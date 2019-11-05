@@ -36,6 +36,7 @@ export default class SafeAreaViewPlus extends Component {
     }
 
     getTopArea(topColor, topInset) {
+        // console.log(topColor);
         return !DeviceInfo.isIPhoneX_deprecated || !topInset ? null
             : <View style={[styles.topArea, {backgroundColor: topColor}]}/>;
     }
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     topArea: {
-        height: 44,
+        height: 0,
     },
     bottomArea: {
         height: 34,

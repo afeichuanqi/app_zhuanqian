@@ -8,6 +8,7 @@ import {
 } from 'react-navigation';
 import WelcomePage from '../page/Welcome';
 import HomePage from '../page/HomePage';
+import SearchPage from '../page/SearchPage';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from "react-navigation-redux-helpers";
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator'
 import {connect} from 'react-redux';
@@ -44,6 +45,12 @@ const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
 const MainNavigator = createStackNavigator({
         HomePage: {
             screen: HomePage,
+            navigationOptions: {
+                header: null,
+            }
+        },
+        SearchPage: {
+            screen: SearchPage,
             navigationOptions: {
                 header: null,
             }

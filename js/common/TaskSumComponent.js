@@ -2,31 +2,28 @@ import React, {Component} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
+import ding from '../res/svg/ding.svg';
+import tuijian from '../res/svg/tuijian.svg';
+import SvgUri from 'react-native-svg-uri';
 
-const topBottomVal = 17;
+const topBottomVal = 15;
 
 class TaskSumComponent extends Component {
 
-
-    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-        if (this.state.value !== nextState.value) {
-            return true;
-        }
-        return false;
-    }
+    // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+    //     if (this.state.value !== nextState.value) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     static defaultProps = {
-        placeholder: '搜索任务ID',
-        onFocus: () => {
+        titleFontSize:16,
 
-        },
     };
 
     constructor(props) {
         super(props);
-        this.state = {
-            value: '',
-        };
     }
 
 
@@ -39,6 +36,8 @@ class TaskSumComponent extends Component {
     }
 
     render() {
+        const {titleFontSize} = this.props;
+
         return <TouchableOpacity
             activeOpacity={0.6}
             style={{
@@ -62,11 +61,14 @@ class TaskSumComponent extends Component {
                 position: 'absolute',
                 top: topBottomVal,
                 left: 60,
+                flexDirection:'row',
             }}>
                 <Text style={{
-                    fontSize: 16,
+                    fontSize: titleFontSize,
                     color: 'black',
-                }}>0元够 + 现金 = 30元</Text>
+                }}>0元购 + 现金 = 30元</Text>
+                <SvgUri  width={19} height={19} style={{marginLeft:8}}  svgXmlData={tuijian}/>
+                <SvgUri  width={18} height={18} style={{marginLeft:8,marginTop:1}}  svgXmlData={ding}/>
             </View>
             {/*左下*/}
             <View style={{
@@ -85,7 +87,7 @@ class TaskSumComponent extends Component {
                 right: 0,
             }}>
                 <Text style={{
-                    fontSize: 16,
+                    fontSize: titleFontSize,
                     color: 'red',
                 }}>+3.6元</Text>
             </View>

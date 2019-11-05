@@ -10,6 +10,7 @@ import {createAppContainer, createBottomTabNavigator} from 'react-navigation';
 import SvgUri from 'react-native-svg-uri';
 import {BottomTabBar} from 'react-navigation-tabs';
 import IndexPage from '../page/IndexPage';
+import TaskHallPage from '../page/TaskHallPage';
 import {bottomTheme} from '../appSet';
 import zhuan from "../res/svg/zhuan.svg";
 type Props = {};
@@ -24,9 +25,9 @@ const TABS = {
         }
     },
     PopularPage: {
-        screen: IndexPage,
+        screen: TaskHallPage,
         navigationOptions: {
-            tabBarLabel: "test",
+            tabBarLabel: "大厅",
             tabBarIcon: ({tintColor, focused}) => (
                 <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
             )

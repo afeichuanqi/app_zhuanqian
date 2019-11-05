@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, View, TextInput} from 'react-native';
-import {bottomTheme} from '../appSet';
+import React, {Component, } from 'react';
+import {Platform,StyleSheet, View, TextInput} from 'react-native';
 import search from '../res/svg/search.svg';
 import SvgUri from 'react-native-svg-uri';
 
@@ -39,36 +38,37 @@ class SearchComponent extends Component {
     }
 
     render() {
-        const {placeholder, onFocus} = this.props;
+        const {placeholder, onFocus, height} = this.props;
         return <View style={{
-            flex:1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        }}>
-            <TextInput
-                style={[styles.textInput]}
-                onChangeText={text => {
-                    this.setState({
-                        value: text,
-                    });
-                }}
-                placeholder={placeholder}
-                keyboardType={'web-search'}
-                returnKeyType={'search'}
-                onFocus={onFocus}
-            />
-            <SvgUri style={{
-                position: 'absolute',
-                left: 10,
-                opacity: 0.2,
-            }} width={19} height={19} svgXmlData={search}/>
-        </View>;
-
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+            }}>
+                <TextInput
+                    style={[styles.textInput, {height}]}
+                    onChangeText={text => {
+                        this.setState({
+                            value: text,
+                        });
+                    }}
+                    placeholder={placeholder}
+                    keyboardType={'web-search'}
+                    returnKeyType={'search'}
+                    onFocus={onFocus}
+                    clearButtonMode={'while-editing'}
+                    multiline={false}
+                    // secureTextEntry={true}
+                    autoCapitalize={'none'}
+                />
+                <SvgUri style={{
+                    position: 'absolute',
+                    left: 10,
+                    opacity: 0.2,
+                }} width={19} height={19} svgXmlData={search}/>
+            </View>
 
     }
-
-
 }
 
 export default SearchComponent;
