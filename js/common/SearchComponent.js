@@ -41,6 +41,7 @@ class SearchComponent extends Component {
     render() {
         const {placeholder, onFocus} = this.props;
         return <View style={{
+            flex:1,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -90,10 +91,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingLeft: 35,
         // marginHorizontal: 5,
-        borderRadius: 8,
+        borderRadius: 7,
         opacity: 1,
         // color: 'white',
-        backgroundColor: '#e8e8e8',
+        backgroundColor: '#f2f2f2',
         paddingVertical: 0,
     },
 });

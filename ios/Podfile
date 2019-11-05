@@ -40,6 +40,8 @@ target 'AwesomeProject' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
+
   target 'AwesomeProjectTests' do
     inherit! :search_paths
     # Pods for testing
