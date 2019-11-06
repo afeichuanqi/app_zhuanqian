@@ -19,6 +19,7 @@ class TaskSumComponent extends Component {
 
     static defaultProps = {
         titleFontSize:16,
+        marginHorizontal:10
 
     };
 
@@ -36,7 +37,7 @@ class TaskSumComponent extends Component {
     }
 
     render() {
-        const {titleFontSize} = this.props;
+        const {titleFontSize,marginHorizontal} = this.props;
 
         return <TouchableOpacity
             activeOpacity={0.6}
@@ -45,7 +46,7 @@ class TaskSumComponent extends Component {
             flexDirection: 'row',
             // justifyContent: 'space-between',
             // alignItems: 'center',
-            marginHorizontal: 10,
+            marginHorizontal: marginHorizontal,
             paddingVertical: 15,
             borderBottomWidth: 1,
             borderBottomColor: '#e8e8e8',
