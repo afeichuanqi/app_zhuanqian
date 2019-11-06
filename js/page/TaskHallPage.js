@@ -456,7 +456,7 @@ class TopLeftFilterComponent extends Component {
         // Animated.parallel([]);
         if (!this.isShow) {
             timing(this.animations.translateX, {
-                duration: 200,
+                duration: 300,
                 toValue: 1,
                 easing: Easing.inOut(Easing.ease),
             }).start();
@@ -468,7 +468,7 @@ class TopLeftFilterComponent extends Component {
         // Animated.parallel([]);
         if (this.isShow) {
             timing(this.animations.translateX, {
-                duration: 200,
+                duration: 300,
                 toValue: 0,
                 easing: Easing.inOut(Easing.ease),
             }).start();
@@ -504,15 +504,15 @@ class TopLeftFilterComponent extends Component {
                 {filterArray.map((item, Lindex, arr) => {
                     return <TouchableOpacity
                         activeOpacity={0.6}
-                        style={{marginLeft: 8, alignItems: 'center'}}
+                        style={{marginLeft: 8, alignItems: 'center', justifyContent:'center'}}
                         onPress={() => this._onPress(Lindex)}
                     >
                         <Animated.Text style={[{
-                            fontSize: fontSize,
+                            fontSize: 12,
                             fontWeight: '400',
                             // transform: [{translationY:80}],
                             // transfrom
-                        }, Lindex === index ? {color: 'black'} : {color: '#595959'}]}>{item.title}</Animated.Text>
+                        }, Lindex === index ? {color: 'black',fontSize: fontSize} : {color: '#595959'}]}>{item.title}</Animated.Text>
 
                         {Lindex === index && <View style={{
                             height: 3,

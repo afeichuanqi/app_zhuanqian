@@ -1,0 +1,79 @@
+{
+  "_from": "react-native-easy-chat-ui",
+  "_id": "react-native-easy-chat-ui@0.4.0",
+  "_inBundle": false,
+  "_integrity": "sha1-xth8pRgmsimr5qjP3oj5G8u92Q0=",
+  "_location": "/react-native-easy-chat-ui",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-easy-chat-ui",
+    "name": "react-native-easy-chat-ui",
+    "escapedName": "react-native-easy-chat-ui",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/react-native-easy-chat-ui/download/react-native-easy-chat-ui-0.4.0.tgz",
+  "_shasum": "c6d87ca51826b229abe6a8cfde88f91bcbbdd90d",
+  "_spec": "react-native-easy-chat-ui",
+  "_where": "/Users/panfeilong/Desktop/react-native/AwesomeProject",
+  "author": {
+    "name": "DaiYz"
+  },
+  "bugs": {
+    "url": "https://github.com/DaiYz/react-native-chat/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "moment": "^2.22.2"
+  },
+  "deprecated": false,
+  "description": "chat UI for React Native",
+  "devDependencies": {
+    "babel-jest": "23.6.0",
+    "babel-preset-react-native": "4.0.1",
+    "jest": "23.6.0",
+    "prop-types": "15.6.2",
+    "react": "16.2.0",
+    "react-native": "0.52.2",
+    "react-test-renderer": "16.2.0"
+  },
+  "directories": {
+    "example": "Demo"
+  },
+  "homepage": "https://github.com/DaiYz/react-native-chat#readme",
+  "jest": {
+    "preset": "react-native"
+  },
+  "keywords": [
+    "ios",
+    "android",
+    "react-native",
+    "wechat",
+    "IM",
+    "chat"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-easy-chat-ui",
+  "peerDependencies": {
+    "react": "*",
+    "prop-types": "*",
+    "react-native": "*",
+    "@react-native-community/viewpager": "^2.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaiYz/react-native-chat.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.4.0"
+}

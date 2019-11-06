@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
-import {ChatScreen} from 'react-native-easy-chat-ui';
+import {ChatScreen} from '../common/Chat-ui';
 import {theme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
@@ -74,7 +74,7 @@ export default class ChatRoomPage extends React.Component {
                 renderTime: true,
                 sendStatus: -2,
                 time: '1542177036549',
-            }
+            },
         ],
         // chatBg: require('../../source/bg.jpg'),
         inverted: false,  // require
@@ -136,6 +136,15 @@ export default class ChatRoomPage extends React.Component {
 
                 <View style={{flex: 1}}>
                     <ChatScreen
+                        inputOutContainerStyle={{
+                            borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.2, shadowColor: '#c7c7c7',
+                            shadowRadius: 3,
+                            shadowOpacity: 1,
+                            shadowOffset: {w: 1, h: 1},
+                            elevation: 10,//安卓的阴影
+                        }}
+                        // inputStyle={{borderRadius:3}}
+                        placeholder={''}
                         useVoice={false}
                         ref={(e) => this.chat = e}
                         messageList={this.state.messages}
@@ -150,9 +159,8 @@ export default class ChatRoomPage extends React.Component {
     }
 
     renderMessageTime = (time) => {
-        console.log(getCurrentTime(time));
-        return <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
-            <Text style={{ color: '#333', fontSize: 11, opacity:0.7}}>{getCurrentTime(parseInt(time))}</Text>
+        return <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>
+            <Text style={{color: '#333', fontSize: 11, opacity: 0.7}}>{getCurrentTime(parseInt(time))}</Text>
         </View>;
     };
 }

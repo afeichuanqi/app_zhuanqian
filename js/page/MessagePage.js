@@ -21,6 +21,7 @@ import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import SvgUri from 'react-native-svg-uri';
 import message_xitong from '../res/svg/message_xitong.svg';
+import message_nomsg from '../res/svg/message_nomsg.svg';
 import zaixiankefu from '../res/svg/zaixiankefu.svg';
 import FastImage from 'react-native-fast-image';
 import Animated, {Easing} from 'react-native-reanimated';
@@ -113,17 +114,7 @@ class MessageColumn extends PureComponent {
 class MsgList extends Component {
     state = {
         friendData: [
-            {id: 10001, name: 'aluo', message: '你好啊', date: '11月11日'},
-            {id: 10002, name: 'aluo', message: '你好啊', date: '11月12日'},
-            {id: 10003, name: 'aluo', message: '你好啊', date: '11月13日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月14日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月15日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月16日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月17日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月18日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月19日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月20日'},
-            {id: 10004, name: 'aluo', message: '你好啊', date: '11月21日'},
+            {id:1,name:'张三',message:'你好啊',date:'2010年5月6日'}
         ],
         isLoading: false,
         hideLoaded: true,
@@ -136,11 +127,19 @@ class MsgList extends Component {
         const {friendData, isLoading, hideLoaded} = this.state;
 
         return <FlatList
+            ListEmptyComponent={<View style={{
+                height: height - 220, justifyContent: 'center', alignItems: 'center',
+
+            }}>
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                    <SvgUri width={95} height={95} svgXmlData={message_nomsg}/>
+                    <Text style={{marginTop: 10, color: 'black', opacity: 0.7}}>您还没有收到消息</Text>
+                </View>
+            </View>}
             ListHeaderComponent={
                 <View style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-
                 }}>
                     <View style={{
                         height: 35,

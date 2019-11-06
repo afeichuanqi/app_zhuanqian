@@ -54,6 +54,7 @@ class SearchComponent extends Component {
                     }}
                     placeholder={placeholder}
                     keyboardType={'web-search'}
+                    placeholderTextColor={'#7b798d'}
                     returnKeyType={'search'}
                     onFocus={onFocus}
                     clearButtonMode={'while-editing'}

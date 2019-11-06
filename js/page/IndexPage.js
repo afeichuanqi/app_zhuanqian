@@ -57,13 +57,46 @@ class FristListComponent extends PureComponent {
         ],
         isLoading: false,
         hideLoaded: false,
+        lunboData: [
+            {imgUrl: 'http://img2.imgtn.bdimg.com/it/u=3292807210,3869414696&fm=26&gp=0.jpg'},
+            {imgUrl: 'http://static.open-open.com/lib/uploadImg/20160101/20160101125439_819.jpg'},
+        ],
     };
 
     render() {
-        const {taskData, isLoading, hideLoaded} = this.state;
+        const containerWidth = width - 18;
+        const {taskData, isLoading, hideLoaded, lunboData} = this.state;
         return <AnimatedFlatList
             ListHeaderComponent={
-                <View style={{height: lunboHeight + TabBarHeight}}/>
+                <>
+                    <View style={{
+                        alignItems: 'center',
+                        height: lunboHeight,
+                        paddingTop: 10,
+                        backgroundColor: theme,
+                        width: width,
+
+                    }}>
+                        {/*轮播图*/}
+                        <Carousel
+                            // homeNavigation={NavigationUtil.homeNavigation}
+                            // navigation={this.props.navigation}
+                            style={styles.carousel}
+                            timeout={3000}
+                            data={lunboData}
+                            renderItem={this._renderItem}
+                            itemWidth={containerWidth}
+                            containerWidth={containerWidth}
+                            separatorWidth={0}
+                            pagingEnable={true}
+                            paginationDefaultColor={'rgba(255,255,255,0.5)'}
+                            paginationActiveColor={'rgba(255,255,255,1)'}
+                        />
+
+                    </View>
+                    <View style={{height: TabBarHeight}}></View>
+                </>
+
             }
             ref={ref => this.flatList = ref}
             data={taskData}
@@ -72,7 +105,7 @@ class FristListComponent extends PureComponent {
             keyExtractor={(item, index) => index + ''}
             refreshControl={
                 <RefreshControl
-                    title={'更新任务中'}
+                    // title={'更新任务中'}
                     refreshing={isLoading}
                     onRefresh={() => this.onRefresh()}
                 />
@@ -160,9 +193,23 @@ class FristListComponent extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent/>;
+        return <TaskSumComponent
+            marginHorizontal={15}
+        />;
     };
-
+    _renderItem = ({item, index}) => {
+        return <TouchableOpacity onPress={() => {
+            console.log('我被单机FastImage');
+        }}>
+            <FastImage
+                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
+                source={{uri: `${item.imgUrl}`}}
+                resizeMode={FastImage.stretch}
+                key={index}
+            />
+        </TouchableOpacity>
+            ;
+    };
 }
 
 class HomePage extends PureComponent {
@@ -171,10 +218,7 @@ class HomePage extends PureComponent {
     }
 
     state = {
-        lunboData: [
-            {imgUrl: 'http://img2.imgtn.bdimg.com/it/u=3292807210,3869414696&fm=26&gp=0.jpg'},
-            {imgUrl: 'http://static.open-open.com/lib/uploadImg/20160101/20160101125439_819.jpg'},
-        ],
+
         navigationIndex: 0,
         navigationRoutes: [
             {key: 'first', title: '优选推荐'},
@@ -237,11 +281,11 @@ class HomePage extends PureComponent {
 
     render() {
         // console.log('wo被render');
-        const {lunboData, navigationRoutes, navigationIndex} = this.state;
-        const containerWidth = width - 18;
+        const {navigationRoutes, navigationIndex} = this.state;
+
         const topBarTop = this.topBarTop.interpolate({
             inputRange: [0, lunboHeight, lunboHeight + 1],
-            outputRange: [0, -lunboHeight - 5, -lunboHeight - 5],
+            outputRange: [lunboHeight, 0, 0],
         });
         let statusBar = {
             hidden: false,
@@ -284,7 +328,6 @@ class HomePage extends PureComponent {
 
                     <Animated.View
                         style={{
-
                             position: 'absolute',
                             // top: topBarTop,
                             // left: 10,
@@ -294,41 +337,13 @@ class HomePage extends PureComponent {
 
                         }}
                     >
-                        {/*真实轮播在这*/}
-
-                        <View style={{
-                            alignItems: 'center',
-                            height: lunboHeight,
-                            paddingTop: 10,
-                            backgroundColor: theme,
-                            width: width,
-
-                        }}>
-                            {/*轮播图*/}
-                            <Carousel
-                                // homeNavigation={NavigationUtil.homeNavigation}
-                                // navigation={this.props.navigation}
-                                style={styles.carousel}
-                                timeout={3000}
-                                data={lunboData}
-                                renderItem={this._renderItem}
-                                itemWidth={containerWidth}
-                                containerWidth={containerWidth}
-                                separatorWidth={0}
-                                pagingEnable={true}
-                                paginationDefaultColor={'rgba(255,255,255,0.5)'}
-                                paginationActiveColor={'rgba(255,255,255,1)'}
-                            />
-
-                        </View>
-
                         <View style={{backgroundColor: theme}}>
                             {/*真实topbar在这*/}
                             {/*topbar*/}
                             <TabBar
                                 style={{
                                     height: 60,
-                                    width: width - 35,
+                                    width: width - 15,
                                     marginLeft: 10,
                                     // zIndex: 3,
                                     // elevation: 0.3,
@@ -346,7 +361,7 @@ class HomePage extends PureComponent {
                                 titleMarginHorizontal={25}
                                 activeStyle={{fontSize: 18, color: [0, 0, 0]}}
                                 inactiveStyle={{fontSize: 14, color: [0, 0, 0], height: 10}}
-                                indicatorStyle={{height: 5, backgroundColor: bottomTheme,borderRadius:3}}
+                                indicatorStyle={{height: 5, backgroundColor: bottomTheme, borderRadius: 3}}
                             />
                             {/*topbar右边图标*/}
                             <TouchableOpacity
@@ -406,19 +421,7 @@ class HomePage extends PureComponent {
         this.jumpTo(navigationRoutes[index].key);
     };
 
-    _renderItem = ({item, index}) => {
-        return <TouchableOpacity onPress={() => {
-            console.log('我被单机FastImage');
-        }}>
-            <FastImage
-                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
-                source={{uri: `${item.imgUrl}`}}
-                resizeMode={FastImage.stretch}
-                key={index}
-            />
-        </TouchableOpacity>
-            ;
-    };
+
     SearchOnFocus = () => {
         console.log('我被触发');
         NavigationUtils.goPage({}, 'SearchPage');
