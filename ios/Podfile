@@ -42,6 +42,8 @@ target 'AwesomeProject' do
 
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
 
+  pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
+
   target 'AwesomeProjectTests' do
     inherit! :search_paths
     # Pods for testing

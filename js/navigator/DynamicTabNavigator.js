@@ -13,6 +13,7 @@ import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
 import {bottomTheme} from '../appSet';
 import zhuan from "../res/svg/zhuan.svg";
+import MessagePage from '../page/MessagePage';
 type Props = {};
 const TABS = {
     IndexPage: {
@@ -24,7 +25,7 @@ const TABS = {
             )
         }
     },
-    PopularPage: {
+    TaskHallPage: {
         screen: TaskHallPage,
         navigationOptions: {
             tabBarLabel: "大厅",
@@ -33,6 +34,15 @@ const TABS = {
             )
         }
     },
+    MessagePage: {
+        screen: MessagePage,
+        navigationOptions: {
+            tabBarLabel: "消息",
+            tabBarIcon: ({tintColor, focused}) => (
+                <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
+            )
+        }
+    }
 
 };
 

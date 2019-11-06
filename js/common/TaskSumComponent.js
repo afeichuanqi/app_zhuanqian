@@ -5,8 +5,12 @@ import LabelBigComponent from './LabelBigComponent';
 import ding from '../res/svg/ding.svg';
 import tuijian from '../res/svg/tuijian.svg';
 import SvgUri from 'react-native-svg-uri';
+import Animated, {Easing} from 'react-native-reanimated';
 
-const topBottomVal = 15;
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const {timing} = Animated;
+
+const topBottomVal = 17;
 
 class TaskSumComponent extends Component {
 
@@ -18,8 +22,8 @@ class TaskSumComponent extends Component {
     // }
 
     static defaultProps = {
-        titleFontSize:16,
-        marginHorizontal:10
+        titleFontSize: 16,
+        marginHorizontal: 10,
 
     };
 
@@ -36,22 +40,48 @@ class TaskSumComponent extends Component {
 
     }
 
-    render() {
-        const {titleFontSize,marginHorizontal} = this.props;
+    animations = {
+        scale: new Animated.Value(1),
+    };
+    _onPressIn = () => {
+        //隐藏box
+        this._anim = timing(this.animations.scale, {
+            duration: 200,
+            toValue: 0,
+            easing: Easing.inOut(Easing.ease),
+        }).start();
+    };
+    _onPressOut = () => {
+        //隐藏box
+        this._anim = timing(this.animations.scale, {
+            duration: 200,
+            toValue: 1,
+            easing: Easing.inOut(Easing.ease),
+        }).start();
+    };
 
-        return <TouchableOpacity
-            activeOpacity={0.6}
+    render() {
+        const scale = Animated.interpolate(this.animations.scale, {
+            inputRange: [0, 1],
+            outputRange: [0.9, 1],
+            extrapolate: 'clamp',
+        });
+        const {titleFontSize, marginHorizontal} = this.props;
+
+        return <AnimatedTouchableOpacity
+            activeOpacity={1}
             style={{
-            flex: 1,
-            flexDirection: 'row',
-            // justifyContent: 'space-between',
-            // alignItems: 'center',
-            marginHorizontal: marginHorizontal,
-            paddingVertical: 15,
-            borderBottomWidth: 1,
-            borderBottomColor: '#e8e8e8',
-            // paddingBottomW
-        }}>
+                flex: 1,
+                flexDirection: 'row',
+                marginHorizontal: marginHorizontal,
+                paddingVertical: 15,
+                borderBottomWidth: 1,
+                borderBottomColor: '#e8e8e8',
+                transform: [{scale}],
+            }}
+            onPressIn={this._onPressIn}
+            onPressOut={this._onPressOut}
+        >
             <FastImage
                 style={[styles.imgStyle]}
                 source={{uri: `http://www.embeddedlinux.org.cn/uploads/allimg/180122/2222032V5-0.jpg`}}
@@ -61,21 +91,21 @@ class TaskSumComponent extends Component {
             <View style={{
                 position: 'absolute',
                 top: topBottomVal,
-                left: 60,
-                flexDirection:'row',
+                left: 55,
+                flexDirection: 'row',
             }}>
                 <Text style={{
                     fontSize: titleFontSize,
                     color: 'black',
-                }}>0元购 + 现金 = 30元</Text>
-                <SvgUri  width={19} height={19} style={{marginLeft:8}}  svgXmlData={tuijian}/>
-                <SvgUri  width={18} height={18} style={{marginLeft:8,marginTop:1}}  svgXmlData={ding}/>
+                }}>0元购+现金 =30元</Text>
+                <SvgUri width={19} height={19} style={{marginLeft: 3}} svgXmlData={tuijian}/>
+                <SvgUri width={18} height={18} style={{marginLeft: 3, marginTop: 1}} svgXmlData={ding}/>
             </View>
             {/*左下*/}
             <View style={{
                 position: 'absolute',
                 bottom: topBottomVal,
-                left: 60,
+                left: 55,
                 flexDirection: 'row',
             }}>
                 <LabelBigComponent title={'高价'}/>
@@ -102,10 +132,10 @@ class TaskSumComponent extends Component {
                     fontSize: 12,
                     // color:''
                     opacity: 0.5,
-                    fontWeight: '100',
+                    // fontWeight: '100',
                 }}>116人已完成|剩余数90</Text>
             </View>
-        </TouchableOpacity>;
+        </AnimatedTouchableOpacity>;
 
 
     }

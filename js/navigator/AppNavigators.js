@@ -12,6 +12,10 @@ import SearchPage from '../page/SearchPage';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from "react-navigation-redux-helpers";
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator'
 import {connect} from 'react-redux';
+import ChatRoomPage from '../page/ChatRoomPage';
+import SvgUri from 'react-native-svg-uri';
+import {bottomTheme} from '../appSet';
+import zhuan from '../res/svg/zhuan.svg';
 
 export const rootCom = "Init";//设置根路由
 const InitNavigator = createStackNavigator({
@@ -54,7 +58,14 @@ const MainNavigator = createStackNavigator({
             navigationOptions: {
                 header: null,
             }
-        }
+
+        },
+        ChatRoomPage: {
+            screen: ChatRoomPage,
+            navigationOptions: {
+                header: null,
+            }
+        },
 
 
     },

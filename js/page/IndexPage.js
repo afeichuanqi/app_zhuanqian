@@ -346,7 +346,7 @@ class HomePage extends PureComponent {
                                 titleMarginHorizontal={25}
                                 activeStyle={{fontSize: 18, color: [0, 0, 0]}}
                                 inactiveStyle={{fontSize: 14, color: [0, 0, 0], height: 10}}
-                                indicatorStyle={{height: 5, backgroundColor: bottomTheme}}
+                                indicatorStyle={{height: 5, backgroundColor: bottomTheme,borderRadius:3}}
                             />
                             {/*topbar右边图标*/}
                             <TouchableOpacity
