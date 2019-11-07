@@ -94,7 +94,7 @@ class FristListComponent extends PureComponent {
                         />
 
                     </View>
-                    <View style={{height: TabBarHeight}}></View>
+                    <View style={{height: TabBarHeight}}/>
                 </>
 
             }
@@ -166,12 +166,12 @@ class FristListComponent extends PureComponent {
         this.setState({
             isLoading: true,
         });
-        this.props.onRefresh(true);
+        // this.props.onRefresh(true);
         setTimeout(() => {
             this.setState({
                 isLoading: false,
             });
-            this.props.onRefresh(false);
+            // this.props.onRefresh(false);
         }, 1000);
     };
     params = {
@@ -247,33 +247,7 @@ class HomePage extends PureComponent {
     // SecondRoute = () => (
     //     <View style={[styles.scene, {backgroundColor: '#673ab7'}]}/>
     // );
-    onRefresh = (isRefresh) => {
-        console.log('isRefresh', isRefresh);
-        if (!this.ActivityIndicator) {
-            return;
-        }
-        if (!isRefresh) {
-            this.ActivityIndicator.setNativeProps({
-                animating: false,
-                hidesWhenStopped: false,
-                style: {
-                    opacity: 0,
-                    zIndex: 0,
-                    elevation: 0,
-                },
-            });
-        } else {
-            this.ActivityIndicator.setNativeProps({
-                animating: true,
-                hidesWhenStopped: true,
-                style: {
-                    opacity: 1,
-                    zIndex: 3,
-                    elevation: 0.3,
-                },
-            });
-        }
-    };
+
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);

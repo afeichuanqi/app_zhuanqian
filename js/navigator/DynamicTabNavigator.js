@@ -12,37 +12,47 @@ import {BottomTabBar} from 'react-navigation-tabs';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
 import {bottomTheme} from '../appSet';
-import zhuan from "../res/svg/zhuan.svg";
+import zhuan from '../res/svg/zhuan.svg';
 import MessagePage from '../page/MessagePage';
+import MyPage from '../page/MyPage';
+
 type Props = {};
 const TABS = {
     IndexPage: {
         screen: IndexPage,
         navigationOptions: {
-            tabBarLabel: "主页",
+            tabBarLabel: '主页',
             tabBarIcon: ({tintColor, focused}) => (
                 <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
-            )
-        }
+            ),
+        },
     },
     TaskHallPage: {
         screen: TaskHallPage,
         navigationOptions: {
-            tabBarLabel: "大厅",
+            tabBarLabel: '大厅',
             tabBarIcon: ({tintColor, focused}) => (
                 <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
-            )
-        }
+            ),
+        },
     },
     MessagePage: {
         screen: MessagePage,
         navigationOptions: {
-            tabBarLabel: "消息",
+            tabBarLabel: '消息',
             tabBarIcon: ({tintColor, focused}) => (
                 <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
-            )
-        }
-    }
+            ),
+        },
+    }, MyPage: {
+        screen: MyPage,
+        navigationOptions: {
+            tabBarLabel: '我的',
+            tabBarIcon: ({tintColor, focused}) => (
+                <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
+            ),
+        },
+    },
 
 };
 
@@ -62,10 +72,10 @@ class DynamicTabNavigator extends Component<Props> {
         // HomeForPage.navigationOptions.tabBarLabel = '最新';//动态配置Tab属性
         return this.Tabs = createAppContainer(createBottomTabNavigator(TABS, {
             tabBarComponent: props => {
-                return <TabBarcompnent {...props} theme={bottomTheme}/>
-            }
+                return <TabBarcompnent {...props} theme={bottomTheme}/>;
+            },
         }));
-    }
+    };
 
     render() {
         const Tab = this._tabNavigator();
@@ -90,7 +100,7 @@ class TabBarcompnent extends Component {
                 // activeTintColor={this.props.theme.themeColor}
             />
 
-        )
+        );
 
     }
 }

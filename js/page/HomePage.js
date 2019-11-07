@@ -27,7 +27,6 @@ class HomePage extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.timer && clearInterval(this.timer);
 
     }
 

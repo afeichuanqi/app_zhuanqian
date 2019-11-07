@@ -52,6 +52,11 @@ class MessagePage extends PureComponent {
     }
 
     render() {
+        const RefreshHeight = Animated.interpolate(this.animations.val, {
+            inputRange: [-200, 0],
+            outputRange: [300, 0],
+            extrapolate: 'clamp',
+        });
         let statusBar = {
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
             // barStyle: 'light-content',
@@ -75,8 +80,24 @@ class MessagePage extends PureComponent {
                 }}>
                     <Text style={{color: 'white', fontSize: 17}}>互动</Text>
                 </View>
+                <Animated.View
+                    // ref={ref => this.zhedangRef = ref}
+                    style={{
+                        backgroundColor: bottomTheme,
+                        height: RefreshHeight,
+                        width,
+                        position: 'absolute',
+                        top: 60,
+                        // zIndex:1,
+                    }}>
+                    {/*{Platform.OS === 'ios' &&*/}
+                    {/*<FastImage style={{flex: 1}}*/}
+                    {/*           resizeMode={FastImage.resizeMode.stretch}*/}
+                    {/*           source={{uri: 'https://img.lovebuy99.com/uploads/allimg/191105/15-191105154359.jpg'}}/>*/}
+                    {/*}*/}
 
-                <MsgList/>
+                </Animated.View>
+                <MsgList RefreshHeight={this.animations.val}/>
                 {/*<View style={{flex:1, backgroundColor:'white',marginTop:50}}>*/}
                 {/*    */}
                 {/*</View>*/}
@@ -84,6 +105,10 @@ class MessagePage extends PureComponent {
             </View>
         );
     }
+
+    animations = {
+        val: new Animated.Value(1),
+    };
 }
 
 class MessageColumn extends PureComponent {
@@ -111,10 +136,12 @@ class MessageColumn extends PureComponent {
     }
 }
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
 class MsgList extends Component {
     state = {
         friendData: [
-            {id:1,name:'张三',message:'你好啊',date:'2010年5月6日'}
+            {id: 1, name: '张三', message: '你好啊', date: '2010年5月6日'},
         ],
         isLoading: false,
         hideLoaded: true,
@@ -126,7 +153,7 @@ class MsgList extends Component {
     render() {
         const {friendData, isLoading, hideLoaded} = this.state;
 
-        return <FlatList
+        return <AnimatedFlatList
             ListEmptyComponent={<View style={{
                 height: height - 220, justifyContent: 'center', alignItems: 'center',
 
@@ -158,7 +185,7 @@ class MsgList extends Component {
 
             }
             style={{
-                flex: 1, backgroundColor: 'white',
+                flex: 1
             }}
             ref={ref => this.flatList = ref}
             data={friendData}
@@ -172,7 +199,14 @@ class MsgList extends Component {
                     onRefresh={() => this.onRefresh()}
                 />
             }
-            onScroll={this._onScroll}
+            onScroll={Animated.event([
+                {
+                    nativeEvent: {
+                        contentOffset: {y: this.props.RefreshHeight},
+                    },
+                },
+            ])}
+            // onScroll={this._onScroll}
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
                 console.log('onEndReached.....');

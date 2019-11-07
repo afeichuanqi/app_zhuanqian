@@ -105,34 +105,14 @@ export default class ChatRoomPage extends React.Component {
             hide={true}
             statusBar={statusBar}
         />;
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '李凯', message_more);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
             >
                 {navigationBar}
-                <View style={{
-                    flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
-                    justifyContent: 'space-between',
-                }}>
-                    <TouchableOpacity
-                        activeOpacity={0.6}
-                        onPress={this._goBackClick}
-                        style={{justifyContent: 'center'}}>
-                        <SvgUri width={24} height={24} svgXmlData={goback}/>
 
-
-                    </TouchableOpacity>
-                    <View>
-                        <Text>李凯</Text>
-                    </View>
-                    <TouchableOpacity
-                        activeOpacity={0.6}
-                        style={{justifyContent: 'center'}}>
-                        <SvgUri width={24} height={24} svgXmlData={message_more}/>
-
-
-                    </TouchableOpacity>
-                </View>
+                {TopColumn}
 
                 <View style={{flex: 1}}>
                     <ChatScreen
@@ -151,6 +131,7 @@ export default class ChatRoomPage extends React.Component {
                         // androidHeaderHeight={androidHeaderHeight}
                         sendMessage={this.sendMessage}
                         renderMessageTime={this.renderMessageTime}
+                        pressAvatar={this._pressAvatar}
                     />
                 </View>
 
@@ -158,6 +139,9 @@ export default class ChatRoomPage extends React.Component {
         );
     }
 
+    _pressAvatar = () => {
+        NavigationUtils.goPage({}, 'ShopInfoPage');
+    };
     renderMessageTime = (time) => {
         return <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>
             <Text style={{color: '#333', fontSize: 11, opacity: 0.7}}>{getCurrentTime(parseInt(time))}</Text>
