@@ -17,6 +17,7 @@ import SvgUri from 'react-native-svg-uri';
 import FastImage from 'react-native-fast-image';
 import ViewUtil from '../util/ViewUtil';
 import Animated from 'react-native-reanimated';
+import NavigationUtils from '../navigator/NavigationUtils';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -136,7 +137,7 @@ class MyPage extends PureComponent {
     }
 
     _nameClick = () => {
-
+        NavigationUtils.goPage({},'LoginPage')
     };
     scrollY = new Animated.Value(0);
 }
@@ -263,7 +264,7 @@ class TopInfoColumn extends PureComponent {
 
                     <FastImage
                         style={[styles.imgStyle]}
-                        source={{uri: `http://www.embeddedlinux.org.cn/uploads/allimg/180122/2222032V5-0.jpg`}}
+                        source={require('../res/img/no_login.png')}
                         resizeMode={FastImage.stretch}
                     />
                 </View>
@@ -288,7 +289,7 @@ export default MyPage;
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色
-        backgroundColor: '#E8E8E8',
+        // backgroundColor: '#E8E8E8',
         // 设置宽度
         width: 50,
         height: 50,

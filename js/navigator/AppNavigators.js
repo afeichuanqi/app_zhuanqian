@@ -14,6 +14,7 @@ import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 import {connect} from 'react-redux';
 import ChatRoomPage from '../page/ChatRoomPage';
+import LoginPage from '../page/LoginPage';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -66,6 +67,12 @@ const MainNavigator = createStackNavigator({
         },
         ShopInfoPage: {
             screen: ShopInfoPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        LoginPage: {
+            screen: LoginPage,
             navigationOptions: {
                 header: null,
             },
