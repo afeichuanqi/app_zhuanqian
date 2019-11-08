@@ -125,7 +125,7 @@ class MessageColumn extends PureComponent {
             shadowRadius: 5,
             shadowOpacity: 1,
             shadowOffset: {w: 1, h: 1},
-            elevation: 10,//安卓的阴影
+            elevation: 3,//安卓的阴影
             flexDirection: 'row',
             justifyContent: 'space-around',
         }}>
@@ -178,7 +178,8 @@ class MsgList extends Component {
 
             }
             style={{
-                flex: 1
+                flex: 1,
+
             }}
             ref={ref => this.flatList = ref}
             data={friendData}

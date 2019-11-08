@@ -49,7 +49,7 @@ class EmptyComponent extends PureComponent {
         return (
             <View style={{
                 height: height, justifyContent: 'center', alignItems: 'center',
-                backgroundColor: '#f7f7f7', position: 'absolute', top: 0, zIndex: -1, width,
+                backgroundColor: '#f7f7f7', position: 'absolute', top: 0, zIndex: -1, width,elevation:-1
 
             }}>
                 <View  style={{justifyContent: 'center', marginTop:this.props.marginTop,alignItems: 'center',shadowColor: '#c7c7c7',

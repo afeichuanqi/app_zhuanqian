@@ -18,6 +18,7 @@ import LoginPage from '../page/LoginPage';
 import EnterCodePage from '../page/EnterCodePage';
 import TaskReleaseMana from '../page/TaskReleaseMana';
 import TaskRelease from '../page/TaskRelease';
+import {Testing} from '../page/Testing';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -94,6 +95,12 @@ const MainNavigator = createStackNavigator({
         },
         TaskRelease: {
             screen: TaskRelease,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        Testing: {
+            screen: Testing,
             navigationOptions: {
                 header: null,
             },

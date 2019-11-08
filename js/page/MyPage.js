@@ -73,7 +73,9 @@ class MyPage extends PureComponent {
             >
                 {navigationBar}
                 {/*顶部导航栏*/}
-                <View>
+                <View
+                    style={{flex: 1}}
+                >
                     <View style={{
                         flexDirection: 'row',
                         paddingHorizontal: 10,
@@ -119,7 +121,9 @@ class MyPage extends PureComponent {
                             // zIndex:1 ,
                         }}>
                     </Animated.View>
+
                     <AnimatedScrollView
+
                         onScroll={Animated.event([
                             {
                                 nativeEvent: {
@@ -129,6 +133,7 @@ class MyPage extends PureComponent {
                         ])}
                         scrollEventThrottle={1}
                     >
+
                         <TopInfoColumn scrollY={this.scrollY}/>
                         <BottomInfoColumn/>
                     </AnimatedScrollView>

@@ -503,6 +503,7 @@ class TopLeftFilterComponent extends Component {
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                 {filterArray.map((item, Lindex, arr) => {
                     return <TouchableOpacity
+                        key={Lindex}
                         activeOpacity={0.6}
                         style={{marginLeft: 8, alignItems: 'center', justifyContent:'center'}}
                         onPress={() => this._onPress(Lindex)}
@@ -671,7 +672,7 @@ class FilterComponent extends PureComponent {
                         }}/>
                         <View style={{marginLeft: 10}}>
                             <Text style={{
-                                color: 'red',
+                                // color: 'red',
                                 opacity: 0.7,
                             }}>简单</Text>
                         </View>
@@ -698,7 +699,7 @@ class FilterComponent extends PureComponent {
                         }}/>
                         <View style={{marginLeft: 10}}>
                             <Text style={{
-                                color: 'red',
+                                // color: 'red',
                                 opacity: 0.7,
                             }}>收益高</Text>
                         </View>
@@ -820,8 +821,8 @@ class TypeComponent extends PureComponent {
             onPress={this._onPress}
             style={[{
                 width: width / 4 - 20, height: 25, marginTop: 10, backgroundColor: '#f1f1f1', justifyContent: 'center',
-                alignItems: 'center', marginHorizontal: 10, borderRadius: 3,
-            }, !checked ? {backgroundColor: '#f1f1f1'} : {
+                alignItems: 'center', marginHorizontal: 10, borderRadius: 3,borderWidth:0.3, borderColor:'rgba(0,0,0,0.2)'
+            }, !checked ? {backgroundColor: '#f6f6f6'} : {
                 backgroundColor: 'rgba(33,150,243,0.1)',
                 borderWidth: 0.3, borderColor: bottomTheme,
             }]}>

@@ -7,8 +7,10 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
+import Animated, {Easing} from 'react-native-reanimated';
 
+const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
 
 class PopMenu extends PureComponent {
@@ -27,6 +29,7 @@ class PopMenu extends PureComponent {
             {id: 7, title: '5天'},
             {id: 8, title: '一星期'},
         ],
+        popTitle: '接单审核时限',
     };
     state = {
         visible: false,
@@ -39,18 +42,39 @@ class PopMenu extends PureComponent {
     }
 
     componentWillUnmount() {
-
+        this.timer && clearTimeout(this.timer);
     }
 
-    hide = () => {
-        this.setState({
-            visible: false,
+    hide = (item) => {
+        console.log(item);
+        this.props.select(item);
+        this._anim = timing(this.animations.bottom, {
+            duration: 200,
+            toValue: -(200 + (width / 3)),
+            easing: Easing.inOut(Easing.ease),
+        }).start(() => {
+            this.timer = setTimeout(() => {
+                this.setState({
+                    visible: false,
+                });
+            }, 100);
+
         });
+
     };
     show = () => {
         this.setState({
             visible: true,
+        }, () => {
+            this._anim = timing(this.animations.bottom, {
+                duration: 100,
+                toValue: 0,
+                easing: Easing.inOut(Easing.cubic),
+            }).start();
         });
+    };
+    animations = {
+        bottom: new Animated.Value(-(200 + (width / 3))),
     };
 
     render() {
@@ -58,51 +82,66 @@ class PopMenu extends PureComponent {
         const {menuArr} = this.props;
 
         return (
-            <Modal
-                // transparent
-                visible={visible}
-                transparent={true}
-                // supportedOrientations={['portrait']}
-                onRequestClose={this.hide}
-                animationType={'slide'}
-            >
-                <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}>
-                    <View style={{
-                        width, position: 'absolute', bottom: 0, backgroundColor: 'white',
 
+            <Modal
+                transparent
+                visible={visible}
+                animationType={'none'}
+                supportedOrientations={['portrait']}
+                onRequestClose={this.hide}
+
+            >
+                <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}
+                                  activeOpacity={1}
+                                  onPress={() => {
+                                      this.hide(null);
+                                  }}
+                >
+                    <Animated.View style={{
+                        width, position: 'absolute', bottom: this.animations.bottom, backgroundColor: 'white',
+                        borderTopLeftRadius: 10, borderTopRightRadius: 10,
                     }}>
                         <View style={{
-                            width, alignItems: 'center', paddingVertical: 15,
+                            width, alignItems: 'center', height: 50, justifyContent: 'center',
                             borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
                         }}>
-                            <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>结单审核时间</Text>
+                            <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>{this.props.popTitle}</Text>
                         </View>
-                        {menuArr.map((item, index, arr) => {
-                            return this.genMenu(item.title);
-                        })}
+                        <ScrollView style={{height: height / 3}}>
+                            {menuArr.map((item, index, arr) => {
+                                return this.genMenu(item);
+                            })}
+                        </ScrollView>
+                        <View style={{
+                            height: 10, backgroundColor: '#e8e8e8',
+                        }}/>
                         <TouchableOpacity
-                            onPress={this.hide}
+                            onPress={() => {
+                                this.hide(null);
+                            }}
                             style={{
-                            width, alignItems: 'center', paddingVertical: 15,
-                            borderTopWidth: 10, borderTopColor: '#e8e8e8',
-                        }}>
-                            <Text>取消</Text>
+                                width, alignItems: 'center', height: 50, justifyContent: 'center',
+
+                            }}>
+                            <Text>取消1</Text>
                         </TouchableOpacity>
-                    </View>
-                </View>
+                    </Animated.View>
+                </TouchableOpacity>
             </Modal>
         );
     }
 
-    genMenu = (title) => {
+    genMenu = (item) => {
         return <TouchableOpacity
             activeOpacity={0.6}
-            onPress={this.hide}
+            onPress={() => {
+                this.hide(item);
+            }}
             style={{
                 width, alignItems: 'center', paddingVertical: 15,
                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
             }}>
-            <Text>{title}</Text>
+            <Text>{item.title}</Text>
         </TouchableOpacity>;
     };
 }
