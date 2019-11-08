@@ -26,10 +26,11 @@ import zaixiankefu from '../res/svg/zaixiankefu.svg';
 import FastImage from 'react-native-fast-image';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
+import EmptyComponent from '../common/EmptyComponent';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+
 
 class MessagePage extends PureComponent {
     constructor(props) {
@@ -69,7 +70,7 @@ class MessagePage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1,}}>
                 {navigationBar}
                 <View style={{
                     height: 40,
@@ -141,7 +142,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 class MsgList extends Component {
     state = {
         friendData: [
-            {id: 1, name: '张三', message: '你好啊', date: '2010年5月6日'},
+            // {id:1,message:'sss',name:'22',date:'112'}
         ],
         isLoading: false,
         hideLoaded: true,
@@ -154,15 +155,7 @@ class MsgList extends Component {
         const {friendData, isLoading, hideLoaded} = this.state;
 
         return <AnimatedFlatList
-            ListEmptyComponent={<View style={{
-                height: height - 220, justifyContent: 'center', alignItems: 'center',
-
-            }}>
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                    <SvgUri width={95} height={95} svgXmlData={message_nomsg}/>
-                    <Text style={{marginTop: 10, color: 'black', opacity: 0.7}}>您还没有收到消息</Text>
-                </View>
-            </View>}
+            ListEmptyComponent={<EmptyComponent/>}
             ListHeaderComponent={
                 <View style={{
                     justifyContent: 'center',

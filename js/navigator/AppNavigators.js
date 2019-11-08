@@ -15,6 +15,9 @@ import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/
 import {connect} from 'react-redux';
 import ChatRoomPage from '../page/ChatRoomPage';
 import LoginPage from '../page/LoginPage';
+import EnterCodePage from '../page/EnterCodePage';
+import TaskReleaseMana from '../page/TaskReleaseMana';
+import TaskRelease from '../page/TaskRelease';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -73,6 +76,24 @@ const MainNavigator = createStackNavigator({
         },
         LoginPage: {
             screen: LoginPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        EnterCodePage: {
+            screen: EnterCodePage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        TaskReleaseMana: {
+            screen: TaskReleaseMana,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        TaskRelease: {
+            screen: TaskRelease,
             navigationOptions: {
                 header: null,
             },

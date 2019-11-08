@@ -22,6 +22,9 @@ import NavigationUtils from '../navigator/NavigationUtils';
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const {width, height} = Dimensions.get('window');
+const MenuClick = (menuName) => {
+    NavigationUtils.goPage({}, menuName);
+};
 
 class MyPage extends PureComponent {
     constructor(props) {
@@ -137,7 +140,7 @@ class MyPage extends PureComponent {
     }
 
     _nameClick = () => {
-        NavigationUtils.goPage({},'LoginPage')
+        NavigationUtils.goPage({}, 'LoginPage');
     };
     scrollY = new Animated.Value(0);
 }
@@ -153,6 +156,7 @@ class ToolsItemComponent extends PureComponent {
         const {title, info, svgXmlData} = this.props;
 
         return <TouchableOpacity
+            onPress={this.props.onPress}
             activeOpacity={0.6}
             style={{
                 width: 130, height: 50,
@@ -184,6 +188,7 @@ class ToolsItemComponent extends PureComponent {
     }
 }
 
+
 class BottomInfoColumn extends PureComponent {
     render() {
         return <View style={{marginTop: 10}}>
@@ -197,7 +202,9 @@ class BottomInfoColumn extends PureComponent {
                 showsHorizontalScrollIndicator={false}
                 style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
             >
-                <ToolsItemComponent/>
+                <ToolsItemComponent onPress={() => {
+                    MenuClick('TaskReleaseMana');
+                }}/>
                 <ToolsItemComponent/>
                 <ToolsItemComponent/>
                 <ToolsItemComponent/>
@@ -243,7 +250,7 @@ class TopInfoColumn extends PureComponent {
     render() {
         const translateY = Animated.interpolate(this.props.scrollY, {
             inputRange: [0, 120],
-            outputRange: [0, 80],
+            outputRange: [0, 70],
             extrapolate: 'clamp',
         });
         const opacity = Animated.interpolate(this.props.scrollY, {

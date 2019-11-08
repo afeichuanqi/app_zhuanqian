@@ -10,12 +10,13 @@ import React, {PureComponent} from 'react';
 import {View, Text, TextInput, Dimensions, TouchableOpacity} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../appSet';
-import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../res/svg/phone_input_clear.svg';
+import gantanhao from '../res/svg/gantanhao.svg';
+import {isPoneAvailable} from '../util/CommonUtils';
 
 const {width, height} = Dimensions.get('window');
 
@@ -100,18 +101,18 @@ class LoginPage extends PureComponent {
                     <View style={{width, justifyContent: 'center', alignItems: 'center', marginTop: 80}}>
 
 
-                        <PhoneInput onChangeText={this._pwdInputOnChangeText}/>
+                        <PhoneInput
+                            ref={ref => this.phoneInput = ref}
+                            onChangeText={this._pwdInputOnChangeText}/>
 
 
                         {/*获取验证码按钮*/}
                         <TouchableOpacity
                             ref={ref => this.loginBtn = ref}
                             activeOpacity={0.6}
-                            // onPress={() => {
-                            //     console.log(this.phone);
-                            // }}
+                            onPress={this._getCode}
                             style={[{
-                                marginTop: 30,
+                                marginTop: 40,
                                 width: width - 90,
                                 height: 50,
                                 justifyContent: 'center',
@@ -133,6 +134,7 @@ class LoginPage extends PureComponent {
                             }}>
 
                         </View>
+
                     </View>
                     {/*登录即将同意*/}
                     <View style={{
@@ -154,6 +156,14 @@ class LoginPage extends PureComponent {
         );
     }
 
+    _getCode = () => {
+        const isTrue = isPoneAvailable(this.phone);
+
+        this.phoneInput.showError(!isTrue);
+        if (isTrue) {
+            NavigationUtils.goPage({},'EnterCodePage')
+        }
+    };
     _goBackClick = () => {
         NavigationUtils.goBack(this.props.navigation);
     };
@@ -181,9 +191,28 @@ class PhoneInput extends PureComponent {
         this.setState({
             phone: phone,
         });
-        // phone = phone.replace(' ', '');
+        phone = phone.replace(/\s+/g, '');
         // console.log(phone);
+        // if(isPoneAvailable(phone)){
+        //
+        // }
         this.props.onChangeText(phone);
+    };
+    showError = (show) => {
+        if (show) {
+            this.errorInfo.setNativeProps({
+                style: {
+                    opacity: 1,
+                },
+            });
+        } else {
+            this.errorInfo.setNativeProps({
+                style: {
+                    opacity: 0,
+                },
+            });
+        }
+
     };
 
     render() {
@@ -222,6 +251,20 @@ class PhoneInput extends PureComponent {
                 marginTop: 5,
                 backgroundColor: 'rgba(0,0,0,0.1)',
             }}/>
+            <View
+                ref={ref => this.errorInfo = ref}
+                style={{
+                    position: 'absolute', top: 30, left: 40,
+                    flexDirection: 'row', alignItems: 'center', opacity: 0,
+
+                }}>
+                <SvgUri
+                    style={{marginHorizontal: 5}}
+                    width={13}
+                    height={13}
+                    svgXmlData={gantanhao}/>
+                <Text style={{color: 'red', fontSize: 11}}>手机号码格式错误,请重新输入</Text>
+            </View>
         </>;
     }
 }

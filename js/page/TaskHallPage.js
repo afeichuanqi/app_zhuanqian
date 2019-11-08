@@ -648,7 +648,7 @@ class FilterComponent extends PureComponent {
 
             <AnimatedTouchableOpacity
                 activeOpacity={0.6}
-                // onPress={}
+                onPress={this.hide}
                 style={{
                     flex: 1, backgroundColor: '#b4b4b4',
                     opacity: opacity,
@@ -827,11 +827,11 @@ class TypeComponent extends PureComponent {
             }]}>
             <Text style={[{
                 fontSize: 13,
-                color: 'black',
+                color: 'rgba(255,255,255,0.5)',
                 opacity: 0.8,
             }, !checked ? {
                 color: 'black',
-                opacity: 0.8,
+                opacity: 0.5,
             } : {color: bottomTheme}]}>{data.title}</Text>
         </TouchableOpacity>;
     }
