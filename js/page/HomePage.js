@@ -31,15 +31,6 @@ class HomePage extends PureComponent {
     }
 
     render() {
-        // const {interVal} = this.state;
-        //
-        // let statusBar = {
-        //     hidden: false,
-        // };
-        // let navigationBar = <NavigationBar
-        //     hide={true}
-        //     statusBar={statusBar}
-        // />;
         return (
             <SafeAreaViewPlus
                 topColor={theme}

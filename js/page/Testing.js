@@ -1,353 +1,71 @@
-import React, { Component } from 'react';
-import { Button, View, Text, StyleSheet } from 'react-native';
-import Modal, {
-    ModalTitle,
-    ModalContent,
-    ModalFooter,
-    ModalButton,
-    SlideAnimation,
-    ScaleAnimation,
-} from 'react-native-modals';
+import React, {Component} from 'react';
+import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
+import Animated, { Easing } from 'react-native-reanimated';
+import { Transition, Transitioning } from 'react-native-reanimated';
+const { Clock, Value, set, cond, startClock, clockRunning, timing, debug, stopClock, block } = Animated
 
+function runTiming(clock, value, dest) {
+    const state = {
+        finished: new Value(0),
+        position: new Value(0),
+        time: new Value(0),
+        frameTime: new Value(0),
+    };
 
+    const config = {
+        duration: 5000,
+        toValue: new Value(0),
+        easing: Easing.inOut(Easing.ease),
+    };
+
+    return block([
+        cond(clockRunning(clock), [
+            // if the clock is already running we update the toValue, in case a new dest has been passed in
+            set(config.toValue, dest),
+        ], [
+            // if the clock isn't running we reset all the animation params and start the clock
+            set(state.finished, 0),
+            set(state.time, 0),
+            set(state.position, value),
+            set(state.frameTime, 0),
+            set(config.toValue, dest),
+            startClock(clock),
+        ]),
+        // we run the step here that is going to update position
+        timing(clock, state, config),
+        // if the animation is over we stop the clock
+        cond(state.finished, debug('stop clock', stopClock(clock))),
+        // we made the block return the updated position
+        state.position,
+    ]);
+}
 
 export class Testing extends Component {
+    // we create a clock node
+    clock = new Clock();
+    // and use runTiming method defined above to create a node that is going to be mapped
+    // to the translateX transform.
+    transX = runTiming(this.clock, -120, 120);
+    componentDidMount(): void {
+        this.animation.animateNextTransition();
+    }
 
-    state = {
-        customBackgroundModal: false,
-        defaultAnimationModal: false,
-        swipeableModal: false,
-        scaleAnimationModal: false,
-        slideAnimationModal: false,
-        bottomModalAndTitle: false,
-        bottomModal: false,
-    };
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                <View style={styles.container}>
-                    <Button
-                        title="Show Modal - Default Animation"
-                        onPress={() => {
-                            this.setState({
-                                defaultAnimationModal: true,
-                            });
-                        }}
-                    />
+            <Transitioning.View
+                transition={
+                    <Transition.Sequence>
+                        <Transition.Out type="scale" />
+                        <Transition.Change interpolation="easeInOut" />
+                        <Transition.In type="fade" />
+                    </Transition.Sequence>
+                }
+                ref={ref => (this.animation = ref)}
+            >
+                <View style={{width:100,height:100, backgroundColor:'red'}}></View>
 
-                    <Button
-                        title="Show Modal - Swipeable Modal Animation"
-                        onPress={() => {
-                            this.setState({
-                                swipeableModal: true,
-                            });
-                        }}
-                    />
 
-                    <Button
-                        title="Show Modal - Scale Animation"
-                        onPress={() => {
-                            this.setState({
-                                scaleAnimationModal: true,
-                            });
-                        }}
-                    />
-
-                    <Button
-                        title="Show Modal - Slide Animation"
-                        onPress={() => {
-                            this.setState({
-                                slideAnimationModal: true,
-                            });
-                        }}
-                    />
-
-                    <Button
-                        title="Show Modal - Custom Background Style"
-                        onPress={() => {
-                            this.setState({
-                                customBackgroundModal: true,
-                            });
-                        }}
-                    />
-
-                    <Button
-                        title="Bottom Modal with Title"
-                        onPress={() => {
-                            this.setState({
-                                bottomModalAndTitle: true,
-                            });
-                        }}
-                    />
-
-                    <Button
-                        title="Bottom Modal without Title"
-                        onPress={() => {
-                            this.setState({
-                                bottomModal: true,
-                            });
-                        }}
-                    />
-                </View>
-
-                <Modal
-                    width={0.9}
-                    visible={this.state.defaultAnimationModal}
-                    rounded
-                    actionsBordered
-                    onTouchOutside={() => {
-                        this.setState({ defaultAnimationModal: false });
-                    }}
-                    modalTitle={
-                        <ModalTitle
-                            title="Popup Modal - Default Animation"
-                            align="left"
-                        />
-                    }
-                    footer={
-                        <ModalFooter>
-                            <ModalButton
-                                text="CANCEL"
-                                bordered
-                                onPress={() => {
-                                    this.setState({ defaultAnimationModal: false });
-                                }}
-                                key="button-1"
-                            />
-                            <ModalButton
-                                text="OK"
-                                bordered
-                                onPress={() => {
-                                    this.setState({ defaultAnimationModal: false });
-                                }}
-                                key="button-2"
-                            />
-                        </ModalFooter>
-                    }
-                >
-                    <ModalContent
-                        style={{ backgroundColor: '#fff' }}
-                    >
-                        <Text>Default Animation</Text>
-                        <Text>No onTouchOutside handler. will not dismiss when touch overlay.</Text>
-                    </ModalContent>
-                </Modal>
-
-                <Modal
-                    onDismiss={() => {
-                        this.setState({ swipeableModal: false });
-                    }}
-                    width={0.9}
-                    overlayOpacity={1}
-                    visible={this.state.swipeableModal}
-                    rounded
-                    actionsBordered
-                    onSwipeOut={() => {
-                        this.setState({ swipeableModal: false });
-                    }}
-                    onTouchOutside={() => {
-                        this.setState({ swipeableModal: false });
-                    }}
-                    swipeDirection={['down', 'up']}
-                    modalAnimation={new SlideAnimation({ slideFrom: 'bottom' })}
-                    modalTitle={
-                        <ModalTitle
-                            title="Swipeable Modal"
-                        />
-                    }
-                    footer={
-                        <ModalFooter>
-                            <ModalButton
-                                text="CANCEL"
-                                bordered
-                                onPress={() => {
-                                    this.setState({ swipeableModal: false });
-                                }}
-                                key="button-1"
-                            />
-                            <ModalButton
-                                text="OK"
-                                bordered
-                                onPress={() => {
-                                    this.setState({ swipeableModal: false });
-                                }}
-                                key="button-2"
-                            />
-                        </ModalFooter>
-                    }
-                >
-                    <ModalContent
-                        style={{ backgroundColor: '#fff', paddingTop: 24 }}
-                    >
-                        <Text>Swipeable</Text>
-                        <Text>Swipe Up/Down</Text>
-                    </ModalContent>
-                </Modal>
-
-                <Modal
-                    onTouchOutside={() => {
-                        this.setState({ scaleAnimationModal: false });
-                    }}
-                    width={0.9}
-                    visible={this.state.scaleAnimationModal}
-                    onSwipeOut={() => this.setState({ scaleAnimationModal: false })}
-                    modalAnimation={new ScaleAnimation()}
-                    onHardwareBackPress={() => {
-                        console.log('onHardwareBackPress');
-                        this.setState({ scaleAnimationModal: false });
-                        return true;
-                    }}
-                    modalTitle={
-                        <ModalTitle
-                            title="Modal - Scale Animation"
-                            hasTitleBar={false}
-                        />
-                    }
-                    actions={[
-                        <ModalButton
-                            text="DISMISS"
-                            onPress={() => {
-                                this.setState({ scaleAnimationModal: false });
-                            }}
-                            key="button-1"
-                        />,
-                    ]}
-                >
-                    <ModalContent>
-                        <Button
-                            title="Show Modal - Default Animation"
-                            onPress={() => {
-                                this.setState({ defaultAnimationModal: true });
-                            }}
-                        />
-                    </ModalContent>
-                </Modal>
-
-                <Modal
-                    onDismiss={() => {
-                        this.setState({ slideAnimationModal: false });
-                    }}
-                    onTouchOutside={() => {
-                        this.setState({ slideAnimationModal: false });
-                    }}
-                    swipeDirection="down"
-                    onSwipeOut={() => this.setState({ slideAnimationModal: false })}
-                    visible={this.state.slideAnimationModal}
-                    modalTitle={
-                        <ModalTitle
-                            title="Modal - Slide Animation"
-                            hasTitleBar={false}
-                        />
-                    }
-                    modalAnimation={new SlideAnimation({ slideFrom: 'bottom' })}
-                >
-                    <ModalContent>
-                        <Text>Slide Animation</Text>
-                    </ModalContent>
-                </Modal>
-
-                <Modal
-                    onDismiss={() => {
-                        this.setState({ customBackgroundModal: false });
-                    }}
-                    onTouchOutside={() => {
-                        this.setState({ customBackgroundModal: false });
-                    }}
-                    zIndex={1000}
-                    backgroundStyle={styles.customBackgroundModal}
-                    modalStyle={{
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                    }}
-                    modalTitle={
-                        <ModalTitle
-                            title="Modal - Custom Background Style"
-                            hasTitleBar={false}
-                            textStyle={{ color: '#fff' }}
-                        />
-                    }
-                    visible={this.state.customBackgroundModal}
-                >
-                    <View style={styles.dialogContentView}>
-                        <Text style={{ color: '#fff' }}>Custom backgroundStyle</Text>
-                    </View>
-                </Modal>
-
-                <Modal.BottomModal
-                    visible={this.state.bottomModalAndTitle}
-                    onTouchOutside={() => this.setState({ bottomModalAndTitle: false })}
-                    height={0.5}
-                    width={2}
-                    onSwipeOut={() => this.setState({ bottomModalAndTitle: false })}
-                    modalTitle={
-                        <ModalTitle
-                            title="Bottom Modal"
-                            hasTitleBar
-                        />
-                    }
-                >
-                    <ModalContent
-                        style={{
-                            flex: 1,
-                            backgroundColor: 'fff',
-                        }}
-                    >
-                        <Text>
-                            Bottom Modal with Title
-                        </Text>
-                    </ModalContent>
-                </Modal.BottomModal>
-
-                <Modal.BottomModal
-                    visible={this.state.bottomModal}
-                    onTouchOutside={() => this.setState({ bottomModal: false })}
-                    // modalStyle={{  }}
-                >
-                    <ModalContent
-                        style={{
-                            backgroundColor: 'fff',
-                            // height: '40%',
-                        }}
-                    >
-                        <Text>
-                            Bottom Modal without Title
-                        </Text>
-                    </ModalContent>
-                </Modal.BottomModal>
-            </View>
+            </Transitioning.View>
         );
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    dialogContentView: {
-        paddingLeft: 18,
-        paddingRight: 18,
-    },
-    navigationBar: {
-        borderBottomColor: '#b5b5b5',
-        borderBottomWidth: 0.5,
-        backgroundColor: '#ffffff',
-    },
-    navigationTitle: {
-        padding: 10,
-    },
-    navigationButton: {
-        padding: 10,
-    },
-    navigationLeftButton: {
-        paddingLeft: 20,
-        paddingRight: 40,
-    },
-    navigator: {
-        flex: 1,
-        // backgroundColor: '#000000',
-    },
-    customBackgroundModal: {
-        opacity: 0.5,
-        backgroundColor: '#000',
-    },
-});

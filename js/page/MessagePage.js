@@ -142,7 +142,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 class MsgList extends Component {
     state = {
         friendData: [
-            // {id:1,message:'sss',name:'22',date:'112'}
+            {id:1,message:'sss',name:'22',date:'112'}
         ],
         isLoading: false,
         hideLoaded: true,

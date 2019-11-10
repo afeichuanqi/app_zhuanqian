@@ -86,11 +86,7 @@ class HomePage extends PureComponent {
                             top: 0,
                             // zIndex:1 ,
                         }}>
-                        {/*{Platform.OS === 'ios' &&*/}
-                        {/*<FastImage style={{flex: 1}}*/}
-                        {/*           resizeMode={FastImage.resizeMode.stretch}*/}
-                        {/*           source={{uri: 'https://img.lovebuy99.com/uploads/allimg/191105/15-191105154359.jpg'}}/>*/}
-                        {/*}*/}
+
 
                     </Animated.View>
                     <ShopList RefreshHeight={this.animations.val}/>

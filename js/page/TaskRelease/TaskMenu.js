@@ -10,32 +10,18 @@ import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
-import wangzhi from '../res/svg/wangzhi.svg';
-import erweima from '../res/svg/erweima.svg';
-import fuzhi from '../res/svg/fuzhi.svg';
-import tuwen from '../res/svg/tuwen.svg';
-import yanzhengtu from '../res/svg/yanzhengtu.svg';
-import shouji from '../res/svg/shouji.svg';
+
 
 const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
 
-class LocalAreaPop extends PureComponent {
+class TaskMenu extends PureComponent {
     constructor(props) {
         super(props);
     }
 
     static defaultProps = {
-        menuArr: [
-            {id: 1, title: '6小时'},
-            {id: 2, title: '12小时'},
-            {id: 3, title: '1天'},
-            {id: 4, title: '2天'},
-            {id: 5, title: '3天'},
-            {id: 6, title: '4天'},
-            {id: 7, title: '5天'},
-            {id: 8, title: '一星期'},
-        ],
+        menuArr: [],
         popTitle: '接单审核时限',
     };
     state = {
@@ -52,44 +38,48 @@ class LocalAreaPop extends PureComponent {
         this.timer && clearTimeout(this.timer);
     }
 
-    hide = (item) => {
+    hide = (annimated = true) => {
         // this.props.select(item);
-        this._anim = timing(this.animations.top, {
-            duration: 100,
-            toValue: height + 160,
-            easing: Easing.inOut(Easing.ease),
-        }).start(() => {
-            this.timer = setTimeout(() => {
-                this.setState({
-                    visible: false,
-                });
-            }, 100);
+        if (annimated) {
+            this._anim = timing(this.animations.top, {
+                duration: 200,
+                toValue: height + 160,
+                easing: Easing.inOut(Easing.ease),
+            }).start(() => {
+                this.timer = setTimeout(() => {
+                    this.setState({
+                        visible: false,
+                    });
+                }, 50);
 
-        });
+            });
+        } else {
+            this.setState({
+                visible: false,
+            });
+        }
+
 
     };
     show = (x, y) => {
+        this.animations.left = new Animated.Value(x - 75);
         this.setState({
             visible: true,
         }, () => {
-            this._anim = timing(this.animations.left, {
-                duration: 0,
-                toValue: x - 75,
+            this._anim = timing(this.animations.top, {
+                duration: 100,
+                toValue: y + 25,
                 easing: Easing.inOut(Easing.cubic),
-            }).start(() => {
-                this._anim = timing(this.animations.top, {
-                    duration: 50,
-                    toValue: y + 25,
-                    easing: Easing.inOut(Easing.cubic),
-                }).start();
-            });
+            }).start();
 
         });
+
     };
     animations = {
-        top: new Animated.Value(height + 160),
-        left: new Animated.Value(-75),
+        top: new Animated.Value(height+250),
+        left: new Animated.Value(0),
     };
+
     render() {
         const {visible} = this.state;
         const {menuArr} = this.props;
@@ -107,7 +97,7 @@ class LocalAreaPop extends PureComponent {
                 <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}
                                   activeOpacity={1}
                                   onPress={() => {
-                                      this.hide(null);
+                                      this.hide(true);
                                   }}
                 >
                     <Animated.View style={{
@@ -135,12 +125,9 @@ class LocalAreaPop extends PureComponent {
                             top: -12,
                             left: 83,
                         }}/>
-                        {this.genMenu('输入网址', wangzhi)}
-                        {this.genMenu('二维码', erweima)}
-                        {this.genMenu('复制数据', fuzhi)}
-                        {this.genMenu('图文说明', tuwen)}
-                        {this.genMenu('验证图', yanzhengtu)}
-                        {this.genMenu('收集信息', shouji)}
+                        {this.props.menuArr.length > 0 && this.props.menuArr.map((item, index, arr) => {
+                            return this.genMenu(item.title, item.svg, item.click);
+                        })}
 
 
                     </Animated.View>
@@ -150,9 +137,14 @@ class LocalAreaPop extends PureComponent {
         );
     }
 
-    genMenu = (title, svgXmlData) => {
+    genMenu = (title, svgXmlData, click) => {
         return <TouchableOpacity
             activeOpacity={0.6}
+            onPress={() => {
+                this.hide(false);
+                click();
+            }
+            }
             style={{
                 width: 100, height: 35,
                 alignItems: 'center', flexDirection: 'row',
@@ -164,4 +156,4 @@ class LocalAreaPop extends PureComponent {
 }
 
 
-export default LocalAreaPop;
+export default TaskMenu;

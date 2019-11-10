@@ -44,6 +44,10 @@ target 'AwesomeProject' do
 
   pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
+
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'AwesomeProjectTests' do
     inherit! :search_paths
     # Pods for testing

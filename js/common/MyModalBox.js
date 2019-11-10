@@ -23,6 +23,7 @@ class MyModalBox extends PureComponent {
     static defaultProps = {
         width: 200,
         height: 500,
+        rightTitle: '添加',
     };
     state = {
         visible: false,
@@ -38,8 +39,7 @@ class MyModalBox extends PureComponent {
         this.timer && clearTimeout(this.timer);
     }
 
-    hide = (item) => {
-        // this.props.select(item);
+    hide = () => {
         this._anim = timing(this.animations.scale, {
             duration: 200,
             toValue: 0,
@@ -55,6 +55,7 @@ class MyModalBox extends PureComponent {
 
     };
     show = () => {
+        console.log('show22');
         this.setState({
             visible: true,
         }, () => {
@@ -72,13 +73,13 @@ class MyModalBox extends PureComponent {
 
     render() {
         const {visible} = this.state;
-        const {menuArr} = this.props;
+        const {menuArr, rightTitle} = this.props;
 
         return (
 
             <Modal
                 transparent
-                visible={true}
+                visible={visible}
                 animationType={'none'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
@@ -86,15 +87,15 @@ class MyModalBox extends PureComponent {
             >
                 <TouchableOpacity style={{
                     flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: 'center', zIndex: 10,
                 }}
                                   activeOpacity={1}
                                   onPress={() => {
-                                      this.hide(null);
+                                      this.hide();
                                   }}
                 >
                     <Animated.View style={[this.props.style, {
-                        transform: [{scale: 1}],
+                        transform: [{scale: this.animations.scale}],
                     }]}>
                         <View style={{
                             paddingVertical: 10,
@@ -106,23 +107,40 @@ class MyModalBox extends PureComponent {
                             <Text style={{fontSize: 16}}>{this.props.title}</Text>
                             <TouchableOpacity
                                 onPress={this.hide}>
-                                <SvgUri width={15}   height={15} svgXmlData={cha}/>
+                                <SvgUri width={15} height={15} svgXmlData={cha}/>
                             </TouchableOpacity>
                         </View>
                         {this.props.children}
-                        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                            <View style={{width:(width - 40)/2, justifyContent:'center', alignItems:'center',height:50}}>
-                                <Text style={{color:'rgba(0,0,0,0.8)'}}>取消</Text>
-                            </View>
-                            <View style={{
-                                height:20,
-                                width:1.5,
-                                backgroundColor:'rgba(0,0,0,0.5)',
-                                marginTop:15
-                            }}/>
-                            <View style={{width:(width - 40)/2, justifyContent:'center', alignItems:'center',height:50}}>
-                                <Text style={{color:'red'}}>添加</Text>
-                            </View>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                onPress={this._cancel}
+                                style={{
+                                    width: (width - 40) / 2,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: 50,
+                                }}>
+                                <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
+                            </TouchableOpacity>
+                            <View
+                                style={{
+                                    height: 20,
+                                    width: 1.5,
+                                    backgroundColor: 'rgba(0,0,0,0.5)',
+                                    marginTop: 15,
+                                }}/>
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                onPress={this._sure}
+                                style={{
+                                    width: (width - 40) / 2,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: 50,
+                                }}>
+                                <Text style={{color: 'red'}}>{rightTitle}</Text>
+                            </TouchableOpacity>
                         </View>
                     </Animated.View>
 
@@ -131,7 +149,16 @@ class MyModalBox extends PureComponent {
         );
     }
 
+    _cancel = () => {
+        this.hide();
+        this.props.cancel && this.props.cancel();
+    };
 
+    _sure = () => {
+        console.log('确认被单机');
+        // this.hide();
+        this.props.sureClick();
+    };
 }
 
 

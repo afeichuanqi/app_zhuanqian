@@ -7,19 +7,33 @@
  */
 
 import React, {PureComponent, Component} from 'react';
-import {View, Text, TouchableOpacity, Dimensions, ScrollView, TextInput, findNodeHandle,
-    UIManager} from 'react-native';
+import {
+    View, Text, TouchableOpacity, Dimensions, ScrollView, TextInput, findNodeHandle,
+    UIManager,
+} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../appSet';
+import rule from '../res/text/rule';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import menu_right from '../res/svg/menu_right.svg';
 import step_add from '../res/svg/step_add.svg';
+import task_yulan from '../res/svg/task_yulan.svg';
 import SvgUri from 'react-native-svg-uri';
-import PopMenu from '../common/PopMenu';
-import LocalAreaPop from '../common/LocalAreaPop';
-import MyModalBox from '../common/MyModalBox';
-import TaskForUrl from './TaskRelPops/TaskForUrl';
+import PopButtomMenu from '../common/PopButtomMenu';
+import TaskMenu from './TaskRelease/TaskMenu';
+import TaskPop from './TaskRelease/TaskPopMenu';
+import wangzhi from '../res/svg/wangzhi.svg';
+import task_sure from '../res/svg/task_sure.svg';
+import task_sure1 from '../res/svg/task_sure1.svg';
+import erweima from '../res/svg/erweima.svg';
+import fuzhi from '../res/svg/fuzhi.svg';
+import tuwen from '../res/svg/tuwen.svg';
+import yanzhengtu from '../res/svg/yanzhengtu.svg';
+import shouji from '../res/svg/shouji.svg';
+import {MORE_MENU} from './TaskRelease/TASK_MENU';
+import TaskStepColumn from './TaskRelease/TaskStepColumn';
+import NavigationUtils from '../navigator/NavigationUtils';
 
 const {width, height} = Dimensions.get('window');
 
@@ -77,6 +91,52 @@ class StepAddMenu extends Component {
     }
 }
 
+//屏幕最下面的提示
+class ComplyColumn extends Component {
+    state = {
+        isTrue: true,
+    };
+
+    render() {
+        const {isTrue} = this.state;
+
+        return <View style={{width, marginTop: 20, paddingTop: 20, marginBottom: 40}}>
+            <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                    this.setState({
+                        isTrue: !this.state.isTrue,
+                    });
+                }}
+                style={{flexDirection: 'row', alignItems: 'center'}}>
+
+                <SvgUri width={15} style={{marginLeft: 10, marginRight: 5}} height={15}
+                        svgXmlData={isTrue ? task_sure1 : task_sure}/>
+
+
+                <Text style={{fontSize: 13}}>我已阅读并同意遵守</Text>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+
+
+                >
+                    <Text style={{color: 'red', fontSize: 13}}>《发布规则》</Text>
+                </TouchableOpacity>
+
+                <Text style={{fontSize: 13}}>全部内容</Text>
+            </TouchableOpacity>
+            <View style={{padding: 10}}>
+                <Text
+                    selectable={true}
+                    style={{color: 'red', fontSize: 12}}>
+                    {rule.release_prompt}
+                </Text>
+            </View>
+        </View>;
+    }
+}
+
+//发布整体布局
 class TaskRelease extends PureComponent {
     constructor(props) {
         super(props);
@@ -114,20 +174,68 @@ class TaskRelease extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <ScrollView style={{backgroundColor: '#e8e8e8'}}>
+
+                <ScrollView
+                    ref={ref => this.scrollView = ref}
+                    style={{backgroundColor: '#e8e8e8'}}>
+
                     <TypeSelect/>
                     <TypeSelect style={{marginTop: 10}} title={'支持设备'} typeArr={[
                         {id: 1, title: '全部'},
                         {id: 2, title: '安卓'},
                         {id: 3, title: '苹果'},
                     ]}/>
-                    <BottomInfoForm/>
+                    <BottomInfoForm ref={ref => this.bIform = ref} scrollTo={this._scrollTo}
+                                    scollToEnd={this._scollToEnd}/>
+                    <ComplyColumn/>
                 </ScrollView>
-                {/*<PopMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}*/}
-                {/*         ref={ref => this.dateMenu = ref}/>*/}
+                <View style={{borderTopWidth: 0.5, borderTopColor: '#e8e8e8', flexDirection: 'row'}}>
+                    <TouchableOpacity
+                        onPress={()=>{
+                            NavigationUtils.goPage({},'TaskDetails')
+                        }}
+                        activeOpacity={0.6}
+                        style={{
+                            height: 60,
+                            width: width / 3,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                        }}>
+                        <SvgUri width={20} fill={'rgba(0,0,0,0.9)'} style={{marginLeft: 5}} height={20}
+                                svgXmlData={task_yulan}/>
+                        <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>预览</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={() => {
+
+                            console.log(this.bIform.stepInfo.taskStep.getStepData());
+                        }}
+                        style={{
+                            height: 60,
+                            width: (width / 3) * 2,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            backgroundColor: bottomTheme,
+                        }}>
+                        <Text style={{fontSize: 15, color: 'white', marginLeft: 5}}>申请发布</Text>
+                    </TouchableOpacity>
+                </View>
             </SafeAreaViewPlus>
         );
     }
+
+    _scrollTo = (x, y, animated) => {
+        this.scrollView.scrollTo({x: x, y: y, animated: animated});
+    };
+    _scollToEnd = () => {
+        this.scrollView.scrollToEnd({animated: false, duration: 0});
+    };
+    // _scrollFun = {
+    //     scrollToEnd: this.scrollView.scrollToEnd,
+    // };
 }
 
 class InputSelect extends Component {
@@ -146,8 +254,8 @@ class InputSelect extends Component {
             >
                 <Text style={{fontSize: 13}}>{this.state.info}</Text>
             </TouchableOpacity>
-            <PopMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
-                     ref={ref => this.dateMenu = ref}/>
+            <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
+                           ref={ref => this.dateMenu = ref}/>
         </View>;
     }
 
@@ -358,7 +466,8 @@ class BottomInfoForm extends Component {
                 {genFormItem('悬赏数量', 4, {placeComponent: rewardNum})}
                 {genFormItem('预付赏金', 1, {info: '服务费、成交额12%'})}
             </View>
-            <StepInfo/>
+            <StepInfo ref={ref => this.stepInfo = ref} scrollTo={this.props.scrollTo}
+                      scollToEnd={this.props.scollToEnd}/>
 
         </View>;
 
@@ -367,40 +476,111 @@ class BottomInfoForm extends Component {
 
 //步骤
 class StepInfo extends Component {
+    menuArr = [
+        {
+            title: '输入网址', svg: wangzhi, click: () => {
+                this.taskPop.show(MORE_MENU.wangzhi.title, MORE_MENU.wangzhi.arr, MORE_MENU.wangzhi.type);
+            },
+        },
+        {
+            title: '二维码', svg: erweima, click: () => {
+                this.taskPop.show(MORE_MENU.erweima.title, MORE_MENU.erweima.arr, MORE_MENU.erweima.type);
+            },
+        },
+        {
+            title: '复制数据', svg: fuzhi, click: () => {
+                this.taskPop.show(MORE_MENU.fuzhishuju.title, MORE_MENU.fuzhishuju.arr, MORE_MENU.fuzhishuju.type);
+            },
+        },
+        {
+            title: '图文说明', svg: tuwen, click: () => {
+                this.taskPop.show(MORE_MENU.tuwenshuoming.title, MORE_MENU.tuwenshuoming.arr, MORE_MENU.tuwenshuoming.type);
+            },
+        },
+        {
+            title: '验证图', svg: yanzhengtu, click: () => {
+                this.taskPop.show(MORE_MENU.yanzhengtu.title, MORE_MENU.yanzhengtu.arr, MORE_MENU.yanzhengtu.type);
+            },
+        },
+        {
+            title: '收集信息', svg: shouji, click: () => {
+                this.taskPop.show(MORE_MENU.shoujixinxi.title, MORE_MENU.shoujixinxi.arr, MORE_MENU.shoujixinxi.type);
+            },
+        },
+    ];
+    _findColumnInfoForType = (type) => {
+        switch (type) {
+            case MORE_MENU.wangzhi.type:
+                return MORE_MENU.wangzhi;
+            case MORE_MENU.erweima.type:
+                return MORE_MENU.erweima;
+            case MORE_MENU.fuzhishuju.type:
+                return MORE_MENU.fuzhishuju;
+            case MORE_MENU.tuwenshuoming.type:
+                return MORE_MENU.tuwenshuoming;
+            case MORE_MENU.yanzhengtu.type:
+                return MORE_MENU.yanzhengtu;
+            case MORE_MENU.shoujixinxi.type:
+                return MORE_MENU.shoujixinxi;
+        }
+    };
+
     render() {
         return <View>
+            {/*步骤计划图*/}
+            <TaskStepColumn edit={(no, type, typeData) => {
+                const Menu = this._findColumnInfoForType(type);
+                this.taskPop.show(Menu.title, Menu.arr, Menu.type, typeData, true, '更新', no);
+            }}
+                            ref={ref => this.taskStep = ref}
+            />
 
-            <View  style={{marginTop: 10, backgroundColor: 'white'}}>
+
+            <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('添加步骤', 5, {
                     info: '请输入项目名', svgCot: <TouchableOpacity
                         ref={ref => this.svg = ref}
                         onPress={this._svgClick}
                     >
-                        <SvgUri  width={20} style={{marginLeft: 5}} height={20}
+                        <SvgUri width={20} style={{marginLeft: 5}} height={20}
                                 svgXmlData={step_add}/>
                     </TouchableOpacity>,
                 })}
             </View>
-            <LocalAreaPop ref={ref => this.laPop = ref}/>
-            <TaskForUrl/>
-            <View style={{height:240,width, backgroundColor:'white'}}></View>
+            {/*类型弹窗*/}
+            <TaskMenu menuArr={this.menuArr} ref={ref => this.laPop = ref}/>
+            {/*具体类型*/}
+            <TaskPop
+                // 弹窗确认按钮被单击
+                sureClick={(data, type, stepNo, rightTitle) => {
+                    // console.log(stepNo, 'stepNo');
+
+                    this.taskStep.setStepDataArr(type, data, stepNo);
+                    console.log(rightTitle);
+                    if (rightTitle === '添加') {
+                        setTimeout(() => {
+                            this.props.scollToEnd();
+                        }, 200);
+
+                    }
+                    // console.log(type, data);
+                }}
+                ref={ref => this.taskPop = ref}/>
+
         </View>;
 
     }
-    _svgClick=()=>{
-        const handle = findNodeHandle(this.svg)
-        UIManager.measure(handle,(x, y, width, height, pageX, pageY)=>{
-            // console.log('相对父视图位置x:', x);
-            // console.log('相对父视图位置y:', y);
-            // console.log('组件宽度width:', width);
-            // console.log('组件高度height:', height);
-            // console.log('距离屏幕的绝对位置x:', pageX);
-            // console.log('距离屏幕的绝对位置y:', pageY);
-            this.laPop.show(pageX,pageY)
+
+    _svgClick = () => {
+        this.props.scollToEnd();
+        const handle = findNodeHandle(this.svg);
+        UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+            this.laPop.show(pageX, pageY);
         });
 
+
         // ;
-    }
+    };
 }
 
 class TypeSelect extends PureComponent {

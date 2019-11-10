@@ -9,7 +9,8 @@
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
-
+// import SYImagePicker from 'react-native-syan-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
 
@@ -19,17 +20,9 @@ class PopMenu extends PureComponent {
     }
 
     static defaultProps = {
-        menuArr: [
-            {id: 1, title: '6小时'},
-            {id: 2, title: '12小时'},
-            {id: 3, title: '1天'},
-            {id: 4, title: '2天'},
-            {id: 5, title: '3天'},
-            {id: 6, title: '4天'},
-            {id: 7, title: '5天'},
-            {id: 8, title: '一星期'},
-        ],
-        popTitle: '接单审核时限',
+        select: () => {
+        },
+        popTitle: '选取照片',
     };
     state = {
         visible: false,
@@ -44,10 +37,7 @@ class PopMenu extends PureComponent {
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
     }
-
-    hide = (item) => {
-        console.log(item);
-        this.props.select(item);
+    hide = () => {
         this._anim = timing(this.animations.bottom, {
             duration: 200,
             toValue: -(200 + (width / 3)),
@@ -76,10 +66,32 @@ class PopMenu extends PureComponent {
     animations = {
         bottom: new Animated.Value(-(200 + (width / 3))),
     };
+    _selTakePhone = async () => {
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+        }).then(image => {
+            this.hide();
+            this.props.select(image);
+        });
+
+    };
+    _selAlbum = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            this.hide();
+            this.props.select(image);
+            console.log(image);
+
+        });
+    };
 
     render() {
         const {visible} = this.state;
-        const {menuArr} = this.props;
 
         return (
 
@@ -107,11 +119,24 @@ class PopMenu extends PureComponent {
                         }}>
                             <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>{this.props.popTitle}</Text>
                         </View>
-                        <ScrollView style={{height: height / 3}}>
-                            {menuArr.map((item, index, arr) => {
-                                return this.genMenu(item);
-                            })}
-                        </ScrollView>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={this._selTakePhone}
+                            style={{
+                                width, alignItems: 'center', paddingVertical: 15,
+                                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
+                            }}>
+                            <Text>{'拍一张照片'}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={this._selAlbum}
+                            style={{
+                                width, alignItems: 'center', paddingVertical: 15,
+                                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
+                            }}>
+                            <Text>{'从相册选一张'}</Text>
+                        </TouchableOpacity>
                         <View style={{
                             height: 10, backgroundColor: '#e8e8e8',
                         }}/>
@@ -123,7 +148,7 @@ class PopMenu extends PureComponent {
                                 width, alignItems: 'center', height: 50, justifyContent: 'center',
 
                             }}>
-                            <Text>取消1</Text>
+                            <Text>取消</Text>
                         </TouchableOpacity>
                     </Animated.View>
                 </TouchableOpacity>
@@ -131,19 +156,6 @@ class PopMenu extends PureComponent {
         );
     }
 
-    genMenu = (item) => {
-        return <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-                this.hide(item);
-            }}
-            style={{
-                width, alignItems: 'center', paddingVertical: 15,
-                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
-            }}>
-            <Text>{item.title}</Text>
-        </TouchableOpacity>;
-    };
 }
 
 

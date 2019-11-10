@@ -9,7 +9,7 @@
 import React, {PureComponent} from 'react';
 import {
     View,
-    Text
+    Text,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
@@ -43,7 +43,10 @@ class Welcome extends PureComponent {
 
         }, 100);
 
+        // this.requestPermission();
     }
+
+
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
