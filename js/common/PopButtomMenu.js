@@ -74,7 +74,7 @@ class PopButtomMenu extends PureComponent {
         });
     };
     animations = {
-        bottom: new Animated.Value(-300),
+        bottom: new Animated.Value(-(200 + (width / 3))),
     };
 
     render() {
@@ -86,7 +86,7 @@ class PopButtomMenu extends PureComponent {
             <Modal
                 transparent
                 visible={visible}
-                animationType={'none'}
+                animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 

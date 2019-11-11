@@ -44,7 +44,7 @@ class LabelBigComponent extends PureComponent {
             <Text style={{
                 fontSize,
                 opacity: 0.5,
-                fontWeight: '100',
+                // fontWeight: '100',
             }}>{title}</Text>
         </View>;
 

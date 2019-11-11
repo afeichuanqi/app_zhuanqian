@@ -663,7 +663,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhuanqian11112;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhuanqian11;
 				PRODUCT_NAME = AwesomeProject;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -686,7 +686,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhuanqian11112;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhuanqian11;
 				PRODUCT_NAME = AwesomeProject;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";

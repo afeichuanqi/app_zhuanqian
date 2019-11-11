@@ -22,6 +22,7 @@ const {width, height} = Dimensions.get('window');
 class TaskDetails extends PureComponent {
     constructor(props) {
         super(props);
+        this.params = this.props.navigation.state.params;
     }
 
     state = {
@@ -79,7 +80,9 @@ class TaskDetails extends PureComponent {
             extrapolate: 'clamp',
         });
         // let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '', null, bottomTheme, 'white', 16);
-
+        // console.log()
+        const {typeData, deviceData, columnData, stepData} = this.params;
+        console.log(columnData.rewardPrice);
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -142,17 +145,20 @@ class TaskDetails extends PureComponent {
                                     <View style={{marginTop: 15}}>
                                         {/*<Text style={{fontSize: 16}}>微信实名</Text>*/}
                                         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-                                            <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 12}}>注册</Text>
+                                            <Text
+                                                style={{color: 'rgba(0,0,0,0.7)', fontSize: 12}}>{typeData.title}</Text>
                                             <View style={{
                                                 height: 10, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)',
                                                 marginHorizontal: 10,
                                             }}/>
-                                            <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 12}}>微信实名</Text>
+                                            <Text style={{
+                                                color: 'rgba(0,0,0,0.7)',
+                                                fontSize: 12,
+                                            }}>{columnData.projectTitle}</Text>
                                         </View>
-
                                     </View>
 
-                                    <Text style={{fontSize: 16, color: bottomTheme}}>55555元</Text>
+                                    <Text style={{fontSize: 16, color: bottomTheme}}>{columnData.rewardPrice}元</Text>
                                 </View>
                                 <View style={{
                                     height: 60,
@@ -172,12 +178,16 @@ class TaskDetails extends PureComponent {
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
-                                        <Text style={{color: 'black', fontSize: 15}}>1小时</Text>
+                                        <Text style={{
+                                            color: 'black',
+                                            fontSize: 15,
+                                        }}>{columnData.orderTimeLimit.title}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>做单时间</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
-                                        <Text style={{color: 'black', fontSize: 15}}>1天</Text>
+                                        <Text
+                                            style={{color: 'black', fontSize: 15}}>{columnData.reviewTime.title}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>审核时间</Text>
                                     </View>
 
@@ -224,7 +234,7 @@ class TaskDetails extends PureComponent {
                                 fontSize: 13,
                                 lineHeight: 20,
                                 letterSpacing: 0.2,
-                            }}>我是任务说明我是任务说明我是任务说明我是任务说明我是任务说明我是任务说明我是任务说明我是任务说明我是任务说明</Text>
+                            }}>{columnData.TaskInfo}</Text>
                         </View>
                         <View style={{
                             marginTop: 10, paddingHorizontal: 10, backgroundColor: 'white', marginHorizontal: 10,
@@ -233,7 +243,7 @@ class TaskDetails extends PureComponent {
                             <Text style={{fontSize: 14, color: bottomTheme, marginTop: 10}}>做单步骤（请仔细审阅任务步骤）</Text>
 
                         </View>
-                        <TaskStepColumn showUtilColumn={false}/>
+                        <TaskStepColumn stepArr={stepData} showUtilColumn={false}/>
                     </Animated.ScrollView>
                 </View>
 

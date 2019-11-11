@@ -55,7 +55,7 @@ class HomePage extends PureComponent {
     render() {
         const RefreshHeight = Animated.interpolate(this.animations.val, {
             inputRange: [-200, 0],
-            outputRange: [250, 0],
+            outputRange: [250, 50],
             extrapolate: 'clamp',
         });
         let statusBar = {

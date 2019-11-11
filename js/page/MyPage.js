@@ -218,21 +218,21 @@ class BottomInfoColumn extends PureComponent {
             {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
             {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
             {ViewUtil.getMenuLine()}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
+            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
 
 
         </View>;

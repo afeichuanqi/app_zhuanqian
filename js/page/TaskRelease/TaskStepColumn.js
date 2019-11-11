@@ -33,7 +33,7 @@ class StepBox extends PureComponent {
             }}>
                 <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
                     {this.getNumNo(this.props.no)}
-                    <Text style={{fontSize: 15, marginLeft: 5,letterSpacing: 3,}}>第{this.props.no}步</Text>
+                    <Text style={{fontSize: 15, marginLeft: 5, letterSpacing: 3}}>第{this.props.no}步</Text>
                 </View>
                 {this.props.children}
                 {/*<View style={{height:40}}/>*/}
@@ -96,21 +96,19 @@ class TaskStepColumn extends PureComponent {
         showUtilColumn: true,
     };
     state = {
-        stepDataArr: [
-            {'type': 1, 'typeData': {'info': '先打开微信做任务先打开微信做任务先打开微信做任务先打开微信做任务先打开微信做任务先打开微信做任务', 'inputValue': '222'}},
-            {'type': 2, 'typeData': {'info': 'wwewq', 'uri': {path: 'wwewadas'}}},
-            {'type': 3, 'typeData': {'info': 'wwewq', 'uri': {path: 'wwewadas'}}},
-            {'type': 4, 'typeData': {'info': 'wwewq', 'uri': {path: 'wwewadas'}}},
-            {'type': 5, 'typeData': {'info': 'wwewq', 'uri': {path: 'wwewadas'}}},
-            {'type': 6, 'typeData': {'collectInfo': 'www'}},
-        ],
+        stepDataArr: this.props.stepArr || [],
     };
+    images = [];
     setStepDataArr = (type, data, stepNo) => {
+        // console.log(data.uri.path,"datadata");
         const tmpArr = [...this.state.stepDataArr];
-        if (stepNo === 0) {
+        if (stepNo === 0) {//为添加
             tmpArr.push({type, typeData: data});
+            if (data.uri) {
+                this.images.push({url: `file://${data.uri.path}`});
+            }
         } else {
-            tmpArr[stepNo - 1] = {type, typeData: data};
+            tmpArr[stepNo - 1] = {type, typeData: data};//为修改
         }
         this.setState({
             stepDataArr: tmpArr,
@@ -130,14 +128,25 @@ class TaskStepColumn extends PureComponent {
         return this.state.stepDataArr;
 
     };
+    _imageClick = (url) => {
+        console.log(url, this.images);
+        this._findImagesForStep(url).then((index) => {
+            this.props.imageClick(index, this.images);
+        });
+        // console.log(index, this.images);
+
+
+    };
     getStepColumn = (stepNo, type, typeData, utilClick = {}) => {
         switch (type) {
             case 1://输入网址
                 return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
                                 typeData={typeData}>
                     <View style={{paddingHorizontal: 10}}>
-                        <Text style={{marginTop: 20, fontSize: 15,lineHeight: 25,
-                            letterSpacing: 0.2,}}>{typeData.info}</Text>
+                        <Text style={{
+                            marginTop: 20, fontSize: 15, lineHeight: 25,
+                            letterSpacing: 0.2,
+                        }}>{typeData.info}</Text>
                     </View>
                     <View style={{
                         flexDirection: 'row',
@@ -173,8 +182,10 @@ class TaskStepColumn extends PureComponent {
             case 2://二维码
                 return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
                                 typeData={typeData}>
-                    <Text style={{marginTop: 20, fontSize: 15, paddingHorizontal: 10,lineHeight: 25,
-                        letterSpacing: 0.2}}>{typeData.info}</Text>
+                    <Text style={{
+                        marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }}>{typeData.info}</Text>
                     <View style={{
                         flexDirection: 'row',
                         marginTop: 20,
@@ -182,12 +193,17 @@ class TaskStepColumn extends PureComponent {
                         justifyContent: 'space-around',
                     }}>
 
-                        <View style={styles.imgBox}>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={() => {
+                                this._imageClick(`file://${typeData.uri.path}`);
+                            }}
+                            style={styles.imgBox}>
                             <Image
-                                source={{uri: typeData.uri.sourceURL}}
+                                source={{uri: `file://${typeData.uri.path}`}}
                                 style={{width: 120, height: 120, backgroundColor: '#F0F0F0', borderRadius: 3}}
                                 resizeMode={'contain'}/>
-                        </View>
+                        </TouchableOpacity>
 
                         <View style={styles.imgBox}>
                             <View style={{
@@ -202,8 +218,10 @@ class TaskStepColumn extends PureComponent {
             case 3://复制数据
                 return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
                                 typeData={typeData}>
-                    <Text style={{marginTop: 20, fontSize: 15, paddingHorizontal: 10,lineHeight: 25,
-                        letterSpacing: 0.2}}>{typeData.info}</Text>
+                    <Text style={{
+                        marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }}>{typeData.info}</Text>
                     <View style={{flexDirection: 'row', marginTop: 20, paddingHorizontal: 10, alignItems: 'center'}}>
 
                         <View style={{
@@ -245,15 +263,22 @@ class TaskStepColumn extends PureComponent {
             case 4://图文说明
                 return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
                                 typeData={typeData}>
-                    <Text style={{marginTop: 20, fontSize: 15, paddingHorizontal: 10,lineHeight: 25,
-                        letterSpacing: 0.2}}>{typeData.info}</Text>
-                    <View style={{
-                        flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, justifyContent: 'center',
-                        paddingVertical: 10,
-                    }}>
+                    <Text style={{
+                        marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }}>{typeData.info}</Text>
+                    <TouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={() => {
+                            this._imageClick(`file://${typeData.uri.path}`);
+                        }}
+                        style={{
+                            flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, justifyContent: 'center',
+                            paddingVertical: 10,
+                        }}>
 
                         <Image
-                            source={{uri: typeData.uri.sourceURL}}
+                            source={{uri: `file://${typeData.uri.path}`}}
                             style={{
                                 width: width / 2,
                                 // marginBottom: 10,
@@ -262,20 +287,28 @@ class TaskStepColumn extends PureComponent {
                                 borderRadius: 3,
                             }}
                             resizeMode={'contain'}/>
-                    </View>
+                    </TouchableOpacity>
+
                 </StepBox>;
             case 5://验证图
                 return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
                                 typeData={typeData}>
-                    <Text style={{marginTop: 20, fontSize: 15, paddingHorizontal: 10,lineHeight: 25,
-                        letterSpacing: 0.2}}>{typeData.info}</Text>
-                    <View style={{
-                        flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, justifyContent: 'center',
-                        paddingVertical: 10,
-                    }}>
+                    <Text style={{
+                        marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }}>{typeData.info}</Text>
+                    <TouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={() => {
+                            this._imageClick(`file://${typeData.uri.path}`);
+                        }}
+                        style={{
+                            flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, justifyContent: 'center',
+                            paddingVertical: 10,
+                        }}>
 
                         <Image
-                            source={{uri: typeData.uri.sourceURL}}
+                            source={{uri: `file://${typeData.uri.path}`}}
                             style={{
                                 width: width / 2,
                                 // marginBottom: 10,
@@ -284,13 +317,15 @@ class TaskStepColumn extends PureComponent {
                                 borderRadius: 3,
                             }}
                             resizeMode={'contain'}/>
-                    </View>
+                    </TouchableOpacity>
                 </StepBox>;
             case 6://收集信息
                 return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
                                 typeData={typeData}>
-                    <Text style={{marginTop: 20, fontSize: 15, paddingHorizontal: 10,lineHeight: 25,
-                        letterSpacing: 0.2}}>{typeData.collectInfo}</Text>
+                    <Text style={{
+                        marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }}>{typeData.collectInfo}</Text>
                     <View style={{
                         flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, alignItems: 'center',
                         justifyContent: 'center',
@@ -318,7 +353,26 @@ class TaskStepColumn extends PureComponent {
 
         }
     };
+    _findImagesForStep = (url) => {
+
+        const image = this.images;
+
+        return new Promise(function (resolve, reject) {
+            image.map((item, index, arr) => {
+                if (item.url == url) {
+                    // console.log(index);
+                    console.log(index);
+                    resolve(index);
+                }
+            });
+        });
+
+    };
     _deleteColumn = (stepNo, type, typeData) => {
+        if (typeData.uri) {//有图片
+            const index = this._findImagesForStep(stepNo);
+            this.images.splice(index, 1);
+        }
         const tmpArr = [...this.state.stepDataArr];
         // tmpArr
         tmpArr.splice(stepNo - 1, 1);
@@ -326,20 +380,35 @@ class TaskStepColumn extends PureComponent {
             stepDataArr: tmpArr,
         });
     };
-    _moveUpColumn = (stepNo, type, typeData) => {
+
+    _moveUpColumn = async (stepNo, type, typeData) => {
         const coverIndex = stepNo - 1;
         if (coverIndex <= 0) {
             return;
         }
+
         const tmpArr = [...this.state.stepDataArr];
         const stepNoUpArr = tmpArr[coverIndex - 1];//上一个数组
         const Arr = tmpArr[coverIndex];//本数组
+
+
         tmpArr[coverIndex] = stepNoUpArr;//转换位置
         tmpArr[coverIndex - 1] = Arr;
 
         this.setState({
             stepDataArr: tmpArr,
         });
+        // console.log(typeData);
+        // const upImageIndex = await this._findImagesForStep(stepNo - 1);
+        //
+        // const _imageIndex = await this._findImagesForStep(stepNo);
+        // console.log(upImageIndex, _imageIndex, '_imageIndex');
+        // const upImage = this.images[upImageIndex].url;
+        // const _image = this.images[_imageIndex].url;
+        //
+        // this.images[upImageIndex].url = _image;
+        // this.images[_imageIndex].url = upImage;
+        // console.log(this.images);
     };
     _moveDownColumn = (stepNo, type, typeData) => {
         const coverIndex = stepNo - 1;

@@ -72,7 +72,7 @@ class SearchPage extends PureComponent {
                     <SearchComponent
                         placeholder={'搜索任务ID1'}
                         height={topIputHeight}
-                        onFocus={this.SearchOnFocus}
+                        onFocus={null}
                     />
                     <TouchableOpacity
                         activeOpacity={0.5}
@@ -107,14 +107,14 @@ class SearchColumn extends PureComponent {
             {id: 1, title: '学生'},
             {id: 2, title: '服务员'},
             {id: 3, title: 'test2'},
-            {id: 2, title: '服务员'},
-            {id: 3, title: 'test2'},
-            {id: 2, title: '服务员'},
-            {id: 3, title: 'test2'},
-            {id: 2, title: '服务员'},
-            {id: 3, title: 'test2'},
-            {id: 2, title: '服务员'},
-            {id: 3, title: 'test2'},
+            {id: 4, title: '服务员'},
+            {id: 5, title: 'test2'},
+            {id: 6, title: '服务员'},
+            {id: 7, title: 'test2'},
+            {id: 8, title: '服务员'},
+            {id: 9, title: 'test2'},
+            {id: 10, title: '服务员'},
+            {id: 11, title: 'test2'},
         ],
     };
 
@@ -130,6 +130,7 @@ class SearchColumn extends PureComponent {
             <View style={{flexDirection: 'row', marginTop: 5, flexWrap: 'wrap'}}>
                 {labelArray.map((item, index, arr) => {
                     return <LabelBigComponent
+                        key={item.id}
                         paddingHorizontal={10}
                         title={item.title}
                         fontSize={11}

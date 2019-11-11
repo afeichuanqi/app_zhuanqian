@@ -3,15 +3,15 @@ import {Platform} from 'react-native';
 
 import {
     createAppContainer,
-    createStackNavigator,
     createSwitchNavigator,
 } from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 import WelcomePage from '../page/Welcome';
 import HomePage from '../page/HomePage';
 import SearchPage from '../page/SearchPage';
 import ShopInfoPage from '../page/ShopInfoPage';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers';
-import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
+// import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 import {connect} from 'react-redux';
 import ChatRoomPage from '../page/ChatRoomPage';
 import LoginPage from '../page/LoginPage';
@@ -20,6 +20,7 @@ import TaskReleaseMana from '../page/TaskReleaseMana';
 import TaskRelease from '../page/TaskRelease';
 import {Testing} from '../page/Testing';
 import TaskDetails from '../page/TaskDetails';
+import TaskHallPage from '../page/TaskHallPage';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -32,24 +33,24 @@ const InitNavigator = createStackNavigator({
 });
 const IOS_MODAL_ROUTES = ['VideoPlayPage', 'MyVipPage'];
 
-const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
-    const isModal = IOS_MODAL_ROUTES.some(
-        screenName =>
-            screenName === transitionProps.scene.route.routeName ||
-            (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName),
-    );
-    if (isModal) {
-        return {
-            screenInterpolator: Platform.OS === 'ios' ? CardStackStyleInterpolator.forFadeFromBottomAndroid : CardStackStyleInterpolator.forInitial,
-        };
-    } else {
-        return {
-            screenInterpolator: Platform.OS === 'android' ? CardStackStyleInterpolator.forVertical : CardStackStyleInterpolator.forHorizontal,
-        };
-    }
-
-
-};
+// const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
+//     const isModal = IOS_MODAL_ROUTES.some(
+//         screenName =>
+//             screenName === transitionProps.scene.route.routeName ||
+//             (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName),
+//     );
+//     if (isModal) {
+//         return {
+//             screenInterpolator: Platform.OS === 'ios' ? CardStackStyleInterpolator.forFadeFromBottomAndroid : CardStackStyleInterpolator.forInitial,
+//         };
+//     } else {
+//         return {
+//             screenInterpolator: Platform.OS === 'android' ? CardStackStyleInterpolator.forVertical : CardStackStyleInterpolator.forHorizontal,
+//         };
+//     }
+//
+//
+// };
 const MainNavigator = createStackNavigator({
         HomePage: {
             screen: HomePage,
@@ -112,6 +113,12 @@ const MainNavigator = createStackNavigator({
                 header: null,
             },
         },
+        TaskHallPage: {
+            screen: TaskHallPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
 
 
     },
@@ -126,7 +133,7 @@ const MainNavigator = createStackNavigator({
         // transitionConfig: () => ({
         //     screenInterpolator: StackViewStyleInterpolator.forHorizontal,
         // }),
-        transitionConfig: dynamicModalTransition,
+        // transitionConfig: dynamicModalTransition,
     },
 );
 const AppContainer = createSwitchNavigator({

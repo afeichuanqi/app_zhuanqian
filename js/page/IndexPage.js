@@ -179,7 +179,7 @@ class HomePage extends PureComponent {
         navigationRoutes: [
             {key: 'first', title: '优选推荐'},
             {key: 'second', title: '简单悬赏'},
-            {key: 'second', title: '高价悬赏'},
+            {key: 'three', title: '高价悬赏'},
         ],
 
     };
@@ -276,6 +276,9 @@ class HomePage extends PureComponent {
                         height={topIputHeight}
                         onFocus={this.SearchOnFocus}
                     />
+                    {/*<View style={{}}>*/}
+                    {/*    */}
+                    {/*</View>*/}
                 </View>
 
                 {/*rn0.6bug多且行且珍惜*/}
@@ -398,7 +401,11 @@ class HomePage extends PureComponent {
                     onRefresh={this.onRefresh}
                 />;
             case 'second':
-                return <View style={[styles.scene, {backgroundColor: '#673ab7'}]}/>;
+                return <FristListComponent
+                    topBarTop={this.topBarTop}
+                    onScroll={this._onScroll}
+                    onRefresh={this.onRefresh}
+                />;;
         }
     };
     handleIndexChange = (index) => {

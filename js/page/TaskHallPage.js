@@ -76,7 +76,6 @@ class TaskHallPage extends PureComponent {
         return (
             <View
                 style={{flex: 1}}
-
             >
                 {navigationBar}
                 {/*顶部样式*/}
@@ -84,8 +83,6 @@ class TaskHallPage extends PureComponent {
                     backgroundColor: bottomTheme,
                     height: 44,
                     width,
-                    // flexDirection: 'row',
-                    // justifyContent: 'space-around',
                     alignItems: 'center',
 
                 }}>
@@ -103,14 +100,12 @@ class TaskHallPage extends PureComponent {
                     <TabBar
                         style={{
                             height: 35,
-                            // width: width - 150,
-                            // overflow:'hidden',
                         }}
                         position={this.position}
                         contentContainerStyle={{paddingTop: 10}}
                         routes={navigationRoutes}
-                        index={0}
-                        sidePadding={0}
+                        index={navigationIndex}
+                        // sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
                         // indicatorStyle={styles.indicator}
                         bounces={true}
@@ -140,9 +135,9 @@ class TaskHallPage extends PureComponent {
                         }}>发布</Text>
                     </TouchableOpacity>
                 </View>
-
+                {/*<FristListComponent/>*/}
                 <TabView
-                    ref={ref => this.tabView = ref}
+                    // ref={ref => this.tabView = ref}
                     indicatorStyle={{backgroundColor: 'white'}}
                     navigationState={{index: navigationIndex, routes: navigationRoutes}}
                     renderScene={this.renderScene}
@@ -151,7 +146,6 @@ class TaskHallPage extends PureComponent {
                     onIndexChange={index => this.setState({
                         navigationIndex: index,
                     })}
-
                     initialLayout={{width}}
                     lazy={true}
                 />
@@ -170,8 +164,7 @@ class TaskHallPage extends PureComponent {
         switch (route.key) {
             case 'first':
                 return <FristListComponent/>;
-            case 'second':
-                return <View style={[styles.scene, {backgroundColor: '#673ab7', flex: 1}]}/>;
+
         }
     };
 
@@ -185,19 +178,18 @@ class FristListComponent extends PureComponent {
             {id: 3},
             {id: 4},
             {id: 5},
-            {id: 1},
-            {id: 2},
-            {id: 3},
-            {id: 4},
-            {id: 5},
+            {id: 6},
+            {id: 7},
+            {id: 8},
+            {id: 9},
+            {id: 10},
         ],
         isLoading: false,
         hideLoaded: false,
     };
     _renderIndexPath = ({item, index}) => {
         return <TaskSumComponent
-            titleFontSize={15}
-            marginHorizontal={15}
+            key={index}
         />;
     };
 
@@ -217,6 +209,7 @@ class FristListComponent extends PureComponent {
 
     onLoading = () => {
         console.log('onLoading触发中');
+        this.onloading = true;
         this.setState({
             hideLoaded: false,
         });
@@ -229,16 +222,10 @@ class FristListComponent extends PureComponent {
                 id: i,
             });
         }
-        setTimeout(() => {
-            this.setState({
-                taskData: data.concat(tmpData),
-            }, () => {
-                // this
-                // this.setState({
-                //     hideLoaded: true,
-                // });
-            });
-        }, 2000);
+        this.setState({
+            taskData: data.concat(tmpData),
+        });
+        this.onloading = false;
 
     };
     onRefresh = () => {
@@ -266,17 +253,15 @@ class FristListComponent extends PureComponent {
     nowY = 0;
 
     _onScroll = (e) => {
-        if (e.nativeEvent.contentOffset.y > 0) {
-            if (e.nativeEvent.contentOffset.y - this.nowY > 10 || e.nativeEvent.contentOffset.y - this.nowY < -10) {
-                if (e.nativeEvent.contentOffset.y > this.nowY) {
-                    this.topLeftFilterComponent.showAnimated();
-                } else if (e.nativeEvent.contentOffset.y < this.nowY) {
-                    this.topLeftFilterComponent.hideAnimated();
-                }
-            }
+        const y = e.nativeEvent.contentOffset.y;
 
+        if (y > this.nowY && y > 0) {
+            this.topLeftFilterComponent.showAnimated();
+        } else if (y < this.nowY && !this.onloading) {
+            this.topLeftFilterComponent.hideAnimated();
         }
-        this.nowY = e.nativeEvent.contentOffset.y;
+
+        this.nowY = y;
 
     };
 
@@ -306,7 +291,11 @@ class FristListComponent extends PureComponent {
                 //
                 //
                 // }
-                ref={ref => this.flatList = ref}
+                getItemLayout={(data, index) => (
+                    {length: 80, offset: 80 * index, index}
+                )}
+
+                // ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}
                 renderItem={data => this._renderIndexPath(data)}
@@ -359,6 +348,7 @@ class HeadlineComponent extends PureComponent {
 
 
     }
+
     componentDidMount() {
 
         // setInterval(() => {
@@ -393,7 +383,7 @@ class HeadlineComponent extends PureComponent {
             <View style={{
                 flex: 1,
                 marginLeft: 10,
-                overflow:'hidden',
+                overflow: 'hidden',
 
             }}>
                 <FlatList
@@ -406,7 +396,7 @@ class HeadlineComponent extends PureComponent {
                     onEndReachedThreshold={0.01}
                 />
                 {/*禁止触摸*/}
-                <View style={{position: 'absolute', width:300, height: 40, opacity:1}}/>
+                <View style={{position: 'absolute', width: 300, height: 40, opacity: 1}}/>
             </View>
         </View>;
     }
@@ -483,6 +473,7 @@ class TopLeftFilterComponent extends Component {
     };
 
     render() {
+        // console.lo
         const {index} = this.state;
         const {filterArray} = this.props;
         const translateX = Animated.interpolate(this.animations.translateX, {
@@ -505,7 +496,7 @@ class TopLeftFilterComponent extends Component {
                     return <TouchableOpacity
                         key={Lindex}
                         activeOpacity={0.6}
-                        style={{marginLeft: 8, alignItems: 'center', justifyContent:'center'}}
+                        style={{marginLeft: 8, alignItems: 'center', justifyContent: 'center'}}
                         onPress={() => this._onPress(Lindex)}
                     >
                         <Animated.Text style={[{
@@ -513,7 +504,10 @@ class TopLeftFilterComponent extends Component {
                             fontWeight: '400',
                             // transform: [{translationY:80}],
                             // transfrom
-                        }, Lindex === index ? {color: 'black',fontSize: fontSize} : {color: '#595959'}]}>{item.title}</Animated.Text>
+                        }, Lindex === index ? {
+                            color: 'black',
+                            fontSize: fontSize,
+                        } : {color: '#595959'}]}>{item.title}</Animated.Text>
 
                         {Lindex === index && <View style={{
                             height: 3,
@@ -579,13 +573,13 @@ class FilterBtnComponent extends PureComponent {
 class FilterComponent extends PureComponent {
     static defaultProps = {
         typeArray: [
-            {id: 1, title: '注册', type: 1},
-            {id: 2, title: '投票', type: 1},
-            {id: 3, title: '关注', type: 1},
-            {id: 4, title: '浏览', type: 1},
-            {id: 5, title: '下载', type: 1},
-            {id: 6, title: '转发', type: 2},
-            {id: 7, title: '发帖', type: 2},
+            // {id: 1, title: '注册', type: 1},
+            // {id: 2, title: '投票', type: 1},
+            // {id: 3, title: '关注', type: 1},
+            // {id: 4, title: '浏览', type: 1},
+            // {id: 5, title: '下载', type: 1},
+            // {id: 6, title: '转发', type: 2},
+            // {id: 7, title: '发帖', type: 2},
         ],
     };
     typeMap = new Map();
@@ -720,7 +714,6 @@ class FilterComponent extends PureComponent {
 
                 </ScrollView>
                 <View
-
                     style={{
                         height: 80, width, backgroundColor: 'white', zIndex: 2, flexDirection: 'row',
                         alignItems: 'center', justifyContent: 'space-around', borderBottomLeftRadius: 10,
@@ -765,7 +758,7 @@ class FilterComponent extends PureComponent {
     };
 }
 
-class TypeComponent extends PureComponent {
+class TypeComponent extends Component {
     static defaultProps = {
         index: 0,
 
@@ -820,8 +813,16 @@ class TypeComponent extends PureComponent {
         return <TouchableOpacity
             onPress={this._onPress}
             style={[{
-                width: width / 4 - 20, height: 25, marginTop: 10, backgroundColor: '#f1f1f1', justifyContent: 'center',
-                alignItems: 'center', marginHorizontal: 10, borderRadius: 3,borderWidth:0.3, borderColor:'rgba(0,0,0,0.2)'
+                width: width / 4 - 20,
+                height: 25,
+                marginTop: 10,
+                backgroundColor: '#f1f1f1',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginHorizontal: 10,
+                borderRadius: 3,
+                borderWidth: 0.3,
+                borderColor: 'rgba(0,0,0,0.2)',
             }, !checked ? {backgroundColor: '#f6f6f6'} : {
                 backgroundColor: 'rgba(33,150,243,0.1)',
                 borderWidth: 0.3, borderColor: bottomTheme,

@@ -80,7 +80,7 @@ class MyModalBox extends PureComponent {
             <Modal
                 transparent
                 visible={visible}
-                animationType={'none'}
+                animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 

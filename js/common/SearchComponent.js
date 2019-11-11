@@ -1,5 +1,5 @@
-import React, {Component, } from 'react';
-import {Platform,StyleSheet, View, TextInput} from 'react-native';
+import React, {Component} from 'react';
+import {Platform, View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import search from '../res/svg/search.svg';
 import SvgUri from 'react-native-svg-uri';
 
@@ -39,37 +39,55 @@ class SearchComponent extends Component {
 
     render() {
         const {placeholder, onFocus, height} = this.props;
-        return <View style={{
+        return <TouchableOpacity
+            activeOpacity={1}
+            onPress={this.props.onFocus}
+            style={{
                 flex: 1,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
             }}>
-                <TextInput
-                    style={[styles.textInput, {height}]}
-                    onChangeText={text => {
-                        this.setState({
-                            value: text,
-                        });
-                    }}
-                    placeholder={placeholder}
-                    keyboardType={'web-search'}
-                    placeholderTextColor={'#7b798d'}
-                    returnKeyType={'search'}
-                    onFocus={onFocus}
-                    clearButtonMode={'while-editing'}
-                    multiline={false}
-                    // secureTextEntry={true}
-                    autoCapitalize={'none'}
-                />
-                <SvgUri style={{
-                    position: 'absolute',
-                    left: 10,
-                    opacity: 0.2,
-                }} width={19} height={19} svgXmlData={search}/>
-            </View>
+            <TextInput
+                ref={ref => this.textInput = ref}
+                style={[styles.textInput, {height}]}
+                onChangeText={text => {
+                    this.setState({
+                        value: text,
+                    });
+                }}
+                // editable={false}
+                placeholder={placeholder}
+                keyboardType={'web-search'}
+                placeholderTextColor={'#7b798d'}
+                returnKeyType={'search'}
+                onFocus={this._onFocus}
+                clearButtonMode={'while-editing'}
+                multiline={false}
+                // secureTextEntry={true}
+                autoCapitalize={'none'}
+            />
+            {/*<View>*/}
+            {/*    */}
+            {/*</View>*/}
+            <SvgUri style={{
+                position: 'absolute',
+                left: 10,
+                opacity: 0.2,
+            }} width={19} height={19} svgXmlData={search}/>
+        </TouchableOpacity>;
 
     }
+
+    _onFocus = () => {
+        const {onFocus} = this.props;
+        console.log(typeof (eval(onFocus)) == 'function');
+        if (typeof (eval(onFocus)) == 'function') {
+            this.props.onFocus();
+            this.textInput.blur();
+        }
+
+    };
 }
 
 export default SearchComponent;

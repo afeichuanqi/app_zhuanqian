@@ -6,7 +6,8 @@
  */
 
 import React, {Component} from 'react';
-import {createAppContainer, createBottomTabNavigator} from 'react-navigation';
+import {createAppContainer, } from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation-tabs'
 import SvgUri from 'react-native-svg-uri';
 import {BottomTabBar} from 'react-navigation-tabs';
 import IndexPage from '../page/IndexPage';
@@ -79,14 +80,7 @@ class DynamicTabNavigator extends Component<Props> {
 
     render() {
         const Tab = this._tabNavigator();
-        return (<Tab
-                // onNavigationStateChange={(prevState, nextState, action) => {
-                //     EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select, {
-                //         from: prevState.index,
-                //         to: nextState.index,
-                //     })
-                // }}
-            />
+        return (<Tab/>
         );
     }
 }

@@ -25,8 +25,6 @@ export default class NavigationUtils {
         if (!navigation) {
             return;
         }
-        console.log(navigation);
-
         navigation.navigate(
             page,
             {

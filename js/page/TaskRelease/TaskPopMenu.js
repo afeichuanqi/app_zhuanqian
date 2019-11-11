@@ -158,6 +158,7 @@ class HomePage extends PureComponent {
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}
                         <ImageSelect
+                            ref={ref => this.imageSelect = ref}
                             select={this.shuomingtu}
                             width={100}
                             height={140}

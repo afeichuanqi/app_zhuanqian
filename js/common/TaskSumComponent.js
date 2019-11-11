@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
-import ding from '../res/svg/ding.svg';
-import tuijian from '../res/svg/tuijian.svg';
-import SvgUri from 'react-native-svg-uri';
+// import ding from '../res/svg/ding.svg';
+// import tuijian from '../res/svg/tuijian.svg';
+// import SvgUri from 'react-native-svg-uri';
 import Animated, {Easing} from 'react-native-reanimated';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -12,7 +12,7 @@ const {timing} = Animated;
 
 const topBottomVal = 17;
 
-class TaskSumComponent extends Component {
+class TaskSumComponent extends PureComponent {
 
     // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
     //     if (this.state.value !== nextState.value) {
@@ -63,7 +63,7 @@ class TaskSumComponent extends Component {
     render() {
         const scale = Animated.interpolate(this.animations.scale, {
             inputRange: [0, 1],
-            outputRange: [0.9, 1],
+            outputRange: [0.95, 1],
             extrapolate: 'clamp',
         });
         const {titleFontSize, marginHorizontal} = this.props;
@@ -78,6 +78,7 @@ class TaskSumComponent extends Component {
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 transform: [{scale}],
+                height:80
             }}
             onPressIn={this._onPressIn}
             onPressOut={this._onPressOut}
@@ -98,8 +99,8 @@ class TaskSumComponent extends Component {
                     fontSize: titleFontSize,
                     color: 'black',
                 }}>0元购+现金 =30元</Text>
-                <SvgUri width={19} height={19} style={{marginLeft: 3}} svgXmlData={tuijian}/>
-                <SvgUri width={18} height={18} style={{marginLeft: 3, marginTop: 1}} svgXmlData={ding}/>
+                {/*<SvgUri width={19} height={19} style={{marginLeft: 3}} svgXmlData={tuijian}/>*/}
+                {/*<SvgUri width={18} height={18} style={{marginLeft: 3, marginTop: 1}} svgXmlData={ding}/>*/}
             </View>
             {/*左下*/}
             <View style={{
@@ -142,8 +143,6 @@ class TaskSumComponent extends Component {
 
 
 }
-
-// class
 export default TaskSumComponent;
 const styles = StyleSheet.create({
     imgStyle: {
