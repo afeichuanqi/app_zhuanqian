@@ -58,8 +58,8 @@ class MyPage extends PureComponent {
             extrapolate: 'clamp',
         });
         const RefreshHeight = Animated.interpolate(this.scrollY, {
-            inputRange: [-200, 0],
-            outputRange: [250, 0],
+            inputRange: [0, 1, 2],
+            outputRange: [230, 50, 50],
             extrapolate: 'clamp',
         });
         let navigationBar = <NavigationBar
@@ -86,6 +86,9 @@ class MyPage extends PureComponent {
                     }}>
                         <TouchableOpacity
                             activeOpacity={0.6}
+                            onPress={()=>{
+                                NavigationUtils.goPage({},'SettingPage')
+                            }}
 
                         >
                             <SvgUri width={23} height={23} fill={'white'} svgXmlData={setting}/>
@@ -101,7 +104,7 @@ class MyPage extends PureComponent {
                             position: 'absolute',
                             top: titleTop,
                             left: 10,
-                            zIndex: 1,
+                            zIndex: 2,
                             elevation: 0.1,
 
                         }}>
@@ -111,19 +114,17 @@ class MyPage extends PureComponent {
                         </Animated.Text>
                     </AnimatedTouchableOpacity>
                     <Animated.View
-                        // ref={ref => this.zhedangRef = ref}
                         style={{
                             backgroundColor: bottomTheme,
                             height: RefreshHeight,
                             width,
                             position: 'absolute',
                             top: 50,
-                            // zIndex:1 ,
                         }}>
                     </Animated.View>
-
                     <AnimatedScrollView
-
+                        style={{zIndex: 1}}
+                        refreshControl={null}
                         onScroll={Animated.event([
                             {
                                 nativeEvent: {
@@ -133,7 +134,9 @@ class MyPage extends PureComponent {
                         ])}
                         scrollEventThrottle={1}
                     >
+                        {/*<View style={{backgroundColor: 'transparent', height: 50}}>*/}
 
+                        {/*</View>*/}
                         <TopInfoColumn scrollY={this.scrollY}/>
                         <BottomInfoColumn/>
                     </AnimatedScrollView>
@@ -196,7 +199,7 @@ class ToolsItemComponent extends PureComponent {
 
 class BottomInfoColumn extends PureComponent {
     render() {
-        return <View style={{marginTop: 10}}>
+        return <View style={{}}>
             <View style={{paddingHorizontal: 10, paddingVertical: 10, backgroundColor: 'white'}}>
                 <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
                     我的工具
@@ -255,7 +258,7 @@ class TopInfoColumn extends PureComponent {
     render() {
         const translateY = Animated.interpolate(this.props.scrollY, {
             inputRange: [0, 120],
-            outputRange: [0, 70],
+            outputRange: [-130, 70],
             extrapolate: 'clamp',
         });
         const opacity = Animated.interpolate(this.props.scrollY, {
@@ -264,8 +267,11 @@ class TopInfoColumn extends PureComponent {
             extrapolate: 'clamp',
         });
         return <View style={{backgroundColor: bottomTheme}}>
+            <View style={{marginTop:130,height:0}}>
+
+            </View>
             <Animated.View
-                style={{height: 130, opacity, transform: [{translateY: translateY}]}}>
+                style={{height: 130, opacity, position:'absolute',top:0}}>
                 {/*头像*/}
                 <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row'}}>
                     <TouchableOpacity style={{marginTop: 40, flexDirection: 'row', alignItems: 'center'}}>

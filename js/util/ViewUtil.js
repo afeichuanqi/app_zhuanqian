@@ -3,12 +3,12 @@ import {TouchableOpacity, StyleSheet, View, Text, Dimensions, Platform} from 're
 
 import SvgUri from 'react-native-svg-uri';
 import goback from '../res/svg/goback.svg';
-import shop from '../res/svg/shop.svg';
 import message_more from '../res/svg/message_more.svg';
 import menu_right from '../res/svg/menu_right.svg';
 
+const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
-    static getTopColumn(goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14) {
+    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14) => {
         return (
             <View style={{
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
@@ -35,7 +35,7 @@ export default class ViewUtil {
 
             </View>
         );
-    }
+    };
 
     /**
      * 获取设置页的Item
@@ -43,7 +43,7 @@ export default class ViewUtil {
      * @param title 标题
      * @param menuinfo 菜单说明
      */
-    static getSettingItem(menuSvg, title, menuinfo) {
+    static getSettingItem = (menuSvg, title, menuinfo) => {
         return (
             <View style={styles.setting_item_container}>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
@@ -56,20 +56,39 @@ export default class ViewUtil {
                 </View>
             </View>
         );
-    }
+    };
 
-    static getMenuLine() {
-        return <View style={{marginVertical:10}}>
+    static getMenuLine = () => {
+        return <View style={{marginVertical: 10}}>
             <View style={{
                 height: 0.5,
                 opacity: 0.3,
                 backgroundColor: 'darkgray',
             }}/>
         </View>;
-    }
+    };
 
     // static
+    static getSettingMenu = (MenuTitle, click, rightText = '') => {
+        return <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={click}
+            style={{
+                height: 40,
+                width,
+                paddingHorizontal: 15,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
 
+            }}>
+            <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
+                <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.5, color: 'black'}}>{rightText}</Text>
+                <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>
+            </View>
+        </TouchableOpacity>;
+    };
 }
 const styles = StyleSheet.create({
     setting_item_container: {

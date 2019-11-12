@@ -20,7 +20,9 @@ import TaskReleaseMana from '../page/TaskReleaseMana';
 import TaskRelease from '../page/TaskRelease';
 import {Testing} from '../page/Testing';
 import TaskDetails from '../page/TaskDetails';
-import TaskHallPage from '../page/TaskHallPage';
+import SettingPage from '../page/SettingPage';
+import AccountSetting from '../page/SettingPage/AccountSetting';
+import UserProtocol from '../page/SettingPage/UserProtocol';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -113,8 +115,20 @@ const MainNavigator = createStackNavigator({
                 header: null,
             },
         },
-        TaskHallPage: {
-            screen: TaskHallPage,
+        SettingPage: {
+            screen: SettingPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        AccountSetting: {
+            screen: AccountSetting,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        UserProtocol: {
+            screen: UserProtocol,
             navigationOptions: {
                 header: null,
             },

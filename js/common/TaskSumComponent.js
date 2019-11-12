@@ -74,11 +74,12 @@ class TaskSumComponent extends PureComponent {
                 flex: 1,
                 flexDirection: 'row',
                 marginHorizontal: marginHorizontal,
-                paddingVertical: 15,
+                paddingTop: 15,
+                paddingBottom:25,
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 transform: [{scale}],
-                height:80
+                height:90
             }}
             onPressIn={this._onPressIn}
             onPressOut={this._onPressOut}
@@ -92,7 +93,7 @@ class TaskSumComponent extends PureComponent {
             <View style={{
                 position: 'absolute',
                 top: topBottomVal,
-                left: 55,
+                left: 60,
                 flexDirection: 'row',
             }}>
                 <Text style={{
@@ -106,7 +107,7 @@ class TaskSumComponent extends PureComponent {
             <View style={{
                 position: 'absolute',
                 bottom: topBottomVal,
-                left: 55,
+                left: 60,
                 flexDirection: 'row',
             }}>
                 <LabelBigComponent title={'高价'}/>

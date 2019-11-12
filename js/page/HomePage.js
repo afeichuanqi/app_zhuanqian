@@ -34,6 +34,7 @@ class HomePage extends PureComponent {
         return (
             <SafeAreaViewPlus
                 topColor={theme}
+                bottomInset={false}
             >
                 <DynamicTabNavigator/>
 

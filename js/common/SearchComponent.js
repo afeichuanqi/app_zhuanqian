@@ -37,6 +37,7 @@ class SearchComponent extends Component {
 
     }
 
+
     render() {
         const {placeholder, onFocus, height} = this.props;
         return <TouchableOpacity

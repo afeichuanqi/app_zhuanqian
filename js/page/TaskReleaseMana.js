@@ -117,7 +117,7 @@ class TaskReleaseMana extends PureComponent {
         );
     }
     _releaseClick=()=>{
-        NavigationUtils.goPage({},'TaskHallPage')
+        NavigationUtils.goPage({},'TaskRelease')
     }
     handleIndexChange = (index) => {
         // console.log(index);

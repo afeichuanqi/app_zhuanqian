@@ -12,157 +12,137 @@ import {
     Text,
     Dimensions,
     StyleSheet,
-    FlatList,
-    RefreshControl,
-    ActivityIndicator,
     Platform,
     TouchableOpacity,
+
 
 } from 'react-native';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
-import SearchComponent from '../common/SearchComponent';
 import Carousel from '../common/Carousel';
 import FastImage from 'react-native-fast-image';
-import TaskSumComponent from '../common/TaskSumComponent';
 import TabBar from '../common/TabBar';
-import {TabView} from 'react-native-tab-view';
-import Animated from 'react-native-reanimated';
-import more from '../res/svg/more.svg';
+import Animated, {Easing} from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
 import NavigationUtils from '../navigator/NavigationUtils';
+import {TabView} from 'react-native-tab-view';
+import search from '../res/svg/search.svg';
+import FlatListCommonUtil from '../common/FlatListCommonUtil';
 
+const {timing} = Animated;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const lunboHeight = height / 4;
-const topIputHeight = (Platform.OS === 'ios') ? 30 : 30;
-const TabBarHeight = 60;
-
-// const FirstRoute = ;
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const topIputHeight = (Platform.OS === 'ios') ? 35 : 35;
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 class FristListComponent extends PureComponent {
     state = {
-        taskData: [
-            {id: 1},
-            {id: 2},
-            {id: 3},
-            {id: 4},
-            {id: 5},
-            {id: 1},
-            {id: 2},
-            {id: 3},
-            {id: 4},
-            {id: 5},
+        lunboData: [
+            {imgUrl: 'http://img2.imgtn.bdimg.com/it/u=3292807210,3869414696&fm=26&gp=0.jpg'},
+            {imgUrl: 'http://static.open-open.com/lib/uploadImg/20160101/20160101125439_819.jpg'},
         ],
-        isLoading: false,
-        hideLoaded: false,
     };
+    _renderItem = ({item, index}) => {
+        return <TouchableOpacity onPress={() => {
+        }}>
+            <FastImage
+                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
+                source={{uri: `${item.imgUrl}`}}
+                resizeMode={FastImage.stretch}
+                key={index}
+            />
+        </TouchableOpacity>
+            ;
+    };
+    scrollY = new Animated.Value(0);
 
     render() {
-        const {taskData, isLoading, hideLoaded} = this.state;
-        return <AnimatedFlatList
-            ListHeaderComponent={
-                <View style={{height: lunboHeight + TabBarHeight}}/>
-            }
-            ref={ref => this.flatList = ref}
-            data={taskData}
-            scrollEventThrottle={1}
-            renderItem={data => this._renderIndexPath(data)}
-            keyExtractor={(item, index) => index + ''}
-            refreshControl={
-                <RefreshControl
-                    title={'更新任务中'}
-                    refreshing={isLoading}
-                    onRefresh={() => this.onRefresh()}
-                />
-            }
-            onScroll={Animated.event([
-                {
-                    nativeEvent: {
-                        contentOffset: {y: this.props.topBarTop},
-                    },
-                },
-            ])}
-            ListFooterComponent={() => this.genIndicator(hideLoaded)}
-            onEndReached={() => {
-                console.log('onEndReached.....');
-                // 等待页面布局完成以后，在让加载更多
-                if (this.canLoadMore) {
-                    this.onLoading();
-                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+        const containerWidth = width - 20;
+        const {lunboData} = this.state;
+        const columnTop = Animated.interpolate(this.scrollY, {
+            inputRange: [-220, 0, lunboHeight - 40],
+            outputRange: [lunboHeight - 40 + 220, lunboHeight - 40, 0],
+            extrapolate: 'clamp',
+        });
+        return <View>
+            <FlatListCommonUtil
+                onLoading={(load) => {
+                    this.props.onLoad(load);
+                }}
+                ListHeaderComponent={
+                    <View style={{
+                        alignItems: 'center',
+                        height: lunboHeight,
+                        paddingTop: 10,
+                        backgroundColor: theme,
+                        width: width,
+                        // zIndex: 1,
+
+                    }}>
+                        {/*轮播图*/}
+                        <Carousel
+                            // homeNavigation={NavigationUtil.homeNavigation}
+                            // navigation={this.props.navigation}
+                            style={styles.carousel}
+                            timeout={3000}
+                            data={lunboData}
+                            renderItem={this._renderItem}
+                            itemWidth={containerWidth}
+                            containerWidth={containerWidth}
+                            separatorWidth={0}
+                            pagingEnable={true}
+                            paginationDefaultColor={'rgba(255,255,255,0.5)'}
+                            paginationActiveColor={'rgba(255,255,255,1)'}
+                        />
+                        <View style={{height: 40}}/>
+
+                    </View>
+                    //
                 }
-            }}
-            // onScrollEndDrag={this._onScrollEndDrag}
-            windowSize={300}
-            onEndReachedThreshold={0.01}
-            onMomentumScrollBegin={() => {
-                console.log('我被触发');
-                this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
-            }}
-        />;
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: {
+                                    y: y =>
+                                        Animated.block([
+                                            Animated.set(this.scrollY, y),
+                                            Animated.call(
+                                                [y],
+                                                ([offsetY]) => (this.props.onScroll(offsetY)),
+                                            ),
+                                        ]),
+                                },
+                            },
+                        },
+                    ],
+                    {
+                        useNativeDriver: true,
+                    },
+                )}
+            />
+            <Animated.View style={{
+                width, height: 40, justifyContent: 'center', position: 'absolute',
+                backgroundColor: 'white', transform: [{translateY: columnTop}],
+            }}>
+                <Text
+                    style={{
+                        fontSize: 12,
+                        marginLeft: 15,
+                        marginTop: 10,
+                        color: bottomTheme,
+                    }}>为您推荐</Text>
+                <View style={{
+                    width: 50,
+                    backgroundColor: bottomTheme,
+                    height: 1,
+                    marginLeft: 15,
+                    marginTop: 10,
+                }}/>
+            </Animated.View>
+        </View>;
     }
-
-    onLoading = () => {
-        console.log('onLoading触发中');
-        this.setState({
-            hideLoaded: false,
-        });
-        const data = [...this.state.taskData];
-        // data.push([...data]);
-        let tmpData = [];
-        for (let i = 0; i < 10; i++) {
-            console.log(i);
-            tmpData.push({
-                id: i,
-            });
-        }
-        setTimeout(() => {
-            this.setState({
-                taskData: data.concat(tmpData),
-            }, () => {
-                // this
-                // this.setState({
-                //     hideLoaded: true,
-                // });
-            });
-        }, 2000);
-
-    };
-    onRefresh = () => {
-        this.setState({
-            isLoading: true,
-        });
-        this.props.onRefresh(true);
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-            });
-            this.props.onRefresh(false);
-        }, 1000);
-    };
-    params = {
-        pageIndex: 0,
-    };
-
-    genIndicator(hideLoaded) {
-        return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator
-                    style={{color: 'red'}}
-                />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
-            </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-
-                <Text style={{marginLeft: 10}}>没有更多了哦</Text>
-            </View>;
-    }
-
-    _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent/>;
-    };
-
 }
 
 class HomePage extends PureComponent {
@@ -171,15 +151,11 @@ class HomePage extends PureComponent {
     }
 
     state = {
-        lunboData: [
-            {imgUrl: 'http://img2.imgtn.bdimg.com/it/u=3292807210,3869414696&fm=26&gp=0.jpg'},
-            {imgUrl: 'http://static.open-open.com/lib/uploadImg/20160101/20160101125439_819.jpg'},
-        ],
+
         navigationIndex: 0,
         navigationRoutes: [
-            {key: 'first', title: '优选推荐'},
-            {key: 'second', title: '简单悬赏'},
-            {key: 'three', title: '高价悬赏'},
+            {key: 'first', title: '推荐'},
+            {key: 'second', title: '最新'},
         ],
 
     };
@@ -190,7 +166,7 @@ class HomePage extends PureComponent {
     }
 
     position = new Animated.Value(0);
-    topBarTop = new Animated.Value(0);
+
     // FirstRoute = () => {
     //     // const {taskData, isLoading, hideLoaded} = this.state;
     //
@@ -203,46 +179,19 @@ class HomePage extends PureComponent {
     // SecondRoute = () => (
     //     <View style={[styles.scene, {backgroundColor: '#673ab7'}]}/>
     // );
-    onRefresh = (isRefresh) => {
-        console.log('isRefresh', isRefresh);
-        if (!this.ActivityIndicator) {
-            return;
-        }
-        if (!isRefresh) {
-            this.ActivityIndicator.setNativeProps({
-                animating: false,
-                hidesWhenStopped: false,
-                style: {
-                    opacity: 0,
-                    zIndex: 0,
-                    elevation: 0,
-                },
-            });
-        } else {
-            this.ActivityIndicator.setNativeProps({
-                animating: true,
-                hidesWhenStopped: true,
-                style: {
-                    opacity: 1,
-                    zIndex: 3,
-                    elevation: 0.3,
-                },
-            });
-        }
-    };
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
     }
 
+    animations = {
+        val: new Animated.Value(0),
+    };
+
     render() {
         // console.log('wo被render');
-        const {lunboData, navigationRoutes, navigationIndex} = this.state;
-        const containerWidth = width - 18;
-        const topBarTop = this.topBarTop.interpolate({
-            inputRange: [0, lunboHeight, lunboHeight + 1],
-            outputRange: [0, -lunboHeight - 5, -lunboHeight - 5],
-        });
+        const {navigationRoutes, navigationIndex} = this.state;
+
         let statusBar = {
             hidden: false,
         };
@@ -251,184 +200,191 @@ class HomePage extends PureComponent {
             hide={true}
             statusBar={statusBar}
         />;
-
+        const searchWidth = Animated.interpolate(this.animations.val, {
+            inputRange: [0, 1],
+            outputRange: [width - 20, width - 150],
+            extrapolate: 'clamp',
+        });
+        const marginTop = Animated.interpolate(this.animations.val, {
+            inputRange: [0, 1],
+            outputRange: [0, -40],
+            extrapolate: 'clamp',
+        });
+        const svgTop = Animated.interpolate(this.animations.val, {
+            inputRange: [0, 1],
+            outputRange: [60, 20],
+            extrapolate: 'clamp',
+        });
         return (
             <View
                 style={{flex: 1}}
             >
                 {navigationBar}
                 {/*顶部搜索栏样式*/}
-                <View style={{
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    zIndex: 2,
-                    elevation: 0.2,
-                    backgroundColor: theme,
-                }}>
-                    <Text style={{
-                        marginRight: 10,
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                    }}>简单赚</Text>
-                    <SearchComponent
-                        height={topIputHeight}
-                        onFocus={this.SearchOnFocus}
-                    />
-                    {/*<View style={{}}>*/}
-                    {/*    */}
-                    {/*</View>*/}
-                </View>
+                <View style={{flex: 1}}>
+                    <View style={{
+                        paddingHorizontal: 10,
+                        paddingTop: 15,
+                        paddingBottom: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        zIndex: 2,
+                        elevation: 0.2,
+                        backgroundColor: theme,
+                        // marginTop:10
+                    }}>
+                        <AnimatedTouchableOpacity
+                            activeOpacity={1}
+                            onPress={this.SearchOnFocus}
+                            style={{
+                                height: topIputHeight, width: searchWidth, backgroundColor: 'rgba(0,0,0,0.05)',
+                                alignItems: 'center', borderRadius: 10, flexDirection: 'row',
+                            }}>
+                            <SvgUri style={{
+                                marginHorizontal: 8,
+                            }} width={19} height={19} svgXmlData={search}/>
+                            <Text style={{color: 'rgba(0,0,0,0.6)'}}>搜索任务ID,商家名称</Text>
+                        </AnimatedTouchableOpacity>
 
-                {/*rn0.6bug多且行且珍惜*/}
-                <View style={{flex: 1, overflow: 'hidden'}}>
-                    {/*安卓刷新图标*/}
+                        <TabBar
 
-                    <Animated.View
-                        style={{
+                            style={{
+                                height: 30,
+                                paddingLeft: 10,
+                            }}
+                            position={this.position}
+                            contentContainerStyle={{paddingTop: 7}}
+                            routes={navigationRoutes}
+                            index={navigationIndex}
+                            sidePadding={0}
+                            handleIndexChange={this.handleIndexChange}
+                            bounces={true}
+                            titleMarginHorizontal={8}
+                            activeStyle={{fontSize: 14, color: [0, 0, 0]}}
+                            inactiveStyle={{fontSize: 12, color: [95, 95, 95], height: 10}}
+                            indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
+                        />
+                    </View>
+                    <AnimatedTouchableOpacity
+                        style={{position: 'absolute', top: svgTop, zIndex: 3, right: 10, elevation: 1}}>
+                        {/*<Image*/}
+                        <FastImage
+                            style={{
+                                backgroundColor: '#E8E8E8',
+                                // 设置宽度
+                                width: 25,
+                                height: 25,
+                                borderRadius: 25,
+                            }}
+                            source={{uri: `https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573504411074&di=a19e2ebb37ff7fd3c9c14dccb1debeaf&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201709%2F22%2F20170922162149_snyk3.jpeg`}}
+                            resizeMode={FastImage.stretch}
+                        />
+                    </AnimatedTouchableOpacity>
+                    <Animated.View style={{marginTop: marginTop, width, height: 30, backgroundColor: 'white'}}>
+                        <TabBar
+                            style={{
+                                height: 28,
+                                paddingLeft: 10,
 
-                            position: 'absolute',
-                            // top: topBarTop,
-                            // left: 10,
-                            zIndex: 2,
-                            elevation: 0.1,
-                            transform: [{translateY: topBarTop}],
-
-                        }}
-                    >
-                        {/*真实轮播在这*/}
-
-                        <View style={{
-                            alignItems: 'center',
-                            height: lunboHeight,
-                            paddingTop: 10,
-                            backgroundColor: theme,
-                            width: width,
-                            zIndex: -10,
-
-                        }}>
-                            {/*轮播图*/}
-                            <Carousel
-                                // homeNavigation={NavigationUtil.homeNavigation}
-                                // navigation={this.props.navigation}
-                                style={styles.carousel}
-                                timeout={3000}
-                                data={lunboData}
-                                renderItem={this._renderItem}
-                                itemWidth={containerWidth}
-                                containerWidth={containerWidth}
-                                separatorWidth={0}
-                                pagingEnable={true}
-                                paginationDefaultColor={'rgba(255,255,255,0.5)'}
-                                paginationActiveColor={'rgba(255,255,255,1)'}
-                            />
-
-                        </View>
-
-                        <View style={{backgroundColor: theme}}>
-                            {/*真实topbar在这*/}
-                            {/*topbar*/}
-                            <TabBar
-                                style={{
-                                    height: 60,
-                                    width: width - 35,
-                                    marginLeft: 10,
-                                    // zIndex: 3,
-                                    // elevation: 0.3,
-                                }}
-                                // position={props.position}
-                                // titleMarginHorizontal
-                                position={this.position}
-                                contentContainerStyle={{paddingTop: 24.5}}
-                                routes={navigationRoutes}
-                                index={navigationIndex}
-                                sidePadding={0}
-                                handleIndexChange={this.handleIndexChange}
-                                // indicatorStyle={styles.indicator}
-                                bounces={true}
-                                titleMarginHorizontal={25}
-                                activeStyle={{fontSize: 18, color: [0, 0, 0]}}
-                                inactiveStyle={{fontSize: 14, color: [0, 0, 0], height: 10}}
-                                indicatorStyle={{height: 5, backgroundColor: bottomTheme, borderRadius: 3}}
-                            />
-                            {/*topbar右边图标*/}
-                            <TouchableOpacity
-                                activeOpacity={0.5}
-                                onPress={() => {
-                                    console.log('我被单机 ');
-                                }}
-                                style={{
-                                    position: 'absolute',
-                                    right: 10,
-                                    top: 25,
-                                }}>
-                                <SvgUri width={15} height={15} svgXmlData={more}/>
-                            </TouchableOpacity>
-                        </View>
-
-
+                            }}
+                            position={this.position}
+                            contentContainerStyle={{paddingTop: 5}}
+                            routes={navigationRoutes}
+                            index={navigationIndex}
+                            sidePadding={0}
+                            handleIndexChange={this.handleIndexChange}
+                            bounces={true}
+                            titleMarginHorizontal={15}
+                            activeStyle={{fontSize: 18, color: [0, 0, 0]}}
+                            inactiveStyle={{fontSize: 14, color: [95, 95, 95], height: 10}}
+                            indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
+                        />
                     </Animated.View>
 
-                    {/*下部刷新列表tab*/}
-                    <TabView
-                        ref={ref => this.tabView = ref}
-                        indicatorStyle={{backgroundColor: 'white'}}
-                        navigationState={{index: navigationIndex, routes: navigationRoutes}}
-                        renderScene={this.renderScene}
-                        position={this.position}
-                        renderTabBar={() => null}
-                        onIndexChange={index => this.setState({
-                            navigationIndex: index,
-                        })}
-                        initialLayout={{width: Dimensions.get('window').width}}
-                        lazy={true}
-                    />
+                    {/*rn0.6bug多且行且珍惜*/}
+                    <View style={{flex: 1, overflow: 'hidden'}}>
+                        <TabView
+                            // ref={ref => this.tabView = ref}
+                            indicatorStyle={{backgroundColor: 'white'}}
+                            navigationState={{index: navigationIndex, routes: navigationRoutes}}
+                            renderScene={this.renderScene}
+                            position={this.position}
+                            renderTabBar={() => null}
+                            onIndexChange={index => this.setState({
+                                navigationIndex: index,
+                            })}
+                            initialLayout={{width}}
+                            lazy={true}
+                        />
+                    </View>
                 </View>
-
 
             </View>
         );
     }
 
-    renderScene = ({route, jumpTo}) => {
-        this.jumpTo = jumpTo;
-        switch (route.key) {
-            case 'first':
-                return <FristListComponent
-                    topBarTop={this.topBarTop}
-                    onScroll={this._onScroll}
-                    onRefresh={this.onRefresh}
-                />;
-            case 'second':
-                return <FristListComponent
-                    topBarTop={this.topBarTop}
-                    onScroll={this._onScroll}
-                    onRefresh={this.onRefresh}
-                />;;
-        }
-    };
     handleIndexChange = (index) => {
         // console.log(index);
         const {navigationRoutes} = this.state;
         this.jumpTo(navigationRoutes[index].key);
     };
+    renderScene = ({route, jumpTo}) => {
+        this.jumpTo = jumpTo;
+        switch (route.key) {
+            case 'first':
+                return <FristListComponent
+                    position={this.position}
+                    onScroll={this._onScroll}
+                    onLoad={this._onLoad}
+                />;
 
-    _renderItem = ({item, index}) => {
-        return <TouchableOpacity onPress={() => {
-            console.log('我被单机FastImage');
-        }}>
-            <FastImage
-                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
-                source={{uri: `${item.imgUrl}`}}
-                resizeMode={FastImage.stretch}
-                key={index}
-            />
-        </TouchableOpacity>
-            ;
+        }
+    };
+    flatListLoad = false;
+    _onLoad = (refresh) => {
+        this.flatListLoad = refresh;
+    };
+    AnimatedIsshow = false;
+    lastScrollTitle = 0;
+    showAnimated = (y) => {
+        if (y > this.nowY && y > 0) {
+            if (!this.AnimatedIsshow) {
+
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 1,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = true;
+            }
+        }
+        if (y < this.nowY && !this.flatListLoad) {
+            if (this.AnimatedIsshow) {
+                this.lastScrollTitle = Date.now();
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 0,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = false;
+            }
+        }
+    };
+    _onScroll = (y) => {
+        // const  = e.nativeEvent.contentOffset.y;
+        if (Platform.OS === 'android') {
+            if (this.lastScrollTitle + 800 < Date.now()) {
+                this.lastScrollTitle = Date.now();
+                this.showAnimated(y);
+            }
+        } else {
+            this.showAnimated(y);
+        }
+
+
+        this.nowY = y;
     };
     SearchOnFocus = () => {
-        console.log('我被触发');
         NavigationUtils.goPage({}, 'SearchPage');
     };
 }
@@ -443,7 +399,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E8E8E8',
         // 设置宽度
         width: width,
-        borderRadius: 5,
+        borderRadius: 10,
         // 设置高度
         // height:150
     },

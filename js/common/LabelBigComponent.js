@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Platform, StyleSheet, View, TextInput, Text} from 'react-native';
+import {View, Text} from 'react-native';
 
 
 class LabelBigComponent extends PureComponent {
@@ -8,10 +8,10 @@ class LabelBigComponent extends PureComponent {
     static defaultProps = {
         title: '高价',
         paddingHorizontal: 6,
-        paddingVertical:3,
+        paddingVertical: 3,
         fontSize: 12,
-        marginRight:5,
-        marginTop:0,
+        marginRight: 5,
+        marginTop: 0,
         onFocus: () => {
 
         },
@@ -31,27 +31,23 @@ class LabelBigComponent extends PureComponent {
     }
 
     render() {
-        const {title, paddingHorizontal, fontSize,paddingVertical,marginRight,marginTop} = this.props;
+        const {title, paddingHorizontal, fontSize, paddingVertical, marginRight, marginTop} = this.props;
         return <View style={{
             paddingHorizontal,
             paddingVertical,
-            backgroundColor: '#f2f2f2',
-            borderRadius: 2,
+            backgroundColor: '#f3f3f3',
+            borderRadius: 4,
             marginRight,
             marginTop,
-            // paddingBottomW
         }}>
             <Text style={{
                 fontSize,
                 opacity: 0.5,
+                color:'black'
                 // fontWeight: '100',
             }}>{title}</Text>
         </View>;
-
-
     }
-
-
 }
 
 // class

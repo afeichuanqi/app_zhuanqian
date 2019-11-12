@@ -11,7 +11,7 @@ import {
     View,
     Text,
     Dimensions,
-    StyleSheet, ScrollView, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity,
+    StyleSheet, ScrollView, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity, Platform,
 } from 'react-native';
 import {bottomTheme, theme} from '../appSet';
 import Animated, {Easing} from 'react-native-reanimated';
@@ -27,6 +27,7 @@ import TaskSumComponent from '../common/TaskSumComponent';
 import zhankai from '../res/svg/zhankai.svg';
 import yincang from '../res/svg/yincang.svg';
 import toutiao from '../res/svg/toutiao.svg';
+import FlatListCommonUtil from '../common/FlatListCommonUtil';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -53,7 +54,6 @@ class TaskHallPage extends PureComponent {
     }
 
     position = new Animated.Value(0);
-    topBarTop = new Animated.Value(0);
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
@@ -171,75 +171,10 @@ class TaskHallPage extends PureComponent {
 }
 
 class FristListComponent extends PureComponent {
-    state = {
-        taskData: [
-            {id: 1},
-            {id: 2},
-            {id: 3},
-            {id: 4},
-            {id: 5},
-            {id: 6},
-            {id: 7},
-            {id: 8},
-            {id: 9},
-            {id: 10},
-        ],
-        isLoading: false,
-        hideLoaded: false,
-    };
-    _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent
-            key={index}
-        />;
+    onLoading = (load) => {
+        this.onloading = load;
     };
 
-    genIndicator(hideLoaded) {
-        return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator
-                    style={{color: 'red'}}
-                />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
-            </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-
-                <Text style={{marginLeft: 10}}>没有更多了哦</Text>
-            </View>;
-    }
-
-    onLoading = () => {
-        console.log('onLoading触发中');
-        this.onloading = true;
-        this.setState({
-            hideLoaded: false,
-        });
-        const data = [...this.state.taskData];
-        // data.push([...data]);
-        let tmpData = [];
-        for (let i = 0; i < 10; i++) {
-            console.log(i);
-            tmpData.push({
-                id: i,
-            });
-        }
-        this.setState({
-            taskData: data.concat(tmpData),
-        });
-        this.onloading = false;
-
-    };
-    onRefresh = () => {
-        this.setState({
-            isLoading: true,
-        });
-        // this.props.onRefresh(true);
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-            });
-            // this.props.onRefresh(false);
-        }, 1000);
-    };
     params = {
         pageIndex: 0,
     };
@@ -251,82 +186,74 @@ class FristListComponent extends PureComponent {
         }
     };
     nowY = 0;
-
-    _onScroll = (e) => {
-        const y = e.nativeEvent.contentOffset.y;
-
-        if (y > this.nowY && y > 0) {
-            this.topLeftFilterComponent.showAnimated();
-        } else if (y < this.nowY && !this.onloading) {
-            this.topLeftFilterComponent.hideAnimated();
+    lastScrollTitle = 0;
+    _showAnimated = (y) => {
+        if (y > this.nowY && y > 0 && !this.AnimatedIsshow) {
+            timing(this.animations.val, {
+                duration: 300,
+                toValue: 1,
+                easing: Easing.inOut(Easing.ease),
+            }).start();
+            this.AnimatedIsshow = true;
+        } else if (y < this.nowY && !this.onloading && this.AnimatedIsshow) {
+            timing(this.animations.val, {
+                duration: 300,
+                toValue: 0,
+                easing: Easing.inOut(Easing.ease),
+            }).start();
+            this.AnimatedIsshow = false;
         }
 
         this.nowY = y;
-
     };
-
+    _onScroll = (e) => {
+        const y = e.nativeEvent.contentOffset.y;
+        if (Platform.OS === 'android') {
+            if (this.lastScrollTitle + 800 < Date.now()) {
+                this.lastScrollTitle = Date.now();
+                this._showAnimated(y);
+            }
+        } else {
+            this._showAnimated(y);
+        }
+    };
+    animations = {
+        val: new Animated.Value(0),
+    };
+    _sureClick = () => {
+        this.filterBtnComponent.hide();
+    };
     render() {
-        const {taskData, isLoading, hideLoaded} = this.state;
+        const marginTop = Animated.interpolate(this.animations.val, {
+            inputRange: [0, 1],
+            outputRange: [0, -40],
+            extrapolate: 'clamp',
+        });
         return <View style={{flex: 1, zIndex: 3}}>
             {/*工具条*/}
-            <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                borderBottomWidth: 0.5,
-                borderBottomColor: '#e8e8e8',
-                zIndex: 3,
-                height: 30,
-                width,
-                backgroundColor: theme,
-            }}>
-                <TopLeftFilterComponent ref={ref => this.topLeftFilterComponent = ref}/>
-                <FilterBtnComponent onPress={this._topLeftClick}/>
-            </View>
+            <Animated.View style={{marginTop: marginTop, zIndex: 5}}>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: '#e8e8e8',
+                    zIndex: 3,
+                    height: 40,
+                    width,
+                    backgroundColor: theme,
+                }}>
+                    <TopLeftFilterComponent ref={ref => this.topLeftFilterComponent = ref}/>
+                    <FilterBtnComponent ref={ref => this.filterBtnComponent = ref} onPress={this._topLeftClick}/>
+                </View>
+                <FilterComponent sureClick={this._sureClick} ref={ref => this.filterComponent = ref}/>
+            </Animated.View>
+
             <HeadlineComponent/>
             {/*筛选器*/}
-            <FilterComponent ref={ref => this.filterComponent = ref}/>
-
-            <AnimatedFlatList
-                // ListHeaderComponent={
-                //
-                //
-                // }
-                getItemLayout={(data, index) => (
-                    {length: 80, offset: 80 * index, index}
-                )}
-
-                // ref={ref => this.flatList = ref}
-                data={taskData}
-                scrollEventThrottle={1}
-                renderItem={data => this._renderIndexPath(data)}
-                keyExtractor={(item, index) => index + ''}
-                refreshControl={
-                    <RefreshControl
-                        title={'更新任务中'}
-                        refreshing={isLoading}
-                        onRefresh={() => this.onRefresh()}
-                    />
-                }
+            <FlatListCommonUtil
                 onScroll={this._onScroll}
-                ListFooterComponent={() => this.genIndicator(hideLoaded)}
-                onEndReached={() => {
-                    console.log('onEndReached.....');
-                    // 等待页面布局完成以后，在让加载更多
-                    if (this.canLoadMore) {
-                        this.onLoading();
-                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                    }
-                }}
-                // onScrollEndDrag={this._onScrollEndDrag}
-                windowSize={300}
-                onEndReachedThreshold={0.01}
-                onMomentumScrollBegin={() => {
-                    console.log('我被触发');
-                    this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
-                }}
+                onLoading={this.onLoading}
             />
-
-
         </View>;
     }
 }
@@ -351,22 +278,19 @@ class HeadlineComponent extends PureComponent {
 
     componentDidMount() {
 
-        // setInterval(() => {
-        //     this.index = this.index + 1;
-        //     console.log(this.index, this.props.HeadlineArrays.length);
-        //     if (this.index >= this.props.HeadlineArrays.length) {
-        //         this.index = 0;
-        //     }
-        //     this.flatList.scrollToIndex({viewPosition: 0, index: this.index});
-        // }, 5000);
     }
 
     render() {
         const {HeadlineArrays} = this.props;
 
         return <View style={{
-            height: 40, width, backgroundColor: 'white', flexDirection: 'row', alignItems: 'center',
-            borderBottomWidth: 0.5, borderBottomColor: 'rgba(0,0,0,0.1)',
+            height: 40,
+            width,
+            backgroundColor: 'white',
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderBottomWidth: 0.3,
+            borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <SvgUri style={{marginLeft: 20, marginRight: 5}} width={20} height={20} svgXmlData={toutiao}/>
@@ -437,35 +361,6 @@ class TopLeftFilterComponent extends Component {
         return false;
     }
 
-    animations = {
-        translateX: new Animated.Value(0),
-    };
-    isShow = false;
-
-    showAnimated = () => {
-        // Animated.parallel([]);
-        if (!this.isShow) {
-            timing(this.animations.translateX, {
-                duration: 300,
-                toValue: 1,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
-            this.isShow = true;
-        }
-
-    };
-    hideAnimated = () => {
-        // Animated.parallel([]);
-        if (this.isShow) {
-            timing(this.animations.translateX, {
-                duration: 300,
-                toValue: 0,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
-            this.isShow = false;
-        }
-
-    };
     _onPress = (index) => {
         this.setState({
             index,
@@ -476,20 +371,9 @@ class TopLeftFilterComponent extends Component {
         // console.lo
         const {index} = this.state;
         const {filterArray} = this.props;
-        const translateX = Animated.interpolate(this.animations.translateX, {
-            inputRange: [0, 1],
-            outputRange: [0, width / 2 - 80],
-            extrapolate: 'clamp',
-        });
-        const fontSize = Animated.interpolate(this.animations.translateX, {
-            inputRange: [0, 1],
-            outputRange: [12, 16],
-            extrapolate: 'clamp',
-        });
-        return <Animated.View style={{
+        return <View style={{
             paddingHorizontal: 10, flexDirection: 'row',
-            justifyContent: 'space-between', height: 30, alignItems: 'center', width: 200,
-            transform: [{translateX: translateX}],
+            justifyContent: 'space-between', height: 40, alignItems: 'center', width: 200,
         }}>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                 {filterArray.map((item, Lindex, arr) => {
@@ -505,8 +389,8 @@ class TopLeftFilterComponent extends Component {
                             // transform: [{translationY:80}],
                             // transfrom
                         }, Lindex === index ? {
-                            color: 'black',
-                            fontSize: fontSize,
+                            color: bottomTheme,
+                            fontSize: 16,
                         } : {color: '#595959'}]}>{item.title}</Animated.Text>
 
                         {Lindex === index && <View style={{
@@ -523,7 +407,7 @@ class TopLeftFilterComponent extends Component {
 
             </View>
 
-        </Animated.View>;
+        </View>;
     }
 }
 
@@ -539,6 +423,11 @@ class FilterBtnComponent extends PureComponent {
         });
 
     };
+    hide = () => {
+        this.setState({
+            show: false,
+        });
+    };
 
     render() {
         const {show} = this.state;
@@ -548,7 +437,7 @@ class FilterBtnComponent extends PureComponent {
             onPress={() => {
                 this.props.onPress();
             }}
-            style={{height: 30, justifyContent: 'center', marginRight: 8}}>
+            style={{height: 40, justifyContent: 'center', marginRight: 8}}>
             <TouchableOpacity
                 activeOpacity={0.6}
                 onPress={this._onPress}
@@ -573,13 +462,13 @@ class FilterBtnComponent extends PureComponent {
 class FilterComponent extends PureComponent {
     static defaultProps = {
         typeArray: [
-            // {id: 1, title: '注册', type: 1},
-            // {id: 2, title: '投票', type: 1},
-            // {id: 3, title: '关注', type: 1},
-            // {id: 4, title: '浏览', type: 1},
-            // {id: 5, title: '下载', type: 1},
-            // {id: 6, title: '转发', type: 2},
-            // {id: 7, title: '发帖', type: 2},
+            {id: 1, title: '注册', type: 1},
+            {id: 2, title: '投票', type: 1},
+            {id: 3, title: '关注', type: 1},
+            {id: 4, title: '浏览', type: 1},
+            {id: 5, title: '下载', type: 1},
+            {id: 6, title: '转发', type: 2},
+            {id: 7, title: '发帖', type: 2},
         ],
     };
     typeMap = new Map();
@@ -634,7 +523,7 @@ class FilterComponent extends PureComponent {
         const {typeArray} = this.props;
         return <View ref={ref => this.containerBox = ref} style={{
             position: 'absolute',
-            top: 30,
+            top: 40,
             height: 0,
             width,
             zIndex: 1,
@@ -754,6 +643,7 @@ class FilterComponent extends PureComponent {
         });
     };
     _sureClick = () => {
+        this.props.sureClick();
         this.hide();
     };
 }

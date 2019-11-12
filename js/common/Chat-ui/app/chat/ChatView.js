@@ -513,7 +513,7 @@ class ChatWindow extends PureComponent {
 
   _onVoiceStart = () => {
     this.setState({ voiceEnd: true })
-    this.voice.show()
+    this.voice.AnimatedIsshow()
   }
 
   _onVoiceEnd = () => {

@@ -24,7 +24,7 @@ const TABS = {
         navigationOptions: {
             tabBarLabel: '主页',
             tabBarIcon: ({tintColor, focused}) => (
-                <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
+                <SvgUri width={24} height={24}  fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
             ),
         },
     },
@@ -54,7 +54,6 @@ const TABS = {
             ),
         },
     },
-
 };
 
 class DynamicTabNavigator extends Component<Props> {
@@ -90,8 +89,6 @@ class TabBarcompnent extends Component {
         return (
             <BottomTabBar
                 {...this.props}
-
-                // activeTintColor={this.props.theme.themeColor}
             />
 
         );
