@@ -15,7 +15,7 @@ import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
 import {theme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
-
+import *as wechat from 'react-native-wechat'
 class Welcome extends PureComponent {
     constructor(props) {
         super(props);
@@ -42,6 +42,8 @@ class Welcome extends PureComponent {
 
 
         }, 100);
+        //申请微信注册
+        wechat.registerApp('wx38e70176d0d810e2');
 
         // this.requestPermission();
     }

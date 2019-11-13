@@ -1,18 +1,7 @@
-import {onChangetheme} from './theme';
-import {changeBarTitle} from './bartitle';
-import {onRegister} from './register';
-import {onLogin} from './login';
-import {onHotConfig} from './hotconfig';
-import {onUserInfo,onCreateUserInfo} from './userInfo';
+import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName} from './userinfo';
 export default {
-    onChangetheme,
-    onRegister,
     onLogin,
-
-    onUserInfo,
-    onCreateUserInfo,
-
-    onHotConfig,
-    changeBarTitle,
-
+    onUploadAvatar,
+    onSetUserSex,
+    onSetUserName
 }

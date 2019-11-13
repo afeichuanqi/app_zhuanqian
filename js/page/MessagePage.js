@@ -15,7 +15,7 @@ import {
     RefreshControl,
     FlatList,
     StyleSheet,
-    ActivityIndicator,
+    ActivityIndicator, StatusBar,
 } from 'react-native';
 import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -58,10 +58,12 @@ class MessagePage extends PureComponent {
             outputRange: [300, 0],
             extrapolate: 'clamp',
         });
+
         let statusBar = {
+            hidden: false,
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
-            // barStyle: 'light-content',
-            // hidden: false,
+            // barStyle: 'dark-content',
+            // translucent:true
         };
         let navigationBar = <NavigationBar
             // showStatusBarHeight={true}

@@ -1,14 +1,10 @@
-
 export default class NavigationUtils {
 
     /**
      * 返回上上一页
      */
-    static goBack(navigation) {
-        navigation.goBack()
-
-
-
+    static goBack(navigation, key = '') {
+        navigation.goBack(key);
     }
 
     /**
@@ -28,7 +24,7 @@ export default class NavigationUtils {
         navigation.navigate(
             page,
             {
-                ...params
+                ...params,
             });
     }
 
@@ -43,7 +39,7 @@ export default class NavigationUtils {
         navigation.navigate(
             page,
             {
-                ...params
+                ...params,
             });
     }
 }

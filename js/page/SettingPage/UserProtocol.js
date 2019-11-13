@@ -12,7 +12,7 @@ import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../../appSet';
 import NavigationBar from '../../common/NavigationBar';
 import ViewUtil from '../../util/ViewUtil';
-import HTML from '../../common/RenderHTML';
+import HTML from 'react-native-render-html';
 import {order_rule, release_rule} from '../../res/text/rule';
 
 const {width} = Dimensions.get('window');

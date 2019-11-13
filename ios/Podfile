@@ -48,6 +48,12 @@ target 'AwesomeProject' do
 
   pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  pod 'RCTWeChat', :path => '../node_modules/react-native-wechat'
+
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
   target 'AwesomeProjectTests' do
     inherit! :search_paths
     # Pods for testing

@@ -1,5 +1,4 @@
 import React from 'react';
-import {Platform} from 'react-native';
 
 import {
     createAppContainer,
@@ -11,7 +10,6 @@ import HomePage from '../page/HomePage';
 import SearchPage from '../page/SearchPage';
 import ShopInfoPage from '../page/ShopInfoPage';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers';
-// import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 import {connect} from 'react-redux';
 import ChatRoomPage from '../page/ChatRoomPage';
 import LoginPage from '../page/LoginPage';
@@ -33,7 +31,6 @@ const InitNavigator = createStackNavigator({
         },
     },
 });
-const IOS_MODAL_ROUTES = ['VideoPlayPage', 'MyVipPage'];
 
 // const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
 //     const isModal = IOS_MODAL_ROUTES.some(

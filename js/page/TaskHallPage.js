@@ -11,7 +11,7 @@ import {
     View,
     Text,
     Dimensions,
-    StyleSheet, ScrollView, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity, Platform,
+    StyleSheet, ScrollView, FlatList, TouchableOpacity, Platform,
 } from 'react-native';
 import {bottomTheme, theme} from '../appSet';
 import Animated, {Easing} from 'react-native-reanimated';
@@ -23,7 +23,6 @@ import search from '../res/svg/search.svg';
 import fabu from '../res/svg/fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import {TabView} from 'react-native-tab-view';
-import TaskSumComponent from '../common/TaskSumComponent';
 import zhankai from '../res/svg/zhankai.svg';
 import yincang from '../res/svg/yincang.svg';
 import toutiao from '../res/svg/toutiao.svg';
@@ -65,7 +64,7 @@ class TaskHallPage extends PureComponent {
         let statusBar = {
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
             // barStyle: 'light-content',
-            // hidden: false,
+            hidden: false,
         };
         let navigationBar = <NavigationBar
             // showStatusBarHeight={true}
@@ -90,7 +89,7 @@ class TaskHallPage extends PureComponent {
                     <TouchableOpacity style={{
                         position: 'absolute',
                         left: 20,
-                        top: 10,
+                        top: 15,
 
                     }}>
                         <SvgUri width={21} height={21} fill={'white'} svgXmlData={search}/>
@@ -99,10 +98,10 @@ class TaskHallPage extends PureComponent {
 
                     <TabBar
                         style={{
-                            height: 35,
+                            height: 40,
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 10}}
+                        contentContainerStyle={{paddingTop: 17}}
                         routes={navigationRoutes}
                         index={navigationIndex}
                         // sidePadding={0}
@@ -120,7 +119,7 @@ class TaskHallPage extends PureComponent {
                         style={{
                             position: 'absolute',
                             right: 10,
-                            top: 8,
+                            top: 12,
                             width: 70,
                             height: 25,
                             borderRadius: 20,
@@ -187,35 +186,81 @@ class FristListComponent extends PureComponent {
     };
     nowY = 0;
     lastScrollTitle = 0;
-    _showAnimated = (y) => {
-        if (y > this.nowY && y > 0 && !this.AnimatedIsshow) {
-            timing(this.animations.val, {
-                duration: 300,
-                toValue: 1,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
-            this.AnimatedIsshow = true;
-        } else if (y < this.nowY && !this.onloading && this.AnimatedIsshow) {
-            timing(this.animations.val, {
-                duration: 300,
-                toValue: 0,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
-            this.AnimatedIsshow = false;
+    _iosShowAnimated = (y) => {
+        if (y > this.nowY && y > 0) {
+
+            if (!this.AnimatedIsshow) {
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 1,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = true;
+
+            }
+        }
+        //
+        if (y < this.nowY && !this.onloading) {
+            if (this.AnimatedIsshow) {
+                // this.lastScrollTitle = Date.now();
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 0,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = false;
+            }
         }
 
-        this.nowY = y;
+
+    };
+    _androidShowAnimated = (y) => {
+        if (this.lastScrollTitle + 800 < Date.now()) {
+            this.lastScrollTitle = Date.now();
+            if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 0,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = false;
+                return;
+            }
+            if (y < this.nowY) {
+                if (this.AnimatedIsshow) {
+                    // this.lastScrollTitle = Date.now();
+                    timing(this.animations.val, {
+                        duration: 300,
+                        toValue: 0,
+                        easing: Easing.inOut(Easing.ease),
+                    }).start();
+                    this.AnimatedIsshow = false;
+                }
+            }
+            if (y > this.nowY) {
+                if (!this.AnimatedIsshow) {
+                    timing(this.animations.val, {
+                        duration: 300,
+                        toValue: 1,
+                        easing: Easing.inOut(Easing.ease),
+                    }).start();
+                    this.AnimatedIsshow = true;
+
+                }
+            }
+
+
+        }
     };
     _onScroll = (e) => {
         const y = e.nativeEvent.contentOffset.y;
         if (Platform.OS === 'android') {
-            if (this.lastScrollTitle + 800 < Date.now()) {
-                this.lastScrollTitle = Date.now();
-                this._showAnimated(y);
-            }
+            this._androidShowAnimated(y);
         } else {
-            this._showAnimated(y);
+            this._iosShowAnimated(y);
         }
+        this.nowY = y;
+
     };
     animations = {
         val: new Animated.Value(0),
@@ -223,15 +268,33 @@ class FristListComponent extends PureComponent {
     _sureClick = () => {
         this.filterBtnComponent.hide();
     };
+
     render() {
         const marginTop = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
             outputRange: [0, -40],
             extrapolate: 'clamp',
         });
+        const translateY = Animated.interpolate(this.animations.val, {
+            inputRange: [0, 1],
+            outputRange: [80, 0],
+            extrapolate: 'clamp',
+        });
         return <View style={{flex: 1, zIndex: 3}}>
+
+
+            {/*筛选器*/}
+            <Animated.View style={{transform: [{translateY}]}}>
+                <FlatListCommonUtil
+                    onScroll={this._onScroll}
+                    onLoading={this.onLoading}
+                    // onMomentumScrollEnd={(e)=>{this._androidShowAnimated(e.nativeEvent.contentOffset.y)}}
+                    // onScrollEndDrag={this._onScroll}
+                    // onScrollBeginDrag={this._onScroll}
+                />
+            </Animated.View>
             {/*工具条*/}
-            <Animated.View style={{marginTop: marginTop, zIndex: 5}}>
+            <Animated.View style={{position: 'absolute', top: marginTop, zIndex: 4, elevation: 0.2}}>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -240,20 +303,17 @@ class FristListComponent extends PureComponent {
                     zIndex: 3,
                     height: 40,
                     width,
+
                     backgroundColor: theme,
                 }}>
                     <TopLeftFilterComponent ref={ref => this.topLeftFilterComponent = ref}/>
                     <FilterBtnComponent ref={ref => this.filterBtnComponent = ref} onPress={this._topLeftClick}/>
                 </View>
-                <FilterComponent sureClick={this._sureClick} ref={ref => this.filterComponent = ref}/>
+                <HeadlineComponent/>
+
             </Animated.View>
 
-            <HeadlineComponent/>
-            {/*筛选器*/}
-            <FlatListCommonUtil
-                onScroll={this._onScroll}
-                onLoading={this.onLoading}
-            />
+            <FilterComponent sureClick={this._sureClick} ref={ref => this.filterComponent = ref}/>
         </View>;
     }
 }
@@ -261,7 +321,7 @@ class FristListComponent extends PureComponent {
 class HeadlineComponent extends PureComponent {
     static defaultProps = {
         HeadlineArrays: [
-            {id: 1, title: '1111', price: 10},
+            {id: 1, title: '注册哟微信全部一起注册', price: 10},
             {id: 2, title: '2222', price: 10},
             {id: 3, title: '3333', price: 10},
             {id: 4, title: '4444', price: 10},
@@ -291,6 +351,8 @@ class HeadlineComponent extends PureComponent {
             alignItems: 'center',
             borderBottomWidth: 0.3,
             borderBottomColor: 'rgba(0,0,0,0.1)',
+            // zIndex:-1,
+            // elevation: -0.1,
         }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <SvgUri style={{marginLeft: 20, marginRight: 5}} width={20} height={20} svgXmlData={toutiao}/>
@@ -298,7 +360,7 @@ class HeadlineComponent extends PureComponent {
                     fontFamily={'sans-serif-condensed'}
                     style={{
                         fontSize: 13,
-                    }}>热门任务</Text>
+                    }}>热门任务 :</Text>
             </View>
             {/*分隔符*/}
             <View
@@ -320,7 +382,9 @@ class HeadlineComponent extends PureComponent {
                     onEndReachedThreshold={0.01}
                 />
                 {/*禁止触摸*/}
-                <View style={{position: 'absolute', width: 300, height: 40, opacity: 1}}/>
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{position: 'absolute', width: 300, height: 40, opacity: 1, zIndex: 3}}/>
             </View>
         </View>;
     }
@@ -374,6 +438,7 @@ class TopLeftFilterComponent extends Component {
         return <View style={{
             paddingHorizontal: 10, flexDirection: 'row',
             justifyContent: 'space-between', height: 40, alignItems: 'center', width: 200,
+
         }}>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                 {filterArray.map((item, Lindex, arr) => {
@@ -512,7 +577,7 @@ class FilterComponent extends PureComponent {
     render() {
         const translateY = Animated.interpolate(this.animations.translateY, {
             inputRange: [0, 1],
-            outputRange: [-260, 0],
+            outputRange: [-260, 40],
             extrapolate: 'clamp',
         });
         const opacity = Animated.interpolate(this.animations.translateY, {
@@ -527,6 +592,7 @@ class FilterComponent extends PureComponent {
             height: 0,
             width,
             zIndex: 1,
+            elevation: 0.1,
         }}>
             {/*/!*遮罩层*!/*/}
 
@@ -536,10 +602,12 @@ class FilterComponent extends PureComponent {
                 style={{
                     flex: 1, backgroundColor: '#b4b4b4',
                     opacity: opacity,
+
                 }}/>
             {/*box*/}
             <Animated.View style={{
                 position: 'absolute', transform: [{translateY}],
+
             }}>
                 <ScrollView style={{
                     height: 180,
@@ -552,8 +620,9 @@ class FilterComponent extends PureComponent {
                     <View style={{flexDirection: 'row', marginTop: 15, marginBottom: 5}}>
                         <View style={{
                             height: 10, width: 3, backgroundColor: bottomTheme,
+
                         }}/>
-                        <View style={{marginLeft: 10}}>
+                        <View style={{marginLeft: 15}}>
                             <Text style={{
                                 // color: 'red',
                                 opacity: 0.7,
@@ -563,7 +632,7 @@ class FilterComponent extends PureComponent {
 
                     <View style={{
                         flexDirection: 'row',
-                        flexWrap: 'wrap',
+                        flexWrap: 'wrap', marginBottom: 20,
                     }}>
 
                         {typeArray.map((item, index, arr) => {
@@ -580,7 +649,7 @@ class FilterComponent extends PureComponent {
                         <View style={{
                             height: 10, width: 3, backgroundColor: bottomTheme,
                         }}/>
-                        <View style={{marginLeft: 10}}>
+                        <View style={{marginLeft: 15}}>
                             <Text style={{
                                 // color: 'red',
                                 opacity: 0.7,
@@ -590,6 +659,7 @@ class FilterComponent extends PureComponent {
                     <View style={{
                         flexDirection: 'row',
                         flexWrap: 'wrap',
+                        marginBottom: 20,
                     }}>
 
                         {typeArray.map((item, index, arr) => {
@@ -669,7 +739,6 @@ class TypeComponent extends Component {
     }
 
     ResetStatus = () => {
-        console.log('我被触发');
         if (this.state.checked) {
             this.setState({
                 checked: false,

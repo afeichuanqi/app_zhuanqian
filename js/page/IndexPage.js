@@ -28,6 +28,8 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import {TabView} from 'react-native-tab-view';
 import search from '../res/svg/search.svg';
 import FlatListCommonUtil from '../common/FlatListCommonUtil';
+import actions from '../action';
+import {connect} from 'react-redux';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -61,42 +63,52 @@ class FristListComponent extends PureComponent {
         const containerWidth = width - 20;
         const {lunboData} = this.state;
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, lunboHeight - 40],
-            outputRange: [lunboHeight - 40 + 220, lunboHeight - 40, 0],
+            inputRange: [-220, 0, lunboHeight - 10],
+            outputRange: [lunboHeight - 10 + 220, lunboHeight - 10, 20],
             extrapolate: 'clamp',
         });
-        return <View>
+        return <Animated.View style={{
+            // zIndex: -100,
+            // elevation: -100,
+            // overflow: 'hidden',
+            transform: [{translateY: this.props.translateY}],
+        }}>
+            <View style={{height: 30}}/>
             <FlatListCommonUtil
+                style={{zIndex: -100, elevation: -100}}
                 onLoading={(load) => {
                     this.props.onLoad(load);
                 }}
                 ListHeaderComponent={
-                    <View style={{
-                        alignItems: 'center',
-                        height: lunboHeight,
-                        paddingTop: 10,
-                        backgroundColor: theme,
-                        width: width,
-                        // zIndex: 1,
+                    <View>
 
-                    }}>
-                        {/*轮播图*/}
-                        <Carousel
-                            // homeNavigation={NavigationUtil.homeNavigation}
-                            // navigation={this.props.navigation}
-                            style={styles.carousel}
-                            timeout={3000}
-                            data={lunboData}
-                            renderItem={this._renderItem}
-                            itemWidth={containerWidth}
-                            containerWidth={containerWidth}
-                            separatorWidth={0}
-                            pagingEnable={true}
-                            paginationDefaultColor={'rgba(255,255,255,0.5)'}
-                            paginationActiveColor={'rgba(255,255,255,1)'}
-                        />
-                        <View style={{height: 40}}/>
+                        <View style={{
+                            alignItems: 'center',
+                            height: lunboHeight,
+                            paddingTop: 10,
+                            backgroundColor: theme,
+                            width: width,
+                            // zIndex: 1,
 
+                        }}>
+                            {/*轮播图*/}
+                            <Carousel
+                                // homeNavigation={NavigationUtil.homeNavigation}
+                                // navigation={this.props.navigation}
+                                style={styles.carousel}
+                                timeout={3000}
+                                data={lunboData}
+                                renderItem={this._renderItem}
+                                itemWidth={containerWidth}
+                                containerWidth={containerWidth}
+                                separatorWidth={0}
+                                pagingEnable={true}
+                                paginationDefaultColor={'rgba(255,255,255,0.5)'}
+                                paginationActiveColor={'rgba(255,255,255,1)'}
+                            />
+                            <View style={{height: 40}}/>
+
+                        </View>
                     </View>
                     //
                 }
@@ -141,7 +153,7 @@ class FristListComponent extends PureComponent {
                     marginTop: 10,
                 }}/>
             </Animated.View>
-        </View>;
+        </Animated.View>;
     }
 }
 
@@ -187,27 +199,39 @@ class HomePage extends PureComponent {
     animations = {
         val: new Animated.Value(0),
     };
-
+    _avatarClick = () => {
+        const {userinfo} = this.props;
+        if (!userinfo.login) {
+            NavigationUtils.goPage({}, 'LoginPage');
+        } else {
+            // this.pickerImage.show();
+            NavigationUtils.goPage({}, 'AccountSetting');
+        }
+    };
     render() {
         // console.log('wo被render');
         const {navigationRoutes, navigationIndex} = this.state;
 
         let statusBar = {
             hidden: false,
+            backgroundColor: theme,//安卓手机状态栏背景颜色
+            barStyle: 'dark-content',
+            // translucent:true
         };
 
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
+            style={{backgroundColor: theme}} // 背景颜色
         />;
         const searchWidth = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
             outputRange: [width - 20, width - 150],
             extrapolate: 'clamp',
         });
-        const marginTop = Animated.interpolate(this.animations.val, {
+        this.translateY = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [0, -40],
+            outputRange: [0, -30],
             extrapolate: 'clamp',
         });
         const svgTop = Animated.interpolate(this.animations.val, {
@@ -215,6 +239,8 @@ class HomePage extends PureComponent {
             outputRange: [60, 20],
             extrapolate: 'clamp',
         });
+
+        const {userinfo} = this.props;
         return (
             <View
                 style={{flex: 1}}
@@ -231,14 +257,14 @@ class HomePage extends PureComponent {
                         zIndex: 2,
                         elevation: 0.2,
                         backgroundColor: theme,
-                        // marginTop:10
+                        height: 60,
                     }}>
                         <AnimatedTouchableOpacity
                             activeOpacity={1}
                             onPress={this.SearchOnFocus}
                             style={{
                                 height: topIputHeight, width: searchWidth, backgroundColor: 'rgba(0,0,0,0.05)',
-                                alignItems: 'center', borderRadius: 10, flexDirection: 'row',
+                                alignItems: 'center', borderRadius: 10, flexDirection: 'row'
                             }}>
                             <SvgUri style={{
                                 marginHorizontal: 8,
@@ -247,7 +273,6 @@ class HomePage extends PureComponent {
                         </AnimatedTouchableOpacity>
 
                         <TabBar
-
                             style={{
                                 height: 30,
                                 paddingLeft: 10,
@@ -264,28 +289,39 @@ class HomePage extends PureComponent {
                             inactiveStyle={{fontSize: 12, color: [95, 95, 95], height: 10}}
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
+
                     </View>
-                    <AnimatedTouchableOpacity
-                        style={{position: 'absolute', top: svgTop, zIndex: 3, right: 10, elevation: 1}}>
-                        {/*<Image*/}
-                        <FastImage
-                            style={{
-                                backgroundColor: '#E8E8E8',
-                                // 设置宽度
-                                width: 25,
-                                height: 25,
-                                borderRadius: 25,
-                            }}
-                            source={{uri: `https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573504411074&di=a19e2ebb37ff7fd3c9c14dccb1debeaf&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201709%2F22%2F20170922162149_snyk3.jpeg`}}
-                            resizeMode={FastImage.stretch}
-                        />
-                    </AnimatedTouchableOpacity>
-                    <Animated.View style={{marginTop: marginTop, width, height: 30, backgroundColor: 'white'}}>
+
+
+
+
+                    {/*rn0.6bug多且行且珍惜*/}
+                    <TabView
+
+                        // ref={ref => this.tabView = ref}
+                        indicatorStyle={{backgroundColor: 'white'}}
+                        navigationState={{index: navigationIndex, routes: navigationRoutes}}
+                        renderScene={this.renderScene}
+                        position={this.position}
+                        renderTabBar={() => null}
+                        onIndexChange={index => this.setState({
+                            navigationIndex: index,
+                        })}
+                        initialLayout={{width}}
+                        lazy={true}
+                    />
+                    <Animated.View style={{
+                        width,
+                        height: 30,
+                        backgroundColor: 'white',
+                        position: 'absolute',
+                        top: 60,
+                        transform: [{translateY: this.translateY}],
+                    }}>
                         <TabBar
                             style={{
                                 height: 28,
                                 paddingLeft: 10,
-
                             }}
                             position={this.position}
                             contentContainerStyle={{paddingTop: 5}}
@@ -300,23 +336,23 @@ class HomePage extends PureComponent {
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
                     </Animated.View>
-
-                    {/*rn0.6bug多且行且珍惜*/}
-                    <View style={{flex: 1, overflow: 'hidden'}}>
-                        <TabView
-                            // ref={ref => this.tabView = ref}
-                            indicatorStyle={{backgroundColor: 'white'}}
-                            navigationState={{index: navigationIndex, routes: navigationRoutes}}
-                            renderScene={this.renderScene}
-                            position={this.position}
-                            renderTabBar={() => null}
-                            onIndexChange={index => this.setState({
-                                navigationIndex: index,
-                            })}
-                            initialLayout={{width}}
-                            lazy={true}
+                    {/*头像组件*/}
+                    <AnimatedTouchableOpacity
+                        onPress={this._avatarClick}
+                        style={{position: 'absolute', top: svgTop, zIndex: 3, right: 10, elevation: 1}}>
+                        {/*<Image*/}
+                        <FastImage
+                            style={{
+                                backgroundColor: '#E8E8E8',
+                                // 设置宽度
+                                width: 25,
+                                height: 25,
+                                borderRadius: 25,zIndex: 3,  elevation: 1
+                            }}
+                            source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
+                            resizeMode={FastImage.stretch}
                         />
-                    </View>
+                    </AnimatedTouchableOpacity>
                 </View>
 
             </View>
@@ -336,6 +372,7 @@ class HomePage extends PureComponent {
                     position={this.position}
                     onScroll={this._onScroll}
                     onLoad={this._onLoad}
+                    translateY={this.translateY}
                 />;
 
         }
@@ -346,21 +383,23 @@ class HomePage extends PureComponent {
     };
     AnimatedIsshow = false;
     lastScrollTitle = 0;
-    showAnimated = (y) => {
+    _iosShowAnimated = (y) => {
         if (y > this.nowY && y > 0) {
-            if (!this.AnimatedIsshow) {
 
+            if (!this.AnimatedIsshow) {
                 timing(this.animations.val, {
                     duration: 300,
                     toValue: 1,
                     easing: Easing.inOut(Easing.ease),
                 }).start();
                 this.AnimatedIsshow = true;
+
             }
         }
+        //
         if (y < this.nowY && !this.flatListLoad) {
             if (this.AnimatedIsshow) {
-                this.lastScrollTitle = Date.now();
+                // this.lastScrollTitle = Date.now();
                 timing(this.animations.val, {
                     duration: 300,
                     toValue: 0,
@@ -369,16 +408,51 @@ class HomePage extends PureComponent {
                 this.AnimatedIsshow = false;
             }
         }
+
+
+    };
+    _androidShowAnimated = (y) => {
+        if (this.lastScrollTitle + 800 < Date.now()) {
+            this.lastScrollTitle = Date.now();
+            if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 0,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = false;
+                return;
+            }
+            if (y < this.nowY) {
+                if (this.AnimatedIsshow) {
+                    timing(this.animations.val, {
+                        duration: 300,
+                        toValue: 0,
+                        easing: Easing.inOut(Easing.ease),
+                    }).start();
+                    this.AnimatedIsshow = false;
+                }
+            }
+            if (y > this.nowY) {
+                if (!this.AnimatedIsshow) {
+                    timing(this.animations.val, {
+                        duration: 300,
+                        toValue: 1,
+                        easing: Easing.inOut(Easing.ease),
+                    }).start();
+                    this.AnimatedIsshow = true;
+
+                }
+            }
+
+
+        }
     };
     _onScroll = (y) => {
-        // const  = e.nativeEvent.contentOffset.y;
         if (Platform.OS === 'android') {
-            if (this.lastScrollTitle + 800 < Date.now()) {
-                this.lastScrollTitle = Date.now();
-                this.showAnimated(y);
-            }
+            this._androidShowAnimated(y);
         } else {
-            this.showAnimated(y);
+            this._iosShowAnimated(y);
         }
 
 
@@ -389,6 +463,13 @@ class HomePage extends PureComponent {
     };
 }
 
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({
+    // onLogin: (phone, code, callback) => dispatch(actions.onLogin(phone, code, callback)),
+});
+const HomePageRedux = connect(mapStateToProps, mapDispatchToProps)(HomePage);
 const styles = StyleSheet.create({
     carousel: {
         flex: 1,
@@ -404,4 +485,4 @@ const styles = StyleSheet.create({
         // height:150
     },
 });
-export default HomePage;
+export default HomePageRedux;

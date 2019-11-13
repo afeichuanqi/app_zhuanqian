@@ -9,8 +9,11 @@
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
-// import SYImagePicker from 'react-native-syan-image-picker';
-import ImagePicker from 'react-native-image-crop-picker';
+import SvgUri from 'react-native-svg-uri';
+import sex_nan from '../res/svg/sex_nan.svg';
+import sex_nv from '../res/svg/sex_nv.svg';
+import sex_nv_ from '../res/svg/sex_nv_.svg';
+import sex_nan_ from '../res/svg/sex_nan_.svg';
 
 const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
@@ -25,7 +28,6 @@ class PopMenu extends PureComponent {
         },
         popTitle: '选取照片',
         includeBase64: false,
-        cropping: false,
     };
     state = {
         visible: false,
@@ -70,30 +72,6 @@ class PopMenu extends PureComponent {
     animations = {
         bottom: new Animated.Value(-(200 + (width / 3))),
     };
-    _selTakePhone = async () => {
-        ImagePicker.openCamera({
-            width: 300,
-            height: 400,
-            cropping: this.props.cropping,
-        }).then(image => {
-            this.hide();
-            this.props.select(image);
-        });
-
-    };
-    _selAlbum = () => {
-        ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: this.props.cropping,
-            includeBase64: this.props.includeBase64,
-        }).then(image => {
-            this.hide();
-            this.props.select(image);
-            // console.log(image);
-
-        });
-    };
 
     render() {
         const {visible} = this.state;
@@ -124,37 +102,27 @@ class PopMenu extends PureComponent {
                         }}>
                             <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>{this.props.popTitle}</Text>
                         </View>
-                        <TouchableOpacity
-                            activeOpacity={0.6}
-                            onPress={this._selTakePhone}
-                            style={{
-                                width, alignItems: 'center', paddingVertical: 15,
-                                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
-                            }}>
-                            <Text>{'拍一张照片'}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={0.6}
-                            onPress={this._selAlbum}
-                            style={{
-                                width, alignItems: 'center', paddingVertical: 15,
-                                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
-                            }}>
-                            <Text>{'从相册选一张'}</Text>
-                        </TouchableOpacity>
-                        <View style={{
-                            height: 10, backgroundColor: '#e8e8e8',
-                        }}/>
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.hide(null);
-                            }}
-                            style={{
-                                width, alignItems: 'center', height: 50, justifyContent: 'center',
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.select(0);
+                                }}
+                                style={{width: width / 2, height: 200, justifyContent: 'center', alignItems: 'center'}}>
+                                <SvgUri width={70} height={70} svgXmlData={sex_nan}/>
+                                <SvgUri style={{marginTop: 10}} width={15} height={15} svgXmlData={sex_nan_}/>
 
-                            }}>
-                            <Text>取消</Text>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.select(1);
+                                }}
+                                style={{width: width / 2, height: 200, justifyContent: 'center', alignItems: 'center'}}>
+                                <SvgUri width={70} height={70} svgXmlData={sex_nv}/>
+                                <SvgUri style={{marginTop: 10}} width={15} height={15} svgXmlData={sex_nv_}/>
+
+                            </TouchableOpacity>
+                        </View>
+
                     </Animated.View>
                 </TouchableOpacity>
             </Modal>

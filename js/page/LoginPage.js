@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, Text, TextInput, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -17,6 +17,8 @@ import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../res/svg/phone_input_clear.svg';
 import gantanhao from '../res/svg/gantanhao.svg';
 import {isPoneAvailable} from '../util/CommonUtils';
+import *as wechat from 'react-native-wechat';
+import {sendSms} from '../util/AppService';
 
 const {width, height} = Dimensions.get('window');
 
@@ -77,9 +79,12 @@ class LoginPage extends PureComponent {
 
     render() {
         // const {phone} = this.state;
-
+        StatusBar.setBarStyle('dark-content',true)
+        StatusBar.setBackgroundColor(theme,true)
         let statusBar = {
             hidden: false,
+            backgroundColor: theme,//安卓手机状态栏背景颜色
+            barStyle: 'dark-content',
         };
         let navigationBar = <NavigationBar
             hide={true}
@@ -156,12 +161,47 @@ class LoginPage extends PureComponent {
         );
     }
 
+    // WXLogin = () => {
+    //     let scope = 'snsapi_userinfo';
+    //     let state = 'wechat_sdk_demo';
+    //     //判断微信是否安装
+    //     wechat.isWXAppInstalled()
+    //         .then((isInstalled) => {
+    //             if (isInstalled) {
+    //                 //发送授权请求
+    //                 wechat.sendAuthRequest(scope, state)
+    //                     .then(responseCode => {
+    //                         //返回code码，通过code获取access_token
+    //                         // this.getAccessToken(responseCode.code);
+    //                         alert('111');
+    //                     })
+    //                     .catch(err => {
+    //                         alert('登录授权发生错误：');
+    //                     });
+    //             } else {
+    //                 alert('没有安装微信')
+    //             }
+    //         });
+    // };
     _getCode = () => {
+        // this.WXLogin();
+        console.log(this.phone, 'this.phone');
         const isTrue = isPoneAvailable(this.phone);
+        //
+        if (!isTrue) {
+            // console.log('我被触发111');
+            this.phoneInput.showError('手机号码格式错误，请重新输入');
+        } else {
+            this.phoneInput.showError('');
+        }
 
-        this.phoneInput.showError(!isTrue);
         if (isTrue) {
-            NavigationUtils.goPage({},'EnterCodePage')
+            sendSms({phone: this.phone}).then(() => {
+                this.phoneInput.showError('');
+                NavigationUtils.goPage({phone: this.phone}, 'EnterCodePage');
+            }).catch((msg) => {
+                this.phoneInput.showError(!msg ? '网络错误' : msg);
+            });
         }
     };
     _goBackClick = () => {
@@ -172,6 +212,7 @@ class LoginPage extends PureComponent {
 class PhoneInput extends PureComponent {
     state = {
         phone: '',
+        errMsg: '',
     };
     nextInput = 0;
     _pwdInputOnChangeText = (text) => {
@@ -198,26 +239,16 @@ class PhoneInput extends PureComponent {
         // }
         this.props.onChangeText(phone);
     };
-    showError = (show) => {
-        if (show) {
-            this.errorInfo.setNativeProps({
-                style: {
-                    opacity: 1,
-                },
-            });
-        } else {
-            this.errorInfo.setNativeProps({
-                style: {
-                    opacity: 0,
-                },
-            });
-        }
-
+    showError = (errMsg) => {
+        this.setState({
+            errMsg,
+        });
     };
 
     render() {
-        const {phone} = this.state;
-
+        const {phone, errMsg} = this.state;
+        // console.log('render');
+        console.log(errMsg);
         return <>
             <TextInput
                 value={phone}
@@ -229,15 +260,16 @@ class PhoneInput extends PureComponent {
                 onChangeText={this._pwdInputOnChangeText}
                 // multiline = {false}
                 style={{
-                    border: 0,
                     width: width - 80,
                     fontSize: 15,
                     color: 'rgba(0,0,0,0.8)',
+                    padding: 0,
+                    height:30
                 }}/>
             {phone.length > 0 &&
             <TouchableOpacity
                 onPress={this._clearInput}
-                style={{position: 'absolute', top: 2, right: 50}} fill={'rgba(0,0,0,0.6)'}
+                style={{position: 'absolute', top: 10, right: 50}} fill={'rgba(0,0,0,0.6)'}
                 activeOpacity={0.7}>
                 <SvgUri width={15}
                         height={15}
@@ -251,11 +283,11 @@ class PhoneInput extends PureComponent {
                 marginTop: 5,
                 backgroundColor: 'rgba(0,0,0,0.1)',
             }}/>
-            <View
+            {errMsg.length > 0 && <View
                 ref={ref => this.errorInfo = ref}
                 style={{
-                    position: 'absolute', top: 30, left: 40,
-                    flexDirection: 'row', alignItems: 'center', opacity: 0,
+                    position: 'absolute', top: 40, left: 40,
+                    flexDirection: 'row', alignItems: 'center', opacity: 1,
 
                 }}>
                 <SvgUri
@@ -263,8 +295,9 @@ class PhoneInput extends PureComponent {
                     width={13}
                     height={13}
                     svgXmlData={gantanhao}/>
-                <Text style={{color: 'red', fontSize: 11}}>手机号码格式错误,请重新输入</Text>
-            </View>
+                <Text style={{color: 'red', fontSize: 12}}>{errMsg}</Text>
+            </View>}
+
         </>;
     }
 }

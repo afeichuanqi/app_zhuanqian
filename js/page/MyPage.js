@@ -18,6 +18,11 @@ import FastImage from 'react-native-fast-image';
 import ViewUtil from '../util/ViewUtil';
 import Animated from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
+import {connect} from 'react-redux';
+import PickerImage from '../common/PickerImage';
+import actions from '../action';
+import sex_nan_ from '../res/svg/sex_nan_.svg';
+import sex_nv_ from '../res/svg/sex_nv_.svg';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -67,6 +72,9 @@ class MyPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
+        const {userinfo, onUploadAvatar} = this.props;
+        console.log(userinfo.upload_avatar_loading,"userinfo.upload_avatar_loading");
+        // console.log(userinfo);
         return (
             <View
                 style={{flex: 1}}
@@ -86,8 +94,8 @@ class MyPage extends PureComponent {
                     }}>
                         <TouchableOpacity
                             activeOpacity={0.6}
-                            onPress={()=>{
-                                NavigationUtils.goPage({},'SettingPage')
+                            onPress={() => {
+                                NavigationUtils.goPage({}, 'SettingPage');
                             }}
 
                         >
@@ -96,23 +104,6 @@ class MyPage extends PureComponent {
                     </View>
 
 
-                    {/*名字*/}
-                    <AnimatedTouchableOpacity
-                        activeOpacity={1}
-                        onPress={this._nameClick}
-                        style={{
-                            position: 'absolute',
-                            top: titleTop,
-                            left: 10,
-                            zIndex: 2,
-                            elevation: 0.1,
-
-                        }}>
-                        <Animated.Text
-                            style={{fontSize: titleFontSize, color: 'white', fontWeight: 'bold'}}>
-                            点击登录
-                        </Animated.Text>
-                    </AnimatedTouchableOpacity>
                     <Animated.View
                         style={{
                             backgroundColor: bottomTheme,
@@ -137,9 +128,28 @@ class MyPage extends PureComponent {
                         {/*<View style={{backgroundColor: 'transparent', height: 50}}>*/}
 
                         {/*</View>*/}
-                        <TopInfoColumn scrollY={this.scrollY}/>
+                        <TopInfoColumn onUploadAvatar={onUploadAvatar} userinfo={userinfo} scrollY={this.scrollY}/>
                         <BottomInfoColumn/>
                     </AnimatedScrollView>
+                    {/*名字*/}
+                    <AnimatedTouchableOpacity
+                        activeOpacity={1}
+                        onPress={userinfo.login ? () => {
+                            NavigationUtils.goPage({}, 'AccountSetting');
+                        } : this._nameClick}
+                        style={{
+                            position: 'absolute',
+                            top: titleTop,
+                            left: 10,
+                            zIndex: 2,
+                            elevation: 0.3,
+
+                        }}>
+                        <Animated.Text
+                            style={{fontSize: titleFontSize, color: 'white', fontWeight: 'bold'}}>
+                            {userinfo.login ? userinfo.username : '请先登录'}
+                        </Animated.Text>
+                    </AnimatedTouchableOpacity>
 
                 </View>
 
@@ -152,6 +162,15 @@ class MyPage extends PureComponent {
     };
     scrollY = new Animated.Value(0);
 }
+
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({
+    onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
+});
+const MyPageRedux = connect(mapStateToProps, mapDispatchToProps)(MyPage);
+export default MyPageRedux;
 
 class ToolsItemComponent extends PureComponent {
     static defaultProps = {
@@ -254,24 +273,32 @@ class TopInfoColumn extends PureComponent {
             <Text style={{color: 'white', fontSize: 12, opacity: 0.8, marginTop: 5}}>{title}</Text>
         </View>;
     };
+    _avatarClick = () => {
+        const {userinfo} = this.props;
+        if (!userinfo.login) {
+            NavigationUtils.goPage({}, 'LoginPage');
+        } else {
+            this.pickerImage.show();
+        }
+    };
 
     render() {
-        const translateY = Animated.interpolate(this.props.scrollY, {
-            inputRange: [0, 120],
-            outputRange: [-130, 70],
-            extrapolate: 'clamp',
-        });
+        // const translateY = Animated.interpolate(this.props.scrollY, {
+        //     inputRange: [0, 120],
+        //     outputRange: [-130, 70],
+        //     extrapolate: 'clamp',
+        // });
+        const {userinfo} = this.props;
         const opacity = Animated.interpolate(this.props.scrollY, {
             inputRange: [0, 120],
             outputRange: [1, 0.1],
             extrapolate: 'clamp',
         });
-        return <View style={{backgroundColor: bottomTheme}}>
-            <View style={{marginTop:130,height:0}}>
 
-            </View>
+        return <View style={{backgroundColor: bottomTheme}}>
+            <View style={{marginTop: 130, height: 0}}/>
             <Animated.View
-                style={{height: 130, opacity, position:'absolute',top:0}}>
+                style={{height: 130, opacity, position: 'absolute', top: 0}}>
                 {/*头像*/}
                 <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row'}}>
                     <TouchableOpacity style={{marginTop: 40, flexDirection: 'row', alignItems: 'center'}}>
@@ -279,12 +306,29 @@ class TopInfoColumn extends PureComponent {
                         <SvgUri width={14} height={14} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
                         <Text style={{fontSize: 12, color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={this._avatarClick}
+                    >
 
-                    <FastImage
-                        style={[styles.imgStyle]}
-                        source={require('../res/img/no_login.png')}
-                        resizeMode={FastImage.stretch}
-                    />
+                        <FastImage
+                            style={[styles.imgStyle]}
+                            source={userinfo.login ? userinfo.upload_avatar_loading ? require('../res/img/upload_avatar_loading.png') : {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
+                            resizeMode={FastImage.stretch}
+                        />
+                        {/*<*/}
+                        {userinfo.login && <SvgUri style={{
+                            position: 'absolute',
+                            right: 0,
+                            bottom: 5,
+                            backgroundColor: userinfo.sex == 0 ? '#3b8ae8' : '#e893d8',
+                            borderRadius: 20,
+                        }} fill={'white'} width={12} height={12}
+                                                   svgXmlData={userinfo.sex == 0 ? sex_nan_ : sex_nv_}/>}
+
+
+                    </TouchableOpacity>
+
                 </View>
                 {/*基本信息栏目*/}
                 <View style={{
@@ -293,17 +337,34 @@ class TopInfoColumn extends PureComponent {
                     justifyContent: 'space-around',
 
                 }}>
-                    {this.genDataInfo('255', '任务币')}
-                    {this.genDataInfo('0', '收入分红')}
-                    {this.genDataInfo('0', '提现总额')}
-                    {this.genDataInfo('0', '保证金')}
+                    {this.genDataInfo(userinfo.login ? userinfo.task_currency : 0, '任务币')}
+                    {this.genDataInfo(userinfo.login ? userinfo.income_dividend : 0, '收入分红')}
+                    {this.genDataInfo(userinfo.login ? userinfo.tota_withdrawal : 0, '提现总额')}
+                    {this.genDataInfo(userinfo.login ? userinfo.guaranteed_amount : 0, '保证金')}
                 </View>
             </Animated.View>
+            <PickerImage cropping={true} includeBase64={true} select={this._avatarSelect} popTitle={'选取头像'}
+                         ref={ref => this.pickerImage = ref}/>
         </View>;
     }
+
+    _avatarSelect = (image) => {
+        const {userinfo} = this.props;
+        const mime = image.mime;
+        const base64Data = image.data;
+        const imgData = {
+            mime,
+            data: base64Data,
+        };
+        // console.log(userinfo.token);
+        this.props.onUploadAvatar(userinfo.token, imgData, (isTrue, data) => {
+            if (!isTrue) {
+                console.log(data.msg);
+            }
+        });
+    };
 }
 
-export default MyPage;
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色

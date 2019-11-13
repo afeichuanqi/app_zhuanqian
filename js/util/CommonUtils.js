@@ -85,3 +85,7 @@ export const getCurrentTime = (time = 0) => {
         return `${oldyear}年${oldm}月${oldd}日 ${oldh}:${oldmin}`;
     }
 };
+export const FormatUploadData = (mime,data) => {
+    // const formData = new FormData();
+    // uploadAvatar()
+};

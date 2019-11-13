@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, Text, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from './TaskSumComponent';
+
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
     static defaultProps = {
@@ -29,12 +30,14 @@ export default class FlatListCommonUtil extends PureComponent {
 
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
-        const {ListHeaderComponent, onScroll} = this.props;
+        const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
+            // style={this.props.style}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}
-            scrollEventThrottle={10}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
             refreshControl={
@@ -56,12 +59,19 @@ export default class FlatListCommonUtil extends PureComponent {
             }}
             windowSize={300}
             onEndReachedThreshold={0.01}
-            onMomentumScrollBegin={() => {
+            onScrollEndDrag={onScrollEndDrag}
+            onScrollBeginDrag={onScrollBeginDrag}
+            onMomentumScrollEnd={onMomentumScrollEnd}
+
+            onMomentumScrollBegin={(e) => {
                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
             }}
         />;
     }
 
+    // _onMomentumScrollBegin=(3)=>{
+    //
+    // }
     onLoading = () => {
         this.props.onLoading(true);
         const data = [...this.state.taskData];

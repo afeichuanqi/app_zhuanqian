@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
 import {theme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
@@ -101,10 +101,13 @@ export default class ChatRoomPage extends React.Component {
         let statusBar = {
             hidden: false,
         };
+
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
         />;
+        StatusBar.setBarStyle('dark-content',true)
+        StatusBar.setBackgroundColor(theme,true)
         let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '李凯', message_more);
         return (
             <SafeAreaViewPlus

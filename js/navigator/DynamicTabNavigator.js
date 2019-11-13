@@ -6,13 +6,14 @@
  */
 
 import React, {Component} from 'react';
-import {createAppContainer, } from 'react-navigation';
-import {createBottomTabNavigator} from 'react-navigation-tabs'
+import  {StatusBar} from 'react-native';
+import {createAppContainer} from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 import SvgUri from 'react-native-svg-uri';
 import {BottomTabBar} from 'react-navigation-tabs';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
-import {bottomTheme} from '../appSet';
+import {bottomTheme, theme} from '../appSet';
 import zhuan from '../res/svg/zhuan.svg';
 import MessagePage from '../page/MessagePage';
 import MyPage from '../page/MyPage';
@@ -24,8 +25,15 @@ const TABS = {
         navigationOptions: {
             tabBarLabel: '主页',
             tabBarIcon: ({tintColor, focused}) => (
-                <SvgUri width={24} height={24}  fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
+                <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
             ),
+            tabBarOnPress: (navigation, defaultHandler) => {
+                navigation.defaultHandler();
+                // console.log();
+                StatusBar.setBarStyle('dark-content',true)
+                StatusBar.setBackgroundColor(theme,true)
+                // defaultHandler();
+            },
         },
     },
     TaskHallPage: {
@@ -35,6 +43,13 @@ const TABS = {
             tabBarIcon: ({tintColor, focused}) => (
                 <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
             ),
+            tabBarOnPress: (navigation, defaultHandler) => {
+                navigation.defaultHandler();
+                // console.log();
+                StatusBar.setBarStyle('light-content',true)
+                StatusBar.setBackgroundColor(bottomTheme,true)
+                // defaultHandler();
+            },
         },
     },
     MessagePage: {
@@ -44,6 +59,13 @@ const TABS = {
             tabBarIcon: ({tintColor, focused}) => (
                 <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
             ),
+            tabBarOnPress: (navigation, defaultHandler) => {
+                navigation.defaultHandler();
+                // console.log();
+                StatusBar.setBarStyle('light-content',true)
+                StatusBar.setBackgroundColor(bottomTheme,true)
+                // defaultHandler();
+            },
         },
     }, MyPage: {
         screen: MyPage,
@@ -52,6 +74,14 @@ const TABS = {
             tabBarIcon: ({tintColor, focused}) => (
                 <SvgUri width={24} height={24} fill={focused ? bottomTheme : tintColor} svgXmlData={zhuan}/>
             ),
+            tabBarOnPress: (navigation, defaultHandler) => {
+                navigation.defaultHandler();
+                // console.log();
+                StatusBar.setBarStyle('light-content',true)
+                StatusBar.setBackgroundColor(bottomTheme,true)
+                // defaultHandler();
+            },
+
         },
     },
 };

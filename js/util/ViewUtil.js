@@ -69,7 +69,7 @@ export default class ViewUtil {
     };
 
     // static
-    static getSettingMenu = (MenuTitle, click, rightText = '') => {
+    static getSettingMenu = (MenuTitle, click, rightText = '', showSvg = true) => {
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={click}
@@ -85,7 +85,8 @@ export default class ViewUtil {
             <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
                 <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.5, color: 'black'}}>{rightText}</Text>
-                <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>
+                {showSvg&&<SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>}
+
             </View>
         </TouchableOpacity>;
     };

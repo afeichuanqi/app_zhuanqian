@@ -1,10 +1,5 @@
 import {combineReducers} from "redux";
-import theme from './theme';
-import bartitle from './bartitle';
-import register from './register';
-import login_ from './login';
 import userinfo from './userinfo';
-import hotconfig from './hotconfig';
 import {rootCom, RootNavigator} from "../navigator/AppNavigators";
 //1.指定默认state
 const navState = RootNavigator.router.getStateForAction(RootNavigator.router.getActionForPathAndParams(rootCom));
@@ -21,12 +16,7 @@ const navReducer = (state = navState, action) => {
  * */
 const index = combineReducers({
     nav: navReducer,
-    theme,
-    register,
-    login_,
     userinfo,
-    hotconfig,
-    bartitle,
 
 })
 export default index;

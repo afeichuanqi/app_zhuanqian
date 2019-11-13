@@ -9,21 +9,20 @@
 import React, {PureComponent} from 'react';
 import {View} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import { theme} from '../appSet';
+import {theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
+import {connect} from 'react-redux';
 
 
-class HomePage extends PureComponent {
+class SettingPage extends PureComponent {
     constructor(props) {
         super(props);
 
     }
 
-    state = {
-
-    };
+    state = {};
 
     componentDidMount() {
 
@@ -48,6 +47,8 @@ class HomePage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
+        const {userinfo} = this.props;
+
         let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '设置', null, theme, 'black', 16);
         return (
             <SafeAreaViewPlus
@@ -60,20 +61,21 @@ class HomePage extends PureComponent {
                     borderTopColor: 'rgba(0,0,0,0.1)',
                 }}/>
                 <View style={{flex: 1}}>
-                    {ViewUtil.getSettingMenu('账号管理', () => {
+                    {userinfo.login && ViewUtil.getSettingMenu('账号管理', () => {
                         NavigationUtils.goPage({}, 'AccountSetting');
                     })}
                     {ViewUtil.getSettingMenu('清理储存空间', () => {
                     }, '128.36KB')}
                     {/*{ViewUtil.getSettingMenu('隐私政策')}*/}
-                    {ViewUtil.getSettingMenu('接单规则',()=>{
-                        NavigationUtils.goPage({type:2},'UserProtocol')
+                    {ViewUtil.getSettingMenu('接单规则', () => {
+                        NavigationUtils.goPage({type: 2}, 'UserProtocol');
                     })}
-                    {ViewUtil.getSettingMenu('发单规则',()=>{
-                        NavigationUtils.goPage({type:1},'UserProtocol')
+                    {ViewUtil.getSettingMenu('发单规则', () => {
+                        NavigationUtils.goPage({type: 1}, 'UserProtocol');
                     })}
                     {ViewUtil.getSettingMenu('关于简单赚')}
-                    {ViewUtil.getSettingMenu('检测新版本',()=>{},'版本号:1.0.12')}
+                    {ViewUtil.getSettingMenu('检测新版本', () => {
+                    }, '版本号:1.0.12')}
                 </View>
             </SafeAreaViewPlus>
         );
@@ -81,4 +83,11 @@ class HomePage extends PureComponent {
 
 }
 
-export default HomePage;
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({
+    // onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
+});
+const SettingPageRedux = connect(mapStateToProps, mapDispatchToProps)(SettingPage);
+export default SettingPageRedux;

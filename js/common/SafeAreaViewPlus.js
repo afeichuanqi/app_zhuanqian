@@ -42,14 +42,12 @@ export default class SafeAreaViewPlus extends Component {
     }
 
     getBottomArea(bottomColor, bottomInset) {
-        console.log( bottomInset);
         return !DeviceInfo.isIPhoneX_deprecated || !bottomInset ? null
             : <View style={[styles.bottomArea, {backgroundColor: bottomColor}]}/>;
     }
 
     render() {
         const {enablePlus} = this.props;
-        // console.log(this.props.bottomInset,"bottomInset");
         return enablePlus ? this.genSafeAreaViewPlus() : this.genSafeAreaView();
     }
 }
