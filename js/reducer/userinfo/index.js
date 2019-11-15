@@ -1,6 +1,6 @@
 import Types from '../../action/Types';
 
-const defaultContent = {login: false};
+const defaultContent = {login: false, msgArr: []};
 
 export default function onAction(state = defaultContent, action) {
     const {data, type} = action;
@@ -9,6 +9,7 @@ export default function onAction(state = defaultContent, action) {
             return {
                 ...state,
                 loading: true,
+                msgArr: [],
             };
         case Types.LOGIN_SUCCESS :
             return {
@@ -52,6 +53,8 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 username: data.username,
             };
+        case Types.CLEAR_USERINFO_ALL:
+            return defaultContent;
         default:
             return state;
     }

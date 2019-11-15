@@ -36,7 +36,7 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
  */
 export function onUploadAvatar(token, data, callback) {
     return dispatch => {
-        dispatch({type: Types.UPLOAD_AVATAR_LOADING});
+        dispatch({type: Types.UPLOAD_AVATAR_LOADING,data: {avatar_url: ''},});
         uploadAvatar(data, token).then((data) => {
             callback(true, data);
             console.log(data, 'data');
@@ -101,6 +101,13 @@ export function onSetUserName(token, value, callback) {
         });
 
     };
+}
+/**
+ *  清空账号信息
+ * @returns {{theme: *, type: string}}
+ */
+export function onClearUserinfoAll() {
+    return {type: Types.CLEAR_USERINFO_ALL}
 }
 
 

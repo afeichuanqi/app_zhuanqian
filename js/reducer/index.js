@@ -1,6 +1,9 @@
-import {combineReducers} from "redux";
 import userinfo from './userinfo';
-import {rootCom, RootNavigator} from "../navigator/AppNavigators";
+import friend from './friend';
+import message from './message';
+import {persistCombineReducers} from 'redux-persist';
+import {rootCom, RootNavigator} from '../navigator/AppNavigators';
+import storage from '@react-native-community/async-storage';
 //1.指定默认state
 const navState = RootNavigator.router.getStateForAction(RootNavigator.router.getActionForPathAndParams(rootCom));
 /**
@@ -9,14 +12,22 @@ const navState = RootNavigator.router.getStateForAction(RootNavigator.router.get
 const navReducer = (state = navState, action) => {
     const nextState = RootNavigator.router.getStateForAction(action, state);
     return nextState || state;
-}
+};
 /**
  * 3.合并reducer
  *
  * */
-const index = combineReducers({
-    nav: navReducer,
-    userinfo,
-
-})
-export default index;
+const index = {
+        nav: navReducer,
+        userinfo,
+        message,
+        friend,
+    }
+;
+const config = {
+    key: 'root',
+    storage,
+    whitelist: ['userinfo', 'message'],
+};
+let reducer = persistCombineReducers(config, index);
+export default reducer;

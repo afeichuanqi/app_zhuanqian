@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, Text, Dimensions, TextInput} from 'react-native';
+import {View, Text, Dimensions, TextInput, TouchableOpacity} from 'react-native';
 import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 import {theme} from '../../appSet';
 import NavigationBar from '../../common/NavigationBar';
@@ -81,16 +81,21 @@ class AccountSetting extends PureComponent {
                     {ViewUtil.getSettingMenu('微信', () => {
                     }, '立即绑定')}
                 </View>
-                <View style={{
-                    position: 'absolute',
-                    bottom: 50,
-                    width,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => {
+                        this.props.onClearUserinfoAll();
+                    }}
+                    style={{
+                        position: 'absolute',
+                        bottom: 50,
+                        width,
+                        justifyContent: 'center',
+                        alignItems: 'center',
 
-                }}>
+                    }}>
                     <Text style={{color: 'red'}}>退出当前账号</Text>
-                </View>
+                </TouchableOpacity>
                 <PickerSex select={this._sexSelect} ref={ref => this.pickerSex = ref} popTitle={'性别'}/>
                 <MyModalBox title={'修改昵称'} style={{
                     // height:
@@ -177,6 +182,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onSetUserSex: (token, value, callback) => dispatch(actions.onSetUserSex(token, value, callback)),
     onSetUserName: (token, value, callback) => dispatch(actions.onSetUserName(token, value, callback)),
+    onClearUserinfoAll: () => dispatch(actions.onClearUserinfoAll()),
 });
 const AccountSettingRedux = connect(mapStateToProps, mapDispatchToProps)(AccountSetting);
 export default AccountSettingRedux;

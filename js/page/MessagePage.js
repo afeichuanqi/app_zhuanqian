@@ -21,12 +21,13 @@ import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import SvgUri from 'react-native-svg-uri';
 import message_xitong from '../res/svg/message_xitong.svg';
-import message_nomsg from '../res/svg/message_nomsg.svg';
 import zaixiankefu from '../res/svg/zaixiankefu.svg';
 import FastImage from 'react-native-fast-image';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
 import EmptyComponent from '../common/EmptyComponent';
+import ChatSocket from '../util/ChatSocket';
+import {connect} from 'react-redux';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -43,6 +44,7 @@ class MessagePage extends PureComponent {
     };
 
     componentDidMount() {
+        ChatSocket.selectAllFriendMessage();
 
 
     }
@@ -72,7 +74,7 @@ class MessagePage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         return (
-            <View style={{flex: 1,}}>
+            <View style={{flex: 1}}>
                 {navigationBar}
                 <View style={{
                     height: 40,
@@ -81,7 +83,7 @@ class MessagePage extends PureComponent {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <Text style={{color: 'white', fontSize: 17}}>互动</Text>
+                    <Text style={{color: 'white', fontSize: 17}}>互动({this.props.friend.unMessageLength})</Text>
                 </View>
                 <Animated.View
                     // ref={ref => this.zhedangRef = ref}
@@ -100,7 +102,7 @@ class MessagePage extends PureComponent {
                     {/*}*/}
 
                 </Animated.View>
-                <MsgList RefreshHeight={this.animations.val}/>
+                <MsgList friend={this.props.friend} RefreshHeight={this.animations.val}/>
                 {/*<View style={{flex:1, backgroundColor:'white',marginTop:50}}>*/}
                 {/*    */}
                 {/*</View>*/}
@@ -143,22 +145,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class MsgList extends Component {
     state = {
-        friendData: [
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-            {id:1,message:'sss',name:'22',date:'112'},
-        ],
+        friendData: [],
         isLoading: false,
         hideLoaded: true,
     };
@@ -167,8 +154,9 @@ class MsgList extends Component {
     };
 
     render() {
-        const {friendData, isLoading, hideLoaded} = this.state;
-
+        const friendData = this.props.friend.friendArr;
+        const {isLoading, hideLoaded} = this.state;
+        console.log(this.props.friend.friendArr, 'this.props.friend.friendArr');
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent/>}
             ListHeaderComponent={
@@ -281,15 +269,18 @@ class MsgList extends Component {
             this.setState({
                 friendData: data.concat(tmpData),
             }, () => {
-                // this
-                // this.setState({
-                //     hideLoaded: true,
-                // });
+
             });
         }, 2000);
 
     };
 }
+
+const mapStateToProps = state => ({
+    friend: state.friend,
+});
+const mapDispatchToProps = dispatch => ({});
+const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePage);
 
 const topBottomVal = 20;
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -304,7 +295,7 @@ class MessageItemComponent extends Component {
     // }
 
     static defaultProps = {
-        titleFontSize: 16,
+        titleFontSize: 15,
         marginHorizontal: 20,
 
     };
@@ -342,7 +333,8 @@ class MessageItemComponent extends Component {
         }).start();
     };
     _onPress = () => {
-        NavigationUtils.goPage({}, 'ChatRoomPage');
+        ChatSocket.setFromUserIdMessageIsRead(this.props.item.id);
+        NavigationUtils.goPage({fromUserinfo: this.props.item}, 'ChatRoomPage');
     };
 
     render() {
@@ -353,7 +345,7 @@ class MessageItemComponent extends Component {
             extrapolate: 'clamp',
         });
         const {titleFontSize, marginHorizontal, item} = this.props;
-
+        console.log(item.unReadLenth, 'item.unReadLenth item.unReadLenth ');
         return <AnimatedTouchableOpacity
             onPress={this._onPress}
             activeOpacity={1}
@@ -370,11 +362,25 @@ class MessageItemComponent extends Component {
             onPressIn={this._onPressIn}
             onPressOut={this._onPressOut}
         >
-            <FastImage
-                style={[styles.imgStyle]}
-                source={{uri: `http://www.embeddedlinux.org.cn/uploads/allimg/180122/2222032V5-0.jpg`}}
-                resizeMode={FastImage.stretch}
-            />
+            <View>
+                <FastImage
+                    style={[styles.imgStyle]}
+                    source={{uri: item.avatar_url}}
+                    resizeMode={FastImage.stretch}
+                />
+                {item.unReadLenth ? item.unReadLenth > 0 && <View style={{
+                    borderRadius: 10, justifyContent: 'center', alignItems: 'center',
+                    position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
+                    // paddingVertical:1,
+                }}>
+                    <Text style={{
+                        fontSize: 10,
+                        color: 'white',
+                    }}>{item.unReadLenth}</Text>
+                </View> : null}
+
+            </View>
+
             {/*左上*/}
             <View style={{
                 position: 'absolute',
@@ -387,7 +393,8 @@ class MessageItemComponent extends Component {
                     fontSize: titleFontSize,
                     color: 'black',
                     opacity: 0.9,
-                }}>{item.name}</Text>
+                    marginLeft: 10,
+                }}>{item.username}</Text>
                 <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>互动消息</Text>
 
             </View>
@@ -399,10 +406,11 @@ class MessageItemComponent extends Component {
                 flexDirection: 'row',
             }}>
                 <Text style={{
-                    fontSize: 14,
+                    fontSize: 12,
                     color: 'black',
                     opacity: 0.6,
-                }}>{item.message}</Text>
+                    marginLeft: 10,
+                }}>{item.msg}</Text>
             </View>
             {/*右上*/}
             <View style={{
@@ -414,7 +422,7 @@ class MessageItemComponent extends Component {
                     fontSize: 11,
                     color: 'black',
                     opacity: 0.5,
-                }}>{item.date}</Text>
+                }}>{item.sendDate}</Text>
             </View>
 
         </AnimatedTouchableOpacity>;
@@ -457,7 +465,7 @@ class MessageColumnItem extends PureComponent {
 }
 
 
-export default MessagePage;
+export default MessagePageRedux;
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色
@@ -465,7 +473,7 @@ const styles = StyleSheet.create({
         // 设置宽度
         width: 50,
         height: 50,
-        borderRadius: 25,
+        borderRadius: 5,
         // 设置高度
         // height:150
     },

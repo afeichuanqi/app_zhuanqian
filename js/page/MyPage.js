@@ -294,7 +294,7 @@ class TopInfoColumn extends PureComponent {
             outputRange: [1, 0.1],
             extrapolate: 'clamp',
         });
-
+        console.log(userinfo.avatar_url);
         return <View style={{backgroundColor: bottomTheme}}>
             <View style={{marginTop: 130, height: 0}}/>
             <Animated.View
@@ -313,7 +313,7 @@ class TopInfoColumn extends PureComponent {
 
                         <FastImage
                             style={[styles.imgStyle]}
-                            source={userinfo.login ? userinfo.upload_avatar_loading ? require('../res/img/upload_avatar_loading.png') : {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
+                            source={userinfo.login ? userinfo.upload_avatar_loading ? require('../res/img/upload_avatar_loading_.png') : {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
                             resizeMode={FastImage.stretch}
                         />
                         {/*<*/}
@@ -368,7 +368,7 @@ class TopInfoColumn extends PureComponent {
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色
-        // backgroundColor: '#E8E8E8',
+        backgroundColor: '#E8E8E8',
         // 设置宽度
         width: 50,
         height: 50,

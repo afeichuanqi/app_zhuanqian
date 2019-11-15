@@ -1,114 +1,77 @@
-import React, {Component} from 'react';
-import {View, Text, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
+import React from 'react';
+import {View, Text, Dimensions, StatusBar} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
 import {theme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
-import goback from '../res/svg/goback.svg';
 import message_more from '../res/svg/message_more.svg';
-import SvgUri from 'react-native-svg-uri';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {getCurrentTime} from '../util/CommonUtils';
+import {getUUID} from '../util/CommonUtils';
+import {connect} from 'react-redux';
+import message from '../reducer/message';
+import ChatSocket from '../util/ChatSocket';
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
-export default class ChatRoomPage extends React.Component {
-    state = {
-        messages: [
-            {
-                id: `1`,
-                type: 'text',
-                content: 'hello world',
-                targetId: '12345678',
-                chatInfo: {
-                    avatar: require('../res/img/touxiang1.png'),
-                    id: '12345678',
-                    nickName: 'Test',
-                },
-                renderTime: true,
-                sendStatus: 0,
-                time: '1542006036549',
-            },
-            {
-                id: `2`,
-                type: 'text',
-                content: 'hi/{se}',
-                targetId: '12345678',
-                chatInfo: {
-                    avatar: require('../res/img/touxiang1.png'),
-                    id: '12345678',
-                    nickName: 'Test',
-                },
-                renderTime: true,
-                sendStatus: 0,
-                time: '1542106036549',
-            },
-            {
-                id: `3`,
-                type: 'image',
-                content: {
-                    uri: 'https://upload-images.jianshu.io/upload_images/11942126-044bd33212dcbfb8.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240',
-                    width: 100,
-                    height: 80,
-                },
-                targetId: '12345678',
-                chatInfo: {
-                    avatar: require('../res/img/touxiang1.png'),
-                    id: '12345678',
-                    nickName: 'Test',
-                },
-                renderTime: false,
-                sendStatus: 0,
-                time: '1542106037000',
-            },
-            {
-                id: `4`,
-                type: 'text',
-                content: '你好/{weixiao}你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好',
-                targetId: '88886666',
-                chatInfo: {
-                    avatar: require('../res/img/touxiang1.png'),
-                    id: '12345678',
-                },
-                renderTime: true,
-                sendStatus: -2,
-                time: '1542177036549',
-            },
-        ],
-        // chatBg: require('../../source/bg.jpg'),
-        inverted: false,  // require
-        voiceHandle: true,
-        currentTime: 0,
-        recording: false,
-        paused: false,
-        stoppedRecording: false,
-        finished: false,
-        audioPath: '',
-        voicePlaying: false,
-        voiceLoading: false,
-    };
+class ChatRoomPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.params = this.props.navigation.state.params;
+    }
 
+    componentDidMount(): void {
+    }
 
-    sendMessage = (type, content, isInverted) => {
-        console.log(type, content, isInverted, 'msg');
-    };
+    state = {};
+
     _goBackClick = () => {
         NavigationUtils.goBack(this.props.navigation);
     };
 
+    getMessages = () => {
+        const tmpArr = [];
+        console.log(this.props.message.msgArr, 'this.props.message.msgArr');
+        const {fromUserinfo} = this.params;
+        const {userinfo} = this.props;
+        this.props.message.msgArr.forEach((item) => {
+            // console.log(item.fromUserid, fromUserinfo.id, 'itemitemitemitem');
+            if ((item.fromUserid == fromUserinfo.id && item.ToUserId == userinfo.userid)
+                || (item.fromUserid == userinfo.userid && item.ToUserId == fromUserinfo.id)
+            ) {
+                tmpArr.push({
+                    id: item.msgId,
+                    type: item.msg_type,
+                    content: item.content,
+                    targetId: parseInt(item.fromUserid),
+                    chatInfo: {
+                        avatar: require('../res/img/touxiang1.png'),
+                        id: parseInt(this.props.userinfo.userid),
+                        nickName: this.props.userinfo.username,
+                    },
+                    renderTime: true,
+                    sendStatus: parseInt(item.sendStatus),
+                    time: item.sendDate,
+                });
+
+            }
+
+        });
+        console.log();
+        return tmpArr;
+    };
+
     render() {
+        const {fromUserinfo} = this.params;
+        const {userinfo} = this.props;
         let statusBar = {
             hidden: false,
         };
-
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
         />;
-        StatusBar.setBarStyle('dark-content',true)
-        StatusBar.setBackgroundColor(theme,true)
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '李凯', message_more);
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, fromUserinfo.username, message_more);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -126,11 +89,12 @@ export default class ChatRoomPage extends React.Component {
                             shadowOffset: {w: 1, h: 1},
                             elevation: 10,//安卓的阴影
                         }}
+                        userProfile={{id: userinfo.userid, avatar: userinfo.avatar_url}}
                         // inputStyle={{borderRadius:3}}
                         placeholder={''}
                         useVoice={false}
                         ref={(e) => this.chat = e}
-                        messageList={this.state.messages}
+                        messageList={this.getMessages()}
                         // androidHeaderHeight={androidHeaderHeight}
                         sendMessage={this.sendMessage}
                         renderMessageTime={this.renderMessageTime}
@@ -142,12 +106,31 @@ export default class ChatRoomPage extends React.Component {
         );
     }
 
+    sendMessage = (type, content, isInverted) => {
+        const {userinfo} = this.props;
+        const userId = userinfo.userid;
+        const {fromUserinfo} = this.params;
+        let toUserid = fromUserinfo.id;
+        const uuid = getUUID();
+        const isSuccess = ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid);
+        if (isSuccess) {
+
+        }
+    };
     _pressAvatar = () => {
         NavigationUtils.goPage({}, 'ShopInfoPage');
     };
     renderMessageTime = (time) => {
         return <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>
-            <Text style={{color: '#333', fontSize: 11, opacity: 0.7}}>{getCurrentTime(parseInt(time))}</Text>
+            <Text style={{color: '#333', fontSize: 11, opacity: 0.7}}>{time}</Text>
         </View>;
     };
 }
+
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+    message: state.message,
+});
+const mapDispatchToProps = dispatch => ({});
+const ChatRoomPageRedux = connect(mapStateToProps, mapDispatchToProps)(ChatRoomPage);
+export default ChatRoomPageRedux;

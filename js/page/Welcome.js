@@ -15,7 +15,9 @@ import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
 import {theme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
-import *as wechat from 'react-native-wechat'
+import ChatSocket from '../util/ChatSocket';
+import {connect} from 'react-redux';
+
 class Welcome extends PureComponent {
     constructor(props) {
         super(props);
@@ -39,15 +41,15 @@ class Welcome extends PureComponent {
                     NavigationUtils.toHomePage();
                 }
             });
-
+            // console.log(this.props, 'this.props');
+            ChatSocket.connctionServer(this.props.dispatch,this.props.userinfo.token);
+           // console.log(ChatSocket.verifyIdentidy()) ;
 
         }, 100);
         //申请微信注册
-        wechat.registerApp('wx38e70176d0d810e2');
 
         // this.requestPermission();
     }
-
 
 
     componentWillUnmount() {
@@ -83,4 +85,11 @@ class Welcome extends PureComponent {
     }
 }
 
-export default Welcome;
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({
+    dispatch: dispatch,
+});
+const WelcomeRedux = connect(mapStateToProps, mapDispatchToProps)(Welcome);
+export default WelcomeRedux;
