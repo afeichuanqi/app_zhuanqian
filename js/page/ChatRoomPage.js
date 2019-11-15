@@ -16,9 +16,12 @@ class ChatRoomPage extends React.Component {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.pageCount = 10;
     }
 
     componentDidMount(): void {
+        const {fromUserinfo} = this.params;
+        ChatSocket.selectAllMsgForFromUserid(fromUserinfo.id, this.pageCount);
     }
 
     state = {};
@@ -33,7 +36,6 @@ class ChatRoomPage extends React.Component {
         const {fromUserinfo} = this.params;
         const {userinfo} = this.props;
         this.props.message.msgArr.forEach((item) => {
-            // console.log(item.fromUserid, fromUserinfo.id, 'itemitemitemitem');
             if ((item.fromUserid == fromUserinfo.id && item.ToUserId == userinfo.userid)
                 || (item.fromUserid == userinfo.userid && item.ToUserId == fromUserinfo.id)
             ) {
@@ -43,20 +45,31 @@ class ChatRoomPage extends React.Component {
                     content: item.content,
                     targetId: parseInt(item.fromUserid),
                     chatInfo: {
-                        avatar: require('../res/img/touxiang1.png'),
-                        id: parseInt(this.props.userinfo.userid),
-                        nickName: this.props.userinfo.username,
+                        avatar: fromUserinfo.avatar_url,
+                        id: parseInt(fromUserinfo.id),
+                        nickName: fromUserinfo.username,
                     },
                     renderTime: true,
                     sendStatus: parseInt(item.sendStatus),
-                    time: item.sendDate,
+                    time: item.sendDate+'000',
                 });
+                if (item.un_read == 0) {//未读消息 设置未已经读取
+                    ChatSocket.setMsgIdIsRead(item.msgId, item.fromUserid);
+
+                }
+
 
             }
 
         });
         console.log();
         return tmpArr;
+    };
+
+    onRefresh = () => {
+        this.pageCount += 10;
+        const {fromUserinfo} = this.params;
+        ChatSocket.selectAllMsgForFromUserid(fromUserinfo.id, this.pageCount);
     };
 
     render() {
@@ -82,6 +95,11 @@ class ChatRoomPage extends React.Component {
 
                 <View style={{flex: 1}}>
                     <ChatScreen
+                        loadHistory={() => {
+                            console.log('我被触发');
+                        }}
+                        onRefresh={this.onRefresh}
+                        loading={false}
                         inputOutContainerStyle={{
                             borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.2, shadowColor: '#c7c7c7',
                             shadowRadius: 3,
@@ -97,7 +115,7 @@ class ChatRoomPage extends React.Component {
                         messageList={this.getMessages()}
                         // androidHeaderHeight={androidHeaderHeight}
                         sendMessage={this.sendMessage}
-                        renderMessageTime={this.renderMessageTime}
+                        // renderMessageTime={this.renderMessageTime}
                         pressAvatar={this._pressAvatar}
                     />
                 </View>
@@ -112,7 +130,7 @@ class ChatRoomPage extends React.Component {
         const {fromUserinfo} = this.params;
         let toUserid = fromUserinfo.id;
         const uuid = getUUID();
-        const isSuccess = ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid);
+        const isSuccess = ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url);
         if (isSuccess) {
 
         }

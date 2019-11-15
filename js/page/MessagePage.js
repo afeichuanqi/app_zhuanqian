@@ -15,7 +15,6 @@ import {
     RefreshControl,
     FlatList,
     StyleSheet,
-    ActivityIndicator, StatusBar,
 } from 'react-native';
 import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -28,6 +27,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import EmptyComponent from '../common/EmptyComponent';
 import ChatSocket from '../util/ChatSocket';
 import {connect} from 'react-redux';
+import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -73,6 +73,9 @@ class MessagePage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
+        const {unMessageLength} = this.props.friend;
+        const {statusText} = this.props.socketStatus;
+
         return (
             <View style={{flex: 1}}>
                 {navigationBar}
@@ -83,7 +86,10 @@ class MessagePage extends PureComponent {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <Text style={{color: 'white', fontSize: 17}}>互动({this.props.friend.unMessageLength})</Text>
+                    <Text style={{
+                        color: 'white',
+                        fontSize: 17,
+                    }}>互动{statusText != '' ? `(${statusText})` : unMessageLength ? unMessageLength > 0 ? `(${unMessageLength})` : '' : ''}</Text>
                 </View>
                 <Animated.View
                     // ref={ref => this.zhedangRef = ref}
@@ -156,7 +162,6 @@ class MsgList extends Component {
     render() {
         const friendData = this.props.friend.friendArr;
         const {isLoading, hideLoaded} = this.state;
-        console.log(this.props.friend.friendArr, 'this.props.friend.friendArr');
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent/>}
             ListHeaderComponent={
@@ -204,22 +209,22 @@ class MsgList extends Component {
                 },
             ])}
             // onScroll={this._onScroll}
-            ListFooterComponent={() => this.genIndicator(hideLoaded)}
-            onEndReached={() => {
-                console.log('onEndReached.....');
-                // 等待页面布局完成以后，在让加载更多
-                if (this.canLoadMore) {
-                    this.onLoading();
-                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                }
-            }}
+            // ListFooterComponent={() => this.genIndicator(hideLoaded)}
+            // onEndReached={() => {
+            //     console.log('onEndReached.....');
+            //     // 等待页面布局完成以后，在让加载更多
+            //     if (this.canLoadMore) {
+            //         this.onLoading();
+            //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+            //     }
+            // }}
             // onScrollEndDrag={this._onScrollEndDrag}
             windowSize={300}
             onEndReachedThreshold={0.01}
-            onMomentumScrollBegin={() => {
-                console.log('我被触发');
-                this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
-            }}
+            // onMomentumScrollBegin={() => {
+            //     console.log('我被触发');
+            //     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
+            // }}
         />;
     }
 
@@ -227,31 +232,30 @@ class MsgList extends Component {
         this.setState({
             isLoading: true,
         });
-        // this.props.onRefresh(true);
+        ChatSocket.selectAllFriendMessage();
         setTimeout(() => {
             this.setState({
                 isLoading: false,
             });
-            // this.props.onRefresh(false);
         }, 1000);
     };
     _renderIndexPath = ({item, index}) => {
         return <MessageItemComponent item={item}/>;
     };
 
-    genIndicator(hideLoaded) {
-        return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator
-                    style={{color: 'red'}}
-                />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
-            </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-
-                <Text style={{marginLeft: 10}}>没有更多了哦</Text>
-            </View>;
-    }
+    // genIndicator(hideLoaded) {
+    //     return !hideLoaded ?
+    //         <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+    //             <ActivityIndicator
+    //                 style={{color: 'red'}}
+    //             />
+    //             <Text style={{marginLeft: 10}}>正在加载更多</Text>
+    //         </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
+    //             style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+    //
+    //             <Text style={{marginLeft: 10}}>没有更多了哦</Text>
+    //         </View>;
+    // }
 
     onLoading = () => {
         console.log('onLoading触发中');
@@ -278,6 +282,7 @@ class MsgList extends Component {
 
 const mapStateToProps = state => ({
     friend: state.friend,
+    socketStatus: state.socketStatus,
 });
 const mapDispatchToProps = dispatch => ({});
 const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePage);
@@ -333,7 +338,9 @@ class MessageItemComponent extends Component {
         }).start();
     };
     _onPress = () => {
-        ChatSocket.setFromUserIdMessageIsRead(this.props.item.id);
+        if (this.props.item.unReadLenth > 0) {
+            ChatSocket.setFromUserIdMessageIsRead(this.props.item.id);
+        }
         NavigationUtils.goPage({fromUserinfo: this.props.item}, 'ChatRoomPage');
     };
 
@@ -345,7 +352,6 @@ class MessageItemComponent extends Component {
             extrapolate: 'clamp',
         });
         const {titleFontSize, marginHorizontal, item} = this.props;
-        console.log(item.unReadLenth, 'item.unReadLenth item.unReadLenth ');
         return <AnimatedTouchableOpacity
             onPress={this._onPress}
             activeOpacity={1}
@@ -405,12 +411,15 @@ class MessageItemComponent extends Component {
                 left: 55,
                 flexDirection: 'row',
             }}>
-                <Text style={{
-                    fontSize: 12,
-                    color: 'black',
-                    opacity: 0.6,
-                    marginLeft: 10,
-                }}>{item.msg}</Text>
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode={'tail'}
+                    style={{
+                        fontSize: 12,
+                        color: 'black',
+                        opacity: 0.6,
+                        marginLeft: 10,
+                    }}>{item.msg}</Text>
             </View>
             {/*右上*/}
             <View style={{
@@ -422,7 +431,7 @@ class MessageItemComponent extends Component {
                     fontSize: 11,
                     color: 'black',
                     opacity: 0.5,
-                }}>{item.sendDate}</Text>
+                }}>{getCurrentTime(parseInt(item.sendDate + '000'))}</Text>
             </View>
 
         </AnimatedTouchableOpacity>;

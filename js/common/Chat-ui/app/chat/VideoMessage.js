@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
-import { View, TouchableOpacity, Image, StyleSheet, ActivityIndicator, Text } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Text } from 'react-native'
+import Image from 'react-native-fast-image';
 export default class VideoMessage extends PureComponent {
   render() {
     const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType, showIsRead, isReadStyle } = this.props

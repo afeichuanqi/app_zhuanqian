@@ -42,6 +42,7 @@ export default function onAction(state = defaultContent, action) {
                         sendDate: item.sendDate,
                         msg_type: item.msg_type,
                         unReadLength: item.unReadLength,
+                        msgId: item.msgId,
                     });
                     //加入新的元素
 
@@ -90,6 +91,56 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 friendArr: temArr2,
                 unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
+            };
+        case Types.MESSAGE_FROMOF_USERID_Friend:
+            let temArr3 = [...state.friendArr];
+            let NewUnReadLength = state.unMessageLength + 1;
+            const fromUserIndex = temArr3.findIndex(d => d.id == data.fromUserid);
+
+            if (fromUserIndex != -1) {//找到了此用户
+                const item = temArr3[fromUserIndex];
+                item.msg_type = data.msg_type;
+                item.msg = data.content;
+                item.sendDate = data.sendDate;
+                item.unReadLenth = item.unReadLenth + 1;
+                temArr3[fromUserIndex] = item;
+
+            } else {
+                temArr3.push({
+                    id: parseInt(data.fromUserid),
+                    username: data.username,
+                    avatar_url: data.avatar_url,
+                    msg: data.content,
+                    sendDate: data.sendDate,
+                    msg_type: data.msg_type,
+                    msgId: data.msgId,
+                    unReadLenth: 1,
+
+                });
+            }
+
+            return {
+                ...state,
+                friendArr: temArr3,
+                unMessageLength: NewUnReadLength,
+            };
+        case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
+            let temArr4 = [...state.friendArr];
+            let NewUnReadLength1 = state.unMessageLength == 0 ? 0 : state.unMessageLength - 1;
+            const fromUserIndex1 = temArr4.findIndex(d => d.id == data.fromUserid);
+            if (fromUserIndex1 != -1) {
+                const item1 = temArr4[fromUserIndex1];
+                if (item1.unReadLenth != 0) {
+                    item1.unReadLenth = item1.unReadLenth - 1;
+                }
+                temArr4[fromUserIndex1] = item1;
+            }
+
+
+            return {
+                ...state,
+                friendArr: temArr4,
+                unMessageLength: NewUnReadLength1,
             };
         default:
             return state;

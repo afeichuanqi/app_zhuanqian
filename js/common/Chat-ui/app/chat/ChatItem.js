@@ -4,9 +4,9 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Image,
   StyleSheet, Dimensions
 } from 'react-native'
+import Image from 'react-native-fast-image';
 import TextMessage from './TextMessage'
 import ImageMessage from './ImageMessage'
 import VideoMessage from './VideoMessage'

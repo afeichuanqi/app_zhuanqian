@@ -1,50 +1,45 @@
 import types from '../action/Types';
 import Message from '../action';
-import {onSelectAllFriend} from '../action/friend';
-// import { createStore } from 'redux';
-// import reducer from '../reducer';
+
 class ChatSocket {
     connectionstatus = false;
     verifyIdentIdy = false;
 
     connctionServer = (dispatch, token) => {
-        console.log('constructor：我被创建');
+        // console.log('constructor：我被创建');
+        dispatch(Message.onChangeSocketStatue('正在连接...'));
+
         const ws = new WebSocket('ws://localhost:433/');
         // this.store = createStore(reducer);
         this.dispatch = dispatch;
+        this.token = token;
         ws.onopen = () => {
-            console.log('连接成功');
+            dispatch(Message.onChangeSocketStatue(''));
             this.connectionstatus = true;
             // this.store.dispatch();
             this.verifyIdentidy(token);
             dispatch(Message.setConnectionStatus(true));
         };
         ws.onmessage = (evt) => {
-            const received_msg = evt.data;
             const msgData = JSON.parse(evt.data);
-            // console.log(msgData, 'msgData');
             const {type, data} = msgData;
             switch (type) {
                 case types.VERIFY_IDENTIDY:
                     const {msg, status} = data;
                     dispatch(Message.verifyIdentIdy(status));
                     if (status === 0) {
+                        dispatch(Message.onChangeSocketStatue(''));
                         this.verifyIdentIdy = true;
                     } else {
+                        dispatch(Message.onChangeSocketStatue('未登录'));
                         this.verifyIdentIdy = false;
                     }
                     break;
                 case types.MESSAGE_FROMOF_USERID://收到消息
-                    const {
-                        fromUserid_,
-                        msg_type_,
-                        content_,
-                        msgId_,
-                        sendDate_,
-                        ToUserId_,
-                        sendStatus_,
-                    } = data;
-                    dispatch(Message.onMessageFrom(fromUserid_, msg_type_, content_, msgId_, sendDate_, ToUserId_, sendStatus_));
+                    dispatch(Message.onMessageFrom(data.fromUserid, data.msg_type,
+                        data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus));//发送给消息列表
+
+                    dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url));//发送给好友列表
                     break;
                 case types.MESSAGE_SENDTO_USERID_STATUS://消息回调
 
@@ -60,7 +55,6 @@ class ChatSocket {
                     // console.log('所有好友回调');
                     // const {friend} = data;
                     dispatch(Message.onSelectAllFriend(data.friend));
-                    console.log(data.friend, 'data.friend');
                     //收到回调进行未读消息数回调
                     this.selectAllFriendUnReadMessageLength();
                     break;
@@ -69,22 +63,25 @@ class ChatSocket {
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
                     dispatch(Message.onSetAllFriendUnRead(data.fromUserid));
-
                     break;
-
-                // dispatch
+                case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
+                    dispatch(Message.onGetMegForUserid(data.msgArr));
+                    break;
+                case types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
+                    dispatch(Message.onSetFriendMsgIsRead(data.fromUserid));
+                    break;
 
 
             }
         };
         //连接关闭的时候触发
         ws.onclose = () => {
-            console.log('连接已关闭...');
+            dispatch(Message.onChangeSocketStatue('连接已关闭'));
             this.connectionstatus = false;
             Message.setConnectionStatus(false);
         };
         ws.onerror = () => {
-            console.log('通信发生错误时触发');
+            dispatch(Message.onChangeSocketStatue('错误连接'));
             this.connectionstatus = false;
             Message.setConnectionStatus(false);
         };
@@ -94,9 +91,7 @@ class ChatSocket {
     //验证身份
     verifyIdentidy = (token) => {
         // console.log(this.connectionstatus);
-        if (!this.connectionstatus) {
-            return '未连接成功';
-        }
+
         this.sendToServer(types.VERIFY_IDENTIDY, {
             token,
         });
@@ -105,19 +100,26 @@ class ChatSocket {
     selectAllFriendMessage = () => {
         this.sendToServer(types.MESSAGE_SELECT_ALL, {});
     };
+    //设置信息id已读取
+    setMsgIdIsRead = (msgId, fromUserid) => {
+        this.sendToServer(types.MESSAGE_SET_MSG_ID_READ, {msgId, fromUserid});
+    };
+    //获取userid所有消息
+    selectAllMsgForFromUserid = (fromUserid,pageCount) => {
+        this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {fromUserid,pageCount});
+    };
     //查询未读消息数
     selectAllFriendUnReadMessageLength = () => {
         this.sendToServer(types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH, {});
     };
     //设置我和fromuserinf的消息为已经读区
     setFromUserIdMessageIsRead = (fromUserid) => {
-        console.log(fromUserid,"fromUseridfromUserid");
         this.sendToServer(types.MESSAGE_SET_USER_ID_IS_READ, {
             fromUserid,
         });
     };
     //发送消息给指定用户
-    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid) => {
+    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url) => {
         if (!this.connectionstatus) {
             return false;
         }
@@ -125,19 +127,31 @@ class ChatSocket {
             return false;
         }
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
-            toUserid, msg_type, content, uuid,
+            toUserid, msg_type, content, uuid, username, avatar_url,
         });
         this.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid));
         // this.dispatch(Message.onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus));
         return true;
     };
     sendToServer = (type, data) => {
+        if (!this.connectionstatus) {
+            this.connctionServer(this.dispatch, this.token);
+            return;
+        }
+        if (!this.verifyIdentidy) {
+            this.verifyIdentidy(this.token);
+            return;
+        }
         const msgData = {
             type, data,
         };
         const msgStr = JSON.stringify(msgData);
-        console.log(msgStr);
-        this.ws.send(msgStr);
+        try {
+            this.ws.send(msgStr);
+        } catch (e) {
+            this.dispatch(Message.onChangeSocketStatue('异常代码:000X1'));
+        }
+
     };
 }
 

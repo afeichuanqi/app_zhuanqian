@@ -20,7 +20,7 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 conn_status: data.conn_status,
             };
-        case Types.MESSAGE_FROMOF_USERID:
+        case Types.MESSAGE_FROMOF_USERID://来自好友消息
             const temArr = [...state.msgArr];
             temArr.push({
                     fromUserid: data.fromUserid,
@@ -30,14 +30,14 @@ export default function onAction(state = defaultContent, action) {
                     sendDate: data.sendDate,
                     ToUserId: data.ToUserId,
                     sendStatus: data.sendStatus,
+                    un_read: 0,
                 },
-            )
-            ;
+            );
             return {
                 ...state,
                 msgArr: temArr,
             };
-        case Types.MESSAGE_ADD_NEW:
+        case Types.MESSAGE_ADD_NEW://我发送的消息加入列表
             // console.log('我触发了MESSAGE_FROMOF_USERID');
             const temArr1 = [...state.msgArr];
             temArr1.push({
@@ -52,7 +52,7 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 msgArr: temArr1,
             };
-        case Types.MESSAGE_SET_STATUS:
+        case Types.MESSAGE_SET_STATUS://消息加状态
             const temArr__ = [...state.msgArr];
             const index = temArr__.findIndex(d => d.uuid === data.uuid);
             const temJson = temArr__[index];
@@ -63,6 +63,12 @@ export default function onAction(state = defaultContent, action) {
             return {
                 ...state,
                 msgArr: temArr__,
+            };
+        case Types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
+
+            return {
+                ...state,
+                msgArr: data.msgArr,
             };
         default:
             return state;

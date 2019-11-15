@@ -1,6 +1,7 @@
 import userinfo from './userinfo';
 import friend from './friend';
 import message from './message';
+import socketStatus from './socketStatus';
 import {persistCombineReducers} from 'redux-persist';
 import {rootCom, RootNavigator} from '../navigator/AppNavigators';
 import storage from '@react-native-community/async-storage';
@@ -22,12 +23,13 @@ const index = {
         userinfo,
         message,
         friend,
+        socketStatus,
     }
 ;
 const config = {
     key: 'root',
     storage,
-    whitelist: ['userinfo', 'message'],
+    whitelist: ['userinfo'],
 };
 let reducer = persistCombineReducers(config, index);
 export default reducer;

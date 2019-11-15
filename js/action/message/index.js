@@ -42,6 +42,14 @@ export function onSetMsgStatus(uuid, msgId, sendDate, sendStatus) {
     };
 }
 
+//获取所有消息
+export function onGetMegForUserid(msgArr) {
+    // console.log('我被触发11222');
+    return {
+        type: Types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS,
+        data: {msgArr},
+    };
+}
 // //发送消息
 // export function onMessageTo(fromUserid, msg_type, content, msgId, sendDate) {
 //     return dispatch => {
