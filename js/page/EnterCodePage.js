@@ -19,6 +19,7 @@ import {sendSms} from '../util/AppService';
 import SvgUri from 'react-native-svg-uri';
 import gantanhao from '../res/svg/gantanhao.svg';
 import DeviceInfo from 'react-native-device-info';
+import ChatSocket from '../util/ChatSocket';
 
 export default class EnterCodePage extends PureComponent {
     constructor(props) {
@@ -264,15 +265,18 @@ class CodeInput extends PureComponent {
         const device_system_version = DeviceInfo.getSystemVersion();
         const device_is_tablet = DeviceInfo.isTablet();
         // device_brand, device_name, device_system_version, device_is_tablet
-        this.props.onLogin(phone, code, platform, DeviceID, device_brand, device_name, device_system_version, device_is_tablet, (isTrue, msg) => {
+        this.props.onLogin(phone, code, platform, DeviceID, device_brand, device_name, device_system_version, device_is_tablet, (isTrue, data) => {
             if (isTrue) {
                 this.props.showError('');
                 const {routes, navigation} = this.props;
                 const key = routes[1].routes[1].key;
+                ChatSocket.verifyIdentidy(data.token);//进行验证token
                 NavigationUtils.goBack(navigation, key);
+                ChatSocket.selectAllFriendMessage();//进行获取好友列表
             } else {
 
-                this.props.showError(msg);
+                console.log(data.msg, 'data.msg');
+                // this.props.showError(data.msg);
                 this.iptArrayNum = new Array(this.props.iptNum);
                 this.refs[`text0`].focus();
                 this.forceUpdate();

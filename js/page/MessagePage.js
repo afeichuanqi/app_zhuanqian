@@ -348,7 +348,7 @@ class MessageItemComponent extends Component {
 
         const scale = Animated.interpolate(this.animations.scale, {
             inputRange: [0, 1],
-            outputRange: [0.9, 1],
+            outputRange: [0.99, 1],
             extrapolate: 'clamp',
         });
         const {titleFontSize, marginHorizontal, item} = this.props;

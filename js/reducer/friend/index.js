@@ -123,7 +123,10 @@ export default function onAction(state = defaultContent, action) {
 
                 });
             }
+            temArr3 = temArr3.sort((data1, data2) => {
 
+                return data2.sendDate - data1.sendDate;
+            });
             return {
                 ...state,
                 friendArr: temArr3,

@@ -21,6 +21,8 @@ import {connect} from 'react-redux';
 class Welcome extends PureComponent {
     constructor(props) {
         super(props);
+        // console.log('welcome执行');
+        ChatSocket.setDispatch(this.props.dispatch);
     }
 
     state = {
@@ -41,9 +43,7 @@ class Welcome extends PureComponent {
                     NavigationUtils.toHomePage();
                 }
             });
-            // console.log(this.props, 'this.props');
-            ChatSocket.connctionServer(this.props.dispatch,this.props.userinfo.token);
-           // console.log(ChatSocket.verifyIdentidy()) ;
+
 
         }, 100);
         //申请微信注册

@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -38,6 +38,8 @@ class SettingPage extends PureComponent {
     };
 
     render() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色

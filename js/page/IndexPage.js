@@ -30,6 +30,7 @@ import search from '../res/svg/search.svg';
 import FlatListCommonUtil from '../common/FlatListCommonUtil';
 import actions from '../action';
 import {connect} from 'react-redux';
+import ChatSocket from '../util/ChatSocket';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -173,7 +174,7 @@ class HomePage extends PureComponent {
     };
 
     componentDidMount() {
-
+        ChatSocket.connctionServer(this.props.userinfo.token);
 
     }
 
@@ -208,6 +209,7 @@ class HomePage extends PureComponent {
             NavigationUtils.goPage({}, 'AccountSetting');
         }
     };
+
     render() {
         // console.log('wo被render');
         const {navigationRoutes, navigationIndex} = this.state;
@@ -264,7 +266,7 @@ class HomePage extends PureComponent {
                             onPress={this.SearchOnFocus}
                             style={{
                                 height: topIputHeight, width: searchWidth, backgroundColor: 'rgba(0,0,0,0.05)',
-                                alignItems: 'center', borderRadius: 10, flexDirection: 'row'
+                                alignItems: 'center', borderRadius: 10, flexDirection: 'row',
                             }}>
                             <SvgUri style={{
                                 marginHorizontal: 8,
@@ -291,8 +293,6 @@ class HomePage extends PureComponent {
                         />
 
                     </View>
-
-
 
 
                     {/*rn0.6bug多且行且珍惜*/}
@@ -347,7 +347,7 @@ class HomePage extends PureComponent {
                                 // 设置宽度
                                 width: 25,
                                 height: 25,
-                                borderRadius: 25,zIndex: 3,  elevation: 1
+                                borderRadius: 25, zIndex: 3, elevation: 1,
                             }}
                             source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
                             resizeMode={FastImage.stretch}

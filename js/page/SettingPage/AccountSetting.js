@@ -83,9 +83,7 @@ class AccountSetting extends PureComponent {
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.6}
-                    onPress={() => {
-                        this.props.onClearUserinfoAll();
-                    }}
+                    onPress={this._clearAccountInfo}
                     style={{
                         position: 'absolute',
                         bottom: 50,
@@ -123,7 +121,6 @@ class AccountSetting extends PureComponent {
                             onChangeText={this._onChangeText}
                             maxLength={15}
                             multiline={true}
-                            // placeholder={this.props.placeholder}
 
                             style={{
                                 height: 50,
@@ -134,9 +131,6 @@ class AccountSetting extends PureComponent {
                                 borderRadius: 5,
                                 padding: 0,
                                 textAlignVertical: 'top',
-                                // borderWidth: this.animations.width,
-                                // borderColor: `rgba(255, 0, 0, 1)`,
-
                             }}
 
                         />
@@ -147,6 +141,10 @@ class AccountSetting extends PureComponent {
         );
     }
 
+    _clearAccountInfo = () => {
+        this.props.onClearUserinfoAll();
+        NavigationUtils.goBack(this.props.navigation)
+    };
     username = '';
     _sureClick = () => {
         if (this.username.length == 0) {

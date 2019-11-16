@@ -1,46 +1,54 @@
 import types from '../action/Types';
 import Message from '../action';
 import {Platform} from 'react-native';
+import ReconnectingWebSocket from './ReconnectingWebSocket';
 
 class ChatSocket {
     connectionstatus = false;
     verifyIdentIdy = false;
-
-    connctionServer = (dispatch, token) => {
-        // console.log('constructor：我被创建');
-        dispatch(Message.onChangeSocketStatue('正在连接...'));
-        const URL = Platform.OS === 'android' ? 'ws://10.0.2.2:433/' : 'ws://localhost:433/';
-        const ws = new WebSocket(URL);
-        // this.store = createStore(reducer);
+    setDispatch = (dispatch) => {
         this.dispatch = dispatch;
+    };
+    connctionServer = (token) => {
+        if (typeof this.dispatch != 'function') {
+            return;
+        }
+        this.dispatch(Message.onChangeSocketStatue('正在连接...'));
+        const URL = Platform.OS === 'android' ? 'ws://10.0.2.2:433/' : 'ws://localhost:433/';
+        const ws = new ReconnectingWebSocket(URL);
+        // this.store = createStore(reducer);
         this.token = token;
         ws.onopen = () => {
-            dispatch(Message.onChangeSocketStatue(''));
+            // console.log('打开连接');
+            this.dispatch(Message.onChangeSocketStatue(''));
             this.connectionstatus = true;
-            // this.store.dispatch();
             this.verifyIdentidy(token);
-            dispatch(Message.setConnectionStatus(true));
+            this.dispatch(Message.setConnectionStatus(true));
         };
+
         ws.onmessage = (evt) => {
+
             const msgData = JSON.parse(evt.data);
+            // console.log('收到消息',msgData);
             const {type, data} = msgData;
             switch (type) {
                 case types.VERIFY_IDENTIDY:
                     const {msg, status} = data;
-                    dispatch(Message.verifyIdentIdy(status));
+                    this.dispatch(Message.verifyIdentIdy(status));
                     if (status === 0) {
-                        dispatch(Message.onChangeSocketStatue(''));
+                        this.dispatch(Message.onChangeSocketStatue(''));
                         this.verifyIdentIdy = true;
                     } else {
-                        dispatch(Message.onChangeSocketStatue('未登录'));
+                        this.dispatch(Message.onChangeSocketStatue('未登录'));
                         this.verifyIdentIdy = false;
                     }
                     break;
                 case types.MESSAGE_FROMOF_USERID://收到消息
-                    dispatch(Message.onMessageFrom(data.fromUserid, data.msg_type,
+                    // console.log('收到消息MESSAGE_FROMOF_USERID');
+                    this.dispatch(Message.onMessageFrom(data.fromUserid, data.msg_type,
                         data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus));//发送给消息列表
 
-                    dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url));//发送给好友列表
+                    this.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url));//发送给好友列表
                     break;
                 case types.MESSAGE_SENDTO_USERID_STATUS://消息回调
 
@@ -50,36 +58,36 @@ class ChatSocket {
                         sendDate,
                         uuid,
                     } = data;
-                    dispatch(Message.onSetMsgStatus(uuid, msgId, sendDate, sendStatus));
+                    this.dispatch(Message.onSetMsgStatus(uuid, msgId, sendDate, sendStatus));
                     break;
                 case types.MESSAGE_FRIEND_ALL:
-                    // console.log('所有好友回调');
-                    // const {friend} = data;
+                    let friendArr = [];
                     if (data.friend && data.friend.length > 0) {
-                        dispatch(Message.onSelectAllFriend(data.friend));
+                        friendArr = data.friend;
                     }
-
+                    this.dispatch(Message.onSelectAllFriend(friendArr));
                     //收到回调进行未读消息数回调
                     this.selectAllFriendUnReadMessageLength();
                     break;
                 case types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH_SUCCESS:
-                    console.log("data.friendUnReadCountArr",data);
-                    if (data.friendUnReadCountArr && data.friendUnReadCountArr.length > 0) {
-                        dispatch(Message.onSelectAllFriendUnRead(data.friendUnReadCountArr));
-                    }
+                    let friendUnReadCountArr = [];
 
+                    if (data.friendUnReadCountArr && data.friendUnReadCountArr.length > 0) {
+                        friendUnReadCountArr = data.friendUnReadCountArr;
+                    }
+                    this.dispatch(Message.onSelectAllFriendUnRead(friendUnReadCountArr));
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
-                    dispatch(Message.onSetAllFriendUnRead(data.fromUserid));
+                    this.dispatch(Message.onSetAllFriendUnRead(data.fromUserid));
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
                     if (data.msgArr && data.msgArr.length > 0) {
-                        dispatch(Message.onGetMegForUserid(data.msgArr));
+                        this.dispatch(Message.onGetMegForUserid(data.msgArr));
                     }
 
                     break;
                 case types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
-                    dispatch(Message.onSetFriendMsgIsRead(data.fromUserid));
+                    this.dispatch(Message.onSetFriendMsgIsRead(data.fromUserid));
                     break;
 
 
@@ -87,14 +95,21 @@ class ChatSocket {
         };
         //连接关闭的时候触发
         ws.onclose = () => {
-            dispatch(Message.onChangeSocketStatue('连接已关闭'));
             this.connectionstatus = false;
             Message.setConnectionStatus(false);
+            if (typeof this.dispatch != 'function') {
+                return;
+            }
+            this.dispatch(Message.onChangeSocketStatue('连接中...'));
+
         };
         ws.onerror = () => {
-            dispatch(Message.onChangeSocketStatue('错误连接'));
             this.connectionstatus = false;
             Message.setConnectionStatus(false);
+            if (typeof this.dispatch != 'function') {
+                return;
+            }
+            this.dispatch(Message.onChangeSocketStatue('错误连接'));
         };
         this.ws = ws;
     };
@@ -156,6 +171,9 @@ class ChatSocket {
             this.verifyIdentidy(this.token);
             return;
         }
+        if (typeof this.dispatch != 'function') {
+            return;
+        }
         const msgData = {
             type, data,
         };
@@ -165,7 +183,6 @@ class ChatSocket {
         } catch (e) {
             this.dispatch(Message.onChangeSocketStatue('异常代码:000X1'));
         }
-
     };
 }
 

@@ -15,7 +15,7 @@ import {
     FlatList,
     RefreshControl,
     ActivityIndicator,
-    TouchableOpacity,
+    TouchableOpacity, StatusBar,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme, theme} from '../appSet';
@@ -53,9 +53,11 @@ class HomePage extends PureComponent {
     };
 
     render() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(bottomTheme, true);
         const RefreshHeight = Animated.interpolate(this.animations.val, {
-            inputRange: [-200, 0],
-            outputRange: [250, 50],
+            inputRange: [-200, -0.1,0],
+            outputRange: [250, 50,0],
             extrapolate: 'clamp',
         });
         let statusBar = {
@@ -67,6 +69,7 @@ class HomePage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
+
         let TopColumn = ViewUtil.getTopColumn(this._goBackClick, 'dsadsa的店铺', null, bottomTheme, 'white', 16);
         return (
             <SafeAreaViewPlus

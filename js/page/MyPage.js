@@ -7,7 +7,9 @@
  */
 
 import React, {PureComponent} from 'react';
+import {ActivityIndicator} from 'react-native';
 import NavigationBar from '../common/NavigationBar';
+
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
 import {bottomTheme} from '../appSet';
 import setting from '../res/svg/setting.svg';
@@ -73,7 +75,7 @@ class MyPage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const {userinfo, onUploadAvatar} = this.props;
-        console.log(userinfo.upload_avatar_loading,"userinfo.upload_avatar_loading");
+        console.log(userinfo.upload_avatar_loading, 'userinfo.upload_avatar_loading');
         // console.log(userinfo);
         return (
             <View
@@ -310,12 +312,22 @@ class TopInfoColumn extends PureComponent {
                         activeOpacity={0.6}
                         onPress={this._avatarClick}
                     >
+                        {userinfo.upload_avatar_loading ?
+                            <View style={{
+                                width: 50,
+                                height: 50,
+                                borderRadius: 25,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <ActivityIndicator size="large" color="black"/>
+                            </View>
+                            : <FastImage
+                                style={[styles.imgStyle]}
+                                source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
+                                resizeMode={FastImage.stretch}
+                            />}
 
-                        <FastImage
-                            style={[styles.imgStyle]}
-                            source={userinfo.login ? userinfo.upload_avatar_loading ? require('../res/img/upload_avatar_loading_.png') : {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
-                            resizeMode={FastImage.stretch}
-                        />
                         {/*<*/}
                         {userinfo.login && <SvgUri style={{
                             position: 'absolute',

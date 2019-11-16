@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Dimensions, StatusBar} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
-import {theme} from '../appSet';
+import { theme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
@@ -11,6 +11,7 @@ import {getUUID} from '../util/CommonUtils';
 import {connect} from 'react-redux';
 import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
+import Image from 'react-native-fast-image';
 
 class ChatRoomPage extends React.Component {
     constructor(props) {
@@ -36,7 +37,6 @@ class ChatRoomPage extends React.Component {
     };
     getMessages = () => {
         const tmpArr = [];
-        // console.log(this.props.message.msgArr, 'this.props.message.msgArr');
         const {fromUserinfo} = this.params;
         const {userinfo} = this.props;
         this.props.message.msgArr.forEach((item) => {
@@ -45,11 +45,10 @@ class ChatRoomPage extends React.Component {
             ) {
                 const PreviousIndex = tmpArr.length;
                 let renTime = true;
-                console.log(PreviousIndex);
                 if (PreviousIndex != 0) {
                     const interval = parseInt(item.sendDate) - parseInt(tmpArr[PreviousIndex - 1].time);
                     if (interval < 100000) {
-                        renTime=false;
+                        renTime = false;
                     }
                 }
                 tmpArr.push({
@@ -89,6 +88,7 @@ class ChatRoomPage extends React.Component {
         const {userinfo} = this.props;
         let statusBar = {
             hidden: false,
+            backgroundColor: theme,//安卓手机状态栏背景颜色
         };
         let navigationBar = <NavigationBar
             hide={true}
@@ -102,32 +102,31 @@ class ChatRoomPage extends React.Component {
                 topColor={theme}
             >
                 {navigationBar}
-
                 {TopColumn}
-
                 <View style={{flex: 1}}>
                     <ChatScreen
                         loadHistory={this.onRefresh}
                         inverted={1}
-                        // onRefresh={this.onRefresh}
-                        // loading={false}
                         inputOutContainerStyle={{
                             borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.2, shadowColor: '#c7c7c7',
                             shadowRadius: 3,
                             shadowOpacity: 1,
                             shadowOffset: {w: 1, h: 1},
-                            elevation: 10,//安卓的阴影
+                            elevation: 2,//安卓的阴影
                         }}
                         userProfile={{id: userinfo.userid, avatar: userinfo.avatar_url}}
-                        // inputStyle={{borderRadius:3}}
                         placeholder={''}
                         useVoice={false}
                         ref={(e) => this.chat = e}
                         messageList={this.getMessages()}
-                        // androidHeaderHeight={androidHeaderHeight}
                         sendMessage={this.sendMessage}
-                        // renderMessageTime={this.renderMessageTime}
                         pressAvatar={this._pressAvatar}
+                        panelSource={[{
+                            icon: <Image source={require('../res/img/photo.png')} style={{width: 30, height: 30}}/>,
+                            title: '照片',
+                            onPress: () => {
+                                console.log('takePhoto');
+                            }}]}
                     />
                 </View>
 

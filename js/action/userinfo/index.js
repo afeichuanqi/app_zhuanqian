@@ -18,13 +18,13 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
             device_system_version,
             device_is_tablet,
         }).then((data) => {
-            callback(true);
+            callback(true,data);
             dispatch({
                 type: Types.LOGIN_SUCCESS,
                 data: data,
             });
         }).catch(msg => {
-            callback(false, msg);
+            callback(false, {msg});
         });
 
     };
