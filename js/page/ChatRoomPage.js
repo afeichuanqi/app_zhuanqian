@@ -17,6 +17,7 @@ class ChatRoomPage extends React.Component {
         super(props);
         this.params = this.props.navigation.state.params;
         this.pageCount = 10;
+        this.unReadArr = [];
     }
 
     componentDidMount(): void {
@@ -29,16 +30,28 @@ class ChatRoomPage extends React.Component {
     _goBackClick = () => {
         NavigationUtils.goBack(this.props.navigation);
     };
-
+    _ComparisonTime = (now, last) => {
+        // console.log(now, last);
+        return true;
+    };
     getMessages = () => {
         const tmpArr = [];
-        console.log(this.props.message.msgArr, 'this.props.message.msgArr');
+        // console.log(this.props.message.msgArr, 'this.props.message.msgArr');
         const {fromUserinfo} = this.params;
         const {userinfo} = this.props;
         this.props.message.msgArr.forEach((item) => {
             if ((item.fromUserid == fromUserinfo.id && item.ToUserId == userinfo.userid)
                 || (item.fromUserid == userinfo.userid && item.ToUserId == fromUserinfo.id)
             ) {
+                const PreviousIndex = tmpArr.length;
+                let renTime = true;
+                console.log(PreviousIndex);
+                if (PreviousIndex != 0) {
+                    const interval = parseInt(item.sendDate) - parseInt(tmpArr[PreviousIndex - 1].time);
+                    if (interval < 100000) {
+                        renTime=false;
+                    }
+                }
                 tmpArr.push({
                     id: item.msgId,
                     type: item.msg_type,
@@ -49,18 +62,17 @@ class ChatRoomPage extends React.Component {
                         id: parseInt(fromUserinfo.id),
                         nickName: fromUserinfo.username,
                     },
-                    renderTime: true,
+                    renderTime: renTime,
                     sendStatus: parseInt(item.sendStatus),
-                    time: item.sendDate+'000',
+                    time: item.sendDate,
                 });
-                if (item.un_read == 0) {//未读消息 设置未已经读取
-                    ChatSocket.setMsgIdIsRead(item.msgId, item.fromUserid);
-
+                if (item.fromUserid == fromUserinfo.id && item.ToUserId == userinfo.userid && item.un_read == 0) { //未读消息 设置未已经读取
+                    if (this.unReadArr.findIndex((n) => n == item.msgId) == -1) {//防止多次去增加服务器负担
+                        ChatSocket.setMsgIdIsRead(item.msgId, item.fromUserid);
+                        this.unReadArr.push(item.msgId);
+                    }
                 }
-
-
             }
-
         });
         console.log();
         return tmpArr;
@@ -95,11 +107,10 @@ class ChatRoomPage extends React.Component {
 
                 <View style={{flex: 1}}>
                     <ChatScreen
-                        loadHistory={() => {
-                            console.log('我被触发');
-                        }}
-                        onRefresh={this.onRefresh}
-                        loading={false}
+                        loadHistory={this.onRefresh}
+                        inverted={1}
+                        // onRefresh={this.onRefresh}
+                        // loading={false}
                         inputOutContainerStyle={{
                             borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.2, shadowColor: '#c7c7c7',
                             shadowRadius: 3,

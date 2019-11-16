@@ -338,7 +338,7 @@ class MessageItemComponent extends Component {
         }).start();
     };
     _onPress = () => {
-        if (this.props.item.unReadLenth > 0) {
+        if (this.props.item.unReadLength > 0) {
             ChatSocket.setFromUserIdMessageIsRead(this.props.item.id);
         }
         NavigationUtils.goPage({fromUserinfo: this.props.item}, 'ChatRoomPage');
@@ -374,7 +374,7 @@ class MessageItemComponent extends Component {
                     source={{uri: item.avatar_url}}
                     resizeMode={FastImage.stretch}
                 />
-                {item.unReadLenth ? item.unReadLenth > 0 && <View style={{
+                {item.unReadLength ? item.unReadLength > 0 && <View style={{
                     borderRadius: 10, justifyContent: 'center', alignItems: 'center',
                     position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
                     // paddingVertical:1,
@@ -382,7 +382,7 @@ class MessageItemComponent extends Component {
                     <Text style={{
                         fontSize: 10,
                         color: 'white',
-                    }}>{item.unReadLenth}</Text>
+                    }}>{item.unReadLength}</Text>
                 </View> : null}
 
             </View>
@@ -419,6 +419,7 @@ class MessageItemComponent extends Component {
                         color: 'black',
                         opacity: 0.6,
                         marginLeft: 10,
+                        width: width - 100,
                     }}>{item.msg}</Text>
             </View>
             {/*右上*/}
@@ -431,7 +432,8 @@ class MessageItemComponent extends Component {
                     fontSize: 11,
                     color: 'black',
                     opacity: 0.5,
-                }}>{getCurrentTime(parseInt(item.sendDate + '000'))}</Text>
+
+                }}>{getCurrentTime(parseInt(item.sendDate))}</Text>
             </View>
 
         </AnimatedTouchableOpacity>;

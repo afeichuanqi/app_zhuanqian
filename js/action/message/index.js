@@ -6,7 +6,7 @@ import Types from '../Types';
  */
 // VERIFY_IDENTIDY 验证结果
 export function verifyIdentIdy(code) {
-    console.log(code, 'code');
+    // console.log(code, 'code');
     return {type: Types.VERIFY_IDENTIDY, data: {identIdy: code}};
 }
 

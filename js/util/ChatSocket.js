@@ -1,5 +1,6 @@
 import types from '../action/Types';
 import Message from '../action';
+import {Platform} from 'react-native';
 
 class ChatSocket {
     connectionstatus = false;
@@ -8,8 +9,8 @@ class ChatSocket {
     connctionServer = (dispatch, token) => {
         // console.log('constructor：我被创建');
         dispatch(Message.onChangeSocketStatue('正在连接...'));
-
-        const ws = new WebSocket('ws://localhost:433/');
+        const URL = Platform.OS === 'android' ? 'ws://10.0.2.2:433/' : 'ws://localhost:433/';
+        const ws = new WebSocket(URL);
         // this.store = createStore(reducer);
         this.dispatch = dispatch;
         this.token = token;
@@ -54,18 +55,28 @@ class ChatSocket {
                 case types.MESSAGE_FRIEND_ALL:
                     // console.log('所有好友回调');
                     // const {friend} = data;
-                    dispatch(Message.onSelectAllFriend(data.friend));
+                    if (data.friend && data.friend.length > 0) {
+                        dispatch(Message.onSelectAllFriend(data.friend));
+                    }
+
                     //收到回调进行未读消息数回调
                     this.selectAllFriendUnReadMessageLength();
                     break;
                 case types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH_SUCCESS:
-                    dispatch(Message.onSelectAllFriendUnRead(data.friendUnReadCountArr));
+                    console.log("data.friendUnReadCountArr",data);
+                    if (data.friendUnReadCountArr && data.friendUnReadCountArr.length > 0) {
+                        dispatch(Message.onSelectAllFriendUnRead(data.friendUnReadCountArr));
+                    }
+
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
                     dispatch(Message.onSetAllFriendUnRead(data.fromUserid));
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
-                    dispatch(Message.onGetMegForUserid(data.msgArr));
+                    if (data.msgArr && data.msgArr.length > 0) {
+                        dispatch(Message.onGetMegForUserid(data.msgArr));
+                    }
+
                     break;
                 case types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
                     dispatch(Message.onSetFriendMsgIsRead(data.fromUserid));
@@ -105,8 +116,8 @@ class ChatSocket {
         this.sendToServer(types.MESSAGE_SET_MSG_ID_READ, {msgId, fromUserid});
     };
     //获取userid所有消息
-    selectAllMsgForFromUserid = (fromUserid,pageCount) => {
-        this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {fromUserid,pageCount});
+    selectAllMsgForFromUserid = (fromUserid, pageCount) => {
+        this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {fromUserid, pageCount});
     };
     //查询未读消息数
     selectAllFriendUnReadMessageLength = () => {
@@ -139,6 +150,9 @@ class ChatSocket {
             return;
         }
         if (!this.verifyIdentidy) {
+            if (!this.token || this.token == '') {
+                return;
+            }
             this.verifyIdentidy(this.token);
             return;
         }

@@ -12,8 +12,7 @@ export function onSelectAllFriend(friendArr) {
 
 // 收到查询所有好友未读消息
 export function onSelectAllFriendUnRead(friendArr) {
-    // console.log(code, 'code');
-    return {type: Types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH_SUCCESS, data: {friendArr}};
+    return {type: Types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH_SUCCESS, data: {friendArr:friendArr}};
 }
 
 // 设置当前的好友所有消息为已读

@@ -1037,13 +1037,13 @@ class ChatWindow extends PureComponent {
                             ref={e => (this.chatList = e)}
                             inverted={inverted}
                             data={currentList}
-                            refreshControl={
-                                <RefreshControl
-                                    title={''}
-                                    refreshing={this.props.loading}
-                                    onRefresh={this.props.onRefresh}
-                                />
-                            }
+                            // refreshControl={
+                            //     <RefreshControl
+                            //         title={''}
+                            //         refreshing={this.props.loading}
+                            //         onRefresh={this.props.onRefresh}
+                            //     />
+                            // }
                             ListFooterComponent={this.props.renderLoadEarlier}
                             extraData={this.props.extraData}
                             automaticallyAdjustContentInsets={false}

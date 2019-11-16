@@ -8,7 +8,7 @@ const defaultContent = {
 
 export default function onAction(state = defaultContent, action) {
     const {data, type} = action;
-    console.log(action, 'actionaction');
+    // console.log(action, 'actionaction');
     switch (type) {
         case Types.VERIFY_IDENTIDY :
             return {
