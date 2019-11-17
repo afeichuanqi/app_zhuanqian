@@ -89,6 +89,9 @@ class ChatSocket {
                 case types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
                     this.dispatch(Message.onSetFriendMsgIsRead(data.fromUserid));
                     break;
+                case types.MESSAGE_FORIMAGE_SENDTO_USERID_SUCCESS:
+                    this.dispatch(Message.onSetImageMsgStatus(data.uuid, data.msgId, data.sendDate, data.sendStatus, data.content));
+                    break;
 
 
             }
@@ -155,8 +158,21 @@ class ChatSocket {
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url,
         });
-        this.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid));
+        this.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime()));
         // this.dispatch(Message.onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus));
+        return true;
+    };
+    //发送图片消息给指定用户
+    sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url) => {
+        if (!this.connectionstatus) {
+            return false;
+        }
+        if (!this.verifyIdentIdy) {
+            return false;
+        }
+        this.sendToServer(types.MESSAGE_FORIMAGE_SENDTO_USERID, {
+            toUserid, msg_type, content, uuid, username, avatar_url,
+        });
         return true;
     };
     sendToServer = (type, data) => {

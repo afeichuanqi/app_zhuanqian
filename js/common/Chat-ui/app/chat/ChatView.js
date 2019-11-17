@@ -802,37 +802,14 @@ class ChatWindow extends PureComponent {
                     items = this.props.setPopItems(type, index, text, message);
                 } else {
                     items = [
-                        {
-                            title: '删除',
-                            onPress: () => {
-                                this.props.delMessage({index, message}, this.isInverted);
-                            },
-                        },
-                        {
-                            title: '多选',
-                            onPress: () => {
-                                this.multipleSelect(index, message);
-                            },
-                        },
+
                     ];
                     if (type === 'text') {
                         items = [
                             {
                                 title: '复制',
                                 onPress: () => Clipboard.setString(text),
-                            },
-                            {
-                                title: '删除',
-                                onPress: () => {
-                                    this.props.delMessage({index, message}, this.isInverted);
-                                },
-                            },
-                            {
-                                title: '多选',
-                                onPress: () => {
-                                    this.multipleSelect(index, message);
-                                },
-                            },
+                            }
                         ];
                     }
                 }

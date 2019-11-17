@@ -48,6 +48,7 @@ export function onSetFriendMsgIsRead(fromUserid) {
         },
     };
 }
+
 //将msgid设置为已读
 // export function onSetMsgIdIsRead(msgId) {
 //     // console.log(code, 'code');

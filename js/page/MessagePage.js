@@ -21,6 +21,7 @@ import NavigationBar from '../common/NavigationBar';
 import SvgUri from 'react-native-svg-uri';
 import message_xitong from '../res/svg/message_xitong.svg';
 import zaixiankefu from '../res/svg/zaixiankefu.svg';
+import huodongxiaoxi from '../res/svg/huodongxiaoxi.svg';
 import FastImage from 'react-native-fast-image';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -56,8 +57,8 @@ class MessagePage extends PureComponent {
 
     render() {
         const RefreshHeight = Animated.interpolate(this.animations.val, {
-            inputRange: [-200, 0],
-            outputRange: [300, 0],
+            inputRange: [-200,-0.1, 0],
+            outputRange: [300, 30,0],
             extrapolate: 'clamp',
         });
 
@@ -79,18 +80,6 @@ class MessagePage extends PureComponent {
         return (
             <View style={{flex: 1}}>
                 {navigationBar}
-                <View style={{
-                    height: 40,
-                    width,
-                    backgroundColor: bottomTheme,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
-                    <Text style={{
-                        color: 'white',
-                        fontSize: 17,
-                    }}>互动{statusText != '' ? `(${statusText})` : unMessageLength ? unMessageLength > 0 ? `(${unMessageLength})` : '' : ''}</Text>
-                </View>
                 <Animated.View
                     // ref={ref => this.zhedangRef = ref}
                     style={{
@@ -98,20 +87,25 @@ class MessagePage extends PureComponent {
                         height: RefreshHeight,
                         width,
                         position: 'absolute',
-                        top: 60,
+                        top: 50,
                         // zIndex:1,
                     }}>
-                    {/*{Platform.OS === 'ios' &&*/}
-                    {/*<FastImage style={{flex: 1}}*/}
-                    {/*           resizeMode={FastImage.resizeMode.stretch}*/}
-                    {/*           source={{uri: 'https://img.lovebuy99.com/uploads/allimg/191105/15-191105154359.jpg'}}/>*/}
-                    {/*}*/}
-
                 </Animated.View>
+                <View style={{
+                    height: 40,
+                    width,
+                    backgroundColor: bottomTheme,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex:3,
+                }}>
+                    <Text style={{
+                        color: 'white',
+                        fontSize: 17,
+                    }}>互动{statusText != '' ? `(${statusText})` : unMessageLength ? unMessageLength > 0 ? `(${unMessageLength})` : '' : ''}</Text>
+                </View>
+
                 <MsgList friend={this.props.friend} RefreshHeight={this.animations.val}/>
-                {/*<View style={{flex:1, backgroundColor:'white',marginTop:50}}>*/}
-                {/*    */}
-                {/*</View>*/}
 
             </View>
         );
@@ -139,9 +133,9 @@ class MessageColumn extends PureComponent {
             flexDirection: 'row',
             justifyContent: 'space-around',
         }}>
-            <MessageColumnItem svgXmlData={message_xitong} title={'系统通知'}/>
-            <MessageColumnItem svgXmlData={zaixiankefu} title={'在线客服'} size={48}/>
-            <MessageColumnItem/>
+            <MessageColumnItem svgXmlData={message_xitong} title={'通知消息'}/>
+            <MessageColumnItem svgXmlData={zaixiankefu} title={'互动消息'} size={48}/>
+            <MessageColumnItem svgXmlData={huodongxiaoxi} title={'活动消息'} size={42}/>
             <MessageColumnItem/>
         </View>;
     }
@@ -196,7 +190,6 @@ class MsgList extends Component {
             keyExtractor={(item, index) => index + ''}
             refreshControl={
                 <RefreshControl
-                    // title={'更新任务中'}
                     refreshing={isLoading}
                     onRefresh={() => this.onRefresh()}
                 />
@@ -208,23 +201,8 @@ class MsgList extends Component {
                     },
                 },
             ])}
-            // onScroll={this._onScroll}
-            // ListFooterComponent={() => this.genIndicator(hideLoaded)}
-            // onEndReached={() => {
-            //     console.log('onEndReached.....');
-            //     // 等待页面布局完成以后，在让加载更多
-            //     if (this.canLoadMore) {
-            //         this.onLoading();
-            //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-            //     }
-            // }}
-            // onScrollEndDrag={this._onScrollEndDrag}
             windowSize={300}
             onEndReachedThreshold={0.01}
-            // onMomentumScrollBegin={() => {
-            //     console.log('我被触发');
-            //     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
-            // }}
         />;
     }
 
@@ -243,22 +221,7 @@ class MsgList extends Component {
         return <MessageItemComponent item={item}/>;
     };
 
-    // genIndicator(hideLoaded) {
-    //     return !hideLoaded ?
-    //         <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-    //             <ActivityIndicator
-    //                 style={{color: 'red'}}
-    //             />
-    //             <Text style={{marginLeft: 10}}>正在加载更多</Text>
-    //         </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
-    //             style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-    //
-    //             <Text style={{marginLeft: 10}}>没有更多了哦</Text>
-    //         </View>;
-    // }
-
     onLoading = () => {
-        console.log('onLoading触发中');
         this.setState({
             hideLoaded: false,
         });
@@ -291,13 +254,6 @@ const topBottomVal = 20;
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 class MessageItemComponent extends Component {
-
-    // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-    //     if (this.state.value !== nextState.value) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
 
     static defaultProps = {
         titleFontSize: 15,
@@ -462,7 +418,7 @@ class MessageColumnItem extends PureComponent {
                 shadowRadius: 5,
                 shadowOpacity: 1,
                 shadowOffset: {w: 1, h: 1},
-                elevation: 10,//安卓的阴影
+                elevation: 5,//安卓的阴影
             }} width={size} height={size} svgXmlData={svgXmlData}/>
             <Text style={{
                 fontSize: 12,

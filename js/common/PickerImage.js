@@ -7,9 +7,8 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal,View, Dimensions, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
-// import SYImagePicker from 'react-native-syan-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const {timing} = Animated;
@@ -70,11 +69,12 @@ class PopMenu extends PureComponent {
     animations = {
         bottom: new Animated.Value(-(200 + (width / 3))),
     };
-    _selTakePhone = async () => {
+    _selTakePhone = () => {
         ImagePicker.openCamera({
             width: 300,
             height: 400,
             cropping: this.props.cropping,
+            includeBase64: this.props.includeBase64,
         }).then(image => {
             this.hide();
             this.props.select(image);

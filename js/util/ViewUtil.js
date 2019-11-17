@@ -8,7 +8,7 @@ import menu_right from '../res/svg/menu_right.svg';
 
 const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
-    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14) => {
+    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14,rightClick) => {
         return (
             <View style={{
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
@@ -26,6 +26,7 @@ export default class ViewUtil {
                     <Text style={{color: fontColor, fontSize}}>{title}</Text>
                 </View>
                 {rightSvg ? <TouchableOpacity
+                    onPress={rightClick}
                     activeOpacity={0.6}
                     style={{justifyContent: 'center'}}>
                     <SvgUri width={24} height={24} fill={fontColor} svgXmlData={message_more}/>

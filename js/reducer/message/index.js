@@ -40,13 +40,16 @@ export default function onAction(state = defaultContent, action) {
         case Types.MESSAGE_ADD_NEW://我发送的消息加入列表
             // console.log('我触发了MESSAGE_FROMOF_USERID');
             const temArr1 = [...state.msgArr];
+            // console.log(data.sendDate,"sendDate")
             temArr1.push({
                 fromUserid: data.fromUserid,
                 msg_type: data.msg_type,
                 content: data.content,
+                sendDate: data.sendDate,
                 ToUserId: data.ToUserId,
                 sendStatus: data.sendStatus,
                 uuid: data.uuid,
+
             });
             return {
                 ...state,
@@ -55,6 +58,7 @@ export default function onAction(state = defaultContent, action) {
         case Types.MESSAGE_SET_STATUS://消息加状态
             const temArr__ = [...state.msgArr];
             const index = temArr__.findIndex(d => d.uuid === data.uuid);
+            // console.log(temArr__,"indexindex");
             const temJson = temArr__[index];
             temJson.msgId = data.msgId;
             temJson.sendDate = data.sendDate;
@@ -63,6 +67,20 @@ export default function onAction(state = defaultContent, action) {
             return {
                 ...state,
                 msgArr: temArr__,
+            };
+        case Types.MESSAGE_FORIMAGE_SENDTO_USERID_SUCCESS://图片消息加状态
+            const temArr2 = [...state.msgArr];
+            const index2 = temArr2.findIndex(d => d.uuid === data.uuid);
+            // console.log(temArr__,"indexindex");
+            const temJson2 = temArr2[index2];
+            temJson2.msgId = data.msgId;
+            temJson2.sendDate = data.sendDate;
+            temJson2.sendStatus = data.sendStatus;
+            temJson2.content = data.content;
+            temArr2[index] = temJson2;
+            return {
+                ...state,
+                msgArr: temArr2,
             };
         case Types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
 

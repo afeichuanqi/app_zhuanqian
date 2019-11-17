@@ -11,7 +11,7 @@ import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react
 import Animated, {Easing} from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
-
+import {bottomTheme} from '../appSet';
 const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
 
@@ -24,6 +24,7 @@ class MyModalBox extends PureComponent {
         width: 200,
         height: 500,
         rightTitle: '添加',
+        titleComponent:null
     };
     state = {
         visible: false,
@@ -97,14 +98,21 @@ class MyModalBox extends PureComponent {
                     <Animated.View style={[this.props.style, {
                         transform: [{scale: this.animations.scale}],
                     }]}>
+
                         <View style={{
                             paddingVertical: 10,
                             width: width - 40,
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
+
+
                         }}>
-                            <Text style={{fontSize: 16}}>{this.props.title}</Text>
+                            <View style={{flexDirection:'row', alignItems:'flex-end'}}>
+                                <Text style={{fontSize: 16}}>{this.props.title}</Text>
+                                {this.props.titleComponent}
+                            </View>
+
                             <TouchableOpacity
                                 onPress={this.hide}>
                                 <SvgUri width={15} height={15} svgXmlData={cha}/>

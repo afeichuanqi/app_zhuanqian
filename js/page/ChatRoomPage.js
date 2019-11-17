@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, Dimensions, StatusBar} from 'react-native';
+import {View, Text, StatusBar,Dimensions} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
-import { theme} from '../appSet';
+import {theme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
@@ -12,7 +12,11 @@ import {connect} from 'react-redux';
 import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
 import Image from 'react-native-fast-image';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import {uploadMsgImage} from '../util/AppService';
+import actions from '../action';
+import ImageViewerModal from '../common/ImageViewerModal';
+const {width,height} = Dimensions.get('window');
 class ChatRoomPage extends React.Component {
     constructor(props) {
         super(props);
@@ -52,9 +56,15 @@ class ChatRoomPage extends React.Component {
                     }
                 }
                 tmpArr.push({
-                    id: item.msgId,
+                    id: item.msgId ? item.msgId : item.uuid,
                     type: item.msg_type,
-                    content: item.content,
+                    content: item.msg_type == 'image' ?
+                        {
+                            uri: item.content,
+                            width: 100,
+                            height: 80,
+                        }
+                        : item.content,
                     targetId: parseInt(item.fromUserid),
                     chatInfo: {
                         avatar: fromUserinfo.avatar_url,
@@ -71,9 +81,10 @@ class ChatRoomPage extends React.Component {
                         this.unReadArr.push(item.msgId);
                     }
                 }
+                // console.log(tmpArr[tmpArr.length-1],"tmpArrtmpArr");
             }
         });
-        console.log();
+        // console.log(tmpArr, 'tmpArrtmpArr');
         return tmpArr;
     };
 
@@ -96,7 +107,9 @@ class ChatRoomPage extends React.Component {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, fromUserinfo.username, message_more);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, fromUserinfo.username, message_more, null, null, null, () => {
+            NavigationUtils.goPage({fromUserinfo: this.params.fromUserinfo}, 'ChatSettings');
+        });
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -121,32 +134,87 @@ class ChatRoomPage extends React.Component {
                         messageList={this.getMessages()}
                         sendMessage={this.sendMessage}
                         pressAvatar={this._pressAvatar}
+                        onMessagePress={(type, index, content) => {
+                            console.log('消息被单击');
+                            if (type == 'image') {
+                                console.log(content);
+                                this._imgViewModel.show({
+                                    url: content,
+                                })
+                            }
+                        }}
                         panelSource={[{
                             icon: <Image source={require('../res/img/photo.png')} style={{width: 30, height: 30}}/>,
                             title: '照片',
                             onPress: () => {
-                                console.log('takePhoto');
-                            }}]}
+                                ImagePicker.openPicker({
+                                    width: 300,
+                                    height: 400,
+                                    cropping: false,
+                                    includeBase64: true,
+                                }).then(image => {
+                                    this._imgSelect(image);
+                                });
+                            },
+                        },
+                            {
+                                icon: <Image source={require('../res/img/take_phone.png')}
+                                             style={{width: 30, height: 30}}/>,
+                                title: '拍照',
+                                onPress: () => {
+                                    ImagePicker.openCamera({
+                                        width: 300,
+                                        height: 400,
+                                        cropping: false,
+                                    }).then(image => {
+                                        this._imgSelect(image);
+                                    });
+                                },
+                            },
+                        ]}
                     />
+                    <ImageViewerModal ref={ref => this._imgViewModel = ref}/>
                 </View>
 
             </SafeAreaViewPlus>
         );
     }
 
-    sendMessage = (type, content, isInverted) => {
+    _imgSelect = (image) => {
+        const {userinfo, onAddMesage} = this.props;//我的用户信息
+        const userId = userinfo.userid;
+        const token = userinfo.token;
+        const {fromUserinfo} = this.params;//他的用户信息
+        let toUserid = fromUserinfo.id;
+        const uuid = getUUID();//获取一条uuid
+
+        const mime = image.mime;
+        const base64Data = image.data;
+        const path = `file://${image.path}`;
+        onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime());//插入一条临时图片数据
+        const imgData = {
+            mime,
+            data: base64Data,
+        };
+        // console.log(uploadMsgImage,"uploadMsgImage");
+        uploadMsgImage(imgData, token).then((result) => {
+            // console.log(result.imageUrl,"result.imageUrl");
+            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', result.imageUrl, uuid, userinfo.username, userinfo.avatar_url);
+        });
+
+    };
+    sendMessage = (type, content) => {
         const {userinfo} = this.props;
         const userId = userinfo.userid;
         const {fromUserinfo} = this.params;
         let toUserid = fromUserinfo.id;
         const uuid = getUUID();
-        const isSuccess = ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url);
-        if (isSuccess) {
-
-        }
+        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url);
     };
     _pressAvatar = () => {
-        NavigationUtils.goPage({}, 'ShopInfoPage');
+        const {fromUserinfo} = this.params;
+        NavigationUtils.goPage({fromUserinfo}, 'ShopInfoPage');
+        // console.log(data1,data2);
     };
     renderMessageTime = (time) => {
         return <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>
@@ -159,6 +227,8 @@ const mapStateToProps = state => ({
     userinfo: state.userinfo,
     message: state.message,
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    onAddMesage: (fromUserid, msg_type, content, ToUserId, uuid, sendDate) => dispatch(actions.onAddMesage(fromUserid, msg_type, content, ToUserId, uuid, sendDate)),
+});
 const ChatRoomPageRedux = connect(mapStateToProps, mapDispatchToProps)(ChatRoomPage);
 export default ChatRoomPageRedux;

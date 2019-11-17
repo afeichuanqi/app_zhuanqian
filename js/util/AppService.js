@@ -51,10 +51,86 @@ export function uploadAvatar(data, token) {
             reject(error);
         }
     });
-
-
+}
+export function uploadMsgImage(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/uploadMsgImage', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
+/**
+ * 查询是否黑名单
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectIsBeBlackList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectIsBeBlackList', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 举报用户
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function insertReportList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/insertReportList', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 加入黑名单
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function setToBlackList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/setToBlackList', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 export function setUserData(data, token) {
     return new Promise(async function (resolve, reject) {
         try {

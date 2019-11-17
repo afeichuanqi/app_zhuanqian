@@ -19,6 +19,7 @@ import TaskRelease from '../page/TaskRelease';
 import {Testing} from '../page/Testing';
 import TaskDetails from '../page/TaskDetails';
 import SettingPage from '../page/SettingPage';
+import ChatSettings from '../page/ChatSettings';
 import AccountSetting from '../page/SettingPage/AccountSetting';
 import UserProtocol from '../page/SettingPage/UserProtocol';
 
@@ -126,6 +127,12 @@ const MainNavigator = createStackNavigator({
         },
         UserProtocol: {
             screen: UserProtocol,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        ChatSettings: {
+            screen: ChatSettings,
             navigationOptions: {
                 header: null,
             },

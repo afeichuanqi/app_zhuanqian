@@ -2,9 +2,6 @@ import React, {PureComponent} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
-// import ding from '../res/svg/ding.svg';
-// import tuijian from '../res/svg/tuijian.svg';
-// import SvgUri from 'react-native-svg-uri';
 import Animated, {Easing} from 'react-native-reanimated';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
