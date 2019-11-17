@@ -7,7 +7,8 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Dimensions, View, Text, TextInput, Clipboard, Image, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {Dimensions, View, Text, TextInput, Clipboard, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import Image from 'react-native-fast-image';
 import {theme, bottomTheme} from '../../appSet';
 import SvgUri from 'react-native-svg-uri';
 import task_delete from '../../res/svg/task_delete.svg';
@@ -15,6 +16,8 @@ import task_shangyi from '../../res/svg/task_shangyi.svg';
 import task_xiayi from '../../res/svg/task_xiayi.svg';
 import task_edit from '../../res/svg/task_edit.svg';
 import AnimatedFadeIn from '../../common/AnimatedFadeIn';
+import RNFS from 'react-native-fs';
+import {uploadMsgImage} from '../../util/AppService';
 
 const {width, height} = Dimensions.get('window');
 
@@ -52,21 +55,20 @@ class StepBox extends PureComponent {
     }
 
     _editColumn = () => {
-        const {no, type, typeData} = this.props;
-        this.props.utilCick.edit(no, type, typeData);
+        const {no, type, typeData, timestamp} = this.props;
+        this.props.utilCick.edit(no, type, typeData, timestamp);
     };
     _deleteColumn = () => {
-        const {no, type, typeData} = this.props;
-        console.log('我被触发_deleteColumn');
-        this.props.utilCick.delete(no, type, typeData);
+        const {no, type, typeData, timestamp} = this.props;
+        this.props.utilCick.delete(no, type, typeData, timestamp);
     };
     _moveUpColumn = () => {
-        const {no, type, typeData} = this.props;
-        this.props.utilCick.moveUp(no, type, typeData);
+        const {no, type, typeData, timestamp} = this.props;
+        this.props.utilCick.moveUp(no, type, typeData, timestamp);
     };
     _moveDownColumn = () => {
-        const {no, type, typeData} = this.props;
-        this.props.utilCick.moveDown(no, type, typeData);
+        const {no, type, typeData, timestamp} = this.props;
+        this.props.utilCick.moveDown(no, type, typeData, timestamp);
     };
     getColumnBtn = (svgXmlData, title, size, click) => {
         return <TouchableOpacity
@@ -99,20 +101,71 @@ class TaskStepColumn extends PureComponent {
         stepDataArr: this.props.stepArr || [],
     };
     images = [];
-    setStepDataArr = (type, data, stepNo) => {
-        // console.log(data.uri.path,"datadata");
+    setStepDataArr = (type, data, stepNo, timestamp) => {
+        // console.log(type,  stepNo,"datadata");
         const tmpArr = [...this.state.stepDataArr];
         if (stepNo === 0) {//为添加
-            tmpArr.push({type, typeData: data});
-            if (data.uri) {
-                this.images.push({url: `file://${data.uri.path}`});
-            }
+            tmpArr.push({type, typeData: data, timestamp, uploadStatus: 0});
         } else {
-            tmpArr[stepNo - 1] = {type, typeData: data};//为修改
+            tmpArr[stepNo - 1] = {type, typeData: data, timestamp, uploadStatus: 0};//为修改
         }
         this.setState({
             stepDataArr: tmpArr,
         });
+    };
+    _resetUploadImage = (timestamp) => {//重新上传
+        const {userinfo} = this.props;
+        console.log(userinfo,"userinfo");
+        const tmpArr = [...this.state.stepDataArr];
+        const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
+        if (index != -1) {
+            const item = tmpArr[index];
+            const data = item.typeData;
+            if (data.uri && data.uri.indexOf('file://') != -1) {//确认是本地照片
+                this.setImageStatusOrUrl(timestamp, 0, '');
+                RNFS.readFile(data.uri, 'base64').then((base64) => {
+                    // console.log(base64,"base64");
+                    // const mime = data.uri.indexOf();
+                    //获取最后一个.的位置
+                    const mimeindex = data.uri.lastIndexOf('.');
+                    //获取后缀
+                    const mime = `image/${data.uri.substr(mimeindex + 1)}`;
+                    // console.log(mime, 'mime');
+                    const imgData = {
+                        mime: mime,
+                        data: base64,
+                    };
+                    uploadMsgImage(imgData, userinfo.token).then((result) => {
+                        if (result.status == 200) {//上传七牛云成功
+                            const imageUrl = result.imageUrl;
+                            this.setImageStatusOrUrl(timestamp, 1, imageUrl);
+                        }
+                    }).catch((msg) => {
+                        this.setImageStatusOrUrl(timestamp, -1, '');
+                    });
+                });
+            }
+        }
+    };
+    setImageStatusOrUrl = (timestamp, status, urlImage) => {
+        const tmpArr = [...this.state.stepDataArr];
+        const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
+        if (index != -1) {
+            const item = tmpArr[index];
+            const data = item.typeData;
+
+            if (data.uri) {
+                if (status == 1) {
+                    data.uri = urlImage;
+                }
+                item.typeData = data;
+                item.uploadStatus = status;
+                tmpArr[index] = item;
+                this.setState({
+                    stepDataArr: tmpArr,
+                });
+            }
+        }
     };
 
     componentDidMount() {
@@ -129,18 +182,19 @@ class TaskStepColumn extends PureComponent {
 
     };
     _imageClick = (url) => {
-        console.log(url, this.images);
-        this._findImagesForStep(url).then((index) => {
-            this.props.imageClick(index, this.images);
-        });
-        // console.log(index, this.images);
+        // console.log(url, this.images);
+        this.props.imageClick({url});
 
 
     };
-    getStepColumn = (stepNo, type, typeData, utilClick = {}) => {
+
+    getStepColumn = (stepNo, type, typeData, utilClick = {}, timestamp, uploadStatus) => {
+        // console.log(stepNo, type, typeData, utilClick = {}, timestamp, uploadStatus, 'tmpArr');
         switch (type) {
             case 1://输入网址
-                return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
+                return <StepBox key={timestamp} timestamp={timestamp} showUtilColumn={this.props.showUtilColumn}
+                                utilCick={utilClick}
+                                no={stepNo} type={type}
                                 typeData={typeData}>
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={{
@@ -180,7 +234,9 @@ class TaskStepColumn extends PureComponent {
                     </View>
                 </StepBox>;
             case 2://二维码
-                return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
+                return <StepBox key={timestamp} timestamp={timestamp} showUtilColumn={this.props.showUtilColumn}
+                                utilCick={utilClick}
+                                no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
@@ -196,13 +252,44 @@ class TaskStepColumn extends PureComponent {
                         <TouchableOpacity
                             activeOpacity={0.6}
                             onPress={() => {
-                                this._imageClick(`file://${typeData.uri.path}`);
+                                this._imageClick(typeData.uri);
                             }}
                             style={styles.imgBox}>
                             <Image
-                                source={{uri: `file://${typeData.uri.path}`}}
+                                source={{uri: typeData.uri}}
                                 style={{width: 120, height: 120, backgroundColor: '#F0F0F0', borderRadius: 3}}
                                 resizeMode={'contain'}/>
+                            {uploadStatus == 0 ?//正在上传
+                                <View style={{
+                                    position: 'absolute', top: 0, left: 0, width: 120, height: 120,
+                                    backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
+                                }}>
+                                    <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
+                                </View>
+                                : uploadStatus == -1 ?//上传失败
+                                    <View style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: 120,
+                                        height: 120,
+                                        backgroundColor: 'rgba(0,0,0,0.4)',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                        <Text style={{color: 'white', fontSize: 13}}>上传失败</Text>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                this._resetUploadImage(timestamp);
+                                            }}
+                                            style={{
+                                                backgroundColor: 'red', paddingHorizontal: 10, paddingVertical: 5,
+                                                borderRadius: 3, marginTop: 8,
+                                            }}>
+                                            <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
+                                        </TouchableOpacity>
+                                    </View> : null
+                            }
                         </TouchableOpacity>
 
                         <View style={styles.imgBox}>
@@ -216,7 +303,9 @@ class TaskStepColumn extends PureComponent {
                     </View>
                 </StepBox>;
             case 3://复制数据
-                return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
+                return <StepBox key={timestamp} timestamp={timestamp} showUtilColumn={this.props.showUtilColumn}
+                                utilCick={utilClick}
+                                no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
@@ -261,7 +350,9 @@ class TaskStepColumn extends PureComponent {
                     </View>
                 </StepBox>;
             case 4://图文说明
-                return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
+                return <StepBox key={timestamp} timestamp={timestamp} showUtilColumn={this.props.showUtilColumn}
+                                utilCick={utilClick}
+                                no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
@@ -276,22 +367,57 @@ class TaskStepColumn extends PureComponent {
                             flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, justifyContent: 'center',
                             paddingVertical: 10,
                         }}>
+                        <View>
+                            <Image
+                                source={{uri: typeData.uri}}
+                                style={{
+                                    width: width / 2,
+                                    // marginBottom: 10,
+                                    height: width / 1.2,
+                                    backgroundColor: '#F0F0F0',
+                                    borderRadius: 3,
+                                }}
+                                resizeMode={'contain'}/>
+                            {uploadStatus == 0 ?//正在上传
+                                <View style={{
+                                    position: 'absolute', top: 0, left: 0, width: width / 2, height: width / 1.2,
+                                    backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
+                                }}>
+                                    <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
+                                </View>
+                                : uploadStatus == -1 ?//上传失败
+                                    <View style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: width / 2,
+                                        height: width / 1.2,
+                                        backgroundColor: 'rgba(0,0,0,0.4)',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                        <Text style={{color: 'white', fontSize: 13}}>上传失败</Text>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                this._resetUploadImage(timestamp);
+                                            }}
+                                            style={{
+                                                backgroundColor: 'red', paddingHorizontal: 10, paddingVertical: 5,
+                                                borderRadius: 3, marginTop: 8,
+                                            }}>
+                                            <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
+                                        </TouchableOpacity>
+                                    </View> : null
+                            }
+                        </View>
 
-                        <Image
-                            source={{uri: `file://${typeData.uri.path}`}}
-                            style={{
-                                width: width / 2,
-                                // marginBottom: 10,
-                                height: width / 1.2,
-                                backgroundColor: '#F0F0F0',
-                                borderRadius: 3,
-                            }}
-                            resizeMode={'contain'}/>
                     </TouchableOpacity>
 
                 </StepBox>;
             case 5://验证图
-                return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
+                return <StepBox key={timestamp} timestamp={timestamp} showUtilColumn={this.props.showUtilColumn}
+                                utilCick={utilClick}
+                                no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
@@ -306,21 +432,56 @@ class TaskStepColumn extends PureComponent {
                             flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, justifyContent: 'center',
                             paddingVertical: 10,
                         }}>
+                        <View>
+                            <Image
+                                source={{uri: typeData.uri}}
+                                style={{
+                                    width: width / 2,
+                                    // marginBottom: 10,
+                                    height: width / 1.2,
+                                    backgroundColor: '#F0F0F0',
+                                    borderRadius: 3,
+                                }}
+                                resizeMode={'contain'}/>
+                            {uploadStatus == 0 ?//正在上传
+                                <View style={{
+                                    position: 'absolute', top: 0, left: 0, width: width / 2, height: width / 1.2,
+                                    backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
+                                }}>
+                                    <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
+                                </View>
+                                : uploadStatus == -1 ?//上传失败
+                                    <View style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: width / 2,
+                                        height: width / 1.2,
+                                        backgroundColor: 'rgba(0,0,0,0.4)',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                        <Text style={{color: 'white', fontSize: 13}}>上传失败</Text>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                this._resetUploadImage(timestamp);
+                                            }}
+                                            style={{
+                                                backgroundColor: 'red', paddingHorizontal: 10, paddingVertical: 5,
+                                                borderRadius: 3, marginTop: 8,
+                                            }}>
+                                            <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
+                                        </TouchableOpacity>
+                                    </View> : null
+                            }
+                        </View>
 
-                        <Image
-                            source={{uri: `file://${typeData.uri.path}`}}
-                            style={{
-                                width: width / 2,
-                                // marginBottom: 10,
-                                height: width / 1.2,
-                                backgroundColor: '#F0F0F0',
-                                borderRadius: 3,
-                            }}
-                            resizeMode={'contain'}/>
                     </TouchableOpacity>
                 </StepBox>;
             case 6://收集信息
-                return <StepBox showUtilColumn={this.props.showUtilColumn} utilCick={utilClick} no={stepNo} type={type}
+                return <StepBox key={timestamp} timestamp={timestamp} showUtilColumn={this.props.showUtilColumn}
+                                utilCick={utilClick}
+                                no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
@@ -353,28 +514,8 @@ class TaskStepColumn extends PureComponent {
 
         }
     };
-    _findImagesForStep = (url) => {
-
-        const image = this.images;
-
-        return new Promise(function (resolve, reject) {
-            image.map((item, index, arr) => {
-                if (item.url == url) {
-                    // console.log(index);
-                    console.log(index);
-                    resolve(index);
-                }
-            });
-        });
-
-    };
     _deleteColumn = (stepNo, type, typeData) => {
-        if (typeData.uri) {//有图片
-            const index = this._findImagesForStep(stepNo);
-            this.images.splice(index, 1);
-        }
         const tmpArr = [...this.state.stepDataArr];
-        // tmpArr
         tmpArr.splice(stepNo - 1, 1);
         this.setState({
             stepDataArr: tmpArr,
@@ -386,29 +527,14 @@ class TaskStepColumn extends PureComponent {
         if (coverIndex <= 0) {
             return;
         }
-
         const tmpArr = [...this.state.stepDataArr];
         const stepNoUpArr = tmpArr[coverIndex - 1];//上一个数组
         const Arr = tmpArr[coverIndex];//本数组
-
-
         tmpArr[coverIndex] = stepNoUpArr;//转换位置
         tmpArr[coverIndex - 1] = Arr;
-
         this.setState({
             stepDataArr: tmpArr,
         });
-        // console.log(typeData);
-        // const upImageIndex = await this._findImagesForStep(stepNo - 1);
-        //
-        // const _imageIndex = await this._findImagesForStep(stepNo);
-        // console.log(upImageIndex, _imageIndex, '_imageIndex');
-        // const upImage = this.images[upImageIndex].url;
-        // const _image = this.images[_imageIndex].url;
-        //
-        // this.images[upImageIndex].url = _image;
-        // this.images[_imageIndex].url = upImage;
-        // console.log(this.images);
     };
     _moveDownColumn = (stepNo, type, typeData) => {
         const coverIndex = stepNo - 1;
@@ -435,7 +561,7 @@ class TaskStepColumn extends PureComponent {
         return (
             <View>
                 {this.state.stepDataArr.map((item, index, arr) => {
-                    return this.getStepColumn(index + 1, item.type, item.typeData, utilClick);
+                    return this.getStepColumn(index + 1, item.type, item.typeData, utilClick, item.timestamp, item.uploadStatus);
                 })}
             </View>
         );

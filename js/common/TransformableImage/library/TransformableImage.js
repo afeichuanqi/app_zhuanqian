@@ -1,11 +1,12 @@
 'use strict';
 
 import React, {Component, PropTypes} from 'react';
-import {TouchableOpacity} from 'react-native';
-import Image from 'react-native-fast-image';
+import {TouchableOpacity,Dimensions,Image} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import ViewTransformer from 'react-native-view-transformer';
 
 let DEV = false;
+const {width,height} = Dimensions.get('window');
 
 export default class TransformableImage extends Component {
 
@@ -102,10 +103,10 @@ export default class TransformableImage extends Component {
                     activeOpacity={1}
                     onPress={this.props.imgClick}
                 >
-                    <Image
+                    <FastImage
                         {...this.props}
                         style={[this.props.style, {backgroundColor: 'transparent'}]}
-                        resizeMode={'contain'}
+                        resizeMode={FastImage.resizeMode.contain}
                         onLoadStart={this.onLoadStart.bind(this)}
                         onLoad={this.onLoad.bind(this)}
                         capInsets={{

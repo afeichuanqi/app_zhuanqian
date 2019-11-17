@@ -1,5 +1,6 @@
 import userinfo from './userinfo';
 import friend from './friend';
+import taskInfo from './taskInfo';
 import message from './message';
 import socketStatus from './socketStatus';
 import {persistCombineReducers} from 'redux-persist';
@@ -24,6 +25,7 @@ const index = {
         message,
         friend,
         socketStatus,
+        taskInfo,
     }
 ;
 const config = {

@@ -16,6 +16,8 @@ import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import Animated from 'react-native-reanimated';
+import actions from '../action';
+import {connect} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
@@ -82,7 +84,9 @@ class TaskDetails extends PureComponent {
         // let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '', null, bottomTheme, 'white', 16);
         // console.log()
         const {typeData, deviceData, columnData, stepData} = this.params;
-        console.log(columnData.rewardPrice);
+        console.log(this.props.taskInfo, ' this.props.taskInfo');
+        // return null;
+        console.log(columnData, 'columnData');
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -256,6 +260,11 @@ class TaskDetails extends PureComponent {
     }
 }
 
+// const mapStateToProps = state => ({
+//     taskInfo: state.taskInfo,
+// });
+// const mapDispatchToProps = dispatch => ({});
+// const TaskDetailsRedux = connect(mapStateToProps, mapDispatchToProps)(TaskDetails);
 export default TaskDetails;
 const styles = StyleSheet.create({
     imgStyle: {

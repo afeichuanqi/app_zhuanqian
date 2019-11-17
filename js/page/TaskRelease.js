@@ -35,8 +35,37 @@ import {MORE_MENU} from './TaskRelease/TASK_MENU';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import NavigationUtils from '../navigator/NavigationUtils';
 import ImageViewerModal from '../common/ImageViewerModal';
+import {selectTaskReleaseData, uploadMsgImage} from '../util/AppService';
+import {connect} from 'react-redux';
+import AppTskDefaultData from './TaskRelease/AppTskDefaultData';
+import actions from '../action';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
+
+class TextInputPro extends PureComponent {
+    state = {
+        defaultValue: this.props.rightComponentData.defaultValue,
+    };
+
+    render() {
+        const {rightComponentData} = this.props;
+        return <TextInput
+            value={this.state.defaultValue}
+            editable={rightComponentData.editable}
+            style={{flex: 1, color: 'black', padding: 0, fontSize: 13}}
+            placeholder={rightComponentData.info}
+            placeholderTextColor={'#7b798d'}
+            onChangeText={this._onChangeText}
+        />;
+    }
+
+    _onChangeText = (text) => {
+        this.setState({
+            defaultValue: text,
+        });
+        this.props.rightComponentData.onChangeText(text);
+    };
+}
 
 const genFormItem = (title, rightComponentType, rightComponentData) => {
     let rightComponent;
@@ -44,13 +73,7 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
 
     switch (rightComponentType) {
         case 1:
-            rightComponent = <TextInput
-                editable={rightComponentData.editable}
-                style={{flex: 1, color: 'black', padding: 0, fontSize: 13}}
-                placeholder={rightComponentData.info}
-                placeholderTextColor={'#7b798d'}
-                onChangeText={rightComponentData.onChangeText}
-            />;
+            rightComponent = <TextInputPro rightComponentData={rightComponentData}/>;
             rightComponentSvg = null;
             break;
         case 2:
@@ -58,26 +81,29 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
                 popTitle={rightComponentData.popTitle}
                 menuArr={rightComponentData.menuArr}
                 select={rightComponentData.selectClick}
-                info={rightComponentData.info}/>;
+                defaultId={rightComponentData.defaultId}/>;
             rightComponentSvg = <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>;
             break;
         case 3:
-            rightComponent = <RadioInfoComponent select={rightComponentData.selectClick}/>;
+            rightComponent = <RadioInfoComponent
+                key={title}
+                radioArr={rightComponentData.radioArr}
+                defaultId={rightComponentData.defaultId}
+                select={rightComponentData.selectClick}/>;
             rightComponentSvg = null;
 
             break;
         case 4:
             rightComponent = <InputTextPro
                 onChangeText={rightComponentData.onChangeText}
+                defaultValue={rightComponentData.defaultValue}
                 placeComponent={rightComponentData.placeComponent}/>;
             rightComponentSvg = null;
             break;
         case 5:
             rightComponent = <View style={{flex: 1}}/>;
             rightComponentSvg = rightComponentData.svgCot;
-
             break;
-
     }
     return <View style={{
         width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
@@ -138,6 +164,17 @@ class ComplyColumn extends Component {
 class TaskRelease extends PureComponent {
     constructor(props) {
         super(props);
+        this.state = {
+            data: {
+                app_task_type: AppTskDefaultData.app_task_type,
+                app_task_single_order: AppTskDefaultData.app_task_single_order,
+                app_task_device: AppTskDefaultData.app_task_device,
+                app_task_review_time: AppTskDefaultData.app_task_review_time,
+                app_task_order_time_limit: AppTskDefaultData.app_task_order_time_limit,
+                app_task_single_order_select: AppTskDefaultData.app_task_single_order_select,
+
+            },
+        };
     }
 
     state = {
@@ -146,13 +183,23 @@ class TaskRelease extends PureComponent {
     };
 
     componentDidMount() {
-
+        selectTaskReleaseData().then((result) => {
+            this.setState({
+                data: result,
+            });
+        });
 
     }
 
     componentWillUnmount() {
 
     }
+
+    _goBackClick = () => {
+        const data = this._getTaskReleaseData();
+        console.log(data, 'datadatadatadata');
+        this.props.onSetTaskReleaseInfo(data);
+    };
 
     render() {
         let statusBar = {
@@ -164,6 +211,8 @@ class TaskRelease extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
+        const {userinfo} = this.props;
+        const {data} = this.state;
         let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '任务发布', null, bottomTheme, 'white', 16);
         return (
             <SafeAreaViewPlus
@@ -176,26 +225,30 @@ class TaskRelease extends PureComponent {
                     ref={ref => this.scrollView = ref}
                     style={{backgroundColor: '#e8e8e8'}}>
 
-                    <TypeSelect ref={ref => this.typeSelect = ref}/>
-                    <TypeSelect ref={ref => this.deviceSelect = ref} style={{marginTop: 10}} title={'支持设备'} typeArr={[
-                        {id: 1, title: '全部'},
-                        {id: 2, title: '安卓'},
-                        {id: 3, title: '苹果'},
-                    ]}/>
-                    <BottomInfoForm ref={ref => this.bIform = ref} scrollTo={this._scrollTo}
-                                    scollToEnd={this._scollToEnd}/>
+                    <TypeSelect
+                        defaultId={this.props.taskInfo.typeData.id}
+                        typeArr={data.app_task_type}
+                        ref={ref => this.typeSelect = ref}/>
+                    <TypeSelect
+                        defaultId={this.props.taskInfo.deviceData.id}
+                        ref={ref => this.deviceSelect = ref}
+                        typeArr={data.app_task_device}
+                        style={{marginTop: 10}} title={'支持设备'}/>
+                    {/*栏目*/}
+                    <BottomInfoForm
+                        taskInfo={this.props.taskInfo}
+                        data={data}
+                        userinfo={userinfo} ref={ref => this.bIform = ref}
+                        scrollTo={this._scrollTo}
+                        scollToEnd={this._scollToEnd}/>
+                    {/*顶部提示*/}
                     <ComplyColumn/>
                 </ScrollView>
                 <View style={{borderTopWidth: 0.5, borderTopColor: '#e8e8e8', flexDirection: 'row'}}>
                     <TouchableOpacity
                         onPress={() => {
-                            //
-                            const typeData = this.typeSelect.getTypeData();
-                            const deviceData = this.deviceSelect.getTypeData();
-                            const columnData = this.bIform.getColumnData();
-                            const stepData = this.bIform.stepInfo.taskStep.getStepData();
-                            console.log(typeData, deviceData, columnData, stepData);
-                            NavigationUtils.goPage({typeData, deviceData, columnData, stepData}, 'TaskDetails');
+                            const data = this._getTaskReleaseData();
+                            NavigationUtils.goPage(data, 'TaskDetails');
                         }}
                         activeOpacity={0.6}
                         style={{
@@ -230,6 +283,18 @@ class TaskRelease extends PureComponent {
         );
     }
 
+    _getTaskReleaseData = () => {
+        const typeData = this.typeSelect.getTypeData();
+        const deviceData = this.deviceSelect.getTypeData();
+        const columnData = this.bIform.getColumnData();
+        const stepData = this.bIform.stepInfo.taskStep.getStepData();
+        return {
+            typeData,
+            deviceData,
+            columnData,
+            stepData,
+        };
+    };
     _scrollTo = (x, y, animated) => {
         this.scrollView.scrollTo({x: x, y: y, animated: animated});
     };
@@ -241,13 +306,32 @@ class TaskRelease extends PureComponent {
     // };
 }
 
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+    taskInfo: state.taskInfo,
+});
+const mapDispatchToProps = dispatch => ({
+    onSetTaskReleaseInfo: (data) => dispatch(actions.onSetTaskReleaseInfo(data)),
+});
+const TaskReleaseRedux = connect(mapStateToProps, mapDispatchToProps)(TaskRelease);
+
 class InputSelect extends Component {
     state = {
-        info: this.props.info,
-
+        // info: this.props.info,
+        defaultId: this.props.defaultId,
     };
 
     render() {
+        const {defaultId} = this.state;
+
+        const index = this.props.menuArr.findIndex(e => e.id == defaultId);
+
+        let title = '';
+        if (index != -1) {
+            title = this.props.menuArr[index].title;
+
+        }
+
         return <View style={{flex: 1}}>
             <TouchableOpacity
                 activeOpacity={1}
@@ -255,9 +339,9 @@ class InputSelect extends Component {
                     this.dateMenu.show();
                 }}
             >
-                <Text style={{fontSize: 13}}>{this.state.info}</Text>
+                <Text style={{fontSize: 13}}>{title}</Text>
             </TouchableOpacity>
-            <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
+            <PopButtomMenu key={title} popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
                            ref={ref => this.dateMenu = ref}/>
         </View>;
     }
@@ -265,7 +349,7 @@ class InputSelect extends Component {
     _select = (item) => {
         console.log(item, 'item..');
         this.setState({
-            info: item ? item.title : this.props.info,
+            defaultId: item ? item.id : this.props.defaultId,
         });
         this.props.select(this.state.info);
     };
@@ -274,11 +358,16 @@ class InputSelect extends Component {
 class InputTextPro extends Component {
     static defaultProps = {
         placeComponent: <Text>1111</Text>,
+        defaultValue: '1111',
+    };
+    state = {
+        defaultValue: this.props.defaultValue,
     };
 
     render() {
         return <View style={{flex: 1, justifyContent: 'center'}}>
             <TextInput
+                value={this.state.defaultValue}
                 maxLength={5}
                 keyboardType={'number-pad'}
                 onFocus={this.hidePlaceholder}
@@ -295,13 +384,31 @@ class InputTextPro extends Component {
         </View>;
     }
 
-    inputText = '';
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        if (nextProps.defaultValue.length > 0) {
+            this._onChangeText(nextProps.defaultValue);
+            this.ipt.setNativeProps({
+                style: {
+                    // back
+                    zIndex: 1,
+                },
+            });
+            this.btn.setNativeProps({
+                style: {
+                    zIndex: 0,
+                },
+            });
+        }
+    }
+
     _onChangeText = (text) => {
-        this.inputText = text;
+        this.setState({
+            defaultValue: text,
+        });
         this.props.onChangeText(text);
     };
     _onBlur = () => {
-        if (this.inputText.length === 0) {
+        if (this.state.defaultValue.length === 0) {
             this.showPlaceholder();
         }
     };
@@ -318,7 +425,6 @@ class InputTextPro extends Component {
         });
     };
     hidePlaceholder = () => {
-        console.log('我被单击');
 
         this.ipt.setNativeProps({
             style: {
@@ -338,24 +444,29 @@ class InputTextPro extends Component {
 
 class RadioInfoComponent extends Component {
     static defaultProps = {
-        radioArr: [
-            {id: 0, title: '每人一次'},
-            {id: 1, title: '每人三次'},
-            {id: 2, title: '每日一次'},
-        ],
+        radioArr: [],
+        defaultId: 1,
     };
     state = {
-        index: 0,
+        id: this.props.defaultId,
     };
     _radioClick = (item, index) => {
         // console.log(index);
         this.setState({
-            index,
+            id: item.id,
         });
         this.props.select(item);
     };
-    genRadio = (item, Nindex, index) => {
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        const index = this.props.radioArr.findIndex(e => e.id == nextProps.defaultId);
+        this.props.select(this.props.radioArr[index]);
+    }
+
+    genRadio = (item, Nindex) => {
+        // console.log(item, 'itemitem');
         return <TouchableOpacity
+            key={item.id}
             activeOpacity={0.6}
             onPress={() => {
                 this._radioClick(item, Nindex);
@@ -363,7 +474,7 @@ class RadioInfoComponent extends Component {
             style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
             <View>
                 <View style={{borderWidth: 1, borderColor: 'black', borderRadius: 10, width: 13, height: 13}}/>
-                {Nindex == index && <View style={{
+                {this.state.id == item.id && <View style={{
                     position: 'absolute', top: 2.5, left: 2.5, width: 8, height: 8, backgroundColor: bottomTheme,
                     borderRadius: 8,
                 }}/>}
@@ -374,11 +485,11 @@ class RadioInfoComponent extends Component {
 
     render() {
         const {radioArr} = this.props;
-        const {index} = this.state;
-
         return <View style={{flex: 1, flexDirection: 'row'}}>
             {radioArr.map((item, Nindex, arr) => {
-                return this.genRadio(item, Nindex, index);
+
+                return this.genRadio(item, Nindex);
+
             })}
 
         </View>;
@@ -387,14 +498,18 @@ class RadioInfoComponent extends Component {
 
 
 class BottomInfoForm extends Component {
-
     columnData = {
-        orderTimeLimit: {id: 1, title: '6小时'},
-        reviewTime: {id: 3, title: '1天'},
-        singleOrder: {id: 1, title: '6小时'},
-        rewardNum: 0,
-        rewardPrice: 0,
+        orderTimeLimit: Object.keys(this.props.taskInfo.columnData.orderTimeLimit).length > 0 ? this.props.taskInfo.columnData.orderTimeLimit : this.props.data.app_task_order_time_limit[0],
+        reviewTime: Object.keys(this.props.taskInfo.columnData.reviewTime).length > 0 ? this.props.taskInfo.columnData.reviewTime : this.props.data.app_task_review_time[0],
+        singleOrder: Object.keys(this.props.taskInfo.columnData.singleOrder).length > 0 ? this.props.taskInfo.columnData.singleOrder : this.props.data.app_task_single_order[0],
+        rewardNum: this.props.taskInfo.columnData.rewardNum,
+        rewardPrice: this.props.taskInfo.columnData.rewardPrice,
+        TaskInfo: this.props.taskInfo.columnData.TaskInfo,
+        title: this.props.taskInfo.columnData.title,
+        projectTitle: this.props.taskInfo.columnData.projectTitle,
+        orderReplayNum: Object.keys(this.props.taskInfo.columnData.orderReplayNum).length > 0 ? this.props.taskInfo.columnData.orderReplayNum : this.props.data.app_task_single_order_select[0],
     };
+
     _changeProjectTitle = (text) => {
         this.columnData.projectTitle = text;
     };
@@ -411,7 +526,7 @@ class BottomInfoForm extends Component {
         this.columnData.reviewTime = item;
     };
     _SelectSingleOrder = (item) => {
-        if (item.id === 2) {
+        if (item.id === 3) {
             this.replayNum.setNativeProps({
                 style: {
                     height: 40,
@@ -427,7 +542,7 @@ class BottomInfoForm extends Component {
         this.columnData.singleOrder = item;
     };
     _selectReplayNum = (item) => {
-        this.columnData.singleOrder = item;
+        this.columnData.orderReplayNum = item;
     };
     _changeRewardPrice = (text) => {
         this.columnData.rewardPrice = text;
@@ -451,82 +566,91 @@ class BottomInfoForm extends Component {
 
     render() {
         //悬赏单价
-        const rewardPrice = <View style={{flexDirection: 'row'}}>
-            <Text style={{color: 'rgba(0,0,0,0.5)'}}>变色</Text>
+        console.log(this.props.taskInfo.columnData.singleOrder, 'this.props.taskInfo.columnData.singleOrder');
+        const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{color: 'rgba(0,0,0,0.5)'}}>最低</Text>
             <Text style={{color: 'black', marginHorizontal: 5}}>0.5</Text>
             <Text style={{color: 'rgba(0,0,0,0.5)'}}>元</Text>
         </View>;
         //悬赏数量
-        const rewardNum = <View style={{flexDirection: 'row'}}>
+        const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{color: 'rgba(0,0,0,0.5)'}}>最少</Text>
             <Text style={{color: 'black', marginHorizontal: 5}}>10</Text>
             <Text style={{color: 'rgba(0,0,0,0.5)'}}>单</Text>
         </View>;
-
-
+        const {userinfo} = this.props;
+        // const ReplayNumArray = this.props.data.app_task_single_order && this.props.data.app_task_single_order[3] && this.props.data.app_task_single_order[3].data;
+        // const
+        // if (ReplayNumArray) {
+        //
+        // }
+        console.log('this.columnData.singleOrder', this.columnData.singleOrder);
         return <View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('项目名称', 1, {
                     info: '请输入项目名', onChangeText: this._changeProjectTitle,
-                    editable: true,
+                    editable: true, defaultValue: this.columnData.projectTitle,
                 })}
-                {genFormItem('标题', 1, {info: '关键字', onChangeText: this._changeTitle, editable: true})}
-                {genFormItem('任务说明', 1, {info: '需求备注', onChangeText: this._changeTaskInfo, editable: true})}
+                {genFormItem('标题', 1,
+                    {
+                        info: '关键字',
+                        onChangeText: this._changeTitle,
+                        editable: true,
+                        defaultValue: this.columnData.title,
+                    })}
+                {genFormItem('任务说明', 1,
+                    {
+                        info: '需求备注',
+                        onChangeText: this._changeTaskInfo,
+                        editable: true,
+
+                        defaultValue: this.columnData.TaskInfo,
+                    })}
 
 
                 {genFormItem('接单时限', 2, {
                     popTitle: '接单时限',
-                    info: '6小时',
-                    menuArr: [
-                        {id: 1, title: '6小时'},
-                        {id: 2, title: '12小时'},
-                        {id: 3, title: '1天'},
-                        {id: 4, title: '2天'},
-                        {id: 5, title: '3天'},
-                        {id: 6, title: '4天'},
-                        {id: 7, title: '5天'},
-                        {id: 8, title: '一星期'},
-                    ],
-
+                    defaultId: this.columnData.orderTimeLimit.id,
+                    menuArr: this.props.data.app_task_order_time_limit,
                     selectClick: this._SelectOrderTimeLimit,
                 })}
                 {genFormItem('审核时间', 2, {
                     popTitle: '审核时间',
-                    info: '1天',
-                    menuArr: [
-                        {id: 1, title: '6小时'},
-                        {id: 2, title: '12小时'},
-                        {id: 3, title: '1天'},
-                        {id: 4, title: '2天'},
-                        {id: 5, title: '3天'},
-                        {id: 6, title: '4天'},
-                        {id: 7, title: '5天'},
-                        {id: 8, title: '一星期'},
-                    ],
+                    defaultId: this.columnData.reviewTime.id,
+                    menuArr: this.props.data.app_task_review_time,
                     selectClick: this._SelectReviewTime,
                 })}
                 {genFormItem('做单次数', 3, {
+                    defaultId: this.columnData.singleOrder.id,
                     selectClick: this._SelectSingleOrder,
+                    radioArr: this.props.data.app_task_single_order,
                 })}
+
                 <View style={{height: 0, overflow: 'hidden'}} ref={ref => this.replayNum = ref}>
                     {genFormItem('重复次数', 2, {
-                        info: '2次',
+                        defaultId: this.columnData.orderReplayNum.id,
                         popTitle: '重复次数',
-                        menuArr: [
-                            {id: 1, title: '2次'},
-                            {id: 2, title: '3次'},
-                            {id: 8, title: '无限'},
-                        ],
+                        menuArr: this.props.data.app_task_single_order_select,
                         selectClick: this._selectReplayNum,
                     })}
                 </View>
-                {/*<View style={{marginTop: 10}}/>*/}
+                <View style={{marginTop: 10}}/>
 
 
             </View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
-                {genFormItem('悬赏单价', 4, {placeComponent: rewardPrice, onChangeText: this._changeRewardPrice})}
-                {genFormItem('悬赏数量', 4, {placeComponent: rewardNum, onChangeText: this._changeRewardNum})}
+                {genFormItem('悬赏单价', 4,
+                    {
+                        placeComponent: rewardPrice,
+                        onChangeText: this._changeRewardPrice,
+                        defaultValue: this.columnData.rewardPrice,
+                    })}
+                {genFormItem('悬赏数量', 4,
+                    {
+                        placeComponent: rewardNum,
+                        onChangeText: this._changeRewardNum,
+                        defaultValue: this.columnData.rewardNum,
+                    })}
                 {/*{genFormItem('预付赏金', 1, {info: '服务费、成交额12%', onchangeText: this._changePrepaidBounty, editable: false})}*/}
                 <InputSetting
                     ref={ref => this.inputSetting = ref}
@@ -536,7 +660,8 @@ class BottomInfoForm extends Component {
                     editable: false,
                 }}/>
             </View>
-            <StepInfo ref={ref => this.stepInfo = ref} scrollTo={this.props.scrollTo}
+            <StepInfo stepData={this.props.taskInfo.stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
+                      scrollTo={this.props.scrollTo}
                       scollToEnd={this.props.scollToEnd}/>
 
         </View>;
@@ -637,12 +762,13 @@ class StepInfo extends Component {
         return <View>
             {/*步骤计划图*/}
             <TaskStepColumn
-
-                imageClick={(index, images) => {
-                    this.imageViewerModal.show(index, images);
+                stepArr={this.props.stepData}
+                userinfo={this.props.userinfo}
+                imageClick={(images) => {
+                    this.imageViewerModal.show(images);
                 }}
 
-                edit={(no, type, typeData) => {
+                edit={(no, type, typeData, timestamp) => {
                     const Menu = this._findColumnInfoForType(type);
                     this.taskPop.show(Menu.title, Menu.arr, Menu.type, typeData, true, '更新', no);
                 }}
@@ -665,18 +791,52 @@ class StepInfo extends Component {
             <TaskMenu menuArr={this.menuArr} ref={ref => this.laPop = ref}/>
             {/*具体类型*/}
             <TaskPop
-                // 弹窗确认按钮被单击
-                sureClick={(data, type, stepNo, rightTitle) => {
-                    // console.log(stepNo, 'stepNo');
 
-                    this.taskStep.setStepDataArr(type, data, stepNo);
-                    // console.log(rightTitle);
+                // 弹窗确认按钮被单击
+                sureClick={(data, type, stepNo, rightTitle, timestamp_) => {
+                    // console.log(timestamp);
+                    let timestamp = '';
+
+                    if (!timestamp_) { //为添加
+                        timestamp = new Date().getTime();
+                    } else {
+                        timestamp = timestamp_;
+                    }
+                    // 获取一个时间戳
+                    let imageData = {};
+                    // console.log(data, 'datadatadata');
+                    if (data.uri) {//是否有图片
+                        imageData = data.uri;
+                        data.uri = `file://${imageData.path}`;//先展示本地数据
+                    }
+
+
+                    this.taskStep.setStepDataArr(type, data, stepNo, timestamp);
                     if (rightTitle === '添加') {
                         setTimeout(() => {
                             this.props.scollToEnd();
                         }, 200);
                     }
-                    // console.log(type, data);
+                    // 上传至云空间
+                    // console.log(data);
+                    setTimeout(() => {
+                        const {userinfo} = this.props;
+                        //数据组合起来
+                        const imgData = {
+                            mime: imageData.mime,
+                            data: imageData.data,
+                        };
+                        //上传七牛云
+                        uploadMsgImage(imgData, userinfo.token).then((result) => {
+                            if (result.status == 200) {//上传七牛云成功
+                                const imageUrl = result.imageUrl;
+                                this.taskStep.setImageStatusOrUrl(timestamp, 1, imageUrl);
+                            }
+                        }).catch((msg) => {
+                            this.taskStep.setImageStatusOrUrl(timestamp, -1, '');
+                        });
+                    }, 800);
+
                 }}
                 ref={ref => this.taskPop = ref}/>
             {/*图片浏览器*/}
@@ -699,32 +859,19 @@ class StepInfo extends Component {
     };
 }
 
-class TypeSelect extends PureComponent {
+class TypeSelect extends Component {
 
     static defaultProps = {
         title: '请选择类型',
-        typeArr: [
-            {id: 1, title: '注册'},
-            {id: 2, title: '投票'},
-            {id: 3, title: '关注'},
-            {id: 4, title: '浏览'},
-            {id: 5, title: '下载'},
-            {id: 6, title: '转发'}, {id: 7, title: '下载'},
-            {id: 8, title: '转发'}, {id: 9, title: '下载'},
-            {id: 10, title: '转发'}, {id: 11, title: '下载'},
-            {id: 12, title: '转发'}, {id: 13, title: '下载'},
-            {id: 14, title: '转发'}, {id: 15, title: '下载'},
-        ],
-        index: 0,
+        typeArr: [],
+        defaultId: 1,
     };
     state = {
-        typeIndex: 0,
+        id: this.props.defaultId,
     };
 
     render() {
         const {title, typeArr} = this.props;
-        const {typeIndex} = this.state;
-
         return <View style={[{backgroundColor: 'white', paddingBottom: 20}, this.props.style]}>
             <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
                 <Text style={{fontSize: 15}}>{title}</Text>
@@ -736,7 +883,7 @@ class TypeSelect extends PureComponent {
 
             }}>
                 {typeArr.map((item, index, arr) => {
-                    return <TypeComponent checked={typeIndex === item.id ? true : false} ref={`typeBtn${item.id}`}
+                    return <TypeComponent checked={this.state.id === item.id ? true : false} ref={`typeBtn${item.id}`}
                                           key={item.id}
                                           onPress={this._typeClick}
                                           data={item} index={item.id}/>;
@@ -747,18 +894,25 @@ class TypeSelect extends PureComponent {
         </View>;
     }
 
-    typeData = {};
+    // typeData = this.props.typeArr[this.st];
     _typeClick = (index, data, checked) => {
         if (checked) {
             this.typeData = data;
+            console.log(data.id, 'data.id');
             this.setState({
-                typeIndex: index,
+                id: data.id,
             });
         }
 
     };
     getTypeData = () => {
-        return this.typeData;
+        const index = this.props.typeArr.findIndex(e => e.id == this.state.id);
+        if (index != -1) {
+            return this.props.typeArr[index];
+        } else {
+            return {};
+        }
+
     };
 }
 
@@ -775,8 +929,8 @@ class TypeComponent extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
 
-        if (this.props.checked != nextProps.checked) {
-            console.log('我该更新了');
+        if (this.props.checked != nextProps.checked || this.props.data.title != nextProps.data.title || this.props.data.id != nextProps.data.id) {
+            // console.log('我该更新了');
             return true;
         }
         return false;
@@ -819,4 +973,4 @@ class TypeComponent extends Component {
     }
 }
 
-export default TaskRelease;
+export default TaskReleaseRedux;

@@ -89,6 +89,28 @@ export function selectIsBeBlackList(data, token) {
         }
     });
 }
+
+/**
+ * 查询发单类型数据
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectTaskReleaseData(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setGetHeader('token', token);
+            const ret = await http.get('user/selectTaskReleaseData');
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 /**
  * 举报用户
  * @param data

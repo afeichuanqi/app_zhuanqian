@@ -109,7 +109,7 @@ class PopButtomMenu extends PureComponent {
                         </View>
                         <ScrollView style={{height: height / 3}}>
                             {menuArr.map((item, index, arr) => {
-                                return this.genMenu(item);
+                                return this.genMenu(item, index);
                             })}
                         </ScrollView>
                         <View style={{
@@ -133,6 +133,7 @@ class PopButtomMenu extends PureComponent {
 
     genMenu = (item) => {
         return <TouchableOpacity
+            key={item.id || index}
             activeOpacity={0.6}
             onPress={() => {
                 this.hide(item);

@@ -7,19 +7,20 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, TextInput, Dimensions, Text, TouchableOpacity, Image} from 'react-native';
+import {View, TextInput, Dimensions, Text, TouchableOpacity} from 'react-native';
 import MyModal from '../../common/MyModalBox';
 import SvgUri from 'react-native-svg-uri';
 import add_image from '../../res/svg/add_image.svg';
 import PickerImage from '../../common/PickerImage';
 import Animated, {Easing} from 'react-native-reanimated';
+import Image from 'react-native-fast-image';
 
 const {width, height} = Dimensions.get('window');
 const {timing} = Animated;
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-class HomePage extends PureComponent {
+class TaskPopMenu extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -80,13 +81,12 @@ class HomePage extends PureComponent {
         return this.inputData;
     };
 
-    getColumnView = (type, typeData) => {
-        console.log('我被rendergetColumnView');
-        console.log(this.inputData);
+    getColumnView = (type, typeData,index) => {
         switch (type) {
-
             case 1://步骤说明
-                return <View style={{
+                return <View
+                    key={1}
+                    style={{
                     paddingVertical: 10,
                     width: width - 40,
                     paddingHorizontal: 15,
@@ -104,7 +104,9 @@ class HomePage extends PureComponent {
                 break;
 
             case 2://填写网址
-                return <View style={{
+                return <View
+                    key={2}
+                    style={{
                     paddingVertical: 10,
                     width: width - 40,
                     paddingHorizontal: 15,
@@ -131,7 +133,10 @@ class HomePage extends PureComponent {
                 </View>;
                 break;
             case 3://选择二维码
-                return <View style={{
+
+                return <View
+                    key={3}
+                    style={{
                     paddingVertical: 10,
                     width: width - 40,
                     paddingHorizontal: 15,
@@ -144,11 +149,14 @@ class HomePage extends PureComponent {
                             ref={ref => this.imageSelect = ref}
                             image={this.inputData.uri} select={this.erweima}/>
                     </View>
-                    <PickerImage select={this._selectImg} ref={ref => this.pickerImg = ref}/>
+                    <PickerImage includeBase64={true} cropping={false} select={this._selectImg}
+                                 ref={ref => this.pickerImg = ref}/>
                 </View>;
                 break;
             case 4://填写说明图
-                return <View style={{
+                return <View
+                    key={4}
+                    style={{
                     paddingVertical: 10,
                     width: width - 40,
                     paddingHorizontal: 15,
@@ -167,7 +175,9 @@ class HomePage extends PureComponent {
                 </View>;
                 break;
             case 5://收集信息
-                return <View style={{
+                return <View
+                    key={5}
+                    style={{
                     paddingBottom: 10,
                     width: width - 40,
                     paddingHorizontal: 15,
@@ -183,12 +193,11 @@ class HomePage extends PureComponent {
                 break;
         }
     };
-    show = (columnTitle, columnArr, type, inputData = {}, forceUpdate = false, rightTitle = '添加', stepNo = 0) => {
+    show = (columnTitle, columnArr, type, inputData = {}, forceUpdate = false, rightTitle = '添加', stepNo = 0, timestamp) => {
         this.inputType = type;
         this.inputData = inputData;
         this.stepNo = stepNo;
-        console.log(stepNo);
-        // this.rightTitle
+        this.timestamp = timestamp;
         this.setState({
             columnArr,
             title: columnTitle,
@@ -218,7 +227,7 @@ class HomePage extends PureComponent {
 
     render() {
         const Component = this.state.columnArr.map((item, index, arr) => {
-            return this.getColumnView(item.type, item.typeData);
+            return this.getColumnView(item.type, item.typeData,index);
         });
         return (
             <MyModal
@@ -262,41 +271,41 @@ class HomePage extends PureComponent {
         return istrue;
     };
     _sureClick = () => {
-        console.log(this.inputType);
+        // console.log(this.inputType);
         switch (this.inputType) {
             case 1:
                 if (this._checkTextArea() && this._checkTextInputPro()) {
-                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle);
+                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle, this.timestamp);
                     this.myModal.hide();
                 }
                 return;
             case 2:
                 if (this._checkTextArea() && this._checkImageSelect()) {
-                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle);
+                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle, this.timestamp);
                     this.myModal.hide();
                 }
                 return;
             case 3:
                 if (this._checkTextArea() && this._checkTextInputPro()) {
-                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle);
+                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle, this.timestamp);
                     this.myModal.hide();
                 }
                 return;
             case 4:
                 if (this._checkTextArea() && this._checkImageSelect()) {
-                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle);
+                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle, this.timestamp);
                     this.myModal.hide();
                 }
                 return;
             case 5:
                 if (this._checkTextArea() && this._checkImageSelect()) {
-                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle);
+                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle, this.timestamp);
                     this.myModal.hide();
                 }
                 return;
             case 6:
                 if (this._checkTextArea_1()) {
-                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle);
+                    this.props.sureClick(this.inputData, this.inputType, this.stepNo, this.state.rightTitle, this.timestamp);
                     this.myModal.hide();
                 }
                 return;
@@ -331,7 +340,7 @@ class TextInputPro extends PureComponent {
         return <AnimatedTextInput
             autoCapitalize={'none'}
             autoComplete={'off'}
-            autoCorrect={'false'}
+            autoCorrect={false}
             blurOnSubmit={false}
             value={this.state.inputValue}
             onChangeText={this._onChangeText}
@@ -405,27 +414,28 @@ class ImageSelect extends PureComponent {
                     borderColor: 'rgba(0,0,0,0.6)',
                     // borderWidth:1, borderColor:'rgba(255,0,0,1)',
                 }}>
-                {this.state.image && this.state.image.path ?
+                {this.state.image  ?
                     <Image
                         // key={`image-${index}`}
                         style={{
                             width: this.props.width, height: this.props.height, backgroundColor: '#F0F0F0',
 
                         }}
-                        source={{uri: `file://${this.state.image.path}`}}
+                        source={{uri: this.state.image}}
                         resizeMode={'contain'}
                     />
                     :
                     <SvgUri width={50} height={50} svgXmlData={add_image}/>}
             </AnimatedTouchableOpacity>
-            <PickerImage select={this._selectImg} ref={ref => this.pickerImg = ref}/>
+            <PickerImage includeBase64={true} cropping={false} select={this._selectImg}
+                         ref={ref => this.pickerImg = ref}/>
         </View>;
     }
 
     _selectImg = (image) => {
 
         this.setState({
-            image: image ? image : null,
+            image: image ? `file://${image.path}` : null,
         });
         this.props.select(image);
     };
@@ -496,4 +506,4 @@ class TextArea extends PureComponent {
     }
 }
 
-export default HomePage;
+export default TaskPopMenu;

@@ -126,7 +126,7 @@ class TaskMenu extends PureComponent {
                             left: 83,
                         }}/>
                         {this.props.menuArr.length > 0 && this.props.menuArr.map((item, index, arr) => {
-                            return this.genMenu(item.title, item.svg, item.click);
+                            return this.genMenu(item.title, item.svg, item.click,index);
                         })}
 
 
@@ -137,8 +137,9 @@ class TaskMenu extends PureComponent {
         );
     }
 
-    genMenu = (title, svgXmlData, click) => {
+    genMenu = (title, svgXmlData, click,index) => {
         return <TouchableOpacity
+            key={index}
             activeOpacity={0.6}
             onPress={() => {
                 this.hide(false);

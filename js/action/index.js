@@ -2,6 +2,7 @@ import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll} fr
 import {verifyIdentIdy,setConnectionStatus,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus} from './message';
 import {onSelectAllFriend,onSelectAllFriendUnRead,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
+import {onSetTaskReleaseInfo} from './taskInfo';
 export default {
     onLogin,
     onUploadAvatar,
@@ -26,5 +27,7 @@ export default {
 
     //状态
     onChangeSocketStatue,
+    //任务发布信息
 
+    onSetTaskReleaseInfo
 }

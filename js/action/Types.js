@@ -63,5 +63,11 @@ export default {
     MESSAGE_SET_MSG_ID_READ_SUCCESS:"MESSAGE_SET_MSG_ID_READ_SUCCESS",
     //全局提示当前socket连接状态
     SET_SOCKET_STATUS_TEXT:"SET_SOCKET_STATUS_TEXT",
+
+
+
+
+    //设置任务发布
+    TASK_RELEASE_SET:"TASK_RELEASE_SET",
 };
 
