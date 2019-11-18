@@ -27,7 +27,7 @@ export default class App extends React.Component {
     render() {
 
         const {visible,images} = this.state;
-        console.log("images.url",images.url);
+        console.log(images,"images");
         return <Modal
             onRequestClose={this.hide}
             animationType={'fade'}

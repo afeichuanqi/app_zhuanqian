@@ -82,7 +82,6 @@ class TaskMenu extends PureComponent {
 
     render() {
         const {visible} = this.state;
-        const {menuArr} = this.props;
 
         return (
 

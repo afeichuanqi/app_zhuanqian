@@ -8,16 +8,17 @@
 
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import {bottomTheme, theme} from '../appSet';
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
+import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import FastImage from 'react-native-fast-image';
 import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import Animated from 'react-native-reanimated';
-import actions from '../action';
 import {connect} from 'react-redux';
+import {selectTaskInfo} from '../util/AppService';
+import task_yulan from '../res/svg/task_yulan.svg';
 
 const {width, height} = Dimensions.get('window');
 
@@ -28,12 +29,31 @@ class TaskDetails extends PureComponent {
     }
 
     state = {
-        interVal: 100,
+        totalData: {},
+        signUp: false,
 
     };
 
     componentDidMount() {
+        const {test, task_id} = this.params;
 
+        if (test) {
+            const {fromUserinfo, taskData, stepData} = this.params;
+            const totalData = {fromUserinfo, taskData, stepData};
+            // console.log(totalData, 'totalData');
+            this.setState({
+                totalData,
+            });
+        } else {
+            selectTaskInfo({task_id: task_id}, this.props.userinfo.token).then(result => {
+
+                const {fromUserinfo, taskData, stepData} = result;
+                const totalData = {fromUserinfo, taskData, stepData: JSON.parse(stepData)};
+                this.setState({
+                    totalData,
+                });
+            });
+        }
 
     }
 
@@ -46,19 +66,14 @@ class TaskDetails extends PureComponent {
     };
 
     render() {
-        const top = Animated.interpolate(this.animations.value, {
-            inputRange: [-220, 0, 75],
-            outputRange: [295, 75, 10],
+        const TitleTop = Animated.interpolate(this.animations.value, {
+            inputRange: [0, 70],
+            outputRange: [20, -50],
             extrapolate: 'clamp',
         });
-        const left = Animated.interpolate(this.animations.value, {
-            inputRange: [0, 20, 55],
-            outputRange: [20, 20, width / 2 - 40],
-            extrapolate: 'clamp',
-        });
-        const R = Animated.interpolate(this.animations.value, {
-            inputRange: [0, 74, 75],
-            outputRange: [0, 0, 255],
+        const NameOpacity = Animated.interpolate(this.animations.value, {
+            inputRange: [0, 70],
+            outputRange: [0, 1],
             extrapolate: 'clamp',
         });
         const opacity = Animated.interpolate(this.animations.value, {
@@ -66,7 +81,6 @@ class TaskDetails extends PureComponent {
             outputRange: [1, 0.5],
             extrapolate: 'clamp',
         });
-        const color = Animated.color(R, R, R);
         let statusBar = {
             hidden: false,
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
@@ -77,16 +91,15 @@ class TaskDetails extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const RefreshHeight = Animated.interpolate(this.animations.value, {
-            inputRange: [-200, 0],
-            outputRange: [250, 0],
+            inputRange: [-200, -0.1, 0],
+            outputRange: [250, 20, 0],
             extrapolate: 'clamp',
         });
-        // let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '', null, bottomTheme, 'white', 16);
-        // console.log()
-        const {typeData, deviceData, columnData, stepData} = this.params;
-        console.log(this.props.taskInfo, ' this.props.taskInfo');
-        // return null;
-        console.log(columnData, 'columnData');
+        const {fromUserinfo, taskData, stepData} = this.state.totalData;
+        // console.log(stepData, 'stepData');
+        const {signUp} = this.state;
+        const {userinfo} = this.props;
+
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -102,21 +115,28 @@ class TaskDetails extends PureComponent {
                         alignItems: 'center',
                     }}/>
                     <Animated.View
-                        // ref={ref => this.zhedangRef = ref}
+                        style={{width, position: 'absolute', top: TitleTop, alignItems: 'center', zIndex: 2}}>
+                        <Text style={{color: 'white', fontSize: 18}}>任务详情</Text>
+                    </Animated.View>
+                    <Animated.View
+                        style={{
+                            width,
+                            position: 'absolute',
+                            top: 5,
+                            alignItems: 'center',
+                            zIndex: 2,
+                            opacity: NameOpacity,
+                        }}>
+                        <Text style={{color: 'white', fontSize: 18}}>{taskData && taskData.title}</Text>
+                    </Animated.View>
+                    <Animated.View
                         style={{
                             backgroundColor: bottomTheme,
                             height: RefreshHeight,
                             width,
                             position: 'absolute',
                             top: 35,
-                            // zIndex:1 ,
                         }}>
-
-
-                    </Animated.View>
-                    <Animated.View style={{position: 'absolute', top: top, left: left, height: 60, zIndex: 1}}>
-                        <Animated.Text
-                            style={{fontSize: 16, color: color}}>微信实名</Animated.Text>
                     </Animated.View>
                     <Animated.ScrollView
                         scrollEventThrottle={1}
@@ -146,11 +166,17 @@ class TaskDetails extends PureComponent {
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
                                 }}>
-                                    <View style={{marginTop: 15}}>
-                                        {/*<Text style={{fontSize: 16}}>微信实名</Text>*/}
-                                        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+
+                                    <View>
+                                        <Text style={{fontSize: 16, opacity: 0.9, color: 'black'}}>
+                                            {taskData && taskData.title}
+                                        </Text>
+                                        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                                             <Text
-                                                style={{color: 'rgba(0,0,0,0.7)', fontSize: 12}}>{typeData.title}</Text>
+                                                style={{
+                                                    color: 'rgba(0,0,0,0.7)',
+                                                    fontSize: 12,
+                                                }}>{taskData && taskData.title}</Text>
                                             <View style={{
                                                 height: 10, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)',
                                                 marginHorizontal: 10,
@@ -158,11 +184,14 @@ class TaskDetails extends PureComponent {
                                             <Text style={{
                                                 color: 'rgba(0,0,0,0.7)',
                                                 fontSize: 12,
-                                            }}>{columnData.projectTitle}</Text>
+                                            }}>{taskData && taskData.projectTitle}</Text>
                                         </View>
                                     </View>
 
-                                    <Text style={{fontSize: 16, color: bottomTheme}}>{columnData.rewardPrice}元</Text>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        color: bottomTheme,
+                                    }}>{taskData && taskData.rewardPrice}元</Text>
                                 </View>
                                 <View style={{
                                     height: 60,
@@ -172,12 +201,18 @@ class TaskDetails extends PureComponent {
                                     alignItems: 'center',
                                 }}>
                                     <View style={{alignItems: 'center'}}>
-                                        <Text style={{color: 'black', fontSize: 15}}>10</Text>
+                                        <Text style={{
+                                            color: 'black',
+                                            fontSize: 15,
+                                        }}>{taskData && taskData.remainderNum}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>剩余数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
-                                        <Text style={{color: 'black', fontSize: 15}}>10</Text>
+                                        <Text style={{
+                                            color: 'black',
+                                            fontSize: 15,
+                                        }}>{taskData && taskData.rewardNum - taskData.remainderNum}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>完成数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
@@ -185,46 +220,50 @@ class TaskDetails extends PureComponent {
                                         <Text style={{
                                             color: 'black',
                                             fontSize: 15,
-                                        }}>{columnData.orderTimeLimit.title}</Text>
+                                        }}>{taskData && taskData.orderTimeLimit.title}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>做单时间</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
                                         <Text
-                                            style={{color: 'black', fontSize: 15}}>{columnData.reviewTime.title}</Text>
+                                            style={{
+                                                color: 'black',
+                                                fontSize: 15,
+                                            }}>{taskData && taskData.reviewTime.title}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>审核时间</Text>
                                     </View>
-
                                 </View>
                             </View>
                         </Animated.View>
-                        <View style={{
-                            backgroundColor: 'white',
-                            height: 60,
-                            marginTop: 10,
-                            marginHorizontal: 10,
-                            paddingVertical: 10,
-                            paddingHorizontal: 10,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            borderRadius: 5,
-                        }}>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            style={{
+                                backgroundColor: 'white',
+                                height: 60,
+                                marginTop: 10,
+                                marginHorizontal: 10,
+                                paddingVertical: 10,
+                                paddingHorizontal: 10,
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                borderRadius: 5,
+                            }}>
                             <View style={{flexDirection: 'row'}}>
                                 <FastImage
                                     style={[styles.imgStyle]}
-                                    source={{uri: `http://www.embeddedlinux.org.cn/uploads/allimg/180122/2222032V5-0.jpg`}}
+                                    source={{uri: fromUserinfo && fromUserinfo.avatar_url}}
                                     resizeMode={FastImage.stretch}
                                 />
                                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                                    <Text>张先生</Text>
+                                    <Text>{fromUserinfo && fromUserinfo.username}</Text>
                                     <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 12}}>名豪投资</Text>
                                 </View>
                             </View>
                             <View>
                                 <SvgUri width={15} style={{marginLeft: 5}} height={15} svgXmlData={menu_right}/>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         <View style={{
                             backgroundColor: 'white', marginTop: 10, paddingHorizontal: 10, marginHorizontal: 10,
                             paddingVertical: 10, borderRadius: 5,
@@ -238,7 +277,7 @@ class TaskDetails extends PureComponent {
                                 fontSize: 13,
                                 lineHeight: 20,
                                 letterSpacing: 0.2,
-                            }}>{columnData.TaskInfo}</Text>
+                            }}>{taskData && taskData.TaskInfo}</Text>
                         </View>
                         <View style={{
                             marginTop: 10, paddingHorizontal: 10, backgroundColor: 'white', marginHorizontal: 10,
@@ -247,25 +286,70 @@ class TaskDetails extends PureComponent {
                             <Text style={{fontSize: 14, color: bottomTheme, marginTop: 10}}>做单步骤（请仔细审阅任务步骤）</Text>
 
                         </View>
-                        <TaskStepColumn stepArr={stepData} showUtilColumn={false}/>
+                        <TaskStepColumn
+                            ref={ref => this.taskStep = ref}
+                            showEditModel={signUp}
+                            userinfo={userinfo}
+                            stepArr={stepData || []}
+                            showUtilColumn={false}/>
                     </Animated.ScrollView>
+                    <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
+                        <TouchableOpacity
+                            onPress={this._goReleaseTest}
+                            activeOpacity={0.6}
+                            style={{
+                                height: 60,
+                                width: width / 3,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                            }}>
+                            <SvgUri width={20} fill={'rgba(0,0,0,0.9)'} style={{marginLeft: 5}} height={20}
+                                    svgXmlData={task_yulan}/>
+                            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>预览</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={this._startSignUp}
+                            style={{
+                                height: 60,
+                                width: (width / 3) * 2,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                backgroundColor: bottomTheme,
+                            }}>
+                            <Text
+                                style={{fontSize: 15, color: 'white', marginLeft: 5}}>{signUp ? '我要提交' : '开始报名'}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-
-
-                {/*<Text style={{}}>wifi万能钥匙</Text>*/}
-
-                {/*{TopColumn}*/}
             </SafeAreaViewPlus>
         );
     }
+
+    _startSignUp = () => {
+        const {signUp} = this.state;
+
+        if (!signUp) {
+            this.setState({
+                signUp: true,
+            });
+        } else {
+            this.setState({
+                signUp: false,
+            });
+        }
+
+    };
 }
 
-// const mapStateToProps = state => ({
-//     taskInfo: state.taskInfo,
-// });
-// const mapDispatchToProps = dispatch => ({});
-// const TaskDetailsRedux = connect(mapStateToProps, mapDispatchToProps)(TaskDetails);
-export default TaskDetails;
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({});
+const TaskDetailsRedux = connect(mapStateToProps, mapDispatchToProps)(TaskDetails);
+export default TaskDetailsRedux;
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色

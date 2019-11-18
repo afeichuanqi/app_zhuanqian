@@ -28,7 +28,6 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import {TabView} from 'react-native-tab-view';
 import search from '../res/svg/search.svg';
 import FlatListCommonUtil from '../common/FlatListCommonUtil';
-import actions from '../action';
 import {connect} from 'react-redux';
 import ChatSocket from '../util/ChatSocket';
 
@@ -65,7 +64,7 @@ class FristListComponent extends PureComponent {
         const {lunboData} = this.state;
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-220, 0, lunboHeight - 10],
-            outputRange: [lunboHeight - 10 + 220, lunboHeight - 10, 20],
+            outputRange: [lunboHeight+ 220, lunboHeight - 10, 20],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{

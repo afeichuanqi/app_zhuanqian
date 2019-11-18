@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated} from 'react-native';
+import {Animated, InteractionManager} from 'react-native';
 import propTypes from 'prop-types';
 
 export default class AnimatedFadeIn extends React.PureComponent {
@@ -34,9 +34,9 @@ export default class AnimatedFadeIn extends React.PureComponent {
 
     componentDidMount() {
 
-        // InteractionManager.runAfterInteractions(() => {
+        InteractionManager.runAfterInteractions(() => {
             this.fadeInAnimated.start();
-        // })
+        })
 
     }
 

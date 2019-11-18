@@ -34,8 +34,7 @@ import shouji from '../res/svg/shouji.svg';
 import {MORE_MENU} from './TaskRelease/TASK_MENU';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import NavigationUtils from '../navigator/NavigationUtils';
-import ImageViewerModal from '../common/ImageViewerModal';
-import {selectTaskReleaseData, uploadMsgImage} from '../util/AppService';
+import {addTaskReleaseData, selectTaskReleaseData, uploadMsgImage} from '../util/AppService';
 import {connect} from 'react-redux';
 import AppTskDefaultData from './TaskRelease/AppTskDefaultData';
 import actions from '../action';
@@ -86,7 +85,7 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
             break;
         case 3:
             rightComponent = <RadioInfoComponent
-                key={title}
+                // key={title}
                 radioArr={rightComponentData.radioArr}
                 defaultId={rightComponentData.defaultId}
                 select={rightComponentData.selectClick}/>;
@@ -109,7 +108,7 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
         width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
         alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
     }}>
-        <Text style={{width: width / 4.2, fontSize: 13}}>{title}</Text>
+        <Text style={{width: width / 4.2}}>{title}</Text>
         {rightComponent}
         {rightComponentSvg}
     </View>;
@@ -175,6 +174,7 @@ class TaskRelease extends PureComponent {
 
             },
         };
+
     }
 
     state = {
@@ -192,13 +192,86 @@ class TaskRelease extends PureComponent {
     }
 
     componentWillUnmount() {
-
+        const data = this._getTaskReleaseData();
+        this.props.onSetTaskReleaseInfo(data);
     }
 
     _goBackClick = () => {
+
+        NavigationUtils.goBack(this.props.navigation);
+    };
+    _goReleaseTest = () => {
+        //生成数据
         const data = this._getTaskReleaseData();
-        console.log(data, 'datadatadatadata');
-        this.props.onSetTaskReleaseInfo(data);
+        const fromUserinfo = this.props.userinfo;
+        const taskData = {
+            title: data.columnData.title,
+            projectTitle: data.columnData.projectTitle,
+            TaskInfo: data.columnData.TaskInfo,
+            rewardPrice: data.columnData.rewardPrice,
+            remainderNum: data.columnData.rewardNum,
+            rewardNum: data.columnData.rewardNum,
+            orderTimeLimit: data.columnData.orderTimeLimit,
+            reviewTime: data.columnData.reviewTime,
+            taskType: data.typeData,
+
+        };
+        const stepData = data.stepData;
+        NavigationUtils.goPage({
+            fromUserinfo,
+            taskData,
+            stepData,
+            test: true,
+        }, 'TaskDetails');
+    };
+    _addTaskReleaseData = () => {
+        const typeData = this.typeSelect.getTypeData();
+        const deviceData = this.deviceSelect.getTypeData();
+        const columnData = this.bIform.getColumnData();
+        const stepData = this.bIform.stepInfo && this.bIform.stepInfo.taskStep.getStepData();
+        const {userinfo} = this.props;
+        const {token} = userinfo;
+
+        // 进行包装
+        // task_type_id, task_device_id, task_name, task_title, task_info, order_time_limit_id, review_time, single_order_id,
+        //     reward_price, reward_num, task_steps
+        const task_type_id = typeData.id;
+        const task_device_id = deviceData.id;
+        const task_name = columnData.projectTitle;
+        const task_title = columnData.title;
+        const task_info = columnData.TaskInfo;
+        const order_time_limit_id = columnData.orderTimeLimit.id;
+        const review_time = columnData.reviewTime.id;
+        let single_order_id = '';
+        if (columnData.singleOrder.use) {
+            single_order_id = columnData.singleOrder.id;
+        } else {
+            single_order_id = columnData.orderReplayNum.id;
+        }
+        const reward_price = columnData.rewardPrice;
+        const reward_num = columnData.rewardNum;
+        const task_steps = JSON.stringify(stepData);
+        const data = {
+            task_type_id,
+            task_device_id,
+            task_name,
+            task_title,
+            task_info,
+            order_time_limit_id,
+            review_time,
+            single_order_id,
+            reward_price,
+            reward_num,
+            task_steps,
+        };
+        console.log(task_steps);
+        addTaskReleaseData(data, token).then(result => {
+            const {task_id} = result;
+            NavigationUtils.goPage({
+                task_id: task_id,
+            }, 'TaskDetails');
+        });
+
     };
 
     render() {
@@ -246,10 +319,7 @@ class TaskRelease extends PureComponent {
                 </ScrollView>
                 <View style={{borderTopWidth: 0.5, borderTopColor: '#e8e8e8', flexDirection: 'row'}}>
                     <TouchableOpacity
-                        onPress={() => {
-                            const data = this._getTaskReleaseData();
-                            NavigationUtils.goPage(data, 'TaskDetails');
-                        }}
+                        onPress={this._goReleaseTest}
                         activeOpacity={0.6}
                         style={{
                             height: 60,
@@ -264,10 +334,7 @@ class TaskRelease extends PureComponent {
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.5}
-                        onPress={() => {
-
-                            console.log(this.bIform.stepInfo.taskStep.getStepData());
-                        }}
+                        onPress={this._addTaskReleaseData}
                         style={{
                             height: 60,
                             width: (width / 3) * 2,
@@ -283,11 +350,12 @@ class TaskRelease extends PureComponent {
         );
     }
 
+
     _getTaskReleaseData = () => {
         const typeData = this.typeSelect.getTypeData();
         const deviceData = this.deviceSelect.getTypeData();
         const columnData = this.bIform.getColumnData();
-        const stepData = this.bIform.stepInfo.taskStep.getStepData();
+        const stepData = this.bIform.stepInfo&&this.bIform.stepInfo.taskStep.getStepData();
         return {
             typeData,
             deviceData,
@@ -304,210 +372,20 @@ class TaskRelease extends PureComponent {
     // _scrollFun = {
     //     scrollToEnd: this.scrollView.scrollToEnd,
     // };
+
 }
-
-const mapStateToProps = state => ({
-    userinfo: state.userinfo,
-    taskInfo: state.taskInfo,
-});
-const mapDispatchToProps = dispatch => ({
-    onSetTaskReleaseInfo: (data) => dispatch(actions.onSetTaskReleaseInfo(data)),
-});
-const TaskReleaseRedux = connect(mapStateToProps, mapDispatchToProps)(TaskRelease);
-
-class InputSelect extends Component {
-    state = {
-        // info: this.props.info,
-        defaultId: this.props.defaultId,
-    };
-
-    render() {
-        const {defaultId} = this.state;
-
-        const index = this.props.menuArr.findIndex(e => e.id == defaultId);
-
-        let title = '';
-        if (index != -1) {
-            title = this.props.menuArr[index].title;
-
-        }
-
-        return <View style={{flex: 1}}>
-            <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                    this.dateMenu.show();
-                }}
-            >
-                <Text style={{fontSize: 13}}>{title}</Text>
-            </TouchableOpacity>
-            <PopButtomMenu key={title} popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
-                           ref={ref => this.dateMenu = ref}/>
-        </View>;
-    }
-
-    _select = (item) => {
-        console.log(item, 'item..');
-        this.setState({
-            defaultId: item ? item.id : this.props.defaultId,
-        });
-        this.props.select(this.state.info);
-    };
-}
-
-class InputTextPro extends Component {
-    static defaultProps = {
-        placeComponent: <Text>1111</Text>,
-        defaultValue: '1111',
-    };
-    state = {
-        defaultValue: this.props.defaultValue,
-    };
-
-    render() {
-        return <View style={{flex: 1, justifyContent: 'center'}}>
-            <TextInput
-                value={this.state.defaultValue}
-                maxLength={5}
-                keyboardType={'number-pad'}
-                onFocus={this.hidePlaceholder}
-                onBlur={this._onBlur}
-                onChangeText={this._onChangeText}
-                ref={ref => this.ipt = ref} style={{flex: 1, backgroundColor: 'white'}}/>
-            <TouchableOpacity
-                ref={ref => this.btn = ref}
-                activeOpacity={1}
-                onPress={this.hidePlaceholder}
-                style={{position: 'absolute'}}>
-                {this.props.placeComponent}
-            </TouchableOpacity>
-        </View>;
-    }
-
-    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        if (nextProps.defaultValue.length > 0) {
-            this._onChangeText(nextProps.defaultValue);
-            this.ipt.setNativeProps({
-                style: {
-                    // back
-                    zIndex: 1,
-                },
-            });
-            this.btn.setNativeProps({
-                style: {
-                    zIndex: 0,
-                },
-            });
-        }
-    }
-
-    _onChangeText = (text) => {
-        this.setState({
-            defaultValue: text,
-        });
-        this.props.onChangeText(text);
-    };
-    _onBlur = () => {
-        if (this.state.defaultValue.length === 0) {
-            this.showPlaceholder();
-        }
-    };
-    showPlaceholder = () => {
-        this.ipt.setNativeProps({
-            style: {
-                zIndex: 0,
-            },
-        });
-        this.btn.setNativeProps({
-            style: {
-                zIndex: 1,
-            },
-        });
-    };
-    hidePlaceholder = () => {
-
-        this.ipt.setNativeProps({
-            style: {
-                // back
-                zIndex: 1,
-            },
-        });
-        this.btn.setNativeProps({
-            style: {
-                zIndex: 0,
-            },
-        });
-        this.ipt.focus();
-
-    };
-}
-
-class RadioInfoComponent extends Component {
-    static defaultProps = {
-        radioArr: [],
-        defaultId: 1,
-    };
-    state = {
-        id: this.props.defaultId,
-    };
-    _radioClick = (item, index) => {
-        // console.log(index);
-        this.setState({
-            id: item.id,
-        });
-        this.props.select(item);
-    };
-
-    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        const index = this.props.radioArr.findIndex(e => e.id == nextProps.defaultId);
-        this.props.select(this.props.radioArr[index]);
-    }
-
-    genRadio = (item, Nindex) => {
-        // console.log(item, 'itemitem');
-        return <TouchableOpacity
-            key={item.id}
-            activeOpacity={0.6}
-            onPress={() => {
-                this._radioClick(item, Nindex);
-            }}
-            style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
-            <View>
-                <View style={{borderWidth: 1, borderColor: 'black', borderRadius: 10, width: 13, height: 13}}/>
-                {this.state.id == item.id && <View style={{
-                    position: 'absolute', top: 2.5, left: 2.5, width: 8, height: 8, backgroundColor: bottomTheme,
-                    borderRadius: 8,
-                }}/>}
-            </View>
-            <Text style={{fontSize: 13, marginLeft: 5}}>{item.title}</Text>
-        </TouchableOpacity>;
-    };
-
-    render() {
-        const {radioArr} = this.props;
-        return <View style={{flex: 1, flexDirection: 'row'}}>
-            {radioArr.map((item, Nindex, arr) => {
-
-                return this.genRadio(item, Nindex);
-
-            })}
-
-        </View>;
-    }
-}
-
 
 class BottomInfoForm extends Component {
     columnData = {
-        orderTimeLimit: Object.keys(this.props.taskInfo.columnData.orderTimeLimit).length > 0 ? this.props.taskInfo.columnData.orderTimeLimit : this.props.data.app_task_order_time_limit[0],
-        reviewTime: Object.keys(this.props.taskInfo.columnData.reviewTime).length > 0 ? this.props.taskInfo.columnData.reviewTime : this.props.data.app_task_review_time[0],
-        singleOrder: Object.keys(this.props.taskInfo.columnData.singleOrder).length > 0 ? this.props.taskInfo.columnData.singleOrder : this.props.data.app_task_single_order[0],
+        orderTimeLimit: (this.props.taskInfo.columnData.orderTimeLimit && Object.keys(this.props.taskInfo.columnData.orderTimeLimit).length > 0) ? this.props.taskInfo.columnData.orderTimeLimit : this.props.data.app_task_order_time_limit[0],
+        reviewTime: (this.props.taskInfo.columnData.reviewTime && Object.keys(this.props.taskInfo.columnData.reviewTime).length > 0) ? this.props.taskInfo.columnData.reviewTime : this.props.data.app_task_review_time[0],
+        singleOrder: (this.props.taskInfo.columnData.singleOrder && Object.keys(this.props.taskInfo.columnData.singleOrder).length > 0) ? this.props.taskInfo.columnData.singleOrder : this.props.data.app_task_single_order[0],
         rewardNum: this.props.taskInfo.columnData.rewardNum,
         rewardPrice: this.props.taskInfo.columnData.rewardPrice,
         TaskInfo: this.props.taskInfo.columnData.TaskInfo,
         title: this.props.taskInfo.columnData.title,
         projectTitle: this.props.taskInfo.columnData.projectTitle,
-        orderReplayNum: Object.keys(this.props.taskInfo.columnData.orderReplayNum).length > 0 ? this.props.taskInfo.columnData.orderReplayNum : this.props.data.app_task_single_order_select[0],
+        orderReplayNum: (this.props.taskInfo.columnData.orderReplayNum && Object.keys(this.props.taskInfo.columnData.orderReplayNum).length > 0) ? this.props.taskInfo.columnData.orderReplayNum : this.props.data.app_task_single_order_select[0],
     };
 
     _changeProjectTitle = (text) => {
@@ -526,20 +404,26 @@ class BottomInfoForm extends Component {
         this.columnData.reviewTime = item;
     };
     _SelectSingleOrder = (item) => {
+        // console.log(item);
+        this.columnData.singleOrder = item;
         if (item.id === 3) {
             this.replayNum.setNativeProps({
                 style: {
                     height: 40,
                 },
             });
+            this.columnData.singleOrder.use = false;
+
         } else {
             this.replayNum.setNativeProps({
                 style: {
                     height: 0,
                 },
             });
+            this.columnData.singleOrder.use = true;
         }
-        this.columnData.singleOrder = item;
+
+
     };
     _selectReplayNum = (item) => {
         this.columnData.orderReplayNum = item;
@@ -563,10 +447,15 @@ class BottomInfoForm extends Component {
     getColumnData = () => {
         return this.columnData;
     };
+    state = {
+        showHistory: false,
+        stepData: [],
+    };
 
     render() {
+        const {showHistory,stepData} = this.state;
+
         //悬赏单价
-        console.log(this.props.taskInfo.columnData.singleOrder, 'this.props.taskInfo.columnData.singleOrder');
         const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{color: 'rgba(0,0,0,0.5)'}}>最低</Text>
             <Text style={{color: 'black', marginHorizontal: 5}}>0.5</Text>
@@ -584,7 +473,6 @@ class BottomInfoForm extends Component {
         // if (ReplayNumArray) {
         //
         // }
-        console.log('this.columnData.singleOrder', this.columnData.singleOrder);
         return <View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('项目名称', 1, {
@@ -660,14 +548,244 @@ class BottomInfoForm extends Component {
                     editable: false,
                 }}/>
             </View>
-            <StepInfo stepData={this.props.taskInfo.stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
-                      scrollTo={this.props.scrollTo}
-                      scollToEnd={this.props.scollToEnd}/>
+            {this.props.taskInfo.stepData.length > 0 && !showHistory ? <View
+
+                    style={{height: 80, width, justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <Text style={{color: 'blue'}}>是否显示历史存档?</Text>
+                    <View style={{width: 150, flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.setState({
+                                    showHistory: true,
+                                    stepData: this.props.taskInfo.stepData,
+                                });
+                            }}
+
+                        >
+                            <Text style={{color: 'blue'}}>是</Text>
+
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.setState({
+                                    showHistory: true,
+                                    stepData: [],
+                                });
+                            }}
+
+                        >
+                            <Text style={{color: 'blue'}}>否</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> :
+                <StepInfo stepData={stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
+                          scrollTo={this.props.scrollTo}
+                          scollToEnd={this.props.scollToEnd}/>}
+
 
         </View>;
 
     }
 }
+
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+    taskInfo: state.taskInfo,
+});
+const mapDispatchToProps = dispatch => ({
+    onSetTaskReleaseInfo: (data) => dispatch(actions.onSetTaskReleaseInfo(data)),
+});
+const TaskReleaseRedux = connect(mapStateToProps, mapDispatchToProps)(TaskRelease);
+
+class InputSelect extends Component {
+    state = {
+        // info: this.props.info,
+        defaultId: this.props.defaultId,
+    };
+
+    render() {
+        const {defaultId} = this.state;
+
+        const index = this.props.menuArr.findIndex(e => e.id == defaultId);
+
+        let title = '';
+        if (index != -1) {
+            title = this.props.menuArr[index].title;
+
+        }
+
+        return <View style={{flex: 1}}>
+            <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                    this.dateMenu.show();
+                }}
+            >
+                <Text style={{fontSize: 13}}>{title}</Text>
+            </TouchableOpacity>
+            <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
+                           ref={ref => this.dateMenu = ref}/>
+        </View>;
+    }
+
+    _select = (item) => {
+        // console.log(item, 'item..');
+        this.setState({
+            defaultId: item ? item.id : this.props.defaultId,
+        });
+        this.props.select(item);
+    };
+}
+
+class InputTextPro extends Component {
+    static defaultProps = {
+        placeComponent: <Text>1111</Text>,
+        defaultValue: '1111',
+    };
+    state = {
+        defaultValue: this.props.defaultValue,
+    };
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    render() {
+        return <View style={{flex: 1, justifyContent: 'center'}}>
+            <TextInput
+                value={this.state.defaultValue}
+                maxLength={5}
+                keyboardType={'number-pad'}
+                onFocus={this.hidePlaceholder}
+                onBlur={this._onBlur}
+                onChangeText={this._onChangeText}
+                ref={ref => this.ipt = ref} style={{flex: 1, backgroundColor: 'white'}}/>
+            <TouchableOpacity
+                ref={ref => this.btn = ref}
+                activeOpacity={1}
+                onPress={this.hidePlaceholder}
+                style={{position: 'absolute'}}>
+                {this.props.placeComponent}
+            </TouchableOpacity>
+        </View>;
+    }
+
+    componentDidMount(): void {
+        if (this.props.defaultValue.length > 0) {
+            // this._onChangeText(this.props.defaultValue);
+            this.ipt.setNativeProps({
+                style: {
+                    // back
+                    zIndex: 1,
+                },
+            });
+            this.btn.setNativeProps({
+                style: {
+                    zIndex: 0,
+                },
+            });
+        }
+    }
+
+    _onChangeText = (text) => {
+        this.setState({
+            defaultValue: text,
+        });
+        this.props.onChangeText(text);
+    };
+    _onBlur = () => {
+        if (this.state.defaultValue.length === 0) {
+            this.showPlaceholder();
+        }
+    };
+    showPlaceholder = () => {
+        this.ipt.setNativeProps({
+            style: {
+                zIndex: 0,
+            },
+        });
+        this.btn.setNativeProps({
+            style: {
+                zIndex: 1,
+            },
+        });
+    };
+    hidePlaceholder = () => {
+
+        this.ipt.setNativeProps({
+            style: {
+                // back
+                zIndex: 1,
+            },
+        });
+        this.btn.setNativeProps({
+            style: {
+                zIndex: 0,
+            },
+        });
+        this.ipt.focus();
+
+    };
+}
+
+class RadioInfoComponent extends Component {
+    static defaultProps = {
+        radioArr: [],
+        defaultId: 1,
+    };
+    state = {
+        id: this.props.defaultId,
+    };
+    _radioClick = (item, index) => {
+        // console.log(index);
+        this.setState({
+            id: item.id,
+        });
+        console.log('item', item);
+        this.props.select(item);
+    };
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        const index = this.props.radioArr.findIndex(e => e.id == nextProps.defaultId);
+        this.props.select(this.props.radioArr[index]);
+    }
+
+    genRadio = (item, Nindex) => {
+        // console.log(item, 'itemitem');
+        return <TouchableOpacity
+            key={item.id}
+            activeOpacity={0.6}
+            onPress={() => {
+                this._radioClick(item, Nindex);
+            }}
+            style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
+            <View>
+                <View style={{borderWidth: 1, borderColor: 'black', borderRadius: 10, width: 13, height: 13}}/>
+                {this.state.id == item.id && <View style={{
+                    position: 'absolute', top: 2.5, left: 2.5, width: 8, height: 8, backgroundColor: bottomTheme,
+                    borderRadius: 8,
+                }}/>}
+            </View>
+            <Text style={{fontSize: 13, marginLeft: 5}}>{item.title}</Text>
+        </TouchableOpacity>;
+    };
+
+    render() {
+        const {radioArr} = this.props;
+        return <View style={{flex: 1, flexDirection: 'row'}}>
+            {radioArr.map((item, Nindex, arr) => {
+
+                return this.genRadio(item, Nindex);
+
+            })}
+
+        </View>;
+    }
+}
+
 
 //预付赏金
 class InputSetting extends Component {
@@ -764,9 +882,9 @@ class StepInfo extends Component {
             <TaskStepColumn
                 stepArr={this.props.stepData}
                 userinfo={this.props.userinfo}
-                imageClick={(images) => {
-                    this.imageViewerModal.show(images);
-                }}
+                // imageClick={(images) => {
+                //     this.imageViewerModal.show(images);
+                // }}
 
                 edit={(no, type, typeData, timestamp) => {
                     const Menu = this._findColumnInfoForType(type);
@@ -826,8 +944,8 @@ class StepInfo extends Component {
                             mime: imageData.mime,
                             data: imageData.data,
                         };
-                        //上传七牛云
                         uploadMsgImage(imgData, userinfo.token).then((result) => {
+                            console.log('上传成功');
                             if (result.status == 200) {//上传七牛云成功
                                 const imageUrl = result.imageUrl;
                                 this.taskStep.setImageStatusOrUrl(timestamp, 1, imageUrl);
@@ -840,9 +958,9 @@ class StepInfo extends Component {
                 }}
                 ref={ref => this.taskPop = ref}/>
             {/*图片浏览器*/}
-            <ImageViewerModal
-                ref={ref => this.imageViewerModal = ref}
-            />
+            {/*<ImageViewerModal*/}
+            {/*    ref={ref => this.imageViewerModal = ref}*/}
+            {/*/>*/}
         </View>;
 
     }

@@ -116,7 +116,7 @@ class AccountSetting extends PureComponent {
                             ref={ref => this.textInput = ref}
                             autoCapitalize={'none'}
                             autoComplete={'off'}
-                            autoCorrect={'false'}
+                            autoCorrect={false}
                             blurOnSubmit={false}
                             onChangeText={this._onChangeText}
                             maxLength={15}

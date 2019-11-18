@@ -7,13 +7,10 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
-import Animated, {Easing} from 'react-native-reanimated';
+import {Modal, View, Dimensions, Animated, Text, TouchableOpacity} from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
-import {bottomTheme} from '../appSet';
-const {timing} = Animated;
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class MyModalBox extends PureComponent {
     constructor(props) {
@@ -41,29 +38,27 @@ class MyModalBox extends PureComponent {
     }
 
     hide = () => {
-        this._anim = timing(this.animations.scale, {
+        this._anim = Animated.timing(this.animations.scale, {
             duration: 200,
             toValue: 0,
-            easing: Easing.inOut(Easing.ease),
+            // easing: Easing.inOut(Easing.ease),
         }).start(() => {
-            this.timer = setTimeout(() => {
-                this.setState({
-                    visible: false,
-                });
-            }, 100);
+            this.setState({
+                visible: false,
+            });
 
         });
 
     };
     show = () => {
-        console.log('show22');
         this.setState({
             visible: true,
         }, () => {
-            this._anim = timing(this.animations.scale, {
+            this._anim = Animated.timing(this.animations.scale, {
+                // useNativeDriver: true,
                 duration: 200,
                 toValue: 1,
-                easing: Easing.inOut(Easing.cubic),
+                // easing: Easing.inOut(Easing.cubic),
             }).start();
 
         });
@@ -75,13 +70,12 @@ class MyModalBox extends PureComponent {
     render() {
         const {visible} = this.state;
         const {menuArr, rightTitle} = this.props;
-
         return (
 
             <Modal
                 transparent
                 visible={visible}
-                animationType={'fade'}
+                // animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 

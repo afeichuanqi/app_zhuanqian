@@ -1,11 +1,11 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text,Animated} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
-import Animated, {Easing} from 'react-native-reanimated';
+// import Animated, {Easing} from 'react-native-reanimated';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-const {timing} = Animated;
+// const {timing} = Animated;
 
 const topBottomVal = 17;
 
@@ -42,23 +42,23 @@ class TaskSumComponent extends PureComponent {
     };
     _onPressIn = () => {
         //隐藏box
-        this._anim = timing(this.animations.scale, {
+        this._anim = Animated.timing(this.animations.scale, {
             duration: 200,
             toValue: 0,
-            easing: Easing.inOut(Easing.ease),
+            // easing: Easing.inOut(Easing.ease),
         }).start();
     };
     _onPressOut = () => {
         //隐藏box
-        this._anim = timing(this.animations.scale, {
+        this._anim = Animated.timing(this.animations.scale, {
             duration: 200,
             toValue: 1,
-            easing: Easing.inOut(Easing.ease),
+            // easing: Easing.inOut(Easing.ease),
         }).start();
     };
 
     render() {
-        const scale = Animated.interpolate(this.animations.scale, {
+        const scale = this.animations.scale.interpolate( {
             inputRange: [0, 1],
             outputRange: [0.95, 1],
             extrapolate: 'clamp',

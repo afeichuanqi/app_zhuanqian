@@ -59,31 +59,35 @@ export default {
     ],
     app_task_single_order_select: [
         {
-            id: 1,
-            title: '1次',
+            id: 4,
+            title: '2次',
             sort: 4,
             is_show: 0,
         },
         {
-            id: 2,
-            title: '2次',
+            id: 5,
+            title: '3次',
             sort: 5,
             is_show: 0,
         },
         {
-            id: 3,
-            title: '3次',
-            sort: 6,
-            is_show: 0,
-        },
-        {
-            id: 3,
+            id: 6,
             title: '4次',
             sort: 6,
             is_show: 0,
         },
         {
-            id: 4,
+            id: 7,
+            title: '5次',
+            sort: 7,
+            is_show: 0,
+        }, {
+            id: 8,
+            title: '6次',
+            sort: 7,
+            is_show: 0,
+        }, {
+            id: 9,
             title: '无限',
             sort: 7,
             is_show: 0,

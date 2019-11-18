@@ -11,7 +11,7 @@ import AppNavigators from './navigator/AppNavigators';
 import {Provider} from 'react-redux';
 import store from './store';
 import {PersistGate} from 'redux-persist/es/integration/react';
-import {persistStore, persistCombineReducers} from 'redux-persist';
+import {persistStore} from 'redux-persist';
 type Props = {}
 export default class App extends Component<Props> {
 

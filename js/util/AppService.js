@@ -168,10 +168,52 @@ export function setUserData(data, token) {
             reject(error);
         }
     });
-
-
 }
 
+/**
+ * 发布任务
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function addTaskReleaseData(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/addTaskReleaseData', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询任务
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectTaskInfo(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectTaskInfo', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 export function getUserInfo(token) {
     return new Promise(async function (resolve, reject) {
         try {

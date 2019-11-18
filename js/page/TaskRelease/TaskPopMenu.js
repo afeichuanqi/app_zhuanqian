@@ -166,6 +166,7 @@ class TaskPopMenu extends PureComponent {
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}
                         <ImageSelect
+                            image={this.inputData.uri}
                             ref={ref => this.imageSelect = ref}
                             select={this.shuomingtu}
                             width={100}
@@ -226,6 +227,7 @@ class TaskPopMenu extends PureComponent {
     };
 
     render() {
+        console.log(this.inputData,"this.inputData")
         const Component = this.state.columnArr.map((item, index, arr) => {
             return this.getColumnView(item.type, item.typeData,index);
         });
@@ -472,7 +474,7 @@ class TextArea extends PureComponent {
             <AnimatedTextInput
                 autoCapitalize={'none'}
                 autoComplete={'off'}
-                autoCorrect={'false'}
+                autoCorrect={false}
                 blurOnSubmit={false}
                 value={this.state.value}
                 onChangeText={this._onChangeText}

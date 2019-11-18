@@ -46,8 +46,11 @@ class PopButtomMenu extends PureComponent {
     }
 
     hide = (item) => {
-        console.log(item);
-        this.props.select(item);
+        // console.log(item);
+        if(item){
+            this.props.select(item);
+        }
+
         this._anim = timing(this.animations.bottom, {
             duration: 200,
             toValue: -(200 + (width / 3)),

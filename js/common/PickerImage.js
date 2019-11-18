@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal,View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -55,7 +55,8 @@ class PopMenu extends PureComponent {
         });
 
     };
-    show = () => {
+    show = (timestamp = 0) => {
+        this.timestamp = timestamp;
         this.setState({
             visible: true,
         }, () => {
@@ -77,7 +78,7 @@ class PopMenu extends PureComponent {
             includeBase64: this.props.includeBase64,
         }).then(image => {
             this.hide();
-            this.props.select(image);
+            this.props.select(image, this.timestamp);
         });
 
     };
@@ -89,7 +90,7 @@ class PopMenu extends PureComponent {
             includeBase64: this.props.includeBase64,
         }).then(image => {
             this.hide();
-            this.props.select(image);
+            this.props.select(image, this.timestamp);
             // console.log(image);
 
         });
