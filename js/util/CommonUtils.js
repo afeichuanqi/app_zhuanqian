@@ -97,3 +97,77 @@ export const getUUID = () => {
 
     return s.join('');
 };
+export const judgeTaskData = (data) => {
+    const {
+        task_type_id,
+        task_device_id,
+        task_name,
+        task_title,
+        task_info,
+        order_time_limit_id,
+        review_time,
+        single_order_id,
+        reward_price,
+        reward_num,
+        task_steps,
+    } = data;
+    if (!task_type_id || task_type_id === 0) {
+        return '请认真填写任务类型哦 ~ ~';
+    }
+    if (!task_device_id || task_device_id === 0) {
+        return '请认真填写设备类型哦 ~ ~';
+    }
+    if (!task_name || task_name.length === 0) {
+        return '项目名称没写哦 ~ ~';
+    }
+    if (!task_title || task_title.length === 0) {
+        return '标题是重点 但是您却忘了 ~ ~';
+    }
+    if (!task_info || task_info.length === 0) {
+        return '任务说明是重点 但是您却忘了 ~ ~';
+    }
+    if (!order_time_limit_id || order_time_limit_id === 0) {
+        return '接单时限您是不是忘记选了 ~ ~';
+    }
+    if (!review_time || review_time === 0) {
+        return '审核时限您是不是忘记选了 ~ ~';
+    }
+    if (!single_order_id || single_order_id === 0) {
+        return '用户做单次数您是不是忘记选了 ~ ~';
+    }
+    if (!reward_price || reward_price === 0) {
+        return '悬赏单价记得填写哦 ~ ~';
+    }
+    if (!reward_num || reward_num === 0) {
+        return '悬赏数量记得填写哦 ~ ~';
+    }
+    console.log(task_steps, 'task_steps');
+    try {
+        const obj = JSON.parse(task_steps);
+
+        if (obj.length === 0) {
+            return '任务步骤太少哦 至少要一项任务步骤 ';
+        }
+        // console.log(obj.length,"obj.length");
+        for (let index = 0; index < obj.length; index++) {
+            const item = obj[index];
+            const {typeData, type} = item;
+            if (typeData && typeData.uri) {
+                if (typeData.uri.indexOf('file://') !== -1) {
+                    return `您步骤${index + 1}图片未上传成功,请仔细检查`;
+                }
+            }
+            if (type !== 6 && typeData.info.length === 0) {
+                return `您步骤${index + 1}说明是不是太短了呀`;
+            }
+            if (type === 6 && typeData.collectInfo.length === 0) {
+                return `您步骤${index + 1}说明是不是太短了呀`;
+            }
+        }
+
+    } catch (e) {
+        console.log(e.toString());
+        return '错误代码 0XJSAS0X,检查任务步骤';
+    }
+    return '';
+};

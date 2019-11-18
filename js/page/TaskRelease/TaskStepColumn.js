@@ -9,7 +9,7 @@
 import React, {PureComponent, Component} from 'react';
 import {Dimensions, View, Text, TextInput, Clipboard, StyleSheet, TouchableOpacity, Linking} from 'react-native';
 import Image from 'react-native-fast-image';
-import {theme, bottomTheme} from '../../appSet';
+import {bottomTheme} from '../../appSet';
 import SvgUri from 'react-native-svg-uri';
 import task_delete from '../../res/svg/task_delete.svg';
 import task_shangyi from '../../res/svg/task_shangyi.svg';
@@ -92,7 +92,7 @@ class StepBox extends PureComponent {
     };
 }
 
-class TaskStepColumn extends Component {
+class TaskStepColumn extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -208,19 +208,7 @@ class TaskStepColumn extends Component {
             }
         }
     };
-    _onblur = (timestamp) => {
-        const tmpArr = [...this.state.stepDataArr];
-        const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
-        if (index !== -1) {
-            // tmpArr[index].
-            const item = tmpArr[index];
-            const data = item.typeData;
-            data.TextContent = this.TextContent;
-            this.setState({
-                stepDataArr: tmpArr,
-            });
-        }
-    };
+
 
     componentDidMount() {
 
@@ -435,7 +423,7 @@ class TaskStepColumn extends Component {
                                 resizeMode={'contain'}/>
                             {uploadStatus == 0 ?//正在上传
                                 <View style={{
-                                    position: 'absolute', top: 0, left: 0, width: width / 2, height: width / 1.2,
+                                    position: 'absolute', top: 0, left: 0, width: width / 2, height: width / 1.5,
                                     backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
                                 }}>
                                     <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
@@ -597,19 +585,21 @@ class TaskStepColumn extends Component {
                                         }}
                                         resizeMode={'contain'}/>
                                     <TouchableOpacity
-                                        onPress={()=>{this._clearPic(timestamp)}}
+                                        onPress={() => {
+                                            this._clearPic(timestamp);
+                                        }}
                                         style={{
-                                        width: 20,
-                                        height: 20,
-                                        borderRadius: 20,
-                                        backgroundColor: 'rgba(0,0,0,0.6)',
-                                        position:'absolute',
-                                        right:-5,
-                                        top:-5,
-                                        justifyContent:'center',
-                                        alignItems:'center',
-                                    }}>
-                                        <Text style={{color:'white'}}>X</Text>
+                                            width: 20,
+                                            height: 20,
+                                            borderRadius: 20,
+                                            backgroundColor: 'rgba(0,0,0,0.6)',
+                                            position: 'absolute',
+                                            right: -5,
+                                            top: -5,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}>
+                                        <Text style={{color: 'white'}}>X</Text>
                                     </TouchableOpacity>
                                     {uploadStatus1 !== 1 && <View style={{
                                         position: 'absolute', top: 0, left: 0, width: (width - 80) / 2,
@@ -676,9 +666,13 @@ class TaskStepColumn extends Component {
                         justifyContent: 'center',
                     }}>
                         <TextInput
-                            onBlur={this._onblur}
+                            // onBlur={this._onblur}
                             placeholder={'请按照要求输入文字内容'}
-                            onChangeText={(text) => this.TextContent = text}
+                            onChangeText={(text) => {
+                                const tmpArr = this.state.stepDataArr;
+                                const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
+                                tmpArr[index].typeData.collectInfoContent = text;
+                            }}
                             // value={}
                             style={{
                                 padding: 0,
@@ -697,7 +691,7 @@ class TaskStepColumn extends Component {
 
         }
     };
-    _clearPic=(timestamp)=>{
+    _clearPic = (timestamp) => {
         const tmpArr = [...this.state.stepDataArr];
         const index = tmpArr.findIndex(data => data.timestamp === timestamp);
         if (index != -1) {
@@ -714,16 +708,14 @@ class TaskStepColumn extends Component {
                 });
             }
         }
-    }
+    };
     _selectVerifyImg = (imageData, timestamp) => {
         const temArr = [...this.state.stepDataArr];
-
         const index = temArr.findIndex(data => data.timestamp === timestamp);
         if (index !== -1) {
             const item = temArr[index];
             item.typeData.uri1 = `file://${imageData.path}`;
             item.uploadStatus1 = 0;//设置正在上传
-            // console.log(temArr, 'temArrtemArr');
             this.setState({
                 stepDataArr: temArr,
             });
@@ -736,19 +728,10 @@ class TaskStepColumn extends Component {
                 uploadMsgImage(imgData, this.props.userinfo.token).then((result) => {
                     if (result.status == 200) {//上传七牛云成功
                         const imageUrl = result.imageUrl;
-                        item.typeData.uri1 = imageUrl;
-                        item.uploadStatus1 = 1;//1上传成功,-1为失败,0正在上传,-2为没有上传任何照片
-                        console.log(temArr, 'temArr1');
-                        this.setState({
-                            stepDataArr: temArr,
-                        });
+                        this.setImageStatusOrUrl_1(timestamp, 1, imageUrl);
                     }
                 }).catch((msg) => {
-                    console.log(temArr, 'temArr2');
-                    item.uploadStatus1 = -1;//设置上传失败
-                    this.setState({
-                        stepDataArr: temArr,
-                    });
+                    this.setImageStatusOrUrl_1(timestamp, -1, '');
                 });
             }, 500);
 

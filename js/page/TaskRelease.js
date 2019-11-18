@@ -38,6 +38,8 @@ import {addTaskReleaseData, selectTaskReleaseData, uploadMsgImage} from '../util
 import {connect} from 'react-redux';
 import AppTskDefaultData from './TaskRelease/AppTskDefaultData';
 import actions from '../action';
+import {judgeTaskData} from '../util/CommonUtils';
+import Toast from '../common/Toast';
 
 const {width} = Dimensions.get('window');
 
@@ -202,6 +204,7 @@ class TaskRelease extends PureComponent {
     };
     _goReleaseTest = () => {
         //生成数据
+        const FormData = this._getFormData();
         const data = this._getTaskReleaseData();
         const fromUserinfo = this.props.userinfo;
         const taskData = {
@@ -214,7 +217,6 @@ class TaskRelease extends PureComponent {
             orderTimeLimit: data.columnData.orderTimeLimit,
             reviewTime: data.columnData.reviewTime,
             taskType: data.typeData,
-
         };
         const stepData = data.stepData;
         NavigationUtils.goPage({
@@ -222,19 +224,16 @@ class TaskRelease extends PureComponent {
             taskData,
             stepData,
             test: true,
+            FormData,
         }, 'TaskDetails');
     };
-    _addTaskReleaseData = () => {
+    //生成表单提交数据
+    _getFormData = () => {
         const typeData = this.typeSelect.getTypeData();
         const deviceData = this.deviceSelect.getTypeData();
         const columnData = this.bIform.getColumnData();
         const stepData = this.bIform.stepInfo && this.bIform.stepInfo.taskStep.getStepData();
-        const {userinfo} = this.props;
-        const {token} = userinfo;
 
-        // 进行包装
-        // task_type_id, task_device_id, task_name, task_title, task_info, order_time_limit_id, review_time, single_order_id,
-        //     reward_price, reward_num, task_steps
         const task_type_id = typeData.id;
         const task_device_id = deviceData.id;
         const task_name = columnData.projectTitle;
@@ -264,13 +263,29 @@ class TaskRelease extends PureComponent {
             reward_num,
             task_steps,
         };
-        console.log(task_steps);
-        addTaskReleaseData(data, token).then(result => {
-            const {task_id} = result;
-            NavigationUtils.goPage({
-                task_id: task_id,
-            }, 'TaskDetails');
-        });
+        return data;
+
+    };
+    _addTaskReleaseData = () => {
+        const data = this._getFormData();
+        const error = judgeTaskData(data);
+        console.log(error,"error")
+        if (error != '') {
+
+            this.toast.show(error);
+        }else{
+            const {userinfo} = this.props;
+            const {token} = userinfo;
+            addTaskReleaseData(data, token).then(result => {
+                const {task_id} = result;
+                NavigationUtils.goPage({
+                    task_id: task_id,
+                }, 'TaskDetails');
+            }).catch(err=>{
+                this.toast.show(err);
+            })
+        }
+
 
     };
 
@@ -293,7 +308,9 @@ class TaskRelease extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <ScrollView
                     ref={ref => this.scrollView = ref}
                     style={{backgroundColor: '#e8e8e8'}}>
@@ -355,7 +372,7 @@ class TaskRelease extends PureComponent {
         const typeData = this.typeSelect.getTypeData();
         const deviceData = this.deviceSelect.getTypeData();
         const columnData = this.bIform.getColumnData();
-        const stepData = this.bIform.stepInfo&&this.bIform.stepInfo.taskStep.getStepData();
+        const stepData = this.bIform.stepInfo && this.bIform.stepInfo.taskStep.getStepData();
         return {
             typeData,
             deviceData,
@@ -453,7 +470,7 @@ class BottomInfoForm extends Component {
     };
 
     render() {
-        const {showHistory,stepData} = this.state;
+        const {showHistory, stepData} = this.state;
 
         //悬赏单价
         const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center'}}>

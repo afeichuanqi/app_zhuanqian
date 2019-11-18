@@ -17,10 +17,15 @@ import menu_right from '../res/svg/menu_right.svg';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
-import {selectTaskInfo} from '../util/AppService';
-import task_yulan from '../res/svg/task_yulan.svg';
+import {addTaskReleaseData, selectTaskInfo, startSignUpTask} from '../util/AppService';
+import taskHallNext from '../res/svg/taskHallNext.svg';
+import goback from '../res/svg/goback.svg';
+import NavigationUtils from '../navigator/NavigationUtils';
+import {judgeTaskData} from '../util/CommonUtils';
+import Toast from '../common/Toast';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 class TaskDetails extends PureComponent {
     constructor(props) {
@@ -36,7 +41,6 @@ class TaskDetails extends PureComponent {
 
     componentDidMount() {
         const {test, task_id} = this.params;
-
         if (test) {
             const {fromUserinfo, taskData, stepData} = this.params;
             const totalData = {fromUserinfo, taskData, stepData};
@@ -81,6 +85,11 @@ class TaskDetails extends PureComponent {
             outputRange: [1, 0.5],
             extrapolate: 'clamp',
         });
+        const goBackTop = Animated.interpolate(this.animations.value, {
+            inputRange: [0, 40],
+            outputRange: [20, 5],
+            extrapolate: 'clamp',
+        });
         let statusBar = {
             hidden: false,
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
@@ -96,24 +105,26 @@ class TaskDetails extends PureComponent {
             extrapolate: 'clamp',
         });
         const {fromUserinfo, taskData, stepData} = this.state.totalData;
-        // console.log(stepData, 'stepData');
         const {signUp} = this.state;
         const {userinfo} = this.props;
+        const {test} = this.params;
 
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
             >
                 {navigationBar}
-                {/*{TopColumn}*/}
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
 
                     <View style={{
                         backgroundColor: bottomTheme,
                         height: 35,
                         justifyContent: 'center',
-                        alignItems: 'center',
                     }}/>
+
                     <Animated.View
                         style={{width, position: 'absolute', top: TitleTop, alignItems: 'center', zIndex: 2}}>
                         <Text style={{color: 'white', fontSize: 18}}>任务详情</Text>
@@ -293,9 +304,11 @@ class TaskDetails extends PureComponent {
                             stepArr={stepData || []}
                             showUtilColumn={false}/>
                     </Animated.ScrollView>
-                    <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
+                    {test ? <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
                         <TouchableOpacity
-                            onPress={this._goReleaseTest}
+                            onPress={() => {
+                                NavigationUtils.goBack(this.props.navigation);
+                            }}
                             activeOpacity={0.6}
                             style={{
                                 height: 60,
@@ -304,9 +317,51 @@ class TaskDetails extends PureComponent {
                                 alignItems: 'center',
                                 flexDirection: 'row',
                             }}>
-                            <SvgUri width={20} fill={'rgba(0,0,0,0.9)'} style={{marginLeft: 5}} height={20}
-                                    svgXmlData={task_yulan}/>
-                            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>预览</Text>
+
+                            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>修改</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                const {FormData} = this.params;
+                                const {token} = userinfo;
+                                const error = judgeTaskData(FormData);
+                                if (error != '') {
+                                    this.toast.show(error);
+                                    return;
+                                }
+                                addTaskReleaseData(FormData, token).then(result => {
+                                    this.toast.show('发布成功 ~ ~ ');
+                                }).catch(err => {
+                                    this.toast.show(err);
+                                });
+                            }}
+                            style={{
+                                height: 60,
+                                width: (width / 3) * 2,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                backgroundColor: bottomTheme,
+                            }}>
+                            <Text
+                                style={{fontSize: 15, color: 'white', marginLeft: 5}}>申请发布</Text>
+                        </TouchableOpacity>
+
+                    </View> : <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
+                        <TouchableOpacity
+                            // onPress={this._goReleaseTest}
+                            activeOpacity={0.6}
+                            style={{
+                                height: 60,
+                                width: width / 3,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                            }}>
+                            <SvgUri width={17} fill={'rgba(0,0,0,0.7)'} style={{marginLeft: 5}} height={17}
+                                    svgXmlData={taskHallNext}/>
+                            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.5}
@@ -320,9 +375,18 @@ class TaskDetails extends PureComponent {
                                 backgroundColor: bottomTheme,
                             }}>
                             <Text
-                                style={{fontSize: 15, color: 'white', marginLeft: 5}}>{signUp ? '我要提交' : '开始报名'}</Text>
+                                style={{fontSize: 15, color: 'white', marginLeft: 5}}>{signUp ? '提交验证' : '开始报名'}</Text>
                         </TouchableOpacity>
-                    </View>
+
+                    </View>}
+                    <AnimatedTouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={() => {
+                            NavigationUtils.goBack(this.props.navigation);
+                        }}
+                        style={{position: 'absolute', top: goBackTop, left: 10, zIndex: 10, width: 50}}>
+                        <SvgUri width={24} height={24} fill={'white'} svgXmlData={goback}/>
+                    </AnimatedTouchableOpacity>
                 </View>
             </SafeAreaViewPlus>
         );
@@ -330,15 +394,22 @@ class TaskDetails extends PureComponent {
 
     _startSignUp = () => {
         const {signUp} = this.state;
-
+        const {userinfo} = this.props;
+        console.log(userinfo.token);
+        const {task_id} = this.params;
         if (!signUp) {
-            this.setState({
-                signUp: true,
+            startSignUpTask({task_id: task_id},userinfo.token).then(result => {
+
+                this.setState({
+                    signUp: true,
+                }, () => {
+                    this.toast.show('报名成功');
+                });
+            }).catch((msg) => {
+                this.toast.show(msg);
             });
+
         } else {
-            this.setState({
-                signUp: false,
-            });
         }
 
     };

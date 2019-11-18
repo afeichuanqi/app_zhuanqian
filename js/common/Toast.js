@@ -1,145 +1,158 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
+ * react-native-easy-toast
+ * https://github.com/crazycodeboy/react-native-easy-toast
+ * Email:crazycodeboy@gmail.com
+ * Blog:http://jiapenghui.com
  * @flow
  */
 
-import React, {PureComponent} from 'react';
-import {Modal, View, Text, TouchableOpacity,Dimensions} from 'react-native';
-import SvgUri from 'react-native-svg-uri';
-import toast_success from '../res/svg/toast_success.svg';
-import toast_error from '../res/svg/toast_error.svg';
-import {bottomTheme} from '../appSet';
-const {width} = Dimensions.get('window');
-class MyModalBox extends PureComponent {
+import React, {Component} from 'react';
+import {
+    StyleSheet,
+    View,
+    Animated,
+    Dimensions,
+    Text,
+} from 'react-native'
+
+export const DURATION = {
+    LENGTH_SHORT: 500,
+    FOREVER: 0,
+};
+
+const {height, width} = Dimensions.get('window');
+
+export default class Toast extends Component {
+
     constructor(props) {
         super(props);
+        this.state = {
+            isShow: false,
+            text: '',
+            opacityValue: new Animated.Value(this.props.opacity),
+        }
     }
 
-    static defaultProps = {
-        title: 200,
-        type: 1,
-    };
-    state = {
-        visible: false,
-        type:1,
-        title:'',
+    show(text, duration, callback) {
+        this.duration = typeof duration === 'number' ? duration : DURATION.LENGTH_SHORT;
+        this.callback = callback;
+        this.setState({
+            isShow: true,
+            text: text,
+        });
 
-    };
+        this.animation = Animated.timing(
+            this.state.opacityValue,
+            {
+                toValue: this.props.opacity,
+                duration: this.props.fadeInDuration,
+            }
+        )
+        this.animation.start(() => {
+            this.isShow = true;
+            if(duration !== DURATION.FOREVER) this.close();
+        });
+    }
 
-    componentDidMount() {
+    close( duration ) {
+        let delay = typeof duration === 'undefined' ? this.duration : duration;
 
+        if(delay === DURATION.FOREVER) delay = this.props.defaultCloseDelay || 250;
 
-    }bottomTheme
+        if (!this.isShow && !this.state.isShow) return;
+        this.timer && clearTimeout(this.timer);
+        this.timer = setTimeout(() => {
+            this.animation = Animated.timing(
+                this.state.opacityValue,
+                {
+                    toValue: 0.0,
+                    duration: this.props.fadeOutDuration,
+                }
+            )
+            this.animation.start(() => {
+                this.setState({
+                    isShow: false,
+                });
+                this.isShow = false;
+                if(typeof this.callback === 'function') {
+                    this.callback();
+                }
+            });
+        }, delay);
+    }
 
     componentWillUnmount() {
+        this.animation && this.animation.stop()
         this.timer && clearTimeout(this.timer);
     }
 
-    // hide = () => {
-    //     this._anim = timing(this.animations.scale, {
-    //         duration: 200,
-    //         toValue: 0,
-    //         easing: Easing.inOut(Easing.ease),
-    //     }).start(() => {
-    //         this.timer = setTimeout(() => {
-    //             this.setState({
-    //                 visible: false,
-    //             });
-    //         }, 100);
-    //
-    //     });
-    //
-    // };
-    // show = () => {
-    //     this.setState({
-    //         visible: true,
-    //     }, () => {
-    //         this._anim = timing(this.animations.scale, {
-    //             duration: 200,
-    //             toValue: 1,
-    //             easing: Easing.inOut(Easing.cubic),
-    //         }).start();
-    //
-    //     });
-    // };
-    // animations = {
-    //     scale: new Animated.Value(0),
-    // };
-    show=()=>{
-        this.setState({
-            visible:true
-        })
-    }
-    hide =()=>{
-        this.setState({
-            visible:false
-        })
-    }
     render() {
-        const {visible} = this.state;
-        const {title, type} = this.props;
-        return (
+        let pos;
+        switch (this.props.position) {
+            case 'top':
+                pos = this.props.positionValue;
+                break;
+            case 'center':
+                pos = height / 2;
+                break;
+            case 'bottom':
+                pos = height - this.props.positionValue;
+                break;
+        }
 
-            <Modal
-                transparent
-                visible={visible}
-                animationType={'fade'}
-                supportedOrientations={['portrait']}
-                onRequestClose={this.hide}
-
+        const view = this.state.isShow ?
+            <View
+                style={[styles.container, { top: pos }]}
+                pointerEvents="none"
             >
-                <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center',
-                    alignItems: 'center', zIndex: 10,
-                }}
-                                  activeOpacity={1}
-                                  onPress={this.hide}
+                <Animated.View
+                    style={[styles.content, { opacity: this.state.opacityValue }, this.props.style]}
                 >
-                    <View style={{
-                        alignItems: 'center',
-                        width: width / 3 * 2.5,
-                        justifyContent: 'center',
-                        backgroundColor: 'white',
-                        paddingTop: 20,
-                        borderRadius: 5,
-                    }}>
-                        <View style={{height: 30}}>
-                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>{title}</Text>
-                        </View>
-                        <SvgUri  style={{marginTop: 13, marginBottom: 25}} width={95} height={95} fill={type == 1 ? bottomTheme : 'red'}
-                                svgXmlData={type == 1 ? toast_success : toast_error}/>
-
-                        <View style={{width: width / 3 * 2.5, height: 0.5, backgroundColor: 'rgba(0,0,0,0.5)'}}/>
-
-                        <TouchableOpacity
-                            onPress={this.hide}
-                            style={{paddingVertical: 15, backgroundColor: 'rgba(255,255,255,0.7)'}}>
-                            <Text
-                                style={{
-                                    color: '#4cb1ff',
-                                    fontSize: 19,
-                                    fontWeight: 'bold',
-                                }}>知道了!</Text></TouchableOpacity>
-                    </View>
-                </TouchableOpacity>
-            </Modal>
-        );
+                    {React.isValidElement(this.state.text) ? this.state.text : <Text style={this.props.textStyle}>{this.state.text}</Text>}
+                </Animated.View>
+            </View> : null;
+        return view;
     }
-
-    _cancel = () => {
-        this.hide();
-        this.props.cancel && this.props.cancel();
-    };
-
-    _sure = () => {
-        console.log('确认被单机');
-        // this.hide();
-        this.props.sureClick();
-    };
 }
 
+const styles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        elevation: 999,
+        alignItems: 'center',
+        zIndex: 10000,
+    },
+    content: {
+        backgroundColor: 'black',
+        borderRadius: 5,
+        padding: 10,
+    },
+    text: {
+        color: 'white'
+    }
+});
 
-export default MyModalBox;
+// Toast.propTypes = {
+//     style: ViewPropTypes.style,
+//     position: PropTypes.oneOf([
+//         'top',
+//         'center',
+//         'bottom',
+//     ]),
+//     textStyle: Text.propTypes.style,
+//     positionValue:PropTypes.number,
+//     fadeInDuration:PropTypes.number,
+//     fadeOutDuration:PropTypes.number,
+//     opacity:PropTypes.number
+// }
+
+Toast.defaultProps = {
+    position: 'bottom',
+    textStyle: styles.text,
+    positionValue: 120,
+    fadeInDuration: 500,
+    fadeOutDuration: 500,
+    opacity: 1
+}

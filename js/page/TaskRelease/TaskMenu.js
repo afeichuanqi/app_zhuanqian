@@ -13,7 +13,7 @@ import SvgUri from 'react-native-svg-uri';
 
 
 const {timing} = Animated;
-const {width, height} = Dimensions.get('window');
+const { height} = Dimensions.get('window');
 
 class TaskMenu extends PureComponent {
     constructor(props) {
