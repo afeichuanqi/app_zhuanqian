@@ -179,11 +179,6 @@ class TaskRelease extends PureComponent {
 
     }
 
-    state = {
-        interVal: 100,
-
-    };
-
     componentDidMount() {
         selectTaskReleaseData().then((result) => {
             this.setState({
@@ -269,21 +264,22 @@ class TaskRelease extends PureComponent {
     _addTaskReleaseData = () => {
         const data = this._getFormData();
         const error = judgeTaskData(data);
-        console.log(error,"error")
+        console.log(error, 'error');
         if (error != '') {
 
             this.toast.show(error);
-        }else{
+        } else {
             const {userinfo} = this.props;
             const {token} = userinfo;
             addTaskReleaseData(data, token).then(result => {
                 const {task_id} = result;
                 NavigationUtils.goPage({
                     task_id: task_id,
+                    test: false,
                 }, 'TaskDetails');
-            }).catch(err=>{
+            }).catch(err => {
                 this.toast.show(err);
-            })
+            });
         }
 
 
@@ -565,7 +561,7 @@ class BottomInfoForm extends Component {
                     editable: false,
                 }}/>
             </View>
-            {this.props.taskInfo.stepData.length > 0 && !showHistory ? <View
+            {this.props.taskInfo.stepData && this.props.taskInfo.stepData.length > 0 && !showHistory ? <View
 
                     style={{height: 80, width, justifyContent: 'center', alignItems: 'center'}}
                 >

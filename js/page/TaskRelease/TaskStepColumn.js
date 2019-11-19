@@ -100,6 +100,7 @@ class TaskStepColumn extends PureComponent {
     static defaultProps = {
         showUtilColumn: true,
         showEditModel: false,
+        isEdit: true,
     };
     state = {
         stepDataArr: this.props.stepArr || [],
@@ -176,7 +177,7 @@ class TaskStepColumn extends PureComponent {
             const data = item.typeData;
 
             if (data.uri1) {
-                if (status == 1) {
+                if (status === 1) {
                     data.uri1 = urlImage;
                 }
                 item.typeData = data;
@@ -191,12 +192,12 @@ class TaskStepColumn extends PureComponent {
     setImageStatusOrUrl = (timestamp, status, urlImage) => {
         const tmpArr = [...this.state.stepDataArr];
         const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
-        if (index != -1) {
+        if (index !== -1) {
             const item = tmpArr[index];
             const data = item.typeData;
 
             if (data.uri) {
-                if (status == 1) {
+                if (status === 1) {
                     data.uri = urlImage;
                 }
                 item.typeData = data;
@@ -225,14 +226,12 @@ class TaskStepColumn extends PureComponent {
     };
 
     _imageClick = (url) => {
-        // this.props.imageClick({url});
         this.imageViewerModal.show({url});
 
 
     };
 
     getStepColumn = (stepNo, type, typeData, utilClick = {}, timestamp, uploadStatus, uploadStatus1) => {
-        // console.log(stepNo, type, typeData, utilClick = {}, timestamp, uploadStatus, 'tmpArr');
         switch (type) {
             case 1://输入网址
                 return <StepBox key={timestamp} timestamp={timestamp} showUtilColumn={this.props.showUtilColumn}
@@ -364,6 +363,7 @@ class TaskStepColumn extends PureComponent {
 
                         }}>
                             <TextInput
+                                editable={false}
                                 value={typeData.inputValue}
                                 style={{
                                     padding: 0,
@@ -560,8 +560,7 @@ class TaskStepColumn extends PureComponent {
                                     activeOpacity={0.6}
                                     onPress={() => {
                                         // this.
-                                        // this.refs[`pickerImg${timestamp}`].show(timestamp);
-                                        this._imageClick(typeData.uri);
+                                        this._imageClick(typeData.uri1);
                                     }}
                                     style={{
                                         borderRadius: 5,
@@ -584,7 +583,7 @@ class TaskStepColumn extends PureComponent {
                                             borderRadius: 3,
                                         }}
                                         resizeMode={'contain'}/>
-                                    <TouchableOpacity
+                                    {this.props.isEdit ? <TouchableOpacity
                                         onPress={() => {
                                             this._clearPic(timestamp);
                                         }}
@@ -600,7 +599,8 @@ class TaskStepColumn extends PureComponent {
                                             alignItems: 'center',
                                         }}>
                                         <Text style={{color: 'white'}}>X</Text>
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> : null}
+
                                     {uploadStatus1 !== 1 && <View style={{
                                         position: 'absolute', top: 0, left: 0, width: (width - 80) / 2,
                                         height: (width - 80) / 1.5, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.5)',
@@ -665,16 +665,32 @@ class TaskStepColumn extends PureComponent {
                         flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                        <TextInput
-                            // onBlur={this._onblur}
-                            placeholder={'请按照要求输入文字内容'}
-                            onChangeText={(text) => {
-                                const tmpArr = this.state.stepDataArr;
-                                const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
-                                tmpArr[index].typeData.collectInfoContent = text;
-                            }}
-                            // value={}
-                            style={{
+                        {this.props.isEdit ? <TextInput
+                                // onBlur={this._onblur}
+
+                                placeholder={'请按照要求输入文字内容'}
+                                onChangeText={(text) => {
+                                    const tmpArr = this.state.stepDataArr;
+                                    const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
+                                    tmpArr[index].typeData.collectInfoContent = text;
+                                }}
+                                // value={}
+                                style={{
+                                    padding: 0,
+                                    width: width - 42,
+                                    height: 40,
+                                    border: 0,
+                                    borderRadius: 3,
+                                    borderWidth: 1,
+                                    borderColor: bottomTheme,
+                                    paddingHorizontal: 5,
+                                    marginTop: 10,
+                                }}/>
+                            :
+
+                            <TextInput
+                                editable={false}
+                                style={{
                                 padding: 0,
                                 width: width - 42,
                                 height: 40,
@@ -684,7 +700,13 @@ class TaskStepColumn extends PureComponent {
                                 borderColor: bottomTheme,
                                 paddingHorizontal: 5,
                                 marginTop: 10,
-                            }}/>
+                                textAlign:'auto'
+
+                            }}>
+                                {typeData.collectInfoContent}
+                            </TextInput>
+                        }
+
                     </View>
                 </StepBox>;
 
@@ -700,7 +722,7 @@ class TaskStepColumn extends PureComponent {
 
             if (data.uri1) {
 
-                item.typeData = data;
+                data.uri1 = '';
                 item.uploadStatus1 = -2;
                 tmpArr[index] = item;
                 this.setState({
@@ -782,8 +804,8 @@ class TaskStepColumn extends PureComponent {
             moveUp: this._moveUpColumn,
             moveDown: this._moveDownColumn,
         };
-        // console.log(this.state.stepDataArr, 'this.state.stepDataArr');
-        console.log('render');
+        console.log(this.state.stepDataArr, 'stepDatastepData1');
+
         return (
             <View style={{marginBottom: 15}}>
                 {this.state.stepDataArr.map((item, index, arr) => {

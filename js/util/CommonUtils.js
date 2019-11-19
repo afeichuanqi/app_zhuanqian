@@ -141,14 +141,14 @@ export const judgeTaskData = (data) => {
     if (!reward_num || reward_num === 0) {
         return '悬赏数量记得填写哦 ~ ~';
     }
-    console.log(task_steps, 'task_steps');
     try {
         const obj = JSON.parse(task_steps);
-
         if (obj.length === 0) {
             return '任务步骤太少哦 至少要一项任务步骤 ';
         }
         // console.log(obj.length,"obj.length");
+        let yanzhengtuNum = 0;
+
         for (let index = 0; index < obj.length; index++) {
             const item = obj[index];
             const {typeData, type} = item;
@@ -163,11 +163,58 @@ export const judgeTaskData = (data) => {
             if (type === 6 && typeData.collectInfo.length === 0) {
                 return `您步骤${index + 1}说明是不是太短了呀`;
             }
+            if (type === 5) {
+                yanzhengtuNum += 1;
+            }
+        }
+        if (yanzhengtuNum === 0) {
+            return `必须要有一张验证图哦`;
+        }
+
+
+    } catch (e) {
+        console.log(e.toString());
+        return '检查任务步骤';
+    }
+    return '';
+};
+export const judgeSendTaskData = (task_step_data) => {
+
+    try {
+        const obj = JSON.parse(task_step_data);
+        for (let index = 0; index < obj.length; index++) {
+            const item = obj[index];
+            const typeData = item.typeData;
+            if (item.type === 5) {
+
+                // console.log(item,item.uploadStatus1);
+                const uploadStatus1 = item.uploadStatus1;
+                // console.log(isNaN(uploadStatus1),uploadStatus1 !== 1,!typeData.uri1,typeData.uri1.indexOf('file://')!==-1);
+                if (isNaN(uploadStatus1)) {
+                    return `您步骤${index + 1}验证图未上传`;
+                }
+                if (uploadStatus1 !== 1) {
+                    return `您步骤${index + 1}验证图未上传成功`;
+                }
+                console.log("typeData.uri1",typeData.uri1);
+                if (!typeData.uri1) {
+                    return `您步骤${index + 1}验证图未上传`;
+                }
+                if (typeData.uri1.indexOf('file://')!==-1) {
+                    return `您步骤${index + 1}验证图未上传成功`;
+                }
+
+            }
+            if (item.type === 6) {
+                if (!typeData.collectInfoContent || typeData.collectInfoContent.length === 0) {
+                    return `您步骤${index + 1}收集信息未填写`;
+                }
+            }
         }
 
     } catch (e) {
         console.log(e.toString());
-        return '错误代码 0XJSAS0X,检查任务步骤';
+        return '检查任务步骤是否正确填写完毕';
     }
     return '';
 };

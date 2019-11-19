@@ -55,8 +55,46 @@ export function startSignUpTask(data, token) {
             reject(error);
         }
     });
-
-
+}
+/**
+ * 用户提交任务
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function sendTaskStepForm(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/sendTaskStepForm', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 用户任务状态
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectUserStatusForTaskId(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectUserStatusForTaskId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 export function uploadAvatar(data, token) {
     return new Promise(async function (resolve, reject) {
@@ -123,6 +161,27 @@ export function selectTaskReleaseData(data, token) {
         try {
             http.setGetHeader('token', token);
             const ret = await http.get('user/selectTaskReleaseData');
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询任务是否已经报名
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectUserIsSignUp(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectUserIsSignUp',data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {

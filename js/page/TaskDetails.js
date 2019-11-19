@@ -17,11 +17,17 @@ import menu_right from '../res/svg/menu_right.svg';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
-import {addTaskReleaseData, selectTaskInfo, startSignUpTask} from '../util/AppService';
+import {
+    addTaskReleaseData,
+    selectTaskInfo,
+    selectUserIsSignUp, selectUserStatusForTaskId,
+    sendTaskStepForm,
+    startSignUpTask,
+} from '../util/AppService';
 import taskHallNext from '../res/svg/taskHallNext.svg';
 import goback from '../res/svg/goback.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {judgeTaskData} from '../util/CommonUtils';
+import {judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
 
 const {width} = Dimensions.get('window');
@@ -35,28 +41,54 @@ class TaskDetails extends PureComponent {
 
     state = {
         totalData: {},
-        signUp: false,
+        StatusForTask: {},
+    };
+    _updateTaskStatus = async () => {
+        const {task_id} = this.params;
+        const StatusForTask = await selectUserStatusForTaskId({task_id: task_id}, this.props.userinfo.token);
+        const tmpData = {...this.state.totalData};
+        if (StatusForTask.status === 5) {
+            const newStepData = JSON.parse(StatusForTask.stepData.task_step_data);
+            tmpData.stepData = newStepData;
+            console.log(newStepData, 'newStepData');
+            this.setState({
+                StatusForTask,
+                totalData: tmpData,
+            });
+        } else {
+            this.setState({
+                StatusForTask,
+            });
+        }
 
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const {test, task_id} = this.params;
         if (test) {
             const {fromUserinfo, taskData, stepData} = this.params;
             const totalData = {fromUserinfo, taskData, stepData};
-            // console.log(totalData, 'totalData');
             this.setState({
                 totalData,
             });
         } else {
-            selectTaskInfo({task_id: task_id}, this.props.userinfo.token).then(result => {
-
-                const {fromUserinfo, taskData, stepData} = result;
+            const TaskInfo = await selectTaskInfo({task_id: task_id}, this.props.userinfo.token);
+            const StatusForTask = await selectUserStatusForTaskId({task_id: task_id}, this.props.userinfo.token);
+            let {fromUserinfo, taskData, stepData} = TaskInfo;
+            if (StatusForTask.status === 5) {
+                stepData = StatusForTask.stepData.task_step_data;
                 const totalData = {fromUserinfo, taskData, stepData: JSON.parse(stepData)};
                 this.setState({
                     totalData,
+                    StatusForTask,
                 });
-            });
+            } else {
+                const totalData = {fromUserinfo, taskData, stepData: JSON.parse(stepData)};
+                this.setState({
+                    totalData,
+                    StatusForTask,
+                });
+            }
         }
 
     }
@@ -105,10 +137,10 @@ class TaskDetails extends PureComponent {
             extrapolate: 'clamp',
         });
         const {fromUserinfo, taskData, stepData} = this.state.totalData;
-        const {signUp} = this.state;
+        const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
-
+        console.log(stepData, 'stepDatastepData');
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -297,88 +329,26 @@ class TaskDetails extends PureComponent {
                             <Text style={{fontSize: 14, color: bottomTheme, marginTop: 10}}>做单步骤（请仔细审阅任务步骤）</Text>
 
                         </View>
+                        {/*做单步骤图*/}
                         <TaskStepColumn
                             ref={ref => this.taskStep = ref}
-                            showEditModel={signUp}
+                            showEditModel={(StatusForTask.status === 4 || StatusForTask.status === 5) ? true : false}
                             userinfo={userinfo}
+                            isEdit={(StatusForTask.status === 4) ? true : false}
                             stepArr={stepData || []}
                             showUtilColumn={false}/>
                     </Animated.ScrollView>
-                    {test ? <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                NavigationUtils.goBack(this.props.navigation);
-                            }}
-                            activeOpacity={0.6}
-                            style={{
-                                height: 60,
-                                width: width / 3,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                            }}>
-
-                            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>修改</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={() => {
-                                const {FormData} = this.params;
-                                const {token} = userinfo;
-                                const error = judgeTaskData(FormData);
-                                if (error != '') {
-                                    this.toast.show(error);
-                                    return;
-                                }
-                                addTaskReleaseData(FormData, token).then(result => {
-                                    this.toast.show('发布成功 ~ ~ ');
-                                }).catch(err => {
-                                    this.toast.show(err);
-                                });
-                            }}
-                            style={{
-                                height: 60,
-                                width: (width / 3) * 2,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                backgroundColor: bottomTheme,
-                            }}>
-                            <Text
-                                style={{fontSize: 15, color: 'white', marginLeft: 5}}>申请发布</Text>
-                        </TouchableOpacity>
-
-                    </View> : <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
-                        <TouchableOpacity
-                            // onPress={this._goReleaseTest}
-                            activeOpacity={0.6}
-                            style={{
-                                height: 60,
-                                width: width / 3,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                            }}>
-                            <SvgUri width={17} fill={'rgba(0,0,0,0.7)'} style={{marginLeft: 5}} height={17}
-                                    svgXmlData={taskHallNext}/>
-                            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={this._startSignUp}
-                            style={{
-                                height: 60,
-                                width: (width / 3) * 2,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                backgroundColor: bottomTheme,
-                            }}>
-                            <Text
-                                style={{fontSize: 15, color: 'white', marginLeft: 5}}>{signUp ? '提交验证' : '开始报名'}</Text>
-                        </TouchableOpacity>
-
-                    </View>}
+                    {/*底部按钮*/}
+                    <BottomBtns
+                        test={test}
+                        taskStatus={taskStatus}
+                        StatusForTask={StatusForTask}
+                        startSignUp={this._startSignUp}
+                        updateStep={() => {
+                            NavigationUtils.goBack(this.props.navigation);
+                        }}
+                        sendStepData={this._sendStepData}
+                    />
                     <AnimatedTouchableOpacity
                         activeOpacity={0.6}
                         onPress={() => {
@@ -392,27 +362,139 @@ class TaskDetails extends PureComponent {
         );
     }
 
-    _startSignUp = () => {
-        const {signUp} = this.state;
+    _startSignUp = async () => {
+        const {StatusForTask} = this.state;
         const {userinfo} = this.props;
         console.log(userinfo.token);
         const {task_id} = this.params;
-        if (!signUp) {
-            startSignUpTask({task_id: task_id},userinfo.token).then(result => {
-
+        if (StatusForTask.status === 0) {//进行报名
+            //进行报名
+            startSignUpTask({task_id: task_id}, userinfo.token).then(result => {
                 this.setState({
                     signUp: true,
                 }, () => {
                     this.toast.show('报名成功');
+
+
                 });
+                this._updateTaskStatus().then();
             }).catch((msg) => {
                 this.toast.show(msg);
             });
 
-        } else {
+        }
+        if (StatusForTask.status === 4) {//进行提交
+            //提交任务
+            const task_step_data = this.taskStep.getStepData();
+            const taskText = JSON.stringify(task_step_data);
+            const error = judgeSendTaskData(taskText);
+            if (error != '') {//任务步骤正确是否正确填写完毕
+                this.toast.show(error);
+            } else {
+                sendTaskStepForm({task_id: task_id, task_step_data: taskText}, userinfo.token).then(result => {
+                    this.toast.show('提交成功,等待审核');
+                    this._updateTaskStatus().then();
+                }).catch((msg) => {
+                    this.toast.show(msg);
+                });
+            }
+
         }
 
     };
+    _sendStepData = () => {
+        const {FormData} = this.params;
+        const {token} = userinfo;
+        const error = judgeTaskData(FormData);
+        if (error != '') {
+            this.toast.show(error);
+            return;
+        }
+        addTaskReleaseData(FormData, token).then(result => {
+            this.toast.show('发布成功 ~ ~ ');
+        }).catch(err => {
+            this.toast.show(err);
+        });
+    };
+}
+
+class BottomBtns extends PureComponent {
+    static defaultProps = {
+        test: false,
+        taskStatus: 100,
+        signUp: false,
+    };
+
+    render() {
+        const {test, StatusForTask} = this.props;
+        console.log(StatusForTask, 'StatusForTask');
+        return <View>
+            {test ? <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
+                <TouchableOpacity
+                    onPress={this.props.updateStep}
+                    activeOpacity={0.6}
+                    style={{
+                        height: 60,
+                        width: width / 3,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                    }}>
+
+                    <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>修改</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={this.props.sendStepData}
+                    style={{
+                        height: 60,
+                        width: (width / 3) * 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        backgroundColor: bottomTheme,
+                    }}>
+                    <Text
+                        style={{fontSize: 15, color: 'white', marginLeft: 5}}>申请发布</Text>
+                </TouchableOpacity>
+
+            </View> : <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
+                <TouchableOpacity
+                    activeOpacity={0.6}
+                    style={{
+                        height: 60,
+                        width: width / 3,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                    }}>
+                    <SvgUri width={17} fill={'rgba(0,0,0,0.7)'} style={{marginLeft: 5}} height={17}
+                            svgXmlData={taskHallNext}/>
+                    <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={this.props.startSignUp}
+                    style={{
+                        height: 60,
+                        width: (width / 3) * 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        backgroundColor: bottomTheme,
+                    }}>
+                    <Text
+                        style={{
+                            fontSize: 15,
+                            color: 'white',
+                            marginLeft: 5,
+                        }}>{StatusForTask.status === 0 ? '开始报名' : StatusForTask.status === 4 ? '提交验证' : StatusForTask.status === 5 ? '待审核' : StatusForTask.msg || ''}</Text>
+                </TouchableOpacity>
+
+
+            </View>}
+        </View>;
+    }
 }
 
 const mapStateToProps = state => ({
