@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, View, Text, Dimensions, Platform} from 'react-native';
+import {TouchableOpacity, StyleSheet, View, Text, Dimensions, Platform, Image} from 'react-native';
 
 import SvgUri from 'react-native-svg-uri';
 import goback from '../res/svg/goback.svg';
@@ -8,7 +8,7 @@ import menu_right from '../res/svg/menu_right.svg';
 
 const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
-    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14,rightClick) => {
+    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14, rightClick) => {
         return (
             <View style={{
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
@@ -86,11 +86,53 @@ export default class ViewUtil {
             <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
                 <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.5, color: 'black'}}>{rightText}</Text>
-                {showSvg&&<SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>}
+                {showSvg && <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>}
 
             </View>
         </TouchableOpacity>;
     };
+    static getReviewIco = (reviewNum,click) => {
+        return <TouchableOpacity
+            onPress={click}
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            <Image
+                style={{height: 13, width: 13}}
+                source={require('../res/img/task_release_review.png')}
+            />
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
+
+        </TouchableOpacity>;
+    };
+    static getzhidingIco=()=>{
+        return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            <Image
+                style={{height: 13, width: 13}}
+                source={require('../res/img/task_top.png')}
+            />
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
+
+        </TouchableOpacity>;
+    }
+    static getrecommendedIco=()=>{
+        return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            <Image
+                style={{height: 13, width: 13}}
+                source={require('../res/img/task_recommended.png')}
+            />
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+
+        </TouchableOpacity>;
+    }
+    static getUpdateIco=()=>{
+        return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            <Image
+                style={{height: 13, width: 13}}
+                source={require('../res/img/task_update.png')}
+            />
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+
+        </TouchableOpacity>;
+    }
 }
 const styles = StyleSheet.create({
     setting_item_container: {

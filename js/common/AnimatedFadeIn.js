@@ -1,5 +1,6 @@
 import React from 'react';
 import {Animated, InteractionManager} from 'react-native';
+
 import propTypes from 'prop-types';
 
 export default class AnimatedFadeIn extends React.PureComponent {
@@ -19,11 +20,11 @@ export default class AnimatedFadeIn extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            fadeInOpacity: new Animated.Value(0),  // 透明度初始值设为0
-            isShow: true,
+
         };
+        this.fadeInOpacity=new Animated.Value(0),  // 透明度初始值设为0
         this.fadeInAnimated = Animated.timing(                       // 随时间变化而执行动画
-            this.state.fadeInOpacity,            // 动画中的变量值
+            this.fadeInOpacity,            // 动画中的变量值
             {
                 useNativeDriver: true,
                 toValue: 1,                        // 透明度最终变为1，即完全不透明
@@ -43,8 +44,8 @@ export default class AnimatedFadeIn extends React.PureComponent {
     render() {
 
         const {startValue, endValue} = this.props;
-        const {fadeInOpacity} = this.state;
-        const rotateZ = fadeInOpacity.interpolate({
+        // const {fadeInOpacity} = this.state;
+        const rotateZ = this.fadeInOpacity.interpolate({
             inputRange: [0, 1],
             outputRange: [startValue, endValue]
         });

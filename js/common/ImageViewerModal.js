@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Modal, View, TouchableOpacity, FlatList, Text, Image, Dimensions} from 'react-native';
-import ImageTransformer from './TransformableImage';
+import GallerySwiper from 'react-native-gallery-swiper';
 
 const {width, height} = Dimensions.get('window');
 export default class App extends React.Component {
@@ -12,7 +12,6 @@ export default class App extends React.Component {
         },
     };
     show = (images) => {
-        console.log(images);
         this.setState({
             images,
             visible: true,
@@ -26,18 +25,25 @@ export default class App extends React.Component {
 
     render() {
 
-        const {visible,images} = this.state;
-        console.log(images,"images");
+        const {visible, images} = this.state;
         return <Modal
             onRequestClose={this.hide}
-            animationType={'fade'}
+            // animationType={'fade'}
             visible={visible} transparent={true}>
-            <View style={{flex: 1, backgroundColor: 'black'}}>
-                <ImageTransformer
-                    // onTransformGestureReleased={() => true}
-                    imgClick={this.hide}
-                    style={{width: width, height: height}}
-                    source={{uri: images.url}}
+            <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.1)'}}>
+                <GallerySwiper
+                    images={[
+                        {uri: images.url},
+                    ]}
+                    initialNumToRender={1}
+                    sensitiveScroll={true}
+                    onSingleTapConfirmed={this.hide}
+                    onLongPress={this.hide}
+                    onTransformGestureReleased={({scale, translateX, translateY}) => {
+                        if (translateY > height * 0.3) {
+                            this.hide();
+                        }
+                    }}
                 />
             </View>
         </Modal>;

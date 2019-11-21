@@ -56,6 +56,7 @@ export function startSignUpTask(data, token) {
         }
     });
 }
+
 /**
  * 用户提交任务
  * @returns {Promise<any> | Promise<*>}
@@ -76,6 +77,46 @@ export function sendTaskStepForm(data, token) {
         }
     });
 }
+
+/**
+ * 本地上传到七牛云
+ */
+export function uploadQiniuImage(Usertoken, modalName, mime, uri) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setGetHeader('token', Usertoken);
+            const ret = await http.get('user/getQiniuToken');
+            if (ret && ret.status == 0) {
+                const resData = ret.data;
+                const {token, uploadUrl, subUrl} = resData;
+                if (token && uploadUrl && subUrl) {
+                    const key = `${modalName}_${new Date().getTime()}.${mime}`;
+                    let body = new FormData();
+                    body.append('token', token);
+                    body.append('key', key);
+                    body.append('file', {
+                        type: `image/${mime}`,
+                        uri: uri,
+                        name: key,
+                    });
+                    const ret = await http.post_(uploadUrl, body);
+                    console.log(ret,"ret")
+                    if (ret.key) {
+                        resolve(`${subUrl}${ret.key}`);
+                    }
+                }else{
+                    reject('获取错误');
+                }
+
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 /**
  * 用户任务状态
  * @returns {Promise<any> | Promise<*>}
@@ -96,6 +137,7 @@ export function selectUserStatusForTaskId(data, token) {
         }
     });
 }
+
 export function uploadAvatar(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
@@ -112,21 +154,22 @@ export function uploadAvatar(data, token) {
         }
     });
 }
-export function uploadMsgImage(data, token) {
-    return new Promise(async function (resolve, reject) {
-        try {
-            http.setPostHeader('token', token);
-            const ret = await http.post('user/uploadMsgImage', data);
-            if (ret && ret.status == 0) {
-                resolve(ret && ret.data);
-            } else {
-                reject(ret && ret.msg);
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
+
+// export function uploadMsgImage(data, token) {
+//     return new Promise(async function (resolve, reject) {
+//         try {
+//             http.setPostHeader('token', token);
+//             const ret = await http.post('user/uploadMsgImage', data);
+//             if (ret && ret.status == 0) {
+//                 resolve(ret && ret.data);
+//             } else {
+//                 reject(ret && ret.msg);
+//             }
+//         } catch (error) {
+//             reject(error);
+//         }
+//     });
+// }
 
 /**
  * 查询是否黑名单
@@ -171,6 +214,7 @@ export function selectTaskReleaseData(data, token) {
         }
     });
 }
+
 /**
  * 查询任务是否已经报名
  * @param data
@@ -181,7 +225,7 @@ export function selectUserIsSignUp(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
             http.setPostHeader('token', token);
-            const ret = await http.post('user/selectUserIsSignUp',data);
+            const ret = await http.post('user/selectUserIsSignUp', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -192,6 +236,7 @@ export function selectUserIsSignUp(data, token) {
         }
     });
 }
+
 /**
  * 举报用户
  * @param data
@@ -213,6 +258,64 @@ export function insertReportList(data, token) {
         }
     });
 }
+
+/**
+ * 查询用户发单
+ */
+export function selectTaskReleaseList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectTaskReleaseList', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
+ * // 查询该任务做的所有信息
+ */
+export function selectSendFormForTaskId(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectSendFormForTaskId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
+ * // 审核通过该用户的接单
+ */
+export function passTaskForSendFormTaskId(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/passTaskForSendFormTaskId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 /**
  * 加入黑名单
  * @param data
@@ -234,6 +337,7 @@ export function setToBlackList(data, token) {
         }
     });
 }
+
 export function setUserData(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
@@ -273,6 +377,7 @@ export function addTaskReleaseData(data, token) {
         }
     });
 }
+
 /**
  * 查询任务
  * @param data
@@ -295,6 +400,7 @@ export function selectTaskInfo(data, token) {
         }
     });
 }
+
 export function getUserInfo(token) {
     return new Promise(async function (resolve, reject) {
         try {

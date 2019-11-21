@@ -94,8 +94,9 @@ class ChatSetting extends PureComponent {
                                 width: 50, height: 50,
                                 borderRadius: 25,
                             }}/>
-                        <View style={{marginLeft: 15, alignSelf: 'flex-start', marginTop: 15}}>
+                        <View style={{marginLeft: 15, height:50, justifyContent:'space-around'}}>
                             <Text style={{fontSize: 15, color: 'black'}}>{fromUserinfo.username}</Text>
+                            <Text style={{color:'rgba(0,0,0,0.7)'}}>UID:123654</Text>
                         </View>
                         <SvgUri style={{position: 'absolute', right: 15, top: 30}} width={15} height={15}
                                 svgXmlData={menu_right}/>

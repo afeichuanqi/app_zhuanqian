@@ -12,7 +12,7 @@ import {
     UIManager,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {theme, bottomTheme} from '../appSet';
+import {bottomTheme} from '../appSet';
 import rule from '../res/text/rule';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
@@ -20,7 +20,7 @@ import menu_right from '../res/svg/menu_right.svg';
 import step_add from '../res/svg/step_add.svg';
 import task_yulan from '../res/svg/task_yulan.svg';
 import SvgUri from 'react-native-svg-uri';
-import PopButtomMenu from '../common/PopButtomMenu';
+// import PopButtomMenu from '../common/PopButtomMenu';
 import TaskMenu from './TaskRelease/TaskMenu';
 import TaskPop from './TaskRelease/TaskPopMenu';
 import wangzhi from '../res/svg/wangzhi.svg';
@@ -34,13 +34,14 @@ import shouji from '../res/svg/shouji.svg';
 import {MORE_MENU} from './TaskRelease/TASK_MENU';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {addTaskReleaseData, selectTaskReleaseData, uploadMsgImage} from '../util/AppService';
+import {addTaskReleaseData, selectTaskReleaseData, uploadQiniuImage} from '../util/AppService';
 import {connect} from 'react-redux';
 import AppTskDefaultData from './TaskRelease/AppTskDefaultData';
 import actions from '../action';
 import {judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
 
+let PopButtomMenu = null;
 const {width} = Dimensions.get('window');
 
 class TextInputPro extends PureComponent {
@@ -207,11 +208,13 @@ class TaskRelease extends PureComponent {
             projectTitle: data.columnData.projectTitle,
             TaskInfo: data.columnData.TaskInfo,
             rewardPrice: data.columnData.rewardPrice,
-            remainderNum: data.columnData.rewardNum,
+            taskSignUpNum: 0,
             rewardNum: data.columnData.rewardNum,
             orderTimeLimit: data.columnData.orderTimeLimit,
             reviewTime: data.columnData.reviewTime,
             taskType: data.typeData,
+            taskPassNum: 0,
+            taskNoPassNum: 0,
         };
         const stepData = data.stepData;
         NavigationUtils.goPage({
@@ -616,6 +619,7 @@ class InputSelect extends Component {
     state = {
         // info: this.props.info,
         defaultId: this.props.defaultId,
+        showPopBtn: false,
     };
 
     render() {
@@ -633,13 +637,26 @@ class InputSelect extends Component {
             <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => {
-                    this.dateMenu.show();
+                    if (!this.state.showPopBtn) {
+                        PopButtomMenu = require('../common/PopButtomMenu').default;
+                        this.setState({
+                            showPopBtn: true,
+                        }, () => {
+                            this.dateMenu.show();
+                        });
+                    } else {
+                        this.dateMenu.show();
+                    }
+
+
                 }}
             >
                 <Text style={{fontSize: 13}}>{title}</Text>
             </TouchableOpacity>
-            <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
-                           ref={ref => this.dateMenu = ref}/>
+            {this.state.showPopBtn ?
+                <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
+                               ref={ref => this.dateMenu = ref}/> : null}
+
         </View>;
     }
 
@@ -659,6 +676,7 @@ class InputTextPro extends Component {
     };
     state = {
         defaultValue: this.props.defaultValue,
+        showPlaceholder: true,
     };
 
     constructor(props) {
@@ -668,37 +686,31 @@ class InputTextPro extends Component {
 
     render() {
         return <View style={{flex: 1, justifyContent: 'center'}}>
-            <TextInput
+            {this.state.showPlaceholder && <TouchableOpacity
+                ref={ref => this.btn = ref}
+                activeOpacity={1}
+                onPress={this.hidePlaceholder}
+                // style={{position: 'absolute'}}
+            >
+                {this.props.placeComponent}
+            </TouchableOpacity>}
+            {!this.state.showPlaceholder && <TextInput
                 value={this.state.defaultValue}
                 maxLength={5}
                 keyboardType={'number-pad'}
                 onFocus={this.hidePlaceholder}
                 onBlur={this._onBlur}
                 onChangeText={this._onChangeText}
-                ref={ref => this.ipt = ref} style={{flex: 1, backgroundColor: 'white'}}/>
-            <TouchableOpacity
-                ref={ref => this.btn = ref}
-                activeOpacity={1}
-                onPress={this.hidePlaceholder}
-                style={{position: 'absolute'}}>
-                {this.props.placeComponent}
-            </TouchableOpacity>
+                ref={ref => this.ipt = ref} style={{flex: 1, color: 'black', padding: 0}}/>}
+
         </View>;
     }
 
     componentDidMount(): void {
         if (this.props.defaultValue.length > 0) {
             // this._onChangeText(this.props.defaultValue);
-            this.ipt.setNativeProps({
-                style: {
-                    // back
-                    zIndex: 1,
-                },
-            });
-            this.btn.setNativeProps({
-                style: {
-                    zIndex: 0,
-                },
+            this.setState({
+                showPlaceholder: false,
             });
         }
     }
@@ -706,6 +718,7 @@ class InputTextPro extends Component {
     _onChangeText = (text) => {
         this.setState({
             defaultValue: text,
+            showPlaceholder: text.length === 0 ? true : false,
         });
         this.props.onChangeText(text);
     };
@@ -715,31 +728,44 @@ class InputTextPro extends Component {
         }
     };
     showPlaceholder = () => {
-        this.ipt.setNativeProps({
-            style: {
-                zIndex: 0,
-            },
+        this.setState({
+            showPlaceholder: true,
+        }, () => {
+            // this.ipt.focus();
         });
-        this.btn.setNativeProps({
-            style: {
-                zIndex: 1,
-            },
-        });
+        // this.ipt.setNativeProps({
+        //     style: {
+        //         zIndex: 0,
+        //         elevation: 0,
+        //     },
+        // });
+        // this.btn.setNativeProps({
+        //     style: {
+        //         zIndex: 1,
+        //         elevation: 0.1,
+        //     },
+        // });
     };
     hidePlaceholder = () => {
+        this.setState({
+            showPlaceholder: false,
+        }, () => {
+            this.ipt.focus();
+        });
+        // this.ipt.setNativeProps({
+        //     style: {
+        //         // back
+        //         zIndex: 1,
+        //         elevation: 0.1,
+        //     },
+        // });
+        // this.btn.setNativeProps({
+        //     style: {
+        //         zIndex: 0,
+        //         elevation: 0,
+        //     },
+        // });
 
-        this.ipt.setNativeProps({
-            style: {
-                // back
-                zIndex: 1,
-            },
-        });
-        this.btn.setNativeProps({
-            style: {
-                zIndex: 0,
-            },
-        });
-        this.ipt.focus();
 
     };
 }
@@ -925,48 +951,36 @@ class StepInfo extends Component {
 
                 // 弹窗确认按钮被单击
                 sureClick={(data, type, stepNo, rightTitle, timestamp_) => {
-                    // console.log(timestamp);
-                    let timestamp = '';
-
-                    if (!timestamp_) { //为添加
-                        timestamp = new Date().getTime();
-                    } else {
-                        timestamp = timestamp_;
-                    }
                     // 获取一个时间戳
+                    const timestamp = !timestamp_ ? new Date().getTime() : timestamp_;//有则保存 无则创建
                     let imageData = {};
-                    // console.log(data, 'datadatadata');
-                    if (data.uri) {//是否有图片
+                    if (data.uri) { //是否有图片
                         imageData = data.uri;
                         data.uri = `file://${imageData.path}`;//先展示本地数据
+                        this.taskStep.setStepDataArr(type, data, stepNo, timestamp);
+                        // 上传至云空间
+                        setTimeout(() => {
+                            const {userinfo} = this.props;
+                            let mime = imageData.mime;
+                            const mimeIndex = mime.indexOf('/');
+                            mime = mime.substring(mimeIndex + 1, mime.length);
+                            const uri = `file://${imageData.path}`;
+                            uploadQiniuImage(userinfo.token, 'stepFile', mime, uri).then(URL => {
+                                this.taskStep.setImageStatusOrUrl(timestamp, 1, URL);
+                            }).catch(err => {
+                                this.taskStep.setImageStatusOrUrl(timestamp, -1, '');
+                            });
+                        }, 800);
+                    } else {
+                        this.taskStep.setStepDataArr(type, data, stepNo, timestamp);
                     }
 
-
-                    this.taskStep.setStepDataArr(type, data, stepNo, timestamp);
                     if (rightTitle === '添加') {
                         setTimeout(() => {
                             this.props.scollToEnd();
                         }, 200);
                     }
-                    // 上传至云空间
-                    // console.log(data);
-                    setTimeout(() => {
-                        const {userinfo} = this.props;
-                        //数据组合起来
-                        const imgData = {
-                            mime: imageData.mime,
-                            data: imageData.data,
-                        };
-                        uploadMsgImage(imgData, userinfo.token).then((result) => {
-                            console.log('上传成功');
-                            if (result.status == 200) {//上传七牛云成功
-                                const imageUrl = result.imageUrl;
-                                this.taskStep.setImageStatusOrUrl(timestamp, 1, imageUrl);
-                            }
-                        }).catch((msg) => {
-                            this.taskStep.setImageStatusOrUrl(timestamp, -1, '');
-                        });
-                    }, 800);
+
 
                 }}
                 ref={ref => this.taskPop = ref}/>

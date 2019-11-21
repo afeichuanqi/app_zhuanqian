@@ -126,7 +126,7 @@ class PopButtomMenu extends PureComponent {
                                 width, alignItems: 'center', height: 50, justifyContent: 'center',
 
                             }}>
-                            <Text>取消1</Text>
+                            <Text>取消</Text>
                         </TouchableOpacity>
                     </Animated.View>
                 </TouchableOpacity>

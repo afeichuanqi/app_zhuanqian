@@ -247,7 +247,7 @@ class TaskDetails extends PureComponent {
                                         <Text style={{
                                             color: 'black',
                                             fontSize: 15,
-                                        }}>{taskData && taskData.remainderNum}</Text>
+                                        }}>{taskData && taskData.rewardNum - taskData.taskSignUpNum}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>剩余数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
@@ -255,7 +255,7 @@ class TaskDetails extends PureComponent {
                                         <Text style={{
                                             color: 'black',
                                             fontSize: 15,
-                                        }}>{taskData && taskData.rewardNum - taskData.remainderNum}</Text>
+                                        }}>{taskData && taskData.taskPassNum}</Text>
                                         <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>完成数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>

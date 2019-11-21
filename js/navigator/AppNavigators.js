@@ -22,6 +22,8 @@ import SettingPage from '../page/SettingPage';
 import ChatSettings from '../page/ChatSettings';
 import AccountSetting from '../page/SettingPage/AccountSetting';
 import UserProtocol from '../page/SettingPage/UserProtocol';
+import MyTaskReview from '../page/MyTaskReview';
+import TaskTurnDownPage from '../page/TaskTurnDownPage';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -133,6 +135,18 @@ const MainNavigator = createStackNavigator({
         },
         ChatSettings: {
             screen: ChatSettings,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        MyTaskReview: {
+            screen: MyTaskReview,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        TaskTurnDownPage: {
+            screen: TaskTurnDownPage,
             navigationOptions: {
                 header: null,
             },

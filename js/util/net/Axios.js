@@ -5,6 +5,7 @@ import qs from 'qs';
 
 let defaultConfig = {
         baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
+        // baseUrl: 'http://3uwvak.natappfree.cc',//测试
         // baseUrl: 'http://47.99.133.97:3000',//测试
         timeout:
             15000,
@@ -30,6 +31,7 @@ class Axios {
             return config;
         }, (error) => {
             // console.log(error);
+
             return Promise.reject(error);
         });
 
@@ -98,7 +100,25 @@ class Axios {
             return null;
         }
     }
+    async post_(url, params) {
 
+        try {
+            let response = await instance.post(url, params);
+            if (response) {
+                if (response.code !== 0) {
+
+                }
+                if (response.code === 10011) {
+
+                } else if (response.code === 10012 || response.code === 10013 || response.code === 10014 || response.code === 20004) {
+
+                }
+            }
+            return response;
+        } catch (e) {
+            return null;
+        }
+    }
 
     setPostHeader(key, value) {
         instance.defaults.headers.post[key] = value;

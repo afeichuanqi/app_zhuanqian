@@ -8,16 +8,27 @@
 
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {theme, bottomTheme} from '../appSet';
+import {bottomTheme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import TabBar from '../common/TabBar';
 import {TabView} from 'react-native-tab-view';
-import {ActivityIndicator, Dimensions,TouchableOpacity, FlatList, RefreshControl, Text, View} from 'react-native';
+import {
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    InteractionManager,
+    RefreshControl,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import Animated from 'react-native-reanimated';
-import TaskSumComponent from '../common/TaskSumComponent';
 import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
+import {selectTaskReleaseList} from '../util/AppService';
+import {connect} from 'react-redux';
+import TaskReleaseItem from './TaskReleaseMana/TaskReleaseItem';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -84,17 +95,17 @@ class TaskReleaseMana extends PureComponent {
                         // indicatorStyle={styles.indicator}
                         bounces={true}
                         titleMarginHorizontal={25}
-                        activeStyle={{fontSize: 18, color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: 13, color: [255, 255, 255], height: 10}}
-                        indicatorStyle={{height: 5, backgroundColor: 'yellow', borderRadius: 3}}
+                        activeStyle={{fontSize: 15, color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: 12, color: [255, 255, 255], height: 10}}
+                        indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
                     />
                     <TouchableOpacity
                         onPress={this._releaseClick}
                         activeOpacity={0.6}
-                        style={{position:'absolute',top:10,right:10}}>
+                        style={{position: 'absolute', top: 10, right: 10}}>
                         <Text style={{
-                            fontSize:13,
-                            color:'white'
+                            fontSize: 13,
+                            color: 'white',
                         }}>发布任务</Text>
                     </TouchableOpacity>
                 </View>
@@ -116,9 +127,10 @@ class TaskReleaseMana extends PureComponent {
             </SafeAreaViewPlus>
         );
     }
-    _releaseClick=()=>{
-        NavigationUtils.goPage({},'TaskRelease')
-    }
+
+    _releaseClick = () => {
+        NavigationUtils.goPage({}, 'TaskRelease');
+    };
     handleIndexChange = (index) => {
         // console.log(index);
         const {navigationRoutes} = this.state;
@@ -128,12 +140,20 @@ class TaskReleaseMana extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent/>;
+                return <FristListComponent task_status={0} userinfo={this.props.userinfo}/>;
             case 'second':
                 return <View style={[{backgroundColor: '#673ab7', flex: 1}]}/>;
         }
     };
 }
+
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({
+    // onSetTaskReleaseInfo: (data) => dispatch(actions.onSetTaskReleaseInfo(data)),
+});
+const TaskReleaseManaRedux = connect(mapStateToProps, mapDispatchToProps)(TaskReleaseMana);
 
 class FristListComponent extends PureComponent {
     state = {
@@ -141,11 +161,64 @@ class FristListComponent extends PureComponent {
         isLoading: false,
         hideLoaded: true,
     };
+    static defaultProps = {
+        task_status: 0,
+    };
+
+    constructor(props) {
+        super(props);
+        this.page = {pageIndex: 0};
+
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this._updateList(true);
+        }, 500);
+
+    }
+
+    _updateList = (refreshing) => {
+        const {userinfo, task_status} = this.props;
+        if (refreshing) {
+            this.page = {pageIndex: 0};
+            this.setState({
+                isLoading: true,
+            });
+        } else {
+            this.page = {pageIndex: this.page.pageIndex + 1};
+            // this.setState({
+            //     isLoading: true,
+            // });
+        }
+        selectTaskReleaseList({task_status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
+
+            if (refreshing) {
+                console.log('我被触发');
+                this.setState({
+                    taskData: result,
+                    isLoading: false,
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+            } else {
+                const tmpArr = [...this.state.taskData];
+                this.setState({
+                    taskData: tmpArr.concat(result),
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+            }
+
+        }).catch(err => {
+
+        });
+    };
+
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent
-            titleFontSize={15}
-            marginHorizontal={15}
-        />;
+        return <TaskReleaseItem onPress={this._itemClick} item={item} key={item.id}/>;
+    };
+    _itemClick = (item) => {
+        // const {id} = item //任务id
+        NavigationUtils.goPage({task_id:item.id},'MyTaskReview')
     };
 
     genIndicator(hideLoaded) {
@@ -154,51 +227,20 @@ class FristListComponent extends PureComponent {
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
-            </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
+                <Text style={{marginLeft: 10}}>正在加载更多 ~ ~</Text>
+            </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10}}>没有更多了哦</Text>
+                <Text style={{marginLeft: 10}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
     onLoading = () => {
-        console.log('onLoading触发中');
-        this.setState({
-            hideLoaded: false,
-        });
-        const data = [...this.state.taskData];
-        // data.push([...data]);
-        let tmpData = [];
-        for (let i = 0; i < 10; i++) {
-            console.log(i);
-            tmpData.push({
-                id: i,
-            });
-        }
-        setTimeout(() => {
-            this.setState({
-                taskData: data.concat(tmpData),
-            }, () => {
-                // this
-                // this.setState({
-                //     hideLoaded: true,
-                // });
-            });
-        }, 2000);
+        this._updateList(false);
 
     };
     onRefresh = () => {
-        this.setState({
-            isLoading: true,
-        });
-        // this.props.onRefresh(true);
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-            });
-            // this.props.onRefresh(false);
-        }, 1000);
+        this._updateList(true);
     };
     params = {
         pageIndex: 0,
@@ -209,7 +251,7 @@ class FristListComponent extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         return <View style={{flex: 1}}>
             <AnimatedFlatList
-
+                style={{backgroundColor: '#e8e8e8'}}
                 ListEmptyComponent={<EmptyComponent marginTop={-80} message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
@@ -220,7 +262,7 @@ class FristListComponent extends PureComponent {
                     <RefreshControl
                         title={'更新任务中'}
                         refreshing={isLoading}
-                        onRefresh={() => this.onRefresh()}
+                        onRefresh={this.onRefresh}
                     />
                 }
                 // onScroll={this._onScroll}
@@ -237,7 +279,6 @@ class FristListComponent extends PureComponent {
                 windowSize={300}
                 onEndReachedThreshold={0.01}
                 onMomentumScrollBegin={() => {
-                    console.log('我被触发');
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
@@ -247,4 +288,4 @@ class FristListComponent extends PureComponent {
     }
 }
 
-export default TaskReleaseMana;
+export default TaskReleaseManaRedux;

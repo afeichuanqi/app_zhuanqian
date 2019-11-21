@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StatusBar,Dimensions} from 'react-native';
+import {View, Text, StatusBar, Dimensions} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
 import {theme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
@@ -13,10 +13,10 @@ import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
 import Image from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
-import {uploadMsgImage} from '../util/AppService';
+import {uploadQiniuImage} from '../util/AppService';
 import actions from '../action';
 import ImageViewerModal from '../common/ImageViewerModal';
-const {width,height} = Dimensions.get('window');
+
 class ChatRoomPage extends React.Component {
     constructor(props) {
         super(props);
@@ -34,10 +34,6 @@ class ChatRoomPage extends React.Component {
 
     _goBackClick = () => {
         NavigationUtils.goBack(this.props.navigation);
-    };
-    _ComparisonTime = (now, last) => {
-        // console.log(now, last);
-        return true;
     };
     getMessages = () => {
         const tmpArr = [];
@@ -81,10 +77,8 @@ class ChatRoomPage extends React.Component {
                         this.unReadArr.push(item.msgId);
                     }
                 }
-                // console.log(tmpArr[tmpArr.length-1],"tmpArrtmpArr");
             }
         });
-        // console.log(tmpArr, 'tmpArrtmpArr');
         return tmpArr;
     };
 
@@ -140,7 +134,7 @@ class ChatRoomPage extends React.Component {
                                 console.log(content);
                                 this._imgViewModel.show({
                                     url: content,
-                                })
+                                });
                             }
                         }}
                         panelSource={[{
@@ -151,7 +145,7 @@ class ChatRoomPage extends React.Component {
                                     width: 300,
                                     height: 400,
                                     cropping: false,
-                                    includeBase64: true,
+                                    // includeBase64: true,
                                 }).then(image => {
                                     this._imgSelect(image);
                                 });
@@ -187,21 +181,14 @@ class ChatRoomPage extends React.Component {
         const {fromUserinfo} = this.params;//他的用户信息
         let toUserid = fromUserinfo.id;
         const uuid = getUUID();//获取一条uuid
-
-        const mime = image.mime;
-        const base64Data = image.data;
+        let mime = image.mime;
+        const mimeIndex = mime.indexOf('/');
+        mime = mime.substring(mimeIndex + 1, mime.length);
         const path = `file://${image.path}`;
         onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime());//插入一条临时图片数据
-        const imgData = {
-            mime,
-            data: base64Data,
-        };
-        // console.log(uploadMsgImage,"uploadMsgImage");
-        uploadMsgImage(imgData, token).then((result) => {
-            // console.log(result.imageUrl,"result.imageUrl");
-            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', result.imageUrl, uuid, userinfo.username, userinfo.avatar_url);
+        uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
+            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url);
         });
-
     };
     sendMessage = (type, content) => {
         const {userinfo} = this.props;

@@ -7,7 +7,17 @@
  */
 
 import React, {PureComponent, Component} from 'react';
-import {Dimensions, View, Text, TextInput, Clipboard, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {
+    Dimensions,
+    View,
+    Text,
+    Clipboardl,
+    TextInput,
+    Clipboard,
+    StyleSheet,
+    TouchableOpacity,
+    Linking,
+} from 'react-native';
 import Image from 'react-native-fast-image';
 import {bottomTheme} from '../../appSet';
 import SvgUri from 'react-native-svg-uri';
@@ -16,8 +26,7 @@ import task_shangyi from '../../res/svg/task_shangyi.svg';
 import task_xiayi from '../../res/svg/task_xiayi.svg';
 import task_edit from '../../res/svg/task_edit.svg';
 import AnimatedFadeIn from '../../common/AnimatedFadeIn';
-import RNFS from 'react-native-fs';
-import {uploadMsgImage} from '../../util/AppService';
+import { uploadQiniuImage} from '../../util/AppService';
 import add_image from '../../res/svg/add_image.svg';
 import PickerImage from '../../common/PickerImage';
 import ImageViewerModal from '../../common/ImageViewerModal';
@@ -146,24 +155,16 @@ class TaskStepColumn extends PureComponent {
                 uri = data.uri1;
             }
             if (uri && uri.indexOf('file://') != -1) {//确认是本地照片
+
                 fun(timestamp, 0, '');
-                RNFS.readFile(uri, 'base64').then((base64) => {
-                    //获取最后一个.的位置
-                    const mimeindex = uri.lastIndexOf('.');
-                    //获取后缀
-                    const mime = `image/${uri.substr(mimeindex + 1)}`;
-                    const imgData = {
-                        mime: mime,
-                        data: base64,
-                    };
-                    uploadMsgImage(imgData, userinfo.token).then((result) => {
-                        if (result.status == 200) {//上传七牛云成功
-                            const imageUrl = result.imageUrl;
-                            fun(timestamp, 1, imageUrl);
-                        }
-                    }).catch((msg) => {
-                        fun(timestamp, -1, '');
-                    });
+                const mimeIndex = uri.lastIndexOf('.');
+                const mime = uri.substring(mimeIndex + 1, uri.length);
+                // const path = `file://${image.path}`;
+                console.log(uri, mime, 'mimemime');
+                uploadQiniuImage(userinfo.token, 'reUploadStep', mime, uri).then(url => {
+                    fun(timestamp, 1, url);
+                }).catch(err => {
+                    fun(timestamp, -1, '');
                 });
             }
         }
@@ -378,18 +379,24 @@ class TaskStepColumn extends PureComponent {
                                 }}/>
                         </View>
 
-                        <View style={{
-                            width: ((width - 62) / 4),
-                            height: 40,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginLeft: 10,
-                            borderRadius: 3,
-                            // justifyContent:,
-                            backgroundColor: bottomTheme,
-                        }}>
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={() => {
+                                Clipboard.setString(typeData.inputValue);
+                                // this.toast.show('复制成功 ~ ~');
+                            }}
+                            style={{
+                                width: ((width - 62) / 4),
+                                height: 40,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginLeft: 10,
+                                borderRadius: 3,
+                                // justifyContent:,
+                                backgroundColor: bottomTheme,
+                            }}>
                             <Text style={{color: 'white'}}>复制数据</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </StepBox>;
             case 4://图文说明
@@ -691,18 +698,18 @@ class TaskStepColumn extends PureComponent {
                             <TextInput
                                 editable={false}
                                 style={{
-                                padding: 0,
-                                width: width - 42,
-                                height: 40,
-                                border: 0,
-                                borderRadius: 3,
-                                borderWidth: 1,
-                                borderColor: bottomTheme,
-                                paddingHorizontal: 5,
-                                marginTop: 10,
-                                textAlign:'auto'
+                                    padding: 0,
+                                    width: width - 42,
+                                    height: 40,
+                                    border: 0,
+                                    borderRadius: 3,
+                                    borderWidth: 1,
+                                    borderColor: bottomTheme,
+                                    paddingHorizontal: 5,
+                                    marginTop: 10,
+                                    textAlign: 'auto',
 
-                            }}>
+                                }}>
                                 {typeData.collectInfoContent}
                             </TextInput>
                         }
@@ -741,20 +748,18 @@ class TaskStepColumn extends PureComponent {
             this.setState({
                 stepDataArr: temArr,
             });
-            const imgData = {
-                mime: imageData.mime,
-                data: imageData.data,
-            };
+            let mime = imageData.mime;
+            const mimeIndex = mime.indexOf('/');
+            mime = mime.substring(mimeIndex + 1, mime.length);
+            const path = `file://${imageData.path}`;
             // 上传七牛云
             setTimeout(() => {
-                uploadMsgImage(imgData, this.props.userinfo.token).then((result) => {
-                    if (result.status == 200) {//上传七牛云成功
-                        const imageUrl = result.imageUrl;
-                        this.setImageStatusOrUrl_1(timestamp, 1, imageUrl);
-                    }
-                }).catch((msg) => {
+                uploadQiniuImage(this.props.userinfo.token, 'sendTaskFrom', mime, path).then(url => {
+                    this.setImageStatusOrUrl_1(timestamp, 1, url);
+                }).catch(err => {
                     this.setImageStatusOrUrl_1(timestamp, -1, '');
                 });
+
             }, 500);
 
         }
@@ -808,6 +813,7 @@ class TaskStepColumn extends PureComponent {
 
         return (
             <View style={{marginBottom: 15}}>
+
                 {this.state.stepDataArr.map((item, index, arr) => {
                     return this.getStepColumn(index + 1, item.type, item.typeData, utilClick, item.timestamp, item.uploadStatus,
                         typeof (item.uploadStatus1) === 'undefined' ? -2 : item.uploadStatus1);

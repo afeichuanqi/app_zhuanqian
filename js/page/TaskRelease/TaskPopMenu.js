@@ -149,7 +149,7 @@ class TaskPopMenu extends PureComponent {
                             ref={ref => this.imageSelect = ref}
                             image={this.inputData.uri} select={this.erweima}/>
                     </View>
-                    <PickerImage includeBase64={true} cropping={false} select={this._selectImg}
+                    <PickerImage includeBase64={false} cropping={false} select={this._selectImg}
                                  ref={ref => this.pickerImg = ref}/>
                 </View>;
                 break;
@@ -429,7 +429,7 @@ class ImageSelect extends PureComponent {
                     :
                     <SvgUri width={50} height={50} svgXmlData={add_image}/>}
             </AnimatedTouchableOpacity>
-            <PickerImage includeBase64={true} cropping={false} select={this._selectImg}
+            <PickerImage includeBase64={false} cropping={false} select={this._selectImg}
                          ref={ref => this.pickerImg = ref}/>
         </View>;
     }
