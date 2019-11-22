@@ -100,14 +100,126 @@ export function uploadQiniuImage(Usertoken, modalName, mime, uri) {
                         name: key,
                     });
                     const ret = await http.post_(uploadUrl, body);
-                    console.log(ret,"ret")
+                    console.log(ret, 'ret');
                     if (ret.key) {
                         resolve(`${subUrl}${ret.key}`);
                     }
-                }else{
+                } else {
                     reject('获取错误');
                 }
 
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
+ * 驳回用户的提交任务
+ */
+export function TaskTurnDownTaskFrom(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/TaskTurnDownTaskFrom', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
+ * 查询任务表的任务信息
+ */
+export function selectTaskInfo_(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectTaskInfo_', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
+ *增加任务数
+ */
+export function addUserTaskNum(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/addUserTaskNum', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ *查询任务已经完成列表
+ */
+export function selectSendFormTaskList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectSendFormTaskList', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ *查询任务已经报名列表
+ */
+export function selectSignUpList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectSignUpList', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ *更新用户任务价格
+ */
+export function updateUserTaskPrice(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/updateUserTaskPrice', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
             } else {
                 reject(ret && ret.msg);
             }
@@ -296,7 +408,26 @@ export function selectSendFormForTaskId(data, token) {
         }
     });
 }
+/*
+测试
+ */
+export function test111(url) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setPostHeader('token', token);
+            const ret = await http.get_(url);
+            console.log(ret);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
 
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 /**
  * // 审核通过该用户的接单
  */

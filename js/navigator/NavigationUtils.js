@@ -1,5 +1,16 @@
 export default class NavigationUtils {
 
+    static goPage(params, page) {
+        const navigation = NavigationUtils.navigation;
+        if (!navigation) {
+            return;
+        }
+        navigation.navigate(
+            page,
+            {
+                ...params,
+            });
+    }
     /**
      * 返回上上一页
      */
@@ -16,17 +27,6 @@ export default class NavigationUtils {
         NavigationUtils.navigation.navigate('Main');
     }
 
-    static goPage(params, page) {
-        const navigation = NavigationUtils.navigation;
-        if (!navigation) {
-            return;
-        }
-        navigation.navigate(
-            page,
-            {
-                ...params,
-            });
-    }
 
     /**
      * 跳转到指定页面

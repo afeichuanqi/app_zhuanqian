@@ -137,8 +137,6 @@ class TaskStepColumn extends PureComponent {
         });
     };
     _resetUploadImage = (timestamp, type = 1) => {//重新上传
-
-
         const {userinfo} = this.props;
         const tmpArr = [...this.state.stepDataArr];
         const index = tmpArr.findIndex((n) => timestamp == n.timestamp);

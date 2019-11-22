@@ -218,7 +218,7 @@ class FristListComponent extends PureComponent {
     };
     _itemClick = (item) => {
         // const {id} = item //任务id
-        NavigationUtils.goPage({task_id:item.id},'MyTaskReview')
+        NavigationUtils.goPage({task_id:item.id, status: 0},'MyTaskReview')
     };
 
     genIndicator(hideLoaded) {

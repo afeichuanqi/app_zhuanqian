@@ -37,6 +37,7 @@ class Axios {
 
         //日志 响应结果
         instance.interceptors.response.use((response) => {
+
             return response.data;
         }, (error) => {
             if (error.toString().indexOf('Network Error') !== -1) {
@@ -52,7 +53,8 @@ class Axios {
         });
     }
 
-    async get(url) {
+    async get_(url) {
+        console.log(url);
         return this.get(url, null);
     }
 

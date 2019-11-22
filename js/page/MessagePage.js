@@ -29,6 +29,7 @@ import EmptyComponent from '../common/EmptyComponent';
 import ChatSocket from '../util/ChatSocket';
 import {connect} from 'react-redux';
 import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
+import {test111} from '../util/AppService';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -46,7 +47,11 @@ class MessagePage extends PureComponent {
 
     componentDidMount() {
         ChatSocket.selectAllFriendMessage();
-
+        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
+        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
+        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
+        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
+        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
 
     }
 
@@ -297,6 +302,7 @@ class MessageItemComponent extends Component {
         if (this.props.item.unReadLength > 0) {
             ChatSocket.setFromUserIdMessageIsRead(this.props.item.id);
         }
+        console.log(this.props.item,"this.props.item");
         NavigationUtils.goPage({fromUserinfo: this.props.item}, 'ChatRoomPage');
     };
 

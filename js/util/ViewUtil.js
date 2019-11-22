@@ -8,7 +8,7 @@ import menu_right from '../res/svg/menu_right.svg';
 
 const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
-    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14, rightClick) => {
+    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14, rightClick, isShowRightSvg = true) => {
         return (
             <View style={{
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
@@ -25,14 +25,16 @@ export default class ViewUtil {
                 <View>
                     <Text style={{color: fontColor, fontSize}}>{title}</Text>
                 </View>
-                {rightSvg ? <TouchableOpacity
+                <TouchableOpacity
                     onPress={rightClick}
                     activeOpacity={0.6}
                     style={{justifyContent: 'center'}}>
-                    <SvgUri width={24} height={24} fill={fontColor} svgXmlData={message_more}/>
+                    {isShowRightSvg&&<SvgUri width={24} height={24} fill={fontColor} svgXmlData={rightSvg || message_more}/>}
 
 
-                </TouchableOpacity> : <View/>}
+
+                </TouchableOpacity>
+
 
             </View>
         );
@@ -91,7 +93,7 @@ export default class ViewUtil {
             </View>
         </TouchableOpacity>;
     };
-    static getReviewIco = (reviewNum,click) => {
+    static getReviewIco = (reviewNum, click) => {
         return <TouchableOpacity
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
@@ -103,7 +105,7 @@ export default class ViewUtil {
 
         </TouchableOpacity>;
     };
-    static getzhidingIco=()=>{
+    static getzhidingIco = () => {
         return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
                 style={{height: 13, width: 13}}
@@ -112,8 +114,8 @@ export default class ViewUtil {
             <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
 
         </TouchableOpacity>;
-    }
-    static getrecommendedIco=()=>{
+    };
+    static getrecommendedIco = () => {
         return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
                 style={{height: 13, width: 13}}
@@ -122,8 +124,8 @@ export default class ViewUtil {
             <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
-    }
-    static getUpdateIco=()=>{
+    };
+    static getUpdateIco = () => {
         return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
                 style={{height: 13, width: 13}}
@@ -132,7 +134,7 @@ export default class ViewUtil {
             <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
-    }
+    };
 }
 const styles = StyleSheet.create({
     setting_item_container: {

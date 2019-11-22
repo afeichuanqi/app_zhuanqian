@@ -5,6 +5,7 @@ import ViewUtil from '../../util/ViewUtil';
 import task_icon from '../../res/svg/task_icon.svg';
 import SvgUri from 'react-native-svg-uri';
 import {bottomTheme} from '../../appSet';
+import NavigationUtils from '../../navigator/NavigationUtils';
 
 const {width, height} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
@@ -13,9 +14,13 @@ export default class TaskReleaseItem extends PureComponent {
         const {item} = this.props;
         return <View style={{}}>
             <TouchableOpacity
+                onPress={() => {
+                    console.log(item);
+                    NavigationUtils.goPage({taskid: item.id}, 'MyOrderManaPage');
+                }}
                 activeOpacity={0.6}
                 style={{
-                    flex: 1,
+                    // flex: 1,
                     flexDirection: 'row',
                     paddingHorizontal: 10,
                     paddingTop: 18,
@@ -85,7 +90,7 @@ export default class TaskReleaseItem extends PureComponent {
                         // color:''
                         opacity: 0.5,
                         // fontWeight: '100',
-                    }}>进行中:{parseInt(item.task_sign_up_num) - parseInt(item.task_pass_num) - parseInt(item.task_noPass_num)}</Text>
+                    }}>进行中:{parseInt(item.task_sign_up_num) - parseInt(item.task_pass_num)}</Text>
                     <View style={{height: 10, width: 1, marginHorizontal: 5, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                     <Text style={{
                         fontSize: 11,

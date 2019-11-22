@@ -24,6 +24,8 @@ import AccountSetting from '../page/SettingPage/AccountSetting';
 import UserProtocol from '../page/SettingPage/UserProtocol';
 import MyTaskReview from '../page/MyTaskReview';
 import TaskTurnDownPage from '../page/TaskTurnDownPage';
+import MyOrderManaPage from '../page/MyOrderManaPage';
+import TaskSendFromUserList from '../page/TaskSendFromUserList';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -147,6 +149,18 @@ const MainNavigator = createStackNavigator({
         },
         TaskTurnDownPage: {
             screen: TaskTurnDownPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        MyOrderManaPage: {
+            screen: MyOrderManaPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        TaskSendFromUserList: {
+            screen: TaskSendFromUserList,
             navigationOptions: {
                 header: null,
             },

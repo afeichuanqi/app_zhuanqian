@@ -25,7 +25,7 @@ export function onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, To
 
 //向本地插入数据
 export function onAddMesage(fromUserid, msg_type, content, ToUserId, uuid,sendDate) {
-    console.log(sendDate,"sendDate")
+    // console.log(sendDate,"sendDate")
     return {
         type: Types.MESSAGE_ADD_NEW,
         data: {fromUserid, msg_type, content, ToUserId, sendStatus: 0, uuid,sendDate},

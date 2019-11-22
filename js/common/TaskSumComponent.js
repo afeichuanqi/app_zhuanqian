@@ -84,7 +84,7 @@ class TaskSumComponent extends PureComponent {
             <FastImage
                 style={[styles.imgStyle]}
                 source={{uri: `http://www.embeddedlinux.org.cn/uploads/allimg/180122/2222032V5-0.jpg`}}
-                resizeMode={FastImage.stretch}
+                resizeMode={FastImage.resizeMode.stretch}
             />
             {/*左上*/}
             <View style={{

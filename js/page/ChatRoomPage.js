@@ -180,6 +180,9 @@ class ChatRoomPage extends React.Component {
         const token = userinfo.token;
         const {fromUserinfo} = this.params;//他的用户信息
         let toUserid = fromUserinfo.id;
+        if (userId == toUserid) {
+            return;
+        }
         const uuid = getUUID();//获取一条uuid
         let mime = image.mime;
         const mimeIndex = mime.indexOf('/');
@@ -191,11 +194,16 @@ class ChatRoomPage extends React.Component {
         });
     };
     sendMessage = (type, content) => {
+
         const {userinfo} = this.props;
         const userId = userinfo.userid;
         const {fromUserinfo} = this.params;
         let toUserid = fromUserinfo.id;
+        if (userId == toUserid) {
+            return;
+        }
         const uuid = getUUID();
+
         ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url);
     };
     _pressAvatar = () => {

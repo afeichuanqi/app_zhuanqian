@@ -7,11 +7,10 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Text, TouchableOpacity, TextInput, ScrollView, View, Dimensions} from 'react-native';
+import {Dimensions, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
-import {StatusBar} from 'react-native';
 import ViewUtil from '../util/ViewUtil';
 import message_more from '../res/svg/message_more.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -21,7 +20,8 @@ import Toast from '../common/Toast';
 import SvgUri from 'react-native-svg-uri';
 import add_image from '../res/svg/add_image.svg';
 import PickerImage from '../common/PickerImage';
-import {uploadQiniuImage} from '../util/AppService';
+import {TaskTurnDownTaskFrom, uploadQiniuImage} from '../util/AppService';
+import ImageViewerModal from '../common/ImageViewerModal';
 
 const {width, height} = Dimensions.get('window');
 const screenWidth = Dimensions.get('window').width;
@@ -54,9 +54,9 @@ class MyTaskReview extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '任务审核', message_more, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '驳回页面', message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.params.fromUserinfo}, 'ChatSettings');
-        });
+        },false);
         const {taskData} = this.params;
         return (
             <SafeAreaViewPlus
@@ -127,13 +127,17 @@ class MyTaskReview extends PureComponent {
 
                             paddingTop: 10,
                         }}>
-                            <TextInput style={{
-                                height: 100, width: width - 20, backgroundColor: '#e8e8e8',
-                                paddingHorizontal: 5,
-                            }}
-                                       placeholder={'请输入驳回理由'}
-                                       placeholderTextColor={'#7f7f7f'}
-                                       multiline={true}
+                            <TextInput
+                                onChangeText={(text) => {
+                                    this.turnDownInfo = text;
+                                }}
+                                style={{
+                                    height: 100, width: width - 20, backgroundColor: '#e8e8e8',
+                                    paddingHorizontal: 5,
+                                }}
+                                placeholder={'请输入驳回理由'}
+                                placeholderTextColor={'#7f7f7f'}
+                                multiline={true}
                             />
 
                         </View>
@@ -145,7 +149,13 @@ class MyTaskReview extends PureComponent {
                                         key={index}
                                         ref={ref => this.btn = ref}
                                         onPress={() => {
-                                            this.refs[`picker${index}`].show(index);
+                                            const {uri} = this.state.data[index];
+                                            if (uri && (uri.indexOf('file://') !== -1 || uri.indexOf('http') !== -1)) {
+                                                this.imageView.show({url: uri});
+                                            } else {
+                                                this.refs[`picker${index}`].show(index);
+                                            }
+
                                         }}
                                         style={{
 
@@ -174,15 +184,75 @@ class MyTaskReview extends PureComponent {
                                             <Text style={{fontSize: 12, color: 'white'}}>正在上传</Text>
                                         </View>
                                         }
-                                        {item.uri && <TouchableOpacity
-
+                                        {item.uploadStatus == -1 &&
+                                        <TouchableOpacity
                                             onPress={() => {
+                                                const {userinfo} = this.props;
                                                 const tmpArr = [...this.state.data];
-                                                const json = {close: true};
-                                                tmpArr[index] = json;
+                                                const item = tmpArr[index];
+                                                const uri = item.uri;
+                                                const mimeIndex = uri.lastIndexOf('.');
+                                                const mime = uri.substring(mimeIndex + 1, uri.length);
+                                                tmpArr[index].uploadStatus = 0;
                                                 this.setState({
                                                     data: tmpArr,
                                                 });
+                                                uploadQiniuImage(userinfo.token, 'reUploadStep', mime, uri).then(url => {
+                                                    tmpArr[index].uploadStatus = 1;
+                                                    tmpArr[index].uri = url;
+                                                    this.setState({
+                                                        data: tmpArr,
+                                                    });
+                                                    this.forceUpdate();
+                                                }).catch(err => {
+                                                    tmpArr[index].uploadStatus = -1;
+                                                    this.setState({
+                                                        data: tmpArr,
+                                                    });
+                                                    this.forceUpdate();
+                                                });
+                                            }}
+                                            style={{
+                                                width: 55, height: 55, backgroundColor: 'rgba(0,0,0,0.5)',
+                                                justifyContent: 'center', alignItems: 'center', position: 'absolute',
+                                            }}>
+                                            <View style={{
+                                                width: 40,
+                                                height: 20,
+                                                borderRadius: 3,
+                                                backgroundColor: 'red',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }}>
+                                                <Text style={{fontSize: 9, color: 'white'}}>重新上传</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        }
+                                        {item.uri && <TouchableOpacity
+                                            onPress={() => {
+                                                const tmpArr = [...this.state.data];
+                                                let interval = 0;
+                                                for (let i = 0; i < tmpArr.length; i++) {
+                                                    if (JSON.stringify(tmpArr[i]) === '{}') {
+                                                        interval += 1;
+
+                                                    }
+                                                    if (i === tmpArr.length - 1) {
+                                                        if (interval >= 1) {
+                                                            tmpArr[index] = {close: true};
+                                                            this.setState({
+                                                                data: tmpArr,
+                                                            });
+                                                        } else {
+                                                            tmpArr[index] = {};
+                                                            this.setState({
+                                                                data: tmpArr,
+                                                            });
+                                                        }
+                                                    }
+                                                }
+
+
                                             }}
                                             style={{
                                                 width: 15,
@@ -212,16 +282,15 @@ class MyTaskReview extends PureComponent {
                     </View>
 
                 </ScrollView>
-                <PickerImage includeBase64={false} cropping={false} select={this._selectImg}
-                             ref={ref => this.pickerImg = ref}/>
+                <ImageViewerModal ref={ref => this.imageView = ref}/>
                 <TouchableOpacity
                     activeOpacity={0.6}
+                    onPress={this._sureSayNo}
                     style={{
                         position: 'absolute',
                         bottom: 5,
                         width: screenWidth - 20,
                         justifyContent: 'center',
-                        // paddingVertical: 5,
                         backgroundColor: bottomTheme,
                         alignItems: 'center',
                         height: 35,
@@ -235,8 +304,40 @@ class MyTaskReview extends PureComponent {
         );
     }
 
+    _sureSayNo = () => {
+        const {data} = this.state;
+        const {userinfo} = this.props;
+        const imageData = {
+            image: [],
+            turnDownInfo: this.turnDownInfo,
+        };
+        const {taskData, updatePage} = this.params;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].uri && data[i].uri.indexOf('file://') !== -1) {
+                this.toast.show('等待图片上传完毕');
+                return;
+            }
+            if (data[i].uri) {
+                imageData.image.push(data[i].uri);
+            }
+            if (i == data.length - 1) {
+
+                TaskTurnDownTaskFrom({
+                    SendFormTaskId: taskData.taskStepId,
+                    turnDownInfo: JSON.stringify(imageData),
+                }, userinfo.token).then(err => {
+                    this.toast.show('驳回成功');
+                    NavigationUtils.goBack(this.props.navigation);
+
+                    updatePage();
+
+                });
+            }
+        }
+        // console.log(JSON.stringify(imageData));
+    };
     _selectImg = (imageData, timestamp) => {
-        console.log(timestamp,"timestamp");
+
         const {userinfo} = this.props;
         let mime = imageData.mime;
         const mimeIndex = mime.indexOf('/');
@@ -244,24 +345,40 @@ class MyTaskReview extends PureComponent {
         const uri = `file://${imageData.path}`;
         const tmpArr = [...this.state.data];
         tmpArr[timestamp] = {uri, uploadStatus: 0};
-        tmpArr.push({});
-        this.setState({
-            data: tmpArr,
-        });
-        console.log(uri,"uriuri");
-        uploadQiniuImage(userinfo.token, 'stepFile', mime, uri).then(URL => {
-            // console.log(URL,"URL");
-            const tmpArr = [...this.state.data];
-            if (tmpArr[timestamp]) {
-                tmpArr[timestamp].uploadStatus = 1;
-                tmpArr[timestamp].uri = URL;
+        let interval = 0;
+        let length = tmpArr.length;
+        for (let i = 0; i < length; i++) {
+            if (tmpArr[i].close) {
+                interval += 1;
+            }
+            if (i === tmpArr.length - 1) {
+                if (tmpArr.length - interval < 3) {
+                    tmpArr.push({});
+                }
                 this.setState({
                     data: tmpArr,
                 });
+                setTimeout(() => {
+                    uploadQiniuImage(userinfo.token, 'stepFile', mime, uri).then(URL => {
+                        tmpArr[timestamp].uploadStatus = 1;
+                        tmpArr[timestamp].uri = URL;
+                        this.setState({
+                            data: tmpArr,
+                        });
+                        this.forceUpdate();
+                    }).catch(err => {
+                        tmpArr[timestamp].uploadStatus = -1;
+                        this.setState({
+                            data: tmpArr,
+                        });
+                        this.forceUpdate();
+                    });
+                }, 500);
+
             }
-        }).catch(err => {
-            // this.taskStep.setImageStatusOrUrl(timestamp, -1, '');
-        });
+        }
+
+
     };
 
 }
