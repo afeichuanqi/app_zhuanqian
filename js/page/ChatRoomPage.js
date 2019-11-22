@@ -13,7 +13,7 @@ import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
 import Image from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
-import {uploadQiniuImage} from '../util/AppService';
+import {isFriendChat, uploadQiniuImage} from '../util/AppService';
 import actions from '../action';
 import ImageViewerModal from '../common/ImageViewerModal';
 
@@ -26,11 +26,28 @@ class ChatRoomPage extends React.Component {
     }
 
     componentDidMount(): void {
-        const {fromUserinfo} = this.params;
-        ChatSocket.selectAllMsgForFromUserid(fromUserinfo.id, this.pageCount);
+        const {fromUserinfo, columnType, task_id} = this.params;
+        isFriendChat({
+            columnType,
+            taskid: task_id,
+            toUserid: fromUserinfo.id,
+        }, this.props.userinfo.token).then(result => {
+            if (result.id) {
+                this.FriendId = result.id;
+                console.log(this.FriendId, 'this.chatId ');
+                ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+            }
+
+        });
+
+
     }
 
     state = {};
+    componentWillUnmount(): void {
+        const {fromUserinfo,} = this.params;
+        ChatSocket.setMsgIdIsRead(this.FriendId,fromUserinfo.id);
+    }
 
     _goBackClick = () => {
         NavigationUtils.goBack(this.props.navigation);
@@ -40,9 +57,9 @@ class ChatRoomPage extends React.Component {
         const {fromUserinfo} = this.params;
         const {userinfo} = this.props;
         this.props.message.msgArr.forEach((item) => {
-            if ((item.fromUserid == fromUserinfo.id && item.ToUserId == userinfo.userid)
-                || (item.fromUserid == userinfo.userid && item.ToUserId == fromUserinfo.id)
-            ) {
+            console.log(item.FriendId,"FriendId");
+            console.log(this.FriendId,"this.FriendId");
+            if (item.FriendId == this.FriendId) {
                 const PreviousIndex = tmpArr.length;
                 let renTime = true;
                 if (PreviousIndex != 0) {
@@ -71,12 +88,13 @@ class ChatRoomPage extends React.Component {
                     sendStatus: parseInt(item.sendStatus),
                     time: item.sendDate,
                 });
-                if (item.fromUserid == fromUserinfo.id && item.ToUserId == userinfo.userid && item.un_read == 0) { //未读消息 设置未已经读取
-                    if (this.unReadArr.findIndex((n) => n == item.msgId) == -1) {//防止多次去增加服务器负担
-                        ChatSocket.setMsgIdIsRead(item.msgId, item.fromUserid);
-                        this.unReadArr.push(item.msgId);
-                    }
-                }
+
+                // if (item.FriendId == this.FriendId && item.un_read == 0) { //未读消息 设置未已经读取
+                //     if (this.unReadArr.findIndex((n) => n == item.msgId) == -1) {//防止多次去增加服务器负担
+                //
+                //         this.unReadArr.push(item.msgId);
+                //     }
+                // }
             }
         });
         return tmpArr;
@@ -85,7 +103,7 @@ class ChatRoomPage extends React.Component {
     onRefresh = () => {
         this.pageCount += 10;
         const {fromUserinfo} = this.params;
-        ChatSocket.selectAllMsgForFromUserid(fromUserinfo.id, this.pageCount);
+        ChatSocket.selectAllMsgForFromUserid( this.FriendId, this.pageCount);
     };
 
     render() {
@@ -112,7 +130,7 @@ class ChatRoomPage extends React.Component {
                 {TopColumn}
                 <View style={{flex: 1}}>
                     <ChatScreen
-                        loadHistory={this.onRefresh}
+                        // loadHistory={this.onRefresh}
                         inverted={1}
                         inputOutContainerStyle={{
                             borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.2, shadowColor: '#c7c7c7',
@@ -175,10 +193,11 @@ class ChatRoomPage extends React.Component {
     }
 
     _imgSelect = (image) => {
+        const FriendId = this.FriendId;
         const {userinfo, onAddMesage} = this.props;//我的用户信息
         const userId = userinfo.userid;
         const token = userinfo.token;
-        const {fromUserinfo} = this.params;//他的用户信息
+        const {fromUserinfo,columnType,taskTitle} = this.params;//他的用户信息
         let toUserid = fromUserinfo.id;
         if (userId == toUserid) {
             return;
@@ -188,23 +207,25 @@ class ChatRoomPage extends React.Component {
         const mimeIndex = mime.indexOf('/');
         mime = mime.substring(mimeIndex + 1, mime.length);
         const path = `file://${image.path}`;
-        onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime());//插入一条临时图片数据
+        onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(),FriendId);//插入一条临时图片数据
         uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
-            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url);
+            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url,FriendId,columnType,taskTitle);
         });
     };
     sendMessage = (type, content) => {
-
+        const FriendId = this.FriendId;
+        // columnType,taskTitle
+        // const {fromUserinfo, columnType, task_id} = this.params;
         const {userinfo} = this.props;
         const userId = userinfo.userid;
-        const {fromUserinfo} = this.params;
+        const {fromUserinfo,columnType,taskTitle} = this.params;
         let toUserid = fromUserinfo.id;
+        console.log(taskTitle,"taskTitletaskTitletaskTitle");
         if (userId == toUserid) {
             return;
         }
         const uuid = getUUID();
-
-        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url);
+        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId,columnType,taskTitle);
     };
     _pressAvatar = () => {
         const {fromUserinfo} = this.params;
@@ -223,7 +244,7 @@ const mapStateToProps = state => ({
     message: state.message,
 });
 const mapDispatchToProps = dispatch => ({
-    onAddMesage: (fromUserid, msg_type, content, ToUserId, uuid, sendDate) => dispatch(actions.onAddMesage(fromUserid, msg_type, content, ToUserId, uuid, sendDate)),
+    onAddMesage: (fromUserid, msg_type, content, ToUserId, uuid, sendDate,FriendId) => dispatch(actions.onAddMesage(fromUserid, msg_type, content, ToUserId, uuid, sendDate,FriendId)),
 });
 const ChatRoomPageRedux = connect(mapStateToProps, mapDispatchToProps)(ChatRoomPage);
 export default ChatRoomPageRedux;

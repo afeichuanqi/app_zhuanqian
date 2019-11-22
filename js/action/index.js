@@ -1,6 +1,6 @@
 import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll} from './userinfo';
 import {verifyIdentIdy,setConnectionStatus,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus} from './message';
-import {onSelectAllFriend,onSelectAllFriendUnRead,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead} from './friend';
+import {onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
 import {onSetTaskReleaseInfo} from './taskInfo';
 export default {
@@ -21,7 +21,7 @@ export default {
 
     //好友列表
     onSelectAllFriend,
-    onSelectAllFriendUnRead,
+    // onSelectAllFriendUnRead,
     onSetAllFriendUnRead,
     onSetFriendMsgIsRead,
 

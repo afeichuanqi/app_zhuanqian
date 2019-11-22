@@ -16,19 +16,18 @@ export function setConnectionStatus(code) {
 }
 
 //收到消息
-export function onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus) {
+export function onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus,FriendId) {
     return {
         type: Types.MESSAGE_FROMOF_USERID,
-        data: {fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus},
+        data: {fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus,FriendId},
     };
 }
 
 //向本地插入数据
-export function onAddMesage(fromUserid, msg_type, content, ToUserId, uuid,sendDate) {
-    // console.log(sendDate,"sendDate")
+export function onAddMesage(fromUserid, msg_type, content, ToUserId, uuid,sendDate,FriendId) {
     return {
         type: Types.MESSAGE_ADD_NEW,
-        data: {fromUserid, msg_type, content, ToUserId, sendStatus: 0, uuid,sendDate},
+        data: {fromUserid, msg_type, content, ToUserId, sendStatus: 0, uuid,sendDate,FriendId},
     };
 }
 

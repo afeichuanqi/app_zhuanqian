@@ -30,6 +30,7 @@ export default function onAction(state = defaultContent, action) {
                     sendDate: data.sendDate,
                     ToUserId: data.ToUserId,
                     sendStatus: data.sendStatus,
+                    FriendId: data.FriendId,
                     un_read: 0,
                 },
             );
@@ -38,7 +39,6 @@ export default function onAction(state = defaultContent, action) {
                 msgArr: temArr,
             };
         case Types.MESSAGE_ADD_NEW://我发送的消息加入列表
-            // console.log('我触发了MESSAGE_FROMOF_USERID');
             const temArr1 = [...state.msgArr];
             // console.log(data.sendDate,"sendDate")
             temArr1.push({
@@ -49,8 +49,10 @@ export default function onAction(state = defaultContent, action) {
                 ToUserId: data.ToUserId,
                 sendStatus: data.sendStatus,
                 uuid: data.uuid,
+                FriendId: data.FriendId,
 
             });
+            console.log(temArr1, 'temArr1');
             return {
                 ...state,
                 msgArr: temArr1,

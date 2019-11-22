@@ -27,9 +27,7 @@ class ChatSocket {
         };
 
         ws.onmessage = (evt) => {
-
             const msgData = JSON.parse(evt.data);
-            // console.log('收到消息',msgData);
             const {type, data} = msgData;
             switch (type) {
                 case types.VERIFY_IDENTIDY:
@@ -46,9 +44,9 @@ class ChatSocket {
                 case types.MESSAGE_FROMOF_USERID://收到消息
                     // console.log('收到消息MESSAGE_FROMOF_USERID');
                     this.dispatch(Message.onMessageFrom(data.fromUserid, data.msg_type,
-                        data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus));//发送给消息列表
+                        data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus,data.FriendId));//发送给消息列表
 
-                    this.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url));//发送给好友列表
+                    this.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url,data.FriendId,data.columnType,data.taskTitle));//发送给好友列表
                     break;
                 case types.MESSAGE_SENDTO_USERID_STATUS://消息回调
 
@@ -67,18 +65,18 @@ class ChatSocket {
                     }
                     this.dispatch(Message.onSelectAllFriend(friendArr));
                     //收到回调进行未读消息数回调
-                    this.selectAllFriendUnReadMessageLength();
+                    // this.selectAllFriendUnReadMessageLength();
                     break;
-                case types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH_SUCCESS:
-                    let friendUnReadCountArr = [];
-
-                    if (data.friendUnReadCountArr && data.friendUnReadCountArr.length > 0) {
-                        friendUnReadCountArr = data.friendUnReadCountArr;
-                    }
-                    this.dispatch(Message.onSelectAllFriendUnRead(friendUnReadCountArr));
-                    break;
+                // case types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH_SUCCESS:
+                //     let friendUnReadCountArr = [];
+                //
+                //     if (data.friendUnReadCountArr && data.friendUnReadCountArr.length > 0) {
+                //         friendUnReadCountArr = data.friendUnReadCountArr;
+                //     }
+                //     this.dispatch(Message.onSelectAllFriendUnRead(friendUnReadCountArr));
+                //     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
-                    this.dispatch(Message.onSetAllFriendUnRead(data.fromUserid));
+                    this.dispatch(Message.onSetAllFriendUnRead(data.FriendId));
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
                     if (data.msgArr && data.msgArr.length > 0) {
@@ -87,7 +85,7 @@ class ChatSocket {
 
                     break;
                 case types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
-                    this.dispatch(Message.onSetFriendMsgIsRead(data.fromUserid));
+                    this.dispatch(Message.onSetFriendMsgIsRead(data.FriendId));
                     break;
                 case types.MESSAGE_FORIMAGE_SENDTO_USERID_SUCCESS:
                     this.dispatch(Message.onSetImageMsgStatus(data.uuid, data.msgId, data.sendDate, data.sendStatus, data.content));
@@ -130,25 +128,25 @@ class ChatSocket {
         this.sendToServer(types.MESSAGE_SELECT_ALL, {});
     };
     //设置信息id已读取
-    setMsgIdIsRead = (msgId, fromUserid) => {
-        this.sendToServer(types.MESSAGE_SET_MSG_ID_READ, {msgId, fromUserid});
+    setMsgIdIsRead = (FriendId,toUserid) => {
+        this.sendToServer(types.MESSAGE_SET_MSG_ID_READ, {FriendId,toUserid});
     };
     //获取userid所有消息
-    selectAllMsgForFromUserid = (fromUserid, pageCount) => {
-        this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {fromUserid, pageCount});
+    selectAllMsgForFromUserid = (friendId, pageCount) => {
+        this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {friendId, pageCount});
     };
     //查询未读消息数
-    selectAllFriendUnReadMessageLength = () => {
-        this.sendToServer(types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH, {});
-    };
+    // selectAllFriendUnReadMessageLength = () => {
+    //     this.sendToServer(types.MESSAGE_SELECT_FRIEND_NO_READ_LENGTH, {});
+    // };
     //设置我和fromuserinf的消息为已经读区
-    setFromUserIdMessageIsRead = (fromUserid) => {
+    setFromUserIdMessageIsRead = (FriendId) => {
         this.sendToServer(types.MESSAGE_SET_USER_ID_IS_READ, {
-            fromUserid,
+            FriendId,
         });
     };
     //发送消息给指定用户
-    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url) => {
+    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskTitle) => {
         if (!this.connectionstatus) {
             return false;
         }
@@ -156,16 +154,16 @@ class ChatSocket {
             return false;
         }
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
-            toUserid, msg_type, content, uuid, username, avatar_url,
+            toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskTitle
         });
-
-        this.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime()));
+        this.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0,username,avatar_url,FriendId,columnType,taskTitle));
+        this.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(),FriendId));
 
         // this.dispatch(Message.onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus));
         return true;
     };
     //发送图片消息给指定用户
-    sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url) => {
+    sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskTitle) => {
         if (!this.connectionstatus) {
             return false;
         }
@@ -173,7 +171,7 @@ class ChatSocket {
             return false;
         }
         this.sendToServer(types.MESSAGE_FORIMAGE_SENDTO_USERID, {
-            toUserid, msg_type, content, uuid, username, avatar_url,
+            toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskTitle
         });
         return true;
     };

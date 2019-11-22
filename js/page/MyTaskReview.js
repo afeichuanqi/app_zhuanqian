@@ -48,9 +48,9 @@ class MyTaskReview extends PureComponent {
     }
 
     _updatePage = () => {
-        const {task_id,status} = this.params;
+        const {task_id, status} = this.params;
         const {userinfo} = this.props;
-        selectSendFormForTaskId({taskId: task_id,status:status}, userinfo.token).then(result => {
+        selectSendFormForTaskId({taskId: task_id, status: status}, userinfo.token).then(result => {
             const {taskDatas} = result;
             this.taskDatas = taskDatas;
             this.pageIndex = 0;
@@ -128,12 +128,17 @@ class MyTaskReview extends PureComponent {
         StatusBar.setBackgroundColor(theme, true);
         let TopColumn = ViewUtil.getTopColumn(this._goChatPage, '任务审核', jiaoliu, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
+            const {task_id} = this.params;
             const fromUserinfo = {
                 avatar_url: data.avatar_url,
                 id: data.userid,
                 username: data.username,
+
+                // taskId
+
             };
-            NavigationUtils.goPage({fromUserinfo: fromUserinfo}, 'ChatRoomPage');
+            // console.log(fromUserinfo, 'fromUserinfo');
+            NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType: 3, task_id: task_id,taskTitle: 'test',}, 'ChatRoomPage');
         });
         const {taskData, unReviewCount, isEnd, haveReviewCount, isEmpty} = this.state;
         const {task_status} = taskData;

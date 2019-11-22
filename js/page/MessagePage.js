@@ -15,6 +15,7 @@ import {
     RefreshControl,
     FlatList,
     StyleSheet,
+    Image,
 } from 'react-native';
 import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -29,7 +30,6 @@ import EmptyComponent from '../common/EmptyComponent';
 import ChatSocket from '../util/ChatSocket';
 import {connect} from 'react-redux';
 import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
-import {test111} from '../util/AppService';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -47,11 +47,6 @@ class MessagePage extends PureComponent {
 
     componentDidMount() {
         ChatSocket.selectAllFriendMessage();
-        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
-        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
-        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
-        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
-        // test111('https://api.chaofun.co/user/get_constant?user_id=54&timestamp=1573785160314&device_width=375&image_size_times=-1&token=d5e02b310508b76a7ebbfa7006b74c5c')
 
     }
 
@@ -62,8 +57,8 @@ class MessagePage extends PureComponent {
 
     render() {
         const RefreshHeight = Animated.interpolate(this.animations.val, {
-            inputRange: [-200,-0.1, 0],
-            outputRange: [300, 30,0],
+            inputRange: [-200, -0.1, 0],
+            outputRange: [300, 30, 0],
             extrapolate: 'clamp',
         });
 
@@ -102,7 +97,7 @@ class MessagePage extends PureComponent {
                     backgroundColor: bottomTheme,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    zIndex:3,
+                    zIndex: 3,
                 }}>
                     <Text style={{
                         color: 'white',
@@ -123,6 +118,8 @@ class MessagePage extends PureComponent {
 
 class MessageColumn extends PureComponent {
     render() {
+        const {columnUnreadLength} = this.props;
+        console.log(columnUnreadLength, 'columnUnreadLength');
         return <View style={{
             width: width - 20,
             height: 100,
@@ -138,10 +135,11 @@ class MessageColumn extends PureComponent {
             flexDirection: 'row',
             justifyContent: 'space-around',
         }}>
-            <MessageColumnItem svgXmlData={message_xitong} title={'通知消息'}/>
-            <MessageColumnItem svgXmlData={zaixiankefu} title={'互动消息'} size={48}/>
-            <MessageColumnItem svgXmlData={huodongxiaoxi} title={'活动消息'} size={42}/>
-            <MessageColumnItem/>
+            <MessageColumnItem type={0} unReadLength={columnUnreadLength[0]} svgXmlData={message_xitong} title={'任务咨询'}/>
+            <MessageColumnItem type={1} unReadLength={columnUnreadLength[1]} svgXmlData={zaixiankefu} title={'申诉消息'} size={48}/>
+            <MessageColumnItem type={2} unReadLength={columnUnreadLength[2]} svgXmlData={huodongxiaoxi} title={'投诉消息'}
+                               size={42}/>
+            <MessageColumnItem  type={3}unReadLength={columnUnreadLength[3]} svgXmlData={huodongxiaoxi} title={'聊天消息'}/>
         </View>;
     }
 }
@@ -160,6 +158,7 @@ class MsgList extends Component {
 
     render() {
         const friendData = this.props.friend.friendArr;
+        const columnUnreadLength = this.props.friend.columnUnreadLength;
         const {isLoading, hideLoaded} = this.state;
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent/>}
@@ -179,7 +178,7 @@ class MsgList extends Component {
 
                     }}/>
 
-                    <MessageColumn/>
+                    <MessageColumn columnUnreadLength={columnUnreadLength}/>
                     <View style={{height: 70}}/>
                 </View>
 
@@ -299,11 +298,20 @@ class MessageItemComponent extends Component {
         }).start();
     };
     _onPress = () => {
+
         if (this.props.item.unReadLength > 0) {
-            ChatSocket.setFromUserIdMessageIsRead(this.props.item.id);
+            ChatSocket.setFromUserIdMessageIsRead(this.props.item.FriendId);
         }
-        console.log(this.props.item,"this.props.item");
-        NavigationUtils.goPage({fromUserinfo: this.props.item}, 'ChatRoomPage');
+        const {item} = this.props;
+        const {columnType, taskId, taskTitle, avatar_url, username, userid} = item;
+        const fromUserinfo = {
+            avatar_url: avatar_url,
+            id: userid,
+            username: username,
+            taskTitle: taskTitle,
+
+        };
+        NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType, task_id: taskId, taskTitle}, 'ChatRoomPage');
     };
 
     render() {
@@ -314,6 +322,8 @@ class MessageItemComponent extends Component {
             extrapolate: 'clamp',
         });
         const {titleFontSize, marginHorizontal, item} = this.props;
+        const {FriendId, avatar_url, columnType, msg, msg_type, taskId, taskTitle, unReadLength, username} = item;
+
         return <AnimatedTouchableOpacity
             onPress={this._onPress}
             activeOpacity={1}
@@ -333,10 +343,10 @@ class MessageItemComponent extends Component {
             <View>
                 <FastImage
                     style={[styles.imgStyle]}
-                    source={{uri: item.avatar_url}}
+                    source={{uri: avatar_url}}
                     resizeMode={FastImage.stretch}
                 />
-                {item.unReadLength ? item.unReadLength > 0 && <View style={{
+                {unReadLength ? unReadLength > 0 && <View style={{
                     borderRadius: 10, justifyContent: 'center', alignItems: 'center',
                     position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
                     // paddingVertical:1,
@@ -344,7 +354,7 @@ class MessageItemComponent extends Component {
                     <Text style={{
                         fontSize: 10,
                         color: 'white',
-                    }}>{item.unReadLength}</Text>
+                    }}>{unReadLength}</Text>
                 </View> : null}
 
             </View>
@@ -362,15 +372,20 @@ class MessageItemComponent extends Component {
                     color: 'black',
                     opacity: 0.9,
                     marginLeft: 10,
-                }}>{item.username}</Text>
-                <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>互动消息</Text>
+                }}>{username}</Text>
+                <Text style={{marginLeft: 10, fontSize: 12, color: 'red', opacity: 0.5}}>{
+                    columnType == 1 ? '任务咨询' : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
+                }</Text>
+
 
             </View>
-            {/*左下*/}
+
+            {/*中间*/}
             <View style={{
                 position: 'absolute',
-                bottom: topBottomVal,
+                bottom: 5,
                 left: 55,
+                height: 30,
                 flexDirection: 'row',
             }}>
                 <Text
@@ -381,9 +396,37 @@ class MessageItemComponent extends Component {
                         color: 'black',
                         opacity: 0.6,
                         marginLeft: 10,
-                        width: width - 100,
-                    }}>{item.msg}</Text>
+                        width: (width - 100) / 2,
+                    }}>{msg_type == 'text' ? msg : '[图片]'}</Text>
+                <Text
+                    numberOfLines={2}
+                    ellipsizeMode={'tail'}
+                    style={{
+                        fontSize: 12,
+                        color: 'black',
+                        opacity: 0.6,
+                        marginLeft: 10,
+                        width: (width - 100) / 2,
+                    }}>{taskTitle}</Text>
             </View>
+            {/*中间*/}
+            {/*<View style={{*/}
+            {/*    position: 'absolute',*/}
+            {/*    bottom: 5,*/}
+            {/*    left: 55,*/}
+            {/*    flexDirection: 'row',*/}
+            {/*}}>*/}
+            {/*    <Text*/}
+            {/*        numberOfLines={1}*/}
+            {/*        ellipsizeMode={'tail'}*/}
+            {/*        style={{*/}
+            {/*            fontSize: 12,*/}
+            {/*            color: 'black',*/}
+            {/*            // opacity: 0.6,*/}
+            {/*            marginLeft: 10,*/}
+            {/*            width: width - 100,*/}
+            {/*        }}>任务:{taskTitle}</Text>*/}
+            {/*</View>*/}
             {/*右上*/}
             <View style={{
                 position: 'absolute',
@@ -411,21 +454,53 @@ class MessageColumnItem extends PureComponent {
         svgXmlData: message_xitong,
         title: '系统通知',
         size: 45,
+        type:0,
     };
 
     render() {
-        const {svgXmlData, title, size} = this.props;
 
+
+        const {svgXmlData, title, size, unReadLength,type} = this.props;
+        let source = null;
+
+        if (type == 0) {
+            source = require('../res/img/message_zixun.png')
+        }else if(type == 1){
+            source = require('../res/img/message_shensu.png');
+        }else if(type == 2){
+            source = require('../res/img/message_tousu.png');
+        }else if(type == 3){
+            source = require('../res/img/message_liaotian.png');
+        }
         return <TouchableOpacity
             activeOpacity={0.6}
             style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>
-            <SvgUri style={{
-                shadowColor: '#c7c7c7',
-                shadowRadius: 5,
-                shadowOpacity: 1,
-                shadowOffset: {w: 1, h: 1},
-                elevation: 5,//安卓的阴影
-            }} width={size} height={size} svgXmlData={svgXmlData}/>
+            <View>
+
+                <Image source={source} style={{
+                    shadowColor: '#c7c7c7',
+                    shadowRadius: 5,
+                    shadowOpacity: 1,
+                    shadowOffset: {w: 1, h: 1},
+                    width: 40, height: 40,
+                    elevation: 5,
+                    backgroundColor:'white',
+                }}/>
+                {/*<SvgUri style={{*/}
+                {/*    */}
+                {/*}} width={size} height={size} svgXmlData={svgXmlData}/>*/}
+                {unReadLength ? unReadLength > 0 && <View style={{
+                    borderRadius: 10, justifyContent: 'center', alignItems: 'center',
+                    position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
+                    // paddingVertical:1,
+                }}>
+                    <Text style={{
+                        fontSize: 10,
+                        color: 'white',
+                    }}>{unReadLength}</Text>
+                </View> : null}
+            </View>
+
             <Text style={{
                 fontSize: 12,
                 color: 'black',
@@ -433,6 +508,7 @@ class MessageColumnItem extends PureComponent {
                 marginTop: 5,
 
             }}>{title}</Text>
+
         </TouchableOpacity>;
     }
 }
