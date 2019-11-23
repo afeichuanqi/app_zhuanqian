@@ -389,6 +389,24 @@ export function selectTaskReleaseList(data, token) {
         }
     });
 }
+/**
+ * 查询任务简单信息
+ */
+export function selectSimpleTaskInfo(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectSimpleTaskInfo', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * // 查询该任务做的所有信息

@@ -991,6 +991,9 @@ class ChatWindow extends PureComponent {
         return (
             <View style={{backgroundColor: this.props.containerBackgroundColor, flex: 1}}
                   onLayout={(e) => this.rootHeight = e.nativeEvent.layout.height}>
+                {/*<View style={{height:80}}>*/}
+                {/*    */}
+                {/*</View>*/}
                 {this.renderBg(chatBackgroundImage)}
                 <Animated.View style={Platform.OS === 'android' ? {flex: 1, backgroundColor: 'transparent'} : {
                     height: this.visibleHeight.interpolate({
@@ -1021,6 +1024,7 @@ class ChatWindow extends PureComponent {
                             //         onRefresh={this.props.onRefresh}
                             //     />
                             // }
+                            // ListHeaderComponent={}
                             ListFooterComponent={this.props.renderLoadEarlier}
                             extraData={this.props.extraData}
                             automaticallyAdjustContentInsets={false}

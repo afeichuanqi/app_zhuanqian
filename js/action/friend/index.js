@@ -22,8 +22,9 @@ export function onSetAllFriendUnRead(FriendId) {
 }
 
 // 好友来了一条新的消息
-export function onSetNewMsgForRromUserid(fromUserid_, msg_type_, content_, msgId_, sendDate_, ToUserId_, sendStatus_,username,avatar_url,FriendId,columnType,taskTitle) {
+export function onSetNewMsgForRromUserid(fromUserid_, msg_type_, content_, msgId_, sendDate_, ToUserId_, sendStatus_,username,avatar_url,FriendId,columnType,taskUri) {
     // console.log(code, 'code');
+    console.log('我被触发');
     return {
         type: Types.MESSAGE_FROMOF_USERID_Friend, data: {
             fromUserid: fromUserid_,
@@ -37,7 +38,7 @@ export function onSetNewMsgForRromUserid(fromUserid_, msg_type_, content_, msgId
             avatar_url,
             FriendId,
             columnType,
-            taskTitle
+            taskUri
         },
     };
 }

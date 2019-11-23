@@ -17,9 +17,8 @@ import {
     StyleSheet,
     Image,
 } from 'react-native';
-import {bottomTheme, theme} from '../appSet';
+import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
-import SvgUri from 'react-native-svg-uri';
 import message_xitong from '../res/svg/message_xitong.svg';
 import zaixiankefu from '../res/svg/zaixiankefu.svg';
 import huodongxiaoxi from '../res/svg/huodongxiaoxi.svg';
@@ -119,7 +118,7 @@ class MessagePage extends PureComponent {
 class MessageColumn extends PureComponent {
     render() {
         const {columnUnreadLength} = this.props;
-        console.log(columnUnreadLength, 'columnUnreadLength');
+        // console.log(columnUnreadLength, 'columnUnreadLength');
         return <View style={{
             width: width - 20,
             height: 100,
@@ -135,11 +134,13 @@ class MessageColumn extends PureComponent {
             flexDirection: 'row',
             justifyContent: 'space-around',
         }}>
-            <MessageColumnItem type={0} unReadLength={columnUnreadLength[0]} svgXmlData={message_xitong} title={'任务咨询'}/>
-            <MessageColumnItem type={1} unReadLength={columnUnreadLength[1]} svgXmlData={zaixiankefu} title={'申诉消息'} size={48}/>
+            <MessageColumnItem type={0} unReadLength={columnUnreadLength[0]} svgXmlData={message_xitong}
+                               title={'任务咨询'}/>
+            <MessageColumnItem type={1} unReadLength={columnUnreadLength[1]} svgXmlData={zaixiankefu} title={'申诉消息'}
+                               size={48}/>
             <MessageColumnItem type={2} unReadLength={columnUnreadLength[2]} svgXmlData={huodongxiaoxi} title={'投诉消息'}
                                size={42}/>
-            <MessageColumnItem  type={3}unReadLength={columnUnreadLength[3]} svgXmlData={huodongxiaoxi} title={'聊天消息'}/>
+            <MessageColumnItem type={3} unReadLength={columnUnreadLength[3]} svgXmlData={huodongxiaoxi} title={'聊天消息'}/>
         </View>;
     }
 }
@@ -322,8 +323,8 @@ class MessageItemComponent extends Component {
             extrapolate: 'clamp',
         });
         const {titleFontSize, marginHorizontal, item} = this.props;
-        const {FriendId, avatar_url, columnType, msg, msg_type, taskId, taskTitle, unReadLength, username} = item;
-
+        const {FriendId, avatar_url, columnType, msg, msg_type, taskId, taskTitle, unReadLength, username,taskUri} = item;
+        // console.log(taskUri,"taskUri");
         return <AnimatedTouchableOpacity
             onPress={this._onPress}
             activeOpacity={1}
@@ -335,12 +336,13 @@ class MessageItemComponent extends Component {
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 transform: [{scale}],
+                height: 70,
                 // backgroundColor:'red',
             }}
             onPressIn={this._onPressIn}
             onPressOut={this._onPressOut}
         >
-            <View>
+            <View style={{position: 'absolute', top: 10}}>
                 <FastImage
                     style={[styles.imgStyle]}
                     source={{uri: avatar_url}}
@@ -362,13 +364,13 @@ class MessageItemComponent extends Component {
             {/*左上*/}
             <View style={{
                 position: 'absolute',
-                top: topBottomVal,
-                left: 55,
+                top: 10,
+                left: 40,
                 flexDirection: 'row',
                 alignItems: 'center',
             }}>
                 <Text style={{
-                    fontSize: titleFontSize,
+                    fontSize: 13,
                     color: 'black',
                     opacity: 0.9,
                     marginLeft: 10,
@@ -383,9 +385,9 @@ class MessageItemComponent extends Component {
             {/*中间*/}
             <View style={{
                 position: 'absolute',
-                bottom: 5,
-                left: 55,
-                height: 30,
+                top: 30,
+                left: 40,
+                // height: 30,
                 flexDirection: 'row',
             }}>
                 <Text
@@ -398,49 +400,32 @@ class MessageItemComponent extends Component {
                         marginLeft: 10,
                         width: (width - 100) / 2,
                     }}>{msg_type == 'text' ? msg : '[图片]'}</Text>
-                <Text
-                    numberOfLines={2}
-                    ellipsizeMode={'tail'}
-                    style={{
-                        fontSize: 12,
-                        color: 'black',
-                        opacity: 0.6,
-                        marginLeft: 10,
-                        width: (width - 100) / 2,
-                    }}>{taskTitle}</Text>
             </View>
-            {/*中间*/}
-            {/*<View style={{*/}
-            {/*    position: 'absolute',*/}
-            {/*    bottom: 5,*/}
-            {/*    left: 55,*/}
-            {/*    flexDirection: 'row',*/}
-            {/*}}>*/}
-            {/*    <Text*/}
-            {/*        numberOfLines={1}*/}
-            {/*        ellipsizeMode={'tail'}*/}
-            {/*        style={{*/}
-            {/*            fontSize: 12,*/}
-            {/*            color: 'black',*/}
-            {/*            // opacity: 0.6,*/}
-            {/*            marginLeft: 10,*/}
-            {/*            width: width - 100,*/}
-            {/*        }}>任务:{taskTitle}</Text>*/}
-            {/*</View>*/}
-            {/*右上*/}
             <View style={{
                 position: 'absolute',
-                top: topBottomVal,
-                right: 0,
+                bottom: 5,
+                left: 50,
             }}>
                 <Text style={{
-                    fontSize: 11,
+                    fontSize: 10,
                     color: 'black',
                     opacity: 0.5,
 
                 }}>{getCurrentTime(parseInt(item.sendDate))}</Text>
             </View>
-
+            <FastImage
+                style={{
+                    position: 'absolute', right: 10,
+                    top: 10,
+                    backgroundColor: '#E8E8E8',
+                    // 设置宽度
+                    width: 50,
+                    height: 50,
+                    borderRadius: 2,
+                }}
+                source={{uri: taskUri}}
+                resizeMode={FastImage.stretch}
+            />
         </AnimatedTouchableOpacity>;
 
 
@@ -451,25 +436,23 @@ class MessageItemComponent extends Component {
 
 class MessageColumnItem extends PureComponent {
     static defaultProps = {
-        svgXmlData: message_xitong,
         title: '系统通知',
-        size: 45,
-        type:0,
+        type: 0,
     };
 
     render() {
 
 
-        const {svgXmlData, title, size, unReadLength,type} = this.props;
+        const {title, unReadLength, type} = this.props;
         let source = null;
 
         if (type == 0) {
-            source = require('../res/img/message_zixun.png')
-        }else if(type == 1){
+            source = require('../res/img/message_zixun.png');
+        } else if (type == 1) {
             source = require('../res/img/message_shensu.png');
-        }else if(type == 2){
+        } else if (type == 2) {
             source = require('../res/img/message_tousu.png');
-        }else if(type == 3){
+        } else if (type == 3) {
             source = require('../res/img/message_liaotian.png');
         }
         return <TouchableOpacity
@@ -478,14 +461,14 @@ class MessageColumnItem extends PureComponent {
             <View>
 
                 <Image source={source} style={{
-                    shadowColor: '#c7c7c7',
-                    shadowRadius: 5,
-                    shadowOpacity: 1,
-                    shadowOffset: {w: 1, h: 1},
+
                     width: 40, height: 40,
-                    elevation: 5,
-                    backgroundColor:'white',
+
+                    backgroundColor: 'white',
                 }}/>
+
+                {/*</View>*/}
+
                 {/*<SvgUri style={{*/}
                 {/*    */}
                 {/*}} width={size} height={size} svgXmlData={svgXmlData}/>*/}
@@ -520,9 +503,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 50,
-        height: 50,
-        borderRadius: 5,
+        width: 40,
+        height: 40,
+        borderRadius: 3,
         // 设置高度
         // height:150
     },

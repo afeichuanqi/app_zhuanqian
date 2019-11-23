@@ -247,6 +247,9 @@ class TaskRelease extends PureComponent {
         }
         const reward_price = columnData.rewardPrice;
         const reward_num = columnData.rewardNum;
+        const stepIndex = stepData.findIndex(d => d.type == 5);
+        const task_uri = stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '';
+
         const task_steps = JSON.stringify(stepData);
         const data = {
             task_type_id,
@@ -260,6 +263,7 @@ class TaskRelease extends PureComponent {
             reward_price,
             reward_num,
             task_steps,
+            task_uri
         };
         return data;
 

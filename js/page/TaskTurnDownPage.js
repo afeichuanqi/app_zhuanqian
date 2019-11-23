@@ -128,16 +128,24 @@ class MyTaskReview extends PureComponent {
                             paddingTop: 10,
                         }}>
                             <TextInput
+                                // multiline={true}
                                 onChangeText={(text) => {
                                     this.turnDownInfo = text;
                                 }}
+                                autoCapitalize={'none'}
+                                autoComplete={'off'}
+                                autoCorrect={false}
+                                blurOnSubmit={false}
+                                value={this.state.value}
+
+                                multiline={true}
                                 style={{
                                     height: 100, width: width - 20, backgroundColor: '#e8e8e8',
-                                    paddingHorizontal: 5,
+                                    paddingHorizontal: 5,padding:0,textAlignVertical: 'top',
                                 }}
                                 placeholder={'请输入驳回理由'}
                                 placeholderTextColor={'#7f7f7f'}
-                                multiline={true}
+                                maxLength={300}
                             />
 
                         </View>

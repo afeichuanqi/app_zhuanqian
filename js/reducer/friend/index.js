@@ -73,7 +73,7 @@ export default function onAction(state = defaultContent, action) {
                 item.msg_type = data.msg_type;
                 item.msg = data.content;
                 item.sendDate = data.sendDate;
-
+                // ite
                 item.unReadLength = data.fromUserid != data.ToUserId && item.unReadLength + 1;
                 temArr3[fromUserIndex] = item;
                 columnUnreadLength3[parseInt(item.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
@@ -90,7 +90,7 @@ export default function onAction(state = defaultContent, action) {
                     unReadLength: data.fromUserid != data.ToUserId ? 1 : 0,
                     FriendId: data.FriendId,
                     columnType: data.columnType,
-                    taskTitle: data.taskTitle,
+                    taskUri: data.taskUri,
 
                 });
             }

@@ -128,17 +128,15 @@ class MyTaskReview extends PureComponent {
         StatusBar.setBackgroundColor(theme, true);
         let TopColumn = ViewUtil.getTopColumn(this._goChatPage, '任务审核', jiaoliu, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
-            const {task_id} = this.params;
+            // console.log('我被触发');
+            // console.log(data,"datadata");
+            const {task_id,taskUri} = this.params;
             const fromUserinfo = {
                 avatar_url: data.avatar_url,
                 id: data.userid,
                 username: data.username,
-
-                // taskId
-
             };
-            // console.log(fromUserinfo, 'fromUserinfo');
-            NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType: 3, task_id: task_id,taskTitle: 'test',}, 'ChatRoomPage');
+            NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType: 3, task_id: task_id,taskTitle: 'test',taskUri}, 'ChatRoomPage');
         });
         const {taskData, unReviewCount, isEnd, haveReviewCount, isEmpty} = this.state;
         const {task_status} = taskData;

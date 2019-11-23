@@ -218,7 +218,18 @@ class FristListComponent extends PureComponent {
     };
     _itemClick = (item) => {
         // const {id} = item //任务id
-        NavigationUtils.goPage({task_id:item.id, status: 0},'MyTaskReview')
+        console.log(item, 'item');
+        // const {task_steps} = item;
+        // const data = JSON.parse(task_steps);
+        // const dataIndex = data.findIndex(d => d.type == 5);
+        // const imgs = data[dataIndex];
+        // const typeData = imgs.typeData;
+        // const uri = typeData.uri;
+        // console.log(uri,"uri");
+        // for(let i=0;i<){
+        //
+        // }
+        NavigationUtils.goPage({task_id: item.id, status: 0, taskUri: item.task_uri}, 'MyTaskReview');
     };
 
     genIndicator(hideLoaded) {
