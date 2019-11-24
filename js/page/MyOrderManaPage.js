@@ -24,7 +24,7 @@ import {addUserTaskNum, selectTaskInfo_, updateUserTaskPrice} from '../util/AppS
 import {connect} from 'react-redux';
 import MyModalBoxTwo from '../common/MyModalBoxTwo';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class MyOrderManaPage extends PureComponent {
     constructor(props) {
@@ -50,6 +50,7 @@ class MyOrderManaPage extends PureComponent {
         selectTaskInfo_({
             task_id: taskid,
         }, userinfo.token).then(result => {
+            console.log(result, 'result');
             this.setState({
                 taskInfo: result,
             });
@@ -155,7 +156,7 @@ class MyOrderManaPage extends PureComponent {
         StatusBar.setBackgroundColor(theme, true);
         let TopColumn = ViewUtil.getTopColumn(this._goChatPage, '任务管理', jiaoliu, null, null, null, () => {
             // const data = this.taskDatas[this.pageIndex];
-        });
+        }, false);
         const {taskInfo} = this.state;
         return (
             <SafeAreaViewPlus
@@ -311,18 +312,24 @@ class MyOrderManaPage extends PureComponent {
                 <Text>已完成：{(parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
-            <TouchableOpacity style={{
-                flexDirection: 'row', alignItems: 'center', width: (width) / 2,
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-            }}>
-                <Text>投诉：10</Text>
+            <TouchableOpacity
+                onPress={() => {
+                    NavigationUtils.goPage({
+                        task_id: this.state.taskInfo.id,
+                        type: 3,
+                    }, 'MessageTypePage');
+                }}
+                style={{
+                    flexDirection: 'row', alignItems: 'center', width: (width) / 2,
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                }}>
+                <Text>投诉：{(parseInt(taskInfo.complaintCount))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
-                    console.log('111');
                     NavigationUtils.goPage({
                         title: '进行中列表',
                         status: 0,
@@ -338,23 +345,30 @@ class MyOrderManaPage extends PureComponent {
                 <Text>进行中：{(parseInt(taskInfo.task_sign_up_num) - parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
-            <TouchableOpacity style={{
+            <TouchableOpacity
+                onPress={()=>{
+                    NavigationUtils.goPage({
+                        task_id: this.state.taskInfo.id,
+                        type: 2,
+                    }, 'MessageTypePage');
+                }}
+                style={{
                 flexDirection: 'row', alignItems: 'center', width: (width) / 2,
                 justifyContent: 'space-between',
                 paddingHorizontal: 10,
                 paddingVertical: 10,
             }}>
-                <Text>申诉：10</Text>
+                <Text>申诉：{(parseInt(taskInfo.appealCount))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
-                    console.log('111');
                     NavigationUtils.goPage({
                         title: '已驳回列表',
                         status: -1,
                         taskid: this.state.taskInfo.id,
                     }, 'TaskSendFromUserList');
+
                 }}
                 style={{
                     flexDirection: 'row', alignItems: 'center', width: (width) / 2,

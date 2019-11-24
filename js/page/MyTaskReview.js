@@ -75,30 +75,31 @@ class MyTaskReview extends PureComponent {
     _setTaskData = (index) => {
 
         try {
-            const data = this.taskDatas[index];
+            console.log(this.taskDatas);
+            const data = {...this.taskDatas[index]};
             const taskStepData = JSON.parse(data.task_step_data);
             data.task_step_data = taskStepData;
             this.setState({
                 taskData: data,
                 // isEnd: index === this.taskDatas.length - 1,
             });
-            for (let i = 0; i < taskStepData.length; i++) {
-                const {type, typeData} = taskStepData[i];
-                if (type === 5 && typeData && typeData.uri1) {
-                    Image.getSize(typeData.uri1, (height, width) => {
-                        const imgHeight = Math.floor(height / (width / (screenWidth - 20)));
-                        const imgWidth = screenWidth - 20;
-                        taskStepData[i].typeData.uri1ImgHeight = imgHeight;
-                        taskStepData[i].typeData.uri1ImgWidth = imgWidth;
-                        this.setState({
-                            taskData: data,
-                        }, () => {
-                            this.forceUpdate();
-                        });
-                    });
+            // for (let i = 0; i < taskStepData.length; i++) {
+            //     const {type, typeData} = taskStepData[i];
+            //     if (type === 5 && typeData && typeData.uri1) {
+            // Image.getSize(typeData.uri1, (height, width) => {
+            //     const imgHeight = Math.floor(height / (width / (screenWidth - 20)));
+            //     const imgWidth = screenWidth - 20;
+            //     taskStepData[i].typeData.uri1ImgHeight = imgHeight;
+            //     taskStepData[i].typeData.uri1ImgWidth = imgWidth;
+            //     this.setState({
+            //         taskData: data,
+            //     }, () => {
+            //         // this.forceUpdate();
+            //     });
+            // });
 
-                }
-            }
+            // }
+            // }
 
         } catch (e) {
             this.toast.show(`error>${e.toString()}`);
@@ -128,16 +129,20 @@ class MyTaskReview extends PureComponent {
         StatusBar.setBackgroundColor(theme, true);
         let TopColumn = ViewUtil.getTopColumn(this._goChatPage, '任务审核', jiaoliu, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
-            // console.log('我被触发');
-            // console.log(data,"datadata");
-            const {task_id,taskUri} = this.params;
+            const {task_id, taskUri} = this.params;
             const fromUserinfo = {
                 avatar_url: data.avatar_url,
                 id: data.userid,
                 username: data.username,
             };
-            NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType: 3, task_id: task_id,taskTitle: 'test',taskUri}, 'ChatRoomPage');
-        });
+            NavigationUtils.goPage({
+                fromUserinfo: fromUserinfo,
+                columnType: 3,
+                task_id: task_id,
+                taskTitle: 'test',
+                taskUri,
+            }, 'ChatRoomPage');
+        }, this.taskDatas && this.taskDatas.length > 0 ? true : false);
         const {taskData, unReviewCount, isEnd, haveReviewCount, isEmpty} = this.state;
         const {task_status} = taskData;
 
@@ -216,7 +221,7 @@ class MyTaskReview extends PureComponent {
                                 // console.log(typeData.uri1ImgHeight, typeData.uri1ImgWidth, 'typeData.uri1ImgHeight');
 
                                 ImageIndex += 1;
-                                return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 200, typeData.uri1ImgWidth || screenWidth - 20, ImageIndex);
+                                return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 600, typeData.uri1ImgWidth || screenWidth - 20, ImageIndex);
                             } else if (type === 6 && typeData.collectInfoContent) {
                                 return this.getTextView(typeData.collectInfoContent);
                             } else {
@@ -348,6 +353,7 @@ class MyTaskReview extends PureComponent {
     _PreviousStepData = () => {
 
         this.pageIndex -= 1;
+        console.log(this.pageIndex);
         if (this.pageIndex < 0) {
 
             this.toast.show('没有更多了');
@@ -363,11 +369,7 @@ class MyTaskReview extends PureComponent {
         this.pageIndex += 1;
         if (this.pageIndex >= this.taskDatas.length) {
 
-            this.setState({
-                isEnd: true,
-            }, () => {
-                this.toast.show('没有更多了');
-            });
+            this.toast.show('没有更多了');
 
 
         } else {

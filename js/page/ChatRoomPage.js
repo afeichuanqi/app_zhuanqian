@@ -57,20 +57,20 @@ class TaskInfo extends React.Component {
                             color: 'rgba(0,0,0,0.7)',
 
                         }}>{columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : ''}</Text>
-                        <TouchableOpacity
-                            onPress={this.props.appealClick}
-                            style={{
-                                width: 40,
-                                height: 15,
-                                backgroundColor: 'red',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginTop: 2,
-                                marginLeft: 10,
-                                borderRadius: 2,
-                            }}>
-                            <Text style={{fontSize: 12, color: 'white'}}>申诉</Text>
-                        </TouchableOpacity>
+                        {/*<TouchableOpacity*/}
+                        {/*    onPress={this.props.appealClick}*/}
+                        {/*    style={{*/}
+                        {/*        width: 40,*/}
+                        {/*        height: 15,*/}
+                        {/*        backgroundColor: 'red',*/}
+                        {/*        justifyContent: 'center',*/}
+                        {/*        alignItems: 'center',*/}
+                        {/*        marginTop: 2,*/}
+                        {/*        marginLeft: 10,*/}
+                        {/*        borderRadius: 2,*/}
+                        {/*    }}>*/}
+                        {/*    <Text style={{fontSize: 12, color: 'white'}}>申诉</Text>*/}
+                        {/*</TouchableOpacity>*/}
                     </View>
 
                 </View>
@@ -123,7 +123,7 @@ class ChatRoomPage extends React.Component {
         }, this.props.userinfo.token).then(result => {
             if (result.id) {
                 this.FriendId = result.id;
-                console.log(this.FriendId, 'this.chatId ');
+                // console.log(this.FriendId, 'this.chatId ');
                 ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
             }
 
@@ -188,7 +188,7 @@ class ChatRoomPage extends React.Component {
     };
 
     render() {
-        const {fromUserinfo, task_id, columnType} = this.params;
+        // const {fromUserinfo, task_id, columnType} = this.params;
         const {userinfo} = this.props;
         let statusBar = {
             hidden: false,

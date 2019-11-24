@@ -203,6 +203,7 @@ class TaskRelease extends PureComponent {
         const FormData = this._getFormData();
         const data = this._getTaskReleaseData();
         const fromUserinfo = this.props.userinfo;
+        // console.log( data.columnData.orderReplayNum," data.orderReplayNum");
         const taskData = {
             title: data.columnData.title,
             projectTitle: data.columnData.projectTitle,
@@ -215,6 +216,7 @@ class TaskRelease extends PureComponent {
             taskType: data.typeData,
             taskPassNum: 0,
             taskNoPassNum: 0,
+            singOrder: data.columnData.orderReplayNum,
         };
         const stepData = data.stepData;
         NavigationUtils.goPage({
@@ -247,7 +249,7 @@ class TaskRelease extends PureComponent {
         }
         const reward_price = columnData.rewardPrice;
         const reward_num = columnData.rewardNum;
-        const stepIndex = stepData.findIndex(d => d.type == 5);
+        const stepIndex = stepData && stepData.findIndex(d => d.type == 5);
         const task_uri = stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '';
 
         const task_steps = JSON.stringify(stepData);
@@ -263,7 +265,7 @@ class TaskRelease extends PureComponent {
             reward_price,
             reward_num,
             task_steps,
-            task_uri
+            task_uri,
         };
         return data;
 

@@ -140,7 +140,7 @@ class TaskDetails extends PureComponent {
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
-        console.log(stepData, 'stepDatastepData');
+        console.log(taskData, 'taskData');
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -300,7 +300,14 @@ class TaskDetails extends PureComponent {
                                 />
                                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
                                     <Text>{fromUserinfo && fromUserinfo.username}</Text>
-                                    <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 12}}>名豪投资</Text>
+                                    <Text style={{color: 'red', opacity: 0.8, fontSize: 12}}>{
+                                        taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
+                                            :
+                                            taskData.singOrder.type == 2 ? `此任务每人每天${taskData.singOrder.num}次`
+                                                :
+                                                '') : '...'
+
+                                    }</Text>
                                 </View>
                             </View>
                             <View>

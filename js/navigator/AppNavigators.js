@@ -26,6 +26,7 @@ import MyTaskReview from '../page/MyTaskReview';
 import TaskTurnDownPage from '../page/TaskTurnDownPage';
 import MyOrderManaPage from '../page/MyOrderManaPage';
 import TaskSendFromUserList from '../page/TaskSendFromUserList';
+import MessageTypePage from '../page/MessageTypePage';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -161,6 +162,12 @@ const MainNavigator = createStackNavigator({
         },
         TaskSendFromUserList: {
             screen: TaskSendFromUserList,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        MessageTypePage: {
+            screen: MessageTypePage,
             navigationOptions: {
                 header: null,
             },

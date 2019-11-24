@@ -15,13 +15,10 @@ import {
     RefreshControl,
     FlatList,
     StyleSheet,
-    Image,
+    Image, StatusBar, TextInput,
 } from 'react-native';
-import {bottomTheme} from '../appSet';
+import {theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
-import message_xitong from '../res/svg/message_xitong.svg';
-import zaixiankefu from '../res/svg/zaixiankefu.svg';
-import huodongxiaoxi from '../res/svg/huodongxiaoxi.svg';
 import FastImage from 'react-native-fast-image';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -29,6 +26,8 @@ import EmptyComponent from '../common/EmptyComponent';
 import ChatSocket from '../util/ChatSocket';
 import {connect} from 'react-redux';
 import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
+import ViewUtil from '../util/ViewUtil';
+import jiaoliu from '../res/svg/jiaoliu.svg';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -37,12 +36,11 @@ const width = Dimensions.get('window').width;
 class MessagePage extends PureComponent {
     constructor(props) {
         super(props);
+        this.params = this.props.navigation.state.params;
+        this.task_id = this.params.task_id || 0;
+        // console.log(this.params,"this.params");
     }
 
-    state = {
-        interVal: 100,
-
-    };
 
     componentDidMount() {
         ChatSocket.selectAllFriendMessage();
@@ -55,56 +53,44 @@ class MessagePage extends PureComponent {
     }
 
     render() {
-        const RefreshHeight = Animated.interpolate(this.animations.val, {
-            inputRange: [-200, -0.1, 0],
-            outputRange: [300, 30, 0],
-            extrapolate: 'clamp',
-        });
+
 
         let statusBar = {
             hidden: false,
-            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
-            // barStyle: 'dark-content',
-            // translucent:true
+            backgroundColor: theme,//安卓手机状态栏背景颜色
         };
         let navigationBar = <NavigationBar
             // showStatusBarHeight={true}
             hide={true}
             statusBar={statusBar}
-            style={{backgroundColor: bottomTheme}} // 背景颜色
+            style={{backgroundColor: theme}} // 背景颜色
         />;
-        const {unMessageLength} = this.props.friend;
-        const {statusText} = this.props.socketStatus;
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
+        const {type} = this.params;
+        let TopColumn = ViewUtil.getTopColumn(this._goChatPage, type == 1 ? '咨询消息' : type == 2 ? '申诉消息' : type == 3 ? '投诉消息' : type == 4 ? '聊天消息' : '', jiaoliu, null, null, null, () => {
+
+        }, false);
+
 
         return (
             <View style={{flex: 1}}>
                 {navigationBar}
-                <Animated.View
-                    // ref={ref => this.zhedangRef = ref}
-                    style={{
-                        backgroundColor: bottomTheme,
-                        height: RefreshHeight,
-                        width,
-                        position: 'absolute',
-                        top: 50,
-                        // zIndex:1,
-                    }}>
-                </Animated.View>
-                <View style={{
-                    height: 40,
-                    width,
-                    backgroundColor: bottomTheme,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: 3,
-                }}>
-                    <Text style={{
-                        color: 'white',
-                        fontSize: 17,
-                    }}>互动{statusText != '' ? `(${statusText})` : unMessageLength ? unMessageLength > 0 ? `(${unMessageLength})` : '' : ''}</Text>
-                </View>
+                {TopColumn}
+                <View style={{flex: 1}}>
+                    <View style={{width: width, height: 30, paddingHorizontal: 10}}>
 
-                <MsgList friend={this.props.friend} RefreshHeight={this.animations.val}/>
+                        <TextPro
+                            value={this.task_id}
+                            onBlur={(text) => {
+                                this.task_id = text;
+                                this.forceUpdate();
+                            }}
+                        />
+                    </View>
+                    <MsgList task_id={this.task_id} type={type} friend={this.props.friend}
+                             RefreshHeight={this.animations.val}/>
+                </View>
 
             </View>
         );
@@ -115,37 +101,39 @@ class MessagePage extends PureComponent {
     };
 }
 
-class MessageColumn extends PureComponent {
+class TextPro extends Component {
+    state = {
+        content: this.props.value,
+    };
+
     render() {
-        const {columnUnreadLength} = this.props;
-        // console.log(columnUnreadLength, 'columnUnreadLength');
-        return <View style={{
-            width: width - 20,
-            height: 100,
-            backgroundColor: 'white',
-            position: 'absolute',
-            top: 0,
-            borderRadius: 10,
-            shadowColor: '#d9d9d9',
-            shadowRadius: 5,
-            shadowOpacity: 1,
-            shadowOffset: {w: 1, h: 1},
-            elevation: 3,//安卓的阴影
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-        }}>
-            <MessageColumnItem type={0} unReadLength={columnUnreadLength[0]} svgXmlData={message_xitong}
-                               title={'系统消息'}/>
-            <MessageColumnItem type={1} columnType={2} unReadLength={columnUnreadLength[1]} svgXmlData={zaixiankefu}
-                               title={'申诉消息'}
-                               size={48}/>
-            <MessageColumnItem type={2} columnType={3} unReadLength={columnUnreadLength[2]} svgXmlData={huodongxiaoxi}
-                               title={'投诉消息'}
-                               size={42}/>
-            <MessageColumnItem type={3} columnType={4} unReadLength={columnUnreadLength[3]} svgXmlData={huodongxiaoxi}
-                               title={'聊天消息'}/>
-        </View>;
+        const {content} = this.state;
+
+        return <TextInput
+            placeholder={'请输入任务ID'}
+            returnKeyType={'search'}
+            style={{
+                padding: 0,
+                // borderWidth:0.3,
+                // borderColor:'rgba(0,0,0,0.5)',
+                height: 25,
+                backgroundColor: '#f2f2f2',
+                borderRadius: 3,
+                paddingLeft: 5,
+            }}
+            value={content}
+            onChangeText={(text) => {
+                this.setState({
+                    content: text,
+                });
+            }}
+            onBlur={this._onBlur}
+        />;
     }
+
+    _onBlur = () => {
+        this.props.onBlur(this.state.content);
+    };
 }
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -156,53 +144,35 @@ class MsgList extends Component {
         isLoading: false,
         hideLoaded: true,
     };
-    params = {
-        pageIndex: 0,
-    };
     filterFriend = (friendArr, type) => {
         let tmpArr = [];
+        const {task_id} = this.props;
 
         for (let i = 0; i < friendArr.length; i++) {
-            if (friendArr[i].columnType == type) {
+            // console.log(friendArr[i].taskId,"friendArr[i].taskId");
+            if (friendArr[i].columnType == type && task_id == 0) {
+                tmpArr.push(friendArr[i]);
+            } else if (friendArr[i].columnType == type && friendArr[i].taskId == task_id) {
                 tmpArr.push(friendArr[i]);
             }
         }
+
+
         return tmpArr;
     };
 
     render() {
         const friendData = this.props.friend.friendArr;
-        const columnUnreadLength = this.props.friend.columnUnreadLength;
-        const {isLoading, hideLoaded} = this.state;
+        const {isLoading} = this.state;
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent/>}
-            ListHeaderComponent={
-                <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
-                    <View style={{
-                        height: 35,
-                        width,
-                        backgroundColor: bottomTheme,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderBottomLeftRadius: 10,
-                        borderBottomRightRadius: 10,
 
-                    }}/>
-
-                    <MessageColumn columnUnreadLength={columnUnreadLength}/>
-                    <View style={{height: 70}}/>
-                </View>
-
-            }
             style={{
                 flex: 1,
 
             }}
             ref={ref => this.flatList = ref}
-            data={this.filterFriend(friendData,1)}
+            data={this.filterFriend(friendData, this.props.type)}
             scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
@@ -212,13 +182,7 @@ class MsgList extends Component {
                     onRefresh={() => this.onRefresh()}
                 />
             }
-            onScroll={Animated.event([
-                {
-                    nativeEvent: {
-                        contentOffset: {y: this.props.RefreshHeight},
-                    },
-                },
-            ])}
+
             windowSize={300}
             onEndReachedThreshold={0.01}
         />;
@@ -236,7 +200,9 @@ class MsgList extends Component {
         }, 1000);
     };
     _renderIndexPath = ({item, index}) => {
+        const {task_id} = this.props;
         return <MessageItemComponent key={item.FriendId} item={item}/>;
+
 
     };
 
@@ -268,7 +234,6 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({});
 const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePage);
-
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -389,7 +354,7 @@ class MessageItemComponent extends Component {
                     opacity: 0.9,
                     marginLeft: 10,
                 }}>{username}</Text>
-                <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>{
+                <Text style={{marginLeft: 10, fontSize: 12, color: 'red', opacity: 0.5}}>{
                     columnType == 1 ? '任务咨询' : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
                 }</Text>
 
@@ -470,9 +435,6 @@ class MessageColumnItem extends PureComponent {
             source = require('../res/img/message_liaotian.png');
         }
         return <TouchableOpacity
-            onPress={() => {
-                NavigationUtils.goPage({type: this.props.columnType}, 'MessageTypePage');
-            }}
             activeOpacity={0.6}
             style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>
             <View>
