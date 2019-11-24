@@ -407,6 +407,60 @@ export function selectSimpleTaskInfo(data, token) {
         }
     });
 }
+/**
+ * 下架任务
+ */
+export function stopDownUserTask(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/stopDownUserTask', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 生成需要的表单信息
+ */
+export function genTaskReleaseInfoData(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/genTaskReleaseInfoData', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 暂停任务
+ */
+export function stopUserTask(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/stopUserTask', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * // 查询该任务做的所有信息
@@ -544,7 +598,28 @@ export function addTaskReleaseData(data, token) {
         }
     });
 }
-
+/**
+ * 修改任务
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function updateTaskReleaseData(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/updateTaskReleaseData', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 /**
  * 查询任务
  * @param data

@@ -50,7 +50,6 @@ class TaskDetails extends PureComponent {
         if (StatusForTask.status === 5) {
             const newStepData = JSON.parse(StatusForTask.stepData.task_step_data);
             tmpData.stepData = newStepData;
-            console.log(newStepData, 'newStepData');
             this.setState({
                 StatusForTask,
                 totalData: tmpData,
@@ -140,7 +139,6 @@ class TaskDetails extends PureComponent {
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
-        console.log(taskData, 'taskData');
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}

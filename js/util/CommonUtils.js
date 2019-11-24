@@ -97,7 +97,7 @@ export const getUUID = () => {
 
     return s.join('');
 };
-export const judgeTaskData = (data) => {
+export const judgeTaskData = (data, update) => {
     const {
         task_type_id,
         task_device_id,
@@ -110,6 +110,7 @@ export const judgeTaskData = (data) => {
         reward_price,
         reward_num,
         task_steps,
+        task_id
     } = data;
     if (!task_type_id || task_type_id === 0) {
         return '请认真填写任务类型哦 ~ ~';
@@ -135,12 +136,19 @@ export const judgeTaskData = (data) => {
     if (!single_order_id || single_order_id === 0) {
         return '用户做单次数您是不是忘记选了 ~ ~';
     }
-    if (!reward_price || reward_price === 0) {
-        return '悬赏单价记得填写哦 ~ ~';
+    if (!update) {
+        if (!reward_price || reward_price === 0) {
+            return '悬赏单价记得填写哦 ~ ~';
+        }
+        if (!reward_num || reward_num === 0) {
+            return '悬赏数量记得填写哦 ~ ~';
+        }
+    }else{
+        if(!task_id){
+            return '数据发生错误 ~ ~';
+        }
     }
-    if (!reward_num || reward_num === 0) {
-        return '悬赏数量记得填写哦 ~ ~';
-    }
+
     try {
         const obj = JSON.parse(task_steps);
         if (obj.length === 0) {
@@ -196,11 +204,11 @@ export const judgeSendTaskData = (task_step_data) => {
                 if (uploadStatus1 !== 1) {
                     return `您步骤${index + 1}验证图未上传成功`;
                 }
-                console.log("typeData.uri1",typeData.uri1);
+                console.log('typeData.uri1', typeData.uri1);
                 if (!typeData.uri1) {
                     return `您步骤${index + 1}验证图未上传`;
                 }
-                if (typeData.uri1.indexOf('file://')!==-1) {
+                if (typeData.uri1.indexOf('file://') !== -1) {
                     return `您步骤${index + 1}验证图未上传成功`;
                 }
 

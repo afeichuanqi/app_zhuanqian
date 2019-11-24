@@ -93,6 +93,9 @@ export default class ViewUtil {
             </View>
         </TouchableOpacity>;
     };
+
+
+
     static getReviewIco = (reviewNum, click) => {
         return <TouchableOpacity
             onPress={click}

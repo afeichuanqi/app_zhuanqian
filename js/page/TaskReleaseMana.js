@@ -69,7 +69,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '发布管理', null, bottomTheme, 'white', 16,null,false);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '发布管理', null, bottomTheme, 'white', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus
@@ -142,7 +142,9 @@ class TaskReleaseMana extends PureComponent {
             case 'first':
                 return <FristListComponent task_status={0} userinfo={this.props.userinfo}/>;
             case 'second':
-                return <View style={[{backgroundColor: '#673ab7', flex: 1}]}/>;
+                return <FristListComponent task_status={2} userinfo={this.props.userinfo}/>;
+            case 'second1':
+                return <FristListComponent task_status={1} userinfo={this.props.userinfo}/>;
         }
     };
 }
@@ -150,9 +152,7 @@ class TaskReleaseMana extends PureComponent {
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
-const mapDispatchToProps = dispatch => ({
-    // onSetTaskReleaseInfo: (data) => dispatch(actions.onSetTaskReleaseInfo(data)),
-});
+const mapDispatchToProps = dispatch => ({});
 const TaskReleaseManaRedux = connect(mapStateToProps, mapDispatchToProps)(TaskReleaseMana);
 
 class FristListComponent extends PureComponent {
@@ -214,21 +214,10 @@ class FristListComponent extends PureComponent {
     };
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskReleaseItem onPress={this._itemClick} item={item} key={item.id}/>;
+        return <TaskReleaseItem task_status={this.props.task_status} onPress={this._itemClick} item={item}
+                                key={item.id}/>;
     };
     _itemClick = (item) => {
-        // const {id} = item //任务id
-        console.log(item, 'item');
-        // const {task_steps} = item;
-        // const data = JSON.parse(task_steps);
-        // const dataIndex = data.findIndex(d => d.type == 5);
-        // const imgs = data[dataIndex];
-        // const typeData = imgs.typeData;
-        // const uri = typeData.uri;
-        // console.log(uri,"uri");
-        // for(let i=0;i<){
-        //
-        // }
         NavigationUtils.goPage({task_id: item.id, status: 0, taskUri: item.task_uri}, 'MyTaskReview');
     };
 

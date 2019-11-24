@@ -20,9 +20,10 @@ import SvgUri from 'react-native-svg-uri';
 import task_icon from '../res/svg/task_icon.svg';
 import menu_right from '../res/svg/menu_right.svg';
 import LabelBigComponent from '../common/LabelBigComponent';
-import {addUserTaskNum, selectTaskInfo_, updateUserTaskPrice} from '../util/AppService';
+import {addUserTaskNum, selectTaskInfo_, stopUserTask, updateUserTaskPrice} from '../util/AppService';
 import {connect} from 'react-redux';
 import MyModalBoxTwo from '../common/MyModalBoxTwo';
+import ToastSelect from '../common/ToastSelect';
 
 const {width} = Dimensions.get('window');
 
@@ -155,7 +156,6 @@ class MyOrderManaPage extends PureComponent {
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
         let TopColumn = ViewUtil.getTopColumn(this._goChatPage, '任务管理', jiaoliu, null, null, null, () => {
-            // const data = this.taskDatas[this.pageIndex];
         }, false);
         const {taskInfo} = this.state;
         return (
@@ -264,6 +264,32 @@ class MyOrderManaPage extends PureComponent {
                     />
 
                 </MyModalBoxTwo>
+                <ToastSelect
+                    rightTitle={'确认'}
+                    sureClick={() => {
+                        // const {task_status} = this.state.taskInfo;
+                        const {userinfo} = this.props;
+                        const {taskid} = this.params;
+                        stopUserTask({
+                            task_id: taskid,
+                            task_status: 1,
+
+                        }, userinfo.token).then(result => {
+                            this.toastSelect.hide();
+                            NavigationUtils.goBack(this.props.navigation);
+                        }).catch(msg => {
+                            this.toast.show(msg);
+                        });
+                    }}
+                    ref={ref => this.toastSelect = ref}>
+                    <View style={{
+                        height: 60, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                        paddingTop: 10,
+
+                    }}>
+                        <Text style={{fontSize: 14, width: width - 80}}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
+                    </View>
+                </ToastSelect>
             </SafeAreaViewPlus>
         );
     }
@@ -346,18 +372,18 @@ class MyOrderManaPage extends PureComponent {
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={()=>{
+                onPress={() => {
                     NavigationUtils.goPage({
                         task_id: this.state.taskInfo.id,
                         type: 2,
                     }, 'MessageTypePage');
                 }}
                 style={{
-                flexDirection: 'row', alignItems: 'center', width: (width) / 2,
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-            }}>
+                    flexDirection: 'row', alignItems: 'center', width: (width) / 2,
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                }}>
                 <Text>申诉：{(parseInt(taskInfo.appealCount))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
@@ -381,38 +407,94 @@ class MyOrderManaPage extends PureComponent {
             </TouchableOpacity>
         </View>;
     };
+    // _update
+
     getColumn = () => {
         return <View style={{
             width,
             paddingVertical: 10, backgroundColor: 'white', paddingHorizontal: 10, flexDirection: 'row',
             flexWrap: 'wrap',
         }}>
-            <TouchableOpacity style={{
-                width: (width - 20) / 4,
-                height: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
+            <TouchableOpacity
+                onPress={() => {
+                    const {taskid} = this.params;
+                    NavigationUtils.goPage({
+                        task_id: taskid,
+                        update: true,
+                        updatePage:this._updatePage
+                    }, 'TaskRelease');
+                    // if (this.state.taskInfo.task_status == 0) {
+                    //     this.toast.show('请先暂停任务');
+                    // } else {
+                    //
+                    // }
+
+                }
+                }
+
+                style={{
+                    width: (width - 20) / 4,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
                 <Image source={require('../res/img/orderMana/xiugai.png')}
                        style={{width: 18, height: 18}}/>
                 <Text style={{marginTop: 5}}>修改</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{
-                width: (width - 20) / 4,
-                height: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
-                <Image source={require('../res/img/orderMana/shangjia.png')}
-                       style={{width: 20, height: 20}}/>
-                <Text style={{marginTop: 5}}>上架</Text>
+            <TouchableOpacity
+                onPress={() => {
+                    const {task_status} = this.state.taskInfo;
+                    const {userinfo} = this.props;
+                    const {taskid} = this.params;
+                    if (task_status != 0 && task_status != 2) {
+                        this.toast.show('数据错误');
+                        return;
+                    }
+                    const updateStatus = task_status == 0 ? 2 : task_status == 2 ? 0 : null;
+                    stopUserTask({
+                        task_id: taskid,
+                        task_status: updateStatus,
+
+                    }, userinfo.token).then(result => {
+                        this._updatePage();
+                    }).catch(msg => {
+                        this.toast.show(msg);
+                    });
+                }}
+
+                style={{
+                    width: (width - 20) / 4,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                <Image
+                    source={this.state.taskInfo.task_status == 0 ?
+                        require('../res/img/orderMana/task_stop.png')
+                        :
+                        require('../res/img/orderMana/shangjia.png')}
+                    style={{width: 20, height: 20}}/>
+                <Text style={{marginTop: 5}}> {this.state.taskInfo.task_status == 0 ? '暂停' : '运行'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{
-                width: (width - 20) / 4,
-                height: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
+            <TouchableOpacity
+                onPress={() => {
+                    const {task_status} = this.state.taskInfo;
+                    const {userinfo} = this.props;
+                    const {taskid} = this.params;
+                    if (task_status == 1) {
+                        this.toast.show('已经是下架状态');
+                        return;
+                    }
+                    this.toastSelect.show();
+
+                }}
+                style={{
+                    width: (width - 20) / 4,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
                 <Image source={require('../res/img/orderMana/xiajia.png')}
                        style={{width: 20, height: 20}}/>
                 <Text style={{marginTop: 5}}>下架</Text>
@@ -432,14 +514,12 @@ class MyOrderManaPage extends PureComponent {
     };
     _sureAddNum = () => {
         const {userinfo} = this.props;
-
         const {taskInfo} = this.state;
         const nowTaskNum = this.updateTaskNum.getNewTaskNum();
         addUserTaskNum({
             task_id: taskInfo.id,
             add_num: nowTaskNum,
         }, userinfo.token).then(result => {
-            // console.log(result);
             setTimeout(() => {
                 this._updatePage();
                 this.toast.show('加量成功');

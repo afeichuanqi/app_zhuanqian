@@ -20,7 +20,6 @@ import menu_right from '../res/svg/menu_right.svg';
 import step_add from '../res/svg/step_add.svg';
 import task_yulan from '../res/svg/task_yulan.svg';
 import SvgUri from 'react-native-svg-uri';
-// import PopButtomMenu from '../common/PopButtomMenu';
 import TaskMenu from './TaskRelease/TaskMenu';
 import TaskPop from './TaskRelease/TaskPopMenu';
 import wangzhi from '../res/svg/wangzhi.svg';
@@ -34,7 +33,13 @@ import shouji from '../res/svg/shouji.svg';
 import {MORE_MENU} from './TaskRelease/TASK_MENU';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {addTaskReleaseData, selectTaskReleaseData, uploadQiniuImage} from '../util/AppService';
+import {
+    addTaskReleaseData,
+    genTaskReleaseInfoData,
+    selectTaskReleaseData,
+    updateTaskReleaseData,
+    uploadQiniuImage,
+} from '../util/AppService';
 import {connect} from 'react-redux';
 import AppTskDefaultData from './TaskRelease/AppTskDefaultData';
 import actions from '../action';
@@ -48,6 +53,15 @@ class TextInputPro extends PureComponent {
     state = {
         defaultValue: this.props.rightComponentData.defaultValue,
     };
+
+    componentWillReceiveProps(nextProps) {
+
+        if (this.props.rightComponentData.defaultValue != nextProps.rightComponentData.defaultValue) {
+            this.setState({
+                defaultValue: nextProps.rightComponentData.defaultValue,
+            });
+        }
+    }
 
     render() {
         const {rightComponentData} = this.props;
@@ -99,6 +113,7 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
             rightComponent = <InputTextPro
                 onChangeText={rightComponentData.onChangeText}
                 defaultValue={rightComponentData.defaultValue}
+                editable={rightComponentData.editable}
                 placeComponent={rightComponentData.placeComponent}/>;
             rightComponentSvg = null;
             break;
@@ -177,10 +192,34 @@ class TaskRelease extends PureComponent {
 
             },
         };
+        this.params = this.props.navigation.state.params;
+        const {update} = this.params;
+        this.taskInfo = this.props.taskInfo;
+        this.taskInfo.update = update;
+
 
     }
 
     componentDidMount() {
+        const {task_id, update} = this.params;
+        const {userinfo} = this.props;
+        if (task_id) {
+            genTaskReleaseInfoData({task_id}, userinfo.token).then(taskInfo => {
+                const stepData = JSON.parse(taskInfo.stepData);
+                taskInfo.stepData = stepData;
+                taskInfo.columnData.rewardPrice = taskInfo.columnData.rewardPrice.toString();
+                taskInfo.columnData.rewardNum = taskInfo.columnData.rewardNum.toString();
+                this.taskInfo = taskInfo;
+
+                this.taskInfo.update = update;//加标示
+                this.taskInfo.taskId = task_id;//加标示
+                this.forceUpdate();
+            });
+        } else {
+
+
+        }
+
         selectTaskReleaseData().then((result) => {
             this.setState({
                 data: result,
@@ -191,6 +230,7 @@ class TaskRelease extends PureComponent {
 
     componentWillUnmount() {
         const data = this._getTaskReleaseData();
+        console.log(data, 'data');
         this.props.onSetTaskReleaseInfo(data);
     }
 
@@ -250,7 +290,8 @@ class TaskRelease extends PureComponent {
         const reward_price = columnData.rewardPrice;
         const reward_num = columnData.rewardNum;
         const stepIndex = stepData && stepData.findIndex(d => d.type == 5);
-        const task_uri = stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '';
+
+        const task_uri = stepIndex && (stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '');
 
         const task_steps = JSON.stringify(stepData);
         const data = {
@@ -271,24 +312,42 @@ class TaskRelease extends PureComponent {
 
     };
     _addTaskReleaseData = () => {
-        const data = this._getFormData();
-        const error = judgeTaskData(data);
-        console.log(error, 'error');
-        if (error != '') {
+        if (!this.taskInfo.update) {
+            const data = this._getFormData();
+            const error = judgeTaskData(data);
+            if (error != '') {
+                this.toast.show(error);
+            } else {
+                const {userinfo} = this.props;
+                const {token} = userinfo;
+                addTaskReleaseData(data, token).then(result => {
+                    const {task_id} = result;
+                    NavigationUtils.goPage({
+                        task_id: task_id,
+                        test: false,
+                    }, 'TaskDetails');
 
-            this.toast.show(error);
+                }).catch(err => {
+                    this.toast.show(err);
+                });
+            }
         } else {
-            const {userinfo} = this.props;
-            const {token} = userinfo;
-            addTaskReleaseData(data, token).then(result => {
-                const {task_id} = result;
-                NavigationUtils.goPage({
-                    task_id: task_id,
-                    test: false,
-                }, 'TaskDetails');
-            }).catch(err => {
-                this.toast.show(err);
-            });
+            const data = this._getFormData();
+            data.task_id = this.taskInfo.taskId;
+
+            const error = judgeTaskData(data, true);
+            if (error != '') {
+                this.toast.show(error);
+            } else {
+                const {userinfo} = this.props;
+                const {token} = userinfo;
+                updateTaskReleaseData(data, token).then(result => {
+                    NavigationUtils.goBack(this.props.navigation);
+                    this.params.updatePage && this.params.updatePage();
+                }).catch(err => {
+                    this.toast.show(err);
+                });
+            }
         }
 
 
@@ -306,7 +365,8 @@ class TaskRelease extends PureComponent {
         />;
         const {userinfo} = this.props;
         const {data} = this.state;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '任务发布', null, bottomTheme, 'white', 16);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16);
+        console.log('render', this.taskInfo);
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -321,17 +381,17 @@ class TaskRelease extends PureComponent {
                     style={{backgroundColor: '#e8e8e8'}}>
 
                     <TypeSelect
-                        defaultId={this.props.taskInfo.typeData.id}
+                        defaultId={this.taskInfo.typeData.id}
                         typeArr={data.app_task_type}
                         ref={ref => this.typeSelect = ref}/>
                     <TypeSelect
-                        defaultId={this.props.taskInfo.deviceData.id}
+                        defaultId={this.taskInfo.deviceData.id}
                         ref={ref => this.deviceSelect = ref}
                         typeArr={data.app_task_device}
                         style={{marginTop: 10}} title={'支持设备'}/>
-                    {/*栏目*/}
+                    {/*栏目加步骤*/}
                     <BottomInfoForm
-                        taskInfo={this.props.taskInfo}
+                        taskInfo={this.taskInfo}
                         data={data}
                         userinfo={userinfo} ref={ref => this.bIform = ref}
                         scrollTo={this._scrollTo}
@@ -365,7 +425,11 @@ class TaskRelease extends PureComponent {
                             flexDirection: 'row',
                             backgroundColor: bottomTheme,
                         }}>
-                        <Text style={{fontSize: 15, color: 'white', marginLeft: 5}}>申请发布</Text>
+                        <Text style={{
+                            fontSize: 15,
+                            color: 'white',
+                            marginLeft: 5,
+                        }}>{this.taskInfo.update ? '确认修改' : '申请发布'}</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaViewPlus>
@@ -409,6 +473,20 @@ class BottomInfoForm extends Component {
         projectTitle: this.props.taskInfo.columnData.projectTitle,
         orderReplayNum: (this.props.taskInfo.columnData.orderReplayNum && Object.keys(this.props.taskInfo.columnData.orderReplayNum).length > 0) ? this.props.taskInfo.columnData.orderReplayNum : this.props.data.app_task_single_order_select[0],
     };
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        this.columnData = {
+            orderTimeLimit: (this.props.taskInfo.columnData.orderTimeLimit && Object.keys(this.props.taskInfo.columnData.orderTimeLimit).length > 0) ? this.props.taskInfo.columnData.orderTimeLimit : this.props.data.app_task_order_time_limit[0],
+            reviewTime: (this.props.taskInfo.columnData.reviewTime && Object.keys(this.props.taskInfo.columnData.reviewTime).length > 0) ? this.props.taskInfo.columnData.reviewTime : this.props.data.app_task_review_time[0],
+            singleOrder: (this.props.taskInfo.columnData.singleOrder && Object.keys(this.props.taskInfo.columnData.singleOrder).length > 0) ? this.props.taskInfo.columnData.singleOrder : this.props.data.app_task_single_order[0],
+            rewardNum: this.props.taskInfo.columnData.rewardNum,
+            rewardPrice: this.props.taskInfo.columnData.rewardPrice,
+            TaskInfo: this.props.taskInfo.columnData.TaskInfo,
+            title: this.props.taskInfo.columnData.title,
+            projectTitle: this.props.taskInfo.columnData.projectTitle,
+            orderReplayNum: (this.props.taskInfo.columnData.orderReplayNum && Object.keys(this.props.taskInfo.columnData.orderReplayNum).length > 0) ? this.props.taskInfo.columnData.orderReplayNum : this.props.data.app_task_single_order_select[0],
+        };
+    }
 
     _changeProjectTitle = (text) => {
         this.columnData.projectTitle = text;
@@ -548,18 +626,22 @@ class BottomInfoForm extends Component {
 
 
             </View>
+            {/*{!this.props.taskInfo.update && }*/}
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
+
                 {genFormItem('悬赏单价', 4,
                     {
                         placeComponent: rewardPrice,
                         onChangeText: this._changeRewardPrice,
                         defaultValue: this.columnData.rewardPrice,
+                        editable: !this.props.taskInfo.update,
                     })}
                 {genFormItem('悬赏数量', 4,
                     {
                         placeComponent: rewardNum,
                         onChangeText: this._changeRewardNum,
                         defaultValue: this.columnData.rewardNum,
+                        editable: !this.props.taskInfo.update,
                     })}
                 {/*{genFormItem('预付赏金', 1, {info: '服务费、成交额12%', onchangeText: this._changePrepaidBounty, editable: false})}*/}
                 <InputSetting
@@ -569,6 +651,7 @@ class BottomInfoForm extends Component {
                     onchangeText: this._changePrepaidBounty,
                     editable: false,
                 }}/>
+                {/*<View style={{position:'absolute',flex:1,width, height:150,backgroundColor:'rgba(0,0,0,0.1)'}}/>*/}
             </View>
             {this.props.taskInfo.stepData && this.props.taskInfo.stepData.length > 0 && !showHistory ? <View
 
@@ -605,10 +688,7 @@ class BottomInfoForm extends Component {
                 <StepInfo stepData={stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
                           scrollTo={this.props.scrollTo}
                           scollToEnd={this.props.scollToEnd}/>}
-
-
         </View>;
-
     }
 }
 
@@ -627,6 +707,14 @@ class InputSelect extends Component {
         defaultId: this.props.defaultId,
         showPopBtn: false,
     };
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        if (this.props.defaultId != nextProps.defaultId) {
+            this.setState({
+                defaultId: nextProps.defaultId,
+            });
+        }
+    }
 
     render() {
         const {defaultId} = this.state;
@@ -691,6 +779,7 @@ class InputTextPro extends Component {
     }
 
     render() {
+        // console.log(this.props.defaultValue.length,"this.props.defaultValue1")
         return <View style={{flex: 1, justifyContent: 'center'}}>
             {this.state.showPlaceholder && <TouchableOpacity
                 ref={ref => this.btn = ref}
@@ -703,6 +792,7 @@ class InputTextPro extends Component {
             {!this.state.showPlaceholder && <TextInput
                 value={this.state.defaultValue}
                 maxLength={5}
+                editable={this.props.editable}
                 keyboardType={'number-pad'}
                 onFocus={this.hidePlaceholder}
                 onBlur={this._onBlur}
@@ -714,12 +804,25 @@ class InputTextPro extends Component {
 
     componentDidMount(): void {
         if (this.props.defaultValue.length > 0) {
+
             // this._onChangeText(this.props.defaultValue);
             this.setState({
                 showPlaceholder: false,
             });
         }
     }
+
+    //
+    // componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+    //     console.log(nextProps.defaultValue,"nextProps.defaultValue");
+    //     if(this.props.defaultValue !== nextProps.defaultValue && nextProps.defaultValue.length > 0){
+    //         console.log('我被执行');
+    //         this.setState({
+    //             showPlaceholder: false,
+    //             defaultValue:nextProps.defaultValue
+    //         });
+    //     }
+    // }
 
     _onChangeText = (text) => {
         this.setState({
@@ -736,21 +839,8 @@ class InputTextPro extends Component {
     showPlaceholder = () => {
         this.setState({
             showPlaceholder: true,
-        }, () => {
-            // this.ipt.focus();
         });
-        // this.ipt.setNativeProps({
-        //     style: {
-        //         zIndex: 0,
-        //         elevation: 0,
-        //     },
-        // });
-        // this.btn.setNativeProps({
-        //     style: {
-        //         zIndex: 1,
-        //         elevation: 0.1,
-        //     },
-        // });
+
     };
     hidePlaceholder = () => {
         this.setState({
@@ -758,21 +848,6 @@ class InputTextPro extends Component {
         }, () => {
             this.ipt.focus();
         });
-        // this.ipt.setNativeProps({
-        //     style: {
-        //         // back
-        //         zIndex: 1,
-        //         elevation: 0.1,
-        //     },
-        // });
-        // this.btn.setNativeProps({
-        //     style: {
-        //         zIndex: 0,
-        //         elevation: 0,
-        //     },
-        // });
-
-
     };
 }
 
@@ -794,8 +869,17 @@ class RadioInfoComponent extends Component {
     };
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        console.log(nextProps.defaultId, 'nextProps.defaultId');
         const index = this.props.radioArr.findIndex(e => e.id == nextProps.defaultId);
         this.props.select(this.props.radioArr[index]);
+        if (this.props.defaultId != nextProps.defaultId) {
+
+            this.setState({
+                id: nextProps.defaultId,
+            });
+
+        }
+
     }
 
     genRadio = (item, Nindex) => {
@@ -1020,6 +1104,14 @@ class TypeSelect extends Component {
     state = {
         id: this.props.defaultId,
     };
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        if (this.props.defaultId != nextProps.defaultId) {
+            this.setState({
+                id: nextProps.defaultId,
+            });
+        }
+    }
 
     render() {
         const {title, typeArr} = this.props;
