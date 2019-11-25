@@ -530,30 +530,6 @@ class TopLeftFilterComponent extends Component {
     }
 }
 
-class FilterBtnComponent extends PureComponent {
-    state = {
-        show: false,
-    };
-    _onPress = () => {
-        this.setState({
-            show: !this.state.show,
-        }, () => {
-            this.props.onPress(this.state.show);
-        });
-
-    };
-    hide = () => {
-        this.setState({
-            show: false,
-        });
-    };
-    //
-    // render() {
-    //     const {show} = this.state;
-    //
-    //     return ;
-    // }
-}
 
 
 export default TaskHallPage;

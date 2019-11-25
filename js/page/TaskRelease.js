@@ -241,6 +241,8 @@ class TaskRelease extends PureComponent {
     _goReleaseTest = () => {
         //生成数据
         const FormData = this._getFormData();
+        FormData.task_id = this.taskInfo.taskId;
+        // FormData.update = this.taskInfo.update;
         const data = this._getTaskReleaseData();
         const fromUserinfo = this.props.userinfo;
         // console.log( data.columnData.orderReplayNum," data.orderReplayNum");
@@ -265,6 +267,7 @@ class TaskRelease extends PureComponent {
             stepData,
             test: true,
             FormData,
+            update:this.taskInfo.update
         }, 'TaskDetails');
     };
     //生成表单提交数据

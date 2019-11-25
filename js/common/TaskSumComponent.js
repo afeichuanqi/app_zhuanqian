@@ -1,10 +1,10 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text,Animated} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
 // import Animated, {Easing} from 'react-native-reanimated';
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+// const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 // const {timing} = Animated;
 
 const topBottomVal = 17;
@@ -37,36 +37,36 @@ class TaskSumComponent extends PureComponent {
 
     }
 
-    animations = {
-        scale: new Animated.Value(1),
-    };
-    _onPressIn = () => {
-        //隐藏box
-        this._anim = Animated.timing(this.animations.scale, {
-            duration: 200,
-            toValue: 0,
-            // easing: Easing.inOut(Easing.ease),
-        }).start();
-    };
-    _onPressOut = () => {
-        //隐藏box
-        this._anim = Animated.timing(this.animations.scale, {
-            duration: 200,
-            toValue: 1,
-            // easing: Easing.inOut(Easing.ease),
-        }).start();
-    };
+    // animations = {
+    //     scale: new Animated.Value(1),
+    // };
+    // _onPressIn = () => {
+    //     //隐藏box
+    //     this._anim = Animated.timing(this.animations.scale, {
+    //         duration: 200,
+    //         toValue: 0,
+    //         // easing: Easing.inOut(Easing.ease),
+    //     }).start();
+    // };
+    // _onPressOut = () => {
+    //     //隐藏box
+    //     this._anim = Animated.timing(this.animations.scale, {
+    //         duration: 200,
+    //         toValue: 1,
+    //         // easing: Easing.inOut(Easing.ease),
+    //     }).start();
+    // };
 
     render() {
-        const scale = this.animations.scale.interpolate( {
-            inputRange: [0, 1],
-            outputRange: [0.95, 1],
-            extrapolate: 'clamp',
-        });
+        // const scale = this.animations.scale.interpolate( {
+        //     inputRange: [0, 1],
+        //     outputRange: [0.95, 1],
+        //     extrapolate: 'clamp',
+        // });
         const {titleFontSize, marginHorizontal} = this.props;
 
-        return <AnimatedTouchableOpacity
-            activeOpacity={1}
+        return <TouchableOpacity
+            // activeOpacity={1}
             style={{
                 flex: 1,
                 flexDirection: 'row',
@@ -75,11 +75,11 @@ class TaskSumComponent extends PureComponent {
                 paddingBottom:25,
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
-                transform: [{scale}],
+                // transform: [{scale}],
                 height:90
             }}
-            onPressIn={this._onPressIn}
-            onPressOut={this._onPressOut}
+            // onPressIn={this._onPressIn}
+            // onPressOut={this._onPressOut}
         >
             <FastImage
                 style={[styles.imgStyle]}
@@ -134,7 +134,7 @@ class TaskSumComponent extends PureComponent {
                     // fontWeight: '100',
                 }}>116人已完成|剩余数90</Text>
             </View>
-        </AnimatedTouchableOpacity>;
+        </TouchableOpacity>;
 
 
     }

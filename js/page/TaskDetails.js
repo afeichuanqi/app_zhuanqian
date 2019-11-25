@@ -20,9 +20,9 @@ import {connect} from 'react-redux';
 import {
     addTaskReleaseData,
     selectTaskInfo,
-    selectUserIsSignUp, selectUserStatusForTaskId,
+    selectUserStatusForTaskId,
     sendTaskStepForm,
-    startSignUpTask,
+    startSignUpTask, updateTaskReleaseData,
 } from '../util/AppService';
 import taskHallNext from '../res/svg/taskHallNext.svg';
 import goback from '../res/svg/goback.svg';
@@ -346,6 +346,7 @@ class TaskDetails extends PureComponent {
                     {/*底部按钮*/}
                     <BottomBtns
                         test={test}
+                        update={this.params.update}
                         taskStatus={taskStatus}
                         StatusForTask={StatusForTask}
                         startSignUp={this._startSignUp}
@@ -408,18 +409,34 @@ class TaskDetails extends PureComponent {
 
     };
     _sendStepData = () => {
-        const {FormData} = this.params;
-        const {token} = userinfo;
-        const error = judgeTaskData(FormData);
-        if (error != '') {
-            this.toast.show(error);
-            return;
+        const {userinfo} = this.props;
+        if (!this.params.update) {
+            const {FormData} = this.params;
+            const {token} = userinfo;
+            const error = judgeTaskData(FormData);
+            if (error != '') {
+                this.toast.show(error);
+                return;
+            }
+            addTaskReleaseData(FormData, token).then(result => {
+                this.toast.show('发布成功 ~ ~ ');
+            }).catch(err => {
+                this.toast.show(err);
+            });
+        } else {
+            const {FormData} = this.params;
+            const {token} = userinfo;
+            const error = judgeTaskData(FormData, true);
+            if (error != '') {
+                this.toast.show(error);
+                return;
+            }
+            updateTaskReleaseData(FormData, token).then(result => {
+                this.toast.show('修改成功 ~ ~ ');
+            }).catch(err => {
+                this.toast.show(err);
+            });
         }
-        addTaskReleaseData(FormData, token).then(result => {
-            this.toast.show('发布成功 ~ ~ ');
-        }).catch(err => {
-            this.toast.show(err);
-        });
     };
 }
 
@@ -460,7 +477,7 @@ class BottomBtns extends PureComponent {
                         backgroundColor: bottomTheme,
                     }}>
                     <Text
-                        style={{fontSize: 15, color: 'white', marginLeft: 5}}>申请发布</Text>
+                        style={{fontSize: 15, color: 'white', marginLeft: 5}}>{this.props.update?'确认修改':'申请发布'}</Text>
                 </TouchableOpacity>
 
             </View> : <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>

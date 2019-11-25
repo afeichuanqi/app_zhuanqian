@@ -672,7 +672,7 @@ class TaskStepColumn extends PureComponent {
                     }}>
                         {this.props.isEdit ? <TextInput
                                 // onBlur={this._onblur}
-
+                                editable={true}
                                 placeholder={'请按照要求输入文字内容'}
                                 onChangeText={(text) => {
                                     const tmpArr = this.state.stepDataArr;

@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Dimensions, Image} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import LabelBigComponent from '../../common/LabelBigComponent';
 import ViewUtil from '../../util/ViewUtil';
 import task_icon from '../../res/svg/task_icon.svg';
@@ -7,17 +7,13 @@ import SvgUri from 'react-native-svg-uri';
 import {bottomTheme} from '../../appSet';
 import NavigationUtils from '../../navigator/NavigationUtils';
 
-const {width, height} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
     render() {
         const titleFontSize = 14;
         const {item} = this.props;
         return <View style={{}}>
             <TouchableOpacity
-                onPress={() => {
-                    console.log(item);
-                    NavigationUtils.goPage({taskid: item.id}, 'MyOrderManaPage');
-                }}
+                onPress={this.props.onPress}
                 activeOpacity={0.6}
                 style={{
                     // flex: 1,
@@ -100,7 +96,7 @@ export default class TaskReleaseItem extends PureComponent {
                     }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>
                 </View>
             </TouchableOpacity>
-            {this.props.task_status == 0 ? <View style={{
+            {(this.props.task_status == 0 || this.props.task_status == 2)? <View style={{
                 height: 25,
                 paddingVertical: 6,
                 paddingHorizontal: 11,
@@ -125,9 +121,16 @@ export default class TaskReleaseItem extends PureComponent {
                 flexDirection: 'row',
             }}>
 
-                {ViewUtil.getReviewIco(parseInt(item.task_is_send_num) - parseInt(item.task_pass_num) - parseInt(item.task_noPass_num), this._reViewClick)}
+                {ViewUtil.getReReviewIco(() => {
+                    // const {taskid} = this.params;
+                    NavigationUtils.goPage({
+                        task_id: this.props.item.id,
+                        update: false,
+                        updatePage: this._updatePage,
+                    }, 'TaskRelease');
+                })}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-
+                {ViewUtil.getDeleteIco(this.props.deleteTask)}
             </View> : null}
 
             {/*{ViewUtil.getLine()}*/}
@@ -137,18 +140,6 @@ export default class TaskReleaseItem extends PureComponent {
 
     _reViewClick = () => {
         const {item} = this.props;
-        this.props.onPress(item);
+        this.props.reViewClick(item);
     };
 }
-const styles = StyleSheet.create({
-    imgStyle: {
-        // 设置背景颜色
-        // backgroundColor: '#E8E8E8',
-        // 设置宽度
-        width: 38,
-        height: 40,
-        borderRadius: 5,
-        // 设置高度
-        // height:150
-    },
-});

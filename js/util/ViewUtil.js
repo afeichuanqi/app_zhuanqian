@@ -93,9 +93,43 @@ export default class ViewUtil {
             </View>
         </TouchableOpacity>;
     };
+    /**
+     * 重新发布
+     * @param reviewNum
+     * @param click
+     * @returns {*}
+     */
+    static getReReviewIco = (click) => {
+        return <TouchableOpacity
+            onPress={click}
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            <Image
+                style={{height: 13, width: 13}}
+                source={require('../res/img/task_chongxinfabu.png')}
+            />
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
 
+        </TouchableOpacity>;
+    };
 
+    /**
+     * 删除
+     * @param reviewNum
+     * @param click
+     * @returns {*}
+     */
+    static getDeleteIco = (click) => {
+        return <TouchableOpacity
+            onPress={click}
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            <Image
+                style={{height: 13, width: 13}}
+                source={require('../res/img/task_delete.png')}
+            />
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
 
+        </TouchableOpacity>;
+    };
     static getReviewIco = (reviewNum, click) => {
         return <TouchableOpacity
             onPress={click}

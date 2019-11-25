@@ -273,10 +273,10 @@ class MyOrderManaPage extends PureComponent {
                         stopUserTask({
                             task_id: taskid,
                             task_status: 1,
-
                         }, userinfo.token).then(result => {
                             this.toastSelect.hide();
                             NavigationUtils.goBack(this.props.navigation);
+                            this.params.updateReleasePage && this.params.updateReleasePage(true);
                         }).catch(msg => {
                             this.toast.show(msg);
                         });
@@ -417,17 +417,17 @@ class MyOrderManaPage extends PureComponent {
         }}>
             <TouchableOpacity
                 onPress={() => {
-                    const {taskid} = this.params;
-                    NavigationUtils.goPage({
-                        task_id: taskid,
-                        update: true,
-                        updatePage:this._updatePage
-                    }, 'TaskRelease');
-                    // if (this.state.taskInfo.task_status == 0) {
-                    //     this.toast.show('请先暂停任务');
-                    // } else {
-                    //
-                    // }
+
+                    if (this.state.taskInfo.task_status == 0) {
+                        this.toast.show('请先暂停任务');
+                    } else {
+                        const {taskid} = this.params;
+                        NavigationUtils.goPage({
+                            task_id: taskid,
+                            update: true,
+                            updatePage: this._updatePage,
+                        }, 'TaskRelease');
+                    }
 
                 }
                 }
@@ -480,8 +480,6 @@ class MyOrderManaPage extends PureComponent {
             <TouchableOpacity
                 onPress={() => {
                     const {task_status} = this.state.taskInfo;
-                    const {userinfo} = this.props;
-                    const {taskid} = this.params;
                     if (task_status == 1) {
                         this.toast.show('已经是下架状态');
                         return;

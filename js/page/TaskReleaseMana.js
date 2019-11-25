@@ -26,9 +26,11 @@ import {
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {selectTaskReleaseList} from '../util/AppService';
+import {deleteTaskRelease, selectTaskReleaseList} from '../util/AppService';
 import {connect} from 'react-redux';
 import TaskReleaseItem from './TaskReleaseMana/TaskReleaseItem';
+import ToastSelect from '../common/ToastSelect';
+import Toast from '../common/Toast';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -116,9 +118,12 @@ class TaskReleaseMana extends PureComponent {
                     renderScene={this.renderScene}
                     position={this.position}
                     renderTabBar={() => null}
-                    onIndexChange={index => this.setState({
-                        navigationIndex: index,
-                    })}
+                    onIndexChange={index => {
+
+                        this.setState({
+                            navigationIndex: index,
+                        });
+                    }}
 
                     initialLayout={{width}}
                     lazy={true}
@@ -132,7 +137,6 @@ class TaskReleaseMana extends PureComponent {
         NavigationUtils.goPage({}, 'TaskRelease');
     };
     handleIndexChange = (index) => {
-        // console.log(index);
         const {navigationRoutes} = this.state;
         this.jumpTo(navigationRoutes[index].key);
     };
@@ -140,11 +144,21 @@ class TaskReleaseMana extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent task_status={0} userinfo={this.props.userinfo}/>;
+                return <FristListComponent task_status={0} index={0}
+                                           navigationIndex={this.state.navigationIndex}
+                                           navigation={this.props.navigation}
+                                           userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent task_status={2} userinfo={this.props.userinfo}/>;
+                return <FristListComponent task_status={2} index={1}
+                                           navigationIndex={this.state.navigationIndex}
+                                           navigation={this.props.navigation}
+                                           userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent task_status={1} userinfo={this.props.userinfo}/>;
+                return <FristListComponent task_status={1}
+                                           index={2}
+                                           navigationIndex={this.state.navigationIndex}
+                                           navigation={this.props.navigation}
+                                           userinfo={this.props.userinfo}/>;
         }
     };
 }
@@ -171,11 +185,29 @@ class FristListComponent extends PureComponent {
 
     }
 
-    componentDidMount() {
-        setTimeout(() => {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.navigationIndex == this.props.index) {
             this._updateList(true);
-        }, 500);
+        }
 
+    }
+
+    componentDidMount() {
+        // setTimeout(() => {
+        //     this._updateList(true);
+        // }, 500);
+        // this._didBlurSubscription = this.props.navigation.addListener(
+        //     'willFocus',
+        //     payload => {
+        //         console.debug('didBlur', payload);
+        //     }
+        // );
+
+    }
+
+    componentWillUnmount() {
+
+        // this._didBlurSubscription && this._didBlurSubscription.remove();
     }
 
     _updateList = (refreshing) => {
@@ -214,8 +246,31 @@ class FristListComponent extends PureComponent {
     };
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskReleaseItem task_status={this.props.task_status} onPress={this._itemClick} item={item}
-                                key={item.id}/>;
+        return <TaskReleaseItem
+            deleteTask={() => {
+                this.deleteTaskId = item.id;
+                this.toastSelect.show();
+
+            }}
+            onPress={() => {
+                if (this.props.task_status == 1) {
+                    NavigationUtils.goPage({
+                        task_id: item.id,
+                        updateReleasePage: this._updateList,
+                        test: false,
+                    }, 'TaskDetails');
+                } else {
+                    NavigationUtils.goPage({taskid: item.id, updateReleasePage: this._updateList}, 'MyOrderManaPage');
+
+                }
+
+
+            }
+            }
+            task_status={this.props.task_status}
+            reViewClick={this._itemClick}
+            item={item}
+            key={item.id}/>;
     };
     _itemClick = (item) => {
         NavigationUtils.goPage({task_id: item.id, status: 0, taskUri: item.task_uri}, 'MyTaskReview');
@@ -250,6 +305,7 @@ class FristListComponent extends PureComponent {
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
         return <View style={{flex: 1}}>
+
             <AnimatedFlatList
                 style={{backgroundColor: '#e8e8e8'}}
                 ListEmptyComponent={<EmptyComponent marginTop={-80} message={'您还没有相关任务'}/>}
@@ -282,7 +338,26 @@ class FristListComponent extends PureComponent {
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
+            <ToastSelect
+                rightTitle={'确认'}
+                sureClick={() => {
+                    // console.log(this.deleteTaskId);
+                    deleteTaskRelease({task_id: this.deleteTaskId}, this.props.userinfo.token).then(result => {
+                        this._updateList(true);
+                    }).catch(msg => {
+                        console.log(msg);
+                    });
+                    this.toastSelect.hide();
+                }}
+                ref={ref => this.toastSelect = ref}>
+                <View style={{
+                    height: 60, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                    paddingTop: 10,
 
+                }}>
+                    <Text style={{fontSize: 14, width: width - 80}}>删除后无法恢复,是否确认删除？</Text>
+                </View>
+            </ToastSelect>
 
         </View>;
     }
