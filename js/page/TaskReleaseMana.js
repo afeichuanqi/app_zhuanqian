@@ -144,20 +144,13 @@ class TaskReleaseMana extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent task_status={0} index={0}
-                                           navigationIndex={this.state.navigationIndex}
-                                           navigation={this.props.navigation}
+                return <FristListComponent task_status={0}
                                            userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent task_status={2} index={1}
-                                           navigationIndex={this.state.navigationIndex}
-                                           navigation={this.props.navigation}
+                return <FristListComponent task_status={2}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
                 return <FristListComponent task_status={1}
-                                           index={2}
-                                           navigationIndex={this.state.navigationIndex}
-                                           navigation={this.props.navigation}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -185,17 +178,17 @@ class FristListComponent extends PureComponent {
 
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.navigationIndex == this.props.index) {
-            this._updateList(true);
-        }
-
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (this.props.navigationIndex == this.props.index) {
+    //         this._updateList(true);
+    //     }
+    //
+    // }
 
     componentDidMount() {
-        // setTimeout(() => {
-        //     this._updateList(true);
-        // }, 500);
+        setTimeout(() => {
+            this._updateList(true);
+        }, 500);
         // this._didBlurSubscription = this.props.navigation.addListener(
         //     'willFocus',
         //     payload => {
@@ -226,7 +219,7 @@ class FristListComponent extends PureComponent {
         selectTaskReleaseList({task_status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
 
             if (refreshing) {
-                console.log('我被触发');
+                // console.log('我被触发');
                 this.setState({
                     taskData: result,
                     isLoading: false,
@@ -308,7 +301,7 @@ class FristListComponent extends PureComponent {
 
             <AnimatedFlatList
                 style={{backgroundColor: '#e8e8e8'}}
-                ListEmptyComponent={<EmptyComponent marginTop={-80} message={'您还没有相关任务'}/>}
+                ListEmptyComponent={<EmptyComponent height={height-100}  message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}

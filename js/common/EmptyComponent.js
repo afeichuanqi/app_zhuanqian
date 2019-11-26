@@ -7,10 +7,9 @@
  */
 
 import React, {PureComponent} from 'react';
-import message_nomsg from '../res/svg/message_nomsg.svg';
 import kongxiangzi from '../res/svg/kongxiangzi.svg';
 import {Dimensions, Text, View} from 'react-native';
-import SvgUri from 'react-native-svg-uri';
+import Image from 'react-native-fast-image';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -32,7 +31,8 @@ class EmptyComponent extends PureComponent {
     static defaultProps = {
         svgXmlData: kongxiangzi,
         message: '您还没有收到消息',
-        marginTop:0
+        marginTop: 0,
+        height: height,
     };
 
     render() {
@@ -48,15 +48,19 @@ class EmptyComponent extends PureComponent {
         // />;
         return (
             <View style={{
-                height: height, justifyContent: 'center', alignItems: 'center',
-                backgroundColor: '#f7f7f7', position: 'absolute', top: 0, zIndex: -1, width,elevation:-1
+                height: this.props.height, justifyContent: 'center', alignItems: 'center',
+                backgroundColor: '#f7f7f7', width,
 
             }}>
-                <View  style={{justifyContent: 'center', marginTop:this.props.marginTop,alignItems: 'center',shadowColor: '#c7c7c7',
+                <View style={{
+                    justifyContent: 'center',
+                    marginTop: this.props.marginTop,
+                    alignItems: 'center',
+                    shadowColor: '#c7c7c7',
 
-                     }}>
-                    <SvgUri  width={95} height={94} svgXmlData={this.props.svgXmlData}/>
-                    <Text style={{marginTop: 5, color: 'black', opacity: 0.7}}>{this.props.message}</Text>
+                }}>
+                    <Image source={require('../res/img/kongxiangzi.png')} style={{width: 100, height: 70}}/>
+                    <Text style={{marginTop: 10, color: 'black', opacity: 0.7}}>{this.props.message}</Text>
                 </View>
             </View>
         );

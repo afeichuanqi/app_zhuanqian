@@ -267,7 +267,7 @@ class TaskRelease extends PureComponent {
             stepData,
             test: true,
             FormData,
-            update:this.taskInfo.update
+            update: this.taskInfo.update,
         }, 'TaskDetails');
     };
     //生成表单提交数据
@@ -293,8 +293,9 @@ class TaskRelease extends PureComponent {
         const reward_price = columnData.rewardPrice;
         const reward_num = columnData.rewardNum;
         const stepIndex = stepData && stepData.findIndex(d => d.type == 5);
+        // console.log(stepIndex, 'stepIndex');
 
-        const task_uri = stepIndex && (stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '');
+        const task_uri = stepIndex != -1 ? (stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '') : '';
 
         const task_steps = JSON.stringify(stepData);
         const data = {

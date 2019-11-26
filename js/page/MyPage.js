@@ -179,10 +179,11 @@ class ToolsItemComponent extends PureComponent {
         title: '发布管理',
         info: '提升简历活跃',
         svgXmlData: my_fabu,
+        source: require('../res/img/my/fabu.png'),
     };
 
     render() {
-        const {title, info, svgXmlData} = this.props;
+        const {title, info, source} = this.props;
 
         return <TouchableOpacity
             onPress={this.props.onPress}
@@ -199,8 +200,6 @@ class ToolsItemComponent extends PureComponent {
                 shadowOpacity: 3,
                 shadowOffset: {w: 1, h: 1},
                 elevation: 3,//安卓的阴影
-                // borderWidth:0.5,
-                // borderColor:'rgba(0,0,0,0.1)',
                 backgroundColor: 'white',
                 marginRight: 5,
                 marginBottom: 10,
@@ -211,7 +210,7 @@ class ToolsItemComponent extends PureComponent {
                 <Text style={{fontWeight: 'bold', fontSize: 14}}>{title}</Text>
                 <Text style={{fontSize: 10, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
-            <SvgUri width={28} height={28} svgXmlData={svgXmlData}/>
+            <FastImage source={source} style={{width: 30, height: 30}}/>
 
         </TouchableOpacity>;
     }
@@ -231,10 +230,21 @@ class BottomInfoColumn extends PureComponent {
                 showsHorizontalScrollIndicator={false}
                 style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
             >
-                <ToolsItemComponent onPress={() => {
-                    MenuClick('TaskReleaseMana');
-                }}/>
-                <ToolsItemComponent/>
+                <ToolsItemComponent
+                    title={'发布管理'}
+                    info={'有需求、大家做'}
+                    source={require('../res/img/my/fabu.png')}
+                    onPress={() => {
+                        MenuClick('TaskReleaseMana');
+                    }}/>
+                <ToolsItemComponent
+                    title={'接单管理'}
+                    source={require('../res/img/my/jiedan.png')}
+                    info={'有任务、赚赏金'}
+                    onPress={() => {
+                        MenuClick('TaskOrdersMana');
+                    }}
+                />
                 <ToolsItemComponent/>
                 <ToolsItemComponent/>
             </ScrollView>

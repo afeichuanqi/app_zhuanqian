@@ -54,7 +54,7 @@ class MyTaskReview extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '驳回页面', message_more, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '驳回', message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.params.fromUserinfo}, 'ChatSettings');
         },false);
         const {taskData} = this.params;

@@ -15,7 +15,7 @@ import {
     RefreshControl,
     FlatList,
     StyleSheet,
-    Image, StatusBar, TextInput,
+    StatusBar, TextInput,
 } from 'react-native';
 import {theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -38,13 +38,10 @@ class MessagePage extends PureComponent {
         super(props);
         this.params = this.props.navigation.state.params;
         this.task_id = this.params.task_id || 0;
-        // console.log(this.params,"this.params");
     }
 
-
     componentDidMount() {
-        ChatSocket.selectAllFriendMessage();
-
+        // ChatSocket.selectAllFriendMessage();
     }
 
     componentWillUnmount() {
@@ -149,7 +146,6 @@ class MsgList extends Component {
         const {task_id} = this.props;
 
         for (let i = 0; i < friendArr.length; i++) {
-            // console.log(friendArr[i].taskId,"friendArr[i].taskId");
             if (friendArr[i].columnType == type && task_id == 0) {
                 tmpArr.push(friendArr[i]);
             } else if (friendArr[i].columnType == type && friendArr[i].taskId == task_id) {
@@ -411,68 +407,6 @@ class MessageItemComponent extends Component {
     }
 
 
-}
-
-class MessageColumnItem extends PureComponent {
-    static defaultProps = {
-        title: '系统通知',
-        type: 0,
-    };
-
-    render() {
-
-
-        const {title, unReadLength, type} = this.props;
-        let source = null;
-
-        if (type == 0) {
-            source = require('../res/img/message_zixun.png');
-        } else if (type == 1) {
-            source = require('../res/img/message_shensu.png');
-        } else if (type == 2) {
-            source = require('../res/img/message_tousu.png');
-        } else if (type == 3) {
-            source = require('../res/img/message_liaotian.png');
-        }
-        return <TouchableOpacity
-            activeOpacity={0.6}
-            style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>
-            <View>
-
-                <Image source={source} style={{
-
-                    width: 40, height: 40,
-
-                    backgroundColor: 'white',
-                }}/>
-
-                {/*</View>*/}
-
-                {/*<SvgUri style={{*/}
-                {/*    */}
-                {/*}} width={size} height={size} svgXmlData={svgXmlData}/>*/}
-                {unReadLength ? unReadLength > 0 && <View style={{
-                    borderRadius: 10, justifyContent: 'center', alignItems: 'center',
-                    position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
-                    // paddingVertical:1,
-                }}>
-                    <Text style={{
-                        fontSize: 10,
-                        color: 'white',
-                    }}>{unReadLength}</Text>
-                </View> : null}
-            </View>
-
-            <Text style={{
-                fontSize: 12,
-                color: 'black',
-                opacity: 0.8,
-                marginTop: 5,
-
-            }}>{title}</Text>
-
-        </TouchableOpacity>;
-    }
 }
 
 

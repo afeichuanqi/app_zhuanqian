@@ -32,6 +32,7 @@ import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 
 class MessagePage extends PureComponent {
@@ -175,7 +176,7 @@ class MsgList extends Component {
         const columnUnreadLength = this.props.friend.columnUnreadLength;
         const {isLoading, hideLoaded} = this.state;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent/>}
+            ListEmptyComponent={<EmptyComponent height={height-210}/>}
             ListHeaderComponent={
                 <View style={{
                     justifyContent: 'center',

@@ -390,6 +390,42 @@ export function selectTaskReleaseList(data, token) {
     });
 }
 /**
+ * 取消用户报名资格
+ */
+export function cancelUserSignUp(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/cancelUserSignUp', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询用户接单
+ */
+export function selectOrderTasks(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectOrderTasks', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
  * 查询任务简单信息
  */
 export function selectSimpleTaskInfo(data, token) {
