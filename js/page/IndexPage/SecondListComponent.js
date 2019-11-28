@@ -1,0 +1,160 @@
+import React, {PureComponent} from 'react';
+import {Dimensions, Platform, StyleSheet, Text, TouchableOpacity, FlatList, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import Animated from 'react-native-reanimated';
+import FlatListCommonUtil from './FlatListCommonUtil';
+import {bottomTheme, theme} from '../../appSet';
+import {getBestNewTask} from '../../util/AppService';
+import NavigationUtils from '../../navigator/NavigationUtils';
+
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+const lunboHeight = 220;
+
+class SecondListComponent extends PureComponent {
+    state = {
+        bestNewData: [{}, {}, {}, {}],
+    };
+
+    componentDidMount(): void {
+
+        getBestNewTask().then(data => {
+            console.log(data);
+            this.setState({
+                bestNewData: data,
+            });
+        });
+    }
+
+    _renderBestNewItem = ({item, index}) => {
+        return <TouchableOpacity
+            onPress={() => {
+                NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
+            }}
+            key={item.id}
+            style={{height: 120, width: 120, marginRight: 10}}>
+            <FastImage
+                style={[styles.imgStyle]}
+                source={{uri: item.task_uri}}
+                resizeMode={FastImage.resizeMode.stretch}
+            />
+            <View style={{
+                backgroundColor: 'rgba(0,0,0,0.1)', position: 'absolute', top: 0, right: 0,
+                width: 120, height: 120,
+            }}>
+                <View style={{position: 'absolute', right: 5, top: 5}}>
+                    <Text style={{fontSize: 16, color: 'white', fontWeight: 'bold'}}>{item.reward_price}.00</Text>
+                </View>
+                {/*<View style={{position:'absolute',right:5, bottom:10,}}>*/}
+                {/*    <Text style={{color: 'white', fontSize: 12,fontWeight:'bold'}}>*/}
+                {/*        {item.title}|{item.task_name}*/}
+                {/*    </Text>*/}
+                {/*</View>*/}
+                <View style={{position: 'absolute', left: 5, bottom: 10}}>
+                    <Text style={{color: 'white', fontSize: 13, width: 120}}>
+                        {item.task_title}
+                    </Text>
+                </View>
+            </View>
+        </TouchableOpacity>;
+    };
+    scrollY = new Animated.Value(0);
+
+    render() {
+
+        const columnTop = Animated.interpolate(this.scrollY, {
+            inputRange: [-220, 0, 185],
+            outputRange: [lunboHeight + 240, lunboHeight - 10, 20],
+            extrapolate: 'clamp',
+        });
+        return <Animated.View style={{
+            // zIndex: -100,
+            // elevation: -100,
+            // overflow: 'hidden',
+            transform: [{translateY: this.props.translateY}],
+        }}>
+            <View style={{height: 30}}/>
+            <FlatListCommonUtil
+                type={2}
+                style={{zIndex: -100, elevation: -100}}
+                onLoading={(load) => {
+                    this.props.onLoad(load);
+                }}
+                ListHeaderComponent={
+                    <View style={{height: 220}}>
+                        <View style={{marginTop: 20, paddingLeft: 10}}>
+                            <Text style={{fontSize: 17, opacity: 0.9}}>最新发布</Text>
+                        </View>
+                        <View style={{paddingHorizontal: 10, marginTop: 10}}>
+                            <FlatList
+                                showsHorizontalScrollIndicator={false}
+                                horizontal={true}
+                                data={this.state.bestNewData}
+                                renderItem={data => this._renderBestNewItem(data)}
+                            />
+                        </View>
+                    </View>
+                }
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: {
+                                    y: y =>
+                                        Animated.block([
+                                            Animated.set(this.scrollY, y),
+                                            Animated.call(
+                                                [y],
+                                                ([offsetY]) => (this.props.onScroll(offsetY)),
+                                            ),
+                                        ]),
+                                },
+                            },
+                        },
+                    ],
+                    {
+                        useNativeDriver: true,
+                    },
+                )}
+            />
+            <Animated.View style={{
+                width, height: 40, justifyContent: 'center', position: 'absolute',
+                backgroundColor: 'white', transform: [{translateY: columnTop}],
+            }}>
+                <Text
+                    style={{
+                        fontSize: 12,
+                        marginLeft: 15,
+                        marginTop: 10,
+                        color: bottomTheme,
+                    }}>最近刷新</Text>
+                <View style={{
+                    width: 50,
+                    backgroundColor: bottomTheme,
+                    height: 1,
+                    marginLeft: 15,
+                    marginTop: 10,
+                }}/>
+            </Animated.View>
+        </Animated.View>;
+    }
+}
+
+const styles = StyleSheet.create({
+    carousel: {
+        flex: 1,
+        // justifyContent:'center'
+    },
+    imgStyle: {
+        // 设置背景颜色
+        backgroundColor: '#E8E8E8',
+        // 设置宽度
+        width: 120,
+        height: 120,
+        borderRadius: 10,
+        // 设置高度
+        // height:150
+    },
+});
+export default SecondListComponent;
+

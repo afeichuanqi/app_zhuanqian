@@ -107,11 +107,11 @@ export default class TaskReleaseItem extends PureComponent {
 
                 {ViewUtil.getReviewIco(parseInt(item.task_is_send_num) - parseInt(item.task_pass_num) - parseInt(item.task_noPass_num), this._reViewClick)}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                {ViewUtil.getzhidingIco()}
+                {ViewUtil.getzhidingIco(this.props.setTopClick)}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                {ViewUtil.getrecommendedIco()}
+                {ViewUtil.getrecommendedIco(this.props.setRecommendClick)}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                {ViewUtil.getUpdateIco()}
+                {ViewUtil.getUpdateIco(this.props.updateTaskUpdateTime)}
             </View> : this.props.task_status == 1 ? <View style={{
                 height: 25,
                 paddingVertical: 6,

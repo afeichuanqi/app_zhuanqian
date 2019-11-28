@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
+import {bottomTheme} from '../appSet';
+import NavigationUtils from '../navigator/NavigationUtils';
 // import Animated, {Easing} from 'react-native-reanimated';
 
 // const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -21,7 +23,17 @@ class TaskSumComponent extends PureComponent {
     static defaultProps = {
         titleFontSize: 16,
         marginHorizontal: 10,
-
+        item: {
+            avatarUrl: '',
+            recommendIsExp: 1,
+            topIsExp: 1,
+            typeTitle: '注册',
+            taskName: '微信注册',
+            rewardPrice: 100,
+            rewardNum: 100,
+            taskSignUpNum: 5,
+            taskPassNum: 2,
+        },
     };
 
     constructor(props) {
@@ -63,76 +75,94 @@ class TaskSumComponent extends PureComponent {
         //     outputRange: [0.95, 1],
         //     extrapolate: 'clamp',
         // });
-        const {titleFontSize, marginHorizontal} = this.props;
+        const {titleFontSize, marginHorizontal, item} = this.props;
 
         return <TouchableOpacity
-            // activeOpacity={1}
+            onPress={()=>{
+                NavigationUtils.goPage({test:false,task_id:item.taskId},'TaskDetails')
+            }}
             style={{
                 flex: 1,
                 flexDirection: 'row',
                 marginHorizontal: marginHorizontal,
                 paddingTop: 15,
-                paddingBottom:25,
+                paddingBottom: 25,
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 // transform: [{scale}],
-                height:90
+                height: 90,
             }}
             // onPressIn={this._onPressIn}
             // onPressOut={this._onPressOut}
         >
             <FastImage
                 style={[styles.imgStyle]}
-                source={{uri: `http://www.embeddedlinux.org.cn/uploads/allimg/180122/2222032V5-0.jpg`}}
+                source={{uri: item.avatarUrl}}
                 resizeMode={FastImage.resizeMode.stretch}
             />
             {/*左上*/}
             <View style={{
                 position: 'absolute',
                 top: topBottomVal,
-                left: 60,
+                left: 65,
                 flexDirection: 'row',
+                alignItems:'center',
             }}>
                 <Text style={{
                     fontSize: titleFontSize,
                     color: 'black',
-                }}>0元购+现金 =30元</Text>
+                }}>{item.taskTitle}</Text>
+                {item.recommendIsExp == 1 && <View style={{
+                    height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                    alignItems: 'center',
+                    justifyContent: 'center', marginLeft:5,
+                }}>
+                    <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>推</Text>
+                </View>}
+                {item.topIsExp == 1 && <View style={{
+                    height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 3,
+                }}>
+                    <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>顶</Text>
+                </View>}
                 {/*<SvgUri width={19} height={19} style={{marginLeft: 3}} svgXmlData={tuijian}/>*/}
                 {/*<SvgUri width={18} height={18} style={{marginLeft: 3, marginTop: 1}} svgXmlData={ding}/>*/}
             </View>
             {/*左下*/}
             <View style={{
                 position: 'absolute',
-                bottom: topBottomVal,
+                top: 47,
                 left: 60,
                 flexDirection: 'row',
             }}>
-                <LabelBigComponent title={'高价'}/>
-                <LabelBigComponent title={'京东支付1分'}/>
+                <LabelBigComponent title={item.typeTitle}/>
+                <LabelBigComponent title={item.taskName}/>
             </View>
             {/*右上*/}
             <View style={{
                 position: 'absolute',
-                top: topBottomVal,
+                top: 17,
                 right: 0,
             }}>
                 <Text style={{
-                    fontSize: titleFontSize,
+                    fontSize: 16,
                     color: 'red',
-                }}>+3.6元</Text>
+                }}>+{item.rewardPrice} 元</Text>
             </View>
             {/*右下*/}
             <View style={{
                 position: 'absolute',
-                bottom: topBottomVal,
+                top: 50,
                 right: 0,
             }}>
                 <Text style={{
-                    fontSize: 12,
+                    fontSize: 13,
                     // color:''
                     opacity: 0.5,
                     // fontWeight: '100',
-                }}>116人已完成|剩余数90</Text>
+                }}>{parseInt(item.taskPassNum)}人已完成|剩余数{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
             </View>
         </TouchableOpacity>;
 
@@ -141,6 +171,7 @@ class TaskSumComponent extends PureComponent {
 
 
 }
+
 export default TaskSumComponent;
 const styles = StyleSheet.create({
     imgStyle: {

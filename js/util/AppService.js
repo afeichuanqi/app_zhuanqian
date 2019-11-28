@@ -390,6 +390,96 @@ export function selectTaskReleaseList(data, token) {
     });
 }
 /**
+ * 查询所有推荐任务
+ */
+export function selectAllRecommendTask(data) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setPostHeader('token', token);
+            const ret = await http.get('user/selectAllRecommendTask',data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 刷新任务
+ */
+export function updateTaskUpdateTime(data,token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/updateTaskUpdateTime',data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 最新首页
+ */
+export function getBestNewTask() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setPostHeader('token', token);
+            const ret = await http.get('user/getBestNewTask',{});
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 设置用户任务的置顶
+ */
+export function userSetTaskTop(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/userSetTaskTop', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 设置用户任务的推荐
+ */
+export function userSetTaskRecommend(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/userSetTaskRecommend', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
  * 取消用户报名资格
  */
 export function cancelUserSignUp(data, token) {
@@ -534,26 +624,7 @@ export function isFriendChat(data, token) {
         }
     });
 }
-/*
-测试
- */
-export function test111(url) {
-    return new Promise(async function (resolve, reject) {
-        try {
-            // http.setPostHeader('token', token);
-            const ret = await http.get_(url);
-            console.log(ret);
-            if (ret && ret.status == 0) {
-                resolve(ret && ret.data);
-            } else {
 
-                reject(ret && ret.msg);
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
 /**
  * // 审核通过该用户的接单
  */

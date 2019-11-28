@@ -17,7 +17,6 @@ import {
     ActivityIndicator,
     Dimensions,
     FlatList,
-    InteractionManager,
     RefreshControl,
     Text,
     TouchableOpacity,
@@ -26,11 +25,18 @@ import {
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {deleteTaskRelease, selectTaskReleaseList} from '../util/AppService';
+import {
+    deleteTaskRelease,
+    selectTaskReleaseList,
+    updateTaskUpdateTime,
+    userSetTaskRecommend,
+    userSetTaskTop,
+} from '../util/AppService';
 import {connect} from 'react-redux';
 import TaskReleaseItem from './TaskReleaseMana/TaskReleaseItem';
 import ToastSelect from '../common/ToastSelect';
 import Toast from '../common/Toast';
+import ToastTaskTopRecommend from './TaskReleaseMana/ToastTaskTopRecommend';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -79,7 +85,9 @@ class TaskReleaseMana extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <View>
                     <TabBar
                         style={{
@@ -144,13 +152,13 @@ class TaskReleaseMana extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent task_status={0}
+                return <FristListComponent toast={this.toast} task_status={0}
                                            userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent task_status={2}
+                return <FristListComponent toast={this.toast} task_status={2}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent task_status={1}
+                return <FristListComponent toast={this.toast} task_status={1}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -178,29 +186,14 @@ class FristListComponent extends PureComponent {
 
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (this.props.navigationIndex == this.props.index) {
-    //         this._updateList(true);
-    //     }
-    //
-    // }
-
     componentDidMount() {
         setTimeout(() => {
             this._updateList(true);
         }, 500);
-        // this._didBlurSubscription = this.props.navigation.addListener(
-        //     'willFocus',
-        //     payload => {
-        //         console.debug('didBlur', payload);
-        //     }
-        // );
 
     }
 
     componentWillUnmount() {
-
-        // this._didBlurSubscription && this._didBlurSubscription.remove();
     }
 
     _updateList = (refreshing) => {
@@ -212,9 +205,7 @@ class FristListComponent extends PureComponent {
             });
         } else {
             this.page = {pageIndex: this.page.pageIndex + 1};
-            // this.setState({
-            //     isLoading: true,
-            // });
+
         }
         selectTaskReleaseList({task_status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
 
@@ -240,10 +231,15 @@ class FristListComponent extends PureComponent {
 
     _renderIndexPath = ({item, index}) => {
         return <TaskReleaseItem
+            setTopClick={() => {
+                this.taskTop.show(item);
+            }}
+            setRecommendClick={() => {
+                this.taskRecommend.show(item);
+            }}
             deleteTask={() => {
                 this.deleteTaskId = item.id;
                 this.toastSelect.show();
-
             }}
             onPress={() => {
                 if (this.props.task_status == 1) {
@@ -256,14 +252,22 @@ class FristListComponent extends PureComponent {
                     NavigationUtils.goPage({taskid: item.id, updateReleasePage: this._updateList}, 'MyOrderManaPage');
 
                 }
-
-
-            }
-            }
+            }}
+            updateTaskUpdateTime={() => {
+                this._updateTaskUpdateTime(item);
+            }}
             task_status={this.props.task_status}
             reViewClick={this._itemClick}
             item={item}
             key={item.id}/>;
+    };
+    _updateTaskUpdateTime = (item) => {
+        console.log('我被触发');
+        updateTaskUpdateTime({task_id: item.id}, this.props.userinfo.token).then(result => {
+            this.props.toast.show('刷新成功');
+        }).catch(msg => {
+            this.props.toast.show(msg);
+        });
     };
     _itemClick = (item) => {
         NavigationUtils.goPage({task_id: item.id, status: 0, taskUri: item.task_uri}, 'MyTaskReview');
@@ -301,7 +305,7 @@ class FristListComponent extends PureComponent {
 
             <AnimatedFlatList
                 style={{backgroundColor: '#e8e8e8'}}
-                ListEmptyComponent={<EmptyComponent height={height-100}  message={'您还没有相关任务'}/>}
+                ListEmptyComponent={<EmptyComponent height={height - 100} message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}
@@ -351,7 +355,44 @@ class FristListComponent extends PureComponent {
                     <Text style={{fontSize: 14, width: width - 80}}>删除后无法恢复,是否确认删除？</Text>
                 </View>
             </ToastSelect>
+            <ToastTaskTopRecommend
+                sureTopClick={(item, topNum) => {
+                    userSetTaskTop({
+                        top_num: topNum,
+                        task_id: item.id,
+                    }, this.props.userinfo.token).then(data => {
+                        setTimeout(() => {
+                            this.props.toast.show(`置顶到期时间:` + data.expTime, 2000);
+                            this._updateList(true);
+                        }, 300);
 
+                    }).catch(msg => {
+                        setTimeout(() => {
+                            this.props.toast.show(msg);
+                        }, 300);
+                    });
+                }}
+                title={'置顶任务'} ref={ref => this.taskTop = ref}/>
+            <ToastTaskTopRecommend
+                type={2}
+                sureTopClick={(item, topNum) => {
+                    userSetTaskRecommend({
+                        recommend_num: topNum,
+                        task_id: item.id,
+                    }, this.props.userinfo.token).then(data => {
+                        setTimeout(() => {
+                            this.props.toast.show(`推荐到期时间:` + data.expTime, 2000);
+                            this._updateList(true);
+                        }, 300);
+
+
+                    }).catch(msg => {
+                        setTimeout(() => {
+                            this.props.toast.show(msg);
+                        }, 300);
+                    });
+                }}
+                title={'推荐任务'} ref={ref => this.taskRecommend = ref}/>
         </View>;
     }
 }

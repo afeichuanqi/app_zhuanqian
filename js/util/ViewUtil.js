@@ -142,8 +142,10 @@ export default class ViewUtil {
 
         </TouchableOpacity>;
     };
-    static getzhidingIco = () => {
-        return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+    static getzhidingIco = (click) => {
+        return <TouchableOpacity
+            onPress={click}
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
                 style={{height: 13, width: 13}}
                 source={require('../res/img/task_top.png')}
@@ -152,8 +154,11 @@ export default class ViewUtil {
 
         </TouchableOpacity>;
     };
-    static getrecommendedIco = () => {
-        return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+    static getrecommendedIco = (click) => {
+        return <TouchableOpacity
+
+            onPress={click}
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
                 style={{height: 13, width: 13}}
                 source={require('../res/img/task_recommended.png')}
@@ -162,8 +167,11 @@ export default class ViewUtil {
 
         </TouchableOpacity>;
     };
-    static getUpdateIco = () => {
-        return <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+    static getUpdateIco = (click) => {
+        return <TouchableOpacity
+            onPress={click}
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+
             <Image
                 style={{height: 13, width: 13}}
                 source={require('../res/img/task_update.png')}

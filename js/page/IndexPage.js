@@ -27,9 +27,10 @@ import SvgUri from 'react-native-svg-uri';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {TabView} from 'react-native-tab-view';
 import search from '../res/svg/search.svg';
-import FlatListCommonUtil from '../common/FlatListCommonUtil';
+import FlatListCommonUtil from './IndexPage/FlatListCommonUtil';
 import {connect} from 'react-redux';
 import ChatSocket from '../util/ChatSocket';
+import SecondListComponent from './IndexPage/SecondListComponent';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -38,124 +39,6 @@ const lunboHeight = height / 4;
 const topIputHeight = (Platform.OS === 'ios') ? 35 : 35;
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-class FristListComponent extends PureComponent {
-    state = {
-        lunboData: [
-            {imgUrl: 'http://img2.imgtn.bdimg.com/it/u=3292807210,3869414696&fm=26&gp=0.jpg'},
-            {imgUrl: 'http://static.open-open.com/lib/uploadImg/20160101/20160101125439_819.jpg'},
-        ],
-    };
-    _renderItem = ({item, index}) => {
-        return <TouchableOpacity onPress={() => {
-        }}>
-            <FastImage
-                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
-                source={{uri: `${item.imgUrl}`}}
-                resizeMode={FastImage.stretch}
-                key={index}
-            />
-        </TouchableOpacity>
-            ;
-    };
-    scrollY = new Animated.Value(0);
-
-    render() {
-        const containerWidth = width - 20;
-        const {lunboData} = this.state;
-        const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, lunboHeight - 10],
-            outputRange: [lunboHeight+ 220, lunboHeight - 10, 20],
-            extrapolate: 'clamp',
-        });
-        return <Animated.View style={{
-            // zIndex: -100,
-            // elevation: -100,
-            // overflow: 'hidden',
-            transform: [{translateY: this.props.translateY}],
-        }}>
-            <View style={{height: 30}}/>
-            <FlatListCommonUtil
-                style={{zIndex: -100, elevation: -100}}
-                onLoading={(load) => {
-                    this.props.onLoad(load);
-                }}
-                ListHeaderComponent={
-                    <View>
-
-                        <View style={{
-                            alignItems: 'center',
-                            height: lunboHeight,
-                            paddingTop: 10,
-                            backgroundColor: theme,
-                            width: width,
-                            // zIndex: 1,
-
-                        }}>
-                            {/*轮播图*/}
-                            <Carousel
-                                // homeNavigation={NavigationUtil.homeNavigation}
-                                // navigation={this.props.navigation}
-                                style={styles.carousel}
-                                timeout={3000}
-                                data={lunboData}
-                                renderItem={this._renderItem}
-                                itemWidth={containerWidth}
-                                containerWidth={containerWidth}
-                                separatorWidth={0}
-                                pagingEnable={true}
-                                paginationDefaultColor={'rgba(255,255,255,0.5)'}
-                                paginationActiveColor={'rgba(255,255,255,1)'}
-                            />
-                            <View style={{height: 40}}/>
-
-                        </View>
-                    </View>
-                    //
-                }
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: {
-                                    y: y =>
-                                        Animated.block([
-                                            Animated.set(this.scrollY, y),
-                                            Animated.call(
-                                                [y],
-                                                ([offsetY]) => (this.props.onScroll(offsetY)),
-                                            ),
-                                        ]),
-                                },
-                            },
-                        },
-                    ],
-                    {
-                        useNativeDriver: true,
-                    },
-                )}
-            />
-            <Animated.View style={{
-                width, height: 40, justifyContent: 'center', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}],
-            }}>
-                <Text
-                    style={{
-                        fontSize: 12,
-                        marginLeft: 15,
-                        marginTop: 10,
-                        color: bottomTheme,
-                    }}>为您推荐</Text>
-                <View style={{
-                    width: 50,
-                    backgroundColor: bottomTheme,
-                    height: 1,
-                    marginLeft: 15,
-                    marginTop: 10,
-                }}/>
-            </Animated.View>
-        </Animated.View>;
-    }
-}
 
 class HomePage extends PureComponent {
     constructor(props) {
@@ -178,19 +61,6 @@ class HomePage extends PureComponent {
     }
 
     position = new Animated.Value(0);
-
-    // FirstRoute = () => {
-    //     // const {taskData, isLoading, hideLoaded} = this.state;
-    //
-    //     return ;
-    // };
-    // _onScroll = (y) => {
-    //     this.topBarTop = y;
-    // };
-
-    // SecondRoute = () => (
-    //     <View style={[styles.scene, {backgroundColor: '#673ab7'}]}/>
-    // );
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
@@ -373,6 +243,13 @@ class HomePage extends PureComponent {
                     onLoad={this._onLoad}
                     translateY={this.translateY}
                 />;
+            case 'second':
+                return <SecondListComponent
+                    position={this.position}
+                    onScroll={this._onScroll}
+                    onLoad={this._onLoad}
+                    translateY={this.translateY}
+                />;
 
         }
     };
@@ -460,6 +337,125 @@ class HomePage extends PureComponent {
     SearchOnFocus = () => {
         NavigationUtils.goPage({}, 'SearchPage');
     };
+}
+
+class FristListComponent extends PureComponent {
+    state = {
+        lunboData: [
+            {imgUrl: 'http://img2.imgtn.bdimg.com/it/u=3292807210,3869414696&fm=26&gp=0.jpg'},
+            {imgUrl: 'http://static.open-open.com/lib/uploadImg/20160101/20160101125439_819.jpg'},
+        ],
+    };
+    _renderItem = ({item, index}) => {
+        return <TouchableOpacity onPress={() => {
+        }}>
+            <FastImage
+                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
+                source={{uri: `${item.imgUrl}`}}
+                resizeMode={FastImage.stretch}
+                key={index}
+            />
+        </TouchableOpacity>
+            ;
+    };
+    scrollY = new Animated.Value(0);
+
+    render() {
+        const containerWidth = width - 20;
+        const {lunboData} = this.state;
+        const columnTop = Animated.interpolate(this.scrollY, {
+            inputRange: [-220, 0, lunboHeight - 10],
+            outputRange: [lunboHeight + 220, lunboHeight - 10, 20],
+            extrapolate: 'clamp',
+        });
+        return <Animated.View style={{
+            // zIndex: -100,
+            // elevation: -100,
+            // overflow: 'hidden',
+            transform: [{translateY: this.props.translateY}],
+        }}>
+            <View style={{height: 30}}/>
+            <FlatListCommonUtil
+                style={{zIndex: -100, elevation: -100}}
+                onLoading={(load) => {
+                    this.props.onLoad(load);
+                }}
+                ListHeaderComponent={
+                    <View>
+
+                        <View style={{
+                            alignItems: 'center',
+                            height: lunboHeight,
+                            paddingTop: 10,
+                            backgroundColor: theme,
+                            width: width,
+                            // zIndex: 1,
+
+                        }}>
+                            {/*轮播图*/}
+                            <Carousel
+                                // homeNavigation={NavigationUtil.homeNavigation}
+                                // navigation={this.props.navigation}
+                                style={styles.carousel}
+                                timeout={3000}
+                                data={lunboData}
+                                renderItem={this._renderItem}
+                                itemWidth={containerWidth}
+                                containerWidth={containerWidth}
+                                separatorWidth={0}
+                                pagingEnable={true}
+                                paginationDefaultColor={'rgba(255,255,255,0.5)'}
+                                paginationActiveColor={'rgba(255,255,255,1)'}
+                            />
+                            <View style={{height: 40}}/>
+
+                        </View>
+                    </View>
+                    //
+                }
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: {
+                                    y: y =>
+                                        Animated.block([
+                                            Animated.set(this.scrollY, y),
+                                            Animated.call(
+                                                [y],
+                                                ([offsetY]) => (this.props.onScroll(offsetY)),
+                                            ),
+                                        ]),
+                                },
+                            },
+                        },
+                    ],
+                    {
+                        useNativeDriver: true,
+                    },
+                )}
+            />
+            <Animated.View style={{
+                width, height: 40, justifyContent: 'center', position: 'absolute',
+                backgroundColor: 'white', transform: [{translateY: columnTop}],
+            }}>
+                <Text
+                    style={{
+                        fontSize: 12,
+                        marginLeft: 15,
+                        marginTop: 10,
+                        color: bottomTheme,
+                    }}>为您推荐</Text>
+                <View style={{
+                    width: 50,
+                    backgroundColor: bottomTheme,
+                    height: 1,
+                    marginLeft: 15,
+                    marginTop: 10,
+                }}/>
+            </Animated.View>
+        </Animated.View>;
+    }
 }
 
 const mapStateToProps = state => ({

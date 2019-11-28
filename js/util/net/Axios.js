@@ -53,18 +53,14 @@ class Axios {
         });
     }
 
-    async get_(url) {
-        console.log(url);
-        return this.get(url, null);
-    }
 
     async get(url, params) {
         try {
             let query = await qs.stringify(params);
             let response = null;
-            // console.log(baseUrl + url, params)
+            console.log(baseUrl + url)
             if (!params) {
-                response = await instance.get(baseUrl + url);
+                response = await instance.get(baseUrl + url,null);
             } else {
                 response = await instance.get(baseUrl + url + '?' + query);
             }
