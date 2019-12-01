@@ -426,6 +426,24 @@ export function updateTaskUpdateTime(data,token) {
     });
 }
 /**
+ * 获取所有任务
+ */
+export function getAllTask(data) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setPostHeader('token', token);
+            const ret = await http.post('user/getAllTask',data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
  * 最新首页
  */
 export function getBestNewTask() {

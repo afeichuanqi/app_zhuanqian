@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, Text, View} from 'react-native';
 import Animated from 'react-native-reanimated';
-import TaskSumComponent from './TaskSumComponent';
+import TaskSumComponent from '../../common/TaskSumComponent';
+import {getAllTask, selectAllRecommendTask} from '../../util/AppService';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
@@ -11,28 +12,71 @@ export default class FlatListCommonUtil extends PureComponent {
         onLoading: () => {
         },
     };
+
+    componentDidMount(): void {
+        this._updateList(true);
+    }
+
+    setColumnType = (type) => {
+        this.params.column_type = type;
+        // this._updateList(true);
+    };
+    setTypes = (types) => {
+        this.params.types = types;
+    };
     state = {
-        taskData: [
-            {id: 1},
-            {id: 2},
-            {id: 3},
-            {id: 4},
-            {id: 5},
-            {id: 1},
-            {id: 2},
-            {id: 3},
-            {id: 4},
-            {id: 5},
-        ],
+        taskData: [],
         isLoading: false,
         hideLoaded: false,
     };
+    params = {
+        pageIndex: 0,
+        column_type: 1,
+        types: '',
+        device: this.props.device,
+    };
+    _updateList = (refresh) => {
+        if (refresh) {
+            this.props.onRefresh(true);
+            this.params.pageIndex = 0;
+
+            this.setState({
+                isLoading: true,
+            });
+        } else {
+            this.props.onLoading(true);
+            this.params.pageIndex += 1;
+        }
+        getAllTask({
+            pageIndex: this.params.pageIndex,
+            column_type: this.params.column_type,
+            types: this.params.types,
+            device: this.params.device,
+        }).then(result => {
+            if (refresh) {
+                this.setState({
+                    taskData: result,
+                    isLoading: false,
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+                this.props.onRefresh(false);
+            } else {
+                const tmpArr = [...this.state.taskData];
+                this.setState({
+                    taskData: tmpArr.concat(result),
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+                this.props.onLoading(false);
+            }
+        });
+
+    };
+
 
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-            // style={this.props.style}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}
@@ -73,39 +117,13 @@ export default class FlatListCommonUtil extends PureComponent {
     //
     // }
     onLoading = () => {
-        this.props.onLoading(true);
-        const data = [...this.state.taskData];
-        let tmpData = [];
-        for (let i = 0; i < 10; i++) {
-            console.log(i);
-            tmpData.push({
-                id: i,
-            });
-        }
-        setTimeout(() => {
-            this.setState({
-                taskData: data.concat(tmpData),
-            }, () => {
-                this.props.onLoading(false);
-            });
-        }, 2000);
+        this._updateList(false);
 
     };
     onRefresh = () => {
-        this.props.onRefresh(true);
-        this.setState({
-            isLoading: true,
-        });
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-            });
-            this.props.onRefresh(false);
-        }, 1000);
+        this._updateList(true);
     };
-    params = {
-        pageIndex: 0,
-    };
+
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
@@ -122,7 +140,7 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent/>;
+        return <TaskSumComponent item={item} key={index}/>;
     };
 
 }

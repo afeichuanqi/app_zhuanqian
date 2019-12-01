@@ -26,7 +26,7 @@ import {TabView} from 'react-native-tab-view';
 import zhankai from '../res/svg/zhankai.svg';
 import yincang from '../res/svg/yincang.svg';
 import toutiao from '../res/svg/toutiao.svg';
-import FlatListCommonUtil from '../common/FlatListCommonUtil';
+import FlatListCommonUtil from './TaskHallPage/FlatListCommonUtil';
 // import FilterComponent from './TaskHall/FilterComponent';
 let FilterComponent = null;
 
@@ -41,8 +41,8 @@ class TaskHallPage extends PureComponent {
         navigationIndex: 0,
         navigationRoutes: [
             {key: 'first', title: '全部'},
-            {key: 'second', title: '高价'},
-            {key: 'second1', title: '简单'},
+            {key: 'second', title: Platform.OS === 'android' ? '安卓手机' : '苹果手机'},
+            // {key: 'second1', title: '简单'},
         ],
     };
 
@@ -153,7 +153,6 @@ class TaskHallPage extends PureComponent {
     }
 
     handleIndexChange = (index) => {
-        // console.log(index);
         const {navigationRoutes} = this.state;
         this.jumpTo(navigationRoutes[index].key);
     };
@@ -161,8 +160,9 @@ class TaskHallPage extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent/>;
-
+                return <FristListComponent device={1}/>;
+            case 'second':
+                return <FristListComponent device={Platform.OS == 'android' ? 2 : 3}/>;
         }
     };
 
@@ -269,8 +269,18 @@ class FristListComponent extends PureComponent {
     animations = {
         val: new Animated.Value(0),
     };
-    _sureClick = () => {
+    _sureClick = (arr) => {
+        this.flatList.setTypes(arr.toString());
+
         this.hide();
+        setTimeout(() => {
+            this.flatList._updateList(true);
+        }, 200);
+    };
+    _columnTypeClick = (item) => {
+        this.flatList.setColumnType(item.id);
+        this.flatList._updateList(true);
+
     };
 
     render() {
@@ -289,14 +299,12 @@ class FristListComponent extends PureComponent {
         return <View style={{flex: 1, zIndex: 3}}>
 
 
-            {/*筛选器*/}
             <Animated.View style={{transform: [{translateY}]}}>
                 <FlatListCommonUtil
+                    device={this.props.device}
+                    ref={ref => this.flatList = ref}
                     onScroll={this._onScroll}
                     onLoading={this.onLoading}
-                    // onMomentumScrollEnd={(e)=>{this._androidShowAnimated(e.nativeEvent.contentOffset.y)}}
-                    // onScrollEndDrag={this._onScroll}
-                    // onScrollBeginDrag={this._onScroll}
                 />
             </Animated.View>
             {/*工具条*/}
@@ -312,7 +320,8 @@ class FristListComponent extends PureComponent {
 
                     backgroundColor: theme,
                 }}>
-                    <TopLeftFilterComponent ref={ref => this.topLeftFilterComponent = ref}/>
+                    <TopLeftFilterComponent onPress={this._columnTypeClick}
+                                            ref={ref => this.topLeftFilterComponent = ref}/>
                     <TouchableOpacity
                         activeOpacity={0.6}
                         onPress={this._onPress}
@@ -342,6 +351,7 @@ class FristListComponent extends PureComponent {
                     </TouchableOpacity>
                     {/*<FilterBtnComponent ref={ref => this.filterBtnComponent = ref} onPress={this._topLeftClick}/>*/}
                 </View>
+                {/*筛选器*/}
                 <HeadlineComponent/>
 
             </Animated.View>
@@ -469,6 +479,7 @@ class TopLeftFilterComponent extends Component {
             {id: 1, title: '推荐'},
             {id: 2, title: '最新'},
             {id: 3, title: '人气'},
+            {id: 4, title: '价格'},
         ],
     };
 
@@ -483,6 +494,8 @@ class TopLeftFilterComponent extends Component {
         this.setState({
             index,
         });
+        // console.log();
+        this.props.onPress(this.props.filterArray[index]);
     };
 
     render() {
@@ -529,7 +542,6 @@ class TopLeftFilterComponent extends Component {
         </View>;
     }
 }
-
 
 
 export default TaskHallPage;

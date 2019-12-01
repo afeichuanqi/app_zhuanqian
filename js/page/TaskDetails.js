@@ -8,7 +8,7 @@
 
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {View, Text, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions, Platform} from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import FastImage from 'react-native-fast-image';
@@ -72,7 +72,10 @@ class TaskDetails extends PureComponent {
             });
         } else {
             const TaskInfo = await selectTaskInfo({task_id: task_id}, this.props.userinfo.token);
-            const StatusForTask = await selectUserStatusForTaskId({task_id: task_id}, this.props.userinfo.token);
+            const StatusForTask = await selectUserStatusForTaskId({
+                task_id: task_id,
+                device: Platform.OS == 'android' ? 2 : 3,
+            }, this.props.userinfo.token);
             let {fromUserinfo, taskData, stepData} = TaskInfo;
             if (StatusForTask.status === 5) {
                 stepData = StatusForTask.stepData.task_step_data;
@@ -477,7 +480,11 @@ class BottomBtns extends PureComponent {
                         backgroundColor: bottomTheme,
                     }}>
                     <Text
-                        style={{fontSize: 15, color: 'white', marginLeft: 5}}>{this.props.update?'确认修改':'申请发布'}</Text>
+                        style={{
+                            fontSize: 15,
+                            color: 'white',
+                            marginLeft: 5,
+                        }}>{this.props.update ? '确认修改' : '申请发布'}</Text>
                 </TouchableOpacity>
 
             </View> : <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>

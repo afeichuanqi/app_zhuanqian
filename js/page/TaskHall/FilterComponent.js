@@ -1,10 +1,11 @@
-import React,{PureComponent,Component} from 'react';
+import React, {PureComponent, Component} from 'react';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import {Dimensions, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {bottomTheme} from '../../appSet';
+
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-const {width,height} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const {timing} = Animated;
 export default class FilterComponent extends PureComponent {
     static defaultProps = {
@@ -14,8 +15,16 @@ export default class FilterComponent extends PureComponent {
             {id: 3, title: '关注', type: 1},
             {id: 4, title: '浏览', type: 1},
             {id: 5, title: '下载', type: 1},
-            {id: 6, title: '转发', type: 2},
-            {id: 7, title: '发帖', type: 2},
+            {id: 6, title: '转发', type: 1},
+            {id: 7, title: '发帖', type: 1},
+            {id: 8, title: '回帖', type: 1},
+            {id: 9, title: '高价', type: 2},
+            {id: 10, title: '电商', type: 2},
+            {id: 11, title: '实名', type: 2},
+            {id: 12, title: '特单', type: 2},
+            {id: 13, title: '砍价', type: 2},
+            {id: 14, title: '其它', type: 2},
+
         ],
     };
     typeMap = new Map();
@@ -195,10 +204,20 @@ export default class FilterComponent extends PureComponent {
         });
     };
     _sureClick = () => {
-        this.props.sureClick();
+        // console.log(this.typeMap);
+        const tmpArr = [];
+        this.typeMap.forEach(function (value, key, map) {
+            if (value) {
+                tmpArr.push(key);
+            }
+        });
+
+        // console.log(tmpArr);
+        this.props.sureClick(tmpArr);
         this.hide();
     };
 }
+
 class TypeComponent extends Component {
     static defaultProps = {
         index: 0,
