@@ -273,7 +273,7 @@ class HomePage extends PureComponent {
             }
         }
         //
-        if (y < this.nowY && !this.flatListLoad) {
+        if (y < this.nowY ) {
             if (this.AnimatedIsshow) {
                 // this.lastScrollTitle = Date.now();
                 timing(this.animations.val, {
@@ -288,8 +288,8 @@ class HomePage extends PureComponent {
 
     };
     _androidShowAnimated = (y) => {
-        if (this.lastScrollTitle + 800 < Date.now()) {
-            this.lastScrollTitle = Date.now();
+        // if (this.lastScrollTitle + 800 < Date.now()) {
+        //     this.lastScrollTitle = Date.now();
             if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
                 timing(this.animations.val, {
                     duration: 300,
@@ -322,7 +322,7 @@ class HomePage extends PureComponent {
             }
 
 
-        }
+        // }
     };
     _onScroll = (y) => {
         if (Platform.OS === 'android') {
@@ -359,24 +359,49 @@ class FristListComponent extends PureComponent {
             ;
     };
     scrollY = new Animated.Value(0);
-
+    AnimatedEvent = Animated.event(
+        [
+            {
+                nativeEvent: {
+                    contentOffset: {
+                        y: y =>
+                            Animated.block([
+                                Animated.call(
+                                    [y],
+                                    ([offsetY]) => (this.props.onScroll(offsetY)),
+                                ),
+                            ]),
+                    },
+                },
+            },
+        ],
+        {
+            useNativeDriver: true,
+        },
+    );
     render() {
         const containerWidth = width - 20;
         const {lunboData} = this.state;
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, lunboHeight - 10],
+            inputRange: [-220, 0, lunboHeight - 20],
             outputRange: [lunboHeight + 220, lunboHeight - 10, 20],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
-            // zIndex: -100,
-            // elevation: -100,
-            // overflow: 'hidden',
             transform: [{translateY: this.props.translateY}],
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
                 style={{zIndex: -100, elevation: -100}}
+                onScrollBeginDrag={this.AnimatedEvent}
+                onScrollEndDrag={this.AnimatedEvent}
+                onScroll={Animated.event([
+                    {
+                        nativeEvent: {
+                            contentOffset: {y: this.scrollY},
+                        },
+                    },
+                ])}
                 onLoading={(load) => {
                     this.props.onLoad(load);
                 }}
@@ -413,27 +438,7 @@ class FristListComponent extends PureComponent {
                     </View>
                     //
                 }
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: {
-                                    y: y =>
-                                        Animated.block([
-                                            Animated.set(this.scrollY, y),
-                                            Animated.call(
-                                                [y],
-                                                ([offsetY]) => (this.props.onScroll(offsetY)),
-                                            ),
-                                        ]),
-                                },
-                            },
-                        },
-                    ],
-                    {
-                        useNativeDriver: true,
-                    },
-                )}
+                // onScroll={}
             />
             <Animated.View style={{
                 width, height: 40, justifyContent: 'center', position: 'absolute',

@@ -189,7 +189,7 @@ class FristListComponent extends PureComponent {
         }
     };
     nowY = 0;
-    lastScrollTitle = 0;
+    // lastScrollTime = 0;
     _iosShowAnimated = (y) => {
         if (y > this.nowY && y > 0) {
 
@@ -204,9 +204,9 @@ class FristListComponent extends PureComponent {
             }
         }
         //
-        if (y < this.nowY && !this.onloading) {
+        if (y < this.nowY) {
             if (this.AnimatedIsshow) {
-                // this.lastScrollTitle = Date.now();
+                // this.lastScrollTime = Date.now();
                 timing(this.animations.val, {
                     duration: 300,
                     toValue: 0,
@@ -219,42 +219,42 @@ class FristListComponent extends PureComponent {
 
     };
     _androidShowAnimated = (y) => {
-        if (this.lastScrollTitle + 800 < Date.now()) {
-            this.lastScrollTitle = Date.now();
-            if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+        // if (this.lastScrollTime + 800 < Date.now()) {
+        //     this.lastScrollTime = Date.now();
+        if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+            timing(this.animations.val, {
+                duration: 300,
+                toValue: 0,
+                easing: Easing.inOut(Easing.ease),
+            }).start();
+            this.AnimatedIsshow = false;
+            return;
+        }
+        if (y < this.nowY) {
+            if (this.AnimatedIsshow) {
+                // this.lastScrollTime = Date.now();
                 timing(this.animations.val, {
                     duration: 300,
                     toValue: 0,
                     easing: Easing.inOut(Easing.ease),
                 }).start();
                 this.AnimatedIsshow = false;
-                return;
             }
-            if (y < this.nowY) {
-                if (this.AnimatedIsshow) {
-                    // this.lastScrollTitle = Date.now();
-                    timing(this.animations.val, {
-                        duration: 300,
-                        toValue: 0,
-                        easing: Easing.inOut(Easing.ease),
-                    }).start();
-                    this.AnimatedIsshow = false;
-                }
-            }
-            if (y > this.nowY) {
-                if (!this.AnimatedIsshow) {
-                    timing(this.animations.val, {
-                        duration: 300,
-                        toValue: 1,
-                        easing: Easing.inOut(Easing.ease),
-                    }).start();
-                    this.AnimatedIsshow = true;
-
-                }
-            }
-
-
         }
+        if (y > this.nowY) {
+            if (!this.AnimatedIsshow) {
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 1,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = true;
+
+            }
+        }
+
+
+        // }
     };
     _onScroll = (e) => {
         const y = e.nativeEvent.contentOffset.y;
@@ -303,8 +303,10 @@ class FristListComponent extends PureComponent {
                 <FlatListCommonUtil
                     device={this.props.device}
                     ref={ref => this.flatList = ref}
-                    onScroll={this._onScroll}
-                    onLoading={this.onLoading}
+                    onScrollBeginDrag={this._onScroll}
+                    onScrollEndDrag={this._onScroll}
+                    // onScroll={this._onScroll}
+                    // onLoading={this.onLoading}
                 />
             </Animated.View>
             {/*工具条*/}
@@ -362,7 +364,11 @@ class FristListComponent extends PureComponent {
     }
 
     _onPress = () => {
-
+        if (FilterComponent !== null && !this.state.showFilterComponent) {
+            this.setState({
+                showFilterComponent: true,
+            });
+        }
         if (!this.state.show && FilterComponent === null) {
             FilterComponent = require('./TaskHall/FilterComponent').default;
             this.setState({

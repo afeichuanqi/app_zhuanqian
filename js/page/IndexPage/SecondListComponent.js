@@ -43,7 +43,7 @@ class SecondListComponent extends PureComponent {
                 width: 120, height: 120,
             }}>
                 <View style={{position: 'absolute', right: 5, top: 5}}>
-                    <Text style={{fontSize: 16, color: 'white', fontWeight: 'bold'}}>{item.reward_price}.00</Text>
+                    <Text style={{fontSize: 16, color: 'white', fontWeight: 'bold'}}>¥{item.reward_price}</Text>
                 </View>
                 {/*<View style={{position:'absolute',right:5, bottom:10,}}>*/}
                 {/*    <Text style={{color: 'white', fontSize: 12,fontWeight:'bold'}}>*/}
@@ -59,6 +59,28 @@ class SecondListComponent extends PureComponent {
         </TouchableOpacity>;
     };
     scrollY = new Animated.Value(0);
+    // scrollY_ = new Animated.Value(0);
+    AnimatedEvent = Animated.event(
+        [
+            {
+                nativeEvent: {
+                    contentOffset: {
+                        y: y =>
+                            Animated.block([
+                                // Animated.set(this.scrollY, y),
+                                Animated.call(
+                                    [y],
+                                    ([offsetY]) => (this.props.onScroll(offsetY)),
+                                ),
+                            ]),
+                    },
+                },
+            },
+        ],
+        {
+            useNativeDriver: true,
+        },
+    );
 
     render() {
 
@@ -95,28 +117,17 @@ class SecondListComponent extends PureComponent {
                         </View>
                     </View>
                 }
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: {
-                                    y: y =>
-                                        Animated.block([
-                                            Animated.set(this.scrollY, y),
-                                            Animated.call(
-                                                [y],
-                                                ([offsetY]) => (this.props.onScroll(offsetY)),
-                                            ),
-                                        ]),
-                                },
-                            },
-                        },
-                    ],
+                onScrollBeginDrag={this.AnimatedEvent}
+                onScrollEndDrag={this.AnimatedEvent}
+                onScroll={Animated.event([
                     {
-                        useNativeDriver: true,
+                        nativeEvent: {
+                            contentOffset: {y: this.scrollY},
+                        },
                     },
-                )}
+                ])}
             />
+
             <Animated.View style={{
                 width, height: 40, justifyContent: 'center', position: 'absolute',
                 backgroundColor: 'white', transform: [{translateY: columnTop}],

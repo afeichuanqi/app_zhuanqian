@@ -1,9 +1,10 @@
 import React, {PureComponent} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, Text, View} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, Text, View,Dimensions} from 'react-native';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../../common/TaskSumComponent';
-import {getAllTask, selectAllRecommendTask} from '../../util/AppService';
-
+import {getAllTask} from '../../util/AppService';
+import EmptyComponent from '../../common/EmptyComponent';
+const {height,width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
     static defaultProps = {
@@ -19,7 +20,6 @@ export default class FlatListCommonUtil extends PureComponent {
 
     setColumnType = (type) => {
         this.params.column_type = type;
-        // this._updateList(true);
     };
     setTypes = (types) => {
         this.params.types = types;
@@ -77,6 +77,7 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
+            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height-150}/>}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}
@@ -84,6 +85,7 @@ export default class FlatListCommonUtil extends PureComponent {
             scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
+
             refreshControl={
                 <RefreshControl
                     title={'更新任务中'}
@@ -94,7 +96,6 @@ export default class FlatListCommonUtil extends PureComponent {
             onScroll={onScroll}
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
-                console.log('onEndReached.....');
                 // 等待页面布局完成以后，在让加载更多
                 if (this.canLoadMore) {
                     this.onLoading();
@@ -102,7 +103,7 @@ export default class FlatListCommonUtil extends PureComponent {
                 }
             }}
             windowSize={300}
-            onEndReachedThreshold={0.01}
+            onEndReachedThreshold={0.3}
             onScrollEndDrag={onScrollEndDrag}
             onScrollBeginDrag={onScrollBeginDrag}
             onMomentumScrollEnd={onMomentumScrollEnd}

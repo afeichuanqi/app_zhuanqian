@@ -174,6 +174,7 @@ export function addUserTaskNum(data, token) {
         }
     });
 }
+
 /**
  *查询任务已经完成列表
  */
@@ -192,6 +193,7 @@ export function selectSendFormTaskList(data, token) {
         }
     });
 }
+
 /**
  *查询任务已经报名列表
  */
@@ -210,6 +212,7 @@ export function selectSignUpList(data, token) {
         }
     });
 }
+
 /**
  *更新用户任务价格
  */
@@ -389,6 +392,7 @@ export function selectTaskReleaseList(data, token) {
         }
     });
 }
+
 /**
  * 查询所有推荐任务
  */
@@ -396,7 +400,7 @@ export function selectAllRecommendTask(data) {
     return new Promise(async function (resolve, reject) {
         try {
             // http.setPostHeader('token', token);
-            const ret = await http.get('user/selectAllRecommendTask',data);
+            const ret = await http.get('user/selectAllRecommendTask', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -407,14 +411,15 @@ export function selectAllRecommendTask(data) {
         }
     });
 }
+
 /**
  * 刷新任务
  */
-export function updateTaskUpdateTime(data,token) {
+export function updateTaskUpdateTime(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
             http.setPostHeader('token', token);
-            const ret = await http.post('user/updateTaskUpdateTime',data);
+            const ret = await http.post('user/updateTaskUpdateTime', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -425,6 +430,7 @@ export function updateTaskUpdateTime(data,token) {
         }
     });
 }
+
 /**
  * 获取所有任务
  */
@@ -432,7 +438,7 @@ export function getAllTask(data) {
     return new Promise(async function (resolve, reject) {
         try {
             // http.setPostHeader('token', token);
-            const ret = await http.post('user/getAllTask',data);
+            const ret = await http.post('user/getAllTask', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -443,6 +449,7 @@ export function getAllTask(data) {
         }
     });
 }
+
 /**
  * 最新首页
  */
@@ -450,7 +457,7 @@ export function getBestNewTask() {
     return new Promise(async function (resolve, reject) {
         try {
             // http.setPostHeader('token', token);
-            const ret = await http.get('user/getBestNewTask',{});
+            const ret = await http.get('user/getBestNewTask', {});
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -461,6 +468,7 @@ export function getBestNewTask() {
         }
     });
 }
+
 /**
  * 设置用户任务的置顶
  */
@@ -479,6 +487,7 @@ export function userSetTaskTop(data, token) {
         }
     });
 }
+
 /**
  * 设置用户任务的推荐
  */
@@ -497,6 +506,7 @@ export function userSetTaskRecommend(data, token) {
         }
     });
 }
+
 /**
  * 取消用户报名资格
  */
@@ -515,6 +525,7 @@ export function cancelUserSignUp(data, token) {
         }
     });
 }
+
 /**
  * 查询用户接单
  */
@@ -533,6 +544,7 @@ export function selectOrderTasks(data, token) {
         }
     });
 }
+
 /**
  * 查询任务简单信息
  */
@@ -551,6 +563,7 @@ export function selectSimpleTaskInfo(data, token) {
         }
     });
 }
+
 /**
  * 下架任务
  */
@@ -569,6 +582,7 @@ export function stopDownUserTask(data, token) {
         }
     });
 }
+
 /**
  * 生成需要的表单信息
  */
@@ -587,6 +601,7 @@ export function genTaskReleaseInfoData(data, token) {
         }
     });
 }
+
 /**
  * 暂停任务
  */
@@ -624,6 +639,7 @@ export function selectSendFormForTaskId(data, token) {
         }
     });
 }
+
 /**
  * // 查询该任务做的所有信息
  */
@@ -702,6 +718,50 @@ export function setUserData(data, token) {
 }
 
 /**
+ * 查询用户店铺详情
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectShopInfoForUserId(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectShopInfoForUserId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询用户店铺详情
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectTaskListForUserId(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectTaskListForUserId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
  * 发布任务
  * @param data
  * @param token
@@ -723,6 +783,7 @@ export function addTaskReleaseData(data, token) {
         }
     });
 }
+
 /**
  * 修改任务
  * @param data
@@ -745,6 +806,7 @@ export function updateTaskReleaseData(data, token) {
         }
     });
 }
+
 /**
  * 删除任务
  * @param data
@@ -767,6 +829,7 @@ export function deleteTaskRelease(data, token) {
         }
     });
 }
+
 /**
  * 查询任务
  * @param data

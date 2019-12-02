@@ -27,6 +27,7 @@ import ToastSelect from '../common/ToastSelect';
 import EmptyComponent from '../common/EmptyComponent';
 
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 class MyTaskReview extends PureComponent {
     constructor(props) {
@@ -137,7 +138,7 @@ class MyTaskReview extends PureComponent {
             };
             NavigationUtils.goPage({
                 fromUserinfo: fromUserinfo,
-                columnType: 3,
+                columnType: 1,
                 task_id: task_id,
                 taskTitle: 'test',
                 taskUri,
@@ -156,7 +157,7 @@ class MyTaskReview extends PureComponent {
                 <Toast
                     ref={ref => this.toast = ref}
                 />
-                {isEmpty ? <EmptyComponent message={'没有更多的任务需要审核啦 ～ ～'}/> : <View style={{flex: 1}}>
+                {isEmpty ? <EmptyComponent height={screenHeight-100} message={'没有更多的任务需要审核啦 ～ ～'}/> : <View style={{flex: 1}}>
                     <ScrollView style={{backgroundColor: '#e8e8e8', marginBottom: 50}}>
                         <View style={{
                             backgroundColor: 'white',

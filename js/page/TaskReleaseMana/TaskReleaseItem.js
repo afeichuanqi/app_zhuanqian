@@ -20,14 +20,9 @@ export default class TaskReleaseItem extends PureComponent {
                     flexDirection: 'row',
                     paddingHorizontal: 10,
                     paddingTop: 18,
-                    // paddingBottom: 25,
-
-                    // transform: [{scale}],
                     height: 70,
                     backgroundColor: 'white',
                 }}
-                // onPressIn={this._onPressIn}
-                // onPressOut={this._onPressOut}
             >
                 <View style={{
                     height: 40,
@@ -50,8 +45,6 @@ export default class TaskReleaseItem extends PureComponent {
                         fontSize: titleFontSize,
                         color: 'black',
                     }}>{`${item.id} - ${item.task_title}`}</Text>
-                    {/*<SvgUri width={19} height={19} style={{marginLeft: 3}} svgXmlData={tuijian}/>*/}
-                    {/*<SvgUri width={18} height={18} style={{marginLeft: 3, marginTop: 1}} svgXmlData={ding}/>*/}
                 </View>
                 {/*左下*/}
                 <View style={{

@@ -51,8 +51,8 @@ class AccountSetting extends PureComponent {
             style={{backgroundColor: theme}} // 背景颜色
         />;
         const {userinfo} = this.props;
-        console.log(userinfo.login);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '账号管理', null, theme, 'black', 16);
+        // console.log(userinfo.login);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '账号管理', null, theme, 'black', 16,()=>{},false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -105,7 +105,7 @@ class AccountSetting extends PureComponent {
                     borderRadius: 5,
                 }}
                             sureClick={this._sureClick}
-                            rightTitle={'更新'}
+                            rightTitle={'修改'}
                             ref={ref => this.myModalBox = ref}>
                     <View style={{
                         paddingBottom: 10,
@@ -124,7 +124,7 @@ class AccountSetting extends PureComponent {
 
                             style={{
                                 height: 50,
-                                backgroundColor: '#e8e8e8',
+                                backgroundColor: '#f7f7f7',
                                 marginTop: 10,
                                 fontSize: 13,
                                 paddingHorizontal: 5,

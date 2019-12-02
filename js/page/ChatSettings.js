@@ -70,7 +70,8 @@ class ChatSetting extends PureComponent {
         const {fromUserinfo} = this.params;
         // const {userinfo} = this.props;
 
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '聊天设置', null, theme, 'black', 16);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '聊天设置', null, theme, 'black', 16, () => {
+        }, false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -85,7 +86,7 @@ class ChatSetting extends PureComponent {
                     <TouchableOpacity
                         activeOpacity={0.6}
                         onPress={() => {
-                            NavigationUtils.goPage({}, 'ShopInfoPage');
+                            NavigationUtils.goPage({userid: fromUserinfo.id}, 'ShopInfoPage');
                         }}
                         style={{width, height: 70, alignItems: 'center', flexDirection: 'row', paddingHorizontal: 10}}>
                         <Image
@@ -94,9 +95,9 @@ class ChatSetting extends PureComponent {
                                 width: 50, height: 50,
                                 borderRadius: 25,
                             }}/>
-                        <View style={{marginLeft: 15, height:50, justifyContent:'space-around'}}>
+                        <View style={{marginLeft: 15, height: 50, justifyContent: 'space-around'}}>
                             <Text style={{fontSize: 15, color: 'black'}}>{fromUserinfo.username}</Text>
-                            <Text style={{color:'rgba(0,0,0,0.7)'}}>UID:123654</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.7)'}}>UID:123654</Text>
                         </View>
                         <SvgUri style={{position: 'absolute', right: 15, top: 30}} width={15} height={15}
                                 svgXmlData={menu_right}/>

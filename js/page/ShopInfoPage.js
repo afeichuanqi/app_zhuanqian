@@ -25,13 +25,17 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../common/TaskSumComponent';
+import {selectShopInfoForUserId, selectTaskListForUserId} from '../util/AppService';
+import {connect} from 'react-redux';
+import EmptyComponent from '../common/EmptyComponent';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
 
-class HomePage extends PureComponent {
+class ShopInfoPage extends PureComponent {
     constructor(props) {
         super(props);
+        this.params = this.props.navigation.state.params;
     }
 
     state = {};
@@ -56,8 +60,8 @@ class HomePage extends PureComponent {
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(bottomTheme, true);
         const RefreshHeight = Animated.interpolate(this.animations.val, {
-            inputRange: [-200, -0.1,0],
-            outputRange: [250, 50,0],
+            inputRange: [-200, -0.1, 0],
+            outputRange: [250, 50, 0],
             extrapolate: 'clamp',
         });
         let statusBar = {
@@ -70,7 +74,8 @@ class HomePage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
 
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, 'dsadsa的店铺', null, bottomTheme, 'white', 16);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, 'dsadsa的店铺', null, bottomTheme, 'white', 16, () => {
+        }, false);
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -92,7 +97,7 @@ class HomePage extends PureComponent {
 
 
                     </Animated.View>
-                    <ShopList RefreshHeight={this.animations.val}/>
+                    <ShopList userid={this.params.userid} userinfo={this.props.userinfo} RefreshHeight={this.animations.val}/>
                 </View>
 
             </SafeAreaViewPlus>
@@ -102,16 +107,54 @@ class HomePage extends PureComponent {
 
 class ShopList extends Component {
     state = {
-        commodityData: [
-            {id: 1},
-            {id: 1},
-            {id: 1},
-            {id: 1},
-            {id: 1},
-            {id: 1},
-        ],
+        commodityData: [],
         isLoading: false,
         hideLoaded: false,
+        shopInfo: {},
+    };
+
+    componentDidMount(): void {
+        selectShopInfoForUserId({user_id: this.props.userid}, this.props.userinfo.token).then(shopInfo => {
+            this.setState({
+                shopInfo,
+            });
+        });
+        this._updatePage(true);
+
+    }
+
+    _updatePage = (refresh) => {
+        if (refresh) {
+            this.params.pageIndex = 0;
+            this.setState({
+                isLoading: true,
+            });
+        } else {
+            this.params.pageIndex += 1;
+        }
+        selectTaskListForUserId({
+            user_id: this.props.userid,
+            pageIndex: this.params.pageIndex,
+        }, this.props.userinfo.token).then(result => {
+            if (refresh) {
+                this.setState({
+                    commodityData: result,
+                    isLoading: false,
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+            } else {
+                const tmpArr = [...this.state.commodityData];
+                this.setState({
+                    commodityData: tmpArr.concat(result),
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+            }
+
+        });
+    };
+    params = {
+        pageIndex: 0,
+
     };
 
     genIndicator(hideLoaded) {
@@ -129,62 +172,34 @@ class ShopList extends Component {
     }
 
     _renderIndexPath = ({item, index}) => {
+        item.avatarUrl = this.state.shopInfo.avatar_url;
+
         return <TaskSumComponent
+            item={item}
             titleFontSize={15}
             marginHorizontal={15}
         />;
     };
     onLoading = () => {
-        console.log('onLoading触发中');
-        this.setState({
-            hideLoaded: false,
-        });
-        const data = [...this.state.commodityData];
-        // data.push([...data]);
-        let tmpData = [];
-        for (let i = 0; i < 10; i++) {
-            console.log(i);
-            tmpData.push({
-                id: i,
-            });
-        }
-        setTimeout(() => {
-            this.setState({
-                commodityData: data.concat(tmpData),
-            }, () => {
-                // this
-                // this.setState({
-                //     hideLoaded: true,
-                // });
-            });
-        }, 2000);
+        this._updatePage(false);
 
     };
     onRefresh = () => {
-        this.setState({
-            isLoading: true,
-        });
-        // this.props.onRefresh(true);
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-            });
-            // this.props.onRefresh(false);
-        }, 1000);
+        this._updatePage(true);
     };
     params = {
         pageIndex: 0,
     };
 
     render() {
-        const {commodityData, hideLoaded, isLoading} = this.state;
+        const {commodityData, hideLoaded, isLoading, shopInfo} = this.state;
 
         return <AnimatedFlatList
             ListHeaderComponent={
                 <View style={{backgroundColor: '#e8e8e8'}}>
 
-                    <AvatarColumn/>
-                    <ShopData/>
+                    <AvatarColumn shopInfo={shopInfo}/>
+                    <ShopData shopInfo={shopInfo}/>
                 </View>
 
             }
@@ -193,6 +208,7 @@ class ShopList extends Component {
             }}
             ref={ref => this.flatList = ref}
             data={commodityData}
+            ListEmptyComponent={<EmptyComponent message={'暂无发布任务'} height={height - 380}/>}
             scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
@@ -254,10 +270,12 @@ class ShopData extends Component {
                 <Text>店铺数据一览</Text>
             </View>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                {this.getTaskDataColumn('发任务数(个)', 265)}
-                {this.getTaskDataColumn('发任务数(个)', 265)}
-                {this.getTaskDataColumn('发任务数(个)', 265)}
-                {this.getTaskDataColumn('发任务数(个)', 265)}
+                {this.getTaskDataColumn('总发任务数', this.props.shopInfo.total_hair_tasks_num)}
+                {this.getTaskDataColumn('总发单数', this.props.shopInfo.total_hair_order_num)}
+                {this.getTaskDataColumn('成功派单数', this.props.shopInfo.success_hair_order_num)}
+                {this.getTaskDataColumn('总接单数', this.props.shopInfo.total_join_order_num)}
+                {this.getTaskDataColumn('成功接单数', this.props.shopInfo.success_join_order_num)}
+                {this.getTaskDataColumn('接单转化比', (parseInt(this.props.shopInfo.success_join_order_num) / parseInt(this.props.shopInfo.total_join_order_num) * 100) + '%')}
             </View>
 
         </View>;
@@ -271,7 +289,7 @@ class AvatarColumn extends Component {
             <View style={{marginTop: 5, marginLeft: 10}}>
                 <FastImage
                     style={[styles.imgStyle]}
-                    source={{uri: `http://www.embeddedlinux.org.cn/uploads/allimg/180122/2222032V5-0.jpg`}}
+                    source={{uri: this.props.shopInfo.avatar_url}}
                     resizeMode={FastImage.stretch}
                 />
                 {/*左上*/}
@@ -284,7 +302,7 @@ class AvatarColumn extends Component {
                     <Text style={{
                         fontSize: 15,
                         color: 'white',
-                    }}>默念</Text>
+                    }}>{this.props.shopInfo.username}</Text>
                 </View>
                 {/*左下*/}
                 <View style={{
@@ -296,7 +314,7 @@ class AvatarColumn extends Component {
                     <Text style={{
                         fontSize: 13,
                         color: 'white',
-                    }}>ID:013A56S</Text>
+                    }}>ID:{this.props.shopInfo.userId}</Text>
                 </View>
                 {/*右中*/}
                 <View style={{
@@ -324,7 +342,14 @@ class AvatarColumn extends Component {
     }
 }
 
-export default HomePage;
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({
+    // onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
+});
+const ShopInfoPageRedux = connect(mapStateToProps, mapDispatchToProps)(ShopInfoPage);
+export default ShopInfoPageRedux;
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色

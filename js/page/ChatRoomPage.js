@@ -49,9 +49,9 @@ class TaskInfo extends React.Component {
                     resizeMode={Image.resizeMode.stretch}
                 />
                 <View style={{marginLeft: 15}}>
-                    <Text style={{fontSize: 15}}>¥ {parseInt(taskInfo.reward_price).toFixed(2)}</Text>
+                    <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
                     <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)'}}>{taskInfo.task_title}</Text>
-                    <View style={{flexDirection: 'row', alignItems: 'center',height:15,wdith:50,marginTop:3}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', height: 15, wdith: 50, marginTop: 3}}>
                         <Text style={{
                             fontSize: 12,
                             color: 'rgba(0,0,0,0.7)',
@@ -236,9 +236,7 @@ class ChatRoomPage extends React.Component {
                         sendMessage={this.sendMessage}
                         pressAvatar={this._pressAvatar}
                         onMessagePress={(type, index, content) => {
-                            console.log('消息被单击');
                             if (type == 'image') {
-                                console.log(content);
                                 this._imgViewModel.show({
                                     url: content,
                                 });
@@ -316,9 +314,7 @@ class ChatRoomPage extends React.Component {
         ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri);
     };
     _pressAvatar = () => {
-        // const {fromUserinfo} = this.params;
-        NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ShopInfoPage');
-        // console.log(data1,data2);
+        NavigationUtils.goPage({userid: this.fromUserinfo.id}, 'ShopInfoPage');
     };
     renderMessageTime = (time) => {
         return <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>

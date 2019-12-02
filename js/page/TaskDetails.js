@@ -45,7 +45,7 @@ class TaskDetails extends PureComponent {
     };
     _updateTaskStatus = async () => {
         const {task_id} = this.params;
-        const StatusForTask = await selectUserStatusForTaskId({task_id: task_id}, this.props.userinfo.token);
+        const StatusForTask = await selectUserStatusForTaskId({task_id: task_id,device: Platform.OS == 'android' ? 2 : 3}, this.props.userinfo.token);
         const tmpData = {...this.state.totalData};
         if (StatusForTask.status === 5) {
             const newStepData = JSON.parse(StatusForTask.stepData.task_step_data);
@@ -280,6 +280,9 @@ class TaskDetails extends PureComponent {
                             </View>
                         </Animated.View>
                         <TouchableOpacity
+                            onPress={()=>{
+                                NavigationUtils.goPage({userid: fromUserinfo.userid}, 'ShopInfoPage');
+                            }}
                             activeOpacity={0.6}
                             style={{
                                 backgroundColor: 'white',
@@ -378,7 +381,7 @@ class TaskDetails extends PureComponent {
         const {task_id} = this.params;
         if (StatusForTask.status === 0) {//进行报名
             //进行报名
-            startSignUpTask({task_id: task_id}, userinfo.token).then(result => {
+            startSignUpTask({task_id: task_id, device: Platform.OS == 'android' ? 2 : 3}, userinfo.token).then(result => {
                 this.setState({
                     signUp: true,
                 }, () => {
