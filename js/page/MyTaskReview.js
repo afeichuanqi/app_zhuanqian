@@ -82,25 +82,8 @@ class MyTaskReview extends PureComponent {
             data.task_step_data = taskStepData;
             this.setState({
                 taskData: data,
-                // isEnd: index === this.taskDatas.length - 1,
             });
-            // for (let i = 0; i < taskStepData.length; i++) {
-            //     const {type, typeData} = taskStepData[i];
-            //     if (type === 5 && typeData && typeData.uri1) {
-            // Image.getSize(typeData.uri1, (height, width) => {
-            //     const imgHeight = Math.floor(height / (width / (screenWidth - 20)));
-            //     const imgWidth = screenWidth - 20;
-            //     taskStepData[i].typeData.uri1ImgHeight = imgHeight;
-            //     taskStepData[i].typeData.uri1ImgWidth = imgWidth;
-            //     this.setState({
-            //         taskData: data,
-            //     }, () => {
-            //         // this.forceUpdate();
-            //     });
-            // });
 
-            // }
-            // }
 
         } catch (e) {
             this.toast.show(`error>${e.toString()}`);
@@ -140,7 +123,6 @@ class MyTaskReview extends PureComponent {
                 fromUserinfo: fromUserinfo,
                 columnType: 1,
                 task_id: task_id,
-                taskTitle: 'test',
                 taskUri,
             }, 'ChatRoomPage');
         }, this.taskDatas && this.taskDatas.length > 0 ? true : false);
@@ -157,181 +139,210 @@ class MyTaskReview extends PureComponent {
                 <Toast
                     ref={ref => this.toast = ref}
                 />
-                {isEmpty ? <EmptyComponent height={screenHeight-100} message={'没有更多的任务需要审核啦 ～ ～'}/> : <View style={{flex: 1}}>
-                    <ScrollView style={{backgroundColor: '#e8e8e8', marginBottom: 50}}>
-                        <View style={{
-                            backgroundColor: 'white',
-                            marginTop: 2,
-                            flexDirection: 'row',
-                            height: 40,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text>已审核:</Text>
-                                <Text style={{color: 'red', marginLeft: 5}}>{haveReviewCount}</Text>
-                                <Text>个</Text>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 20}}>
-                                <Text>未审核:</Text>
-                                <Text style={{color: 'red', marginLeft: 5}}>{unReviewCount}</Text>
-                                <Text>个</Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity
-                            activeOpacity={0.6}
-                            onPress={() => {
-                                NavigationUtils.goPage({}, 'ShopInfoPage');
-                            }}
-                            style={{
-                                width: screenWidth, height: 70,
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                paddingHorizontal: 10,
-                                backgroundColor: 'white',
-                                marginTop: 10,
-                            }}>
-                            <Image_
-                                source={{uri: taskData.avatar_url}}
-                                style={{
-                                    width: 40, height: 40,
-                                    borderRadius: 25,
-                                }}/>
-                            <View style={{marginLeft: 15, height: 40, justifyContent: 'space-around'}}>
-                                <View style={{flexDirection: 'row', width: 100}}>
-                                    <Text style={{fontSize: 15, color: 'black'}}>{taskData.username}</Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 15,
-                                            color: 'black',
-                                            marginLeft: 5,
-                                        }}>(ID:{taskData.userid})</Text>
-                                </View>
+                {isEmpty ? <EmptyComponent height={screenHeight - 100} message={'没有更多的任务需要审核啦 ～ ～'}/> :
+                    <View style={{flex: 1}}>
+                        <ScrollView style={{backgroundColor: '#e8e8e8', marginBottom: 50}}>
+                            {task_status === 0 ? <View style={{
+                                    backgroundColor: 'white',
+                                    marginTop: 2,
+                                    flexDirection: 'row',
+                                    height: 40,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
 
-                                <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.6)'}}>提交时间:{taskData.send_date}</Text>
-                            </View>
-                            <SvgUri style={{position: 'absolute', right: 15, top: 30}} width={15} height={15}
-                                    svgXmlData={menu_right}/>
-                        </TouchableOpacity>
-
-                        {taskData.task_step_data && taskData.task_step_data.map((item, index, arr) => {
-                            const {type, typeData} = item;
-                            let ImageIndex = 0;
-                            // console.log(type, typeData, 'type, typeData');
-                            if (type === 5 && typeData && typeData.uri1) {
-                                // console.log(typeData.uri1ImgHeight, typeData.uri1ImgWidth, 'typeData.uri1ImgHeight');
-
-                                ImageIndex += 1;
-                                return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 600, typeData.uri1ImgWidth || screenWidth - 20, ImageIndex);
-                            } else if (type === 6 && typeData.collectInfoContent) {
-                                return this.getTextView(typeData.collectInfoContent);
-                            } else {
-                                return null;
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <Text>已审核:</Text>
+                                        <Text style={{color: 'red', marginLeft: 5}}>{haveReviewCount}</Text>
+                                        <Text>个</Text>
+                                    </View>
+                                    <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 20}}>
+                                        <Text>未审核:</Text>
+                                        <Text style={{color: 'red', marginLeft: 5}}>{unReviewCount}</Text>
+                                        <Text>个</Text>
+                                    </View>
+                                </View> :
+                                task_status === -1 ? <View style={{
+                                    backgroundColor: 'white',
+                                    marginTop: 10,
+                                    flexDirection: 'row',
+                                    height: 40,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+                                    <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                                        <Text>驳回理由:</Text>
+                                        <Text
+                                            // numberOfLines={5}
+                                            // ellipsizeMode={'tail'}
+                                            style={{
+                                            width: screenWidth - 120,
+                                            fontSize: 12,
+                                            color: 'red',
+                                            marginLeft: 10,
+                                        }}>{JSON.parse(taskData.reason_for_rejection).turnDownInfo}</Text>
+                                    </View>
+                                </View> : null
                             }
-                        })}
-
-                    </ScrollView>
-                    {task_status === 0 ? <View style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            flexDirection: 'row',
-                            width: screenWidth,
-                            justifyContent: 'space-around',
-                            // paddingVertical: 5,
-                            backgroundColor: bottomTheme,
-                            alignItems: 'center',
-                            height: 50,
-                        }}>
 
                             <TouchableOpacity
+                                activeOpacity={0.6}
                                 onPress={() => {
-                                    this.toastS.show();
+                                    NavigationUtils.goPage({userid:taskData.userid}, 'ShopInfoPage');
                                 }}
-                                activeOpacity={0.5}
                                 style={{
-                                    height: 40,
-                                    width: (screenWidth - 2) / 3,
+                                    width: screenWidth, height: 70,
                                     alignItems: 'center',
-                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                    paddingHorizontal: 10,
+                                    backgroundColor: 'white',
+                                    marginTop: 10,
                                 }}>
-                                <Text style={{color: 'white'}}>通过</Text>
+                                <Image_
+                                    source={{uri: taskData.avatar_url}}
+                                    style={{
+                                        width: 40, height: 40,
+                                        borderRadius: 25,
+                                    }}/>
+                                <View style={{marginLeft: 15, height: 40, justifyContent: 'space-around'}}>
+                                    <View style={{flexDirection: 'row', width: 100}}>
+                                        <Text style={{fontSize: 15, color: 'black'}}>{taskData.username}</Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 15,
+                                                color: 'black',
+                                                marginLeft: 5,
+                                            }}>(ID:{taskData.userid})</Text>
+                                    </View>
+
+                                    <Text style={{
+                                        fontSize: 12,
+                                        color: 'rgba(0,0,0,0.6)',
+                                    }}>{task_status != 0 ? `审核时间:${taskData.review_time}` : `提交时间:${taskData.send_date}`}</Text>
+                                </View>
+                                <SvgUri style={{position: 'absolute', right: 15, top: 30}} width={15} height={15}
+                                        svgXmlData={menu_right}/>
                             </TouchableOpacity>
-                            <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
-                            <TouchableOpacity onPress={() => {
-                                NavigationUtils.goPage({taskData, updatePage: this._updatePage}, 'TaskTurnDownPage');
-                            }} style={{
-                                height: 40,
-                                width: (screenWidth - 2) / 3,
+
+                            {taskData.task_step_data && taskData.task_step_data.map((item, index, arr) => {
+                                const {type, typeData} = item;
+                                let ImageIndex = 0;
+                                // console.log(type, typeData, 'type, typeData');
+                                if (type === 5 && typeData && typeData.uri1) {
+                                    // console.log(typeData.uri1ImgHeight, typeData.uri1ImgWidth, 'typeData.uri1ImgHeight');
+
+                                    ImageIndex += 1;
+                                    return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 600, typeData.uri1ImgWidth || screenWidth - 20, ImageIndex);
+                                } else if (type === 6 && typeData.collectInfoContent) {
+                                    return this.getTextView(typeData.collectInfoContent);
+                                } else {
+                                    return null;
+                                }
+                            })}
+
+                        </ScrollView>
+                        {task_status === 0 ? <View style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                flexDirection: 'row',
+                                width: screenWidth,
+                                justifyContent: 'space-around',
+                                // paddingVertical: 5,
+                                backgroundColor: bottomTheme,
                                 alignItems: 'center',
-                                justifyContent: 'center',
+                                height: 50,
                             }}>
-                                <Text style={{color: 'white'}}>驳回</Text>
-                            </TouchableOpacity>
-                            <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
-                            <TouchableOpacity
-                                onPress={!isEnd ? this._nextStepData : null}
-                                activeOpacity={isEnd ? 0.5 : 0.7}
-                                style={{
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.toastS.show();
+                                    }}
+                                    activeOpacity={0.5}
+                                    style={{
+                                        height: 40,
+                                        width: (screenWidth - 2) / 3,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
+                                    <Text style={{color: 'white'}}>通过</Text>
+                                </TouchableOpacity>
+                                <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
+                                <TouchableOpacity onPress={() => {
+                                    NavigationUtils.goPage({taskData, updatePage: this._updatePage}, 'TaskTurnDownPage');
+                                }} style={{
                                     height: 40,
                                     width: (screenWidth - 2) / 3,
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    opacity: isEnd ? 0.5 : 1,
                                 }}>
-                                <Text style={{color: 'white'}}>下一个</Text>
-                            </TouchableOpacity>
+                                    <Text style={{color: 'white'}}>驳回</Text>
+                                </TouchableOpacity>
+                                <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
+                                <TouchableOpacity
+                                    onPress={!isEnd ? this._nextStepData : null}
+                                    activeOpacity={isEnd ? 0.5 : 0.7}
+                                    style={{
+                                        height: 40,
+                                        width: (screenWidth - 2) / 3,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        opacity: isEnd ? 0.5 : 1,
+                                    }}>
+                                    <Text style={{color: 'white'}}>下一个</Text>
+                                </TouchableOpacity>
 
 
-                        </View> :
-                        <View style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            flexDirection: 'row',
-                            width: screenWidth,
-                            justifyContent: 'space-around',
-                            // paddingVertical: 5,
-                            backgroundColor: bottomTheme,
-                            alignItems: 'center',
-                            height: 50,
-                        }}>
-                            <TouchableOpacity
-                                onPress={this._PreviousStepData}
-                                activeOpacity={isEnd ? 0.5 : 0.7}
-                                style={{
-                                    height: 40,
-                                    width: (screenWidth - 2) / 3,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    // opacity: isEnd ? 0.5 : 1,
-                                }}>
-                                <Text style={{color: 'white'}}>上一个</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={!isEnd ? this._nextStepData : null}
-                                activeOpacity={isEnd ? 0.5 : 0.7}
-                                style={{
-                                    height: 40,
-                                    width: (screenWidth - 2) / 3,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    opacity: isEnd ? 0.5 : 1,
-                                }}>
-                                <Text style={{color: 'white'}}>下一个</Text>
-                            </TouchableOpacity>
-                        </View>}
+                            </View> :
+                            <View style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                flexDirection: 'row',
+                                width: screenWidth,
+                                justifyContent: 'space-around',
+                                // paddingVertical: 5,
+                                backgroundColor: bottomTheme,
+                                alignItems: 'center',
+                                height: 50,
+                            }}>
+                                <TouchableOpacity
+                                    onPress={this._PreviousStepData}
+                                    activeOpacity={isEnd ? 0.5 : 0.7}
+                                    style={{
+                                        height: 40,
+                                        width: (screenWidth - 2) / 3,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        // opacity: isEnd ? 0.5 : 1,
+                                    }}>
+                                    <Text style={{color: 'white'}}>上一个</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={!isEnd ? this._nextStepData : null}
+                                    activeOpacity={isEnd ? 0.5 : 0.7}
+                                    style={{
+                                        height: 40,
+                                        width: (screenWidth - 2) / 3,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        opacity: isEnd ? 0.5 : 1,
+                                    }}>
+                                    <Text style={{color: 'white'}}>下一个</Text>
+                                </TouchableOpacity>
+                            </View>}
 
-                    <ImageViewerModal ref={ref => this.imageModal = ref}/>
-                    <ToastSelect
-                        rightTitle={'通过'}
-                        sureClick={() => this.thisTaskPass(taskData.taskStepId)} ref={ref => this.toastS = ref}>
-                        <View style={{
-                            height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                            paddingTop: 10,
-                        }}>
-                            <Text style={{fontSize: 14}}>仔细确认是否通过此任务的验证？</Text>
-                        </View>
-                    </ToastSelect>
-                </View>}
+                        <ImageViewerModal ref={ref => this.imageModal = ref}/>
+                        <ToastSelect
+                            rightTitle={'通过'}
+                            sureClick={() => this.thisTaskPass(taskData.taskStepId)}
+                            ref={ref => this.toastS = ref}>
+                            <View style={{
+                                height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                                paddingTop: 10,
+                            }}>
+                                <Text style={{fontSize: 14}}>仔细确认是否通过此任务的验证？</Text>
+                            </View>
+                        </ToastSelect>
+                    </View>}
 
             </SafeAreaViewPlus>
         );
@@ -344,8 +355,14 @@ class MyTaskReview extends PureComponent {
                 unReviewCount: this.state.unReviewCount - 1,
                 haveReviewCount: this.state.haveReviewCount + 1,
             });
-            this._nextStepData();
             this.toast.show('已经通过');
+            if (this.pageIndex == this.taskDatas.length - 1) {
+                this._updatePage();//直接刷新本页面
+            } else {
+                this._nextStepData();
+            }
+
+
         }).catch(error => {
             this.toast.show(error);
         });
@@ -354,12 +371,9 @@ class MyTaskReview extends PureComponent {
     _PreviousStepData = () => {
 
         this.pageIndex -= 1;
-        console.log(this.pageIndex);
         if (this.pageIndex < 0) {
-
+            this.pageIndex += 1;
             this.toast.show('没有更多了');
-
-
         } else {
             this._setTaskData(this.pageIndex);
         }
@@ -369,10 +383,8 @@ class MyTaskReview extends PureComponent {
 
         this.pageIndex += 1;
         if (this.pageIndex >= this.taskDatas.length) {
-
+            this.pageIndex -= 1;
             this.toast.show('没有更多了');
-
-
         } else {
             this._setTaskData(this.pageIndex);
         }

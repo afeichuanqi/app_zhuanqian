@@ -8,7 +8,7 @@
 
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {bottomTheme} from '../appSet';
+import {bottomTheme,theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
@@ -118,26 +118,26 @@ class TaskReleaseMana extends PureComponent {
     render() {
         let statusBar = {
             hidden: false,
-            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
+            backgroundColor: theme,//安卓手机状态栏背景颜色
         };
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
-            style={{backgroundColor: bottomTheme}} // 背景颜色
+            style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.params.title, null, bottomTheme, 'white', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.params.title, null, 'white', 'black', 16, null, false);
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <SafeAreaViewPlus
-                topColor={bottomTheme}
+                topColor={theme}
             >
                 {navigationBar}
                 {TopColumn}
 
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
-                        style={{backgroundColor: '#e8e8e8'}}
-                        ListEmptyComponent={<EmptyComponent marginTop={-80} message={'您还没有相关任务'}/>}
+                        style={{backgroundColor: '#f5f5f5',paddingTop:5}}
+                        ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关任务'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
                         scrollEventThrottle={1}
@@ -205,10 +205,13 @@ class TaskReleaseMana extends PureComponent {
                     </View>
                     <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 5, alignItems: 'center'}}>
                         <Text style={{
-                            fontSize: 14,
+                            fontSize: 12,
                             color: 'rgba(0,0,0,0.8)',
-                        }}>{item.task_status == 1 ? '审核时间' : item.task_status == 0 ? '进行中' : item.task_status == -1 ? '驳回时间' : ''}</Text>
-                        <Text style={{fontSize: 14, color: 'rgba(0,0,0,0.8)'}}>{item.send_date1}</Text>
+                        }}>{item.task_status == 1 ? '审核时间' : item.task_status == 0 ? '进行中' : item.task_status == -1 ? '驳回时间' : ''}:</Text>
+                        <Text style={{
+                            fontSize: 12,
+                            color: 'rgba(0,0,0,0.8)',
+                        }}>{item.task_status == 0 ? item.send_date1 : item.review_time1}</Text>
                     </View>
                 </View>
             </View>

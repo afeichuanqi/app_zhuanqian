@@ -14,6 +14,7 @@ import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView, FlatLi
 import {bottomTheme} from '../appSet';
 import setting from '../res/svg/setting.svg';
 import shop from '../res/svg/shop.svg';
+import guanzhu from '../res/svg/mysvg/guanzhu1.svg';
 import my_fabu from '../res/svg/my_fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import FastImage from 'react-native-fast-image';
@@ -131,7 +132,7 @@ class MyPage extends PureComponent {
 
                         {/*</View>*/}
                         <TopInfoColumn onUploadAvatar={onUploadAvatar} userinfo={userinfo} scrollY={this.scrollY}/>
-                        <BottomInfoColumn/>
+                        <BottomInfoColumn userinfo={userinfo}/>
                     </AnimatedScrollView>
                     {/*名字*/}
                     <AnimatedTouchableOpacity
@@ -249,7 +250,9 @@ class BottomInfoColumn extends PureComponent {
                 <ToolsItemComponent/>
             </ScrollView>
 
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
+            {ViewUtil.getSettingItem(guanzhu, '我的关注', '关注列表', () => {
+                NavigationUtils.goPage({user_id: this.props.userinfo.userid, isMy: true}, 'MyAttentionList');
+            })}
             {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
             {ViewUtil.getMenuLine()}
             {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
@@ -306,14 +309,20 @@ class TopInfoColumn extends PureComponent {
             outputRange: [1, 0.1],
             extrapolate: 'clamp',
         });
-        console.log(userinfo.avatar_url);
+        // console.log('');
+        console.log(userinfo);
         return <View style={{backgroundColor: bottomTheme}}>
             <View style={{marginTop: 130, height: 0}}/>
             <Animated.View
                 style={{height: 130, opacity, position: 'absolute', top: 0}}>
                 {/*头像*/}
                 <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row'}}>
-                    <TouchableOpacity style={{marginTop: 40, flexDirection: 'row', alignItems: 'center'}}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            NavigationUtils.goPage({userid: userinfo.userid}, 'ShopInfoPage');
+
+                        }}
+                        style={{marginTop: 40, flexDirection: 'row', alignItems: 'center'}}>
 
                         <SvgUri width={14} height={14} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
                         <Text style={{fontSize: 12, color: 'white'}}>我的店铺 > </Text>

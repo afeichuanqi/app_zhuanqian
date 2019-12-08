@@ -46,7 +46,7 @@ class ChatSocket {
                     this.dispatch(Message.onMessageFrom(data.fromUserid, data.msg_type,
                         data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus,data.FriendId));//发送给消息列表
 
-                    this.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url,data.FriendId,data.columnType,data.taskUri));//发送给好友列表
+                    this.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url,data.FriendId,data.columnType,data.taskUri,data.taskId));//发送给好友列表
                     break;
                 case types.MESSAGE_SENDTO_USERID_STATUS://消息回调
 
@@ -146,7 +146,7 @@ class ChatSocket {
         });
     };
     //发送消息给指定用户
-    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri) => {
+    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri,taskId) => {
         if (!this.connectionstatus) {
             return false;
         }
@@ -154,7 +154,7 @@ class ChatSocket {
             return false;
         }
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
-            toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri
+            toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri,taskId
         });
         this.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0,username,avatar_url,FriendId,columnType,taskUri));
         this.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(),FriendId));
@@ -163,7 +163,7 @@ class ChatSocket {
         return true;
     };
     //发送图片消息给指定用户
-    sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri) => {
+    sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri,taskId) => {
         if (!this.connectionstatus) {
             return false;
         }
@@ -172,7 +172,7 @@ class ChatSocket {
         }
 
         this.sendToServer(types.MESSAGE_FORIMAGE_SENDTO_USERID, {
-            toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri
+            toUserid, msg_type, content, uuid, username, avatar_url,FriendId,columnType,taskUri,taskId
         });
         this.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0,username,avatar_url,FriendId,columnType,taskUri));//发送一个消息给好友列表 提示有新消息
         return true;

@@ -25,10 +25,12 @@ import {
     startSignUpTask, updateTaskReleaseData,
 } from '../util/AppService';
 import taskHallNext from '../res/svg/taskHallNext.svg';
+
 import goback from '../res/svg/goback.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
+import liaotian from '../res/svg/liaotian.svg';
 
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -45,7 +47,10 @@ class TaskDetails extends PureComponent {
     };
     _updateTaskStatus = async () => {
         const {task_id} = this.params;
-        const StatusForTask = await selectUserStatusForTaskId({task_id: task_id,device: Platform.OS == 'android' ? 2 : 3}, this.props.userinfo.token);
+        const StatusForTask = await selectUserStatusForTaskId({
+            task_id: task_id,
+            device: Platform.OS == 'android' ? 2 : 3,
+        }, this.props.userinfo.token);
         const tmpData = {...this.state.totalData};
         if (StatusForTask.status === 5) {
             const newStepData = JSON.parse(StatusForTask.stepData.task_step_data);
@@ -280,8 +285,12 @@ class TaskDetails extends PureComponent {
                             </View>
                         </Animated.View>
                         <TouchableOpacity
-                            onPress={()=>{
-                                NavigationUtils.goPage({userid: fromUserinfo.userid}, 'ShopInfoPage');
+                            onPress={() => {
+                                NavigationUtils.goPage({
+                                    userid: fromUserinfo.userid,
+                                    taskId: this.params.task_id,
+                                    taskUri: taskData.taskUri,
+                                }, 'ShopInfoPage');
                             }}
                             activeOpacity={0.6}
                             style={{
@@ -314,9 +323,24 @@ class TaskDetails extends PureComponent {
                                     }</Text>
                                 </View>
                             </View>
-                            <View>
-                                <SvgUri width={15} style={{marginLeft: 5}} height={15} svgXmlData={menu_right}/>
-                            </View>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    NavigationUtils.goPage({
+                                        fromUserinfo: {
+                                            avatar_url: fromUserinfo && fromUserinfo.avatar_url,
+                                            id: fromUserinfo && fromUserinfo.userid,
+                                            username: fromUserinfo && fromUserinfo.username,
+                                        },
+                                        columnType: 1,
+                                        task_id: this.params.task_id,
+                                        taskUri:taskData.taskUri,
+                                    }, 'ChatRoomPage');
+                                }}
+                                style={{marginRight: 10}}>
+                                <SvgUri width={25} fill={'#6d6d6d'} height={25} svgXmlData={liaotian}/>
+                                {/*<SvgUri width={15} style={{marginLeft: 5}} height={15} svgXmlData={menu_right}/>*/}
+
+                            </TouchableOpacity>
                         </TouchableOpacity>
                         <View style={{
                             backgroundColor: 'white', marginTop: 10, paddingHorizontal: 10, marginHorizontal: 10,
@@ -381,7 +405,10 @@ class TaskDetails extends PureComponent {
         const {task_id} = this.params;
         if (StatusForTask.status === 0) {//进行报名
             //进行报名
-            startSignUpTask({task_id: task_id, device: Platform.OS == 'android' ? 2 : 3}, userinfo.token).then(result => {
+            startSignUpTask({
+                task_id: task_id,
+                device: Platform.OS == 'android' ? 2 : 3,
+            }, userinfo.token).then(result => {
                 this.setState({
                     signUp: true,
                 }, () => {

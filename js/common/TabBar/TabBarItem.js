@@ -31,25 +31,25 @@ class TabBarItem extends PureComponent<Props> {
                 extrapolate: 'clamp',
             }),
         ) : activeStyle.color[0];
-        // const G = inputRange.length > 1 ? Animated.round(
-        //   Animated.interpolate(position, {
-        //     inputRange,
-        //     outputRange: isFirst
-        //       ? [activeStyle.color[1], inactiveStyle.color[1]] : isLast
-        //         ? [inactiveStyle.color[1], activeStyle.color[1]] : [inactiveStyle.color[1], activeStyle.color[1], inactiveStyle.color[1]],
-        //     extrapolate: 'clamp',
-        //   }),
-        // ) : activeStyle.color[1];
-        // const B = inputRange.length > 1 ? Animated.round(
-        //   Animated.interpolate(position, {
-        //     inputRange,
-        //     outputRange: isFirst
-        //       ? [activeStyle.color[2], inactiveStyle.color[2]] : isLast
-        //         ? [inactiveStyle.color[2], activeStyle.color[2]] : [inactiveStyle.color[2], activeStyle.color[2], inactiveStyle.color[2]],
-        //     extrapolate: 'clamp',
-        //   }),
-        // ) : activeStyle.color[2];
-        const color = Animated.color(R, R, R);
+        const G = inputRange.length > 1 ? Animated.round(
+          Animated.interpolate(position, {
+            inputRange,
+            outputRange: isFirst
+              ? [activeStyle.color[1], inactiveStyle.color[1]] : isLast
+                ? [inactiveStyle.color[1], activeStyle.color[1]] : [inactiveStyle.color[1], activeStyle.color[1], inactiveStyle.color[1]],
+            extrapolate: 'clamp',
+          }),
+        ) : activeStyle.color[1];
+        const B = inputRange.length > 1 ? Animated.round(
+          Animated.interpolate(position, {
+            inputRange,
+            outputRange: isFirst
+              ? [activeStyle.color[2], inactiveStyle.color[2]] : isLast
+                ? [inactiveStyle.color[2], activeStyle.color[2]] : [inactiveStyle.color[2], activeStyle.color[2], inactiveStyle.color[2]],
+            extrapolate: 'clamp',
+          }),
+        ) : activeStyle.color[2];
+        const color = Animated.color(R, G, B);
         const scaleActive = activeStyle.fontSize / inactiveStyle.fontSize;
         const scale = inputRange.length > 1 ? Animated.interpolate(position, {
             inputRange,

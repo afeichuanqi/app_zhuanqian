@@ -212,6 +212,24 @@ export function selectSignUpList(data, token) {
         }
     });
 }
+/**
+ *查询所有关注和粉丝
+ */
+export function selectAttentionFanList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectAttentionFanList', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  *更新用户任务价格
@@ -842,6 +860,28 @@ export function selectTaskInfo(data, token) {
             // const params = `userName=${username}&passWord=${password}&email=${email}`;
             http.setPostHeader('token', token);
             const ret = await http.post('user/selectTaskInfo', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 关注用户
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function attentionUserId(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/attentionUserId', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {

@@ -136,15 +136,15 @@ class MessageColumn extends PureComponent {
             justifyContent: 'space-around',
         }}>
             <MessageColumnItem type={0} unReadLength={columnUnreadLength[0]} svgXmlData={message_xitong}
-                               title={'系统消息'}/>
+                               title={'通知消息'}/>
             <MessageColumnItem type={1} columnType={2} unReadLength={columnUnreadLength[1]} svgXmlData={zaixiankefu}
-                               title={'申诉消息'}
+                               title={'工作邀约'}
                                size={48}/>
             <MessageColumnItem type={2} columnType={3} unReadLength={columnUnreadLength[2]} svgXmlData={huodongxiaoxi}
-                               title={'投诉消息'}
+                               title={'诉求消息'}
                                size={42}/>
             <MessageColumnItem type={3} columnType={4} unReadLength={columnUnreadLength[3]} svgXmlData={huodongxiaoxi}
-                               title={'聊天消息'}/>
+                               title={'在线客服'}/>
         </View>;
     }
 }
@@ -320,6 +320,7 @@ class MessageItemComponent extends Component {
         }
         const {item} = this.props;
         const {columnType, taskId, taskTitle, avatar_url, username, userid} = item;
+        // console.log("item",item);
         const fromUserinfo = {
             avatar_url: avatar_url,
             id: userid,
@@ -337,8 +338,8 @@ class MessageItemComponent extends Component {
             outputRange: [0.99, 1],
             extrapolate: 'clamp',
         });
-        const {titleFontSize, marginHorizontal, item} = this.props;
-        const {FriendId, avatar_url, columnType, msg, msg_type, taskId, taskTitle, unReadLength, username, taskUri} = item;
+        const { marginHorizontal, item} = this.props;
+        const {avatar_url, columnType, msg, msg_type, taskId, taskTitle, unReadLength, username, taskUri} = item;
         // console.log(taskUri,"taskUri");
         return <AnimatedTouchableOpacity
             onPress={this._onPress}

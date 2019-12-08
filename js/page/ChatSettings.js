@@ -97,7 +97,7 @@ class ChatSetting extends PureComponent {
                             }}/>
                         <View style={{marginLeft: 15, height: 50, justifyContent: 'space-around'}}>
                             <Text style={{fontSize: 15, color: 'black'}}>{fromUserinfo.username}</Text>
-                            <Text style={{color: 'rgba(0,0,0,0.7)'}}>UID:123654</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.7)'}}>ID:{fromUserinfo.id}</Text>
                         </View>
                         <SvgUri style={{position: 'absolute', right: 15, top: 30}} width={15} height={15}
                                 svgXmlData={menu_right}/>
@@ -146,7 +146,7 @@ class ChatSetting extends PureComponent {
                     </TouchableOpacity>
                 </View>
                 <MyModalBox
-                    titleComponent={<Text style={{fontSize: 12, color: 'red', marginLeft: 10}}>请勿频繁提交或提交不属实的依据</Text>}
+                    titleComponent={<Text style={{fontSize: 12, color: 'red', marginLeft: 10}}>请勿频繁提交或提交不属实的内容</Text>}
                     title={'举报内容'} style={{
                     // height:
                     width: width - 40,
@@ -178,7 +178,7 @@ class ChatSetting extends PureComponent {
 
                             style={{
                                 height: 130,
-                                backgroundColor: '#e8e8e8',
+                                backgroundColor: '#f7f7f7',
                                 marginTop: 10,
                                 fontSize: 13,
                                 paddingHorizontal: 5,

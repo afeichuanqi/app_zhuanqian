@@ -13,7 +13,7 @@ export default function onAction(state = defaultContent, action) {
     switch (type) {
         case Types.MESSAGE_FRIEND_ALL :
             const temArr = data.friendArr;
-            const columnUnreadLength1 =[0, 0, 0, 0];
+            // const columnUnreadLength1 = [0, 0, 0, 0];
 
             let unMessageLength = 0;
 
@@ -22,35 +22,26 @@ export default function onAction(state = defaultContent, action) {
                 const {unReadLength, columnType} = item;
 
                 unMessageLength += unReadLength;
-                columnUnreadLength1[parseInt(columnType) - 1] = columnUnreadLength1[parseInt(columnType) - 1] + unReadLength;
-                // if (columnType == 1) {
-                //     column1 += unReadLength;
-                // } else if (columnType == 2) {
-                //     column2 += unReadLength;
-                // } else if (columnType == 3) {
-                //     column3 += unReadLength;
-                // } else if (columnType == 4) {
-                //     column4 += unReadLength;
-                // }
+                // columnUnreadLength1[parseInt(columnType) - 1] = columnUnreadLength1[parseInt(columnType) - 1] + unReadLength;
             }
             // console.log(columnUnreadLength1, 'columnUnreadLength1');
             return {
                 ...state,
                 friendArr: temArr,
                 unMessageLength,
-                columnUnreadLength: columnUnreadLength1,
+                // columnUnreadLength: columnUnreadLength1,
             };
 
         case Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS ://设置好友的未读消息数
             let temArr2 = [...state.friendArr];
             // let column1 = state.column1;
-            const columnUnreadLength2 = [...state.columnUnreadLength];
+            // const columnUnreadLength2 = [...state.columnUnreadLength];
             let nowUnMessageLength = state.unMessageLength;
             const FriendIdIndex = temArr2.findIndex(d => d.FriendId === data.FriendId);
             const originalFriendUnReadLen = temArr2[FriendIdIndex].unReadLength;
 
             //设置分类消息数
-            columnUnreadLength2[parseInt(temArr2[FriendIdIndex].columnType) - 1] -= temArr2[FriendIdIndex].unReadLength;
+            // columnUnreadLength2[parseInt(temArr2[FriendIdIndex].columnType) - 1] -= temArr2[FriendIdIndex].unReadLength;
 
             temArr2[FriendIdIndex].unReadLength = 0;
             temArr2 = temArr2.sort((data1, data2) => {
@@ -60,10 +51,10 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 friendArr: temArr2,
                 unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
-                columnUnreadLength: columnUnreadLength2,
+                // columnUnreadLength: columnUnreadLength2,
             };
         case Types.MESSAGE_FROMOF_USERID_Friend:
-            const columnUnreadLength3 = [...state.columnUnreadLength];
+            // const columnUnreadLength3 = [...state.columnUnreadLength];
             let temArr3 = [...state.friendArr];
             let NewUnReadLength = state.unMessageLength + 1;
             const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
@@ -76,11 +67,11 @@ export default function onAction(state = defaultContent, action) {
                 // ite
                 item.unReadLength = data.fromUserid != data.ToUserId && item.unReadLength + 1;
                 temArr3[fromUserIndex] = item;
-                columnUnreadLength3[parseInt(item.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
+                // columnUnreadLength3[parseInt(item.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
             } else {
-                columnUnreadLength3[parseInt(data.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
+                // columnUnreadLength3[parseInt(data.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
                 temArr3.push({
-                    id: parseInt(data.fromUserid),
+                    userid: data.fromUserid,
                     username: data.username,
                     avatar_url: data.avatar_url,
                     msg: data.content,
@@ -91,6 +82,7 @@ export default function onAction(state = defaultContent, action) {
                     FriendId: data.FriendId,
                     columnType: data.columnType,
                     taskUri: data.taskUri,
+                    taskId: data.taskId,
 
                 });
             }
@@ -102,10 +94,10 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 friendArr: temArr3,
                 unMessageLength: NewUnReadLength,
-                columnUnreadLength: columnUnreadLength3,
+                // columnUnreadLength: columnUnreadLength3,
             };
         case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
-            const columnUnreadLength4 = [...state.columnUnreadLength];
+            // const columnUnreadLength4 = [...state.columnUnreadLength];
             let temArr4 = [...state.friendArr];
             let NewUnReadLength1 = state.unMessageLength == 0 ? 0 : state.unMessageLength - 1;
             const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
@@ -113,7 +105,7 @@ export default function onAction(state = defaultContent, action) {
                 const item1 = temArr4[fromUserIndex1];
                 item1.unReadLength = 0;
                 temArr4[fromUserIndex1] = item1;
-                columnUnreadLength4[parseInt(item1.columnType) - 1] -= item1.unReadLength;
+                // columnUnreadLength4[parseInt(item1.columnType) - 1] -= item1.unReadLength;
             }
 
 
@@ -121,7 +113,7 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 friendArr: temArr4,
                 unMessageLength: NewUnReadLength1,
-                columnUnreadLength: columnUnreadLength4,
+                // columnUnreadLength: columnUnreadLength4,
             };
         default:
             return state;

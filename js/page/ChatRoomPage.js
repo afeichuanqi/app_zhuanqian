@@ -16,6 +16,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {isFriendChat, selectSimpleTaskInfo, uploadQiniuImage} from '../util/AppService';
 import actions from '../action';
 import ImageViewerModal from '../common/ImageViewerModal';
+import Toast from '../common/Toast';
 
 const {width, height} = Dimensions.get('window');
 
@@ -26,7 +27,7 @@ class TaskInfo extends React.Component {
 
     componentDidMount(): void {
         selectSimpleTaskInfo({task_id: this.props.task_id}, this.props.userinfo.token).then(taskInfo => {
-            console.log(taskInfo);
+            // console.log(taskInfo);
             this.setState({
                 taskInfo,
             });
@@ -34,13 +35,13 @@ class TaskInfo extends React.Component {
     }
 
     render() {
-        console.log(this.props.task_id, this.props.columnType, 'this.props.columnType');
         const {taskInfo} = this.state;
         const {columnType} = this.props;
 
         return <View style={{
             height: 70, width, backgroundColor: 'white', position: 'absolute', zIndex: 1,
             paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', flexDirection: 'row',
+            borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0',
         }}>
             <View style={{flexDirection: 'row'}}>
                 <Image
@@ -50,7 +51,7 @@ class TaskInfo extends React.Component {
                 />
                 <View style={{marginLeft: 15}}>
                     <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)'}}>{taskInfo.task_title}</Text>
+                    <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)', marginTop: 3}}>{taskInfo.task_title}</Text>
                     <View style={{flexDirection: 'row', alignItems: 'center', height: 15, wdith: 50, marginTop: 3}}>
                         <Text style={{
                             fontSize: 12,
@@ -77,7 +78,10 @@ class TaskInfo extends React.Component {
             </View>
             <View style={{height: 60, justifyContent: 'flex-start'}}>
                 <TouchableOpacity
-
+                    onPress={() => {
+                        NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
+                    }
+                    }
                     style={{
                         height: 25,
                         width: 60,
@@ -116,16 +120,21 @@ class ChatRoomPage extends React.Component {
     }
 
     _updatePage = (columnType, task_id, toUserid) => {
+        // console.log(toUserid,"task_id");
         isFriendChat({
             columnType,
             taskid: task_id,
             toUserid: toUserid,
         }, this.props.userinfo.token).then(result => {
+            console.log(result, 'result');
             if (result.id) {
                 this.FriendId = result.id;
                 // console.log(this.FriendId, 'this.chatId ');
                 ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
             }
+
+        }).catch(msg=>{
+            this.toast.show(msg);
 
         });
     };
@@ -177,8 +186,11 @@ class ChatRoomPage extends React.Component {
     };
 
     onRefresh = () => {
-        this.pageCount += 10;
-        ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+        if (this.getMessages().length >= 10) {
+            this.pageCount += 10;
+            ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+        }
+
     };
     _appealClick = () => {
         // const {fromUserinfo, columnType, task_id} = this.params;
@@ -209,7 +221,9 @@ class ChatRoomPage extends React.Component {
             >
                 {navigationBar}
                 {TopColumn}
-
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <View style={{flex: 1}}>
                     <TaskInfo
                         task_id={this.task_id}
@@ -218,7 +232,7 @@ class ChatRoomPage extends React.Component {
                         appealClick={this._appealClick}
                     />
                     <ChatScreen
-                        // loadHistory={this.onRefresh}
+                        loadHistory={this.onRefresh}
                         inverted={true}
                         inputOutContainerStyle={{
                             borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.2, shadowColor: '#c7c7c7',
@@ -297,21 +311,20 @@ class ChatRoomPage extends React.Component {
         const path = `file://${image.path}`;
         onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(), FriendId);//插入一条临时图片数据
         uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
-            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri);
+            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id);
         });
     };
     sendMessage = (type, content) => {
         const FriendId = this.FriendId;
         const {userinfo} = this.props;
         const userId = userinfo.userid;
-        // const {fromUserinfo, taskUri} = this.params;
         const columnType = this.columnType;
         let toUserid = this.fromUserinfo.id;
         if (userId == toUserid) {
             return;
         }
         const uuid = getUUID();
-        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri);
+        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id);
     };
     _pressAvatar = () => {
         NavigationUtils.goPage({userid: this.fromUserinfo.id}, 'ShopInfoPage');

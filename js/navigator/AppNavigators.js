@@ -27,7 +27,9 @@ import TaskTurnDownPage from '../page/TaskTurnDownPage';
 import MyOrderManaPage from '../page/MyOrderManaPage';
 import TaskSendFromUserList from '../page/TaskSendFromUserList';
 import MessageTypePage from '../page/MessageTypePage';
+import MyAttentionList from '../page/MyAttentionList';
 import TaskOrdersMana from '../page/TaskOrdersMana';
+import HisAttentionList from '../page/HisAttentionList';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -175,6 +177,18 @@ const MainNavigator = createStackNavigator({
         },
         TaskOrdersMana: {
             screen: TaskOrdersMana,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        MyAttentionList: {
+            screen: MyAttentionList,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        HisAttentionList: {
+            screen: HisAttentionList,
             navigationOptions: {
                 header: null,
             },

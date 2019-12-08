@@ -68,6 +68,9 @@ class TaskRecommend extends PureComponent {
                 <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13, marginTop: 5}}>
                     如果当前任务已经在推荐将增加小时数
                 </Text>
+                <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13, marginTop: 5}}>
+                    支持小数(1.5代表1小时30分钟,以此类推)
+                </Text>
                 {this.props.item.recommendIsExp == 1 ?
                     <Text style={{color: 'red', width: width - 60, fontSize: 13, marginTop: 5}}>
                         当前推荐到期时间:{this.props.item.recommendExpTime}
@@ -90,7 +93,7 @@ class TaskRecommend extends PureComponent {
                             });
                             this.numText = text;
                             this.setState({
-                                price: (parseInt(text) * 10).toFixed(2),
+                                price: (parseFloat(text) * 10).toFixed(2),
                             });
 
                         } else {
@@ -140,6 +143,9 @@ class TaskTop extends PureComponent {
                 </Text>
                 <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13, marginTop: 5}}>
                     如果当前任务已经在置顶将增加小时数
+                </Text>
+                <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13, marginTop: 5}}>
+                    支持小数(1.5代表1小时30分钟,以此类推)
                 </Text>
                 {this.props.item.topIsExp == 1 ?
                     <Text style={{color: 'red', width: width - 60, fontSize: 13, marginTop: 5}}>

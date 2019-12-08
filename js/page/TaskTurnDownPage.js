@@ -111,8 +111,8 @@ class MyTaskReview extends PureComponent {
                                 justifyContent: 'space-between',
                                 width: screenWidth - 80,
                             }}>
-                                <Text style={{fontSize: 15, color: 'rgba(0,0,0,1)'}}>{taskData.task_title}</Text>
-                                <Text style={{fontSize: 13, color: 'red'}}>+{taskData.reward_price}</Text>
+                                <Text style={{fontSize: 14, color: 'rgba(0,0,0,1)'}}>{taskData.task_title}</Text>
+                                <Text style={{fontSize: 14, color: 'red'}}>+{taskData.reward_price}</Text>
                             </View>
 
                         </View>

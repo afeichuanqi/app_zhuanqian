@@ -196,9 +196,6 @@ class FristListComponent extends PureComponent {
             });
         } else {
             this.page = {pageIndex: this.page.pageIndex + 1};
-            // this.setState({
-            //     isLoading: true,
-            // });
         }
         selectOrderTasks({status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
 
@@ -370,7 +367,7 @@ class OrdersItem extends React.Component {
                         }}>将在{item.reviewTimeTitle}内完成审核,期限外自动完成</Text>
                     </View> : status == 3 ? <View style={{marginLeft: 10}}>
                         <Text style={{fontWeight: 'bold'}}>{item.task_title}</Text>
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>提交时间:{item.sendFromTime}</Text>
+                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
                         <Text
                             ellipsizeMode={'tail'}
                             numberOfLines={2}
@@ -385,7 +382,7 @@ class OrdersItem extends React.Component {
 
                     </View> : status == 4 ? <View style={{marginLeft: 10}}>
                         <Text style={{fontWeight: 'bold'}}>{item.task_title}</Text>
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>提交时间:{item.sendFromTime}</Text>
+                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
                         <Text
                             ellipsizeMode={'tail'}
                             numberOfLines={2}
@@ -403,7 +400,7 @@ class OrdersItem extends React.Component {
                 </View>
 
                 <View>
-                    <Text style={{fontSize: 18, color: 'red'}}>+{item.reward_price}</Text>
+                    <Text style={{fontSize: 17, color: 'red'}}>+{item.reward_price}</Text>
                 </View>
             </TouchableOpacity>
 

@@ -1,11 +1,10 @@
 import React, {PureComponent} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LabelBigComponent from '../../common/LabelBigComponent';
 import ViewUtil from '../../util/ViewUtil';
-import task_icon from '../../res/svg/task_icon.svg';
-import SvgUri from 'react-native-svg-uri';
 import {bottomTheme} from '../../appSet';
 import NavigationUtils from '../../navigator/NavigationUtils';
+import FastImage from 'react-native-fast-image';
 
 export default class TaskReleaseItem extends PureComponent {
     render() {
@@ -24,16 +23,11 @@ export default class TaskReleaseItem extends PureComponent {
                     backgroundColor: 'white',
                 }}
             >
-                <View style={{
-                    height: 40,
-                    width: 38,
-                    backgroundColor: bottomTheme,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 5,
-                }}>
-                    <SvgUri width={25} height={25} fill={'white'} svgXmlData={task_icon}/>
-                </View>
+                <FastImage
+                    style={[styles.imgStyle]}
+                    source={{uri: item.task_uri}}
+                    resizeMode={FastImage.resizeMode.stretch}
+                />
                 {/*左上*/}
                 <View style={{
                     position: 'absolute',
@@ -79,7 +73,7 @@ export default class TaskReleaseItem extends PureComponent {
                         // color:''
                         opacity: 0.5,
                         // fontWeight: '100',
-                    }}>进行中:{parseInt(item.task_sign_up_num) - parseInt(item.task_pass_num)}</Text>
+                    }}>进行中:{item.task_ing_num}</Text>
                     <View style={{height: 10, width: 1, marginHorizontal: 5, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                     <Text style={{
                         fontSize: 11,
@@ -98,7 +92,7 @@ export default class TaskReleaseItem extends PureComponent {
                 flexDirection: 'row',
             }}>
 
-                {ViewUtil.getReviewIco(parseInt(item.task_is_send_num) - parseInt(item.task_pass_num) - parseInt(item.task_noPass_num), this._reViewClick)}
+                {ViewUtil.getReviewIco(parseInt(item.review_num), this._reViewClick)}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getzhidingIco(this.props.setTopClick)}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
@@ -136,3 +130,15 @@ export default class TaskReleaseItem extends PureComponent {
         this.props.reViewClick(item);
     };
 }
+const styles = StyleSheet.create({
+    imgStyle: {
+        // 设置背景颜色
+        backgroundColor: bottomTheme,
+        // 设置宽度
+        width: 38,
+        height: 40,
+        borderRadius: 3,
+        // 设置高度
+        // height:150
+    },
+});

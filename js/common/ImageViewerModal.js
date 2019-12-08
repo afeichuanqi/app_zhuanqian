@@ -1,19 +1,36 @@
 import React, {Component} from 'react';
-import {Modal, View, TouchableOpacity, FlatList, Text, Image, Dimensions} from 'react-native';
-import GallerySwiper from 'react-native-gallery-swiper';
+import {Dimensions} from 'react-native';
+import PhotoView from '@merryjs/photo-viewer';
 
 const {width, height} = Dimensions.get('window');
 export default class App extends React.Component {
     state = {
         visible: false,
         index: 0,
-        images: {
-            url: 'file:///Users/panfeilong/Library/Developer/CoreSimulator/Devices/0DE50456-2114-427D-A503-07FB3CE08516/data/Containers/Data/Application/CEBA7F83-349F-49BE-BAAE-8AE057E0FDB2/tmp/react-native-image-crop-picker/B3C18632-DC7D-4A14-BDC0-834CCBAAAC2C.jpg',
-        },
+        images: [
+            {
+                source: {
+                    uri:
+                        'http://wenjian.5irenqi.com/4ee6b320-0bf0-11ea-98fb-3ff2c90f7c8b.jpg',
+                },
+                // title: "Flash End-of-Life",
+                // summary:
+                //     "Adobe announced its roadmap to stop supporting Flash at the end of 2020. ",
+                // // must be valid hex color or android will crashes
+                // titleColor: "#f90000",
+                // summaryColor: "green"
+            },
+        ],
     };
     show = (images) => {
+        const tmpImages = [...this.state.images];
+        tmpImages[0] = {
+            source: {
+                uri: images.url,
+            },
+        };
         this.setState({
-            images,
+            images: tmpImages,
             visible: true,
 
         });
@@ -25,28 +42,19 @@ export default class App extends React.Component {
 
     render() {
 
-        const {visible, images} = this.state;
-        return <Modal
-            onRequestClose={this.hide}
-            // animationType={'fade'}
-            visible={visible} transparent={true}>
-            <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.1)'}}>
-                <GallerySwiper
-                    images={[
-                        {uri: images.url},
-                    ]}
-                    initialNumToRender={1}
-                    sensitiveScroll={true}
-                    onSingleTapConfirmed={this.hide}
-                    onLongPress={this.hide}
-                    onTransformGestureReleased={({scale, translateX, translateY}) => {
-                        if (translateY > height * 0.3) {
-                            this.hide();
-                        }
-                    }}
-                />
-            </View>
-        </Modal>;
+        const {visible, images, index} = this.state;
+
+        return <PhotoView
+            visible={visible}
+            data={images}
+            hideShareButton={true}
+            hideStatusBar={false}
+            initial={index}
+            onDismiss={e => {
+                this.setState({visible: false});
+            }}
+        />;
+
     }
 
 }

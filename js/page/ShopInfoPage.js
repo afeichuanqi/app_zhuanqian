@@ -18,36 +18,64 @@ import {
     TouchableOpacity, StatusBar,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {bottomTheme, theme} from '../appSet';
+import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../common/TaskSumComponent';
-import {selectShopInfoForUserId, selectTaskListForUserId} from '../util/AppService';
+import {attentionUserId, selectShopInfoForUserId, selectTaskListForUserId} from '../util/AppService';
 import {connect} from 'react-redux';
 import EmptyComponent from '../common/EmptyComponent';
+import Toast from '../common/Toast';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
+let taskId = 0;
+let taskUri = '';
 
 class ShopInfoPage extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        taskId = this.params.taskId;
+        taskUri = this.params.taskUri;
+        this.state = {
+            shopInfo: {},
+            attentionStatus: 0,
+            userId: this.params.userid,
+        };
+
     }
 
-    state = {};
-
     componentDidMount() {
-
-
+        this.updateShopInfo(this.params.userid);
+        EventBus.getInstance().addListener(EventTypes.update_shopInfo_page, this.listener = data => {
+            this.updateShopInfo(data.userId);
+        });
     }
 
     componentWillUnmount() {
-
+        EventBus.getInstance().removeListener(this.listener);
     }
+
+    updateShopInfo = (user_id) => {
+        // this.userId = user_id;
+        selectShopInfoForUserId({user_id: user_id}, this.props.userinfo.token).then(shopInfoArr => {
+            // console.log(shopInfoArr,"shopInfoArr");
+            const {shopInfo, attentionStatus} = shopInfoArr;
+
+            this.setState({
+                shopInfo,
+                attentionStatus,
+                userId: user_id,
+            });
+        });
+    };
+
 
     _goBackClick = () => {
         NavigationUtils.goBack(this.props.navigation);
@@ -74,7 +102,7 @@ class ShopInfoPage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
 
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, 'dsadsa的店铺', null, bottomTheme, 'white', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, `${this.state.shopInfo.username}的店铺`, null, bottomTheme, 'white', 16, () => {
         }, false);
         return (
             <SafeAreaViewPlus
@@ -82,27 +110,50 @@ class ShopInfoPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <View style={{flex: 1}}>
                     <Animated.View
-                        // ref={ref => this.zhedangRef = ref}
                         style={{
                             backgroundColor: bottomTheme,
                             height: RefreshHeight,
                             width,
                             position: 'absolute',
                             top: 0,
-                            // zIndex:1 ,
                         }}>
 
 
                     </Animated.View>
-                    <ShopList userid={this.params.userid} userinfo={this.props.userinfo} RefreshHeight={this.animations.val}/>
+                    <ShopList
+                        attentionStatus={this.state.attentionStatus}
+                        attentionUserId={this._attentionUserId}
+                        updateShopInfo={this.updateShopInfo}
+                        shopInfo={this.state.shopInfo}
+                        userid={this.state.userId}
+                        userinfo={this.props.userinfo}
+                        RefreshHeight={this.animations.val}/>
                 </View>
 
             </SafeAreaViewPlus>
         );
     }
+
+    _attentionUserId = () => {
+        let attention_type = this.state.attentionStatus == 0 ? 1 : 0;
+        attentionUserId({
+            be_user_id: this.params.userid,
+            type: attention_type,
+        }, this.props.userinfo.token).then(result => {
+            // this.setState({
+            //     attentionStatus: attention_type,
+            // });
+            this.updateShopInfo();
+            this.toast.show(`${attention_type == 0 ? '取消关注' : '关注'}成功`);
+        }).catch(msg => {
+            this.toast.show(msg);
+        });
+    };
 }
 
 class ShopList extends Component {
@@ -110,21 +161,27 @@ class ShopList extends Component {
         commodityData: [],
         isLoading: false,
         hideLoaded: false,
-        shopInfo: {},
+
     };
 
     componentDidMount(): void {
-        selectShopInfoForUserId({user_id: this.props.userid}, this.props.userinfo.token).then(shopInfo => {
-            this.setState({
-                shopInfo,
-            });
-        });
+        this.userid = this.props.userid;
+
         this._updatePage(true);
 
+
+    }
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        if (this.props.userid != nextProps.userid) {
+            this.userid = nextProps.userid;
+            this._updatePage(true);
+        }
     }
 
     _updatePage = (refresh) => {
         if (refresh) {
+
             this.params.pageIndex = 0;
             this.setState({
                 isLoading: true,
@@ -133,9 +190,10 @@ class ShopList extends Component {
             this.params.pageIndex += 1;
         }
         selectTaskListForUserId({
-            user_id: this.props.userid,
+            user_id: this.userid,
             pageIndex: this.params.pageIndex,
         }, this.props.userinfo.token).then(result => {
+            // console.log('刷新中');
             if (refresh) {
                 this.setState({
                     commodityData: result,
@@ -172,7 +230,7 @@ class ShopList extends Component {
     }
 
     _renderIndexPath = ({item, index}) => {
-        item.avatarUrl = this.state.shopInfo.avatar_url;
+        item.avatarUrl = item.task_uri;
 
         return <TaskSumComponent
             item={item}
@@ -185,20 +243,26 @@ class ShopList extends Component {
 
     };
     onRefresh = () => {
+        this.props.updateShopInfo(this.userid);
         this._updatePage(true);
-    };
-    params = {
-        pageIndex: 0,
     };
 
     render() {
-        const {commodityData, hideLoaded, isLoading, shopInfo} = this.state;
+        const {shopInfo} = this.props;
+
+        const {commodityData, hideLoaded, isLoading} = this.state;
 
         return <AnimatedFlatList
             ListHeaderComponent={
                 <View style={{backgroundColor: '#e8e8e8'}}>
 
-                    <AvatarColumn shopInfo={shopInfo}/>
+                    <AvatarColumn
+                        attentionStatus={this.props.attentionStatus}
+                        attentionUserId={this.props.attentionUserId}
+                        shopInfo={shopInfo}
+                        userinfo={this.props.userinfo}
+
+                    />
                     <ShopData shopInfo={shopInfo}/>
                 </View>
 
@@ -230,7 +294,7 @@ class ShopList extends Component {
             ])}
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
-                console.log('onEndReached.....');
+                // console.log('onEndReached.....');
                 // 等待页面布局完成以后，在让加载更多
                 if (this.canLoadMore) {
                     this.onLoading();
@@ -241,7 +305,7 @@ class ShopList extends Component {
             windowSize={300}
             onEndReachedThreshold={0.01}
             onMomentumScrollBegin={() => {
-                console.log('我被触发');
+                // console.log('我被触发');
                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
             }}
         />;
@@ -275,7 +339,7 @@ class ShopData extends Component {
                 {this.getTaskDataColumn('成功派单数', this.props.shopInfo.success_hair_order_num)}
                 {this.getTaskDataColumn('总接单数', this.props.shopInfo.total_join_order_num)}
                 {this.getTaskDataColumn('成功接单数', this.props.shopInfo.success_join_order_num)}
-                {this.getTaskDataColumn('接单转化比', (parseInt(this.props.shopInfo.success_join_order_num) / parseInt(this.props.shopInfo.total_join_order_num) * 100) + '%')}
+                {this.getTaskDataColumn('接单转化比', (parseInt(this.props.shopInfo.success_join_order_num) / parseInt(this.props.shopInfo.total_join_order_num) * 100).toFixed(2) + '%')}
             </View>
 
         </View>;
@@ -285,7 +349,7 @@ class ShopData extends Component {
 
 class AvatarColumn extends Component {
     render() {
-        return <View style={{backgroundColor: bottomTheme, width, paddingVertical: 10, paddingBottom: 20}}>
+        return <View style={{backgroundColor: bottomTheme, width, paddingVertical: 10, paddingBottom: 50}}>
             <View style={{marginTop: 5, marginLeft: 10}}>
                 <FastImage
                     style={[styles.imgStyle]}
@@ -316,6 +380,7 @@ class AvatarColumn extends Component {
                         color: 'white',
                     }}>ID:{this.props.shopInfo.userId}</Text>
                 </View>
+
                 {/*右中*/}
                 <View style={{
                     position: 'absolute',
@@ -323,9 +388,13 @@ class AvatarColumn extends Component {
                     right: 20,
                     flexDirection: 'row',
                 }}>
+
+
                     <TouchableOpacity
+                        onPress={this.props.attentionUserId}
                         activeOpacity={0.6}
                         style={{
+                            marginLeft: 5,
                             paddingHorizontal: 10,
                             paddingVertical: 3,
                             backgroundColor: '#5faff3',
@@ -333,13 +402,45 @@ class AvatarColumn extends Component {
                         }}>
                         <Text style={{
                             color: 'white',
-                        }}>+ 关注</Text>
+                        }}>{this.props.attentionStatus == 0 ? '+ 关注' : '✓ 已关注'}</Text>
                     </TouchableOpacity>
-                </View>
-            </View>
 
+                </View>
+
+            </View>
+            {/*左下*/}
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                    // EventBus.getInstance().fireEvent(EventTypes.update_attention_page, {
+                    //     // isDelTitle: false
+                    //     user_id: this.props.shopInfo.userId
+                    // });
+                    NavigationUtils.goPage({user_id: this.props.shopInfo.userId}, this.props.userinfo.userid == this.props.shopInfo.userId ? 'MyAttentionList' : 'HisAttentionList');
+                }}
+                style={{
+                    position: 'absolute',
+                    bottom: 15,
+                    left: 15,
+                    flexDirection: 'row',
+                }}>
+                <Text style={{
+                    fontSize: 14,
+                    color: 'white',
+                    fontWeight: 'bold',
+                    letterSpacing: 1,
+                }}>{this.props.shopInfo.attention_num}关注</Text>
+                <Text style={{
+                    fontSize: 14,
+                    color: 'white',
+                    marginLeft: 15,
+                    fontWeight: 'bold',
+                    letterSpacing: 1,
+                }}>{this.props.shopInfo.fan_num}粉丝</Text>
+            </TouchableOpacity>
         </View>;
     }
+
 }
 
 const mapStateToProps = state => ({

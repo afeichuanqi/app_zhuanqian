@@ -51,7 +51,6 @@ class MyOrderManaPage extends PureComponent {
         selectTaskInfo_({
             task_id: taskid,
         }, userinfo.token).then(result => {
-            console.log(result, 'result');
             this.setState({
                 taskInfo: result,
             });
@@ -214,7 +213,7 @@ class MyOrderManaPage extends PureComponent {
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 15, marginRight: 10}}>佣金:</Text>
-                                <Text>{(parseInt(taskInfo.reward_price))}</Text>
+                                <Text>{(parseFloat(taskInfo.reward_price))}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -298,7 +297,12 @@ class MyOrderManaPage extends PureComponent {
         const {userinfo} = this.props;
 
         const {taskInfo} = this.state;
+        if (this.updateTaskPrice.getError()) {
+            this.toast.show('佣金必须大于原有佣金哦 ～ ～');
+            return;
+        }
         const new_price = this.updateTaskPrice.getNewPrice();
+
         updateUserTaskPrice({
             task_id: taskInfo.id,
             new_price,
@@ -338,22 +342,22 @@ class MyOrderManaPage extends PureComponent {
                 <Text>已完成：{(parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => {
-                    NavigationUtils.goPage({
-                        task_id: this.state.taskInfo.id,
-                        type: 3,
-                    }, 'MessageTypePage');
-                }}
-                style={{
-                    flexDirection: 'row', alignItems: 'center', width: (width) / 2,
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 10,
-                    paddingVertical: 10,
-                }}>
-                <Text>投诉：{(parseInt(taskInfo.complaintCount))}</Text>
-                <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
-            </TouchableOpacity>
+            {/*<TouchableOpacity*/}
+            {/*    onPress={() => {*/}
+            {/*        NavigationUtils.goPage({*/}
+            {/*            task_id: this.state.taskInfo.id,*/}
+            {/*            type: 3,*/}
+            {/*        }, 'MessageTypePage');*/}
+            {/*    }}*/}
+            {/*    style={{*/}
+            {/*        flexDirection: 'row', alignItems: 'center', width: (width) / 2,*/}
+            {/*        justifyContent: 'space-between',*/}
+            {/*        paddingHorizontal: 10,*/}
+            {/*        paddingVertical: 10,*/}
+            {/*    }}>*/}
+            {/*    <Text>投诉：{(parseInt(taskInfo.complaintCount))}</Text>*/}
+            {/*    <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>*/}
+            {/*</TouchableOpacity>*/}
             <TouchableOpacity
                 onPress={() => {
                     NavigationUtils.goPage({
@@ -371,22 +375,22 @@ class MyOrderManaPage extends PureComponent {
                 <Text>进行中：{(parseInt(taskInfo.task_sign_up_num) - parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => {
-                    NavigationUtils.goPage({
-                        task_id: this.state.taskInfo.id,
-                        type: 2,
-                    }, 'MessageTypePage');
-                }}
-                style={{
-                    flexDirection: 'row', alignItems: 'center', width: (width) / 2,
-                    justifyContent: 'space-between',
-                    paddingHorizontal: 10,
-                    paddingVertical: 10,
-                }}>
-                <Text>申诉：{(parseInt(taskInfo.appealCount))}</Text>
-                <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
-            </TouchableOpacity>
+            {/*<TouchableOpacity*/}
+            {/*    onPress={() => {*/}
+            {/*        NavigationUtils.goPage({*/}
+            {/*            task_id: this.state.taskInfo.id,*/}
+            {/*            type: 2,*/}
+            {/*        }, 'MessageTypePage');*/}
+            {/*    }}*/}
+            {/*    style={{*/}
+            {/*        flexDirection: 'row', alignItems: 'center', width: (width) / 2,*/}
+            {/*        justifyContent: 'space-between',*/}
+            {/*        paddingHorizontal: 10,*/}
+            {/*        paddingVertical: 10,*/}
+            {/*    }}>*/}
+            {/*    <Text>申诉：{(parseInt(taskInfo.appealCount))}</Text>*/}
+            {/*    <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>*/}
+            {/*</TouchableOpacity>*/}
             <TouchableOpacity
                 onPress={() => {
                     NavigationUtils.goPage({
@@ -513,7 +517,12 @@ class MyOrderManaPage extends PureComponent {
     _sureAddNum = () => {
         const {userinfo} = this.props;
         const {taskInfo} = this.state;
+        if (this.updateTaskNum.getError()) {
+            this.toast.show('加量必须大于1哦 ～ ～');
+            return;
+        }
         const nowTaskNum = this.updateTaskNum.getNewTaskNum();
+
         addUserTaskNum({
             task_id: taskInfo.id,
             add_num: nowTaskNum,
@@ -538,6 +547,9 @@ class UpdateTaskPrice extends PureComponent {
         return this.priceText;
 
     };
+    getError = () => {
+        return this.state.error;
+    };
 
     render() {
         const {rewardNum, rewardPrice} = this.props;
@@ -556,11 +568,11 @@ class UpdateTaskPrice extends PureComponent {
                     onChangeText={text => {
                         this.priceText = text;
                         this.setState({
-                            error: !(parseInt(text) > parseInt(rewardPrice)),
+                            error: !(parseFloat(text) > parseFloat(rewardPrice)),
                         });
-                        if (parseInt(text) > parseInt(rewardPrice)) {
+                        if (parseFloat(text) > parseFloat(rewardPrice)) {
                             this.setState({
-                                price: (parseInt(text) - parseInt(rewardPrice)) * rewardNum.toFixed(2),
+                                price: ((parseFloat(text) - parseFloat(rewardPrice)) * rewardNum * 1.05).toFixed(2),
                             });
                         } else {
 
@@ -592,10 +604,13 @@ class UpdateTaskNum extends PureComponent {
     getNewTaskNum = () => {
         return this.numText;
     };
+    getError = () => {
+        return this.state.error;
+    };
 
     render() {
         const {rewardPrice} = this.props;
-        const {price} = this.state;
+        const {price, error} = this.state;
         return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text>当前价格：</Text>
@@ -610,13 +625,16 @@ class UpdateTaskNum extends PureComponent {
                     onChangeText={text => {
                         this.numText = text;
                         this.setState({
-                            price: (parseInt(text) * parseInt(rewardPrice) * 1.05).toFixed(2),
+                            error: !(parseFloat(text) >= 1),
+                        });
+                        this.setState({
+                            price: (parseInt(text) * parseFloat(rewardPrice) * 1.05).toFixed(2),
                         });
                     }}
                     style={{
                         padding: 0,
                         borderWidth: 0.3,
-                        borderColor: 'rgba(0,0,0,0.3)',
+                        borderColor: error ? 'red' : 'rgba(0,0,0,0.3)',
                         height: 30,
                         borderRadius: 5,
                         paddingHorizontal: 5,

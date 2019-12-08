@@ -1,3 +1,6 @@
+import {isFriendChat} from '../util/AppService';
+import ChatSocket from '../util/ChatSocket';
+
 export default class NavigationUtils {
 
     static goPage(params, page) {
@@ -42,4 +45,23 @@ export default class NavigationUtils {
                 ...params,
             });
     }
+
+    /**
+     * 跳到聊天详情页面
+     */
+    // static toChatRoomPage(columnType,task_id,toUserid,token){
+    //     isFriendChat({
+    //         columnType,
+    //         taskid: task_id,
+    //         toUserid: toUserid,
+    //     }, token).then(result => {
+    //         // console.log(result, 'result');
+    //         if (result.id) {
+    //             NavigationUtils.goPage({},'ChatRoomPage');
+    //
+    //             this.FriendId = result.id;
+    //         }
+    //
+    //     });
+    // }
 }

@@ -181,6 +181,7 @@ android {
 }
 
 dependencies {
+    implementation project(':@merryjs_photo-viewer')
     implementation project(':react-native-fs')
     implementation project(':react-native-device-info')
     implementation project(':react-native-wechat')

@@ -45,10 +45,13 @@ export default class ViewUtil {
      * @param menuSvg 菜单svg
      * @param title 标题
      * @param menuinfo 菜单说明
+     * @param click
      */
-    static getSettingItem = (menuSvg, title, menuinfo) => {
+    static getSettingItem = (menuSvg, title, menuinfo,click) => {
         return (
-            <View style={styles.setting_item_container}>
+            <TouchableOpacity
+                onPress={click}
+                style={styles.setting_item_container}>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
                     <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.9)'} svgXmlData={menuSvg}/>
                     <Text style={{marginLeft: 10, fontSize: 15, opacity: 1, color: 'black'}}>{title}</Text>
@@ -57,7 +60,7 @@ export default class ViewUtil {
                     <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     };
 
