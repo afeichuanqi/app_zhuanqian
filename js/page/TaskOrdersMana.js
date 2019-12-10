@@ -421,14 +421,54 @@ class OrdersItem extends React.Component {
                         }}>
                         <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>等待审核</Text>
                     </View> : status == 3 ?
-                        <TouchableOpacity
-                            onPress={this.props.showRejection}
-                            style={{
-                                backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',
-                                alignItems: 'center', borderRadius: 5, marginTop: 5,
-                            }}>
-                            <Text style={{color: 'white', fontSize: 12}}>具体理由</Text>
-                        </TouchableOpacity> : null}
+                        <View style={{flexDirection: 'row'}}>
+                            {item.again_send_status == 1 ? <View
+
+                                style={{
+                                    width: 80, height: 25, justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
+                                    borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
+                                }}>
+                                <Text style={{color: bottomTheme, fontSize: 12}}>已重新提交</Text>
+                            </View> : item.again_send_status == 2 ? <View
+
+                                style={{
+                                    width: 80, height: 25, justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
+                                    borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
+                                }}>
+                                <Text style={{color: bottomTheme, fontSize: 12}}>最终审核</Text>
+                            </View> : (item.isSignUpExp == 0 && item.align_num  <= 1) ?//当报名已经过期。且被拒绝次数小于或者等于1
+                                <View
+
+                                    style={{
+                                        width: 100, height: 25, justifyContent: 'center',
+                                        alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
+                                        borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
+                                    }}>
+                                    <Text style={{color: bottomTheme, fontSize: 12}}>已放弃重新提交</Text>
+                                </View> : (item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) ?//当报名未过期。且被拒绝次数小于或者等于1
+                                <TouchableOpacity
+                                    onPress={this.props.onPress}
+                                    style={{
+                                        width: 60, height: 25, justifyContent: 'center',
+                                        alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
+                                        borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
+                                    }}>
+                                    <Text style={{color: bottomTheme, fontSize: 12}}>重新提交</Text>
+                                </TouchableOpacity> : null}
+
+
+                            <TouchableOpacity
+                                onPress={this.props.showRejection}
+                                style={{
+                                    backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: 3, marginTop: 5,
+                                }}>
+                                <Text style={{color: 'white', fontSize: 12}}>具体理由</Text>
+                            </TouchableOpacity>
+                        </View>
+                        : null}
             </View>
 
         </View>;

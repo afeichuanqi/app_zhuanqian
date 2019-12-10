@@ -362,7 +362,7 @@ class MessageItemComponent extends Component {
                 <FastImage
                     style={[styles.imgStyle]}
                     source={{uri: avatar_url}}
-                    resizeMode={FastImage.stretch}
+                    resizeMode={FastImage.resizeMode.stretch}
                 />
                 {unReadLength ? unReadLength > 0 && <View style={{
                     borderRadius: 10, justifyContent: 'center', alignItems: 'center',
@@ -440,7 +440,7 @@ class MessageItemComponent extends Component {
                     borderRadius: 2,
                 }}
                 source={{uri: taskUri}}
-                resizeMode={FastImage.stretch}
+                resizeMode={FastImage.resizeMode.stretch}
             />
         </AnimatedTouchableOpacity>;
 

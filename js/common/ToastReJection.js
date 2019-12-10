@@ -107,8 +107,8 @@ class MyModalBox extends PureComponent {
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
                             backgroundColor: 'white',
-                            borderTopLeftRadius: 5,
-                            borderTopRightRadius: 5,
+                            borderTopLeftRadius: 2,
+                            borderTopRightRadius: 2,
                             paddingTop: 15,
 
                         }}>
@@ -123,10 +123,10 @@ class MyModalBox extends PureComponent {
                             </TouchableOpacity>
                         </View>
                         <View style={{backgroundColor: 'white', paddingHorizontal: 15, paddingVertical: 10}}>
-                            <Text style={{width: width - 70}}>{this.state.rejection.turnDownInfo}</Text>
-
+                            <Text style={{width: width - 70,}}>{this.state.rejection.turnDownInfo}</Text>
+                            {this.state.rejection.image && this.state.rejection.image.length > 0 &&
                             <View style={{flexDirection: 'row', marginTop: 30}}>
-                                {this.state.rejection.image && this.state.rejection.image.map((item, index, arr) => {
+                                {this.state.rejection.image.map((item, index, arr) => {
                                     return <TouchableOpacity
                                         key={index}
                                         onPress={() => {
@@ -143,13 +143,14 @@ class MyModalBox extends PureComponent {
                                         />
                                     </TouchableOpacity>;
                                 })}
+                            </View>}
 
-                            </View>
+
                         </View>
                         <ImageViewerModal ref={ref => this.imgModal = ref}/>
                         <View style={{
                             flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',
-                            borderBottomLeftRadius: 4, borderBottomRightRadius: 4,
+                            borderBottomLeftRadius: 2, borderBottomRightRadius: 2,
                         }}>
                             <TouchableOpacity
                                 activeOpacity={0.6}
@@ -160,7 +161,7 @@ class MyModalBox extends PureComponent {
                                     alignItems: 'center',
                                     height: 50,
                                 }}>
-                                <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.7)'}}>取消</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity

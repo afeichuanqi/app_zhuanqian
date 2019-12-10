@@ -219,7 +219,7 @@ class HomePage extends PureComponent {
                                 borderRadius: 25, zIndex: 3, elevation: 1,
                             }}
                             source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
-                            resizeMode={FastImage.stretch}
+                            resizeMode={FastImage.resizeMode.stretch}
                         />
                     </AnimatedTouchableOpacity>
                 </View>
@@ -352,7 +352,7 @@ class FristListComponent extends PureComponent {
             <FastImage
                 style={[styles.imgStyle, {height: '100%', width: '100%'}]}
                 source={{uri: `${item.imgUrl}`}}
-                resizeMode={FastImage.stretch}
+                resizeMode={FastImage.resizeMode.stretch}
                 key={index}
             />
         </TouchableOpacity>

@@ -15,6 +15,7 @@ import {bottomTheme} from '../appSet';
 import setting from '../res/svg/setting.svg';
 import shop from '../res/svg/shop.svg';
 import guanzhu from '../res/svg/mysvg/guanzhu1.svg';
+import bill1 from '../res/svg/mysvg/bill1.svg';
 import my_fabu from '../res/svg/my_fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import FastImage from 'react-native-fast-image';
@@ -253,7 +254,14 @@ class BottomInfoColumn extends PureComponent {
             {ViewUtil.getSettingItem(guanzhu, '我的关注', '关注列表', () => {
                 NavigationUtils.goPage({user_id: this.props.userinfo.userid, isMy: true}, 'MyAttentionList');
             })}
-            {ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}
+            {ViewUtil.getSettingItem(bill1, '帐单展示', '支出、收入',()=>{
+                NavigationUtils.goPage({},'UserBillListPage');
+
+            })}
+            {ViewUtil.getSettingItem(bill1, '邀请好友', '支出、收入',()=>{
+                NavigationUtils.goPage({},'FriendPromotionPage');
+
+            })}
             {ViewUtil.getMenuLine()}
             {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
             {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}

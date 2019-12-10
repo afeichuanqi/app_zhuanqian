@@ -30,6 +30,8 @@ import MessageTypePage from '../page/MessageTypePage';
 import MyAttentionList from '../page/MyAttentionList';
 import TaskOrdersMana from '../page/TaskOrdersMana';
 import HisAttentionList from '../page/HisAttentionList';
+import UserBillListPage from '../page/UserBillListPage';
+import FriendPromotionPage from '../page/FriendPromotionPage';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -189,6 +191,18 @@ const MainNavigator = createStackNavigator({
         },
         HisAttentionList: {
             screen: HisAttentionList,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        UserBillListPage: {
+            screen: UserBillListPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        FriendPromotionPage: {
+            screen: FriendPromotionPage,
             navigationOptions: {
                 header: null,
             },

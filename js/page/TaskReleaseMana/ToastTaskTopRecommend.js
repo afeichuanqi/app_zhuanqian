@@ -169,7 +169,7 @@ class TaskTop extends PureComponent {
                             });
                             this.numText = text;
                             this.setState({
-                                price: (parseInt(text) * 10).toFixed(2),
+                                price: (parseFloat(text) * 10).toFixed(2),
                             });
 
                         } else {

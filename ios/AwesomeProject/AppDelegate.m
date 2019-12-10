@@ -11,7 +11,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
-
+#import "RNUMConfigure.h"
 // ios 8.x or older
 
 @implementation AppDelegate
@@ -30,6 +30,13 @@ sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  ///* 设置友盟appkey */
+  [UMConfigure setLogEnabled:YES];
+  [RNUMConfigure initWithAppkey:@"5def3d7f0cafb21df800088a" channel:@"App Store"];
+  //
+
+//关闭强制验证https，可允许http图片分享，但需要在info.plist设置安全域名
+ 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"AwesomeProject"

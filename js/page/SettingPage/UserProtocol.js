@@ -48,7 +48,7 @@ class UserProtocol extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.params.type === 1 ? '《简单赚发单规则》' : '《简单赚接单规则》', null, theme, 'black', 16);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.params.type === 1 ? '《简单赚发单规则》' : '《简单赚接单规则》', null, theme, 'black', 16,null,false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}

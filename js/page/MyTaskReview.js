@@ -51,10 +51,12 @@ class MyTaskReview extends PureComponent {
     _updatePage = () => {
         const {task_id, status} = this.params;
         const {userinfo} = this.props;
-        selectSendFormForTaskId({taskId: task_id, status: status}, userinfo.token).then(result => {
+        selectSendFormForTaskId({taskId: task_id, status: status}, userinfo.token).then(async result => {
             const {taskDatas} = result;
             this.taskDatas = taskDatas;
-            this.pageIndex = 0;
+            const formIndex = await this.taskDatas.findIndex(d => d.taskStepId == this.params.sendFormId);
+
+            this.pageIndex = formIndex === -1 ? 0 : formIndex;
             if (taskDatas.length > 0) {
                 const {task_pass_num, task_noPass_num, task_is_send_num} = taskDatas[0];
 
@@ -111,7 +113,7 @@ class MyTaskReview extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goChatPage, '任务审核', jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this._goChatPage, `任务审核 (${this.taskDatas &&(this.pageIndex + 1)>this.taskDatas.length?this.taskDatas.length:this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, jiaoliu, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
             const {task_id, taskUri} = this.params;
             const fromUserinfo = {
@@ -176,11 +178,11 @@ class MyTaskReview extends PureComponent {
                                             // numberOfLines={5}
                                             // ellipsizeMode={'tail'}
                                             style={{
-                                            width: screenWidth - 120,
-                                            fontSize: 12,
-                                            color: 'red',
-                                            marginLeft: 10,
-                                        }}>{JSON.parse(taskData.reason_for_rejection).turnDownInfo}</Text>
+                                                width: screenWidth - 120,
+                                                fontSize: 12,
+                                                color: 'red',
+                                                marginLeft: 10,
+                                            }}>{JSON.parse(taskData.reason_for_rejection).turnDownInfo}</Text>
                                     </View>
                                 </View> : null
                             }
@@ -188,7 +190,7 @@ class MyTaskReview extends PureComponent {
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={() => {
-                                    NavigationUtils.goPage({userid:taskData.userid}, 'ShopInfoPage');
+                                    NavigationUtils.goPage({userid: taskData.userid}, 'ShopInfoPage');
                                 }}
                                 style={{
                                     width: screenWidth, height: 70,

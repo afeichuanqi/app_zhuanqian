@@ -410,6 +410,24 @@ export function selectTaskReleaseList(data, token) {
         }
     });
 }
+/**
+ * 查询用户帐单
+ */
+export function selectBillForUserId(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectBillForUserId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 查询所有推荐任务

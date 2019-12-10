@@ -8,7 +8,7 @@
 
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {bottomTheme, theme} from '../appSet';
+import {theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
@@ -16,13 +16,12 @@ import {
     Dimensions,
     FlatList,
     RefreshControl, StyleSheet, Text,
-    View, TouchableOpacity,
+    View, TouchableOpacity, StatusBar,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import {connect} from 'react-redux';
-import {selectSendFormTaskList, selectSignUpList} from '../util/AppService';
-import FastImage from 'react-native-fast-image';
+import {selectBillForUserId} from '../util/AppService';
 import NavigationUtils from '../navigator/NavigationUtils';
 
 const width = Dimensions.get('window').width;
@@ -47,7 +46,7 @@ class TaskReleaseMana extends PureComponent {
     }
 
     _updatePage = (isRefresh) => {
-        const {status, taskid} = this.params;
+        // const {status, taskid} = this.params;
         const {userinfo} = this.props;
         if (isRefresh) {
             this.page.pageIndex = 0;
@@ -58,54 +57,28 @@ class TaskReleaseMana extends PureComponent {
             this.page.pageIndex += 1;
 
         }
-        if (status === 0) {
-            selectSignUpList({
-                status: 0,
-                task_id: taskid,
-                pageIndex: this.page.pageIndex,
-            }, userinfo.token).then(result => {
-                console.log(result);
-                if (isRefresh) {
-                    this.setState({
-                        taskData: result,
-                        isLoading: false,
-                        hideLoaded: result.length >= 10 ? false : true,
-                    });
-                } else {
-                    const tmpArr = [...this.state.taskData];
-                    this.setState({
-                        taskData: tmpArr.concat(result),
-                        hideLoaded: result.length >= 10 ? false : true,
-                    });
-                }
+        selectBillForUserId({
 
-            }).catch(msg => {
-                console.log(msg);
-            });
-        } else {
-            selectSendFormTaskList({
-                status,
-                task_id: taskid,
-                pageIndex: this.page.pageIndex,
-            }, userinfo.token).then(result => {
-                if (isRefresh) {
-                    this.setState({
-                        taskData: result,
-                        isLoading: false,
-                        hideLoaded: result.length >= 10 ? false : true,
-                    });
-                } else {
-                    const tmpArr = [...this.state.taskData];
-                    this.setState({
-                        taskData: tmpArr.concat(result),
-                        hideLoaded: result.length >= 10 ? false : true,
-                    });
-                }
+            pageIndex: this.page.pageIndex,
+        }, userinfo.token).then(result => {
+            console.log(result);
+            if (isRefresh) {
+                this.setState({
+                    taskData: result,
+                    isLoading: false,
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+            } else {
+                const tmpArr = [...this.state.taskData];
+                this.setState({
+                    taskData: tmpArr.concat(result),
+                    hideLoaded: result.length >= 10 ? false : true,
+                });
+            }
 
-            }).catch(msg => {
-                console.log(msg);
-            });
-        }
+        }).catch(msg => {
+            console.log(msg);
+        });
 
     };
 
@@ -116,6 +89,8 @@ class TaskReleaseMana extends PureComponent {
     position = new Animated.Value(0);
 
     render() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
@@ -125,7 +100,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.params.title, null, 'white', 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '帐单', null, 'white', 'black', 16, null, false);
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <SafeAreaViewPlus
@@ -137,7 +112,7 @@ class TaskReleaseMana extends PureComponent {
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5', paddingTop: 5}}
-                        ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关任务'}/>}
+                        ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关帐单'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
                         scrollEventThrottle={1}
@@ -173,59 +148,49 @@ class TaskReleaseMana extends PureComponent {
         );
     }
 
-    onRefresh = () => {
-        this._updatePage(true);
-    };
     onLoading = () => {
         this._updatePage(false);
     };
+    onRefresh = () => {
+        this._updatePage(true);
+    };
     _renderIndexPath = ({item, index}) => {
         return <TouchableOpacity
-            onPress={() => {
-                if (item.task_status == 0) {
-                    NavigationUtils.goPage({userid: item.userid}, 'ShopInfoPage');
-                } else {
-                    NavigationUtils.goPage({
-                        task_id: this.params.taskid,
-                        status: item.task_status,
-                        sendFormId: item.id,
-                    }, 'MyTaskReview');
+            onPress={()=>{
+                if(item.bill_task_id){
+                    NavigationUtils.goPage({test:false,task_id:item.bill_task_id},'TaskDetails')
                 }
 
             }}
-            key={index} style={{
-            height: 60, width, paddingHorizontal: 10, justifyContent: 'space-between', alignItems: 'center',
-            flexDirection: 'row',
-            backgroundColor: 'white',
-        }}>
-
-            <View style={{flexDirection: 'row'}}>
-                <FastImage
-                    style={[styles.imgStyle]}
-                    source={{uri: item.avatar_url}}
-                    resizeMode={FastImage.resizeMode.stretch}
-                />
-                <View style={{justifyContent: 'space-around'}}>
-                    <View style={{flexDirection: 'row', marginLeft: 10}}>
-                        <Text style={{fontSize: 15}}>{item.username}</Text>
-                        <Text style={{marginLeft: 5}}>(ID:{item.userid})</Text>
-                    </View>
-                    <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 5, alignItems: 'center'}}>
-                        <Text style={{
-                            fontSize: 12,
-                            color: 'rgba(0,0,0,0.8)',
-                        }}>{item.task_status == 1 ? '审核时间' : item.task_status == 0 ? '进行中' : item.task_status == -1 ? '驳回时间' : ''}:</Text>
-                        <Text style={{
-                            fontSize: 12,
-                            color: 'rgba(0,0,0,0.8)',
-                        }}>{item.task_status == 0 ? item.send_date1 : item.review_time1}</Text>
-                    </View>
-                </View>
-            </View>
+            key={item.id}
+            style={{
+                height: 90, width,
+                paddingHorizontal: 10,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row',
+                backgroundColor: 'white',
+                borderBottomWidth: 0.3,
+                borderBottomColor: 'rgba(0,0,0,0.1)',
+            }}>
             <View>
-                <Text
-                    style={{color: bottomTheme}}>{item.task_status == 1 ? '已完成' : item.task_status == 0 ? '进行中' : item.task_status == -1 ? '已驳回' : ''}</Text>
+                <Text style={{fontSize: 15}}>{item.bill_title}</Text>
+                <Text style={{marginTop: 8, opacity: 0.8, fontSize: 13}}>余额:{item.bill_balance}</Text>
+                <Text style={{marginTop: 8, opacity: 0.7, fontSize: 12}}>{item.bill_date1}</Text>
             </View>
+            <View style={{alignSelf: 'flex-start', marginTop: 20}}>
+                <Text style={{
+                    fontSize: 16,
+                    color: 'red',
+                    textAlign: 'right',
+                }}>{item.bill_money_type}{parseFloat(item.bill_money).toFixed(2)}</Text>
+                <Text style={{
+                    opacity: 0.5,
+                    marginTop: 10,
+                    textAlign: 'right',
+                }}>{item.bill_status == 1 ? '支付成功' : '处理中'}</Text>
+            </View>
+
         </TouchableOpacity>;
     };
     page = {

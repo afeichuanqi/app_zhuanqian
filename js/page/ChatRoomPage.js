@@ -51,8 +51,8 @@ class TaskInfo extends React.Component {
                 />
                 <View style={{marginLeft: 15}}>
                     <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)', marginTop: 3}}>{taskInfo.task_title}</Text>
-                    <View style={{flexDirection: 'row', alignItems: 'center', height: 15, wdith: 50, marginTop: 3}}>
+                    <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)', marginTop: 1}}>{taskInfo.task_title}</Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center', height: 15, wdith: 50, marginTop: 1}}>
                         <Text style={{
                             fontSize: 12,
                             color: 'rgba(0,0,0,0.7)',
