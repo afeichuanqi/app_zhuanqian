@@ -21,6 +21,7 @@ import Animated from 'react-native-reanimated';
 import NavigationBar from '../common/NavigationBar';
 import NavigationUtils from '../navigator/NavigationUtils';
 import LabelBigComponent from '../common/LabelBigComponent';
+import BackPressComponent from '../common/BackPressComponent';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -29,20 +30,24 @@ const topIputHeight = (Platform.OS === 'ios') ? 30 : 30;
 class SearchPage extends PureComponent {
     constructor(props) {
         super(props);
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {};
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
 
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     position = new Animated.Value(0);
-    topBarTop = new Animated.Value(0);
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
+        this.backPress.componentWillUnmount();
     }
 
     render() {

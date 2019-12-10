@@ -17,7 +17,6 @@ import {
     ActivityIndicator,
     Dimensions,
     FlatList,
-    InteractionManager,
     RefreshControl, StyleSheet,
     Text,
     TouchableOpacity,
@@ -26,13 +25,12 @@ import {
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {cancelUserSignUp, deleteTaskRelease, selectOrderTasks, selectTaskReleaseList} from '../util/AppService';
+import {cancelUserSignUp, selectOrderTasks} from '../util/AppService';
 import {connect} from 'react-redux';
-import ToastSelect from '../common/ToastSelect';
 import FastImage from 'react-native-fast-image';
-import LabelBigComponent from '../common/LabelBigComponent';
 import Toast from '../common/Toast';
 import ToastReJection from '../common/ToastReJection';
+import BackPressComponent from '../common/BackPressComponent';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -41,8 +39,12 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 class TaskOrdersMana extends PureComponent {
     constructor(props) {
         super(props);
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {
         navigationIndex: 0,
         navigationRoutes: [
@@ -55,12 +57,12 @@ class TaskOrdersMana extends PureComponent {
     };
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
 
     }
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     position = new Animated.Value(0);
@@ -75,7 +77,7 @@ class TaskOrdersMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '接单管理', null, bottomTheme, 'white', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '接单管理', null, bottomTheme, 'white', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus

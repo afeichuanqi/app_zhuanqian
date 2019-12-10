@@ -14,23 +14,27 @@ import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {connect} from 'react-redux';
+import BackPressComponent from '../common/BackPressComponent';
 
 
 class SettingPage extends PureComponent {
     constructor(props) {
         super(props);
-
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {};
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
 
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     _goBackClick = () => {
@@ -51,7 +55,7 @@ class SettingPage extends PureComponent {
         />;
         const {userinfo} = this.props;
 
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '设置', null, theme, 'black', 16);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '设置', null, theme, 'black', 16);
         return (
             <SafeAreaViewPlus
                 topColor={theme}

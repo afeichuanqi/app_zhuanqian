@@ -14,6 +14,8 @@ import NavigationBar from '../../common/NavigationBar';
 import ViewUtil from '../../util/ViewUtil';
 import HTML from 'react-native-render-html';
 import {order_rule, release_rule} from '../../res/text/rule';
+import BackPressComponent from '../../common/BackPressComponent';
+import NavigationUtils from '../../navigator/NavigationUtils';
 
 const {width} = Dimensions.get('window');
 
@@ -21,22 +23,23 @@ class UserProtocol extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {};
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     componentDidMount() {
-
+        this.backPress.componentDidMount();
 
     }
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
-    _goBackClick = () => {
-        this.props.navigation.goBack();
-    };
 
     render() {
         let statusBar = {
@@ -48,7 +51,7 @@ class UserProtocol extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.params.type === 1 ? '《简单赚发单规则》' : '《简单赚接单规则》', null, theme, 'black', 16,null,false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.params.type === 1 ? '《简单赚发单规则》' : '《简单赚接单规则》', null, theme, 'black', 16,null,false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}

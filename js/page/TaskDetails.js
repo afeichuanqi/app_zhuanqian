@@ -8,12 +8,11 @@
 
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {View, Text, StyleSheet, TouchableOpacity, Dimensions, Platform} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions, Platform, StatusBar} from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import FastImage from 'react-native-fast-image';
 import SvgUri from 'react-native-svg-uri';
-import menu_right from '../res/svg/menu_right.svg';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
@@ -31,6 +30,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import {judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
 import liaotian from '../res/svg/liaotian.svg';
+import BackPressComponent from '../common/BackPressComponent';
 
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -39,8 +39,12 @@ class TaskDetails extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {
         totalData: {},
         StatusForTask: {},
@@ -97,11 +101,12 @@ class TaskDetails extends PureComponent {
                 });
             }
         }
+        this.backPress.componentDidMount();
 
     }
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     animations = {
@@ -130,9 +135,12 @@ class TaskDetails extends PureComponent {
             extrapolate: 'clamp',
         });
         let statusBar = {
-            hidden: false,
+            barStyle: 'light-content',
+            // hidden: false,
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
+        // StatusBar.setBarStyle('light-content', true);
+        StatusBar.setBackgroundColor(bottomTheme, true);
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
@@ -380,16 +388,12 @@ class TaskDetails extends PureComponent {
                         taskStatus={taskStatus}
                         StatusForTask={StatusForTask}
                         startSignUp={this._startSignUp}
-                        updateStep={() => {
-                            NavigationUtils.goBack(this.props.navigation);
-                        }}
+                        updateStep={this.onBackPress}
                         sendStepData={this._sendStepData}
                     />
                     <AnimatedTouchableOpacity
                         activeOpacity={0.6}
-                        onPress={() => {
-                            NavigationUtils.goBack(this.props.navigation);
-                        }}
+                        onPress={this.onBackPress}
                         style={{position: 'absolute', top: goBackTop, left: 10, zIndex: 10, width: 50}}>
                         <SvgUri width={24} height={24} fill={'white'} svgXmlData={goback}/>
                     </AnimatedTouchableOpacity>

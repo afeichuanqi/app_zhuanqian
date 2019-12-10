@@ -28,6 +28,7 @@ import {connect} from 'react-redux';
 import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
 import ViewUtil from '../util/ViewUtil';
 import jiaoliu from '../res/svg/jiaoliu.svg';
+import BackPressComponent from '../common/BackPressComponent';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -38,17 +39,23 @@ class MessagePage extends PureComponent {
         super(props);
         this.params = this.props.navigation.state.params;
         this.task_id = this.params.task_id || 0;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     componentDidMount() {
-        // ChatSocket.selectAllFriendMessage();
+        this.backPress.componentDidMount();
     }
 
     componentWillUnmount() {
+        this.backPress.componentWillUnmount();
         this.timer && clearInterval(this.timer);
 
     }
 
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     render() {
 
 
@@ -65,7 +72,7 @@ class MessagePage extends PureComponent {
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
         const {type} = this.params;
-        let TopColumn = ViewUtil.getTopColumn(this._goChatPage, type == 1 ? '咨询消息' : type == 2 ? '申诉消息' : type == 3 ? '投诉消息' : type == 4 ? '聊天消息' : '', jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, type == 1 ? '咨询消息' : type == 2 ? '申诉消息' : type == 3 ? '投诉消息' : type == 4 ? '聊天消息' : '', jiaoliu, null, null, null, () => {
 
         }, false);
 

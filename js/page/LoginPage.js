@@ -19,19 +19,21 @@ import gantanhao from '../res/svg/gantanhao.svg';
 import {isPoneAvailable} from '../util/CommonUtils';
 import *as wechat from 'react-native-wechat';
 import {sendSms} from '../util/AppService';
+import BackPressComponent from '../common/BackPressComponent';
 
 const {width, height} = Dimensions.get('window');
 
 class LoginPage extends PureComponent {
     constructor(props) {
         super(props);
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {};
     phone = '';
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
         this.loginBtn.setNativeProps({
             style: {
                 opacity: 0.3,
@@ -45,9 +47,12 @@ class LoginPage extends PureComponent {
     }
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     _pwdInputOnChangeText = (text) => {
         // this.setState({phone: text});
         console.log('我被触发');
@@ -90,7 +95,7 @@ class LoginPage extends PureComponent {
             hide={true}
             statusBar={statusBar}
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '', null);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '', null);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -203,9 +208,6 @@ class LoginPage extends PureComponent {
                 this.phoneInput.showError(!msg ? '网络错误' : msg);
             });
         }
-    };
-    _goBackClick = () => {
-        NavigationUtils.goBack(this.props.navigation);
     };
 }
 

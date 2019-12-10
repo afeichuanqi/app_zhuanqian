@@ -80,14 +80,11 @@ class HomePage extends PureComponent {
     };
 
     render() {
-        // console.log('wo被render');
         const {navigationRoutes, navigationIndex} = this.state;
-
         let statusBar = {
-            hidden: false,
+            // hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
-            barStyle: 'dark-content',
-            // translucent:true
+            // barStyle: 'dark-content',
         };
 
         let navigationBar = <NavigationBar

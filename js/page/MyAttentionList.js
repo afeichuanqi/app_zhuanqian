@@ -31,6 +31,7 @@ import sex_nv_ from '../res/svg/sex_nv_.svg';
 import SvgUri from 'react-native-svg-uri';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import BackPressComponent from '../common/BackPressComponent';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -41,7 +42,7 @@ class MyAttention extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
-
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
         this.state = {
             navigationIndex: 0,
             navigationRoutes: [
@@ -52,7 +53,18 @@ class MyAttention extends PureComponent {
         };
 
     }
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
+    componentDidMount() {
+        this.backPress.componentDidMount();
+    }
 
+    componentWillUnmount() {
+        this.backPress.componentWillUnmount();
+
+    }
 
     position = new Animated.Value(0);
 
@@ -68,7 +80,7 @@ class MyAttention extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '我的关注粉丝', null, theme, 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '我的关注粉丝', null, theme, 'black', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus

@@ -359,7 +359,9 @@ class FristListComponent extends PureComponent {
             </Animated.View>
 
             {showFilterComponent ?
-                <FilterComponent sureClick={this._sureClick} ref={ref => this.filterComponent = ref}/> : null}
+                <FilterComponent cancelClick={() => {
+                    this.hide();
+                }} sureClick={this._sureClick} ref={ref => this.filterComponent = ref}/> : null}
         </View>;
     }
 
@@ -370,7 +372,7 @@ class FristListComponent extends PureComponent {
             });
         }
         if (!this.state.show && FilterComponent === null) {
-            FilterComponent = require('./TaskHall/FilterComponent').default;
+            FilterComponent = require('./TaskHallPage/FilterComponent').default;
             this.setState({
                 showFilterComponent: true,
             });

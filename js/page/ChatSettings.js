@@ -20,6 +20,7 @@ import RadioComponent from '../common/RadioComponent';
 import {connect} from 'react-redux';
 import {insertReportList, selectIsBeBlackList, setToBlackList} from '../util/AppService';
 import MyModalBox from '../common/MyModalBox';
+import BackPressComponent from '../common/BackPressComponent';
 
 const {width, height} = Dimensions.get('window');
 
@@ -27,12 +28,16 @@ class ChatSetting extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
-
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {};
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     componentDidMount() {
+        this.backPress.componentDidMount();
         const {userinfo} = this.props;
         const {token} = userinfo;
         const {fromUserinfo} = this.params;
@@ -46,12 +51,9 @@ class ChatSetting extends PureComponent {
     }
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
-    _goBackClick = () => {
-        this.props.navigation.goBack();
-    };
 
     render() {
         StatusBar.setBarStyle('dark-content', true);
@@ -70,7 +72,7 @@ class ChatSetting extends PureComponent {
         const {fromUserinfo} = this.params;
         // const {userinfo} = this.props;
 
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '聊天设置', null, theme, 'black', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '聊天设置', null, theme, 'black', 16, () => {
         }, false);
         return (
             <SafeAreaViewPlus

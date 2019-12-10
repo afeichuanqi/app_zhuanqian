@@ -15,7 +15,10 @@ export default class FlatListCommonUtil extends PureComponent {
     };
 
     componentDidMount(): void {
-        this._updateList(true);
+        setTimeout(() => {
+            this._updateList(true);
+        },500)
+
     }
 
     setColumnType = (type) => {

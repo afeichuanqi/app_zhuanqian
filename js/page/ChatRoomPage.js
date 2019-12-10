@@ -17,6 +17,7 @@ import {isFriendChat, selectSimpleTaskInfo, uploadQiniuImage} from '../util/AppS
 import actions from '../action';
 import ImageViewerModal from '../common/ImageViewerModal';
 import Toast from '../common/Toast';
+import BackPressComponent from '../common/BackPressComponent';
 
 const {width, height} = Dimensions.get('window');
 
@@ -110,15 +111,18 @@ class ChatRoomPage extends React.Component {
         this.task_id = task_id;
         this.fromUserinfo = fromUserinfo;
         this.taskUri = taskUri;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     componentDidMount(): void {
-
+        this.backPress.componentDidMount();
 
         this._updatePage(this.columnType, this.task_id, this.fromUserinfo.id);
 
     }
-
     _updatePage = (columnType, task_id, toUserid) => {
         // console.log(toUserid,"task_id");
         isFriendChat({
@@ -141,12 +145,11 @@ class ChatRoomPage extends React.Component {
     state = {};
 
     componentWillUnmount(): void {
+        this.backPress.componentWillUnmount();
         ChatSocket.setMsgIdIsRead(this.FriendId, this.fromUserinfo.id);
     }
 
-    _goBackClick = () => {
-        NavigationUtils.goBack(this.props.navigation);
-    };
+
     getMessages = () => {
         const tmpArr = [];
         // const {fromUserinfo} = this.params;
@@ -212,7 +215,7 @@ class ChatRoomPage extends React.Component {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.fromUserinfo.username, message_more, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
         });
         return (

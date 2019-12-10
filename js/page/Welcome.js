@@ -62,6 +62,7 @@ class Welcome extends PureComponent {
 
         let statusBar = {
             hidden: false,
+
         };
         let navigationBar = <NavigationBar
             hide={true}

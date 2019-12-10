@@ -20,20 +20,28 @@ import SvgUri from 'react-native-svg-uri';
 import gantanhao from '../res/svg/gantanhao.svg';
 import DeviceInfo from 'react-native-device-info';
 import ChatSocket from '../util/ChatSocket';
+import BackPressComponent from '../common/BackPressComponent';
 
 export default class EnterCodePage extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {};
     phone = '';
 
     componentDidMount() {
+        this.backPress.componentDidMount();
     }
 
     componentWillUnmount() {
+        this.backPress.componentWillUnmount();
     }
 
 
@@ -49,7 +57,7 @@ export default class EnterCodePage extends PureComponent {
             hide={true}
             statusBar={statusBar}
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '', null);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '', null);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -82,9 +90,6 @@ export default class EnterCodePage extends PureComponent {
 
     _showError = (msg) => {
         this.againSend.showError(msg);
-    };
-    _goBackClick = () => {
-        NavigationUtils.goBack(this.props.navigation);
     };
 }
 
@@ -230,17 +235,13 @@ class CodeInput extends PureComponent {
                 }}
                 onChangeText={(text) => {
                     if (text.length > 0) {
-                        // const iptArray = this.state.iptArray;
                         this.iptArrayNum[index] = text;
                         if (index + 1 <= this.props.iptNum - 1) {//防止最后一个进行focus
                             this.refs[`text${index + 1}`].focus();
                         }
                         if (index + 1 == this.props.iptNum) {
                             this._onLogin();
-                            // alert(this.iptArrayNum.join(''));
-
                             this.forceUpdate();
-                            // console.log(this.iptArrayNum);
                         }
                     }
                     this.forceUpdate();
@@ -275,7 +276,7 @@ class CodeInput extends PureComponent {
                 ChatSocket.selectAllFriendMessage();//进行获取好友列表
             } else {
 
-                console.log(data.msg, 'data.msg');
+                // console.log(data.msg, 'data.msg');
                 // this.props.showError(data.msg);
                 this.iptArrayNum = new Array(this.props.iptNum);
                 this.refs[`text0`].focus();

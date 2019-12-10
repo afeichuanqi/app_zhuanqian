@@ -53,7 +53,7 @@ class MyPage extends PureComponent {
 
     render() {
         let statusBar = {
-            hidden: false,
+            // hidden: false,
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
         const titleTop = Animated.interpolate(this.scrollY, {
@@ -77,7 +77,7 @@ class MyPage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const {userinfo, onUploadAvatar} = this.props;
-        console.log(userinfo.upload_avatar_loading, 'userinfo.upload_avatar_loading');
+        // console.log(userinfo.upload_avatar_loading, 'userinfo.upload_avatar_loading');
         // console.log(userinfo);
         return (
             <View

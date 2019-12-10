@@ -12,7 +12,11 @@ const navState = RootNavigator.router.getStateForAction(RootNavigator.router.get
  * 创建自己的navigation reducer
  */
 const navReducer = (state = navState, action) => {
+
     const nextState = RootNavigator.router.getStateForAction(action, state);
+    state.type = action.type;
+    state.key = action.key;
+
     return nextState || state;
 };
 /**
@@ -31,7 +35,7 @@ const index = {
 const config = {
     key: 'root',
     storage,
-    whitelist: ['userinfo','taskInfo'],
+    whitelist: ['userinfo', 'taskInfo'],
 };
 let reducer = persistCombineReducers(config, index);
 export default reducer;

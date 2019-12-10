@@ -1,5 +1,3 @@
-import {isFriendChat} from '../util/AppService';
-import ChatSocket from '../util/ChatSocket';
 
 export default class NavigationUtils {
 

@@ -12,42 +12,42 @@ import {bottomTheme, theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
-    ActivityIndicator,
     Dimensions,
-    FlatList,
-    RefreshControl, StyleSheet, Text,
+    FlatList,StyleSheet, Text,
     View, TouchableOpacity, StatusBar, Clipboard, ScrollView,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
-import EmptyComponent from '../common/EmptyComponent';
 import {connect} from 'react-redux';
-import {selectBillForUserId, selectSendFormTaskList, selectSignUpList} from '../util/AppService';
 import FastImage from 'react-native-fast-image';
-import NavigationUtils from '../navigator/NavigationUtils';
 import copy from '../res/svg/yaoqing/copy.svg';
 import SvgUri from 'react-native-svg-uri';
 import Toast from '../common/Toast';
+import BackPressComponent from '../common/BackPressComponent';
+import NavigationUtils from '../navigator/NavigationUtils';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 class TaskReleaseMana extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {};
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     componentDidMount() {
-
+        this.backPress.componentDidMount();
         // this._updatePage(true);
     }
 
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     render() {
@@ -62,7 +62,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '邀请送大礼', null, 'white', 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '邀请送大礼', null, 'white', 'black', 16, null, false);
 
         return (
             <SafeAreaViewPlus

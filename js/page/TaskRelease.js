@@ -45,6 +45,7 @@ import AppTskDefaultData from './TaskRelease/AppTskDefaultData';
 import actions from '../action';
 import {judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
+import BackPressComponent from '../common/BackPressComponent';
 
 let PopButtomMenu = null;
 const {width} = Dimensions.get('window');
@@ -196,10 +197,13 @@ class TaskRelease extends PureComponent {
         const {update} = this.params;
         this.taskInfo = this.props.taskInfo;
         this.taskInfo.update = update;
-
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
 
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     componentDidMount() {
         const {task_id, update} = this.params;
         const {userinfo} = this.props;
@@ -225,10 +229,11 @@ class TaskRelease extends PureComponent {
                 data: result,
             });
         });
-
+        this.backPress.componentDidMount();
     }
 
     componentWillUnmount() {
+        this.backPress.componentWillUnmount();
         const data = this._getTaskReleaseData();
         console.log(data, 'data');
         this.props.onSetTaskReleaseInfo(data);
@@ -369,7 +374,7 @@ class TaskRelease extends PureComponent {
         />;
         const {userinfo} = this.props;
         const {data} = this.state;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16);
         console.log('render', this.taskInfo);
         return (
             <SafeAreaViewPlus

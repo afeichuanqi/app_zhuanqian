@@ -37,6 +37,7 @@ import TaskReleaseItem from './TaskReleaseMana/TaskReleaseItem';
 import ToastSelect from '../common/ToastSelect';
 import Toast from '../common/Toast';
 import ToastTaskTopRecommend from './TaskReleaseMana/ToastTaskTopRecommend';
+import BackPressComponent from '../common/BackPressComponent';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -45,8 +46,13 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 class TaskReleaseMana extends PureComponent {
     constructor(props) {
         super(props);
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {
         navigationIndex: 0,
         navigationRoutes: [
@@ -57,12 +63,12 @@ class TaskReleaseMana extends PureComponent {
     };
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
 
     }
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     position = new Animated.Value(0);
@@ -77,7 +83,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '发布管理', null, bottomTheme, 'white', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '发布管理', null, bottomTheme, 'white', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus

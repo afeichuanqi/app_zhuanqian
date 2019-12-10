@@ -89,7 +89,7 @@ export default class FilterComponent extends PureComponent {
 
             <AnimatedTouchableOpacity
                 activeOpacity={0.6}
-                onPress={this._sureClick}
+                onPress={this._cancelClick}
                 style={{
                     flex: 1, backgroundColor: '#b4b4b4',
                     opacity: opacity,
@@ -214,6 +214,11 @@ export default class FilterComponent extends PureComponent {
 
         // console.log(tmpArr);
         this.props.sureClick(tmpArr);
+        this.hide();
+    };
+    _cancelClick = () => {
+
+        this.props.cancelClick();
         this.hide();
     };
 }

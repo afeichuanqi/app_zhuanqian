@@ -32,7 +32,7 @@ import TaskOrdersMana from '../page/TaskOrdersMana';
 import HisAttentionList from '../page/HisAttentionList';
 import UserBillListPage from '../page/UserBillListPage';
 import FriendPromotionPage from '../page/FriendPromotionPage';
-
+// import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator'
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
     Welcome: {
@@ -42,7 +42,7 @@ const InitNavigator = createStackNavigator({
         },
     },
 });
-
+// const IOS_MODAL_ROUTES = ['TaskDetails'];
 // const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
 //     const isModal = IOS_MODAL_ROUTES.some(
 //         screenName =>
@@ -211,9 +211,9 @@ const MainNavigator = createStackNavigator({
 
     },
     {
-        // defaultNavigationOptions: {
-        //     gesturesEnabled: true,
-        // },
+        defaultNavigationOptions: {
+            gesturesEnabled: true,
+        },
         initialRouteName: 'HomePage',
         // transitionConfig: () => ({
         //     screenInterpolator: CardStackStyleInterpolator.forInitial,

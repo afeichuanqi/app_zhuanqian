@@ -24,6 +24,7 @@ import {addUserTaskNum, selectTaskInfo_, stopUserTask, updateUserTaskPrice} from
 import {connect} from 'react-redux';
 import MyModalBoxTwo from '../common/MyModalBoxTwo';
 import ToastSelect from '../common/ToastSelect';
+import BackPressComponent from '../common/BackPressComponent';
 
 const {width} = Dimensions.get('window');
 
@@ -31,6 +32,7 @@ class MyOrderManaPage extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {
@@ -40,10 +42,14 @@ class MyOrderManaPage extends PureComponent {
     };
 
     componentDidMount() {
+        this.backPress.componentDidMount();
         this._updatePage();
 
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     _updatePage = () => {
         const {userinfo} = this.props;
         const {taskid} = this.params;
@@ -58,7 +64,7 @@ class MyOrderManaPage extends PureComponent {
     };
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     getTaskItem = (taskInfo) => {
@@ -154,7 +160,7 @@ class MyOrderManaPage extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goChatPage, '任务管理', jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '任务管理', jiaoliu, null, null, null, () => {
         }, false);
         const {taskInfo} = this.state;
         return (

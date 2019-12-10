@@ -25,6 +25,7 @@ import Toast from '../common/Toast';
 import ImageViewerModal from '../common/ImageViewerModal';
 import ToastSelect from '../common/ToastSelect';
 import EmptyComponent from '../common/EmptyComponent';
+import BackPressComponent from '../common/BackPressComponent';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -33,6 +34,7 @@ class MyTaskReview extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
     state = {
@@ -44,10 +46,14 @@ class MyTaskReview extends PureComponent {
     };
 
     componentDidMount() {
+        this.backPress.componentDidMount();
         this._updatePage();
 
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     _updatePage = () => {
         const {task_id, status} = this.params;
         const {userinfo} = this.props;
@@ -94,13 +100,9 @@ class MyTaskReview extends PureComponent {
     };
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
-    _goChatPage = () => {
-
-        // this.pageIndex
-    };
 
     render() {
         let statusBar = {
@@ -113,7 +115,7 @@ class MyTaskReview extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goChatPage, `任务审核 (${this.taskDatas &&(this.pageIndex + 1)>this.taskDatas.length?this.taskDatas.length:this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `任务审核 (${this.taskDatas &&(this.pageIndex + 1)>this.taskDatas.length?this.taskDatas.length:this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, jiaoliu, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
             const {task_id, taskUri} = this.params;
             const fromUserinfo = {

@@ -22,6 +22,7 @@ import add_image from '../res/svg/add_image.svg';
 import PickerImage from '../common/PickerImage';
 import {TaskTurnDownTaskFrom, uploadQiniuImage} from '../util/AppService';
 import ImageViewerModal from '../common/ImageViewerModal';
+import BackPressComponent from '../common/BackPressComponent';
 
 const {width, height} = Dimensions.get('window');
 const screenWidth = Dimensions.get('window').width;
@@ -30,16 +31,22 @@ class MyTaskReview extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {
         data: [
             {},
         ],
     };
-
+    componentDidMount(){
+        this.backPress.componentDidMount();
+    }
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
 
@@ -54,7 +61,7 @@ class MyTaskReview extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '驳回', message_more, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '驳回', message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.params.fromUserinfo}, 'ChatSettings');
         },false);
         const {taskData} = this.params;

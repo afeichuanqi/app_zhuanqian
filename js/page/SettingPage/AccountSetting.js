@@ -17,27 +17,29 @@ import actions from '../../action';
 import {connect} from 'react-redux';
 import PickerSex from '../../common/PickerSex';
 import MyModalBox from '../../common/MyModalBox';
+import BackPressComponent from '../../common/BackPressComponent';
 
 const {width} = Dimensions.get('window');
 
 class AccountSetting extends PureComponent {
     constructor(props) {
         super(props);
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {};
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
     }
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
-    _goBackClick = () => {
-        this.props.navigation.goBack();
-    };
 
     render() {
         let statusBar = {
@@ -52,7 +54,7 @@ class AccountSetting extends PureComponent {
         />;
         const {userinfo} = this.props;
         // console.log(userinfo.login);
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '账号管理', null, theme, 'black', 16,()=>{},false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '账号管理', null, theme, 'black', 16,()=>{},false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}

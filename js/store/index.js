@@ -2,6 +2,7 @@ import {applyMiddleware, createStore} from 'redux';
 import thunk from 'redux-thunk';
 import reducers from '../reducer';
 import {middleware} from '../navigator/AppNavigators';
+// import EventBus from '../common/EventBus';
 //日志打印系统的中间件
 const logger = store => next => action => {
     // if(typeof action==='function'){
@@ -9,13 +10,18 @@ const logger = store => next => action => {
     // }else {
     //     console.log('dispatching ', action);
     // }
+    // console.log(action);
+    // if (action.type == 'Navigation/BACK') {//返回被触发
+    //
+    // }
+    console.log(action,"actionaction");
     return next(action);
-}
+};
 const middlewares = [
     middleware,
     logger,
-    thunk
-]
+    thunk,
+];
 /**
  * 创建store
  */

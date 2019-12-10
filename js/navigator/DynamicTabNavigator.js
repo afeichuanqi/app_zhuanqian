@@ -85,6 +85,37 @@ class DynamicTabNavigator extends Component<Props> {
 }
 
 class BottomBar extends Component {
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        // console.log(this.props.nav, 'this.props.nav');
+        let {routes, type, key} = this.props.nav;
+        // console.log(key);
+        if (!key || key.length === 0) {
+            key = routes[1].routes[routes[1].index].key;
+        }
+        // console.log();
+        if (type === 'Navigation/BACK' && key === routes[1].routes[1].key) {//需要返回到主页面
+            // console.log(this.props.navigationIndex,"this.props.navigationIndex");
+            if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
+                StatusBar.setBarStyle('dark-content', true);
+                StatusBar.setBackgroundColor(theme, true);
+            } else {
+                StatusBar.setBarStyle('light-content', true);
+                StatusBar.setBackgroundColor(bottomTheme, true);
+            }
+            return;
+        }
+        if ((type === 'Navigation/BACK' && key === routes[1].routes[2].key && routes[1].routes[1].routeName === 'TaskReleaseMana')
+            ||
+            (type === 'Navigation/BACK' && key === routes[1].routes[2].key && routes[1].routes[1].routeName === 'TaskOrdersMana')
+        ) {
+            // console.log('更改了状态栏');
+            StatusBar.setBarStyle('light-content', true);
+            StatusBar.setBackgroundColor(bottomTheme, true);
+        }
+
+
+    }
+
     render() {
         const {navigationIndex, jumpTo, navigationRoutes, onPress} = this.props;
         const {unMessageLength} = this.props.friend;
@@ -178,6 +209,7 @@ class BottomBar extends Component {
 
 const mapStateToProps = state => ({
     friend: state.friend,
+    nav: state.nav,
 });
 const mapDispatchToProps = dispatch => ({});
 const BottomBarRedux = connect(mapStateToProps, mapDispatchToProps)(BottomBar);

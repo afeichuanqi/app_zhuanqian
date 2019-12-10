@@ -31,6 +31,7 @@ import EmptyComponent from '../common/EmptyComponent';
 import Toast from '../common/Toast';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import BackPressComponent from '../common/BackPressComponent';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
@@ -48,10 +49,14 @@ class ShopInfoPage extends PureComponent {
             attentionStatus: 0,
             userId: this.params.userid,
         };
-
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     componentDidMount() {
+        this.backPress.componentDidMount();
         this.updateShopInfo(this.params.userid);
         EventBus.getInstance().addListener(EventTypes.update_shopInfo_page, this.listener = data => {
             this.updateShopInfo(data.userId);
@@ -59,6 +64,7 @@ class ShopInfoPage extends PureComponent {
     }
 
     componentWillUnmount() {
+        this.backPress.componentWillUnmount();
         EventBus.getInstance().removeListener(this.listener);
     }
 
@@ -102,7 +108,7 @@ class ShopInfoPage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
 
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, `${this.state.shopInfo.username}的店铺`, null, bottomTheme, 'white', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `${this.state.shopInfo.username}的店铺`, null, bottomTheme, 'white', 16, () => {
         }, false);
         return (
             <SafeAreaViewPlus

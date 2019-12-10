@@ -24,6 +24,7 @@ import {connect} from 'react-redux';
 import {selectSendFormTaskList, selectSignUpList} from '../util/AppService';
 import FastImage from 'react-native-fast-image';
 import NavigationUtils from '../navigator/NavigationUtils';
+import BackPressComponent from '../common/BackPressComponent';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -33,8 +34,12 @@ class TaskReleaseMana extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {
         taskData: [],
         isLoading: false,
@@ -42,7 +47,7 @@ class TaskReleaseMana extends PureComponent {
     };
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
         this._updatePage(true);
     }
 
@@ -110,7 +115,7 @@ class TaskReleaseMana extends PureComponent {
     };
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     position = new Animated.Value(0);
@@ -125,7 +130,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, this.params.title, null, 'white', 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.params.title, null, 'white', 'black', 16, null, false);
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <SafeAreaViewPlus

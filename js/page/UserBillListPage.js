@@ -23,6 +23,7 @@ import EmptyComponent from '../common/EmptyComponent';
 import {connect} from 'react-redux';
 import {selectBillForUserId} from '../util/AppService';
 import NavigationUtils from '../navigator/NavigationUtils';
+import BackPressComponent from '../common/BackPressComponent';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -32,8 +33,12 @@ class TaskReleaseMana extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
-
+    onBackPress = () => {
+        NavigationUtils.goBack(this.props.navigation);
+        return true;
+    };
     state = {
         taskData: [],
         isLoading: false,
@@ -41,7 +46,7 @@ class TaskReleaseMana extends PureComponent {
     };
 
     componentDidMount() {
-
+        this.backPress.componentDidMount();
         this._updatePage(true);
     }
 
@@ -83,7 +88,7 @@ class TaskReleaseMana extends PureComponent {
     };
 
     componentWillUnmount() {
-
+        this.backPress.componentWillUnmount();
     }
 
     position = new Animated.Value(0);
@@ -100,7 +105,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this._goBackClick, '帐单', null, 'white', 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '帐单', null, 'white', 'black', 16, null, false);
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <SafeAreaViewPlus
@@ -109,40 +114,38 @@ class TaskReleaseMana extends PureComponent {
                 {navigationBar}
                 {TopColumn}
 
-                <View style={{flex: 1}}>
-                    <AnimatedFlatList
-                        style={{backgroundColor: '#f5f5f5', paddingTop: 5}}
-                        ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关帐单'}/>}
-                        ref={ref => this.flatList = ref}
-                        data={taskData}
-                        scrollEventThrottle={1}
-                        renderItem={data => this._renderIndexPath(data)}
-                        keyExtractor={(item, index) => index + ''}
-                        refreshControl={
-                            <RefreshControl
-                                title={'更新中'}
-                                refreshing={isLoading}
-                                onRefresh={this.onRefresh}
-                            />
+                <AnimatedFlatList
+                    style={{backgroundColor: '#f5f5f5', paddingTop: 5}}
+                    ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关帐单'}/>}
+                    ref={ref => this.flatList = ref}
+                    data={taskData}
+                    scrollEventThrottle={1}
+                    renderItem={data => this._renderIndexPath(data)}
+                    keyExtractor={(item, index) => index + ''}
+                    refreshControl={
+                        <RefreshControl
+                            title={'更新中'}
+                            refreshing={isLoading}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
+                    // onScroll={this._onScroll}
+                    ListFooterComponent={() => this.genIndicator(hideLoaded)}
+                    onEndReached={() => {
+                        console.log('onEndReached.....');
+                        // 等待页面布局完成以后，在让加载更多
+                        if (this.canLoadMore) {
+                            this.onLoading();
+                            this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                         }
-                        // onScroll={this._onScroll}
-                        ListFooterComponent={() => this.genIndicator(hideLoaded)}
-                        onEndReached={() => {
-                            console.log('onEndReached.....');
-                            // 等待页面布局完成以后，在让加载更多
-                            if (this.canLoadMore) {
-                                this.onLoading();
-                                this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                            }
-                        }}
-                        // onScrollEndDrag={this._onScrollEndDrag}
-                        windowSize={300}
-                        onEndReachedThreshold={0.01}
-                        onMomentumScrollBegin={() => {
-                            this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
-                        }}
-                    />
-                </View>
+                    }}
+                    // onScrollEndDrag={this._onScrollEndDrag}
+                    windowSize={300}
+                    onEndReachedThreshold={0.01}
+                    onMomentumScrollBegin={() => {
+                        this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
+                    }}
+                />
 
             </SafeAreaViewPlus>
         );

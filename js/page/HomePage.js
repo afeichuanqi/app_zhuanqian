@@ -10,6 +10,7 @@ import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
+import {StatusBar} from 'react-native';
 
 class HomePage extends PureComponent {
     constructor(props) {
@@ -31,6 +32,8 @@ class HomePage extends PureComponent {
     }
 
     render() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
