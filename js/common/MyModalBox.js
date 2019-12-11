@@ -7,11 +7,13 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Animated, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions,  Text, TouchableOpacity} from 'react-native';
+import Animated, {Easing} from 'react-native-reanimated'
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
+import {bottomTheme} from '../appSet';
 const {width} = Dimensions.get('window');
-
+const {timing} = Animated;
 class MyModalBox extends PureComponent {
     constructor(props) {
         super(props);
@@ -38,10 +40,10 @@ class MyModalBox extends PureComponent {
     }
 
     hide = () => {
-        this._anim = Animated.timing(this.animations.scale, {
-            duration: 200,
+        this._anim = timing(this.animations.scale, {
+            duration: 300,
             toValue: 0,
-            // easing: Easing.inOut(Easing.ease),
+            easing: Easing.inOut(Easing.ease),
         }).start(() => {
             this.setState({
                 visible: false,
@@ -54,11 +56,10 @@ class MyModalBox extends PureComponent {
         this.setState({
             visible: true,
         }, () => {
-            this._anim = Animated.timing(this.animations.scale, {
-                // useNativeDriver: true,
-                duration: 200,
+            this._anim = timing(this.animations.scale, {
+                duration: 300,
                 toValue: 1,
-                // easing: Easing.inOut(Easing.cubic),
+                easing: Easing.inOut(Easing.ease),
             }).start();
 
         });
@@ -69,13 +70,13 @@ class MyModalBox extends PureComponent {
 
     render() {
         const {visible} = this.state;
-        const {menuArr, rightTitle} = this.props;
+        const {rightTitle} = this.props;
         return (
 
             <Modal
                 transparent
                 visible={visible}
-                // animationType={'fade'}
+                animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 
@@ -99,17 +100,21 @@ class MyModalBox extends PureComponent {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
-
+                            backgroundColor: bottomTheme,
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5,
+                            paddingTop:20,
+                            paddingBottom:15,
 
                         }}>
                             <View style={{flexDirection:'row', alignItems:'flex-end'}}>
-                                <Text style={{fontSize: 16}}>{this.props.title}</Text>
+                                <Text style={{fontSize: 16,color:'white'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
                             <TouchableOpacity
                                 onPress={this.hide}>
-                                <SvgUri width={15} height={15} svgXmlData={cha}/>
+                                <SvgUri width={15} height={15} fill={'rgba(255,255,255,0.8)'} svgXmlData={cha}/>
                             </TouchableOpacity>
                         </View>
                         {this.props.children}
@@ -125,13 +130,7 @@ class MyModalBox extends PureComponent {
                                 }}>
                                 <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
                             </TouchableOpacity>
-                            <View
-                                style={{
-                                    height: 20,
-                                    width: 1.5,
-                                    backgroundColor: 'rgba(0,0,0,0.5)',
-                                    marginTop: 15,
-                                }}/>
+
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={this._sure}
@@ -140,8 +139,9 @@ class MyModalBox extends PureComponent {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     height: 50,
+                                    backgroundColor:bottomTheme,
                                 }}>
-                                <Text style={{color: 'red'}}>{rightTitle}</Text>
+                                <Text style={{color: 'white'}}>{rightTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </Animated.View>

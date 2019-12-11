@@ -41,6 +41,7 @@ class TaskOrdersMana extends PureComponent {
         super(props);
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -229,23 +230,15 @@ class FristListComponent extends PureComponent {
             cancelSignUp={() => {
                 this._cancelSignUp(item);
             }}
-            showRejection={() => {
-                this._showRejection(item);
-            }}
             onPress={() => {
-                this._itemClick(item);
+                if (this.props.status == 3) {
+                    NavigationUtils.goPage({item: item}, 'TaskRejectDetailsPage');
+                } else {
+                    NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
+                }
+
             }}
         />;
-    };
-    _showRejection = (item) => {
-        console.log(item.rejectionContent);
-        if (item.rejectionContent) {
-            this.toastReJection.show(JSON.parse(item.rejectionContent));
-        }
-        //
-    };
-    _itemClick = (item) => {
-        NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
     };
     _cancelSignUp = (item) => {
         const {userinfo} = this.props;
@@ -259,15 +252,15 @@ class FristListComponent extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多 ~ ~</Text>
+                <Text style={{marginLeft: 10}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
@@ -313,17 +306,10 @@ class FristListComponent extends PureComponent {
                 }}
                 windowSize={300}
                 onEndReachedThreshold={0.01}
-                onMomentumScrollBegin={() => {
+                onScrollBeginDrag={() => {
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
-            <ToastReJection
-                rightTitle={'确认'}
-                title={'驳回详情'}
-                sureClick={() => {
-                    this.toastSelect.hide();
-                }}
-                ref={ref => this.toastReJection = ref}/>
 
 
         </View>;
@@ -356,11 +342,11 @@ class OrdersItem extends React.Component {
                         resizeMode={FastImage.resizeMode.stretch}
                     />
                     {status == 1 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.task_title}</Text>
+                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
                         <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>到期时间:{item.orderExpTime}</Text>
                         <Text style={{color: 'red', fontSize: 13, marginTop: 5}}>请在{item.orderTimeTitle}内完成</Text>
                     </View> : status == 2 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.task_title}</Text>
+                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
                         <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核期限:{item.reviewExpTime}</Text>
                         <Text style={{
                             color: 'red',
@@ -368,8 +354,12 @@ class OrdersItem extends React.Component {
                             marginTop: 5,
                         }}>将在{item.reviewTimeTitle}内完成审核,期限外自动完成</Text>
                     </View> : status == 3 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.task_title}</Text>
+                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
                         <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
+                        {(item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) &&  <Text style={{fontSize: 13, marginTop: 5,color:'red'}}>
+                            请于 {item.orderExpTime} 之前重新提交
+                        </Text>}
+
                         <Text
                             ellipsizeMode={'tail'}
                             numberOfLines={2}
@@ -379,11 +369,16 @@ class OrdersItem extends React.Component {
                                 marginTop: 5,
                                 width: width - 130,
 
-                            }}>未通过理由:{JSON.parse(item.rejectionContent).turnDownInfo}
+                            }}>驳回理由:
+                            {JSON.parse(item.rejectionContent).image.length > 0 && JSON.parse(item.rejectionContent).image.map((item, index) => {
+                                return '</图片点击查看详细>';
+                            })}
+                            {item.rejectionContent && JSON.parse(item.rejectionContent).turnDownInfo}
                         </Text>
 
+
                     </View> : status == 4 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.task_title}</Text>
+                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
                         <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
                         <Text
                             ellipsizeMode={'tail'}
@@ -401,8 +396,8 @@ class OrdersItem extends React.Component {
 
                 </View>
 
-                <View>
-                    <Text style={{fontSize: 17, color: 'red'}}>+{item.reward_price}</Text>
+                <View style={{height:50, alignItems:'flex-start'}}>
+                    <Text style={{fontSize: 17, color: 'red'}}>+{item.reward_price}元</Text>
                 </View>
             </TouchableOpacity>
 
@@ -427,48 +422,52 @@ class OrdersItem extends React.Component {
                             {item.again_send_status == 1 ? <View
 
                                 style={{
-                                    width: 80, height: 25, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
-                                    borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
+                                    height: 25, justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: 5, marginTop: 5,
+
                                 }}>
                                 <Text style={{color: bottomTheme, fontSize: 12}}>已重新提交</Text>
                             </View> : item.again_send_status == 2 ? <View
 
                                 style={{
-                                    width: 80, height: 25, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
-                                    borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
+                                    height: 25, justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: 5, marginTop: 5,
+
                                 }}>
                                 <Text style={{color: bottomTheme, fontSize: 12}}>最终审核</Text>
-                            </View> : (item.isSignUpExp == 0 && item.align_num  <= 1) ?//当报名已经过期。且被拒绝次数小于或者等于1
+                            </View> : (item.isSignUpExp == 0 && item.align_num <= 1) ?//当报名已经过期。且被拒绝次数小于或者等于1
                                 <View
 
                                     style={{
-                                        width: 100, height: 25, justifyContent: 'center',
-                                        alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
-                                        borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
+                                        height: 25, justifyContent: 'center',
+                                        alignItems: 'center', borderRadius: 5, marginTop: 5,
+
                                     }}>
                                     <Text style={{color: bottomTheme, fontSize: 12}}>已放弃重新提交</Text>
                                 </View> : (item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) ?//当报名未过期。且被拒绝次数小于或者等于1
-                                <TouchableOpacity
-                                    onPress={this.props.onPress}
-                                    style={{
-                                        width: 60, height: 25, justifyContent: 'center',
-                                        alignItems: 'center', borderRadius: 5, marginTop: 5, marginRight: 10,
-                                        borderWidth: 1, borderColor: '#e8e8e8', backgroundColor: '#fafafa',
-                                    }}>
-                                    <Text style={{color: bottomTheme, fontSize: 12}}>重新提交</Text>
-                                </TouchableOpacity> : null}
+                                    <TouchableOpacity
+                                        onPress={this.props.onPress}
+                                        style={{
+                                            backgroundColor: bottomTheme,
+                                            width: 60,
+                                            height: 25,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            borderRadius: 5,
+                                            marginTop: 5,
+                                        }}>
+                                        <Text style={{color: 'white', fontSize: 12}}>重新提交</Text>
+                                    </TouchableOpacity> : null}
 
 
-                            <TouchableOpacity
-                                onPress={this.props.showRejection}
-                                style={{
-                                    backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 3, marginTop: 5,
-                                }}>
-                                <Text style={{color: 'white', fontSize: 12}}>具体理由</Text>
-                            </TouchableOpacity>
+                            {/*<TouchableOpacity*/}
+                            {/*    onPress={this.props.showRejection}*/}
+                            {/*    style={{*/}
+                            {/*        backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',*/}
+                            {/*        alignItems: 'center', borderRadius: 5, marginTop: 5,*/}
+                            {/*    }}>*/}
+                            {/*    <Text style={{color: 'white', fontSize: 12}}>具体理由</Text>*/}
+                            {/*</TouchableOpacity>*/}
                         </View>
                         : null}
             </View>

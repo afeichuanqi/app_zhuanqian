@@ -17,7 +17,6 @@ import {
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import SearchComponent from '../common/SearchComponent';
-import Animated from 'react-native-reanimated';
 import NavigationBar from '../common/NavigationBar';
 import NavigationUtils from '../navigator/NavigationUtils';
 import LabelBigComponent from '../common/LabelBigComponent';
@@ -43,7 +42,6 @@ class SearchPage extends PureComponent {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
-    position = new Animated.Value(0);
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
@@ -53,10 +51,13 @@ class SearchPage extends PureComponent {
     render() {
         let statusBar = {
             hidden: false,
+            backgroundColor: theme,//安卓手机状态栏背景颜色
+            barStyle: 'dark-content',
         };
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
+            style={{backgroundColor: theme}} // 背景颜色
         />;
         return (
             <SafeAreaViewPlus
@@ -75,7 +76,7 @@ class SearchPage extends PureComponent {
                 }}>
 
                     <SearchComponent
-                        placeholder={'搜索任务ID1'}
+                        placeholder={'搜索任务标题、任务ID'}
                         height={topIputHeight}
                         onFocus={null}
                     />

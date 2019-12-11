@@ -7,10 +7,12 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Animated, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import Animated, {Easing} from 'react-native-reanimated'
+const {timing} = Animated;
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
-
+import { bottomTheme} from '../appSet';
 const {width,height} = Dimensions.get('window');
 
 class MyModalBox extends PureComponent {
@@ -39,10 +41,10 @@ class MyModalBox extends PureComponent {
     }
 
     hide = () => {
-        this._anim = Animated.timing(this.animations.translateY, {
+        this._anim = timing(this.animations.translateY, {
             duration: 200,
             toValue: -height,
-            // easing: Easing.inOut(Easing.ease),
+            easing: Easing.inOut(Easing.ease),
         }).start(() => {
             this.setState({
                 visible: false,
@@ -55,11 +57,11 @@ class MyModalBox extends PureComponent {
         this.setState({
             visible: true,
         }, () => {
-            this._anim = Animated.timing(this.animations.translateY, {
+            this._anim = timing(this.animations.translateY, {
                 // useNativeDriver: true,
                 duration: 200,
                 toValue: 1,
-                // easing: Easing.inOut(Easing.cubic),
+                easing: Easing.inOut(Easing.cubic),
             }).start();
 
         });
@@ -100,20 +102,22 @@ class MyModalBox extends PureComponent {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
-                            backgroundColor: 'white',
+                            backgroundColor: bottomTheme,
                             borderTopLeftRadius: 5,
                             borderTopRightRadius: 5,
-                            paddingTop:20
+                            paddingTop:20,
+                            paddingBottom:15,
+
 
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: 16}}>{this.props.title}</Text>
+                                <Text style={{fontSize: 15,color:'white'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
                             <TouchableOpacity
                                 onPress={this.hide}>
-                                <SvgUri width={15} height={15} svgXmlData={cha}/>
+                                <SvgUri width={15} height={15} fill={'rgba(255,255,255,0.7)'} svgXmlData={cha}/>
                             </TouchableOpacity>
                         </View>
                         {this.props.children}
@@ -146,8 +150,10 @@ class MyModalBox extends PureComponent {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     height: 50,
+                                    backgroundColor:bottomTheme,
+
                                 }}>
-                                <Text style={{color: 'red'}}>{rightTitle}</Text>
+                                <Text style={{color: 'white'}}>{rightTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </Animated.View>

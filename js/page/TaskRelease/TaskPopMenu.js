@@ -27,25 +27,7 @@ class TaskPopMenu extends PureComponent {
 
     state = {
 
-        columnArr: [
-            // {
-            //     type: 1, typeData: {
-            //         title: '步骤说明',
-            //         placeholder: '适用于需要点击链接访问网页的操作，输入内容，提示打开网址注意事项',
-            //         onChangeText: () => {
-            //         },
-            //     },
-            // },
-            //
-            // {
-            //     type: 3, typeData: {
-            //         title: '输入网址',
-            //         placeholder: '适用于需要点击链接访问网页的操作，输入内容，提示打开网址注意事项',
-            //         onChangeText: () => {
-            //         },
-            //     },
-            // },
-        ],
+        columnArr: [],
         title: '复制数据',
         rightTitle: '添加',
 
@@ -77,20 +59,18 @@ class TaskPopMenu extends PureComponent {
     shoujixinxi = (text) => {
         this.inputData.collectInfo = text;
     };
-    getInputData = () => {
-        return this.inputData;
-    };
 
-    getColumnView = (type, typeData,index) => {
+
+    getColumnView = (type, typeData, index) => {
         switch (type) {
             case 1://步骤说明
                 return <View
                     key={1}
                     style={{
-                    paddingVertical: 10,
-                    width: width - 40,
-                    paddingHorizontal: 15,
-                }}>
+                        paddingVertical: 10,
+                        width: width - 40,
+                        paddingHorizontal: 15,
+                    }}>
                     <Text style={{fontSize: 13}}>{typeData.title}</Text>
                     <TextArea
                         ref={ref => this.textArea = ref}
@@ -107,10 +87,10 @@ class TaskPopMenu extends PureComponent {
                 return <View
                     key={2}
                     style={{
-                    paddingVertical: 10,
-                    width: width - 40,
-                    paddingHorizontal: 15,
-                }}>
+                        paddingVertical: 10,
+                        width: width - 40,
+                        paddingHorizontal: 15,
+                    }}>
                     <Text style={{fontSize: 13}}>{typeData.title}</Text>
                     <TextInputPro
                         ref={ref => this.textInputPro = ref}
@@ -137,10 +117,10 @@ class TaskPopMenu extends PureComponent {
                 return <View
                     key={3}
                     style={{
-                    paddingVertical: 10,
-                    width: width - 40,
-                    paddingHorizontal: 15,
-                }}>
+                        paddingVertical: 10,
+                        width: width - 40,
+                        paddingHorizontal: 15,
+                    }}>
                     <Text style={{fontSize: 13}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
@@ -157,10 +137,10 @@ class TaskPopMenu extends PureComponent {
                 return <View
                     key={4}
                     style={{
-                    paddingVertical: 10,
-                    width: width - 40,
-                    paddingHorizontal: 15,
-                }}>
+                        paddingVertical: 10,
+                        width: width - 40,
+                        paddingHorizontal: 15,
+                    }}>
                     <Text style={{fontSize: 13}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
@@ -179,10 +159,10 @@ class TaskPopMenu extends PureComponent {
                 return <View
                     key={5}
                     style={{
-                    paddingBottom: 10,
-                    width: width - 40,
-                    paddingHorizontal: 15,
-                }}>
+                        paddingBottom: 10,
+                        width: width - 40,
+                        paddingHorizontal: 15,
+                    }}>
                     <TextArea
                         ref={ref => this.textArea = ref}
                         value={this.inputData.collectInfo ? this.inputData.collectInfo : ''}
@@ -227,15 +207,14 @@ class TaskPopMenu extends PureComponent {
     };
 
     render() {
-        console.log(this.inputData,"this.inputData")
+        console.log(this.inputData, 'this.inputData');
         const Component = this.state.columnArr.map((item, index, arr) => {
-            return this.getColumnView(item.type, item.typeData,index);
+            return this.getColumnView(item.type, item.typeData, index);
         });
         return (
             <MyModal
                 ref={ref => this.myModal = ref}
                 rightTitle={this.state.rightTitle}
-                // cancel={}
                 sureClick={this._sureClick}
                 title={this.state.title}
                 style={{
@@ -244,7 +223,7 @@ class TaskPopMenu extends PureComponent {
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: 'white',
-                    padding: 10,
+                    // padding: 10,
                     borderRadius: 5,
                 }}>
                 {Component}
@@ -328,18 +307,26 @@ class TextInputPro extends PureComponent {
         this.props.onChangeText(text);
     };
     showAnimated = (show) => {
-        this._anim = timing(this.animations.width, {
-            duration: 200,
-            toValue: show ? 1 : 0,
-            easing: Easing.inOut(Easing.linear),
-        }).start();
+        // this._anim = timing(this.animations.width, {
+        //     duration: 200,
+        //     toValue: show ? 1 : 0,
+        //     easing: Easing.inOut(Easing.linear),
+        // }).start();
+        this.textInput.setNativeProps({
+            style: {
+                borderWidth:show? 1:0.3,
+                borderColor: show?`rgba(255, 0, 0, 1)`:'rgba(0,0,0,0.3)',
+            },
+        });
+
     };
     animations = {
         width: new Animated.Value(0),
     };
 
     render() {
-        return <AnimatedTextInput
+        return <TextInput
+            ref={ref => this.textInput = ref}
             autoCapitalize={'none'}
             autoComplete={'off'}
             autoCorrect={false}
@@ -349,16 +336,19 @@ class TextInputPro extends PureComponent {
             maxLength={300}
             multiline={false}
             placeholder={this.props.placeholder}
+            placeholderTextColor={'#727272'}
             style={{
                 height: 30,
-                backgroundColor: '#e8e8e8',
+                // backgroundColor: '#e8e8e8',
                 marginTop: 10,
                 fontSize: 13,
                 paddingHorizontal: 5,
                 borderRadius: 5,
                 padding: 0,
-                borderWidth: this.animations.width,
-                borderColor: `rgba(255, 0, 0, 1)`,
+                // borderWidth: this.animations.width,
+                // borderColor: `rgba(255, 0, 0, 1)`,
+                borderWidth: 0.3,
+                borderColor: 'rgba(0,0,0,0.3)',
             }}
         />;
     }
@@ -375,14 +365,15 @@ class ImageSelect extends PureComponent {
     showAnimated = (show) => {
         this.btn.setNativeProps({
             style: {
-                borderColor: show ? 'red' : 'rgba(0,0,0,0.6)',
+                borderColor: show ? 'red' : 'rgba(0,0,0,0.3)',
+                borderWidth: show ? 1 : 0.3,
             },
         });
-        this._anim = timing(this.animations.width, {
-            duration: 200,
-            toValue: show ? 1 : 0.6,
-            easing: Easing.inOut(Easing.linear),
-        }).start();
+        // this._anim = timing(this.animations.width, {
+        //     duration: 200,
+        //     toValue: show ? 1 : 0.6,
+        //     easing: Easing.inOut(Easing.linear),
+        // }).start();
     };
     animations = {
         width: new Animated.Value(0),
@@ -399,7 +390,7 @@ class ImageSelect extends PureComponent {
         //     extrapolate: 'clamp',
         // });
         return <View>
-            <AnimatedTouchableOpacity
+            <TouchableOpacity
                 ref={ref => this.btn = ref}
                 onPress={() => {
                     this.pickerImg.show();
@@ -409,14 +400,16 @@ class ImageSelect extends PureComponent {
                     marginTop: 10,
                     width: this.props.width,
                     height: this.props.height,
-                    backgroundColor: '#e8e8e8',
+                    // backgroundColor: '#e8e8e8',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderWidth: this.animations.width,
-                    borderColor: 'rgba(0,0,0,0.6)',
+                    borderWidth: 0.3,
+                    borderColor: 'rgba(0,0,0,0.3)',
+                    borderRadius: 5,
+
                     // borderWidth:1, borderColor:'rgba(255,0,0,1)',
                 }}>
-                {this.state.image  ?
+                {this.state.image ?
                     <Image
                         // key={`image-${index}`}
                         style={{
@@ -428,7 +421,7 @@ class ImageSelect extends PureComponent {
                     />
                     :
                     <SvgUri width={50} height={50} svgXmlData={add_image}/>}
-            </AnimatedTouchableOpacity>
+            </TouchableOpacity>
             <PickerImage includeBase64={false} cropping={false} select={this._selectImg}
                          ref={ref => this.pickerImg = ref}/>
         </View>;
@@ -458,11 +451,18 @@ class TextArea extends PureComponent {
         this.props.onChangeText(text);
     };
     showAnimated = (show) => {
-        this._anim = timing(this.animations.width, {
-            duration: 200,
-            toValue: show ? 1 : 0,
-            easing: Easing.inOut(Easing.linear),
-        }).start();
+        // this._anim = timing(this.animations.width, {
+        //     duration: 200,
+        //     toValue: show ? 1 : 0,
+        //     easing: Easing.inOut(Easing.linear),
+        // }).start();
+        this.textInput.setNativeProps({
+            style: {
+                borderWidth: show ? 1 : 0.3,
+                borderColor: show ? `rgba(255, 0, 0, 1)` : 'rgba(0,0,0,0.3)',
+            },
+        });
+
     };
     animations = {
         width: new Animated.Value(0),
@@ -471,7 +471,8 @@ class TextArea extends PureComponent {
     render() {
 
         return <View>
-            <AnimatedTextInput
+            <TextInput
+                ref={ref => this.textInput = ref}
                 autoCapitalize={'none'}
                 autoComplete={'off'}
                 autoCorrect={false}
@@ -481,18 +482,21 @@ class TextArea extends PureComponent {
                 maxLength={this.props.length}
                 multiline={true}
                 placeholder={this.props.placeholder}
-
+                placeholderTextColor={'#727272'}
                 style={{
                     height: 80,
-                    backgroundColor: '#e8e8e8',
+                    // backgroundColor: '#e8e8e8',
+
                     marginTop: 10,
                     fontSize: 13,
                     paddingHorizontal: 5,
                     borderRadius: 5,
                     padding: 0,
                     textAlignVertical: 'top',
-                    borderWidth: this.animations.width,
-                    borderColor: `rgba(255, 0, 0, 1)`,
+
+                    borderWidth: 0.3,
+                    borderColor: 'rgba(0,0,0,0.3)',
+                    // borderColor: `rgba(255, 0, 0, 1)`,
 
                 }}
             />

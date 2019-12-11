@@ -108,12 +108,15 @@ export default class FlatListCommonUtil extends PureComponent {
             windowSize={300}
             onEndReachedThreshold={0.3}
             onScrollEndDrag={onScrollEndDrag}
-            onScrollBeginDrag={onScrollBeginDrag}
-            onMomentumScrollEnd={onMomentumScrollEnd}
-
-            onMomentumScrollBegin={(e) => {
+            onScrollBeginDrag={event=>{
+                onScrollBeginDrag(event);
                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
             }}
+            onMomentumScrollEnd={onMomentumScrollEnd}
+
+            // onScrollBeginDrag={(e) => {
+            //
+            // }}
         />;
     }
 
@@ -131,15 +134,15 @@ export default class FlatListCommonUtil extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
                 <Text style={{marginLeft: 10}}>正在加载更多</Text>
             </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10}}>没有更多了哦</Text>
+                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 

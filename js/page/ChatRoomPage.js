@@ -33,6 +33,7 @@ class TaskInfo extends React.Component {
                 taskInfo,
             });
         });
+
     }
 
     render() {
@@ -119,18 +120,17 @@ class ChatRoomPage extends React.Component {
     };
     componentDidMount(): void {
         this.backPress.componentDidMount();
-
         this._updatePage(this.columnType, this.task_id, this.fromUserinfo.id);
+
 
     }
     _updatePage = (columnType, task_id, toUserid) => {
-        // console.log(toUserid,"task_id");
         isFriendChat({
             columnType,
             taskid: task_id,
             toUserid: toUserid,
         }, this.props.userinfo.token).then(result => {
-            console.log(result, 'result');
+            // console.log(result, 'result');
             if (result.id) {
                 this.FriendId = result.id;
                 // console.log(this.FriendId, 'this.chatId ');

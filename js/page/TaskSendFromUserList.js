@@ -36,6 +36,7 @@ class TaskReleaseMana extends PureComponent {
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -69,7 +70,7 @@ class TaskReleaseMana extends PureComponent {
                 task_id: taskid,
                 pageIndex: this.page.pageIndex,
             }, userinfo.token).then(result => {
-                console.log(result);
+                // console.log(result);
                 if (isRefresh) {
                     this.setState({
                         taskData: result,
@@ -105,6 +106,7 @@ class TaskReleaseMana extends PureComponent {
                         taskData: tmpArr.concat(result),
                         hideLoaded: result.length >= 10 ? false : true,
                     });
+
                 }
 
             }).catch(msg => {
@@ -158,7 +160,8 @@ class TaskReleaseMana extends PureComponent {
                         // onScroll={this._onScroll}
                         ListFooterComponent={() => this.genIndicator(hideLoaded)}
                         onEndReached={() => {
-                            console.log('onEndReached.....');
+                            // console.log('onEndReached.....');
+                            // console.log(this.canLoadMore);
                             // 等待页面布局完成以后，在让加载更多
                             if (this.canLoadMore) {
                                 this.onLoading();
@@ -168,7 +171,12 @@ class TaskReleaseMana extends PureComponent {
                         // onScrollEndDrag={this._onScrollEndDrag}
                         windowSize={300}
                         onEndReachedThreshold={0.01}
-                        onMomentumScrollBegin={() => {
+                        // onMomentumScrollBegin={() => {
+                        //     console.log('onMomentumScrollBegin');
+                        //
+                        // }}
+                        onScrollBeginDrag={()=>{
+                            // console.log("onScrollBeginDrag");
                             this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                         }}
                     />
@@ -178,10 +186,12 @@ class TaskReleaseMana extends PureComponent {
         );
     }
 
+    // canLoadMore = true;
     onRefresh = () => {
         this._updatePage(true);
     };
     onLoading = () => {
+        // console.log('我被触发');
         this._updatePage(false);
     };
     _renderIndexPath = ({item, index}) => {
@@ -239,15 +249,15 @@ class TaskReleaseMana extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多 ~ ~</Text>
+                <Text style={{marginLeft: 10}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }

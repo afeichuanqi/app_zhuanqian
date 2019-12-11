@@ -239,6 +239,7 @@ class HomePage extends PureComponent {
                     onScroll={this._onScroll}
                     onLoad={this._onLoad}
                     translateY={this.translateY}
+                    showAnimated={this.showAnimated}
                 />;
             case 'second':
                 return <SecondListComponent
@@ -246,6 +247,7 @@ class HomePage extends PureComponent {
                     onScroll={this._onScroll}
                     onLoad={this._onLoad}
                     translateY={this.translateY}
+                    showAnimated={this.showAnimated}
                 />;
 
         }
@@ -255,7 +257,28 @@ class HomePage extends PureComponent {
         this.flatListLoad = refresh;
     };
     AnimatedIsshow = false;
-    lastScrollTitle = 0;
+    showAnimated = (show) => {
+        if (show) {
+            if (!this.AnimatedIsshow) {
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 1,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = true;
+
+            }
+        } else {
+            if (this.AnimatedIsshow) {
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 0,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = false;
+            }
+        }
+    };
     _iosShowAnimated = (y) => {
         if (y > this.nowY && y > 0) {
 
@@ -270,7 +293,7 @@ class HomePage extends PureComponent {
             }
         }
         //
-        if (y < this.nowY ) {
+        if (y < this.nowY) {
             if (this.AnimatedIsshow) {
                 // this.lastScrollTitle = Date.now();
                 timing(this.animations.val, {
@@ -287,39 +310,36 @@ class HomePage extends PureComponent {
     _androidShowAnimated = (y) => {
         // if (this.lastScrollTitle + 800 < Date.now()) {
         //     this.lastScrollTitle = Date.now();
-            if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+        if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+            timing(this.animations.val, {
+                duration: 300,
+                toValue: 0,
+                easing: Easing.inOut(Easing.ease),
+            }).start();
+            this.AnimatedIsshow = false;
+            return;
+        }
+        if (y < this.nowY) {
+            if (this.AnimatedIsshow) {
                 timing(this.animations.val, {
                     duration: 300,
                     toValue: 0,
                     easing: Easing.inOut(Easing.ease),
                 }).start();
                 this.AnimatedIsshow = false;
-                return;
             }
-            if (y < this.nowY) {
-                if (this.AnimatedIsshow) {
-                    timing(this.animations.val, {
-                        duration: 300,
-                        toValue: 0,
-                        easing: Easing.inOut(Easing.ease),
-                    }).start();
-                    this.AnimatedIsshow = false;
-                }
+        }
+        if (y > this.nowY) {
+            if (!this.AnimatedIsshow) {
+                timing(this.animations.val, {
+                    duration: 300,
+                    toValue: 1,
+                    easing: Easing.inOut(Easing.ease),
+                }).start();
+                this.AnimatedIsshow = true;
+
             }
-            if (y > this.nowY) {
-                if (!this.AnimatedIsshow) {
-                    timing(this.animations.val, {
-                        duration: 300,
-                        toValue: 1,
-                        easing: Easing.inOut(Easing.ease),
-                    }).start();
-                    this.AnimatedIsshow = true;
-
-                }
-            }
-
-
-        // }
+        }
     };
     _onScroll = (y) => {
         if (Platform.OS === 'android') {
@@ -327,8 +347,6 @@ class HomePage extends PureComponent {
         } else {
             this._iosShowAnimated(y);
         }
-
-
         this.nowY = y;
     };
     SearchOnFocus = () => {
@@ -356,26 +374,54 @@ class FristListComponent extends PureComponent {
             ;
     };
     scrollY = new Animated.Value(0);
-    AnimatedEvent = Animated.event(
-        [
-            {
-                nativeEvent: {
-                    contentOffset: {
-                        y: y =>
-                            Animated.block([
-                                Animated.call(
-                                    [y],
-                                    ([offsetY]) => (this.props.onScroll(offsetY)),
-                                ),
-                            ]),
-                    },
-                },
-            },
-        ],
-        {
-            useNativeDriver: true,
-        },
-    );
+    // AnimatedEvent = Animated.event(
+    //     [
+    //         {
+    //             nativeEvent: {
+    //                 contentOffset: {
+    //                     y: y =>
+    //                         Animated.block([
+    //                             Animated.call(
+    //                                 [y],
+    //                                 ([offsetY]) => (this.props.onScroll(offsetY)),
+    //                             ),
+    //                         ]),
+    //                 },
+    //             },
+    //         },
+    //     ],
+    //     {
+    //         useNativeDriver: true,
+    //     },
+    // );
+
+    _onScroll = (event) => {
+        const y = event.nativeEvent.contentOffset.y;
+        const {showAnimated} = this.props;
+        if (Platform.OS === 'android') {
+
+            if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+                showAnimated(false)
+            }
+            if (y < this.nowY) {
+                showAnimated(false)
+            }
+            if (y > this.nowY) {
+                showAnimated(true)
+            }
+        } else {
+            if (y > this.nowY && y > 0) {
+                showAnimated(true);
+            }
+            //
+            if (y < this.nowY) {
+                showAnimated(false);
+            }
+        }
+        this.nowY = y;
+    };
+
+
     render() {
         const containerWidth = width - 20;
         const {lunboData} = this.state;
@@ -390,8 +436,8 @@ class FristListComponent extends PureComponent {
             <View style={{height: 30}}/>
             <FlatListCommonUtil
                 style={{zIndex: -100, elevation: -100}}
-                onScrollBeginDrag={this.AnimatedEvent}
-                onScrollEndDrag={this.AnimatedEvent}
+                onScrollBeginDrag={this._onScroll}
+                onScrollEndDrag={this._onScroll}
                 onScroll={Animated.event([
                     {
                         nativeEvent: {
@@ -438,9 +484,10 @@ class FristListComponent extends PureComponent {
                 // onScroll={}
             />
             <Animated.View style={{
-                width, height: 40, justifyContent: 'center', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}],
+                width, height: 40, justifyContent: 'space-between', position: 'absolute',
+                backgroundColor: 'white', transform: [{translateY: columnTop}]
             }}>
+                <View style={{height:8}}/>
                 <Text
                     style={{
                         fontSize: 12,
@@ -454,6 +501,7 @@ class FristListComponent extends PureComponent {
                     height: 1,
                     marginLeft: 15,
                     marginTop: 10,
+                    // alignSelf:'flex-end',
                 }}/>
             </Animated.View>
         </Animated.View>;

@@ -754,6 +754,27 @@ export function setUserData(data, token) {
 }
 
 /**
+ * 获取用户信息
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function getUserInfoForToken(token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setGetHeader('token', token);
+            const ret = await http.get('user/getUserInfo');
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
  * 查询用户店铺详情
  * @param data
  * @param token

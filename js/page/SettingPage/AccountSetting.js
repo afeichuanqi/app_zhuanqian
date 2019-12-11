@@ -71,7 +71,8 @@ class AccountSetting extends PureComponent {
                     }, userinfo.login ? userinfo.userid : '', false)}
 
                     {ViewUtil.getSettingMenu('昵称', () => {
-                        this.myModalBox.show();
+                        NavigationUtils.goPage({},'UpdateUserName')
+                        // this.myModalBox.show();
                     }, userinfo.login ? userinfo.username : '')}
                     {ViewUtil.getSettingMenu('性别', () => {
                         this.pickerSex.show();
@@ -97,48 +98,7 @@ class AccountSetting extends PureComponent {
                     <Text style={{color: 'red'}}>退出当前账号</Text>
                 </TouchableOpacity>
                 <PickerSex select={this._sexSelect} ref={ref => this.pickerSex = ref} popTitle={'性别'}/>
-                <MyModalBox title={'修改昵称'} style={{
-                    // height:
-                    width: width - 40,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    padding: 10,
-                    borderRadius: 5,
-                }}
-                            sureClick={this._sureClick}
-                            rightTitle={'修改'}
-                            ref={ref => this.myModalBox = ref}>
-                    <View style={{
-                        paddingBottom: 10,
-                        width: width - 40,
-                        paddingHorizontal: 15,
-                    }}>
-                        <TextInput
-                            ref={ref => this.textInput = ref}
-                            autoCapitalize={'none'}
-                            autoComplete={'off'}
-                            autoCorrect={false}
-                            blurOnSubmit={false}
-                            onChangeText={this._onChangeText}
-                            maxLength={15}
-                            multiline={true}
 
-                            style={{
-                                height: 50,
-                                backgroundColor: '#f7f7f7',
-                                marginTop: 10,
-                                fontSize: 13,
-                                paddingHorizontal: 5,
-                                borderRadius: 5,
-                                padding: 0,
-                                textAlignVertical: 'top',
-                            }}
-
-                        />
-                    </View>
-
-                </MyModalBox>
             </SafeAreaViewPlus>
         );
     }
@@ -148,25 +108,7 @@ class AccountSetting extends PureComponent {
         NavigationUtils.goBack(this.props.navigation)
     };
     username = '';
-    _sureClick = () => {
-        if (this.username.length == 0) {
-            this.textInput.setNativeProps({
-                style: {borderWidth: 1, borderColor: `rgba(255, 0, 0, 1)`},
-            });
-        } else {
-            this.textInput.setNativeProps({
-                style: {borderWidth: 0},
-            });
-            const {onSetUserName, userinfo} = this.props;
-            onSetUserName(userinfo.token, this.username, () => {
-                this.myModalBox.hide();
-                this.username = '';
-            });
-        }
-    };
-    _onChangeText = (text) => {
-        this.username = text;
-    };
+
     _sexSelect = (sex) => {
         const {onSetUserSex, userinfo} = this.props;
         onSetUserSex(userinfo.token, sex, () => {
@@ -181,7 +123,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     onSetUserSex: (token, value, callback) => dispatch(actions.onSetUserSex(token, value, callback)),
-    onSetUserName: (token, value, callback) => dispatch(actions.onSetUserName(token, value, callback)),
+    // onSetUserName: (token, value, callback) => dispatch(actions.onSetUserName(token, value, callback)),
     onClearUserinfoAll: () => dispatch(actions.onClearUserinfoAll()),
 });
 const AccountSettingRedux = connect(mapStateToProps, mapDispatchToProps)(AccountSetting);

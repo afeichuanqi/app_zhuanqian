@@ -7,13 +7,13 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
 
 
 const {timing} = Animated;
-const { height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 class TaskMenu extends PureComponent {
     constructor(props) {
@@ -76,7 +76,7 @@ class TaskMenu extends PureComponent {
 
     };
     animations = {
-        top: new Animated.Value(height+250),
+        top: new Animated.Value(height + 250),
         left: new Animated.Value(0),
     };
 
@@ -125,7 +125,7 @@ class TaskMenu extends PureComponent {
                             left: 83,
                         }}/>
                         {this.props.menuArr.length > 0 && this.props.menuArr.map((item, index, arr) => {
-                            return this.genMenu(item.title, item.svg, item.click,index);
+                            return this.genMenu(item.title, item.svg, item.click, index);
                         })}
 
 
@@ -136,7 +136,7 @@ class TaskMenu extends PureComponent {
         );
     }
 
-    genMenu = (title, svgXmlData, click,index) => {
+    genMenu = (title, svgXmlData, click, index) => {
         return <TouchableOpacity
             key={index}
             activeOpacity={0.6}

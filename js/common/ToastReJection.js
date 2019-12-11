@@ -12,7 +12,7 @@ import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import Image from 'react-native-fast-image';
 import ImageViewerModal from './ImageViewerModal';
-
+import {theme, bottomTheme} from '../appSet';
 const {width, height} = Dimensions.get('window');
 
 class MyModalBox extends PureComponent {
@@ -106,24 +106,24 @@ class MyModalBox extends PureComponent {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
-                            backgroundColor: 'white',
-                            borderTopLeftRadius: 2,
-                            borderTopRightRadius: 2,
-                            paddingTop: 15,
+                            backgroundColor: bottomTheme,
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5,
+                            height:50, alignItems:'center',
 
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: 16, color: 'red'}}>{this.props.title}</Text>
+                                <Text style={{fontSize: 15, color: 'white'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
                             <TouchableOpacity
                                 onPress={this.hide}>
-                                <SvgUri width={15} height={15} svgXmlData={cha}/>
+                                <SvgUri width={15} height={15} fill={'rgba(255,255,255,0.7)'} svgXmlData={cha}/>
                             </TouchableOpacity>
                         </View>
-                        <View style={{backgroundColor: 'white', paddingHorizontal: 15, paddingVertical: 10}}>
-                            <Text style={{width: width - 70,}}>{this.state.rejection.turnDownInfo}</Text>
+                        <View style={{backgroundColor: 'white', paddingHorizontal: 15, paddingVertical: 30}}>
+                            <Text style={{width: width - 70, opacity:0.8,fontSize:15}}>{this.state.rejection.turnDownInfo}</Text>
                             {this.state.rejection.image && this.state.rejection.image.length > 0 &&
                             <View style={{flexDirection: 'row', marginTop: 30}}>
                                 {this.state.rejection.image.map((item, index, arr) => {
@@ -139,6 +139,7 @@ class MyModalBox extends PureComponent {
                                                 width: 55, height: 55,
                                                 borderRadius: 0,
                                                 marginRight: 10,
+                                                backgroundColor:'#e8e8e8',
                                             }}
                                         />
                                     </TouchableOpacity>;
@@ -150,7 +151,7 @@ class MyModalBox extends PureComponent {
                         <ImageViewerModal ref={ref => this.imgModal = ref}/>
                         <View style={{
                             flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',
-                            borderBottomLeftRadius: 2, borderBottomRightRadius: 2,
+                            borderBottomLeftRadius: 5, borderBottomRightRadius: 5, borderTopWidth:0.3, borderTopColor:'#e1e1e1',
                         }}>
                             <TouchableOpacity
                                 activeOpacity={0.6}
@@ -163,7 +164,7 @@ class MyModalBox extends PureComponent {
                                 }}>
                                 <Text style={{color: 'rgba(0,0,0,0.7)'}}>取消</Text>
                             </TouchableOpacity>
-
+                            <View style={{height:50,width:0.5, backgroundColor:'#e8e8e8'}}/>
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={this._sure}
@@ -172,8 +173,9 @@ class MyModalBox extends PureComponent {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     height: 50,
+                                    // backgroundColor:'white',
                                 }}>
-                                <Text style={{color: 'red'}}>{rightTitle}</Text>
+                                <Text style={{color: bottomTheme}}>{rightTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </Animated.View>

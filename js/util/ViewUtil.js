@@ -8,7 +8,7 @@ import menu_right from '../res/svg/menu_right.svg';
 
 const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
-    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14, rightClick, isShowRightSvg = true) => {
+    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14, rightClick, isShowRightSvg = true, isShowRightText = false, rightText = '') => {
         return (
             <View style={{
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
@@ -24,14 +24,15 @@ export default class ViewUtil {
 
                 </TouchableOpacity>
                 <View>
-                    <Text style={{color: fontColor, fontSize}}>{title}</Text>
+                    <Text style={{color: fontColor, fontSize, fontWeight:'bold'}}>{title}</Text>
                 </View>
                 <TouchableOpacity
                     onPress={rightClick}
                     activeOpacity={0.6}
                     style={{justifyContent: 'center'}}>
-                    {isShowRightSvg&&<SvgUri width={24} height={24} fill={fontColor} svgXmlData={rightSvg || message_more}/>}
-
+                    {isShowRightSvg &&
+                    <SvgUri width={24} height={24} fill={fontColor} svgXmlData={rightSvg || message_more}/>}
+                    {isShowRightText && <Text style={{marginTop:5}}>{rightText}</Text>}
 
 
                 </TouchableOpacity>
@@ -48,7 +49,7 @@ export default class ViewUtil {
      * @param menuinfo 菜单说明
      * @param click
      */
-    static getSettingItem = (menuSvg, title, menuinfo,click) => {
+    static getSettingItem = (menuSvg, title, menuinfo, click) => {
         return (
             <TouchableOpacity
                 onPress={click}
@@ -137,24 +138,24 @@ export default class ViewUtil {
     static getReviewIco = (reviewNum, click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 15}}>
             <Image
-                style={{height: 13, width: 13}}
+                style={{height: 15, width: 15}}
                 source={require('../res/img/task_release_review.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
+            <Text style={{fontSize: 13, marginLeft: 3, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
 
         </TouchableOpacity>;
     };
     static getzhidingIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 15}}>
             <Image
-                style={{height: 13, width: 13}}
+                style={{height: 15, width: 15}}
                 source={require('../res/img/task_top.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
+            <Text style={{fontSize: 13, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
 
         </TouchableOpacity>;
     };
@@ -162,25 +163,25 @@ export default class ViewUtil {
         return <TouchableOpacity
 
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 15}}>
             <Image
-                style={{height: 13, width: 13}}
+                style={{height: 15, width: 15}}
                 source={require('../res/img/task_recommended.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+            <Text style={{fontSize: 13, marginLeft: 3, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
     };
     static getUpdateIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 14}}>
 
             <Image
                 style={{height: 13, width: 13}}
                 source={require('../res/img/task_update.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+            <Text style={{fontSize: 13, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
     };

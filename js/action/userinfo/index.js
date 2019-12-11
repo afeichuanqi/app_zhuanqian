@@ -1,5 +1,5 @@
 import Types from '../Types';
-import {verifyCode, uploadAvatar, setUserData} from '../../util/AppService';
+import {verifyCode, uploadAvatar, setUserData, getUserInfoForToken} from '../../util/AppService';
 
 /**
  * 账户登录
@@ -18,13 +18,15 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
             device_system_version,
             device_is_tablet,
         }).then((data) => {
-            callback(true,data);
+            callback(true, data);
             dispatch({
                 type: Types.LOGIN_SUCCESS,
                 data: data,
             });
         }).catch(msg => {
+
             callback(false, {msg});
+            dispatch({type: Types.LOGIN_FAIL});
         });
 
     };
@@ -36,7 +38,7 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
  */
 export function onUploadAvatar(token, data, callback) {
     return dispatch => {
-        dispatch({type: Types.UPLOAD_AVATAR_LOADING,data: {avatar_url: ''},});
+        dispatch({type: Types.UPLOAD_AVATAR_LOADING, data: {avatar_url: ''}});
         uploadAvatar(data, token).then((data) => {
             callback(true, data);
             console.log(data, 'data');
@@ -62,10 +64,8 @@ export function onSetUserSex(token, value, callback) {
     return dispatch => {
         dispatch({type: Types.UPLOAD_USER_SEX_LOADING});
         setUserData(data, token).then((data) => {
-            // console.log();
             callback(true, data);
             console.log('修改成功拉');
-            // console.log(data, 'data');
             dispatch({
                 type: Types.UPLOAD_USER_SEX_SUCCESS,
                 data: {sex: value},
@@ -97,17 +97,41 @@ export function onSetUserName(token, value, callback) {
                 data: {username: value},
             });
         }).catch((msg) => {
+
             callback(false, {msg});
         });
 
     };
 }
+
 /**
  *  清空账号信息
  * @returns {{theme: *, type: string}}
  */
 export function onClearUserinfoAll() {
-    return {type: Types.CLEAR_USERINFO_ALL}
+    return {type: Types.CLEAR_USERINFO_ALL};
 }
 
+/**
+ * 根据token获取用户基本信息
+ */
+
+export function onGetUserInFoForToken(token, callback) {
+
+    return dispatch => {
+        dispatch({type: Types.GET_USER_INFO_LOADING});
+        getUserInfoForToken(token).then((data) => {
+            callback(true, data);
+            dispatch({
+                type: Types.GET_USER_INFO_SUCCESS,
+                data,
+            });
+        }).catch((msg) => {
+
+            callback(false, {msg});
+            dispatch({type: Types.GET_USER_INFO_FAIL});
+        });
+
+    };
+}
 

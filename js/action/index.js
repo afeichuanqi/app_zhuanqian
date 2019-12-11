@@ -1,4 +1,4 @@
-import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll} from './userinfo';
+import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken} from './userinfo';
 import {verifyIdentIdy,setConnectionStatus,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus} from './message';
 import {onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
@@ -9,6 +9,7 @@ export default {
     onSetUserSex,
     onSetUserName,
     onClearUserinfoAll,
+    onGetUserInFoForToken,
     //socket
     verifyIdentIdy,
     setConnectionStatus,

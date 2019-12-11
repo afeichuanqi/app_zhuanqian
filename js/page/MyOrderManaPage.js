@@ -560,7 +560,7 @@ class UpdateTaskPrice extends PureComponent {
     render() {
         const {rewardNum, rewardPrice} = this.props;
         const {price, error} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20, paddingBottom:10}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text>当前数量：</Text>
                 <Text style={{color: 'red'}}>{rewardNum}</Text>
@@ -617,7 +617,7 @@ class UpdateTaskNum extends PureComponent {
     render() {
         const {rewardPrice} = this.props;
         const {price, error} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20,paddingBottom:10}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text>当前价格：</Text>
                 <Text style={{color: 'red'}}>{rewardPrice}元</Text>

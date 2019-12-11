@@ -19,7 +19,7 @@ export default class TaskReleaseItem extends PureComponent {
                     flexDirection: 'row',
                     paddingHorizontal: 10,
                     paddingTop: 18,
-                    height: 70,
+                    height: 80,
                     backgroundColor: 'white',
                 }}
             >
@@ -32,22 +32,22 @@ export default class TaskReleaseItem extends PureComponent {
                 <View style={{
                     position: 'absolute',
                     top: 20,
-                    left: 55,
+                    left: 70,
                     flexDirection: 'row',
                 }}>
                     <Text style={{
-                        fontSize: titleFontSize,
+                        fontSize: 14,
                         color: 'black',
                     }}>{`${item.id} - ${item.task_title}`}</Text>
                 </View>
                 {/*左下*/}
                 <View style={{
                     position: 'absolute',
-                    bottom: 12,
-                    left: 55,
+                    bottom: 13,
+                    left: 70,
                     flexDirection: 'row',
                 }}>
-                    <LabelBigComponent paddingVertical={1} fontSize={10} title={item.task_name}/>
+                    <LabelBigComponent paddingVertical={1} fontSize={12} title={item.task_name}/>
                 </View>
                 {/*右上*/}
                 <View style={{
@@ -56,27 +56,27 @@ export default class TaskReleaseItem extends PureComponent {
                     right: 10,
                 }}>
                     <Text style={{
-                        fontSize: 15,
+                        fontSize: 16,
                         color: 'red',
                     }}>+{item.reward_price}元</Text>
                 </View>
                 {/*右下*/}
                 <View style={{
                     position: 'absolute',
-                    bottom: 10,
+                    bottom: 13,
                     right: 10,
                     alignItems: 'center',
                     flexDirection: 'row',
                 }}>
                     <Text style={{
-                        fontSize: 11,
+                        fontSize: 12,
                         // color:''
                         opacity: 0.5,
                         // fontWeight: '100',
                     }}>进行中:{item.task_ing_num}</Text>
                     <View style={{height: 10, width: 1, marginHorizontal: 5, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                     <Text style={{
-                        fontSize: 11,
+                        fontSize: 12,
                         // color:''
                         opacity: 0.5,
                         // fontWeight: '100',
@@ -84,7 +84,7 @@ export default class TaskReleaseItem extends PureComponent {
                 </View>
             </TouchableOpacity>
             {(this.props.task_status == 0 || this.props.task_status == 2)? <View style={{
-                height: 25,
+                height: 28,
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
@@ -93,11 +93,11 @@ export default class TaskReleaseItem extends PureComponent {
             }}>
 
                 {ViewUtil.getReviewIco(parseInt(item.review_num), this._reViewClick)}
-                <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 15, width: 1, marginHorizontal: 8, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getzhidingIco(this.props.setTopClick)}
-                <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 15, width: 1, marginHorizontal: 8, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getrecommendedIco(this.props.setRecommendClick)}
-                <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 15, width: 1, marginHorizontal: 8, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getUpdateIco(this.props.updateTaskUpdateTime)}
             </View> : this.props.task_status == 1 ? <View style={{
                 height: 25,
@@ -135,9 +135,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: bottomTheme,
         // 设置宽度
-        width: 38,
-        height: 40,
-        borderRadius: 3,
+        width:49,
+        height: 52,
+        borderRadius: 5,
         // 设置高度
         // height:150
     },

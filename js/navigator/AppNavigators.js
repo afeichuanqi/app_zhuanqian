@@ -32,6 +32,8 @@ import TaskOrdersMana from '../page/TaskOrdersMana';
 import HisAttentionList from '../page/HisAttentionList';
 import UserBillListPage from '../page/UserBillListPage';
 import FriendPromotionPage from '../page/FriendPromotionPage';
+import UpdateUserName from '../page/SettingPage/UpdateUserName';
+import TaskRejectDetailsPage from '../page/TaskRejectDetailsPage';
 // import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator'
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -203,6 +205,18 @@ const MainNavigator = createStackNavigator({
         },
         FriendPromotionPage: {
             screen: FriendPromotionPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        UpdateUserName: {
+            screen: UpdateUserName,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        TaskRejectDetailsPage: {
+            screen: TaskRejectDetailsPage,
             navigationOptions: {
                 header: null,
             },

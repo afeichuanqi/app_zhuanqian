@@ -59,29 +59,32 @@ class SecondListComponent extends PureComponent {
         </TouchableOpacity>;
     };
     scrollY = new Animated.Value(0);
-    // scrollY_ = new Animated.Value(0);
-    AnimatedEvent = Animated.event(
-        [
-            {
-                nativeEvent: {
-                    contentOffset: {
-                        y: y =>
-                            Animated.block([
-                                // Animated.set(this.scrollY, y),
-                                Animated.call(
-                                    [y],
-                                    ([offsetY]) => (this.props.onScroll(offsetY)),
-                                ),
-                            ]),
-                    },
-                },
-            },
-        ],
-        {
-            useNativeDriver: true,
-        },
-    );
 
+    _onScroll = (event) => {
+        const y = event.nativeEvent.contentOffset.y;
+        const {showAnimated} = this.props;
+        if (Platform.OS === 'android') {
+
+            if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+                showAnimated(false)
+            }
+            if (y < this.nowY) {
+                showAnimated(false)
+            }
+            if (y > this.nowY) {
+                showAnimated(true)
+            }
+        } else {
+            if (y > this.nowY && y > 0) {
+                showAnimated(true);
+            }
+            //
+            if (y < this.nowY) {
+                showAnimated(false);
+            }
+        }
+        this.nowY = y;
+    };
     render() {
 
         const columnTop = Animated.interpolate(this.scrollY, {
@@ -117,8 +120,8 @@ class SecondListComponent extends PureComponent {
                         </View>
                     </View>
                 }
-                onScrollBeginDrag={this.AnimatedEvent}
-                onScrollEndDrag={this.AnimatedEvent}
+                onScrollBeginDrag={this._onScroll}
+                onScrollEndDrag={this._onScroll}
                 onScroll={Animated.event([
                     {
                         nativeEvent: {
@@ -129,9 +132,10 @@ class SecondListComponent extends PureComponent {
             />
 
             <Animated.View style={{
-                width, height: 40, justifyContent: 'center', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}],
+                width, height: 40, justifyContent: 'space-between', position: 'absolute',
+                backgroundColor: 'white', transform: [{translateY: columnTop}]
             }}>
+                <View style={{height:8}}/>
                 <Text
                     style={{
                         fontSize: 12,
@@ -145,6 +149,7 @@ class SecondListComponent extends PureComponent {
                     height: 1,
                     marginLeft: 15,
                     marginTop: 10,
+                    // alignSelf:'flex-end',
                 }}/>
             </Animated.View>
         </Animated.View>;

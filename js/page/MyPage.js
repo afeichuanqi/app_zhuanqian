@@ -31,8 +31,8 @@ import sex_nv_ from '../res/svg/sex_nv_.svg';
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const {width, height} = Dimensions.get('window');
-const MenuClick = (menuName) => {
-    NavigationUtils.goPage({}, menuName);
+const MenuClick = (menuName, params = {}) => {
+    NavigationUtils.goPage(params, menuName);
 };
 
 class MyPage extends PureComponent {
@@ -191,8 +191,8 @@ class ToolsItemComponent extends PureComponent {
             onPress={this.props.onPress}
             activeOpacity={0.6}
             style={{
-                width: 130, height: 50,
-                borderRadius: 10,
+                width: 140, height: 65,
+                borderRadius: 5,
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexDirection: 'row',
@@ -209,10 +209,10 @@ class ToolsItemComponent extends PureComponent {
                 marginTop: 10,
             }}>
             <View>
-                <Text style={{fontWeight: 'bold', fontSize: 14}}>{title}</Text>
-                <Text style={{fontSize: 10, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
+                <Text style={{fontSize: 15}}>{title}</Text>
+                <Text style={{fontSize: 11, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
-            <FastImage source={source} style={{width: 30, height: 30}}/>
+            <FastImage source={source} style={{width: 35, height: 35}}/>
 
         </TouchableOpacity>;
     }
@@ -222,7 +222,7 @@ class ToolsItemComponent extends PureComponent {
 class BottomInfoColumn extends PureComponent {
     render() {
         return <View style={{}}>
-            <View style={{paddingHorizontal: 10, paddingVertical: 10, backgroundColor: 'white'}}>
+            <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
                 <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
                     我的工具
                 </Text>
@@ -252,15 +252,16 @@ class BottomInfoColumn extends PureComponent {
             </ScrollView>
 
             {ViewUtil.getSettingItem(guanzhu, '我的关注', '关注列表', () => {
-                NavigationUtils.goPage({user_id: this.props.userinfo.userid, isMy: true}, 'MyAttentionList');
+                MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
+                // NavigationUtils.goPage();
             })}
-            {ViewUtil.getSettingItem(bill1, '帐单展示', '支出、收入',()=>{
-                NavigationUtils.goPage({},'UserBillListPage');
+            {ViewUtil.getSettingItem(bill1, '帐单展示', '支出、收入', () => {
+                MenuClick('UserBillListPage');
+                NavigationUtils.goPage({}, '');
 
             })}
-            {ViewUtil.getSettingItem(bill1, '邀请好友', '支出、收入',()=>{
-                NavigationUtils.goPage({},'FriendPromotionPage');
-
+            {ViewUtil.getSettingItem(bill1, '邀请好友', '好友邀请得奖励', () => {
+                MenuClick('FriendPromotionPage');
             })}
             {ViewUtil.getMenuLine()}
             {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
@@ -318,7 +319,7 @@ class TopInfoColumn extends PureComponent {
             extrapolate: 'clamp',
         });
         // console.log('');
-        console.log(userinfo);
+        // console.log(userinfo);
         return <View style={{backgroundColor: bottomTheme}}>
             <View style={{marginTop: 130, height: 0}}/>
             <Animated.View

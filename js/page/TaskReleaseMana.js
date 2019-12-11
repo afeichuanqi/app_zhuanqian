@@ -268,7 +268,6 @@ class FristListComponent extends PureComponent {
             key={item.id}/>;
     };
     _updateTaskUpdateTime = (item) => {
-        console.log('我被触发');
         updateTaskUpdateTime({task_id: item.id}, this.props.userinfo.token).then(result => {
             this.props.toast.show('刷新成功');
         }).catch(msg => {
@@ -281,15 +280,15 @@ class FristListComponent extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多 ~ ~</Text>
+                <Text style={{marginLeft: 10}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
@@ -337,7 +336,7 @@ class FristListComponent extends PureComponent {
                 // onScrollEndDrag={this._onScrollEndDrag}
                 windowSize={300}
                 onEndReachedThreshold={0.01}
-                onMomentumScrollBegin={() => {
+                onScrollBeginDrag={() => {
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
@@ -369,7 +368,7 @@ class FristListComponent extends PureComponent {
                     }, this.props.userinfo.token).then(data => {
                         setTimeout(() => {
                             this.props.toast.show(`置顶到期时间:` + data.expTime, 2000);
-                            this._updateList(true);
+                            // this._updateList(true);
                         }, 300);
 
                     }).catch(msg => {
@@ -388,7 +387,7 @@ class FristListComponent extends PureComponent {
                     }, this.props.userinfo.token).then(data => {
                         setTimeout(() => {
                             this.props.toast.show(`推荐到期时间:` + data.expTime, 2000);
-                            this._updateList(true);
+                            // this._updateList(true);
                         }, 300);
 
 

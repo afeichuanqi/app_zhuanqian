@@ -160,6 +160,12 @@ class MsgList extends Component {
     params = {
         pageIndex: 0,
     };
+
+    constructor(props) {
+        super(props);
+        this.page = {pageIndex: 0};
+    }
+
     filterFriend = (friendArr, type) => {
         let tmpArr = [];
 
@@ -176,7 +182,7 @@ class MsgList extends Component {
         const columnUnreadLength = this.props.friend.columnUnreadLength;
         const {isLoading, hideLoaded} = this.state;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent height={height-210}/>}
+            ListEmptyComponent={<EmptyComponent height={height - 210}/>}
             ListHeaderComponent={
                 <View style={{
                     justifyContent: 'center',
@@ -203,7 +209,7 @@ class MsgList extends Component {
 
             }}
             ref={ref => this.flatList = ref}
-            data={this.filterFriend(friendData,1)}
+            data={this.filterFriend(friendData, 1)}
             scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
@@ -225,16 +231,28 @@ class MsgList extends Component {
         />;
     }
 
+    // getData = (refreshing) => {
+    //     if (refreshing) {
+    //         this.page = {pageIndex: 0};
+    //         this.setState({
+    //             isLoading: true,
+    //         });
+    //     } else {
+    //         this.page = {pageIndex: this.page.pageIndex + 1};
+    //     }
+    //     if (refreshing) {
+    //         ChatSocket.selectAllFriendMessage();
+    //         this.setState({
+    //             taskData: result,
+    //             isLoading: false,
+    //             hideLoaded: result.length >= 10 ? false : true,
+    //         });
+    //     } else {
+    //
+    //     }
+    // };
     onRefresh = () => {
-        this.setState({
-            isLoading: true,
-        });
         ChatSocket.selectAllFriendMessage();
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-            });
-        }, 1000);
     };
     _renderIndexPath = ({item, index}) => {
         return <MessageItemComponent key={item.FriendId} item={item}/>;
@@ -242,23 +260,6 @@ class MsgList extends Component {
     };
 
     onLoading = () => {
-        this.setState({
-            hideLoaded: false,
-        });
-        const data = [...this.state.friendData];
-        // data.push([...data]);
-        let tmpData = [];
-        for (let i = 0; i < 10; i++) {
-            console.log(i);
-            tmpData.push({id: 10004, name: 'aluo', message: '你好啊'});
-        }
-        setTimeout(() => {
-            this.setState({
-                friendData: data.concat(tmpData),
-            }, () => {
-
-            });
-        }, 2000);
 
     };
 }
@@ -338,7 +339,7 @@ class MessageItemComponent extends Component {
             outputRange: [0.99, 1],
             extrapolate: 'clamp',
         });
-        const { marginHorizontal, item} = this.props;
+        const {marginHorizontal, item} = this.props;
         const {avatar_url, columnType, msg, msg_type, taskId, taskTitle, unReadLength, username, taskUri} = item;
         // console.log(taskUri,"taskUri");
         return <AnimatedTouchableOpacity

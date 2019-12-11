@@ -5,13 +5,14 @@ import {
     RefreshControl,
     Text,
     View,
-    Dimensions
+    Dimensions,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import {selectAllRecommendTask} from '../../util/AppService';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import EmptyComponent from '../../common/EmptyComponent';
-const {height,width} = Dimensions.get('window');
+import {bottomTheme } from '../../appSet';
+const {height} = Dimensions.get('window');
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
@@ -66,12 +67,11 @@ export default class FlatListCommonUtil extends PureComponent {
     };
 
 
-
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height-300}/>}
+            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 300}/>}
             // style={this.props.style}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
@@ -98,14 +98,17 @@ export default class FlatListCommonUtil extends PureComponent {
                 }
             }}
             windowSize={300}
-            onEndReachedThreshold={0.01}
+            onEndReachedThreshold={0.3}
             onScrollEndDrag={onScrollEndDrag}
-            onScrollBeginDrag={onScrollBeginDrag}
-            onMomentumScrollEnd={onMomentumScrollEnd}
-
-            onMomentumScrollBegin={(e) => {
+            onScrollBeginDrag={event => {
+                onScrollBeginDrag && onScrollBeginDrag(event);
                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
             }}
+            onMomentumScrollEnd={onMomentumScrollEnd}
+
+            // onMomentumScrollBegin={(e) => {
+            //
+            // }}
         />;
     }
 
@@ -125,15 +128,15 @@ export default class FlatListCommonUtil extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
                 <Text style={{marginLeft: 10}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
-                style={{marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10}}>没有更多了哦</Text>
+                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 

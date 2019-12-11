@@ -44,7 +44,6 @@ class LabelBigComponent extends PureComponent {
                 fontSize,
                 opacity: 0.5,
                 color:'black'
-                // fontWeight: '100',
             }}>{title}</Text>
         </View>;
     }

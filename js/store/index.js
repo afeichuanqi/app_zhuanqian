@@ -14,7 +14,6 @@ const logger = store => next => action => {
     // if (action.type == 'Navigation/BACK') {//返回被触发
     //
     // }
-    console.log(action,"actionaction");
     return next(action);
 };
 const middlewares = [

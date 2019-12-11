@@ -60,7 +60,7 @@ class TaskRecommend extends PureComponent {
 
     render() {
         const {price} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingBottom:10}}>
             <View style={{paddingVertical: 10}}>
                 <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13}}>
                     推荐任务将在首页显示
@@ -136,8 +136,8 @@ class TaskTop extends PureComponent {
 
     render() {
         const {price} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10}}>
-            <View style={{paddingVertical: 10}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingBottom:10}}>
+            <View style={{paddingVertical: 10,paddingTop:15}}>
                 <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13}}>
                     置顶任务将在所有任务数保持前排
                 </Text>

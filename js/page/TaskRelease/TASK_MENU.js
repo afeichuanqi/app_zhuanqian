@@ -1,5 +1,6 @@
 export const MORE_MENU = {
-    wangzhi: {type:1,title:'输入网址',arr:[
+    wangzhi: {
+        type: 1, title: '输入网址', arr: [
             {
                 type: 1, typeData: {
                     title: '步骤说明',
@@ -12,13 +13,15 @@ export const MORE_MENU = {
             {
                 type: 2, typeData: {
                     title: '输入网址',
-                    placeholder: '示例:http://www.baidu.com',
+                    placeholder: '示例:http://www.jiandanzhuang.com',
                     onChangeText: () => {
                     },
                 },
             },
-        ]},
-    erweima: {type:2,title:'二维码',arr:[
+        ],
+    },
+    erweima: {
+        type: 2, title: '二维码', arr: [
             {
                 type: 1, typeData: {
                     title: '步骤说明',
@@ -36,8 +39,10 @@ export const MORE_MENU = {
                     },
                 },
             },
-        ]},
-    fuzhishuju: {type:3,title:'复制数据',arr:[
+        ],
+    },
+    fuzhishuju: {
+        type: 3, title: '复制数据', arr: [
             {
                 type: 1, typeData: {
                     title: '步骤说明',
@@ -55,8 +60,10 @@ export const MORE_MENU = {
                     },
                 },
             },
-        ]},
-    tuwenshuoming: {type:4,title:'图文说明',arr:[
+        ],
+    },
+    tuwenshuoming: {
+        type: 4, title: '图文说明', arr: [
             {
                 type: 1, typeData: {
                     title: '步骤说明',
@@ -74,8 +81,10 @@ export const MORE_MENU = {
                     },
                 },
             },
-        ]},
-    yanzhengtu: {type:5,title:'验证图',arr:[
+        ],
+    },
+    yanzhengtu: {
+        type: 5, title: '验证图', arr: [
             {
                 type: 1, typeData: {
                     title: '步骤说明',
@@ -93,8 +102,10 @@ export const MORE_MENU = {
                     },
                 },
             },
-        ]},
-    shoujixinxi: {type:6,title:'收集信息',arr:[
+        ],
+    },
+    shoujixinxi: {
+        type: 6, title: '收集信息', arr: [
             {
                 type: 5, typeData: {
                     // title: '',
@@ -103,5 +114,6 @@ export const MORE_MENU = {
                     },
                 },
             },
-        ]},
+        ],
+    },
 };

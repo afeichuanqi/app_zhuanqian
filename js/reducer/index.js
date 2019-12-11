@@ -17,7 +17,7 @@ const navReducer = (state = navState, action) => {
     state.type = action.type;
     state.key = action.key;
 
-    return nextState || state;
+    return  nextState || state;
 };
 /**
  * 3.合并reducer

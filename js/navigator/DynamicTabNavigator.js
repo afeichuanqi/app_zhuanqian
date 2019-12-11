@@ -24,6 +24,7 @@ import messageA from '../res/svg/indexPage/messageA.svg';
 import my from '../res/svg/indexPage/my.svg';
 import myA from '../res/svg/indexPage/myA.svg';
 import {connect} from 'react-redux';
+import actions from '../action';
 
 type Props = {};
 
@@ -86,15 +87,12 @@ class DynamicTabNavigator extends Component<Props> {
 
 class BottomBar extends Component {
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        // console.log(this.props.nav, 'this.props.nav');
         let {routes, type, key} = this.props.nav;
-        // console.log(key);
+        // console.log(this.props.nav,"this.props.nav");
         if (!key || key.length === 0) {
             key = routes[1].routes[routes[1].index].key;
         }
-        // console.log();
         if (type === 'Navigation/BACK' && key === routes[1].routes[1].key) {//需要返回到主页面
-            // console.log(this.props.navigationIndex,"this.props.navigationIndex");
             if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
                 StatusBar.setBarStyle('dark-content', true);
                 StatusBar.setBackgroundColor(theme, true);
@@ -108,16 +106,24 @@ class BottomBar extends Component {
             ||
             (type === 'Navigation/BACK' && key === routes[1].routes[2].key && routes[1].routes[1].routeName === 'TaskOrdersMana')
         ) {
-            // console.log('更改了状态栏');
             StatusBar.setBarStyle('light-content', true);
             StatusBar.setBackgroundColor(bottomTheme, true);
         }
+    }
 
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.props.navigationIndex !== nextProps.navigationIndex
+            || (this.props.friend && (this.props.friend.unMessageLength !== nextProps.friend.unMessageLength))
+        ) {
+            return true;
+        }
+        return false;
 
     }
 
     render() {
-        const {navigationIndex, jumpTo, navigationRoutes, onPress} = this.props;
+        // console.log('我被render');
+        const {navigationIndex} = this.props;
         const {unMessageLength} = this.props.friend;
         return <View style={{
             flexDirection: 'row',
@@ -131,7 +137,7 @@ class BottomBar extends Component {
                 (index) => {
                     StatusBar.setBarStyle('dark-content', true);
                     StatusBar.setBackgroundColor(theme, true);
-                    onPress(index);
+                    this.bottomBarOnPress(index);
                 },
                 0,
                 navigationIndex === 0 ? true : false,
@@ -144,7 +150,7 @@ class BottomBar extends Component {
                 (index) => {
                     StatusBar.setBarStyle('light-content', true);
                     StatusBar.setBackgroundColor(bottomTheme, true);
-                    onPress(index);
+                    this.bottomBarOnPress(index);
                 },
                 1,
                 navigationIndex === 1 ? true : false,
@@ -156,7 +162,7 @@ class BottomBar extends Component {
                 (index) => {
                     StatusBar.setBarStyle('light-content', true);
                     StatusBar.setBackgroundColor(bottomTheme, true);
-                    onPress(index);
+                    this.bottomBarOnPress(index);
                 },
                 2,
                 navigationIndex === 2 ? true : false,
@@ -168,7 +174,7 @@ class BottomBar extends Component {
                 (index) => {
                     StatusBar.setBarStyle('light-content', true);
                     StatusBar.setBackgroundColor(bottomTheme, true);
-                    onPress(index);
+                    this.bottomBarOnPress(index);
                 }, 3,
                 navigationIndex === 3 ? true : false,
                 37,
@@ -176,6 +182,21 @@ class BottomBar extends Component {
         </View>;
     }
 
+    bottomBarOnPress = (index) => {
+        const {onPress, onGetUserInFoForToken, userinfo} = this.props;
+        onPress(index);
+        if (index === 3) { //我的栏目被单击
+            const token = userinfo.token;
+            onGetUserInFoForToken(token, (loginStatus, msg) => {
+                // console.log(loginStatus, msg, 'loginStatus, msg');
+                //成功或者失败要做什么
+            });
+            // if (token) {
+            //
+            // }
+        }
+
+    };
     _renderBottomBar = (svgXmlData, onPress, key, isActive, size = 35, unReadLength = 0) => {
 
         return <TouchableOpacity
@@ -210,7 +231,11 @@ class BottomBar extends Component {
 const mapStateToProps = state => ({
     friend: state.friend,
     nav: state.nav,
+    userinfo: state.userinfo,
+
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
+});
 const BottomBarRedux = connect(mapStateToProps, mapDispatchToProps)(BottomBar);
 export default DynamicTabNavigator;

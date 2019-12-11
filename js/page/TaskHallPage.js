@@ -25,8 +25,9 @@ import SvgUri from 'react-native-svg-uri';
 import {TabView} from 'react-native-tab-view';
 import zhankai from '../res/svg/zhankai.svg';
 import yincang from '../res/svg/yincang.svg';
-import toutiao from '../res/svg/toutiao.svg';
+import remenrenwu from '../res/svg/remenrenwu.svg';
 import FlatListCommonUtil from './TaskHallPage/FlatListCommonUtil';
+import NavigationUtils from '../navigator/NavigationUtils';
 // import FilterComponent from './TaskHall/FilterComponent';
 let FilterComponent = null;
 
@@ -85,7 +86,11 @@ class TaskHallPage extends PureComponent {
 
                 }}>
                     {/*搜索图标*/}
-                    <TouchableOpacity style={{
+                    <TouchableOpacity
+                        onPress={()=>{
+                            NavigationUtils.goPage({},'SearchPage')
+                        }}
+                        style={{
                         position: 'absolute',
                         left: 20,
                         top: 15,
@@ -426,13 +431,13 @@ class HeadlineComponent extends PureComponent {
             // zIndex:-1,
             // elevation: -0.1,
         }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <SvgUri style={{marginLeft: 20, marginRight: 5}} width={20} height={20} svgXmlData={toutiao}/>
-                <Text
-                    fontFamily={'sans-serif-condensed'}
-                    style={{
-                        fontSize: 13,
-                    }}>热门任务 :</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center',height:20}}>
+                <SvgUri style={{marginLeft: 20}} width={60} height={60} svgXmlData={remenrenwu}/>
+                {/*<Text*/}
+                {/*    fontFamily={'sans-serif-condensed'}*/}
+                {/*    style={{*/}
+                {/*        fontSize: 14,*/}
+                {/*    }}>热门任务</Text>*/}
             </View>
             {/*分隔符*/}
             <View
