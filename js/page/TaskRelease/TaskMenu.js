@@ -7,13 +7,14 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
-import SvgUri from 'react-native-svg-uri';
 
 
 const {timing} = Animated;
 const {height} = Dimensions.get('window');
+
+// const {width} = Dimensions.get('window');
 
 class TaskMenu extends PureComponent {
     constructor(props) {
@@ -21,11 +22,11 @@ class TaskMenu extends PureComponent {
     }
 
     static defaultProps = {
-        menuArr: [],
-        popTitle: '接单审核时限',
+        opacity: 0.3,
     };
     state = {
         visible: false,
+        left: -100,
 
     };
 
@@ -39,11 +40,10 @@ class TaskMenu extends PureComponent {
     }
 
     hide = (annimated = true) => {
-        // this.props.select(item);
         if (annimated) {
             this._anim = timing(this.animations.top, {
                 duration: 200,
-                toValue: height + 160,
+                toValue: height + 490,
                 easing: Easing.inOut(Easing.ease),
             }).start(() => {
                 this.timer = setTimeout(() => {
@@ -62,13 +62,14 @@ class TaskMenu extends PureComponent {
 
     };
     show = (x, y) => {
-        this.animations.left = new Animated.Value(x - 75);
+        // this.animations.left = ;
         this.setState({
             visible: true,
+            left: x - 75,
         }, () => {
             this._anim = timing(this.animations.top, {
-                duration: 100,
-                toValue: y + 25,
+                duration: 200,
+                toValue: y + 330,
                 easing: Easing.inOut(Easing.cubic),
             }).start();
 
@@ -77,7 +78,7 @@ class TaskMenu extends PureComponent {
     };
     animations = {
         top: new Animated.Value(height + 250),
-        left: new Animated.Value(0),
+        // left: new Animated.Value(0),
     };
 
     render() {
@@ -88,12 +89,12 @@ class TaskMenu extends PureComponent {
             <Modal
                 transparent
                 visible={visible}
-                animationType={'fade'}
+                animationType={'none'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 
             >
-                <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}
+                <TouchableOpacity style={{flex: 1, backgroundColor: `rgba(0,0,0,${this.props.opacity})`}}
                                   activeOpacity={1}
                                   onPress={() => {
                                       this.hide(true);
@@ -101,8 +102,8 @@ class TaskMenu extends PureComponent {
                 >
                     <Animated.View style={{
                         position: 'absolute',
-                        top: this.animations.top,
-                        left: this.animations.left,
+                        top: -300,
+                        left: this.state.left,
                         borderWidth: 0.3,
                         borderColor: 'rgba(0,0,0,0.3)',
                         paddingVertical: 5,
@@ -110,6 +111,8 @@ class TaskMenu extends PureComponent {
                         backgroundColor: 'white',
                         borderRadius: 5,
                         alignItems: 'center',
+                        transform: [{translateY: this.animations.top}],
+                        //
                     }}>
                         <View style={{
                             width: 0,
@@ -124,10 +127,8 @@ class TaskMenu extends PureComponent {
                             top: -12,
                             left: 83,
                         }}/>
-                        {this.props.menuArr.length > 0 && this.props.menuArr.map((item, index, arr) => {
-                            return this.genMenu(item.title, item.svg, item.click, index);
-                        })}
 
+                        {this.props.children}
 
                     </Animated.View>
 
@@ -136,23 +137,6 @@ class TaskMenu extends PureComponent {
         );
     }
 
-    genMenu = (title, svgXmlData, click, index) => {
-        return <TouchableOpacity
-            key={index}
-            activeOpacity={0.6}
-            onPress={() => {
-                this.hide(false);
-                click();
-            }
-            }
-            style={{
-                width: 100, height: 35,
-                alignItems: 'center', flexDirection: 'row',
-            }}>
-            <SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>
-            <Text style={{fontSize: 15}}>{title}</Text>
-        </TouchableOpacity>;
-    };
 }
 
 

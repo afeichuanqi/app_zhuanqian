@@ -45,6 +45,7 @@ class UserProtocol extends PureComponent {
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
+            barStyle: 'dark-content',
         };
         let navigationBar = <NavigationBar
             hide={true}

@@ -807,7 +807,6 @@ class TaskStepColumn extends PureComponent {
             moveUp: this._moveUpColumn,
             moveDown: this._moveDownColumn,
         };
-        console.log(this.state.stepDataArr, 'stepDatastepData1');
 
         return (
             <View style={{marginBottom: 15}}>

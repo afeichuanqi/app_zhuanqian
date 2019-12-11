@@ -66,13 +66,13 @@ class SecondListComponent extends PureComponent {
         if (Platform.OS === 'android') {
 
             if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
-                showAnimated(false)
+                showAnimated(false);
             }
             if (y < this.nowY) {
-                showAnimated(false)
+                showAnimated(false);
             }
             if (y > this.nowY) {
-                showAnimated(true)
+                showAnimated(true);
             }
         } else {
             if (y > this.nowY && y > 0) {
@@ -85,11 +85,12 @@ class SecondListComponent extends PureComponent {
         }
         this.nowY = y;
     };
+
     render() {
 
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-220, 0, 185],
-            outputRange: [lunboHeight + 240, lunboHeight - 10, 20],
+            outputRange: [lunboHeight + 200, lunboHeight - 15, 20],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -133,23 +134,25 @@ class SecondListComponent extends PureComponent {
 
             <Animated.View style={{
                 width, height: 40, justifyContent: 'space-between', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}]
+                backgroundColor: 'white', transform: [{translateY: columnTop}],
             }}>
-                <View style={{height:8}}/>
                 <Text
                     style={{
                         fontSize: 12,
-                        marginLeft: 15,
-                        marginTop: 10,
                         color: bottomTheme,
+                        position: 'absolute',
+                        left: 15,
+                        top: 16,
+
                     }}>最近刷新</Text>
+
                 <View style={{
                     width: 50,
                     backgroundColor: bottomTheme,
-                    height: 1,
-                    marginLeft: 15,
-                    marginTop: 10,
-                    // alignSelf:'flex-end',
+                    height: 2,
+                    position: 'absolute',
+                    left: 15,
+                    bottom: 3,
                 }}/>
             </Animated.View>
         </Animated.View>;

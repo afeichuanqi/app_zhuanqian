@@ -90,7 +90,6 @@ export default class FlatListCommonUtil extends PureComponent {
             onScroll={onScroll}
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
-                console.log('onEndReached.....');
                 // 等待页面布局完成以后，在让加载更多
                 if (this.canLoadMore) {
                     this.onLoading();

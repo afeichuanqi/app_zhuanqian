@@ -29,7 +29,6 @@ import {cancelUserSignUp, selectOrderTasks} from '../util/AppService';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import Toast from '../common/Toast';
-import ToastReJection from '../common/ToastReJection';
 import BackPressComponent from '../common/BackPressComponent';
 
 const width = Dimensions.get('window').width;

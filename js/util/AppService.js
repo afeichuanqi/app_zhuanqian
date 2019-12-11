@@ -802,11 +802,74 @@ export function selectShopInfoForUserId(data, token) {
  * @param token
  * @returns {Promise<any> | Promise<*>}
  */
+export function getHotTasks() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setGetHeader('token', token);
+            const ret = await http.get('user/getHotTasks');
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 获取热门任务
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
 export function getSearchContent(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
             http.setPostHeader('token', token);
             const ret = await http.post('user/getSearchContent', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询用户任务收藏状态
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function selectUserIsFavoriteTask(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/selectUserIsFavoriteTask', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 设置用户收藏状态
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function setUserFavoriteTask(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/setUserFavoriteTask', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {

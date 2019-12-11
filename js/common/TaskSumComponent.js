@@ -21,7 +21,7 @@ class TaskSumComponent extends PureComponent {
     // }
 
     static defaultProps = {
-        titleFontSize: 16,
+        titleFontSize: 15,
         marginHorizontal: 10,
         item: {
             avatarUrl: '',
@@ -111,6 +111,7 @@ class TaskSumComponent extends PureComponent {
                 <Text style={{
                     fontSize: titleFontSize,
                     color: 'black',
+
                 }}>{item.taskTitle}</Text>
                 {item.recommendIsExp == 1 && <View style={{
                     height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,

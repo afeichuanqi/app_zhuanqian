@@ -6,9 +6,19 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React, {PureComponent, Component} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {View, Text, StyleSheet, TouchableOpacity, Dimensions, Platform, StatusBar} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Dimensions,
+    Platform,
+    StatusBar,
+    UIManager,
+    findNodeHandle,
+} from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import FastImage from 'react-native-fast-image';
@@ -18,19 +28,24 @@ import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import {
     addTaskReleaseData,
-    selectTaskInfo,
+    selectTaskInfo, selectUserIsFavoriteTask,
     selectUserStatusForTaskId,
-    sendTaskStepForm,
+    sendTaskStepForm, setUserFavoriteTask,
     startSignUpTask, updateTaskReleaseData,
 } from '../util/AppService';
 import taskHallNext from '../res/svg/taskHallNext.svg';
-
 import goback from '../res/svg/goback.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
 import liaotian from '../res/svg/liaotian.svg';
 import BackPressComponent from '../common/BackPressComponent';
+import message_more from '../res/svg/message_more.svg';
+import TaskMenu from './TaskRelease/TaskMenu';
+import fenxiang from '../res/svg/fenxiang.svg';
+import shoucang from '../res/svg/shoucang.svg';
+import shoucang_ from '../res/svg/shoucang_.svg';
+import ToastShare from '../common/ToastShare';
 
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -39,8 +54,13 @@ class TaskDetails extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        const {test, task_id} = this.params;
+        this.test = test;
+        this.task_id = task_id;
+
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -50,9 +70,8 @@ class TaskDetails extends PureComponent {
         StatusForTask: {},
     };
     _updateTaskStatus = async () => {
-        const {task_id} = this.params;
         const StatusForTask = await selectUserStatusForTaskId({
-            task_id: task_id,
+            task_id: this.task_id,
             device: Platform.OS == 'android' ? 2 : 3,
         }, this.props.userinfo.token);
         const tmpData = {...this.state.totalData};
@@ -72,17 +91,16 @@ class TaskDetails extends PureComponent {
     };
 
     async componentDidMount() {
-        const {test, task_id} = this.params;
-        if (test) {
+        if (this.test) {
             const {fromUserinfo, taskData, stepData} = this.params;
             const totalData = {fromUserinfo, taskData, stepData};
             this.setState({
                 totalData,
             });
         } else {
-            const TaskInfo = await selectTaskInfo({task_id: task_id}, this.props.userinfo.token);
+            const TaskInfo = await selectTaskInfo({task_id: this.task_id}, this.props.userinfo.token);
             const StatusForTask = await selectUserStatusForTaskId({
-                task_id: task_id,
+                task_id: this.task_id,
                 device: Platform.OS == 'android' ? 2 : 3,
             }, this.props.userinfo.token);
             let {fromUserinfo, taskData, stepData} = TaskInfo;
@@ -179,12 +197,22 @@ class TaskDetails extends PureComponent {
                         style={{
                             width,
                             position: 'absolute',
-                            top: 5,
+                            top: 8,
                             alignItems: 'center',
                             zIndex: 2,
                             opacity: NameOpacity,
                         }}>
-                        <Text style={{color: 'white', fontSize: 18}}>{taskData && taskData.title}</Text>
+                        <Text style={{color: 'white', fontSize: 16}}>{taskData && taskData.title}</Text>
+                        {/*<TouchableOpacity*/}
+
+                        {/*    style={{*/}
+                        {/*        position: 'absolute',*/}
+                        {/*        right: 15,*/}
+                        {/*        // top:2*/}
+                        {/*    }}>*/}
+                        {/*    */}
+                        {/*</TouchableOpacity>*/}
+
                     </Animated.View>
                     <Animated.View
                         style={{
@@ -296,7 +324,7 @@ class TaskDetails extends PureComponent {
                             onPress={() => {
                                 NavigationUtils.goPage({
                                     userid: fromUserinfo.userid,
-                                    taskId: this.params.task_id,
+                                    taskId: this.task_id,
                                     taskUri: taskData.taskUri,
                                 }, 'ShopInfoPage');
                             }}
@@ -340,8 +368,8 @@ class TaskDetails extends PureComponent {
                                             username: fromUserinfo && fromUserinfo.username,
                                         },
                                         columnType: 1,
-                                        task_id: this.params.task_id,
-                                        taskUri:taskData.taskUri,
+                                        task_id: this.task_id,
+                                        taskUri: taskData.taskUri,
                                     }, 'ChatRoomPage');
                                 }}
                                 style={{marginRight: 10}}>
@@ -397,7 +425,32 @@ class TaskDetails extends PureComponent {
                         style={{position: 'absolute', top: goBackTop, left: 10, zIndex: 10, width: 50}}>
                         <SvgUri width={24} height={24} fill={'white'} svgXmlData={goback}/>
                     </AnimatedTouchableOpacity>
+                    <AnimatedTouchableOpacity
+                        ref={ref => this.moreSvg = ref}
+                        activeOpacity={0.6}
+                        onPress={() => {
+                            const handle = findNodeHandle(this.moreSvg);
+                            UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+                                // console.log(pageX, pageY);
+                                this.taskDetailsPop.show(pageX, pageY);
+                                // this.taskMenu.show();
+                            });
+                        }}
+                        style={{position: 'absolute', top: goBackTop, right: 0, zIndex: 10, width: 40, marginTop: 3}}>
+                        <SvgUri width={20} height={20} fill={'white'} svgXmlData={message_more}/>
+                    </AnimatedTouchableOpacity>
                 </View>
+                {/*右上角的弹出菜单*/}
+                <TaskDetailsPop
+                    ref={ref => this.taskDetailsPop = ref}
+                    userinfo={userinfo}
+                    task_id={this.task_id}
+                    shareClick={() => {
+                        this.toastShare.show();
+                    }}
+                />
+                {/*分享弹窗*/}
+                <ToastShare ref={ref => this.toastShare = ref}/>
             </SafeAreaViewPlus>
         );
     }
@@ -405,12 +458,11 @@ class TaskDetails extends PureComponent {
     _startSignUp = async () => {
         const {StatusForTask} = this.state;
         const {userinfo} = this.props;
-        console.log(userinfo.token);
-        const {task_id} = this.params;
+        // console.log(userinfo.token);
         if (StatusForTask.status === 0) {//进行报名
             //进行报名
             startSignUpTask({
-                task_id: task_id,
+                task_id: this.task_id,
                 device: Platform.OS == 'android' ? 2 : 3,
             }, userinfo.token).then(result => {
                 this.setState({
@@ -434,7 +486,7 @@ class TaskDetails extends PureComponent {
             if (error != '') {//任务步骤正确是否正确填写完毕
                 this.toast.show(error);
             } else {
-                sendTaskStepForm({task_id: task_id, task_step_data: taskText}, userinfo.token).then(result => {
+                sendTaskStepForm({task_id: this.task_id, task_step_data: taskText}, userinfo.token).then(result => {
                     this.toast.show('提交成功,等待审核');
                     this._updateTaskStatus().then();
                 }).catch((msg) => {
@@ -477,6 +529,106 @@ class TaskDetails extends PureComponent {
     };
 }
 
+class TaskDetailsPop extends Component {
+    state = {
+        isFavorite: 0,
+    };
+
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.task_id != this.props.task_id) {
+    //         //刷新
+    //         console.log('s刷新');
+    //
+    //     }
+    // }
+    componentDidMount(): void {
+        selectUserIsFavoriteTask({task_id: this.props.task_id}, this.props.userinfo.token).then(data => {
+            this.setState({
+                isFavorite: data.status,
+            });
+        }).catch(msg => {
+            this.setState({
+                isFavorite: 0,
+            });
+        });
+    }
+
+    show(x, y) {
+        this.taskMenu.show(x, y);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.task_id != nextProps.task_id || this.state.isFavorite != nextState.isFavorite) {
+            return true;
+        }
+        return false;
+
+    }
+
+    render() {
+        const {isFavorite} = this.state;
+        const {task_id, userinfo} = this.props;
+        return <View>
+            <TaskMenu opacity={0.2} animationType={'none'} ref={ref => this.taskMenu = ref}>
+                <TouchableOpacity
+                    key={1}
+                    activeOpacity={0.6}
+                    onPress={() => {
+                        this.taskMenu.hide(true);
+                        NavigationUtils.goPage({type: 2}, 'UserProtocol');
+                    }}
+                    style={{
+                        width: 100, height: 30,
+                        alignItems: 'center', flexDirection: 'row',
+                        justifyContent: 'center',
+                    }}>
+                    {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
+                    <Text style={{fontSize: 15, opacity:0.8}}>接单说明</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    // key={index}
+                    activeOpacity={0.6}
+                    onPress={() => {
+                        this.taskMenu.hide(false);
+                        this.props.shareClick();
+                    }}
+                    style={{
+                        width: 100, height: 35,
+                        alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
+                    }}>
+                    <SvgUri width={18} fill={'black'} height={18} svgXmlData={fenxiang}/>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity:0.8}}>分享</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => {
+                        const is_favorite = this.state.isFavorite == 1 ? 0 : 1;
+                        setUserFavoriteTask({
+                            task_id: task_id,
+                            favorite_status: is_favorite,
+                        }, userinfo.token).then(result => {
+                            console.log(is_favorite, 'is_favorite');
+                            this.setState({
+                                isFavorite: is_favorite,
+                            });
+                        });
+                        this.taskMenu.hide(true);
+                    }}
+                    style={{
+                        width: 100, height: 35,
+                        alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
+                    }}>
+                    <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.8)'} height={18}
+                            svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity:0.8}}>收藏</Text>
+                </TouchableOpacity>
+
+            </TaskMenu>
+
+        </View>;
+    }
+}
+
 class BottomBtns extends PureComponent {
     static defaultProps = {
         test: false,
@@ -486,7 +638,6 @@ class BottomBtns extends PureComponent {
 
     render() {
         const {test, StatusForTask} = this.props;
-        console.log(StatusForTask, 'StatusForTask');
         return <View>
             {test ? <View style={{borderTopWidth: 0.5, borderTopColor: '#c8c8c8', flexDirection: 'row'}}>
                 <TouchableOpacity

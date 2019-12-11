@@ -207,7 +207,6 @@ class TaskPopMenu extends PureComponent {
     };
 
     render() {
-        console.log(this.inputData, 'this.inputData');
         const Component = this.state.columnArr.map((item, index, arr) => {
             return this.getColumnView(item.type, item.typeData, index);
         });

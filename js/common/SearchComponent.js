@@ -65,7 +65,6 @@ class SearchComponent extends Component {
                         value: text,
                     });
                 }}
-                // editable={false}
                 value={value}
                 placeholder={placeholder}
                 keyboardType={'web-search'}
@@ -84,7 +83,7 @@ class SearchComponent extends Component {
             }} width={19} height={19} svgXmlData={search}/>
             {value.length > 0 && <TouchableOpacity
                 onPress={this._clearInput}
-                style={{position: 'absolute', top: 9, right: 10}} fill={'rgba(0,0,0,0.6)'}
+                style={{position: 'absolute', top: 9, right: 10}}
                 activeOpacity={0.7}>
                 <SvgUri width={13}
                         height={13}

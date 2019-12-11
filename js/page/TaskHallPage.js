@@ -28,6 +28,7 @@ import yincang from '../res/svg/yincang.svg';
 import remenrenwu from '../res/svg/remenrenwu.svg';
 import FlatListCommonUtil from './TaskHallPage/FlatListCommonUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
+import {getHotTasks} from '../util/AppService';
 // import FilterComponent from './TaskHall/FilterComponent';
 let FilterComponent = null;
 
@@ -87,15 +88,15 @@ class TaskHallPage extends PureComponent {
                 }}>
                     {/*搜索图标*/}
                     <TouchableOpacity
-                        onPress={()=>{
-                            NavigationUtils.goPage({},'SearchPage')
+                        onPress={() => {
+                            NavigationUtils.goPage({}, 'SearchPage');
                         }}
                         style={{
-                        position: 'absolute',
-                        left: 20,
-                        top: 15,
+                            position: 'absolute',
+                            left: 20,
+                            top: 15,
 
-                    }}>
+                        }}>
                         <SvgUri width={21} height={21} fill={'white'} svgXmlData={search}/>
                     </TouchableOpacity>
 
@@ -119,6 +120,9 @@ class TaskHallPage extends PureComponent {
                     />
                     {/*发布按钮图标*/}
                     <TouchableOpacity
+                        onPress={()=>{
+                            NavigationUtils.goPage({},'TaskRelease')
+                        }}
                         activeOpacity={0.6}
                         style={{
                             position: 'absolute',
@@ -194,10 +198,8 @@ class FristListComponent extends PureComponent {
         }
     };
     nowY = 0;
-    // lastScrollTime = 0;
-    _iosShowAnimated = (y) => {
-        if (y > this.nowY && y > 0) {
-
+    showAnimated = (show) => {
+        if (show) {
             if (!this.AnimatedIsshow) {
                 timing(this.animations.val, {
                     duration: 300,
@@ -207,11 +209,8 @@ class FristListComponent extends PureComponent {
                 this.AnimatedIsshow = true;
 
             }
-        }
-        //
-        if (y < this.nowY) {
+        } else {
             if (this.AnimatedIsshow) {
-                // this.lastScrollTime = Date.now();
                 timing(this.animations.val, {
                     duration: 300,
                     toValue: 0,
@@ -221,52 +220,29 @@ class FristListComponent extends PureComponent {
             }
         }
 
-
     };
-    _androidShowAnimated = (y) => {
-        // if (this.lastScrollTime + 800 < Date.now()) {
-        //     this.lastScrollTime = Date.now();
-        if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
-            timing(this.animations.val, {
-                duration: 300,
-                toValue: 0,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
-            this.AnimatedIsshow = false;
-            return;
-        }
-        if (y < this.nowY) {
-            if (this.AnimatedIsshow) {
-                // this.lastScrollTime = Date.now();
-                timing(this.animations.val, {
-                    duration: 300,
-                    toValue: 0,
-                    easing: Easing.inOut(Easing.ease),
-                }).start();
-                this.AnimatedIsshow = false;
-            }
-        }
-        if (y > this.nowY) {
-            if (!this.AnimatedIsshow) {
-                timing(this.animations.val, {
-                    duration: 300,
-                    toValue: 1,
-                    easing: Easing.inOut(Easing.ease),
-                }).start();
-                this.AnimatedIsshow = true;
 
-            }
-        }
-
-
-        // }
-    };
     _onScroll = (e) => {
         const y = e.nativeEvent.contentOffset.y;
         if (Platform.OS === 'android') {
-            this._androidShowAnimated(y);
+            if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
+                this.showAnimated(false);
+                return;
+            }
+            if (y < this.nowY) {
+                this.showAnimated(false);
+            }
+            if (y > this.nowY) {
+                this.showAnimated(true);
+            }
         } else {
-            this._iosShowAnimated(y);
+            if (y > this.nowY && y > 0) {
+                this.showAnimated(true);
+            }
+            //
+            if (y < this.nowY) {
+                this.showAnimated(false);
+            }
         }
         this.nowY = y;
 
@@ -310,6 +286,10 @@ class FristListComponent extends PureComponent {
                     ref={ref => this.flatList = ref}
                     onScrollBeginDrag={this._onScroll}
                     onScrollEndDrag={this._onScroll}
+                    onRefresh={() => {
+                        // console.log('刷次一次');
+                        this.headlineComponent.updatePage();
+                    }}
                     // onScroll={this._onScroll}
                     // onLoading={this.onLoading}
                 />
@@ -359,7 +339,7 @@ class FristListComponent extends PureComponent {
                     {/*<FilterBtnComponent ref={ref => this.filterBtnComponent = ref} onPress={this._topLeftClick}/>*/}
                 </View>
                 {/*筛选器*/}
-                <HeadlineComponent/>
+                <HeadlineComponent ref={ref => this.headlineComponent = ref}/>
 
             </Animated.View>
 
@@ -396,30 +376,42 @@ class FristListComponent extends PureComponent {
 }
 
 class HeadlineComponent extends PureComponent {
-    static defaultProps = {
-        HeadlineArrays: [
-            {id: 1, title: '注册哟微信全部一起注册', price: 10},
-            {id: 2, title: '2222', price: 10},
-            {id: 3, title: '3333', price: 10},
-            {id: 4, title: '4444', price: 10},
-            {id: 5, title: '5555', price: 10},
-            {id: 6, title: '6666', price: 10},
-        ],
+
+    state = {
+        HeadlineArrays: [],
     };
-    index = 0;
 
     componentWillUnmount() {
-
-
+        this.timer && clearInterval(this.timer);
     }
 
+    updatePage = () => {
+
+        getHotTasks().then(result => {
+            this.setState({
+                HeadlineArrays: result,
+            });
+        });
+    };
+    startLunbo = () => {
+        this.index = 0;
+        this.timer = setInterval(() => {
+            this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
+            if (this.state.HeadlineArrays.length !== 0) {
+                this.flatList.scrollToIndex({animated: true, index: this.index});
+            }
+
+        }, 2500);
+    };
+
     componentDidMount() {
+        // this.updatePage();
+        !this.timer && this.startLunbo();
 
     }
 
     render() {
-        const {HeadlineArrays} = this.props;
-
+        const {HeadlineArrays} = this.state;
         return <View style={{
             height: 40,
             width,
@@ -428,16 +420,9 @@ class HeadlineComponent extends PureComponent {
             alignItems: 'center',
             borderBottomWidth: 0.3,
             borderBottomColor: 'rgba(0,0,0,0.1)',
-            // zIndex:-1,
-            // elevation: -0.1,
         }}>
-            <View style={{flexDirection: 'row', alignItems: 'center',height:20}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', height: 20}}>
                 <SvgUri style={{marginLeft: 20}} width={60} height={60} svgXmlData={remenrenwu}/>
-                {/*<Text*/}
-                {/*    fontFamily={'sans-serif-condensed'}*/}
-                {/*    style={{*/}
-                {/*        fontSize: 14,*/}
-                {/*    }}>热门任务</Text>*/}
             </View>
             {/*分隔符*/}
             <View
@@ -445,7 +430,6 @@ class HeadlineComponent extends PureComponent {
             {/*热门任务*/}
             <View style={{
                 flex: 1,
-                marginLeft: 10,
                 overflow: 'hidden',
 
             }}>
@@ -456,10 +440,13 @@ class HeadlineComponent extends PureComponent {
                     scrollEventThrottle={1}
                     renderItem={data => this._renderIndexPath(data)}
                     keyExtractor={(item, index) => index + ''}
-                    onEndReachedThreshold={0.01}
+                    // onEndReachedThreshold={0.01}
                 />
                 {/*禁止触摸*/}
                 <TouchableOpacity
+                    onPress={()=>{
+                        NavigationUtils.goPage({test:false,task_id:this.state.HeadlineArrays[this.index].taskId},'TaskDetails')
+                    }}
                     activeOpacity={1}
                     style={{position: 'absolute', width: 300, height: 40, opacity: 1, zIndex: 3}}/>
             </View>
@@ -467,17 +454,27 @@ class HeadlineComponent extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <View style={{
-            height: 40,
-            flexDirection: 'row',
-            alignItems: 'center', justifyContent: 'space-around',
-        }}>
+        return <View
+            key={item.taskId}
+            style={{
+                height: 40,
+                flexDirection: 'row',
+                alignItems: 'center', justifyContent: 'space-between',
+
+            }}>
+            <Text
+                numberOfLines={1}
+                style={{
+                    fontSize: 15,
+                    color: bottomTheme,
+                    width: width - 190,
+                    marginLeft: 10,
+
+                }}>{item.taskTitle}</Text>
             <Text style={{
-                fontSize: 13,
-                color: bottomTheme,
-                // color: bottomTheme,
-            }}>{item.title}</Text>
-            <Text style={{color: 'red', fontStyle: 'italic', fontSize: 16}}>+{item.price}</Text>
+                color: 'red', fontStyle: 'italic', fontSize: 15,
+                marginRight: 20,
+            }}>+{item.rewardPrice}元</Text>
         </View>;
     };
 }

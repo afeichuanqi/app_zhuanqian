@@ -41,6 +41,7 @@ export default class FlatListCommonUtil extends PureComponent {
     _updateList = (refresh) => {
         if (refresh) {
             this.props.onRefresh(true);
+
             this.params.pageIndex = 0;
 
             this.setState({
@@ -62,14 +63,12 @@ export default class FlatListCommonUtil extends PureComponent {
                     isLoading: false,
                     hideLoaded: result.length >= 10 ? false : true,
                 });
-                this.props.onRefresh(false);
             } else {
                 const tmpArr = [...this.state.taskData];
                 this.setState({
                     taskData: tmpArr.concat(result),
                     hideLoaded: result.length >= 10 ? false : true,
                 });
-                this.props.onLoading(false);
             }
         });
 

@@ -200,10 +200,12 @@ class TaskRelease extends PureComponent {
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
 
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentDidMount() {
         const {task_id, update} = this.params;
         const {userinfo} = this.props;
@@ -239,10 +241,7 @@ class TaskRelease extends PureComponent {
         this.props.onSetTaskReleaseInfo(data);
     }
 
-    _goBackClick = () => {
 
-        NavigationUtils.goBack(this.props.navigation);
-    };
     _goReleaseTest = () => {
         //生成数据
         const FormData = this._getFormData();
@@ -374,8 +373,9 @@ class TaskRelease extends PureComponent {
         />;
         const {userinfo} = this.props;
         const {data} = this.state;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16);
-        console.log('render', this.taskInfo);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16, () => {
+
+        });
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -879,7 +879,6 @@ class RadioInfoComponent extends Component {
     };
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        console.log(nextProps.defaultId, 'nextProps.defaultId');
         const index = this.props.radioArr.findIndex(e => e.id == nextProps.defaultId);
         this.props.select(this.props.radioArr[index]);
         if (this.props.defaultId != nextProps.defaultId) {
@@ -1045,7 +1044,11 @@ class StepInfo extends Component {
                 })}
             </View>
             {/*类型弹窗*/}
-            <TaskMenu menuArr={this.menuArr} ref={ref => this.laPop = ref}/>
+            <TaskMenu menuArr={this.menuArr} ref={ref => this.laPop = ref}>
+                {this.menuArr.length > 0 && this.menuArr.map((item, index, arr) => {
+                    return this.genMenu(item.title, item.svg, item.click, index);
+                })}
+            </TaskMenu>
             {/*具体类型*/}
             <TaskPop
 
@@ -1091,16 +1094,29 @@ class StepInfo extends Component {
         </View>;
 
     }
-
+    genMenu = (title, svgXmlData, click, index) => {
+        return <TouchableOpacity
+            key={index}
+            activeOpacity={0.6}
+            onPress={() => {
+                this.laPop.hide(false);
+                click();
+            }
+            }
+            style={{
+                width: 100, height: 35,
+                alignItems: 'center', flexDirection: 'row',
+            }}>
+            <SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>
+            <Text style={{fontSize: 15}}>{title}</Text>
+        </TouchableOpacity>;
+    };
     _svgClick = () => {
         this.props.scollToEnd();
         const handle = findNodeHandle(this.svg);
         UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
             this.laPop.show(pageX, pageY);
         });
-
-
-        // ;
     };
 }
 

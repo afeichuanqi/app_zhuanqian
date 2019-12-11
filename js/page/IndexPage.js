@@ -131,13 +131,17 @@ class HomePage extends PureComponent {
                             activeOpacity={1}
                             onPress={this.SearchOnFocus}
                             style={{
-                                height: topIputHeight, width: searchWidth, backgroundColor: 'rgba(0,0,0,0.05)',
-                                alignItems: 'center', borderRadius: 10, flexDirection: 'row',
+                                height: topIputHeight,
+                                width: searchWidth, backgroundColor: 'rgba(0,0,0,0.05)',
+                                alignItems: 'center',
+                                borderRadius: 10, flexDirection: 'row',
+                                overflow:'hidden',
+
                             }}>
                             <SvgUri style={{
                                 marginHorizontal: 8,
                             }} width={19} height={19} svgXmlData={search}/>
-                            <Text style={{color: 'rgba(0,0,0,0.4)'}}>搜索任务标题、任务ID、用户名</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.2)'}}>任务标题、任务ID、用户名</Text>
                         </AnimatedTouchableOpacity>
 
                         <TabBar
@@ -236,7 +240,6 @@ class HomePage extends PureComponent {
             case 'first':
                 return <FristListComponent
                     position={this.position}
-                    onScroll={this._onScroll}
                     onLoad={this._onLoad}
                     translateY={this.translateY}
                     showAnimated={this.showAnimated}
@@ -244,7 +247,6 @@ class HomePage extends PureComponent {
             case 'second':
                 return <SecondListComponent
                     position={this.position}
-                    onScroll={this._onScroll}
                     onLoad={this._onLoad}
                     translateY={this.translateY}
                     showAnimated={this.showAnimated}
@@ -279,76 +281,7 @@ class HomePage extends PureComponent {
             }
         }
     };
-    _iosShowAnimated = (y) => {
-        if (y > this.nowY && y > 0) {
 
-            if (!this.AnimatedIsshow) {
-                timing(this.animations.val, {
-                    duration: 300,
-                    toValue: 1,
-                    easing: Easing.inOut(Easing.ease),
-                }).start();
-                this.AnimatedIsshow = true;
-
-            }
-        }
-        //
-        if (y < this.nowY) {
-            if (this.AnimatedIsshow) {
-                // this.lastScrollTitle = Date.now();
-                timing(this.animations.val, {
-                    duration: 300,
-                    toValue: 0,
-                    easing: Easing.inOut(Easing.ease),
-                }).start();
-                this.AnimatedIsshow = false;
-            }
-        }
-
-
-    };
-    _androidShowAnimated = (y) => {
-        // if (this.lastScrollTitle + 800 < Date.now()) {
-        //     this.lastScrollTitle = Date.now();
-        if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
-            timing(this.animations.val, {
-                duration: 300,
-                toValue: 0,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
-            this.AnimatedIsshow = false;
-            return;
-        }
-        if (y < this.nowY) {
-            if (this.AnimatedIsshow) {
-                timing(this.animations.val, {
-                    duration: 300,
-                    toValue: 0,
-                    easing: Easing.inOut(Easing.ease),
-                }).start();
-                this.AnimatedIsshow = false;
-            }
-        }
-        if (y > this.nowY) {
-            if (!this.AnimatedIsshow) {
-                timing(this.animations.val, {
-                    duration: 300,
-                    toValue: 1,
-                    easing: Easing.inOut(Easing.ease),
-                }).start();
-                this.AnimatedIsshow = true;
-
-            }
-        }
-    };
-    _onScroll = (y) => {
-        if (Platform.OS === 'android') {
-            this._androidShowAnimated(y);
-        } else {
-            this._iosShowAnimated(y);
-        }
-        this.nowY = y;
-    };
     SearchOnFocus = () => {
         NavigationUtils.goPage({}, 'SearchPage');
     };
@@ -401,7 +334,8 @@ class FristListComponent extends PureComponent {
         if (Platform.OS === 'android') {
 
             if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
-                showAnimated(false)
+                showAnimated(false);
+                return;
             }
             if (y < this.nowY) {
                 showAnimated(false)
@@ -485,23 +419,25 @@ class FristListComponent extends PureComponent {
             />
             <Animated.View style={{
                 width, height: 40, justifyContent: 'space-between', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}]
+                backgroundColor: 'white', transform: [{translateY: columnTop}],
             }}>
-                <View style={{height:8}}/>
                 <Text
                     style={{
                         fontSize: 12,
-                        marginLeft: 15,
-                        marginTop: 10,
                         color: bottomTheme,
+                        position: 'absolute',
+                        left: 15,
+                        top: 16,
+
                     }}>为您推荐</Text>
+
                 <View style={{
                     width: 50,
                     backgroundColor: bottomTheme,
-                    height: 1,
-                    marginLeft: 15,
-                    marginTop: 10,
-                    // alignSelf:'flex-end',
+                    height: 2,
+                    position: 'absolute',
+                    left: 15,
+                    bottom: 3,
                 }}/>
             </Animated.View>
         </Animated.View>;

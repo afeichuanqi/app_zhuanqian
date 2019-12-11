@@ -44,7 +44,7 @@ export default class FilterComponent extends PureComponent {
         });
         //隐藏box
         this._anim = timing(this.animations.translateY, {
-            duration: 300,
+            duration: 200,
             toValue: 1,
             easing: Easing.inOut(Easing.ease),
         }).start();
@@ -52,7 +52,7 @@ export default class FilterComponent extends PureComponent {
     hide = () => {
         //隐藏box
         this._anim = timing(this.animations.translateY, {
-            duration: 300,
+            duration: 200,
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {

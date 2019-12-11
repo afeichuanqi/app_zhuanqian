@@ -58,7 +58,6 @@ class Axios {
         try {
             let query = await qs.stringify(params);
             let response = null;
-            console.log(baseUrl + url)
             if (!params) {
                 response = await instance.get(baseUrl + url,null);
             } else {
