@@ -802,6 +802,27 @@ export function selectShopInfoForUserId(data, token) {
  * @param token
  * @returns {Promise<any> | Promise<*>}
  */
+export function getSearchContent(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/getSearchContent', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询用户店铺详情
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
 export function selectTaskListForUserId(data, token) {
     return new Promise(async function (resolve, reject) {
         try {

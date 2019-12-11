@@ -1,10 +1,11 @@
 import React, {PureComponent} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, Text, View,Dimensions} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, Text, View, Dimensions} from 'react-native';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../../common/TaskSumComponent';
-import {getAllTask} from '../../util/AppService';
+import {getAllTask, getSearchContent} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
-const {height,width} = Dimensions.get('window');
+import {bottomTheme} from '../../appSet';
+const {height, width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
     static defaultProps = {
@@ -14,18 +15,15 @@ export default class FlatListCommonUtil extends PureComponent {
         },
     };
 
-    componentDidMount(): void {
-        setTimeout(() => {
-            this._updateList(true);
-        },500)
+    // componentDidMount(): void {
+    //     //     setTimeout(() => {
+    //     //         this._updateList(true);
+    //     //     }, 500);
+    //     // }
 
-    }
 
-    setColumnType = (type) => {
-        this.params.column_type = type;
-    };
-    setTypes = (types) => {
-        this.params.types = types;
+    setSearchContent = (searchContent) => {
+        this.params.searchContent = searchContent;
     };
     state = {
         taskData: [],
@@ -34,9 +32,7 @@ export default class FlatListCommonUtil extends PureComponent {
     };
     params = {
         pageIndex: 0,
-        column_type: 1,
-        types: '',
-        device: this.props.device,
+        searchContent: '',
     };
     _updateList = (refresh) => {
         if (refresh) {
@@ -50,12 +46,15 @@ export default class FlatListCommonUtil extends PureComponent {
             this.props.onLoading(true);
             this.params.pageIndex += 1;
         }
-        getAllTask({
+        console.log({
             pageIndex: this.params.pageIndex,
-            column_type: this.params.column_type,
-            types: this.params.types,
-            device: this.params.device,
-        }).then(result => {
+            searchContent: this.params.searchContent,
+        });
+        getSearchContent({
+            pageIndex: this.params.pageIndex,
+            searchContent: this.params.searchContent,
+        }, this.props.token).then(result => {
+            // console.log(result,"result");
             if (refresh) {
                 this.setState({
                     taskData: result,
@@ -78,9 +77,9 @@ export default class FlatListCommonUtil extends PureComponent {
 
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
-        const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
+        const {ListHeaderComponent} = this.props;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height-150}/>}
+            ListEmptyComponent={<EmptyComponent message={'暂无符合搜索记录'} height={height - 80}/>}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}
@@ -92,11 +91,12 @@ export default class FlatListCommonUtil extends PureComponent {
             refreshControl={
                 <RefreshControl
                     // title={'更新任务中'}
+                    // tintColor={bottomTheme}
                     refreshing={isLoading}
                     onRefresh={() => this.onRefresh()}
                 />
             }
-            onScroll={onScroll}
+            // onScroll={onScroll}
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
                 // 等待页面布局完成以后，在让加载更多
@@ -107,12 +107,12 @@ export default class FlatListCommonUtil extends PureComponent {
             }}
             windowSize={300}
             onEndReachedThreshold={0.3}
-            onScrollEndDrag={onScrollEndDrag}
-            onScrollBeginDrag={event=>{
-                onScrollBeginDrag(event);
+            // onScrollEndDrag={onScrollEndDrag}
+            onScrollBeginDrag={event => {
+                // onScrollBeginDrag(event);
                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
             }}
-            onMomentumScrollEnd={onMomentumScrollEnd}
+            // onMomentumScrollEnd={onMomentumScrollEnd}
 
             // onScrollBeginDrag={(e) => {
             //
@@ -142,7 +142,7 @@ export default class FlatListCommonUtil extends PureComponent {
             </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 

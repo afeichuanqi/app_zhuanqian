@@ -2,6 +2,7 @@ import userinfo from './userinfo';
 import friend from './friend';
 import taskInfo from './taskInfo';
 import message from './message';
+import search from './search';
 import socketStatus from './socketStatus';
 import {persistCombineReducers} from 'redux-persist';
 import {rootCom, RootNavigator} from '../navigator/AppNavigators';
@@ -17,7 +18,7 @@ const navReducer = (state = navState, action) => {
     state.type = action.type;
     state.key = action.key;
 
-    return  nextState || state;
+    return nextState || state;
 };
 /**
  * 3.合并reducer
@@ -30,12 +31,13 @@ const index = {
         friend,
         socketStatus,
         taskInfo,
+        search,
     }
 ;
 const config = {
     key: 'root',
     storage,
-    whitelist: ['userinfo', 'taskInfo'],
+    whitelist: ['userinfo', 'taskInfo', 'search'],
 };
 let reducer = persistCombineReducers(config, index);
 export default reducer;

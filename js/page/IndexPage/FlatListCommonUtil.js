@@ -82,7 +82,7 @@ export default class FlatListCommonUtil extends PureComponent {
             keyExtractor={(item, index) => index + ''}
             refreshControl={
                 <RefreshControl
-                    title={'更新任务中'}
+                    // title={'更新任务中'}
                     refreshing={isLoading}
                     onRefresh={() => this.onRefresh()}
                 />

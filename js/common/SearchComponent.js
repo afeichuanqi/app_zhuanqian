@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Platform, View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import search from '../res/svg/search.svg';
 import SvgUri from 'react-native-svg-uri';
+import phone_input_clear from '../res/svg/phone_input_clear.svg';
 
 
 class SearchComponent extends Component {
@@ -19,6 +20,9 @@ class SearchComponent extends Component {
         onFocus: () => {
 
         },
+        onSubmitEditing: () => {
+
+        },
     };
 
     constructor(props) {
@@ -28,6 +32,9 @@ class SearchComponent extends Component {
         };
     }
 
+    getValue = () => {
+        return this.state.value;
+    };
 
     componentWillUnmount() {
     }
@@ -39,7 +46,8 @@ class SearchComponent extends Component {
 
 
     render() {
-        const {placeholder, onFocus, height} = this.props;
+        const {placeholder, height} = this.props;
+        const {value} = this.state;
         return <TouchableOpacity
             activeOpacity={1}
             onPress={this.props.onFocus}
@@ -58,37 +66,50 @@ class SearchComponent extends Component {
                     });
                 }}
                 // editable={false}
+                value={value}
                 placeholder={placeholder}
                 keyboardType={'web-search'}
-                placeholderTextColor={'#7b798d'}
+                placeholderTextColor={'rgba(0,0,0,0.4)'}
                 returnKeyType={'search'}
-                onFocus={this._onFocus}
-                clearButtonMode={'while-editing'}
                 multiline={false}
-                // secureTextEntry={true}
+                blurOnSubmit={true}
                 autoCapitalize={'none'}
+                onSubmitEditing={this.props.onSubmitEditing}
             />
-            {/*<View>*/}
-            {/*    */}
-            {/*</View>*/}
+
             <SvgUri style={{
                 position: 'absolute',
                 left: 10,
-                opacity: 0.2,
+                opacity: 1,
             }} width={19} height={19} svgXmlData={search}/>
+            {value.length > 0 && <TouchableOpacity
+                onPress={this._clearInput}
+                style={{position: 'absolute', top: 9, right: 10}} fill={'rgba(0,0,0,0.6)'}
+                activeOpacity={0.7}>
+                <SvgUri width={13}
+                        height={13}
+                        fill={'rgba(0,0,0,0.6)'}
+                        svgXmlData={phone_input_clear}/>
+            </TouchableOpacity>}
+
         </TouchableOpacity>;
 
     }
 
-    _onFocus = () => {
-        const {onFocus} = this.props;
-        console.log(typeof (eval(onFocus)) == 'function');
-        if (typeof (eval(onFocus)) == 'function') {
-            this.props.onFocus();
-            this.textInput.blur();
-        }
-
+    _clearInput = () => {
+        this.props.clearInput();
+        this.setState({
+            value: '',
+        });
     };
+    // _onFocus = () => {
+    //     const {onFocus} = this.props;
+    //     if (typeof (eval(onFocus)) == 'function') {
+    //         this.props.onFocus();
+    //         this.textInput.blur();
+    //     }
+    //
+    // };
 }
 
 export default SearchComponent;

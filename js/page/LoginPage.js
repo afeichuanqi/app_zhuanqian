@@ -54,8 +54,6 @@ class LoginPage extends PureComponent {
         return true;
     };
     _pwdInputOnChangeText = (text) => {
-        // this.setState({phone: text});
-        console.log('我被触发');
         if (text.length > 0) {
             this.loginBtn.setNativeProps({
                 style: {
@@ -141,9 +139,8 @@ class LoginPage extends PureComponent {
                                 width: width - 90,
                                 height: 50,
                                 borderRadius: 30,
-                            }}>
+                            }}/>
 
-                        </View>
 
                     </View>
                     {/*登录即将同意*/}

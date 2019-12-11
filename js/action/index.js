@@ -3,6 +3,8 @@ import {verifyIdentIdy,setConnectionStatus,onMessageFrom,onAddMesage,onSetMsgSta
 import {onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
 import {onSetTaskReleaseInfo} from './taskInfo';
+
+import {onAddSearchTitle} from './search';
 export default {
     onLogin,
     onUploadAvatar,
@@ -30,5 +32,7 @@ export default {
     onChangeSocketStatue,
     //任务发布信息
 
-    onSetTaskReleaseInfo
+    onSetTaskReleaseInfo,
+    //加入搜索历史
+    onAddSearchTitle
 }

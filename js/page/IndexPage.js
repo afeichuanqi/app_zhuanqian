@@ -137,7 +137,7 @@ class HomePage extends PureComponent {
                             <SvgUri style={{
                                 marginHorizontal: 8,
                             }} width={19} height={19} svgXmlData={search}/>
-                            <Text style={{color: 'rgba(0,0,0,0.6)'}}>搜索任务ID,商家名称</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.4)'}}>搜索任务标题、任务ID、用户名</Text>
                         </AnimatedTouchableOpacity>
 
                         <TabBar

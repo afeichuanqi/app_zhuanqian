@@ -21,6 +21,10 @@ import NavigationBar from '../common/NavigationBar';
 import NavigationUtils from '../navigator/NavigationUtils';
 import LabelBigComponent from '../common/LabelBigComponent';
 import BackPressComponent from '../common/BackPressComponent';
+import actions from '../action';
+import {connect} from 'react-redux';
+import {onAddSearchTitle} from '../action/search';
+import FlatListCommonUtil from './SearchPage/FlatListCommonUtil';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -32,12 +36,16 @@ class SearchPage extends PureComponent {
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
-    state = {};
+    state = {
+        showFlatList: false,
+
+    };
 
     componentDidMount() {
         this.backPress.componentDidMount();
 
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -59,8 +67,9 @@ class SearchPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        return (
-            <SafeAreaViewPlus
+        const {search, userinfo} = this.props;
+        const {showFlatList} = this.state;
+        return (<SafeAreaViewPlus
                 topColor={theme}
             >
                 {navigationBar}
@@ -73,12 +82,20 @@ class SearchPage extends PureComponent {
                     backgroundColor: theme,
                     borderBottomWidth: 0.5,
                     borderBottomColor: '#e8e8e8',
+                    marginTop: 10,
                 }}>
 
                     <SearchComponent
-                        placeholder={'搜索任务标题、任务ID'}
+                        ref={ref => this.searchComponent = ref}
+                        placeholder={'任务标题、任务ID、用户名'}
                         height={topIputHeight}
                         onFocus={null}
+                        onSubmitEditing={this.onSubmitEditing}
+                        clearInput={()=>{
+                            this.setState({
+                                showFlatList:false
+                            })
+                        }}
                     />
                     <TouchableOpacity
                         activeOpacity={0.5}
@@ -87,19 +104,36 @@ class SearchPage extends PureComponent {
                         <Text style={{
                             marginLeft: 10,
                             // opacity: 0.8,
-                            fontWeight: '100',
+                            fontWeight: '200',
                         }}>取消</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView>
-                    <SearchColumn title={'热门搜索'}/>
-                    <SearchColumn title={'搜索历史'}/>
-                </ScrollView>
+                {showFlatList ?
+                    <FlatListCommonUtil token={this.props.userinfo.token} ref={ref => this.flatList = ref}/> :
+                    <ScrollView>
+                        {/*<SearchColumn labelArray={search.searchArr} title={'热门搜索'}/>*/}
+                        <SearchColumn labelArray={search.searchArr} title={'搜索历史'}/>
+                    </ScrollView>}
+
 
             </SafeAreaViewPlus>
         );
     }
 
+    onSubmitEditing = () => {
+        const {onAddSearchTitle} = this.props;
+        const searchContent = this.searchComponent.getValue();
+        if (searchContent.length > 0) {
+            onAddSearchTitle(searchContent);//加入搜索本地的历史记录
+            this.setState({
+                showFlatList: true,
+            }, () => {
+                this.flatList.setSearchContent(searchContent);
+                this.flatList._updateList(true);
+
+            });
+        }
+    };
     _cancelPress = () => {
         NavigationUtils.goBack(this.props.navigation);
     };
@@ -107,40 +141,29 @@ class SearchPage extends PureComponent {
 }
 
 class SearchColumn extends PureComponent {
+
     static defaultProps = {
         title: '热门搜索',
-        labelArray: [
-            {id: 1, title: '学生'},
-            {id: 2, title: '服务员'},
-            {id: 3, title: 'test2'},
-            {id: 4, title: '服务员'},
-            {id: 5, title: 'test2'},
-            {id: 6, title: '服务员'},
-            {id: 7, title: 'test2'},
-            {id: 8, title: '服务员'},
-            {id: 9, title: 'test2'},
-            {id: 10, title: '服务员'},
-            {id: 11, title: 'test2'},
-        ],
+        labelArray: [],
     };
 
     render() {
         const {title, labelArray} = this.props;
 
-        return <View style={{marginLeft: 10, marginTop: 20}}>
+        return <View style={{marginLeft: 15, marginTop: 20}}>
             <Text style={{
                 fontSize: 12,
                 opacity: 0.8,
-                fontWeight: '100',
+                fontWeight: '200',
             }}>{title}</Text>
             <View style={{flexDirection: 'row', marginTop: 5, flexWrap: 'wrap'}}>
                 {labelArray.map((item, index, arr) => {
                     return <LabelBigComponent
-                        key={item.id}
+                        key={index}
                         paddingHorizontal={10}
                         title={item.title}
-                        fontSize={11}
-                        paddingVertical={3}
+                        fontSize={12}
+                        paddingVertical={4}
                         marginRight={10}
                         marginTop={10}
                     />;
@@ -150,6 +173,15 @@ class SearchColumn extends PureComponent {
         </View>;
     }
 }
+
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+    search: state.search,
+});
+const mapDispatchToProps = dispatch => ({
+    onAddSearchTitle: (title, callback) => dispatch(actions.onAddSearchTitle(title, callback)),
+});
+const SearchPageRedux = connect(mapStateToProps, mapDispatchToProps)(SearchPage);
 
 const styles = StyleSheet.create({
     carousel: {
@@ -166,4 +198,4 @@ const styles = StyleSheet.create({
         // height:150
     },
 });
-export default SearchPage;
+export default SearchPageRedux;

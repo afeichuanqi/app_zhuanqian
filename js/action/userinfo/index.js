@@ -88,10 +88,7 @@ export function onSetUserName(token, value, callback) {
     return dispatch => {
         dispatch({type: Types.UPLOAD_USER_NAME_LOADING});
         setUserData(data, token).then((data) => {
-            // console.log();
             callback(true, data);
-            // console.log('修改成功拉');
-            // console.log(data, 'data');
             dispatch({
                 type: Types.UPLOAD_USER_NAME_SUCCESS,
                 data: {username: value},
