@@ -46,6 +46,8 @@ import fenxiang from '../res/svg/fenxiang.svg';
 import shoucang from '../res/svg/shoucang.svg';
 import shoucang_ from '../res/svg/shoucang_.svg';
 import ToastShare from '../common/ToastShare';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -57,7 +59,6 @@ class TaskDetails extends PureComponent {
         const {test, task_id} = this.params;
         this.test = test;
         this.task_id = task_id;
-
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
@@ -89,8 +90,7 @@ class TaskDetails extends PureComponent {
         }
 
     };
-
-    async componentDidMount() {
+    updatePage = async () => {
         if (this.test) {
             const {fromUserinfo, taskData, stepData} = this.params;
             const totalData = {fromUserinfo, taskData, stepData};
@@ -113,18 +113,33 @@ class TaskDetails extends PureComponent {
                 });
             } else {
                 const totalData = {fromUserinfo, taskData, stepData: JSON.parse(stepData)};
+                console.log(stepData,"stepData");
                 this.setState({
                     totalData,
                     StatusForTask,
                 });
             }
         }
-        this.backPress.componentDidMount();
+    };
 
+    componentDidMount() {
+        this.backPress.componentDidMount();
+        this.updatePage().then();
+
+        //收到消息刷新任务
+        EventBus.getInstance().addListener(EventTypes.update_task_page, this.listener = data => {
+            const {test, task_id} = data;
+            if (task_id != this.task_id) {
+                this.task_id = task_id;
+                this.test = test;
+                this.updatePage().then();
+            }
+        });
     }
 
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     animations = {
@@ -583,7 +598,7 @@ class TaskDetailsPop extends Component {
                         justifyContent: 'center',
                     }}>
                     {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
-                    <Text style={{fontSize: 15, opacity:0.7}}>接单说明</Text>
+                    <Text style={{fontSize: 15, opacity: 0.7}}>接单说明</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     // key={index}
@@ -597,7 +612,7 @@ class TaskDetailsPop extends Component {
                         alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                     }}>
                     <SvgUri width={18} fill={'rgba(0,0,0,0.7)'} height={18} svgXmlData={fenxiang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity:0.7}}>分享</Text>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7}}>分享</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.6}
@@ -620,7 +635,7 @@ class TaskDetailsPop extends Component {
                     }}>
                     <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={18}
                             svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity:0.7}}>收藏</Text>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7}}>收藏</Text>
                 </TouchableOpacity>
 
             </TaskMenu>

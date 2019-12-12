@@ -29,6 +29,7 @@ import remenrenwu from '../res/svg/remenrenwu.svg';
 import FlatListCommonUtil from './TaskHallPage/FlatListCommonUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {getHotTasks} from '../util/AppService';
+import Global from '../common/Global';
 // import FilterComponent from './TaskHall/FilterComponent';
 let FilterComponent = null;
 
@@ -120,8 +121,8 @@ class TaskHallPage extends PureComponent {
                     />
                     {/*发布按钮图标*/}
                     <TouchableOpacity
-                        onPress={()=>{
-                            NavigationUtils.goPage({},'TaskRelease')
+                        onPress={() => {
+                            NavigationUtils.goPage({}, 'TaskRelease');
                         }}
                         activeOpacity={0.6}
                         style={{
@@ -150,9 +151,12 @@ class TaskHallPage extends PureComponent {
                     renderScene={this.renderScene}
                     position={this.position}
                     renderTabBar={() => null}
-                    onIndexChange={index => this.setState({
-                        navigationIndex: index,
-                    })}
+                    onIndexChange={index => {
+                        this.setState({
+                            navigationIndex: index,
+                        });
+                        Global.TaskHallPage_Index = index;
+                    }}
                     initialLayout={{width}}
                     lazy={true}
                 />
@@ -169,9 +173,9 @@ class TaskHallPage extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent device={1}/>;
+                return <FristListComponent index={0} device={1}/>;
             case 'second':
-                return <FristListComponent device={Platform.OS == 'android' ? 2 : 3}/>;
+                return <FristListComponent index={1} device={Platform.OS == 'android' ? 2 : 3}/>;
         }
     };
 
@@ -323,7 +327,7 @@ class FristListComponent extends PureComponent {
                                 justifyContent: 'center',
                             }}>
                             <Text style={[{
-                                fontSize: 12,
+                                fontSize: 14,
                                 fontWeight: '400',
                                 opacity: 0.6,
                             }, !show ? {color: 'black', opacity: 0.6} : {color: bottomTheme}]}>类型 </Text>
@@ -339,7 +343,7 @@ class FristListComponent extends PureComponent {
                     {/*<FilterBtnComponent ref={ref => this.filterBtnComponent = ref} onPress={this._topLeftClick}/>*/}
                 </View>
                 {/*筛选器*/}
-                <HeadlineComponent ref={ref => this.headlineComponent = ref}/>
+                <HeadlineComponent index={this.props.index} ref={ref => this.headlineComponent = ref}/>
 
             </Animated.View>
 
@@ -396,11 +400,13 @@ class HeadlineComponent extends PureComponent {
     startLunbo = () => {
         this.index = 0;
         this.timer = setInterval(() => {
-
-            if (this.state.HeadlineArrays.length !== 0) {
+            if (Global.TaskHallPage_Index == this.props.index &&
+                Global.activeRouteName == 'TaskHallPage' &&
+                this.state.HeadlineArrays.length !== 0) {//只有在当前页面才进行跑马灯
                 this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
                 this.flatList.scrollToIndex({animated: true, index: this.index});
             }
+
 
         }, 2500);
     };
@@ -423,7 +429,7 @@ class HeadlineComponent extends PureComponent {
             borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 20}}>
-                <SvgUri style={{marginLeft: 20}} width={60} height={60} svgXmlData={remenrenwu}/>
+                <SvgUri style={{marginLeft: 20,marginTop:3}} width={60} height={60} svgXmlData={remenrenwu}/>
             </View>
             {/*分隔符*/}
             <View
@@ -445,8 +451,11 @@ class HeadlineComponent extends PureComponent {
                 />
                 {/*禁止触摸*/}
                 <TouchableOpacity
-                    onPress={()=>{
-                        NavigationUtils.goPage({test:false,task_id:this.state.HeadlineArrays[this.index].taskId},'TaskDetails')
+                    onPress={() => {
+                        NavigationUtils.goPage({
+                            test: false,
+                            task_id: this.state.HeadlineArrays[this.index].taskId,
+                        }, 'TaskDetails');
                     }}
                     activeOpacity={1}
                     style={{position: 'absolute', width: 300, height: 40, opacity: 1, zIndex: 3}}/>
@@ -473,7 +482,7 @@ class HeadlineComponent extends PureComponent {
 
                 }}>{item.taskTitle}</Text>
             <Text style={{
-                color: 'red', fontStyle: 'italic', fontSize: 15,
+                color: 'red',  fontSize: 16,
                 marginRight: 20,
             }}>+{item.rewardPrice}元</Text>
         </View>;
@@ -527,7 +536,7 @@ class TopLeftFilterComponent extends Component {
                         onPress={() => this._onPress(Lindex)}
                     >
                         <Animated.Text style={[{
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: '400',
                             // transform: [{translationY:80}],
                             // transfrom

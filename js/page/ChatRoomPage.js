@@ -56,33 +56,19 @@ class TaskInfo extends React.Component {
         }}>
             <View style={{flexDirection: 'row'}}>
                 <Image
-                    style={{height: 50, width: 50, backgroundColor: 5}}
+                    style={{height: 50, width: 50, backgroundColor: 5, borderRadius: 3}}
                     source={{uri: taskInfo.task_uri}}
                     resizeMode={Image.resizeMode.stretch}
                 />
-                <View style={{marginLeft: 15}}>
+                <View style={{marginLeft: 10, justifyContent: 'space-between'}}>
                     <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)', marginTop: 1}}>{taskInfo.task_title}</Text>
-                    <View style={{flexDirection: 'row', alignItems: 'center', height: 15, wdith: 50, marginTop: 1}}>
+                    <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.6)'}}>{taskInfo.task_title}</Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center', height: 15, wdith: 50}}>
                         <Text style={{
-                            fontSize: 12,
-                            color: 'rgba(0,0,0,0.7)',
+                            fontSize: 11,
+                            color: 'rgba(0,0,0,0.6)',
 
                         }}>{columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : ''}</Text>
-                        {/*<TouchableOpacity*/}
-                        {/*    onPress={this.props.appealClick}*/}
-                        {/*    style={{*/}
-                        {/*        width: 40,*/}
-                        {/*        height: 15,*/}
-                        {/*        backgroundColor: 'red',*/}
-                        {/*        justifyContent: 'center',*/}
-                        {/*        alignItems: 'center',*/}
-                        {/*        marginTop: 2,*/}
-                        {/*        marginLeft: 10,*/}
-                        {/*        borderRadius: 2,*/}
-                        {/*    }}>*/}
-                        {/*    <Text style={{fontSize: 12, color: 'white'}}>申诉</Text>*/}
-                        {/*</TouchableOpacity>*/}
                     </View>
 
                 </View>
@@ -163,7 +149,7 @@ class ChatRoomPage extends React.Component {
 
     getMessages = () => {
         const tmpArr = [];
-        // console.log("getMessages","getMessages");
+
         this.props.message.msgArr.forEach((item) => {
             if (item.FriendId == this.FriendId) {
                 const PreviousIndex = tmpArr.length;
@@ -174,10 +160,14 @@ class ChatRoomPage extends React.Component {
                         renTime = false;
                     }
                 }
-                // if (item.msg_type == 'image') {
-                //     const url = item.content;
-                //     this.imageArr.push({url});
-                // }
+                if (item.msg_type == 'image') {
+                    const url = item.content;
+                    const findindex = this.imageArr.findIndex(item => item.url == url);
+                    if (findindex === -1) {
+                        this.imageArr.push({url});
+                    }
+
+                }
                 tmpArr.push({
                     id: item.msgId ? item.msgId : item.uuid,
                     type: item.msg_type,
@@ -199,13 +189,26 @@ class ChatRoomPage extends React.Component {
                     time: item.sendDate,
                 });
 
+
             }
         });
+        if (tmpArr.length < 10 && tmpArr.length != 0) {
+            tmpArr.push({
+                id: 0,
+                type: 'system',
+                content: '为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付',
+                title: '安全交易规范',
+                chatInfo: {
+                    avatar: this.fromUserinfo.avatar_url,
+                    id: parseInt(this.fromUserinfo.id),
+                    nickName: this.fromUserinfo.username,
+                },
+            });
+        }
         return tmpArr;
     };
 
     onRefresh = () => {
-        console.log('我被触发触发');
         if (this.getMessages().length >= 10) {
             this.pageCount += 10;
             ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
@@ -220,8 +223,6 @@ class ChatRoomPage extends React.Component {
     };
 
     render() {
-        // const {fromUserinfo, task_id, columnType} = this.params;
-        console.log('我被render');
         const {userinfo} = this.props;
         let statusBar = {
             hidden: false,
@@ -253,6 +254,11 @@ class ChatRoomPage extends React.Component {
                         appealClick={this._appealClick}
                     />
                     <ChatScreen
+                        systemClick={() => {
+                            // NavigationUtils
+                            NavigationUtils.goPage({type: 2}, 'UserProtocol');
+                        }}
+                        allPanelAnimateDuration={0}
                         loadHistory={this.onRefresh}
                         inverted={true}
                         inputOutContainerStyle={{

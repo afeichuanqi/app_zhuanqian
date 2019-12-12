@@ -4,8 +4,8 @@ import qs from 'qs';
 // import Toast from "../../common/RootToast";
 
 let defaultConfig = {
-        baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
-        // baseUrl: 'http://is8zdp.natappfree.cc',//测试
+        // baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
+        baseUrl: 'http://6vrsiw.natappfree.cc',//测试
         // baseUrl: 'http://47.99.133.97:3000',//测试
         timeout:
             15000,

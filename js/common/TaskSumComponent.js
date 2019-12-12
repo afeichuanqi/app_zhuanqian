@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
 import {bottomTheme} from '../appSet';
@@ -10,6 +10,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 // const {timing} = Animated;
 
 const topBottomVal = 17;
+const {width} = Dimensions.get('window');
 
 class TaskSumComponent extends PureComponent {
 
@@ -78,8 +79,9 @@ class TaskSumComponent extends PureComponent {
         const {titleFontSize, marginHorizontal, item} = this.props;
 
         return <TouchableOpacity
-            onPress={()=>{
-                NavigationUtils.goPage({test:false,task_id:item.taskId},'TaskDetails')
+            onPress={() => {
+                NavigationUtils.goPage({test: false, task_id: item.taskId}, 'TaskDetails');
+                this.props.onPress && this.props.onPress(item.taskId);
             }}
             style={{
                 flex: 1,
@@ -90,7 +92,7 @@ class TaskSumComponent extends PureComponent {
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 // transform: [{scale}],
-                height: 90,
+                height: 85,
             }}
             // onPressIn={this._onPressIn}
             // onPressOut={this._onPressOut}
@@ -100,71 +102,65 @@ class TaskSumComponent extends PureComponent {
                 source={{uri: item.avatarUrl}}
                 resizeMode={FastImage.resizeMode.stretch}
             />
-            {/*左上*/}
-            <View style={{
-                position: 'absolute',
-                top: topBottomVal,
-                left: 65,
-                flexDirection: 'row',
-                alignItems:'center',
-            }}>
-                <Text style={{
-                    fontSize: titleFontSize,
-                    color: 'black',
+            <View style={{height: 50, width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
 
-                }}>{item.taskTitle}</Text>
-                {item.recommendIsExp == 1 && <View style={{
-                    height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
-                    alignItems: 'center',
-                    justifyContent: 'center', marginLeft:5,
-                }}>
-                    <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>推</Text>
-                </View>}
-                {item.topIsExp == 1 && <View style={{
-                    height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginLeft: 3,
-                }}>
-                    <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>顶</Text>
-                </View>}
-                {/*<SvgUri width={19} height={19} style={{marginLeft: 3}} svgXmlData={tuijian}/>*/}
-                {/*<SvgUri width={18} height={18} style={{marginLeft: 3, marginTop: 1}} svgXmlData={ding}/>*/}
-            </View>
-            {/*左下*/}
-            <View style={{
-                position: 'absolute',
-                top: 47,
-                left: 60,
-                flexDirection: 'row',
             }}>
-                <LabelBigComponent title={item.typeTitle}/>
-                <LabelBigComponent title={item.taskName}/>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
+                    {/*标题*/}
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                        <Text style={{
+                            fontSize: titleFontSize,
+                            color: 'black',
+
+                        }}>{item.taskTitle}</Text>
+                        {item.recommendIsExp == 1 && <View style={{
+                            height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                            alignItems: 'center',
+                            justifyContent: 'center', marginLeft: 5,
+                        }}>
+                            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>推</Text>
+                        </View>}
+                        {item.topIsExp == 1 && <View style={{
+                            height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginLeft: 3,
+                        }}>
+                            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>顶</Text>
+                        </View>}
+                    </View>
+                    {/*价格*/}
+                    <View style={{
+                    }}>
+                        <Text style={{
+                            fontSize: 16,
+                            color: 'red',
+                        }}>+{item.rewardPrice} 元</Text>
+                    </View>
+                </View>
+                <View
+                    style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
+                    {/*标签*/}
+                    <View style={{
+                        flexDirection: 'row',
+                    }}>
+                        <LabelBigComponent title={item.typeTitle}/>
+                        <LabelBigComponent title={item.taskName}/>
+                    </View>
+                    {/*剩余数*/}
+                    <Text style={{
+                        fontSize: 13,
+                        // color:''
+                        opacity: 0.5,
+                        // fontWeight: '100',
+                    }}>{parseInt(item.taskPassNum)}人已完成|剩余数{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
+                </View>
             </View>
-            {/*右上*/}
-            <View style={{
-                position: 'absolute',
-                top: 17,
-                right: 0,
-            }}>
-                <Text style={{
-                    fontSize: 16,
-                    color: 'red',
-                }}>+{item.rewardPrice} 元</Text>
-            </View>
-            {/*右下*/}
-            <View style={{
-                position: 'absolute',
-                top: 50,
-                right: 0,
-            }}>
-                <Text style={{
-                    fontSize: 13,
-                    // color:''
-                    opacity: 0.5,
-                    // fontWeight: '100',
-                }}>{parseInt(item.taskPassNum)}人已完成|剩余数{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
-            </View>
+
+
         </TouchableOpacity>;
 
 

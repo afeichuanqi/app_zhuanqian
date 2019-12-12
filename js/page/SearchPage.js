@@ -93,10 +93,10 @@ class SearchPage extends PureComponent {
                         height={topIputHeight}
                         onFocus={null}
                         onSubmitEditing={this.onSubmitEditing}
-                        clearInput={()=>{
+                        clearInput={() => {
                             this.setState({
-                                showFlatList:false
-                            })
+                                showFlatList: false,
+                            });
                         }}
                     />
                     <TouchableOpacity
@@ -114,7 +114,7 @@ class SearchPage extends PureComponent {
                     <FlatListCommonUtil token={this.props.userinfo.token} ref={ref => this.flatList = ref}/> :
                     <ScrollView>
                         {/*<SearchColumn labelArray={search.searchArr} title={'热门搜索'}/>*/}
-                        <SearchColumn labelArray={search.searchArr} title={'搜索历史'}/>
+                        <SearchColumn startSearch={this.SearchColumnStartSearch} labelArray={search.searchArr} title={'搜索历史'}/>
                     </ScrollView>}
 
 
@@ -122,9 +122,16 @@ class SearchPage extends PureComponent {
         );
     }
 
+    SearchColumnStartSearch = (searchContent) => {
+        this.searchComponent.setValue(searchContent)
+        this.startSearch(searchContent);
+    };
     onSubmitEditing = () => {
-        const {onAddSearchTitle} = this.props;
         const searchContent = this.searchComponent.getValue();
+        this.startSearch(searchContent);
+    };
+    startSearch = (searchContent) => {
+        const {onAddSearchTitle} = this.props;
         if (searchContent.length > 0) {
             onAddSearchTitle(searchContent);//加入搜索本地的历史记录
             this.setState({
@@ -148,6 +155,9 @@ class SearchColumn extends PureComponent {
         title: '热门搜索',
         labelArray: [],
     };
+    _startSearch = (title) => {
+        this.props.startSearch(title);
+    };
 
     render() {
         const {title, labelArray} = this.props;
@@ -162,6 +172,7 @@ class SearchColumn extends PureComponent {
                 {labelArray.map((item, index, arr) => {
                     return <LabelBigComponent
                         key={index}
+                        onClick={this._startSearch}
                         paddingHorizontal={10}
                         title={item.title}
                         fontSize={12}

@@ -16,14 +16,14 @@ import {
 import Image from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import {getCurrentTime, changeEmojiText, isIPhoneX} from './utils';
-import Voice from './VoiceView';
+// import Voice from './VoiceView';
 import PopView from './components/pop-view';
 import ChatItem from './ChatItem';
 import {EMOJIS_ZH} from '../source/emojis';
 import EmojiPanel from './emoji';
 import InputBar from './InputBar';
 import PlusPanel from './plus';
-import DelPanel from './del';
+// import DelPanel from './del';
 
 const {height, width} = Dimensions.get('window');
 const ViewPropTypes = RNViewPropTypes || View.propTypes;
@@ -1055,6 +1055,7 @@ class ChatWindow extends PureComponent {
                             renderItem={({item, index}) =>
                                 <ChatItem
                                     ref={(e) => (this.messageItem = e)}
+                                    systemClick={this.props.systemClick}
                                     user={this.props.userProfile}
                                     chatType={chatType}
                                     lastReadAt={this.props.lastReadAt}
@@ -1149,23 +1150,23 @@ class ChatWindow extends PureComponent {
                         inputContainerStyle={this.props.inputContainerStyle}
                         inputHeightFix={this.props.inputHeightFix}
                     />
-                    {
-                        this.props.usePopView
-                            ? <DelPanel
-                                messageSelected={this.state.messageSelected}
-                                isIphoneX={this.isIphoneX}
-                                delPanelButtonStyle={this.props.delPanelButtonStyle}
-                                delPanelStyle={this.props.delPanelStyle}
-                                renderDelPanel={this.props.renderDelPanel}
-                                HeaderHeight={this.HeaderHeight}
-                                iphoneXBottomPadding={this.props.iphoneXBottomPadding}
-                                messageDelIcon={this.props.messageDelIcon}
-                                delMessage={this.props.delMessage}
-                                isInverted={this.isInverted}
-                                leftHeight={this.leftHeight}
-                            />
-                            : null
-                    }
+                    {/*{*/}
+                    {/*    this.props.usePopView*/}
+                    {/*        ? <DelPanel*/}
+                    {/*            messageSelected={this.state.messageSelected}*/}
+                    {/*            isIphoneX={this.isIphoneX}*/}
+                    {/*            delPanelButtonStyle={this.props.delPanelButtonStyle}*/}
+                    {/*            delPanelStyle={this.props.delPanelStyle}*/}
+                    {/*            renderDelPanel={this.props.renderDelPanel}*/}
+                    {/*            HeaderHeight={this.HeaderHeight}*/}
+                    {/*            iphoneXBottomPadding={this.props.iphoneXBottomPadding}*/}
+                    {/*            messageDelIcon={this.props.messageDelIcon}*/}
+                    {/*            delMessage={this.props.delMessage}*/}
+                    {/*            isInverted={this.isInverted}*/}
+                    {/*            leftHeight={this.leftHeight}*/}
+                    {/*        />*/}
+                    {/*        : null*/}
+                    {/*}*/}
                     {
                         this.props.usePlus
                             ? <PlusPanel
@@ -1195,37 +1196,37 @@ class ChatWindow extends PureComponent {
                             />
                             : null
                     }
-                    {
-                        this.state.showVoice
-                            ? <Voice
-                                ref={(e) => (this.voice = e)}
-                                sendVoice={(type, content) => this._sendMessage(type, content)}
-                                changeVoiceStatus={this.changeVoiceStatus}
-                                voiceStatus={this.state.isVoiceContinue}
-                                audioPath={this.props.audioPath}
-                                audioHasPermission={this.androidHasAudioPermission}
-                                audioPermissionState={this.props.audioHasPermission}
-                                voiceSpeakIcon={this.props.voiceSpeakIcon}
-                                audioOnProgress={this.props.audioOnProgress}
-                                audioOnFinish={this.props.audioOnFinish}
-                                audioInitPath={this.props.audioInitPath}
-                                audioRecord={this.props.audioRecord}
-                                audioStopRecord={this.props.audioStopRecord}
-                                audioPauseRecord={this.props.audioPauseRecord}
-                                audioCurrentTime={this.props.audioCurrentTime}
-                                audioResumeRecord={this.props.audioResumeRecord}
-                                audioHandle={this.props.audioHandle}
-                                setAudioHandle={this.props.setAudioHandle}
-                                errorIcon={this.props.voiceErrorIcon}
-                                cancelIcon={this.props.voiceCancelIcon}
-                                errorText={this.props.voiceErrorText}
-                                voiceCancelText={this.props.voiceCancelText}
-                                voiceNoteText={this.props.voiceNoteText}
-                                renderVoiceView={this.props.renderVoiceView}
-                                voiceVolume={this.props.voiceVolume}
-                            />
-                            : null
-                    }
+                    {/*{*/}
+                    {/*    this.state.showVoice*/}
+                    {/*        ? <Voice*/}
+                    {/*            ref={(e) => (this.voice = e)}*/}
+                    {/*            sendVoice={(type, content) => this._sendMessage(type, content)}*/}
+                    {/*            changeVoiceStatus={this.changeVoiceStatus}*/}
+                    {/*            voiceStatus={this.state.isVoiceContinue}*/}
+                    {/*            audioPath={this.props.audioPath}*/}
+                    {/*            audioHasPermission={this.androidHasAudioPermission}*/}
+                    {/*            audioPermissionState={this.props.audioHasPermission}*/}
+                    {/*            voiceSpeakIcon={this.props.voiceSpeakIcon}*/}
+                    {/*            audioOnProgress={this.props.audioOnProgress}*/}
+                    {/*            audioOnFinish={this.props.audioOnFinish}*/}
+                    {/*            audioInitPath={this.props.audioInitPath}*/}
+                    {/*            audioRecord={this.props.audioRecord}*/}
+                    {/*            audioStopRecord={this.props.audioStopRecord}*/}
+                    {/*            audioPauseRecord={this.props.audioPauseRecord}*/}
+                    {/*            audioCurrentTime={this.props.audioCurrentTime}*/}
+                    {/*            audioResumeRecord={this.props.audioResumeRecord}*/}
+                    {/*            audioHandle={this.props.audioHandle}*/}
+                    {/*            setAudioHandle={this.props.setAudioHandle}*/}
+                    {/*            errorIcon={this.props.voiceErrorIcon}*/}
+                    {/*            cancelIcon={this.props.voiceCancelIcon}*/}
+                    {/*            errorText={this.props.voiceErrorText}*/}
+                    {/*            voiceCancelText={this.props.voiceCancelText}*/}
+                    {/*            voiceNoteText={this.props.voiceNoteText}*/}
+                    {/*            renderVoiceView={this.props.renderVoiceView}*/}
+                    {/*            voiceVolume={this.props.voiceVolume}*/}
+                    {/*        />*/}
+                    {/*        : null*/}
+                    {/*}*/}
                 </Animated.View>
             </View>
         )

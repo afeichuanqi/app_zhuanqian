@@ -40,19 +40,27 @@ class PopMenu extends PureComponent {
         this.timer && clearTimeout(this.timer);
     }
 
-    hide = () => {
-        this._anim = timing(this.animations.bottom, {
-            duration: 200,
-            toValue: 0,
-            easing: Easing.inOut(Easing.ease),
-        }).start(() => {
+    hide = (animated = true) => {
+        if (animated) {
+            this._anim = timing(this.animations.bottom, {
+                duration: 200,
+                toValue: 0,
+                easing: Easing.inOut(Easing.ease),
+            }).start(() => {
+                this.timer = setTimeout(() => {
+                    this.setState({
+                        visible: false,
+                    });
+                }, 100);
+            });
+        } else {
             this.timer = setTimeout(() => {
                 this.setState({
                     visible: false,
                 });
             }, 100);
+        }
 
-        });
 
     };
     show = (timestamp = 0) => {
@@ -78,6 +86,7 @@ class PopMenu extends PureComponent {
             includeBase64: this.props.includeBase64,
         }).then(image => {
             this.hide();
+
             this.props.select(image, this.timestamp);
         });
 
@@ -115,8 +124,13 @@ class PopMenu extends PureComponent {
                                   }}
                 >
                     <Animated.View style={{
-                        width, position: 'absolute', bottom: -250, backgroundColor: 'white',
-                        borderTopLeftRadius: 10, borderTopRightRadius: 10,transform: [{translateY: this.animations.bottom}],
+                        width,
+                        position: 'absolute',
+                        bottom: -250,
+                        backgroundColor: 'white',
+                        borderTopLeftRadius: 10,
+                        borderTopRightRadius: 10,
+                        transform: [{translateY: this.animations.bottom}],
                     }}>
                         <View style={{
                             width, alignItems: 'center', height: 50, justifyContent: 'center',

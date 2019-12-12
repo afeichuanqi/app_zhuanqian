@@ -27,6 +27,7 @@ export default class App extends React.Component {
             if (i === tmpImages.length - 1) {
                 if (activeUrl != '') {
                     activeIndex = tmpImages.findIndex(item => item.url == activeUrl);
+                    console.log(activeIndex,"activeIndex");
                 }
                 this.setState({
                     index: activeIndex,
@@ -97,6 +98,7 @@ export default class App extends React.Component {
                 onClick={this.onClick}
                 onLoadSuccess={this.onLoadSuccess}
                 imageUrls={images}
+                index={index}
 
             />
         </Modal>;

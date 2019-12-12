@@ -26,10 +26,12 @@ import task_shangyi from '../../res/svg/task_shangyi.svg';
 import task_xiayi from '../../res/svg/task_xiayi.svg';
 import task_edit from '../../res/svg/task_edit.svg';
 import AnimatedFadeIn from '../../common/AnimatedFadeIn';
-import { uploadQiniuImage} from '../../util/AppService';
+import {uploadQiniuImage} from '../../util/AppService';
 import add_image from '../../res/svg/add_image.svg';
 import PickerImage from '../../common/PickerImage';
 import ImageViewerModal from '../../common/ImageViewerModal';
+import {equalsObj} from '../../util/CommonUtils';
+import FastImagePro from '../../common/FastImagePro';
 
 const {width, height} = Dimensions.get('window');
 
@@ -101,9 +103,22 @@ class StepBox extends PureComponent {
     };
 }
 
-class TaskStepColumn extends PureComponent {
+class TaskStepColumn extends Component {
     constructor(props) {
         super(props);
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        // console.log(this.state.stepDataArr, nextState.stepDataArr,"this.state.stepDataArr, nextState.stepDataArr");
+        if (this.props.showUtilColumn != nextProps.showUtilColumn
+            || this.props.showEditModel != nextProps.showEditModel
+            || this.props.isEdit != nextProps.isEdit
+            || this.state.stepDataArr != nextState.stepDataArr
+            || this.props.stepArr != nextProps.stepArr
+        ) {
+            return true;
+        }
+        return false;
     }
 
     static defaultProps = {
@@ -116,7 +131,7 @@ class TaskStepColumn extends PureComponent {
     };
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.stepArr.length !== nextProps.stepArr.length) {
+        if (!equalsObj(this.props.stepArr, nextProps.stepArr)) {
             this.setState({
                 stepDataArr: nextProps.stepArr,
             });
@@ -157,8 +172,6 @@ class TaskStepColumn extends PureComponent {
                 fun(timestamp, 0, '');
                 const mimeIndex = uri.lastIndexOf('.');
                 const mime = uri.substring(mimeIndex + 1, uri.length);
-                // const path = `file://${image.path}`;
-                console.log(uri, mime, 'mimemime');
                 uploadQiniuImage(userinfo.token, 'reUploadStep', mime, uri).then(url => {
                     fun(timestamp, 1, url);
                 }).catch(err => {
@@ -414,7 +427,7 @@ class TaskStepColumn extends PureComponent {
                             paddingVertical: 10,
                         }}>
                         <View>
-                            <Image
+                            <FastImagePro
                                 source={{uri: typeData.uri}}
                                 style={{
                                     width: width / 2,
@@ -423,7 +436,10 @@ class TaskStepColumn extends PureComponent {
                                     backgroundColor: '#F0F0F0',
                                     borderRadius: 3,
                                 }}
-                                resizeMode={'contain'}/>
+                                resizeMode={'contain'}
+                            />
+                            {/*<Image*/}
+                            {/*    />*/}
                             {uploadStatus == 0 ?//正在上传
                                 <View style={{
                                     position: 'absolute', top: 0, left: 0, width: width / 2, height: width / 1.5,
@@ -805,11 +821,12 @@ class TaskStepColumn extends PureComponent {
             moveUp: this._moveUpColumn,
             moveDown: this._moveDownColumn,
         };
-
+        // console.log('我被render');
         return (
             <View style={{marginBottom: 15}}>
 
                 {this.state.stepDataArr.map((item, index, arr) => {
+                    console.log(this.state.stepDataArr, 'item.timestamp');
                     return this.getStepColumn(index + 1, item.type, item.typeData, utilClick, item.timestamp, item.uploadStatus,
                         typeof (item.uploadStatus1) === 'undefined' ? -2 : item.uploadStatus1);
                 })}

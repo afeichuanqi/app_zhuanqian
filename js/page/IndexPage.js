@@ -14,8 +14,6 @@ import {
     StyleSheet,
     Platform,
     TouchableOpacity,
-
-
 } from 'react-native';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -31,6 +29,7 @@ import FlatListCommonUtil from './IndexPage/FlatListCommonUtil';
 import {connect} from 'react-redux';
 import ChatSocket from '../util/ChatSocket';
 import SecondListComponent from './IndexPage/SecondListComponent';
+import Global from '../common/Global';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -135,7 +134,7 @@ class HomePage extends PureComponent {
                                 width: searchWidth, backgroundColor: 'rgba(0,0,0,0.05)',
                                 alignItems: 'center',
                                 borderRadius: 10, flexDirection: 'row',
-                                overflow:'hidden',
+                                overflow: 'hidden',
 
                             }}>
                             <SvgUri style={{
@@ -174,9 +173,12 @@ class HomePage extends PureComponent {
                         renderScene={this.renderScene}
                         position={this.position}
                         renderTabBar={() => null}
-                        onIndexChange={index => this.setState({
-                            navigationIndex: index,
-                        })}
+                        onIndexChange={index => {
+                            Global.IndexPage_Index = index;
+                            this.setState({
+                                navigationIndex: index,
+                            });
+                        }}
                         initialLayout={{width}}
                         lazy={true}
                     />
@@ -283,8 +285,8 @@ class HomePage extends PureComponent {
     };
 
     SearchOnFocus = () => {
-        // NavigationUtils.goPage({}, 'SearchPage');
-        NavigationUtils.goPage({}, 'ImageExample');
+        NavigationUtils.goPage({}, 'SearchPage');
+        // NavigationUtils.goPage({}, 'ImageExample');
     };
 }
 
@@ -339,10 +341,10 @@ class FristListComponent extends PureComponent {
                 return;
             }
             if (y < this.nowY) {
-                showAnimated(false)
+                showAnimated(false);
             }
             if (y > this.nowY) {
-                showAnimated(true)
+                showAnimated(true);
             }
         } else {
             if (y > this.nowY && y > 0) {
@@ -397,8 +399,6 @@ class FristListComponent extends PureComponent {
                         }}>
                             {/*轮播图*/}
                             <Carousel
-                                // homeNavigation={NavigationUtil.homeNavigation}
-                                // navigation={this.props.navigation}
                                 style={styles.carousel}
                                 timeout={3000}
                                 data={lunboData}

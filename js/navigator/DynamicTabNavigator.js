@@ -25,6 +25,7 @@ import my from '../res/svg/indexPage/my.svg';
 import myA from '../res/svg/indexPage/myA.svg';
 import {connect} from 'react-redux';
 import actions from '../action';
+import Global from '../common/Global';
 
 type Props = {};
 
@@ -87,17 +88,51 @@ class DynamicTabNavigator extends Component<Props> {
 
 class BottomBar extends Component {
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        //记录下当前的路由
         let {routes, type, key} = this.props.nav;
+        const activeRouterName = routes[1].routes[routes[1].routes.length - 1].routeName;
+
+        if (activeRouterName == 'HomePage') {
+            if (nextProps.navigationIndex === 0) {
+                Global.activeRouteName = 'IndexPage';
+            }
+            if (nextProps.navigationIndex === 1) {
+                Global.activeRouteName = 'TaskHallPage';
+            }
+            if (nextProps.navigationIndex === 2) {
+                Global.activeRouteName = 'MessagePage';
+            }
+            if (nextProps.navigationIndex === 3) {
+                Global.activeRouteName = 'MyPage';
+            }
+        } else {
+            Global.activeRouteName = activeRouterName;
+        }
+
         // console.log(this.props.nav,"this.props.nav");
         if (!key || key.length === 0) {
             key = routes[1].routes[routes[1].index].key;
         }
 
         if (type === 'Navigation/BACK' && key === routes[1].routes[1].key) {//需要返回到主页面
-            console.log(this.props.navigationIndex,"this.props.navigationIndex");
+            // console.log(this.props.navigationIndex, 'this.props.navigationIndex');
+            //记录下当前的路由
+            if (nextProps.navigationIndex === 0) {
+                Global.activeRouteName = 'IndexPage';
+            }
+            if (nextProps.navigationIndex === 1) {
+                Global.activeRouteName = 'TaskHallPage';
+            }
+            if (nextProps.navigationIndex === 2) {
+                Global.activeRouteName = 'MessagePage';
+            }
+            if (nextProps.navigationIndex === 3) {
+                Global.activeRouteName = 'MyPage';
+            }
             if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
                 StatusBar.setBarStyle('dark-content', true);
                 StatusBar.setBackgroundColor(theme, true);
+
             } else {
                 StatusBar.setBarStyle('light-content', true);
                 StatusBar.setBackgroundColor(bottomTheme, true);

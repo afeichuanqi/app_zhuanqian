@@ -93,6 +93,7 @@ class ToastShare extends PureComponent {
                                 marginVertical: 5,
                             }}>分享至</Text>
                             <ScrollView
+                                showsHorizontalScrollIndicator={false}
                                 horizontal={true}
                                 style={{ paddingHorizontal: 20, marginTop: 5}}>
 

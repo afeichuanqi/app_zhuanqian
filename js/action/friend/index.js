@@ -22,7 +22,10 @@ export function onSetAllFriendUnRead(FriendId) {
 }
 
 // 好友来了一条新的消息
-export function onSetNewMsgForRromUserid(fromUserid_, msg_type_, content_, msgId_, sendDate_, ToUserId_, sendStatus_,username,avatar_url,FriendId,columnType,taskUri,taskId) {
+export function onSetNewMsgForRromUserid(
+    fromUserid_, msg_type_, content_, msgId_, sendDate_, ToUserId_, sendStatus_, username, avatar_url, FriendId, columnType, taskUri, taskId,
+    isAddNewMsgLength = true,
+) {
     return {
         type: Types.MESSAGE_FROMOF_USERID_Friend, data: {
             fromUserid: fromUserid_,
@@ -37,10 +40,12 @@ export function onSetNewMsgForRromUserid(fromUserid_, msg_type_, content_, msgId
             FriendId,
             columnType,
             taskUri,
-            taskId
+            taskId,
+            isAddNewMsgLength,
         },
     };
 }
+
 // 设置好友的一条消息已经读取
 export function onSetFriendMsgIsRead(FriendId) {
     // console.log(code, 'code');

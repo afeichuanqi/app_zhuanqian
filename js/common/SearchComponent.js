@@ -32,6 +32,11 @@ class SearchComponent extends Component {
         };
     }
 
+    setValue = (text) => {
+        this.setState({
+            value: text,
+        });
+    };
     getValue = () => {
         return this.state.value;
     };

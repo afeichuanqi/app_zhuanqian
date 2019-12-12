@@ -110,7 +110,7 @@ export const judgeTaskData = (data, update) => {
         reward_price,
         reward_num,
         task_steps,
-        task_id
+        task_id,
     } = data;
     if (!task_type_id || task_type_id === 0) {
         return '请认真填写任务类型哦 ~ ~';
@@ -143,8 +143,8 @@ export const judgeTaskData = (data, update) => {
         if (!reward_num || reward_num === 0) {
             return '悬赏数量记得填写哦 ~ ~';
         }
-    }else{
-        if(!task_id){
+    } else {
+        if (!task_id) {
             return '数据发生错误 ~ ~';
         }
     }
@@ -225,4 +225,54 @@ export const judgeSendTaskData = (task_step_data) => {
         return '检查任务步骤是否正确填写完毕';
     }
     return '';
+};
+export const equalsObj = (oldData, newData) =>{
+    // 类型为基本类型时,如果相同,则返回true
+    if (oldData === newData) {
+        return true;
+    }
+    if (isObject(oldData) && isObject(newData) && Object.keys(oldData).length === Object.keys(newData).length) {
+        // 类型为对象并且元素个数相同
+
+        // 遍历所有对象中所有属性,判断元素是否相同
+        for (const key in oldData) {
+            if (oldData.hasOwnProperty(key)) {
+                if (!equalsObj(oldData[key], newData[key]))
+                // 对象中具有不相同属性 返回false
+                {
+                    return false;
+                }
+            }
+        }
+    } else if (isArray(oldData) && isArray(oldData) && oldData.length === newData.length) {
+        // 类型为数组并且数组长度相同
+
+        for (let i = 0, length = oldData.length; i < length; i++) {
+            if (!equalsObj(oldData[i], newData[i]))
+            // 如果数组元素中具有不相同元素,返回false
+            {
+                return false;
+            }
+        }
+    } else {
+        // 其它类型,均返回false
+        return false;
+    }
+
+    // 走到这里,说明数组或者对象中所有元素都相同,返回true
+    return true;
+};
+/**
+ * 判断此对象是否是Object类型
+ * @param {Object} obj
+ */
+function  isObject(obj){
+    return Object.prototype.toString.call(obj)==='[object Object]';
+};
+/**
+ * 判断此类型是否是Array类型
+ * @param {Array} arr
+ */
+function isArray(arr){
+    return Object.prototype.toString.call(arr)==='[object Array]';
 };

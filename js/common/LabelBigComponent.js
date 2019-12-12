@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Text} from 'react-native';
+import {Text, TouchableOpacity, Platform} from 'react-native';
 
 
 class LabelBigComponent extends PureComponent {
@@ -8,13 +8,11 @@ class LabelBigComponent extends PureComponent {
     static defaultProps = {
         title: '高价',
         paddingHorizontal: 6,
-        paddingVertical: 3,
+        paddingVertical: Platform.OS === 'android' ? 1 : 3,
         fontSize: 12,
         marginRight: 5,
         marginTop: 0,
-        onFocus: () => {
 
-        },
     };
 
     constructor(props) {
@@ -31,21 +29,26 @@ class LabelBigComponent extends PureComponent {
     }
 
     render() {
-        const {title, paddingHorizontal, fontSize, paddingVertical, marginRight, marginTop} = this.props;
-        return <View style={{
-            paddingHorizontal,
-            paddingVertical,
-            backgroundColor: '#f3f3f3',
-            borderRadius: 4,
-            marginRight,
-            marginTop,
-        }}>
+        const {title, paddingHorizontal, fontSize, paddingVertical, marginRight, marginTop, onClick} = this.props;
+        return <TouchableOpacity
+            onPress={() => {
+                onClick && onClick(title);
+            }}
+            activeOpacity={onClick ? 0.6 : 1}
+            style={{
+                paddingHorizontal,
+                paddingVertical,
+                backgroundColor: '#f3f3f3',
+                borderRadius: 4,
+                marginRight,
+                marginTop,
+            }}>
             <Text style={{
                 fontSize,
                 opacity: 0.5,
-                color:'black'
+                color: 'black',
             }}>{title}</Text>
-        </View>;
+        </TouchableOpacity>;
     }
 }
 

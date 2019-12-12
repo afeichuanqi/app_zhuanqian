@@ -393,7 +393,7 @@ class MessageItemComponent extends Component {
                     marginLeft: 10,
                 }}>{username}</Text>
                 <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>{
-                    columnType == 1 ? '任务咨询' : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
+                    columnType == 1 ? `任务咨询 - 任务ID:${taskId}` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
                 }</Text>
 
 

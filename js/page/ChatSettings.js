@@ -235,9 +235,7 @@ class ChatSetting extends PureComponent {
             beUserid: toUserid,
             is_black: isCheck ? 1 : 0,
         }, token).then(() => {
-            console.log('成功');
         }).catch(e => {
-            console.log('我被触发');
             this.radioComponent.setChecked(!isCheck);
         });
     };

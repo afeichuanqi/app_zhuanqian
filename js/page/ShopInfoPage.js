@@ -51,10 +51,12 @@ class ShopInfoPage extends PureComponent {
         };
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentDidMount() {
         this.backPress.componentDidMount();
         this.updateShopInfo(this.params.userid);
@@ -80,11 +82,6 @@ class ShopInfoPage extends PureComponent {
                 userId: user_id,
             });
         });
-    };
-
-
-    _goBackClick = () => {
-        NavigationUtils.goBack(this.props.navigation);
     };
     animations = {
         val: new Animated.Value(1),
@@ -228,10 +225,10 @@ class ShopList extends Component {
                     style={{color: 'red'}}
                 />
                 <Text style={{marginLeft: 10}}>正在加载更多</Text>
-            </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
+            </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
@@ -242,6 +239,12 @@ class ShopList extends Component {
             item={item}
             titleFontSize={15}
             marginHorizontal={15}
+            onPress={(task_id) => {
+                EventBus.getInstance().fireEvent(EventTypes.update_task_page, {
+                    test: false,
+                    task_id: task_id,
+                });
+            }}
         />;
     };
     onLoading = () => {

@@ -41,7 +41,6 @@ export function onUploadAvatar(token, data, callback) {
         dispatch({type: Types.UPLOAD_AVATAR_LOADING, data: {avatar_url: ''}});
         uploadAvatar(data, token).then((data) => {
             callback(true, data);
-            console.log(data, 'data');
             dispatch({
                 type: Types.UPLOAD_AVATAR_SUCCESS,
                 data: {avatar_url: data.imageUrl},

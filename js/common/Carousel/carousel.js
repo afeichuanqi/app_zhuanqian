@@ -8,10 +8,9 @@ import {
     View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-// import NavigationUtil from "../../../js/navigator/NavigationUtils";
+import Global from '../../common/Global';
 
 let {width} = Dimensions.get('window');
-// width = width - 20
 const styles = StyleSheet.create({
     container: {},
     itemContainer: {justifyContent: 'center'},
@@ -76,15 +75,12 @@ class Carousel extends Component {
     }
 
     _handle = () => {
+        if (Global.activeRouteName == 'IndexPage' && Global.IndexPage_Index == 0) {
+            let length = this.props.data.length;
+            this.currentIndex += 1;
+            this.scrollToIndex(this.currentIndex % length);
+        }
 
-        // const isWatchVideo = NavigationUtil.isWatchVideo;
-        // const {homeNavigation, navigation} = this.props;
-        // if (homeNavigation.isFocused() && navigation.isFocused() && !isWatchVideo) {
-        //
-        // }
-        let length = this.props.data.length;
-        this.currentIndex += 1;
-        this.scrollToIndex(this.currentIndex % length);
     };
 
     componentWillUnmount(): void {

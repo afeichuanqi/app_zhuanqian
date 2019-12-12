@@ -353,7 +353,7 @@ class TopInfoColumn extends PureComponent {
                             : <FastImage
                                 style={[styles.imgStyle]}
                                 source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
-                                resizeMode={FastImage.stretch}
+                                resizeMode={FastImage.resizeMode.stretch}
                             />}
 
                         {/*<*/}
@@ -396,11 +396,10 @@ class TopInfoColumn extends PureComponent {
             mime,
             data: base64Data,
         };
-        // console.log(userinfo.token);
         this.props.onUploadAvatar(userinfo.token, imgData, (isTrue, data) => {
-            if (!isTrue) {
-                console.log(data.msg);
-            }
+            // if (!isTrue) {
+            //     console.log(data.msg);
+            // }
         });
     };
 }

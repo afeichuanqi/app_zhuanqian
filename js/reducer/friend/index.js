@@ -56,7 +56,8 @@ export default function onAction(state = defaultContent, action) {
         case Types.MESSAGE_FROMOF_USERID_Friend:
             // const columnUnreadLength3 = [...state.columnUnreadLength];
             let temArr3 = [...state.friendArr];
-            let NewUnReadLength = state.unMessageLength + 1;
+            console.log(data.isAddNewMsgLength,"data.isAddNewMsgLength");
+            let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
             const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
 
             if (fromUserIndex != -1) {//找到了此用户
@@ -64,8 +65,7 @@ export default function onAction(state = defaultContent, action) {
                 item.msg_type = data.msg_type;
                 item.msg = data.content;
                 item.sendDate = data.sendDate;
-                // ite
-                item.unReadLength = data.fromUserid != data.ToUserId && item.unReadLength + 1;
+                item.unReadLength = data.fromUserid != data.ToUserId && data.isAddNewMsgLength && item.unReadLength + 1;
                 temArr3[fromUserIndex] = item;
                 // columnUnreadLength3[parseInt(item.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
             } else {
@@ -78,7 +78,7 @@ export default function onAction(state = defaultContent, action) {
                     sendDate: data.sendDate,
                     msg_type: data.msg_type,
                     msgId: data.msgId,
-                    unReadLength: data.fromUserid != data.ToUserId ? 1 : 0,
+                    unReadLength: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? 1 : 0 : 0,
                     FriendId: data.FriendId,
                     columnType: data.columnType,
                     taskUri: data.taskUri,
@@ -99,10 +99,11 @@ export default function onAction(state = defaultContent, action) {
         case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
             // const columnUnreadLength4 = [...state.columnUnreadLength];
             let temArr4 = [...state.friendArr];
-            let NewUnReadLength1 = state.unMessageLength == 0 ? 0 : state.unMessageLength - 1;
+            let NewUnReadLength1 ;
             const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
             if (fromUserIndex1 != -1) {
                 const item1 = temArr4[fromUserIndex1];
+                NewUnReadLength1 = state.unMessageLength - item1.unReadLength;
                 item1.unReadLength = 0;
                 temArr4[fromUserIndex1] = item1;
                 // columnUnreadLength4[parseInt(item1.columnType) - 1] -= item1.unReadLength;

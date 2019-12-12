@@ -6,7 +6,8 @@ import {
   ActivityIndicator,
   Text
 } from 'react-native'
-import Image from 'react-native-fast-image';
+// import Image from 'react-native-fast-image';
+import FastImagePro from '../../../FastImagePro';
 export default class ImageMessage extends PureComponent {
   render () {
     const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType, showIsRead, isReadStyle } = this.props
@@ -23,7 +24,7 @@ export default class ImageMessage extends PureComponent {
             this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'image', parseInt(this.props.rowId), message.content.uri, message)
           }} >
           <View style={{ maxHeight: 300, overflow: 'hidden', borderRadius: 5 }}>
-            <Image source={{ uri: message.content.uri }} style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]} />
+            <FastImagePro source={{ uri: message.content.uri }} style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]} />
             {showIsRead && chatType !== 'group' && isSelf && (
               <Text style={[{ textAlign: 'right', fontSize: 13 }, isReadStyle]}>
                 {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
