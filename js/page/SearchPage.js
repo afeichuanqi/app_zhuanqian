@@ -12,7 +12,7 @@ import {
     Text,
     Dimensions,
     StyleSheet, Platform,
-    TouchableOpacity, ScrollView,
+    TouchableOpacity, ScrollView, StatusBar,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
@@ -62,6 +62,8 @@ class SearchPage extends PureComponent {
             backgroundColor: theme,//安卓手机状态栏背景颜色
             barStyle: 'dark-content',
         };
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}

@@ -54,7 +54,7 @@ class MyPage extends PureComponent {
     render() {
         let statusBar = {
             // hidden: false,
-            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
+            // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
         const titleTop = Animated.interpolate(this.scrollY, {
             inputRange: [-200, 0, 100],

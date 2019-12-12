@@ -34,7 +34,8 @@ import UserBillListPage from '../page/UserBillListPage';
 import FriendPromotionPage from '../page/FriendPromotionPage';
 import UpdateUserName from '../page/SettingPage/UpdateUserName';
 import TaskRejectDetailsPage from '../page/TaskRejectDetailsPage';
-// import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator'
+import ImageExample from '../common/ImageViewer/ImageViewer';
+import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator'
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
     Welcome: {
@@ -44,25 +45,25 @@ const InitNavigator = createStackNavigator({
         },
     },
 });
-// const IOS_MODAL_ROUTES = ['TaskDetails'];
-// const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
-//     const isModal = IOS_MODAL_ROUTES.some(
-//         screenName =>
-//             screenName === transitionProps.scene.route.routeName ||
-//             (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName),
-//     );
-//     if (isModal) {
-//         return {
-//             screenInterpolator: Platform.OS === 'ios' ? CardStackStyleInterpolator.forFadeFromBottomAndroid : CardStackStyleInterpolator.forInitial,
-//         };
-//     } else {
-//         return {
-//             screenInterpolator: Platform.OS === 'android' ? CardStackStyleInterpolator.forVertical : CardStackStyleInterpolator.forHorizontal,
-//         };
-//     }
-//
-//
-// };
+const IOS_MODAL_ROUTES = ['TaskDetails'];
+const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
+    const isModal = IOS_MODAL_ROUTES.some(
+        screenName =>
+            screenName === transitionProps.scene.route.routeName ||
+            (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName),
+    );
+    if (isModal) {
+        return {
+            screenInterpolator: CardStackStyleInterpolator.forFadeFromBottomAndroid,
+        };
+    } else {
+        return {
+            screenInterpolator: CardStackStyleInterpolator.forHorizontal ,
+        };
+    }
+
+
+};
 const MainNavigator = createStackNavigator({
         HomePage: {
             screen: HomePage,
@@ -221,6 +222,12 @@ const MainNavigator = createStackNavigator({
                 header: null,
             },
         },
+        ImageExample: {
+            screen: ImageExample,
+            navigationOptions: {
+                header: null,
+            },
+        },
 
 
     },
@@ -235,7 +242,7 @@ const MainNavigator = createStackNavigator({
         // transitionConfig: () => ({
         //     screenInterpolator: StackViewStyleInterpolator.forHorizontal,
         // }),
-        // transitionConfig: dynamicModalTransition,
+        transitionConfig: dynamicModalTransition,
     },
 );
 const AppContainer = createSwitchNavigator({

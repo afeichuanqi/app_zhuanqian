@@ -83,7 +83,7 @@ class HomePage extends PureComponent {
         const {navigationRoutes, navigationIndex} = this.state;
         let statusBar = {
             // hidden: false,
-            backgroundColor: theme,//安卓手机状态栏背景颜色
+            // backgroundColor: theme,//安卓手机状态栏背景颜色
             // barStyle: 'dark-content',
         };
 
@@ -283,7 +283,8 @@ class HomePage extends PureComponent {
     };
 
     SearchOnFocus = () => {
-        NavigationUtils.goPage({}, 'SearchPage');
+        // NavigationUtils.goPage({}, 'SearchPage');
+        NavigationUtils.goPage({}, 'ImageExample');
     };
 }
 

@@ -43,7 +43,7 @@ class PopMenu extends PureComponent {
     hide = () => {
         this._anim = timing(this.animations.bottom, {
             duration: 200,
-            toValue: -(200 + (width / 3)),
+            toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
             this.timer = setTimeout(() => {
@@ -61,14 +61,14 @@ class PopMenu extends PureComponent {
             visible: true,
         }, () => {
             this._anim = timing(this.animations.bottom, {
-                duration: 100,
-                toValue: 0,
+                duration: 200,
+                toValue: -250,
                 easing: Easing.inOut(Easing.cubic),
             }).start();
         });
     };
     animations = {
-        bottom: new Animated.Value(-(200 + (width / 3))),
+        bottom: new Animated.Value(0),
     };
     _selTakePhone = () => {
         ImagePicker.openCamera({
@@ -91,7 +91,6 @@ class PopMenu extends PureComponent {
         }).then(image => {
             this.hide();
             this.props.select(image, this.timestamp);
-            // console.log(image);
 
         });
     };
@@ -104,7 +103,7 @@ class PopMenu extends PureComponent {
             <Modal
                 transparent
                 visible={visible}
-                animationType={'fade'}
+                // animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 
@@ -116,8 +115,8 @@ class PopMenu extends PureComponent {
                                   }}
                 >
                     <Animated.View style={{
-                        width, position: 'absolute', bottom: this.animations.bottom, backgroundColor: 'white',
-                        borderTopLeftRadius: 10, borderTopRightRadius: 10,
+                        width, position: 'absolute', bottom: -250, backgroundColor: 'white',
+                        borderTopLeftRadius: 10, borderTopRightRadius: 10,transform: [{translateY: this.animations.bottom}],
                     }}>
                         <View style={{
                             width, alignItems: 'center', height: 50, justifyContent: 'center',

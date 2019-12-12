@@ -1,59 +1,105 @@
-import React, {Component} from 'react';
-import {Dimensions} from 'react-native';
-import PhotoView from '@merryjs/photo-viewer';
+import React from 'react';
+import {ActivityIndicator, Modal} from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import FastImage from 'react-native-fast-image';
+import Global from './Global';
+import {saveImg} from '../util/ImageUtil';
+import Toast from './Toast';
 
-const {width, height} = Dimensions.get('window');
 export default class App extends React.Component {
     state = {
         visible: false,
         index: 0,
-        images: [
-            {
-                source: {
-                    uri:
-                        'http://wenjian.5irenqi.com/4ee6b320-0bf0-11ea-98fb-3ff2c90f7c8b.jpg',
-                },
-                // title: "Flash End-of-Life",
-                // summary:
-                //     "Adobe announced its roadmap to stop supporting Flash at the end of 2020. ",
-                // // must be valid hex color or android will crashes
-                // titleColor: "#f90000",
-                // summaryColor: "green"
-            },
-        ],
+        images: [{}],
     };
-    show = (images) => {
-        const tmpImages = [...this.state.images];
-        tmpImages[0] = {
-            source: {
-                uri: images.url,
-            },
-        };
-        this.setState({
-            images: tmpImages,
-            visible: true,
+    show = (images, activeUrl = '') => {
+        let activeIndex = 0;
+        const tmpImages = [...images];
+        for (let i = 0; i < tmpImages.length; i++) {
+            const index = i;
+            const images = tmpImages[index];
+            const findindex = Global.imageSizeArr.findIndex(item => images.url == item.url);
+            if (findindex !== -1) {
+                tmpImages[index].width = Global.imageSizeArr[findindex].width;
+                tmpImages[index].height = Global.imageSizeArr[findindex].height;
+            }
 
-        });
+            if (i === tmpImages.length - 1) {
+                if (activeUrl != '') {
+                    activeIndex = tmpImages.findIndex(item => item.url == activeUrl);
+                }
+                this.setState({
+                    index: activeIndex,
+                    images: tmpImages,
+                    visible: true,
+                });
+            }
+        }
+
 
     };
     hide = () => {
         this.setState({visible: false});
+    };
+    onCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+    renderImage = (props) => {
+        return <FastImage {...props}/>;
+    };
+    onClick = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+    onLoadSuccess = (url, width, height) => {
+        const index = Global.imageSizeArr.findIndex(item => item.url == url);
+        if (index === -1) {
+            Global.imageSizeArr.push({url, width, height});
+        } else {
+            Global.imageSizeArr[index].width = width;
+            Global.imageSizeArr[index].height = height;
+        }
+    };
+    onDoubleClick = () => {
+
+    };
+    loadingRender = () => {
+        return <ActivityIndicator/>;
+    };
+    onSave = (url) => {
+        saveImg(url, (msg) => {
+            this.toast.show(msg);
+        });
     };
 
     render() {
 
         const {visible, images, index} = this.state;
 
-        return <PhotoView
+        return <Modal
             visible={visible}
-            data={images}
-            hideShareButton={true}
-            hideStatusBar={false}
-            initial={index}
-            onDismiss={e => {
-                this.setState({visible: false});
-            }}
-        />;
+            animationType={'fade'}
+            transparent
+            onRequestClose={this.hide}
+        >
+            <Toast
+                ref={ref => this.toast = ref}
+            />
+            <ImageViewer
+                loadingRender={this.loadingRender}
+                onCancel={this.onCancel}
+                renderImage={this.renderImage}
+                onDoubleClick={this.onDoubleClick}
+                onSave={this.onSave}
+                onClick={this.onClick}
+                onLoadSuccess={this.onLoadSuccess}
+                imageUrls={images}
+
+            />
+        </Modal>;
 
     }
 

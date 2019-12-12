@@ -64,7 +64,7 @@ class MessagePage extends PureComponent {
 
         let statusBar = {
             hidden: false,
-            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
+            // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
             // barStyle: 'dark-content',
             // translucent:true
         };

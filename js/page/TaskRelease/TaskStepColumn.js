@@ -225,9 +225,7 @@ class TaskStepColumn extends PureComponent {
     };
 
     _imageClick = (url) => {
-        this.imageViewerModal.show({url});
-
-
+        this.imageViewerModal.show([{url}]);
     };
 
     getStepColumn = (stepNo, type, typeData, utilClick = {}, timestamp, uploadStatus, uploadStatus1) => {

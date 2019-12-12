@@ -26,6 +26,15 @@ class TaskInfo extends React.Component {
         taskInfo: {},
     };
 
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.props.task_id != nextProps.task_id
+            || this.state.taskInfo != nextState.taskInfo
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     componentDidMount(): void {
         selectSimpleTaskInfo({task_id: this.props.task_id}, this.props.userinfo.token).then(taskInfo => {
             // console.log(taskInfo);
@@ -114,35 +123,37 @@ class ChatRoomPage extends React.Component {
         this.taskUri = taskUri;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentDidMount(): void {
         this.backPress.componentDidMount();
         this._updatePage(this.columnType, this.task_id, this.fromUserinfo.id);
 
 
     }
+
     _updatePage = (columnType, task_id, toUserid) => {
         isFriendChat({
             columnType,
             taskid: task_id,
             toUserid: toUserid,
         }, this.props.userinfo.token).then(result => {
-            // console.log(result, 'result');
             if (result.id) {
                 this.FriendId = result.id;
-                // console.log(this.FriendId, 'this.chatId ');
                 ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
             }
 
-        }).catch(msg=>{
+        }).catch(msg => {
             this.toast.show(msg);
 
         });
     };
     state = {};
+    imageArr = [];
 
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
@@ -152,7 +163,7 @@ class ChatRoomPage extends React.Component {
 
     getMessages = () => {
         const tmpArr = [];
-        // const {fromUserinfo} = this.params;
+        // console.log("getMessages","getMessages");
         this.props.message.msgArr.forEach((item) => {
             if (item.FriendId == this.FriendId) {
                 const PreviousIndex = tmpArr.length;
@@ -163,6 +174,10 @@ class ChatRoomPage extends React.Component {
                         renTime = false;
                     }
                 }
+                // if (item.msg_type == 'image') {
+                //     const url = item.content;
+                //     this.imageArr.push({url});
+                // }
                 tmpArr.push({
                     id: item.msgId ? item.msgId : item.uuid,
                     type: item.msg_type,
@@ -183,12 +198,14 @@ class ChatRoomPage extends React.Component {
                     sendStatus: parseInt(item.sendStatus),
                     time: item.sendDate,
                 });
+
             }
         });
         return tmpArr;
     };
 
     onRefresh = () => {
+        console.log('我被触发触发');
         if (this.getMessages().length >= 10) {
             this.pageCount += 10;
             ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
@@ -204,6 +221,7 @@ class ChatRoomPage extends React.Component {
 
     render() {
         // const {fromUserinfo, task_id, columnType} = this.params;
+        console.log('我被render');
         const {userinfo} = this.props;
         let statusBar = {
             hidden: false,
@@ -254,9 +272,8 @@ class ChatRoomPage extends React.Component {
                         pressAvatar={this._pressAvatar}
                         onMessagePress={(type, index, content) => {
                             if (type == 'image') {
-                                this._imgViewModel.show({
-                                    url: content,
-                                });
+
+                                this._imgViewModel.show(this.imageArr, content);
                             }
                         }}
                         panelSource={[{

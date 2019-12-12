@@ -92,7 +92,9 @@ class BottomBar extends Component {
         if (!key || key.length === 0) {
             key = routes[1].routes[routes[1].index].key;
         }
+
         if (type === 'Navigation/BACK' && key === routes[1].routes[1].key) {//需要返回到主页面
+            console.log(this.props.navigationIndex,"this.props.navigationIndex");
             if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
                 StatusBar.setBarStyle('dark-content', true);
                 StatusBar.setBackgroundColor(theme, true);

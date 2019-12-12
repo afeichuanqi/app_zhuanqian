@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.merryjs.PhotoViewer.MerryPhotoViewPackage;
+import com.reactnativecommunity.cameraroll.CameraRollPackage;
 import com.rnfs.RNFSPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.theweflex.react.WeChatPackage;

@@ -56,7 +56,8 @@ target 'AwesomeProject' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
-  pod 'MerryPhotoViewer', :path => '../node_modules/@merryjs/photo-viewer'
+
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
   target 'AwesomeProjectTests' do
     inherit! :search_paths

@@ -1036,7 +1036,15 @@ class ChatWindow extends PureComponent {
                             enableEmptySections
                             scrollEventThrottle={100}
                             keyExtractor={(item) => `${item.id}`}
-                            onEndReached={() => this._loadHistory()}
+                            onEndReached={() => {
+                                if (this.canLoadMore) {
+                                    this._loadHistory();
+                                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                                }
+                            }}
+                            onScrollBeginDrag={event => {
+                                this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
+                            }}
                             onLayout={(e) => {
                                 this._scrollToBottom();
                                 this.listHeight = e.nativeEvent.layout.height;

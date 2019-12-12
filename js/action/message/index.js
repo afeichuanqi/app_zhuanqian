@@ -67,7 +67,6 @@ export function onSetImageMsgStatus(uuid, msgId, sendDate, sendStatus,content) {
 // }
 //获取所有消息
 export function onGetMegForUserid(msgArr) {
-    // console.log('我被触发11222');
     return {
         type: Types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS,
         data: {msgArr},

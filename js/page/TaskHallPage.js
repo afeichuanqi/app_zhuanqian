@@ -63,7 +63,7 @@ class TaskHallPage extends PureComponent {
         const {navigationIndex, navigationRoutes} = this.state;
 
         let statusBar = {
-            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
+            // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
             // barStyle: 'light-content',
             hidden: false,
         };
@@ -396,8 +396,9 @@ class HeadlineComponent extends PureComponent {
     startLunbo = () => {
         this.index = 0;
         this.timer = setInterval(() => {
-            this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
+
             if (this.state.HeadlineArrays.length !== 0) {
+                this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
                 this.flatList.scrollToIndex({animated: true, index: this.index});
             }
 
