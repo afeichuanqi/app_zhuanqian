@@ -6,11 +6,12 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
-import {View, Image, Dimensions} from 'react-native';
+import React, {Component} from 'react';
+import {View, Image, ActivityIndicator} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {equalsObj} from '../util/CommonUtils';
 
-class FastImagePro extends PureComponent {
+class FastImagePro extends Component {
     constructor(props) {
         super(props);
     }
@@ -29,24 +30,35 @@ class FastImagePro extends PureComponent {
         });
     };
 
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.state.isSuccess !== nextState.isSuccess
+            || !equalsObj(this.props.source, nextProps.source)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
         const {style} = this.props;
         const {isSuccess} = this.state;
+        // console.log('isSuccess', this.props);
         return <View>
             <FastImage
                 {...this.props}
                 onLoadStart={this.onLoadStart}
                 onLoadEnd={this.onLoadEnd}
             />
-            {!isSuccess && <View style={{
+            {!isSuccess && <View style={[style, {
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                width: style.width,
-                height: style.height,
-            }}>
+                justifyContent:'center',
+                alignItems:'center',
+            }]}>
+                {/*<ActivityIndicator size="small" color="black"/>*/}
                 <Image
-                    style={style}
+                    style={{width:50,height:50}}
                     source={require('../res/img/image_loading.gif')}
                 />
             </View>}

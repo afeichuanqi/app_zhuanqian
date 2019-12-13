@@ -1,11 +1,10 @@
 import types from '../action/Types';
 import Message from '../action';
-import {Platform} from 'react-native';
 import ReconnectingWebSocket from './ReconnectingWebSocket';
 
 class ChatSocket {
     connectionstatus = false;
-    verifyIdentIdy = false;
+    isVerifyIdentIdy = false;
     setDispatch = (dispatch) => {
         this.dispatch = dispatch;
     };
@@ -14,15 +13,15 @@ class ChatSocket {
             return;
         }
         this.dispatch(Message.onChangeSocketStatue('正在连接...'));
-        const URL = Platform.OS === 'android' ? 'ws://10.0.2.2:433/' : 'ws://localhost:433/';
+        // const URL = Platform.OS === 'android' ? 'ws://10.0.2.2:433/' : 'ws://localhost:433/';
+        const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
         const ws = new ReconnectingWebSocket(URL);
         // this.store = createStore(reducer);
         this.token = token;
         ws.onopen = () => {
-            // console.log('打开连接');
             this.dispatch(Message.onChangeSocketStatue(''));
             this.connectionstatus = true;
-            this.verifyIdentidy(token);
+            this.verifyIdentidy(this.token);
             this.dispatch(Message.setConnectionStatus(true));
         };
 
@@ -35,10 +34,10 @@ class ChatSocket {
                     this.dispatch(Message.verifyIdentIdy(status));
                     if (status === 0) {
                         this.dispatch(Message.onChangeSocketStatue(''));
-                        this.verifyIdentIdy = true;
+                        this.isVerifyIdentIdy = true;
                     } else {
                         this.dispatch(Message.onChangeSocketStatue('未登录'));
-                        this.verifyIdentIdy = false;
+                        this.isVerifyIdentIdy = false;
                     }
                     break;
                 case types.MESSAGE_FROMOF_USERID://收到消息
@@ -114,18 +113,27 @@ class ChatSocket {
         };
         this.ws = ws;
     };
-
-    //验证身份
-    verifyIdentidy = (token) => {
-        // console.log(this.connectionstatus);
+    setToken = (token) => {
         this.token = token;
-        this.sendToServer(types.VERIFY_IDENTIDY, {
-            token,
-        });
+    };
+    //验证身份
+    verifyIdentidy = () => {
+        const msgData = {
+            type: types.VERIFY_IDENTIDY,
+            data: {
+                token: this.token,
+            },
+        };
+        const msgStr = JSON.stringify(msgData);
+        try {
+            this.ws.send(msgStr);
+        } catch (e) {
+            this.dispatch(Message.onChangeSocketStatue('异常代码:000X1'));
+        }
     };
     //查询所有好友消息
-    selectAllFriendMessage = () => {
-        this.sendToServer(types.MESSAGE_SELECT_ALL, {});
+    selectAllFriendMessage = (pageCount) => {
+        this.sendToServer(types.MESSAGE_SELECT_ALL, {pageCount});
     };
     //设置信息id已读取
     setMsgIdIsRead = (FriendId, toUserid) => {
@@ -146,17 +154,17 @@ class ChatSocket {
         });
     };
     //发送消息给指定用户
-    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId) => {
+    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo) => {
         if (!this.connectionstatus) {
             return false;
         }
-        if (!this.verifyIdentIdy) {
+        if (!this.isVerifyIdentIdy) {
             return false;
         }
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId,
         });
-        this.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri,taskId, false));
+        this.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo.avatar_url, FriendId, columnType, taskUri, taskId, false));
         this.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(), FriendId));
 
         // this.dispatch(Message.onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus));
@@ -167,26 +175,27 @@ class ChatSocket {
         if (!this.connectionstatus) {
             return false;
         }
-        if (!this.verifyIdentIdy) {
+        if (!this.isVerifyIdentIdy) {
             return false;
         }
 
         this.sendToServer(types.MESSAGE_FORIMAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId,
         });
-        this.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri,taskId, false));//发送一个消息给好友列表 提示有新消息
+        this.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri, taskId, false));//发送一个消息给好友列表 提示有新消息
         return true;
     };
     sendToServer = (type, data) => {
         if (!this.connectionstatus) {
-            this.connctionServer(this.dispatch, this.token);
+            this.connctionServer(this.token);
             return;
         }
-        if (!this.verifyIdentidy) {
+        if (!this.isVerifyIdentIdy) {
             if (!this.token || this.token == '') {
+                this.dispatch(Message.onChangeSocketStatue('离线'));
                 return;
             }
-            this.verifyIdentidy(this.token);
+            this.verifyIdentidy();
             return;
         }
         if (typeof this.dispatch != 'function') {

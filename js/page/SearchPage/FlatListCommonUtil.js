@@ -5,6 +5,7 @@ import TaskSumComponent from '../../common/TaskSumComponent';
 import {getAllTask, getSearchContent} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
 import {bottomTheme} from '../../appSet';
+
 const {height, width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
@@ -70,6 +71,11 @@ export default class FlatListCommonUtil extends PureComponent {
                 });
                 this.props.onLoading(false);
             }
+        }).catch(() => {
+            this.setState({
+                isLoading: false,
+                hideLoaded: false,
+            });
         });
 
     };

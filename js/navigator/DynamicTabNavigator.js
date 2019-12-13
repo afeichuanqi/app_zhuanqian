@@ -26,6 +26,8 @@ import myA from '../res/svg/indexPage/myA.svg';
 import {connect} from 'react-redux';
 import actions from '../action';
 import Global from '../common/Global';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 type Props = {};
 
@@ -88,12 +90,14 @@ class DynamicTabNavigator extends Component<Props> {
 
 class BottomBar extends Component {
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        //记录下当前的路由
+
+        // -------------记录下当前的路由------------- //
         let {routes, type, key} = this.props.nav;
         const activeRouterName = routes[1].routes[routes[1].routes.length - 1].routeName;
 
         if (activeRouterName == 'HomePage') {
             if (nextProps.navigationIndex === 0) {
+
                 Global.activeRouteName = 'IndexPage';
             }
             if (nextProps.navigationIndex === 1) {
@@ -108,15 +112,15 @@ class BottomBar extends Component {
         } else {
             Global.activeRouteName = activeRouterName;
         }
+        // -------------End记录下当前的路由------------- //
 
-        // console.log(this.props.nav,"this.props.nav");
         if (!key || key.length === 0) {
             key = routes[1].routes[routes[1].index].key;
         }
 
         if (type === 'Navigation/BACK' && key === routes[1].routes[1].key) {//需要返回到主页面
             // console.log(this.props.navigationIndex, 'this.props.navigationIndex');
-            //记录下当前的路由
+            // -------------记录下当前的路由------------- //
             if (nextProps.navigationIndex === 0) {
                 Global.activeRouteName = 'IndexPage';
             }
@@ -129,6 +133,7 @@ class BottomBar extends Component {
             if (nextProps.navigationIndex === 3) {
                 Global.activeRouteName = 'MyPage';
             }
+            // -------------End记录下当前的路由------------- //
             if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
                 StatusBar.setBarStyle('dark-content', true);
                 StatusBar.setBackgroundColor(theme, true);
@@ -158,6 +163,33 @@ class BottomBar extends Component {
 
     }
 
+    _BottomBarClick = (index) => {
+
+        if (index === 0) {
+            StatusBar.setBarStyle('dark-content', true);
+            StatusBar.setBackgroundColor(theme, true);
+        } else {
+            StatusBar.setBarStyle('light-content', true);
+            StatusBar.setBackgroundColor(bottomTheme, true);
+        }
+
+        this.bottomBarOnPress(index);
+
+        if (index === this.props.navigationIndex) { //按下了相同的底部导航
+            let pageName = '';
+
+            if (index === 0) {
+                pageName = `IndexPage_${Global.IndexPage_Index}`;
+            }
+            if (index === 1) {
+                pageName = `TaskHallPage_${Global.TaskHallPage_Index}`;
+            }
+            EventBus.getInstance().fireEvent(EventTypes.scroll_top_for_page, {
+                pageName,
+            });//页面跳转到顶部
+        }
+    };
+
     render() {
         // console.log('我被render');
         const {navigationIndex} = this.props;
@@ -171,11 +203,7 @@ class BottomBar extends Component {
         }}>
             {this._renderBottomBar(
                 navigationIndex === 0 ? homeA : home,
-                (index) => {
-                    StatusBar.setBarStyle('dark-content', true);
-                    StatusBar.setBackgroundColor(theme, true);
-                    this.bottomBarOnPress(index);
-                },
+                this._BottomBarClick,
                 0,
                 navigationIndex === 0 ? true : false,
                 35,
@@ -184,23 +212,14 @@ class BottomBar extends Component {
             }
             {this._renderBottomBar(
                 navigationIndex === 1 ? hallA : hall,
-                (index) => {
-                    StatusBar.setBarStyle('light-content', true);
-                    StatusBar.setBackgroundColor(bottomTheme, true);
-                    this.bottomBarOnPress(index);
-                },
+                this._BottomBarClick,
                 1,
                 navigationIndex === 1 ? true : false,
                 35,
             )}
             {this._renderBottomBar(
                 navigationIndex === 2 ? messageA : message,
-
-                (index) => {
-                    StatusBar.setBarStyle('light-content', true);
-                    StatusBar.setBackgroundColor(bottomTheme, true);
-                    this.bottomBarOnPress(index);
-                },
+                this._BottomBarClick,
                 2,
                 navigationIndex === 2 ? true : false,
                 37,
@@ -208,11 +227,8 @@ class BottomBar extends Component {
             )}
             {this._renderBottomBar(
                 navigationIndex === 3 ? myA : my,
-                (index) => {
-                    StatusBar.setBarStyle('light-content', true);
-                    StatusBar.setBackgroundColor(bottomTheme, true);
-                    this.bottomBarOnPress(index);
-                }, 3,
+                this._BottomBarClick,
+                3,
                 navigationIndex === 3 ? true : false,
                 37,
             )}

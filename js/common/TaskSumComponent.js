@@ -79,6 +79,7 @@ class TaskSumComponent extends PureComponent {
         const {titleFontSize, marginHorizontal, item} = this.props;
 
         return <TouchableOpacity
+            activeOpacity={0.6}
             onPress={() => {
                 NavigationUtils.goPage({test: false, task_id: item.taskId}, 'TaskDetails');
                 this.props.onPress && this.props.onPress(item.taskId);
@@ -102,10 +103,11 @@ class TaskSumComponent extends PureComponent {
                 source={{uri: item.avatarUrl}}
                 resizeMode={FastImage.resizeMode.stretch}
             />
-            <View style={{height: 50, width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
+            <View style={{
+                height: 50, width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
 
             }}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     {/*标题*/}
                     <View style={{
                         flexDirection: 'row',
@@ -133,8 +135,7 @@ class TaskSumComponent extends PureComponent {
                         </View>}
                     </View>
                     {/*价格*/}
-                    <View style={{
-                    }}>
+                    <View style={{}}>
                         <Text style={{
                             fontSize: 16,
                             color: 'red',
@@ -142,7 +143,7 @@ class TaskSumComponent extends PureComponent {
                     </View>
                 </View>
                 <View
-                    style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
+                    style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     {/*标签*/}
                     <View style={{
                         flexDirection: 'row',
@@ -151,12 +152,22 @@ class TaskSumComponent extends PureComponent {
                         <LabelBigComponent title={item.taskName}/>
                     </View>
                     {/*剩余数*/}
-                    <Text style={{
-                        fontSize: 13,
-                        // color:''
-                        opacity: 0.5,
-                        // fontWeight: '100',
-                    }}>{parseInt(item.taskPassNum)}人已完成|剩余数{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                        <Text style={{
+                            fontSize: 13,
+                            opacity: 0.5,
+                        }}>{parseInt(item.taskPassNum)}人已完成</Text>
+                        <View
+                            style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
+                        <Text style={{
+                            fontSize: 13,
+                            opacity: 0.5,
+                        }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
+                    </View>
+
                 </View>
             </View>
 

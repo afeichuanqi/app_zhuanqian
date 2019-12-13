@@ -38,6 +38,8 @@ import ToastSelect from '../common/ToastSelect';
 import Toast from '../common/Toast';
 import ToastTaskTopRecommend from './TaskReleaseMana/ToastTaskTopRecommend';
 import BackPressComponent from '../common/BackPressComponent';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -196,16 +198,20 @@ class FristListComponent extends PureComponent {
         setTimeout(() => {
             this._updateList(true);
         }, 500);
-
+        //收到消息刷新任务
+        EventBus.getInstance().addListener(EventTypes.update_task_release_mana, this.listener = data => {
+            this._updateList(true);
+        });
     }
 
     componentWillUnmount() {
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     _updateList = (refreshing) => {
         const {userinfo, task_status} = this.props;
         if (refreshing) {
-            this.page = {pageIndex: 0};
+            // this.page = {pageIndex: 0};
             this.setState({
                 isLoading: true,
             });
@@ -231,7 +237,10 @@ class FristListComponent extends PureComponent {
             }
 
         }).catch(err => {
-
+            this.setState({
+                isLoading: false,
+                hideLoaded: false,
+            });
         });
     };
 
@@ -288,7 +297,7 @@ class FristListComponent extends PureComponent {
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 

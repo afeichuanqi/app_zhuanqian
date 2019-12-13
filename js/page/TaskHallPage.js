@@ -30,6 +30,8 @@ import FlatListCommonUtil from './TaskHallPage/FlatListCommonUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {getHotTasks} from '../util/AppService';
 import Global from '../common/Global';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 // import FilterComponent from './TaskHall/FilterComponent';
 let FilterComponent = null;
 
@@ -128,18 +130,21 @@ class TaskHallPage extends PureComponent {
                         style={{
                             position: 'absolute',
                             right: 10,
-                            top: 12,
-                            width: 70,
-                            height: 25,
+                            top: 15,
+                            // width: 70,
+                            // height: 25,
+                            paddingHorizontal: 10,
+                            paddingVertical: 3,
                             borderRadius: 20,
                             backgroundColor: 'white',
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexDirection: 'row',
                         }}>
-                        <SvgUri style={{marginRight: 3}} width={20} height={20} fill={bottomTheme} svgXmlData={fabu}/>
+                        <SvgUri style={{marginRight: 3}} width={16} height={16} fill={bottomTheme} svgXmlData={fabu}/>
                         <Text style={{
                             color: bottomTheme,
+                            fontSize: 13,
                         }}>发布</Text>
                     </TouchableOpacity>
                 </View>
@@ -182,6 +187,21 @@ class TaskHallPage extends PureComponent {
 }
 
 class FristListComponent extends PureComponent {
+    componentDidMount() {
+        EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
+            const {pageName} = data;
+            if (pageName == `TaskHallPage_${this.props.index}`) {
+                this.flatList.scrollToTop_();
+                this.showAnimated(false);
+            }
+        });
+    }
+
+    componentWillUnmount() {
+
+        EventBus.getInstance().removeListener(this.listener);
+    }
+
     onLoading = (load) => {
         this.onloading = load;
     };
@@ -228,6 +248,18 @@ class FristListComponent extends PureComponent {
 
     _onScroll = (e) => {
         const y = e.nativeEvent.contentOffset.y;
+        const Y_ = this.nowY - y;
+        if (Y_ < 10
+            && Y_ > -10
+        ) {
+            return;
+        }
+        // if (Y_ < 20
+        //     || Y_ > -20
+        // ) {
+        //     return;
+        // }
+
         if (Platform.OS === 'android') {
             if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
                 this.showAnimated(false);
@@ -291,11 +323,8 @@ class FristListComponent extends PureComponent {
                     onScrollBeginDrag={this._onScroll}
                     onScrollEndDrag={this._onScroll}
                     onRefresh={() => {
-                        // console.log('刷次一次');
                         this.headlineComponent.updatePage();
                     }}
-                    // onScroll={this._onScroll}
-                    // onLoading={this.onLoading}
                 />
             </Animated.View>
             {/*工具条*/}
@@ -429,7 +458,7 @@ class HeadlineComponent extends PureComponent {
             borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 20}}>
-                <SvgUri style={{marginLeft: 20,marginTop:3}} width={60} height={60} svgXmlData={remenrenwu}/>
+                <SvgUri style={{marginLeft: 20, marginTop: 3}} width={60} height={60} svgXmlData={remenrenwu}/>
             </View>
             {/*分隔符*/}
             <View
@@ -482,7 +511,7 @@ class HeadlineComponent extends PureComponent {
 
                 }}>{item.taskTitle}</Text>
             <Text style={{
-                color: 'red',  fontSize: 16,
+                color: 'red', fontSize: 16,
                 marginRight: 20,
             }}>+{item.rewardPrice}元</Text>
         </View>;

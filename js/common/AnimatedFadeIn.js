@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated, InteractionManager} from 'react-native';
+import {Animated} from 'react-native';
 
 import propTypes from 'prop-types';
 
@@ -13,7 +13,7 @@ export default class AnimatedFadeIn extends React.PureComponent {
     static defaultProps = {
         startValue: 0,
         endValue: 1,
-        duration: 1500,
+        duration: 800,
 
     }
 
@@ -35,16 +35,13 @@ export default class AnimatedFadeIn extends React.PureComponent {
 
     componentDidMount() {
 
-        InteractionManager.runAfterInteractions(() => {
-            this.fadeInAnimated.start();
-        })
+        this.fadeInAnimated.start();
 
     }
 
     render() {
 
         const {startValue, endValue} = this.props;
-        // const {fadeInOpacity} = this.state;
         const rotateZ = this.fadeInOpacity.interpolate({
             inputRange: [0, 1],
             outputRange: [startValue, endValue]

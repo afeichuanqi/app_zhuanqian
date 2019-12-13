@@ -199,11 +199,12 @@ class CodeInput extends PureComponent {
         super(props);
         this.iptArrayNum = new Array(props.iptNum);
 
-
     }
 
     componentDidMount() {
-
+        setTimeout(() => {
+            this.refs['text0'] && this.refs['text0'].focus();
+        }, 500);
 
     }
 
@@ -219,7 +220,7 @@ class CodeInput extends PureComponent {
             <TextInput
                 value={this.iptArrayNum[index]}
                 keyboardType={'number-pad'}
-                autoFocus={index == 0 ? true : false}
+                // autoFocus={index == 0 ? true : false}
                 onKeyPress={({nativeEvent}) => {
                     if (index == 0) {
                         return;
@@ -271,9 +272,11 @@ class CodeInput extends PureComponent {
                 this.props.showError('');
                 const {routes, navigation} = this.props;
                 const key = routes[1].routes[1].key;
-                ChatSocket.verifyIdentidy(data.token);//进行验证token
+
+                ChatSocket.setToken(data.token);//进行验证token
+                ChatSocket.verifyIdentidy();//进行验证token
                 NavigationUtils.goBack(navigation, key);
-                ChatSocket.selectAllFriendMessage();//进行获取好友列表
+                ChatSocket.selectAllFriendMessage(20);//进行获取好友列表
             } else {
 
                 // console.log(data.msg, 'data.msg');

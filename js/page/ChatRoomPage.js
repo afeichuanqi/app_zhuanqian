@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, StatusBar, Dimensions, Platform, TouchableOpacity} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
 import {theme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
@@ -62,14 +62,13 @@ class TaskInfo extends React.Component {
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-between'}}>
                     <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.6)'}}>{taskInfo.task_title}</Text>
-                    <View style={{flexDirection: 'row', alignItems: 'center', height: 15, wdith: 50}}>
-                        <Text style={{
-                            fontSize: 11,
-                            color: 'rgba(0,0,0,0.6)',
-
-                        }}>{columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : ''}</Text>
-                    </View>
+                    <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.5)'}}>{taskInfo.task_title}</Text>
+                    <Text style={{
+                        fontSize: 11,
+                        color: 'rgba(0,0,0,0.5)',
+                    }}>
+                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : ''}
+                    </Text>
 
                 </View>
             </View>
@@ -105,6 +104,7 @@ class ChatRoomPage extends React.Component {
         const {columnType, task_id, fromUserinfo, taskUri} = this.params;
         this.columnType = columnType;
         this.task_id = task_id;
+        // console.log(this.task_id,"this.task_id");
         this.fromUserinfo = fromUserinfo;
         this.taskUri = taskUri;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
@@ -134,6 +134,10 @@ class ChatRoomPage extends React.Component {
             }
 
         }).catch(msg => {
+            this.setState({
+                isLoading: false,
+                hideLoaded: false,
+            });
             this.toast.show(msg);
 
         });
@@ -150,7 +154,7 @@ class ChatRoomPage extends React.Component {
     getMessages = () => {
         const tmpArr = [];
 
-        this.props.message.msgArr.forEach((item) => {
+        this.props.message.msgArr.forEach((item, index, arrs) => {
             if (item.FriendId == this.FriendId) {
                 const PreviousIndex = tmpArr.length;
                 let renTime = true;
@@ -162,10 +166,13 @@ class ChatRoomPage extends React.Component {
                 }
                 if (item.msg_type == 'image') {
                     const url = item.content;
-                    const findindex = this.imageArr.findIndex(item => item.url == url);
-                    if (findindex === -1) {
-                        this.imageArr.push({url});
+                    if (url.indexOf('file://') === -1) {
+                        const findindex = this.imageArr.findIndex(item => item.url == url);
+                        if (findindex === -1) {
+                            this.imageArr.push({url});
+                        }
                     }
+
 
                 }
                 tmpArr.push({
@@ -188,23 +195,24 @@ class ChatRoomPage extends React.Component {
                     sendStatus: parseInt(item.sendStatus),
                     time: item.sendDate,
                 });
-
-
+            }
+            if (index === arrs.length - 1) {//最后一条
+                if (arrs.length < 10 && arrs.length > 0) {
+                    tmpArr.push({
+                        id: -10,
+                        type: 'system',
+                        content: '为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付',
+                        title: '安全交易规范',
+                        chatInfo: {
+                            avatar: this.fromUserinfo.avatar_url,
+                            id: parseInt(this.fromUserinfo.id),
+                            nickName: this.fromUserinfo.username,
+                        },
+                    });
+                }
             }
         });
-        if (tmpArr.length < 10 && tmpArr.length != 0) {
-            tmpArr.push({
-                id: 0,
-                type: 'system',
-                content: '为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付',
-                title: '安全交易规范',
-                chatInfo: {
-                    avatar: this.fromUserinfo.avatar_url,
-                    id: parseInt(this.fromUserinfo.id),
-                    nickName: this.fromUserinfo.username,
-                },
-            });
-        }
+
         return tmpArr;
     };
 
@@ -247,12 +255,13 @@ class ChatRoomPage extends React.Component {
                     ref={ref => this.toast = ref}
                 />
                 <View style={{flex: 1}}>
-                    <TaskInfo
+                    {this.task_id && <TaskInfo
                         task_id={this.task_id}
                         userinfo={userinfo}
                         columnType={this.columnType}
                         appealClick={this._appealClick}
-                    />
+                    />}
+
                     <ChatScreen
                         systemClick={() => {
                             // NavigationUtils
@@ -262,15 +271,19 @@ class ChatRoomPage extends React.Component {
                         loadHistory={this.onRefresh}
                         inverted={true}
                         inputOutContainerStyle={{
-                            borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.1, shadowColor: '#cdcdcd',
+                            borderColor: 'rgba(0,0,0,1)',
+                            borderTopWidth: Platform.OS == 'android' ? 0.2 : 0.1,
+                            shadowColor: '#cdcdcd',
                             shadowRadius: 1,
                             shadowOpacity: 1,
                             shadowOffset: {w: 1, h: 1},
                             elevation: 1,//安卓的阴影
                         }}
-                        renderLoadEarlier={<View style={{height: 80}}/>}
+                        renderLoadEarlier={() => {
+                            return <View style={{height: 80}}/>;
+                        }}
                         userProfile={{id: userinfo.userid, avatar: userinfo.avatar_url}}
-                        placeholder={'想说点什么呢'}
+                        placeholder={'想咨询TA点什么呢'}
                         useVoice={false}
                         ref={(e) => this.chat = e}
                         messageList={this.getMessages()}
@@ -289,8 +302,13 @@ class ChatRoomPage extends React.Component {
                                 ImagePicker.openPicker({
                                     width: 300,
                                     height: 400,
-                                    cropping: false,
-                                    // includeBase64: true,
+                                    mediaType: 'photo',
+                                    cropperChooseText: '确认',
+                                    cropperCancelText: '取消',
+                                    cropperToolbarTitle: '选择图片',
+                                    freeStyleCropEnabled: true,
+                                    showCropGuidelines: true,
+                                    compressImageQuality: 0.7,
                                 }).then(image => {
                                     this._imgSelect(image);
                                 });
@@ -304,7 +322,14 @@ class ChatRoomPage extends React.Component {
                                     ImagePicker.openCamera({
                                         width: 300,
                                         height: 400,
-                                        cropping: false,
+                                        // cropping: true,
+                                        mediaType: 'photo',
+                                        cropperChooseText: '确认',
+                                        cropperCancelText: '取消',
+                                        cropperToolbarTitle: '选择图片',
+                                        freeStyleCropEnabled: true,
+                                        showCropGuidelines: true,
+                                        compressImageQuality: 0.7,
                                     }).then(image => {
                                         this._imgSelect(image);
                                     });
@@ -337,7 +362,7 @@ class ChatRoomPage extends React.Component {
         const path = `file://${image.path}`;
         onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(), FriendId);//插入一条临时图片数据
         uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
-            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id);
+            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
         });
     };
     sendMessage = (type, content) => {
@@ -350,7 +375,8 @@ class ChatRoomPage extends React.Component {
             return;
         }
         const uuid = getUUID();
-        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id);
+        // console.log(this.fromUserinfo,"this.fromUserinfo");
+        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
     };
     _pressAvatar = () => {
         NavigationUtils.goPage({userid: this.fromUserinfo.id}, 'ShopInfoPage');

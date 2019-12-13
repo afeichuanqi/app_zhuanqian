@@ -46,7 +46,7 @@ class MessagePage extends PureComponent {
     };
 
     componentDidMount() {
-        ChatSocket.selectAllFriendMessage();
+        ChatSocket.selectAllFriendMessage(20);
 
     }
 
@@ -76,7 +76,6 @@ class MessagePage extends PureComponent {
         />;
         const {unMessageLength} = this.props.friend;
         const {statusText} = this.props.socketStatus;
-
         return (
             <View style={{flex: 1}}>
                 {navigationBar}
@@ -163,7 +162,7 @@ class MsgList extends Component {
 
     constructor(props) {
         super(props);
-        this.page = {pageIndex: 0};
+        this.page = {pageCount: 20};
     }
 
     filterFriend = (friendArr, type) => {
@@ -226,6 +225,16 @@ class MsgList extends Component {
                     },
                 },
             ])}
+            onScrollBeginDrag={event => {
+                this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
+            }}
+            onEndReached={() => {
+                // 等待页面布局完成以后，在让加载更多
+                if (this.canLoadMore) {
+                    this.onLoading();
+                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                }
+            }}
             windowSize={300}
             onEndReachedThreshold={0.01}
         />;
@@ -251,8 +260,9 @@ class MsgList extends Component {
     //
     //     }
     // };
+
     onRefresh = () => {
-        ChatSocket.selectAllFriendMessage();
+        ChatSocket.selectAllFriendMessage(this.page.pageCount);
     };
     _renderIndexPath = ({item, index}) => {
         return <MessageItemComponent key={item.FriendId} item={item}/>;
@@ -260,7 +270,8 @@ class MsgList extends Component {
     };
 
     onLoading = () => {
-
+        this.page.pageCount = this.page.pageCount + 20;
+        ChatSocket.selectAllFriendMessage(this.page.pageCount);
     };
 }
 
@@ -432,7 +443,7 @@ class MessageItemComponent extends Component {
             </View>
             <FastImage
                 style={{
-                    backgroundColor: '#E8E8E8',
+                    backgroundColor: '#9d9d9d',
                     // 设置宽度
                     width: 55,
                     height: 55,

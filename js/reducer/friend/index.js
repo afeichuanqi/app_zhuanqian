@@ -56,7 +56,6 @@ export default function onAction(state = defaultContent, action) {
         case Types.MESSAGE_FROMOF_USERID_Friend:
             // const columnUnreadLength3 = [...state.columnUnreadLength];
             let temArr3 = [...state.friendArr];
-            console.log(data.isAddNewMsgLength,"data.isAddNewMsgLength");
             let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
             const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
 
@@ -87,7 +86,9 @@ export default function onAction(state = defaultContent, action) {
                 });
             }
             temArr3 = temArr3.sort((data1, data2) => {
-
+                // if(data1.unReadLength){
+                //
+                // }
                 return data2.sendDate - data1.sendDate;
             });
             return {

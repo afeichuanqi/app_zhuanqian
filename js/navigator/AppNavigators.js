@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {Platform} from 'react-native';
 import {
     createAppContainer,
     createSwitchNavigator,
@@ -35,7 +35,8 @@ import FriendPromotionPage from '../page/FriendPromotionPage';
 import UpdateUserName from '../page/SettingPage/UpdateUserName';
 import TaskRejectDetailsPage from '../page/TaskRejectDetailsPage';
 import ImageExample from '../common/ImageViewer/ImageViewer';
-import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator'
+import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
+
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
     Welcome: {
@@ -58,7 +59,7 @@ const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
         };
     } else {
         return {
-            screenInterpolator: CardStackStyleInterpolator.forHorizontal ,
+            screenInterpolator: Platform.OS === 'android' ? CardStackStyleInterpolator.forFadeFromBottomAndroid : CardStackStyleInterpolator.forHorizontal,
         };
     }
 

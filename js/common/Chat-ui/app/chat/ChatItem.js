@@ -257,20 +257,30 @@ export default class ChatItem extends PureComponent {
                         <TouchableOpacity
                             activeOpacity={0.8}
                             onPress={this.props.systemClick}
-                            style={{width: width - 20, height: 120, backgroundColor: 'white', padding: 15,
+                            style={{width: width - 20,  backgroundColor: 'white',paddingTop:15, paddingHorizontal:15,
                                 borderRadius:3,
                             }}>
                             <Text style={{fontSize: 14, fontWeight: 'bold'}}>{message.title}</Text>
                             <Text
-                                style={{fontSize: 11, color: 'rgba(0,0,0,0.6)', marginTop: 10}}>{message.content}</Text>
+                                style={{fontSize: 11, color: 'rgba(0,0,0,0.5)', marginTop: 10}}>{message.content}</Text>
                             <View style={{
-                                marginVertical: 15,
-                                height: 0.3,
-                                backgroundColor: 'rgba(0,0,0,0.1)',
-                                width: width - 40,
-                                alignItems:'center',
-                            }}/>
-                            <Text style={{color:'#2196F3'}}>了解更多安全交易规范</Text>
+                                // marginVertical: 15,
+                                marginTop:10,
+                                paddingVertical:10,
+
+                                // height: 50,
+                                // backgroundColor: 'rgba(0,0,0,0.1)',
+                                width: width - 60,
+                                alignItems:'flex-start',
+                                justifyContent:'center',
+
+                                borderTopWidth:0.3,
+                                borderTopColor:'rgba(0,0,0,0.1)',
+
+                            }}>
+                                <Text style={{color:'#2196F3'}}>了解更多安全交易规范</Text>
+                            </View>
+
                         </TouchableOpacity>
                     );
                 } else {

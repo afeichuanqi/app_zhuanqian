@@ -307,7 +307,7 @@ class TaskStepColumn extends Component {
                                 this._imageClick(typeData.uri);
                             }}
                             style={styles.imgBox}>
-                            <Image
+                            <FastImagePro
                                 source={{uri: typeData.uri}}
                                 style={{width: 120, height: 120, backgroundColor: '#F0F0F0', borderRadius: 3}}
                                 resizeMode={'contain'}/>
@@ -497,7 +497,7 @@ class TaskStepColumn extends Component {
                                 this._imageClick(typeData.uri);
                             }}
                             style={{marginRight: 15}}>
-                            <Image
+                            <FastImagePro
                                 source={{uri: typeData.uri}}
                                 style={{
                                     width: (width - 80) / 2,
@@ -556,7 +556,7 @@ class TaskStepColumn extends Component {
                             alignItems: 'center',
 
                         }}>
-                            {uploadStatus1 === -2 ? <TouchableOpacity
+                            {uploadStatus1 === -2 ? <TouchableOpacity//未上传验证图
                                     activeOpacity={0.6}
                                     onPress={() => {
                                         // this.
@@ -575,7 +575,7 @@ class TaskStepColumn extends Component {
                                     <SvgUri width={50} height={50} svgXmlData={add_image}/>
                                     <Text style={{marginTop: 10, color: 'rgba(0,0,0,0.6)'}}>添加验证图片</Text>
                                 </TouchableOpacity>
-                                : <TouchableOpacity
+                                : <TouchableOpacity  //已经上传验证图
                                     activeOpacity={0.6}
                                     onPress={() => {
                                         // this.
@@ -592,7 +592,7 @@ class TaskStepColumn extends Component {
                                     }}
                                 >
 
-                                    <Image
+                                    <FastImagePro
                                         source={{uri: typeData.uri1}}
                                         style={{
                                             width: (width - 80) / 2,
@@ -602,7 +602,7 @@ class TaskStepColumn extends Component {
                                             borderRadius: 3,
                                         }}
                                         resizeMode={'contain'}/>
-                                    {this.props.isEdit ? <TouchableOpacity
+                                    {this.props.isEdit ? <TouchableOpacity //是否能修改状态
                                         onPress={() => {
                                             this._clearPic(timestamp);
                                         }}
@@ -620,7 +620,7 @@ class TaskStepColumn extends Component {
                                         <Text style={{color: 'white'}}>X</Text>
                                     </TouchableOpacity> : null}
 
-                                    {uploadStatus1 !== 1 && <View style={{
+                                    {uploadStatus1 !== 1 && <View style={{ //状态管理
                                         position: 'absolute', top: 0, left: 0, width: (width - 80) / 2,
                                         height: (width - 80) / 1.5, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.5)',
                                         alignItems: 'center', justifyContent: 'center',

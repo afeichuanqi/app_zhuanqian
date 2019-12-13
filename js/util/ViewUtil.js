@@ -8,7 +8,7 @@ import menu_right from '../res/svg/menu_right.svg';
 
 const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
-    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14, rightClick, isShowRightSvg = true, isShowRightText = false, rightText = '') => {
+    static getTopColumn = (goBackClick, title, rightSvg, ColumnBgcColor = 'white', fontColor = 'black', fontSize = 14, rightClick, isShowRightSvg = true, isShowRightText = false, rightText = '', rightTextColor = 'black') => {
         return (
             <View style={{
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
@@ -24,7 +24,7 @@ export default class ViewUtil {
 
                 </TouchableOpacity>
                 <View>
-                    <Text style={{color: fontColor, fontSize, fontWeight:'bold'}}>{title}</Text>
+                    <Text style={{color: fontColor, fontSize, fontWeight: 'bold'}}>{title}</Text>
                 </View>
                 <TouchableOpacity
                     onPress={rightClick}
@@ -32,7 +32,7 @@ export default class ViewUtil {
                     style={{justifyContent: 'center'}}>
                     {isShowRightSvg &&
                     <SvgUri width={24} height={24} fill={fontColor} svgXmlData={rightSvg || message_more}/>}
-                    {isShowRightText && <Text style={{marginTop:5}}>{rightText}</Text>}
+                    {isShowRightText && <Text style={{marginTop: 5, color: rightTextColor}}>{rightText}</Text>}
 
 
                 </TouchableOpacity>
@@ -54,11 +54,11 @@ export default class ViewUtil {
             <TouchableOpacity
                 onPress={click}
                 style={styles.setting_item_container}>
-                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingLeft:20}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingLeft: 20}}>
                     <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.9)'} svgXmlData={menuSvg}/>
                     <Text style={{marginLeft: 10, fontSize: 15, opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingRight:10}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingRight: 10}}>
                     <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>
                 </View>

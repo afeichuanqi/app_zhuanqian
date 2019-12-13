@@ -7,37 +7,67 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Text, TouchableOpacity, Image, FlatList} from 'react-native';
+import {Modal, View, PermissionsAndroid, Dimensions, Text, TouchableOpacity, Image, FlatList} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageUtil from '../util/ImageUtil';
+
 const {timing} = Animated;
 const {width} = Dimensions.get('window');
 
-class PopMenu extends PureComponent {
+class PickerImage extends PureComponent {
     constructor(props) {
         super(props);
     }
 
-    // hideBottom = height +
     static defaultProps = {
         select: () => {
         },
         popTitle: '选取照片',
         includeBase64: false,
         cropping: false,
-        showMorePhotos:true,
+        showMorePhotos: true,
     };
     state = {
         visible: false,
         photos: [],
 
     };
+    checkPermission = async () => {
+        if (Platform.OS === 'android') {
+            //返回Promise类型
+            const data = await PermissionsAndroid.check(
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            );
+            if (!data) {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                    {
+                        title: '申请读权限',
+                        message:
+                            '简单赚需要您手机的读文件权限',
+                        buttonNeutral: '稍后询问',
+                        buttonNegative: '拒绝',
+                        buttonPositive: '授予',
+                    },
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {//获取成功
+                    return 1;
+                } else {//权限获取失败
+                    // this.show('权限获取失败');
+                    return 1;
+                }
+            } else {//已经有此权限
 
-    componentDidMount() {
+                return 1;
+            }
 
+        } else {//ios
+            return 1;
+        }
 
-    }
+    };
+
 
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
@@ -49,14 +79,18 @@ class PopMenu extends PureComponent {
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
-            this.setState({
-                visible: false,
-            });
+            setTimeout(()=>{
+                this.setState({
+                    visible: false,
+                });
+            },0)
+
         });
 
 
     };
-    show = (timestamp = 0) => {
+    show = async (timestamp = 0) => {
+        await this.checkPermission();//等待权限获取完毕
         ImageUtil.getMorePhotos({
             first: 20,
             groupTypes: 'All',
@@ -84,14 +118,13 @@ class PopMenu extends PureComponent {
             width: 300,
             height: 400,
             cropping: this.props.cropping,
-            // includeBase64: this.props.includeBase64,
             mediaType: 'photo',
             freeStyleCropEnabled: true,
             showCropGuidelines: true,
             compressImageQuality: 0.7,
-            cropperChooseText:'确认',
-            cropperCancelText:'取消',
-            cropperToolbarTitle:'剪裁图片'
+            cropperChooseText: '确认',
+            cropperCancelText: '取消',
+            cropperToolbarTitle: '剪裁图片',
         }).then(image => {
             this.hide();
 
@@ -104,14 +137,13 @@ class PopMenu extends PureComponent {
             width: 300,
             height: 400,
             cropping: this.props.cropping,
-            // includeBase64: this.props.includeBase64,
             mediaType: 'photo',
             freeStyleCropEnabled: true,
             showCropGuidelines: true,
             compressImageQuality: 0.7,
-            cropperChooseText:'确认',
-            cropperCancelText:'取消',
-            cropperToolbarTitle:'剪裁图片'
+            cropperChooseText: '确认',
+            cropperCancelText: '取消',
+            cropperToolbarTitle: '剪裁图片',
         }).then(image => {
             this.hide();
             this.props.select(image, this.timestamp);
@@ -136,7 +168,7 @@ class PopMenu extends PureComponent {
                 <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.1)'}}
                                   activeOpacity={1}
                                   onPress={() => {
-                                      this.hide(null);
+                                      this.hide();
                                   }}
                 >
                     <Animated.View style={{
@@ -176,7 +208,7 @@ class PopMenu extends PureComponent {
                             onPress={this._selAlbum}
                             style={{
                                 width, alignItems: 'center', paddingVertical: 15,
-                                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8'
+                                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
                             }}>
                             <Text style={{}}>{'从相册选一张'}</Text>
                         </TouchableOpacity>
@@ -209,15 +241,15 @@ class PopMenu extends PureComponent {
         return <TouchableOpacity
             onPress={() => {
                 ImagePicker.openCropper({
-                    path:uri,
+                    path: uri,
                     width: (Platform.OS === 'ios') ? width * 2 : width,
                     height: (Platform.OS === 'ios') ? height * 2 : height,
                     freeStyleCropEnabled: true,
                     showCropGuidelines: true,
                     compressImageQuality: 0.7,
-                    cropperChooseText:'确认',
-                    cropperCancelText:'取消',
-                    cropperToolbarTitle:'剪裁图片'
+                    cropperChooseText: '确认',
+                    cropperCancelText: '取消',
+                    cropperToolbarTitle: '剪裁图片',
                 }).then(image => {
                     this.hide();
                     this.props.select(image, this.timestamp);
@@ -237,4 +269,4 @@ class PopMenu extends PureComponent {
 }
 
 
-export default PopMenu;
+export default PickerImage;

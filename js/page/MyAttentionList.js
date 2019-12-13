@@ -46,17 +46,19 @@ class MyAttention extends PureComponent {
         this.state = {
             navigationIndex: 0,
             navigationRoutes: [
-                {key: 'first', title: '我的关注' },
+                {key: 'first', title: '我的关注'},
                 {key: 'second', title: '关注我的'},
             ],
 
         };
 
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentDidMount() {
         this.backPress.componentDidMount();
     }
@@ -140,6 +142,11 @@ class MyAttention extends PureComponent {
                 return <MyAttentionList type={0} userinfo={this.props.userinfo} user_id={this.params.user_id}/>;
         }
     };
+    handleIndexChange = (index) => {
+        // console.log(index);
+        const {navigationRoutes} = this.state;
+        this.jumpTo(navigationRoutes[index].key);
+    };
 }
 
 class MyAttentionList extends PureComponent {
@@ -192,7 +199,10 @@ class MyAttentionList extends PureComponent {
             }
 
         }).catch(msg => {
-            console.log(msg);
+            this.setState({
+                isLoading: false,
+                hideLoaded: false,
+            });
         });
 
     };
@@ -265,7 +275,7 @@ class MyAttentionList extends PureComponent {
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }
@@ -283,7 +293,7 @@ class AttentionItem extends PureComponent {
             onPress={() => {
                 // console.log(item.userid, 'item.userId');
                 EventBus.getInstance().fireEvent(EventTypes.update_shopInfo_page, {
-                    userId:item.userId
+                    userId: item.userId,
                 });
                 NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
 
@@ -322,7 +332,7 @@ class AttentionItem extends PureComponent {
                     </View>
                 </View>
             </View>
-            {type == 1  && <TouchableOpacity
+            {type == 1 && <TouchableOpacity
                 onPress={() => {
                     let attention_type = this.state.attentionStatus == 0 ? 1 : 0;
                     console.log(item);

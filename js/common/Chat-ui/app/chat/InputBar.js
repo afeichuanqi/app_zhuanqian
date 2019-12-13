@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
   commentBar__input: {
     // borderRadius: 18,
     height: 26,
+    padding:0,
     // width: '100%',
     paddingLeft: 5,
     // paddingHorizontal: 5

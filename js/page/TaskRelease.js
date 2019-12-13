@@ -279,7 +279,7 @@ class TaskRelease extends PureComponent {
         const typeData = this.typeSelect.getTypeData();
         const deviceData = this.deviceSelect.getTypeData();
         const columnData = this.bIform.getColumnData();
-        const stepData = this.bIform.stepInfo && this.bIform.stepInfo.taskStep.getStepData();
+        const stepData = (this.bIform.stepInfo && this.bIform.stepInfo.taskStep.getStepData()) || [];
 
         const task_type_id = typeData.id;
         const task_device_id = deviceData.id;
@@ -296,6 +296,7 @@ class TaskRelease extends PureComponent {
         }
         const reward_price = columnData.rewardPrice;
         const reward_num = columnData.rewardNum;
+
         const stepIndex = stepData && stepData.findIndex(d => d.type == 5);
         // console.log(stepIndex, 'stepIndex');
 
@@ -374,8 +375,8 @@ class TaskRelease extends PureComponent {
         const {userinfo} = this.props;
         const {data} = this.state;
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16, () => {
-
-        });
+            NavigationUtils.goPage({type: 1}, 'UserProtocol');
+        },false,true,'发布须知','white');
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -1094,6 +1095,7 @@ class StepInfo extends Component {
         </View>;
 
     }
+
     genMenu = (title, svgXmlData, click, index) => {
         return <TouchableOpacity
             key={index}

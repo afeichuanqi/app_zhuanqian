@@ -71,11 +71,11 @@ export default class FilterComponent extends PureComponent {
             outputRange: [-260, 40],
             extrapolate: 'clamp',
         });
-        const opacity = Animated.interpolate(this.animations.translateY, {
-            inputRange: [0, 1],
-            outputRange: [0, 0.6],
-            extrapolate: 'clamp',
-        });
+        // const opacity = Animated.interpolate(this.animations.translateY, {
+        //     inputRange: [0, 1],
+        //     outputRange: [0, 0.6],
+        //     extrapolate: 'clamp',
+        // });
         const {typeArray} = this.props;
         return <View ref={ref => this.containerBox = ref} style={{
             position: 'absolute',
@@ -91,8 +91,8 @@ export default class FilterComponent extends PureComponent {
                 activeOpacity={0.6}
                 onPress={this._cancelClick}
                 style={{
-                    flex: 1, backgroundColor: '#b4b4b4',
-                    opacity: opacity,
+                    flex: 1, backgroundColor: 'rgb(0,0,0)',
+                    opacity: 0.2,
 
                 }}/>
             {/*box*/}

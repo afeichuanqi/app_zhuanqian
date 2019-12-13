@@ -46,6 +46,10 @@ export function onUploadAvatar(token, data, callback) {
                 data: {avatar_url: data.imageUrl},
             });
         }).catch((msg) => {
+            dispatch({
+                type: Types.UPLOAD_AVATAR_SUCCESS,
+                data: {avatar_url: ''},
+            });
             callback(false, {msg});
         });
 

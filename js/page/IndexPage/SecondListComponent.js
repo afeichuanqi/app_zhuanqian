@@ -6,6 +6,8 @@ import FlatListCommonUtil from './FlatListCommonUtil';
 import {bottomTheme, theme} from '../../appSet';
 import {getBestNewTask} from '../../util/AppService';
 import NavigationUtils from '../../navigator/NavigationUtils';
+import EventBus from '../../common/EventBus';
+import EventTypes from '../../util/EventTypes';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -24,6 +26,17 @@ class SecondListComponent extends PureComponent {
                 bestNewData: data,
             });
         });
+        //跳转到顶部处理事件
+        EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
+            const {pageName} = data;
+            if (pageName == `IndexPage_1`) {
+                this.flatList.scrollToTop_();
+            }
+        });
+    }
+
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     _renderBestNewItem = ({item, index}) => {

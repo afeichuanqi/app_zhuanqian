@@ -211,6 +211,11 @@ class ShopList extends Component {
                 });
             }
 
+        }).catch(()=>{
+            this.setState({
+                isLoading: false,
+                hideLoaded: false,
+            });
         });
     };
     params = {
@@ -283,6 +288,7 @@ class ShopList extends Component {
             data={commodityData}
             ListEmptyComponent={<EmptyComponent message={'暂无发布任务'} height={height - 380}/>}
             scrollEventThrottle={1}
+            showsVerticalScrollIndicator={false}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
             refreshControl={

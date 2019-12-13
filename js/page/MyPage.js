@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, RefreshControl} from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
@@ -27,6 +27,7 @@ import PickerImage from '../common/PickerImage';
 import actions from '../action';
 import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
+import FastImagePro from '../common/FastImagePro';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -119,7 +120,11 @@ class MyPage extends PureComponent {
                     </Animated.View>
                     <AnimatedScrollView
                         style={{zIndex: 1}}
-                        refreshControl={null}
+                        // refreshControl={<RefreshControl
+                        //     // title={'更新任务中'}
+                        //     // refreshing={isLoading}
+                        //     onRefresh={() => this.onRefresh()}
+                        // />}
                         onScroll={Animated.event([
                             {
                                 nativeEvent: {
@@ -347,10 +352,11 @@ class TopInfoColumn extends PureComponent {
                                 borderRadius: 25,
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                // backgroundColor:'white',
                             }}>
-                                <ActivityIndicator size="large" color="black"/>
+                                <ActivityIndicator size="small" color="white"/>
                             </View>
-                            : <FastImage
+                            : <FastImagePro
                                 style={[styles.imgStyle]}
                                 source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
                                 resizeMode={FastImage.resizeMode.stretch}
@@ -390,20 +396,11 @@ class TopInfoColumn extends PureComponent {
 
     _avatarSelect = (imageData) => {
         const {userinfo} = this.props;
-        // const mime = image.mime;
-        // const base64Data = image.data;
-        // const imgData = {
-        //     mime,
-        //     data: base64Data,
-        // };
         let mime = imageData.mime;
         const mimeIndex = mime.indexOf('/');
         mime = mime.substring(mimeIndex + 1, mime.length);
         const uri = `file://${imageData.path}`;
         this.props.onUploadAvatar(userinfo.token, {mime,uri}, (isTrue, data) => {
-            // if (!isTrue) {
-            //     console.log(data.msg);
-            // }
         });
     };
 }
@@ -411,7 +408,7 @@ class TopInfoColumn extends PureComponent {
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色
-        backgroundColor: '#E8E8E8',
+        // backgroundColor: '#E8E8E8',
         // 设置宽度
         width: 50,
         height: 50,

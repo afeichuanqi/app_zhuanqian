@@ -11,7 +11,6 @@ import Animated from 'react-native-reanimated';
 import {selectAllRecommendTask} from '../../util/AppService';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import EmptyComponent from '../../common/EmptyComponent';
-import {bottomTheme } from '../../appSet';
 const {height} = Dimensions.get('window');
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -26,6 +25,10 @@ export default class FlatListCommonUtil extends PureComponent {
         },
         onLoading: () => {
         },
+    };
+    scrollToTop_ = () => {
+        console.log(this.flatList);
+        this.flatList && this.flatList.getNode().scrollToOffset({animated: true, viewPosition: 0, index: 0});
     };
     state = {
         taskData: [],
@@ -63,6 +66,11 @@ export default class FlatListCommonUtil extends PureComponent {
                 });
                 this.props.onLoading(false);
             }
+        }).catch(()=>{
+            this.setState({
+                isLoading: false,
+                hideLoaded: false,
+            });
         });
     };
 

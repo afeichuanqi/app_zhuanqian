@@ -23,6 +23,8 @@ import PickerImage from '../common/PickerImage';
 import {TaskTurnDownTaskFrom, uploadQiniuImage} from '../util/AppService';
 import ImageViewerModal from '../common/ImageViewerModal';
 import BackPressComponent from '../common/BackPressComponent';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const {width, height} = Dimensions.get('window');
 const screenWidth = Dimensions.get('window').width;
@@ -33,6 +35,7 @@ class MyTaskReview extends PureComponent {
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -42,9 +45,11 @@ class MyTaskReview extends PureComponent {
             {},
         ],
     };
-    componentDidMount(){
+
+    componentDidMount() {
         this.backPress.componentDidMount();
     }
+
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
     }
@@ -63,7 +68,7 @@ class MyTaskReview extends PureComponent {
         StatusBar.setBackgroundColor(theme, true);
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '驳回', message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.params.fromUserinfo}, 'ChatSettings');
-        },false);
+        }, false);
         const {taskData} = this.params;
         return (
             <SafeAreaViewPlus
@@ -148,7 +153,7 @@ class MyTaskReview extends PureComponent {
                                 multiline={true}
                                 style={{
                                     height: 100, width: width - 20, backgroundColor: '#e8e8e8',
-                                    paddingHorizontal: 5,padding:0,textAlignVertical: 'top',
+                                    paddingHorizontal: 5, padding: 0, textAlignVertical: 'top',
                                 }}
                                 placeholder={'请输入驳回理由'}
                                 placeholderTextColor={'#7f7f7f'}
@@ -341,6 +346,7 @@ class MyTaskReview extends PureComponent {
                     SendFormTaskId: taskData.taskStepId,
                     turnDownInfo: JSON.stringify(imageData),
                 }, userinfo.token).then(err => {
+                    EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {});//刷新审核页面
                     this.toast.show('驳回成功');
                     NavigationUtils.goBack(this.props.navigation);
 

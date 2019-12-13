@@ -195,7 +195,7 @@ class MsgList extends Component {
         this.setState({
             isLoading: true,
         });
-        ChatSocket.selectAllFriendMessage();
+        ChatSocket.selectAllFriendMessage(20);
         setTimeout(() => {
             this.setState({
                 isLoading: false,

@@ -86,7 +86,10 @@ class TaskReleaseMana extends PureComponent {
                 }
 
             }).catch(msg => {
-                console.log(msg);
+                this.setState({
+                    isLoading: false,
+                    hideLoaded: false,
+                });
             });
         } else {
             selectSendFormTaskList({

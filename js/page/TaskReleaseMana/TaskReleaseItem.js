@@ -113,7 +113,7 @@ export default class TaskReleaseItem extends PureComponent {
                     NavigationUtils.goPage({
                         task_id: this.props.item.id,
                         update: false,
-                        updatePage: this._updatePage,
+                        // updatePage: this._updatePage,
                     }, 'TaskRelease');
                 })}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>

@@ -30,6 +30,8 @@ import {connect} from 'react-redux';
 import ChatSocket from '../util/ChatSocket';
 import SecondListComponent from './IndexPage/SecondListComponent';
 import Global from '../common/Global';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -298,9 +300,13 @@ class FristListComponent extends PureComponent {
         ],
     };
     _renderItem = ({item, index}) => {
-        return <TouchableOpacity onPress={() => {
-        }}>
+        return <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+            }}
+        >
             <FastImage
+
                 style={[styles.imgStyle, {height: '100%', width: '100%'}]}
                 source={{uri: `${item.imgUrl}`}}
                 resizeMode={FastImage.resizeMode.stretch}
@@ -358,7 +364,20 @@ class FristListComponent extends PureComponent {
         this.nowY = y;
     };
 
+    componentDidMount() {
+        EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
+            const {pageName} = data;
+            if (pageName == `IndexPage_0`) {
+                this.flatList.scrollToTop_();
+                this.props.showAnimated(false)
+            }
+        });
+    }
 
+    componentWillUnmount() {
+
+        EventBus.getInstance().removeListener(this.listener);
+    }
     render() {
         const containerWidth = width - 20;
         const {lunboData} = this.state;
@@ -372,6 +391,7 @@ class FristListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+                ref={ref => this.flatList = ref}
                 style={{zIndex: -100, elevation: -100}}
                 onScrollBeginDrag={this._onScroll}
                 onScrollEndDrag={this._onScroll}

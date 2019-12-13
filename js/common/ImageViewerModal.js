@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, Modal} from 'react-native';
+import {ActivityIndicator, Modal, PermissionsAndroid} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import FastImage from 'react-native-fast-image';
 import Global from './Global';
@@ -70,12 +70,49 @@ export default class App extends React.Component {
     loadingRender = () => {
         return <ActivityIndicator/>;
     };
-    onSave = (url) => {
-        saveImg(url, (msg) => {
-            this.toast.show(msg);
-        });
-    };
+    onSave = async (url) => {
+        const bool = await this.checkPermission();
+        if(bool){
+            saveImg(url, (msg) => {
+                this.toast.show(msg);
+            });
+        }
 
+    };
+    checkPermission = async () => {
+        if (Platform.OS === 'android') {
+            //返回Promise类型
+            const data = await PermissionsAndroid.check(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            );
+            if (!data) {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    {
+                        title: '申请写权限',
+                        message:
+                            '简单赚需要您手机的写文件权限',
+                        buttonNeutral: '稍后询问',
+                        buttonNegative: '拒绝',
+                        buttonPositive: '授予',
+                    },
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {//获取成功
+                    return true;
+                } else {//权限获取失败
+                    // this.show('权限获取失败');
+                    return false;
+                }
+            } else {//已经有此权限
+
+                return true;
+            }
+
+        } else {//ios
+            return true;
+        }
+
+    };
     render() {
 
         const {visible, images, index} = this.state;

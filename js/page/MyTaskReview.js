@@ -15,7 +15,6 @@ import {StatusBar} from 'react-native';
 import ViewUtil from '../util/ViewUtil';
 import jiaoliu from '../res/svg/jiaoliu.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import Image_ from 'react-native-fast-image';
 import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
 import {bottomTheme} from '../appSet';
@@ -26,6 +25,9 @@ import ImageViewerModal from '../common/ImageViewerModal';
 import ToastSelect from '../common/ToastSelect';
 import EmptyComponent from '../common/EmptyComponent';
 import BackPressComponent from '../common/BackPressComponent';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
+import FastImagePro from '../common/FastImagePro';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -80,6 +82,11 @@ class MyTaskReview extends PureComponent {
                 // NavigationUtils.goBack(this.props.navigation);
             }
 
+        }).catch(()=>{
+            // this.setState({
+            //     isLoading: false,
+            //     hideLoaded: false,
+            // });
         });
     };
     _setTaskData = (index) => {
@@ -202,7 +209,7 @@ class MyTaskReview extends PureComponent {
                                     backgroundColor: 'white',
                                     marginTop: 10,
                                 }}>
-                                <Image_
+                                <FastImagePro
                                     source={{uri: taskData.avatar_url}}
                                     style={{
                                         width: 40, height: 40,
@@ -355,6 +362,9 @@ class MyTaskReview extends PureComponent {
     thisTaskPass = (taskStepId) => {
         const {userinfo} = this.props;
         passTaskForSendFormTaskId({SendFormTaskId: taskStepId}, userinfo.token).then(result => {
+            EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {
+            });//刷新审核页面
+
             this.setState({
                 unReviewCount: this.state.unReviewCount - 1,
                 haveReviewCount: this.state.haveReviewCount + 1,
@@ -428,17 +438,17 @@ class MyTaskReview extends PureComponent {
             </View>
             {/*<Flat*/}
             <TouchableOpacity
-                activeOpacity={0.7}
+                activeOpacity={0.8}
                 onPress={() => {
                     this.imageModal.show([{
                         url: url,
                     }]);
                 }}
             >
-                <Image_
+                <FastImagePro
                     style={{height: height, width: width}}
                     source={{uri: url}}
-                    resizeMode={Image_.resizeMode.contain}
+                    // resizeMode={Image_.resizeMode.contain}
                 />
                 <View style={{
                     position: 'absolute', left: 0, top: 0, paddingHorizontal: 5, paddingVertical: 2,
