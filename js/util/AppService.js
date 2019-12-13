@@ -100,7 +100,6 @@ export function uploadQiniuImage(Usertoken, modalName, mime, uri) {
                         name: key,
                     });
                     const ret = await http.post_(uploadUrl, body);
-                    console.log(ret, 'ret');
                     if (ret.key) {
                         resolve(`${subUrl}${ret.key}`);
                     }
@@ -212,6 +211,7 @@ export function selectSignUpList(data, token) {
         }
     });
 }
+
 /**
  *查询所有关注和粉丝
  */
@@ -274,9 +274,17 @@ export function selectUserStatusForTaskId(data, token) {
 export function uploadAvatar(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
-            // const params = `userName=${username}&passWord=${password}&email=${email}`;
             http.setPostHeader('token', token);
-            const ret = await http.post('user/uploadAvatar', data);
+            let body = new FormData();
+            const key = `${new Date().getTime()}.${data.mime}`;
+            body.append('key', key);
+            body.append('file', {
+                type: `image/${data.mime}`,
+                uri: data.uri,
+                name: key,
+            });
+
+            const ret = await http.post_('user/uploadAvatar', body, true);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -410,6 +418,7 @@ export function selectTaskReleaseList(data, token) {
         }
     });
 }
+
 /**
  * 查询用户帐单
  */
@@ -774,6 +783,7 @@ export function getUserInfoForToken(token) {
         }
     });
 }
+
 /**
  * 查询用户店铺详情
  * @param data
@@ -796,6 +806,7 @@ export function selectShopInfoForUserId(data, token) {
         }
     });
 }
+
 /**
  * 查询用户店铺详情
  * @param data
@@ -817,6 +828,7 @@ export function getHotTasks() {
         }
     });
 }
+
 /**
  * 获取热门任务
  * @param data
@@ -838,6 +850,7 @@ export function getSearchContent(data, token) {
         }
     });
 }
+
 /**
  * 查询用户任务收藏状态
  * @param data
@@ -859,6 +872,7 @@ export function selectUserIsFavoriteTask(data, token) {
         }
     });
 }
+
 /**
  * 设置用户收藏状态
  * @param data
@@ -880,6 +894,7 @@ export function setUserFavoriteTask(data, token) {
         }
     });
 }
+
 /**
  * 查询用户店铺详情
  * @param data
@@ -993,6 +1008,7 @@ export function selectTaskInfo(data, token) {
         }
     });
 }
+
 /**
  * 关注用户
  * @param data

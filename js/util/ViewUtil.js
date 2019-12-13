@@ -54,11 +54,11 @@ export default class ViewUtil {
             <TouchableOpacity
                 onPress={click}
                 style={styles.setting_item_container}>
-                <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingLeft:20}}>
                     <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.9)'} svgXmlData={menuSvg}/>
                     <Text style={{marginLeft: 10, fontSize: 15, opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingRight:10}}>
                     <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>
                 </View>
@@ -193,6 +193,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        paddingHorizontal: 20,
+
     },
 });

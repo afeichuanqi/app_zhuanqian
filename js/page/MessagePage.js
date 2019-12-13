@@ -349,100 +349,100 @@ class MessageItemComponent extends Component {
 
                 flexDirection: 'row',
                 marginHorizontal: marginHorizontal,
-                paddingVertical: 15,
+                paddingVertical: 0,
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 transform: [{scale}],
                 height: 70,
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 // backgroundColor:'red',
             }}
             onPressIn={this._onPressIn}
             onPressOut={this._onPressOut}
         >
-            <View style={{position: 'absolute', top: 10}}>
-                <FastImage
-                    style={[styles.imgStyle]}
-                    source={{uri: avatar_url}}
-                    resizeMode={FastImage.resizeMode.stretch}
-                />
-                {unReadLength ? unReadLength > 0 && <View style={{
-                    borderRadius: 10, justifyContent: 'center', alignItems: 'center',
-                    position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
-                    // paddingVertical:1,
+            <View>
+                <View style={{flexDirection: 'row'}}>
+                    <View>
+                        <FastImage
+                            style={[styles.imgStyle]}
+                            source={{uri: avatar_url}}
+                            resizeMode={FastImage.resizeMode.stretch}
+                        />
+                        {unReadLength ? unReadLength > 0 && <View style={{
+                            borderRadius: 10, justifyContent: 'center', alignItems: 'center',
+                            position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
+                            // paddingVertical:1,
+                        }}>
+                            <Text style={{
+                                fontSize: 10,
+                                color: 'white',
+                            }}>{unReadLength}</Text>
+                        </View> : null}
+                    </View>
+                    <View style={{justifyContent: 'space-around'}}>
+                        {/*左上*/}
+                        <View style={{
+                            // position: 'absolute',
+                            // top: 10,
+                            // left: 40,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <Text style={{
+                                fontSize: 13,
+                                color: 'black',
+                                opacity: 0.9,
+                                marginLeft: 10,
+                            }}>{username}</Text>
+                            <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>{
+                                columnType == 1 ? `任务咨询 - 任务ID:${taskId}` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
+                            }</Text>
+
+
+                        </View>
+                        {/*中间*/}
+                        <Text
+                            numberOfLines={1}
+                            ellipsizeMode={'tail'}
+                            style={{
+                                fontSize: 12,
+                                color: 'black',
+                                opacity: 0.6,
+                                marginLeft: 10,
+                                width: (width - 100) / 2,
+                            }}>{msg_type == 'text' ? msg : '[图片]'}
+                        </Text>
+                    </View>
+
+                </View>
+
+
+                <View style={{
+                    marginLeft: 50,
+                    marginTop: 5,
                 }}>
                     <Text style={{
                         fontSize: 10,
-                        color: 'white',
-                    }}>{unReadLength}</Text>
-                </View> : null}
-
-            </View>
-
-            {/*左上*/}
-            <View style={{
-                position: 'absolute',
-                top: 10,
-                left: 40,
-                flexDirection: 'row',
-                alignItems: 'center',
-            }}>
-                <Text style={{
-                    fontSize: 13,
-                    color: 'black',
-                    opacity: 0.9,
-                    marginLeft: 10,
-                }}>{username}</Text>
-                <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>{
-                    columnType == 1 ? `任务咨询 - 任务ID:${taskId}` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
-                }</Text>
-
-
-            </View>
-
-            {/*中间*/}
-            <View style={{
-                position: 'absolute',
-                top: 30,
-                left: 40,
-                // height: 30,
-                flexDirection: 'row',
-            }}>
-                <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={{
-                        fontSize: 12,
                         color: 'black',
-                        opacity: 0.6,
-                        marginLeft: 10,
-                        width: (width - 100) / 2,
-                    }}>{msg_type == 'text' ? msg : '[图片]'}</Text>
-            </View>
-            <View style={{
-                position: 'absolute',
-                bottom: 5,
-                left: 50,
-            }}>
-                <Text style={{
-                    fontSize: 10,
-                    color: 'black',
-                    opacity: 0.5,
+                        opacity: 0.5,
 
-                }}>{getCurrentTime(parseInt(item.sendDate))}</Text>
+                    }}>{getCurrentTime(parseInt(item.sendDate))}</Text>
+                </View>
             </View>
             <FastImage
                 style={{
-                    position: 'absolute', right: 10,
-                    top: 10,
                     backgroundColor: '#E8E8E8',
                     // 设置宽度
-                    width: 50,
-                    height: 50,
+                    width: 55,
+                    height: 55,
                     borderRadius: 2,
                 }}
                 source={{uri: taskUri}}
                 resizeMode={FastImage.resizeMode.stretch}
             />
+
+
         </AnimatedTouchableOpacity>;
 
 

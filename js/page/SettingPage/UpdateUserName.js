@@ -16,6 +16,7 @@ import NavigationUtils from '../../navigator/NavigationUtils';
 import actions from '../../action';
 import {connect} from 'react-redux';
 import BackPressComponent from '../../common/BackPressComponent';
+import Toast from '../../common/Toast';
 
 const {width} = Dimensions.get('window');
 
@@ -57,17 +58,25 @@ class UpdateUserName extends PureComponent {
         />;
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '昵称', null, theme, 'black', 16, () => {
             const {onSetUserName, userinfo} = this.props;
-            onSetUserName(userinfo.token, this.state.text, () => {
-                NavigationUtils.goBack(this.props.navigation)
+            onSetUserName(userinfo.token, this.state.text, (bool,msg) => {
+                if(bool){
+                    this.toast.show('修改成功');
+                }else{
+                    this.toast.show(msg);
+                }
+
+
             });
-        }, false,true,'确定');
+        }, false, true, '确定');
         return (
             <SafeAreaViewPlus
                 topColor={theme}
             >
                 {navigationBar}
                 {TopColumn}
-
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <View style={{
                     paddingVertical: 10,
                     paddingHorizontal: 15,
@@ -87,7 +96,8 @@ class UpdateUserName extends PureComponent {
                             borderBottomWidth: 0.3,
                             borderBottomColor: '#e8e8e8',
                             // paddingBottom: 10,
-                            height:30
+                            padding: 0,
+                            height: 30,
                         }} value={this.state.text}/>
                     <View>
                         <View style={{flexDirection: 'row', position: 'absolute', right: 10, top: 10}}>

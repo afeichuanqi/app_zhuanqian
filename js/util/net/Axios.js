@@ -4,8 +4,8 @@ import qs from 'qs';
 // import Toast from "../../common/RootToast";
 
 let defaultConfig = {
-        // baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
-        baseUrl: 'http://6vrsiw.natappfree.cc',//测试
+        baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
+        // baseUrl: 'http://6vrsiw.natappfree.cc',//测试
         // baseUrl: 'http://47.99.133.97:3000',//测试
         timeout:
             15000,
@@ -59,7 +59,7 @@ class Axios {
             let query = await qs.stringify(params);
             let response = null;
             if (!params) {
-                response = await instance.get(baseUrl + url,null);
+                response = await instance.get(baseUrl + url, null);
             } else {
                 response = await instance.get(baseUrl + url + '?' + query);
             }
@@ -97,10 +97,11 @@ class Axios {
             return null;
         }
     }
-    async post_(url, params) {
+
+    async post_(url, params, addBaseUri = false) {
 
         try {
-            let response = await instance.post(url, params);
+            let response = await instance.post(addBaseUri ? baseUrl + url : url, params);
             if (response) {
                 if (response.code !== 0) {
 

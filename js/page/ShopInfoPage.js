@@ -148,10 +148,10 @@ class ShopInfoPage extends PureComponent {
             be_user_id: this.params.userid,
             type: attention_type,
         }, this.props.userinfo.token).then(result => {
-            // this.setState({
-            //     attentionStatus: attention_type,
-            // });
-            this.updateShopInfo();
+            this.setState({
+                attentionStatus: attention_type,
+            });
+            // this.updateShopInfo();
             this.toast.show(`${attention_type == 0 ? '取消关注' : '关注'}成功`);
         }).catch(msg => {
             this.toast.show(msg);
@@ -237,8 +237,8 @@ class ShopList extends Component {
 
         return <TaskSumComponent
             item={item}
-            titleFontSize={15}
-            marginHorizontal={15}
+            // titleFontSize={15}
+            // marginHorizontal={15}
             onPress={(task_id) => {
                 EventBus.getInstance().fireEvent(EventTypes.update_task_page, {
                     test: false,

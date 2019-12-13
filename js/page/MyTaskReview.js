@@ -50,6 +50,7 @@ class MyTaskReview extends PureComponent {
         this._updatePage();
 
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -84,7 +85,6 @@ class MyTaskReview extends PureComponent {
     _setTaskData = (index) => {
 
         try {
-            console.log(this.taskDatas);
             const data = {...this.taskDatas[index]};
             const taskStepData = JSON.parse(data.task_step_data);
             data.task_step_data = taskStepData;
@@ -115,7 +115,7 @@ class MyTaskReview extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `任务审核 (${this.taskDatas &&(this.pageIndex + 1)>this.taskDatas.length?this.taskDatas.length:this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `任务审核 (${this.taskDatas && (this.pageIndex + 1) > this.taskDatas.length ? this.taskDatas.length : this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, jiaoliu, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
             const {task_id, taskUri} = this.params;
             const fromUserinfo = {
@@ -430,9 +430,9 @@ class MyTaskReview extends PureComponent {
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
-                    this.imageModal.show({
+                    this.imageModal.show([{
                         url: url,
-                    });
+                    }]);
                 }}
             >
                 <Image_

@@ -262,15 +262,15 @@ class ChatRoomPage extends React.Component {
                         loadHistory={this.onRefresh}
                         inverted={true}
                         inputOutContainerStyle={{
-                            borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.2, shadowColor: '#c7c7c7',
-                            shadowRadius: 3,
+                            borderColor: 'rgba(0,0,0,1)', borderTopWidth: 0.1, shadowColor: '#cdcdcd',
+                            shadowRadius: 1,
                             shadowOpacity: 1,
                             shadowOffset: {w: 1, h: 1},
-                            elevation: 2,//安卓的阴影
+                            elevation: 1,//安卓的阴影
                         }}
                         renderLoadEarlier={<View style={{height: 80}}/>}
                         userProfile={{id: userinfo.userid, avatar: userinfo.avatar_url}}
-                        placeholder={''}
+                        placeholder={'想说点什么呢'}
                         useVoice={false}
                         ref={(e) => this.chat = e}
                         messageList={this.getMessages()}

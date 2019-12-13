@@ -121,18 +121,19 @@ export default class InputBar extends PureComponent {
         <View style={[{
           flexDirection: 'row', alignItems: 'center', marginVertical: 8, paddingHorizontal: 10
         }, inputContainerStyle]}>
-          {
-            useVoice ? <View style={{ height: 35 + inputHeightFix, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.7}>
-              <TouchableOpacity onPress={onMethodChange} activeOpacity={0.7}>
-                {showVoice ? this.props.keyboardIcon : this.props.voiceIcon}
-              </TouchableOpacity>
-            </View> : null
-          }
+          {/*{*/}
+          {/*  useVoice ? <View style={{ height: 35 + inputHeightFix, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.7}>*/}
+          {/*    <TouchableOpacity onPress={onMethodChange} activeOpacity={0.7}>*/}
+          {/*      {showVoice ? this.props.keyboardIcon : this.props.voiceIcon}*/}
+          {/*    </TouchableOpacity>*/}
+          {/*  </View> : null*/}
+          {/*}*/}
           <View style={{ marginHorizontal: 8,
             borderRadius: 5,
             borderColor: '#ccc',
+
             flex: 1,
-            borderWidth: 0.5,
+            borderBottomWidth: 0.5,
             paddingVertical: 0.8
           }}
           >
@@ -207,17 +208,17 @@ export default class InputBar extends PureComponent {
 const styles = StyleSheet.create({
   commentBar: {
     width: width,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f6f6f6',
     justifyContent: 'center',
-    borderColor: '#ccc',
+    // borderColor: '#ccc',
     borderTopWidth: StyleSheet.hairlineWidth
   },
   commentBar__input: {
-    borderRadius: 18,
+    // borderRadius: 18,
     height: 26,
-    width: '100%',
-    padding: 0,
-    paddingHorizontal: 5
+    // width: '100%',
+    paddingLeft: 5,
+    // paddingHorizontal: 5
     // backgroundColor: '#f9f9f9'
   }
 })

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Platform} from 'react-native';
-import CameraRoll from "@react-native-community/cameraroll";
-import RNFS from "react-native-fs";
-const  ImageUtil = {
+import {Platform} from 'react-native';
+import CameraRoll from '@react-native-community/cameraroll';
+import RNFS from 'react-native-fs';
+
+const ImageUtil = {
+
     saveImg: (img, callback) => {
         if (Platform.OS === 'ios') {
             let promise = CameraRoll.saveToCameraRoll(img, 'photo');
@@ -28,6 +30,21 @@ const  ImageUtil = {
             });
         }
 
+    },
+    getMorePhotos: (Params, callback) => {
+        const promise = CameraRoll.getPhotos(Params);
+        promise.then(data => {
+            const edges = data.edges;
+            const photos = [];
+            // console.log(data);
+
+            for (let i in edges) {
+                photos.push(edges[i].node.image);
+            }
+            callback(true, photos);
+        }, function (err) {
+            callback(false, []);
+        });
     },
 
 };

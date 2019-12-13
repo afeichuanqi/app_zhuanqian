@@ -383,20 +383,24 @@ class TopInfoColumn extends PureComponent {
                     {this.genDataInfo(userinfo.login ? userinfo.guaranteed_amount : 0, '保证金')}
                 </View>
             </Animated.View>
-            <PickerImage cropping={true} includeBase64={true} select={this._avatarSelect} popTitle={'选取头像'}
+            <PickerImage showMorePhotos={true} cropping={true} includeBase64={true} select={this._avatarSelect} popTitle={'选取头像'}
                          ref={ref => this.pickerImage = ref}/>
         </View>;
     }
 
-    _avatarSelect = (image) => {
+    _avatarSelect = (imageData) => {
         const {userinfo} = this.props;
-        const mime = image.mime;
-        const base64Data = image.data;
-        const imgData = {
-            mime,
-            data: base64Data,
-        };
-        this.props.onUploadAvatar(userinfo.token, imgData, (isTrue, data) => {
+        // const mime = image.mime;
+        // const base64Data = image.data;
+        // const imgData = {
+        //     mime,
+        //     data: base64Data,
+        // };
+        let mime = imageData.mime;
+        const mimeIndex = mime.indexOf('/');
+        mime = mime.substring(mimeIndex + 1, mime.length);
+        const uri = `file://${imageData.path}`;
+        this.props.onUploadAvatar(userinfo.token, {mime,uri}, (isTrue, data) => {
             // if (!isTrue) {
             //     console.log(data.msg);
             // }

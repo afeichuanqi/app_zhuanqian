@@ -166,7 +166,7 @@ class MyTaskReview extends PureComponent {
                                         onPress={() => {
                                             const {uri} = this.state.data[index];
                                             if (uri && (uri.indexOf('file://') !== -1 || uri.indexOf('http') !== -1)) {
-                                                this.imageView.show({url: uri});
+                                                this.imageView.show([{url: uri}]);
                                             } else {
                                                 this.refs[`picker${index}`].show(index);
                                             }

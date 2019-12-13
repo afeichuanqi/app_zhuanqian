@@ -8,7 +8,7 @@ class LabelBigComponent extends PureComponent {
     static defaultProps = {
         title: '高价',
         paddingHorizontal: 6,
-        paddingVertical: Platform.OS === 'android' ? 1 : 3,
+        paddingVertical: Platform.OS === 'android' ? 0 : 3,
         fontSize: 12,
         marginRight: 5,
         marginTop: 0,

@@ -94,14 +94,14 @@ import jianxiao from './jianxiao.png'  /* 奸笑 */
 import jizhi from './jizhi.png'  /* 机智 */
 import zhoumei from './zhoumei.png'  /* 皱眉 */
 import ye from './ye.png'  /* 耶 */
-import guilian from './guilian.png'  /* 鬼脸 */
-import heshi from './heshi.png'  /* 合十 */
-import jiayou from './jiayou.png'  /* 加油 */
-import qingzhu from './qingzhu.png'  /* 庆祝 */
-import liwu from './liwu.png'  /* 礼物 */
-import hongbao from './hongbao.png'  /* 红包 */
-import fa from './fa.png'  /* 发 */
-import ji from './ji.png'  /* 鸡 */
+// import guilian from './guilian.png'  /* 鬼脸 */
+// import heshi from './heshi.png'  /* 合十 */
+// import jiayou from './jiayou.png'  /* 加油 */
+// import qingzhu from './qingzhu.png'  /* 庆祝 */
+// import liwu from './liwu.png'  /* 礼物 */
+// import hongbao from './hongbao.png'  /* 红包 */
+// import fa from './fa.png'  /* 发 */
+// import ji from './ji.png'  /* 鸡 */
 
 
 
@@ -207,14 +207,14 @@ export const EMOJIS_DATA = {
   '/{jizhi}': jizhi,/* 机智 */
   '/{zhoumei}': zhoumei,/* 皱眉 */
   '/{ye}': ye,/* 耶 */
-  '/{guilian}': guilian,/* 鬼脸 */
-  '/{heshi}': heshi,/* 合十 */
-  '/{jiayou}': jiayou,/* 加油 */
-  '/{qingzhu}': qingzhu,/* 庆祝 */
-  '/{liwu}': liwu,/* 礼物 */
-  '/{hongbao}': hongbao,/* 红包 */
-  '/{fa}': fa,/* 发 */
-  '/{ji}': ji,/* 鸡 */
+  // '/{guilian}': guilian,/* 鬼脸 */
+  // '/{heshi}': heshi,/* 合十 */
+  // '/{jiayou}': jiayou,/* 加油 */
+  // '/{qingzhu}': qingzhu,/* 庆祝 */
+  // '/{liwu}': liwu,/* 礼物 */
+  // '/{hongbao}': hongbao,/* 红包 */
+  // '/{fa}': fa,/* 发 */
+  // '/{ji}': ji,/* 鸡 */
 
 };
 
@@ -317,14 +317,14 @@ export const EMOJIS_ZH = {
   '/{jizhi}':  '[机智]',
   '/{zhoumei}':  '[皱眉]',
   '/{ye}':  '[耶]',
-  '/{guilian}':  '[鬼脸]',
-  '/{heshi}':  '[合十]',
-  '/{jiayou}':  '[加油 ]',
-  '/{qingzhu}':  '[庆祝]',
-  '/{liwu}':  '[礼物]',
-  '/{hongbao}':  '[红包]',
-  '/{fa}':  '[发]',
-  '/{ji}':  '[鸡]',
+  // '/{guilian}':  '[鬼脸]',
+  // '/{heshi}':  '[合十]',
+  // '/{jiayou}':  '[加油 ]',
+  // '/{qingzhu}':  '[庆祝]',
+  // '/{liwu}':  '[礼物]',
+  // '/{hongbao}':  '[红包]',
+  // '/{fa}':  '[发]',
+  // '/{ji}':  '[鸡]',
 }
 
 export const invertKeyValues = obj =>
