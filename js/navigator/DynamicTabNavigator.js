@@ -180,13 +180,15 @@ class BottomBar extends Component {
 
             if (index === 0) {
                 pageName = `IndexPage_${Global.IndexPage_Index}`;
-            }
-            if (index === 1) {
+            } else if (index === 1) {
                 pageName = `TaskHallPage_${Global.TaskHallPage_Index}`;
+            } else if (index === 2) {
+                pageName = `MessagePage`;
             }
-            EventBus.getInstance().fireEvent(EventTypes.scroll_top_for_page, {
+            pageName.length > 0 && EventBus.getInstance().fireEvent(EventTypes.scroll_top_for_page, {
                 pageName,
             });//页面跳转到顶部
+
         }
     };
 

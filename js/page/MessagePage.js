@@ -29,6 +29,8 @@ import EmptyComponent from '../common/EmptyComponent';
 import ChatSocket from '../util/ChatSocket';
 import {connect} from 'react-redux';
 import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -160,6 +162,20 @@ class MsgList extends Component {
         pageIndex: 0,
     };
 
+    componentDidMount(): void {
+        EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
+            const {pageName} = data;
+            if (pageName == `MessagePage`) {
+                // this.flatList.get
+                this.flatList.getNode().scrollToOffset({animated: true, viewPosition: 0, index: 0});
+            }
+        });
+    }
+
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListener(this.listener);
+    }
+
     constructor(props) {
         super(props);
         this.page = {pageCount: 20};
@@ -225,15 +241,17 @@ class MsgList extends Component {
                     },
                 },
             ])}
-            onScrollBeginDrag={event => {
+            onMomentumScrollBegin={() => {
                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
             }}
             onEndReached={() => {
                 // 等待页面布局完成以后，在让加载更多
-                if (this.canLoadMore) {
-                    this.onLoading();
-                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                }
+                setTimeout(() => {
+                    if (this.canLoadMore) {
+                        this.onLoading();
+                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                    }
+                }, 100);
             }}
             windowSize={300}
             onEndReachedThreshold={0.01}

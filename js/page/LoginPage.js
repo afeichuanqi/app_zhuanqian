@@ -93,7 +93,7 @@ class LoginPage extends PureComponent {
             hide={true}
             statusBar={statusBar}
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '', null);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '', null, 'white', 'black', 14, null, false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}

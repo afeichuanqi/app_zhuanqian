@@ -262,7 +262,7 @@ class FristListComponent extends PureComponent {
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
@@ -300,15 +300,17 @@ class FristListComponent extends PureComponent {
                 ListFooterComponent={() => this.genIndicator(hideLoaded)}
                 onEndReached={() => {
                     console.log('onEndReached.....');
-                    // 等待页面布局完成以后，在让加载更多
-                    if (this.canLoadMore) {
-                        this.onLoading();
-                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                    }
+                    setTimeout(() => {
+                        // 等待页面布局完成以后，在让加载更多
+                        if (this.canLoadMore) {
+                            this.onLoading();
+                            this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                        }
+                    }, 100);
                 }}
                 windowSize={300}
                 onEndReachedThreshold={0.01}
-                onScrollBeginDrag={() => {
+                onMomentumScrollBegin={() => {
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
@@ -358,7 +360,8 @@ class OrdersItem extends React.Component {
                     </View> : status == 3 ? <View style={{marginLeft: 10}}>
                         <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
                         <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
-                        {(item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) &&  <Text style={{fontSize: 13, marginTop: 5,color:'red'}}>
+                        {(item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) &&
+                        <Text style={{fontSize: 13, marginTop: 5, color: 'red'}}>
                             请于 {item.orderExpTime} 之前重新提交
                         </Text>}
 
@@ -398,7 +401,7 @@ class OrdersItem extends React.Component {
 
                 </View>
 
-                <View style={{height:50, alignItems:'flex-start'}}>
+                <View style={{height: 50, alignItems: 'flex-start'}}>
                     <Text style={{fontSize: 17, color: 'red'}}>+{item.reward_price}元</Text>
                 </View>
             </TouchableOpacity>

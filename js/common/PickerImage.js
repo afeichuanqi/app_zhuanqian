@@ -7,7 +7,17 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, PermissionsAndroid, Dimensions, Text, TouchableOpacity, Image, FlatList} from 'react-native';
+import {
+    Modal,
+    View,
+    PermissionsAndroid,
+    Dimensions,
+    Text,
+    TouchableOpacity,
+    Image,
+    FlatList,
+    Platform,
+} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageUtil from '../util/ImageUtil';
@@ -25,7 +35,7 @@ class PickerImage extends PureComponent {
         },
         popTitle: '选取照片',
         includeBase64: false,
-        cropping: false,
+        cropping: true,
         showMorePhotos: true,
     };
     state = {
@@ -115,8 +125,8 @@ class PickerImage extends PureComponent {
     };
     _selTakePhone = () => {
         ImagePicker.openCamera({
-            width: 300,
-            height: 400,
+            width: Platform.OS === 'ios' ? 1800 : 600,
+            height: Platform.OS === 'ios' ? 1200 : 400,
             cropping: this.props.cropping,
             mediaType: 'photo',
             freeStyleCropEnabled: true,
@@ -134,8 +144,8 @@ class PickerImage extends PureComponent {
     };
     _selAlbum = () => {
         ImagePicker.openPicker({
-            width: 300,
-            height: 400,
+            width: Platform.OS === 'ios' ? 1800 : 600,
+            height: Platform.OS === 'ios' ? 1200 : 400,
             cropping: this.props.cropping,
             mediaType: 'photo',
             freeStyleCropEnabled: true,
@@ -192,6 +202,7 @@ class PickerImage extends PureComponent {
                             data={photos}
                             keyExtractor={(item, index) => index + ''}
                             renderItem={data => this._renderBestNewItem(data)}
+                            windowSize={10}
                         />}
 
                         <TouchableOpacity
@@ -236,14 +247,13 @@ class PickerImage extends PureComponent {
         const FlatListItemHeight = 130;
         const size = FlatListItemHeight / height;
         const imgWidth = width * size;
-        // console.log(item.uri);
 
         return <TouchableOpacity
             onPress={() => {
                 ImagePicker.openCropper({
                     path: uri,
-                    width: (Platform.OS === 'ios') ? width * 2 : width,
-                    height: (Platform.OS === 'ios') ? height * 2 : height,
+                    width: (Platform.OS === 'ios') ? width * 3 : width,
+                    height: (Platform.OS === 'ios') ? height * 3 : height,
                     freeStyleCropEnabled: true,
                     showCropGuidelines: true,
                     compressImageQuality: 0.7,

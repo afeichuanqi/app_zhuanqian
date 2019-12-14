@@ -263,6 +263,7 @@ class ChatRoomPage extends React.Component {
                     />}
 
                     <ChatScreen
+                        onEndReachedThreshold={0.3}
                         systemClick={() => {
                             // NavigationUtils
                             NavigationUtils.goPage({type: 2}, 'UserProtocol');
@@ -300,8 +301,9 @@ class ChatRoomPage extends React.Component {
                             title: '照片',
                             onPress: () => {
                                 ImagePicker.openPicker({
-                                    width: 300,
-                                    height: 400,
+                                    width: Platform.OS === 'ios' ? 1800 : 600,
+                                    height: Platform.OS === 'ios' ? 1200 : 400,
+                                    cropping: true,
                                     mediaType: 'photo',
                                     cropperChooseText: '确认',
                                     cropperCancelText: '取消',

@@ -801,15 +801,13 @@ class ChatWindow extends PureComponent {
                 if (this.props.setPopItems) {
                     items = this.props.setPopItems(type, index, text, message);
                 } else {
-                    items = [
-
-                    ];
+                    items = [];
                     if (type === 'text') {
                         items = [
                             {
                                 title: '复制',
                                 onPress: () => Clipboard.setString(text),
-                            }
+                            },
                         ];
                     }
                 }
@@ -1037,12 +1035,14 @@ class ChatWindow extends PureComponent {
                             scrollEventThrottle={100}
                             keyExtractor={(item) => `${item.id}`}
                             onEndReached={() => {
-                                if (this.canLoadMore) {
-                                    this._loadHistory();
-                                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                                }
+                                setTimeout(() => {
+                                    if (this.canLoadMore) {
+                                        this._loadHistory();
+                                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                                    }
+                                }, 100);
                             }}
-                            onScrollBeginDrag={event => {
+                            onMomentumScrollBegin={() => {
                                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                             }}
                             onLayout={(e) => {
@@ -1229,8 +1229,8 @@ class ChatWindow extends PureComponent {
                     {/*}*/}
                 </Animated.View>
             </View>
-        )
+        );
     }
 }
 
-export default ChatWindow
+export default ChatWindow;

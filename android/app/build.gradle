@@ -181,12 +181,12 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-image-crop-picker')
     implementation project(':@react-native-community_cameraroll')
     implementation project(':react-native-fs')
     implementation project(':react-native-device-info')
     implementation project(':react-native-wechat')
     implementation project(':@react-native-community_async-storage')
-    implementation project(':react-native-image-crop-picker')
     implementation project(':@react-native-community_viewpager')
     implementation project(':react-native-fast-image')
     implementation project(':react-native-svg')

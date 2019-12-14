@@ -126,6 +126,7 @@ class UserBillListPage extends PureComponent {
             </SafeAreaViewPlus>
         );
     }
+
     handleIndexChange = (index) => {
         // console.log(index);
         const {navigationRoutes} = this.state;
@@ -229,15 +230,17 @@ class UserBillList extends PureComponent {
                 onEndReached={() => {
                     console.log('onEndReached.....');
                     // 等待页面布局完成以后，在让加载更多
-                    if (this.canLoadMore) {
-                        this.onLoading();
-                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                    }
+                    setTimeout(() => {
+                        if (this.canLoadMore) {
+                            this.onLoading();
+                            this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                        }
+                    }, 100);
                 }}
                 // onScrollEndDrag={this._onScrollEndDrag}
                 windowSize={300}
                 onEndReachedThreshold={0.01}
-                onScrollBeginDrag={() => {
+                onMomentumScrollBegin={() => {
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />

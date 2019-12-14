@@ -44,7 +44,7 @@ export default class FilterComponent extends PureComponent {
         });
         //隐藏box
         this._anim = timing(this.animations.translateY, {
-            duration: 200,
+            duration: 300,
             toValue: 1,
             easing: Easing.inOut(Easing.ease),
         }).start();
@@ -52,7 +52,7 @@ export default class FilterComponent extends PureComponent {
     hide = () => {
         //隐藏box
         this._anim = timing(this.animations.translateY, {
-            duration: 200,
+            duration: 300,
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
@@ -68,14 +68,14 @@ export default class FilterComponent extends PureComponent {
     render() {
         const translateY = Animated.interpolate(this.animations.translateY, {
             inputRange: [0, 1],
-            outputRange: [-260, 40],
+            outputRange: [-250, 40],
             extrapolate: 'clamp',
         });
-        // const opacity = Animated.interpolate(this.animations.translateY, {
-        //     inputRange: [0, 1],
-        //     outputRange: [0, 0.6],
-        //     extrapolate: 'clamp',
-        // });
+        const opacity = Animated.interpolate(this.animations.translateY, {
+            inputRange: [0, 1],
+            outputRange: [0.1, 1],
+            extrapolate: 'clamp',
+        });
         const {typeArray} = this.props;
         return <View ref={ref => this.containerBox = ref} style={{
             position: 'absolute',
@@ -88,7 +88,7 @@ export default class FilterComponent extends PureComponent {
             {/*/!*遮罩层*!/*/}
 
             <AnimatedTouchableOpacity
-                activeOpacity={0.6}
+                activeOpacity={0.2}
                 onPress={this._cancelClick}
                 style={{
                     flex: 1, backgroundColor: 'rgb(0,0,0)',
@@ -97,7 +97,7 @@ export default class FilterComponent extends PureComponent {
                 }}/>
             {/*box*/}
             <Animated.View style={{
-                position: 'absolute', transform: [{translateY}],
+                position: 'absolute', transform: [{translateY}],opacity:opacity
 
             }}>
                 <ScrollView style={{

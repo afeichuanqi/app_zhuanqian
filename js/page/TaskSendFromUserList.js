@@ -166,10 +166,12 @@ class TaskReleaseMana extends PureComponent {
                             // console.log('onEndReached.....');
                             // console.log(this.canLoadMore);
                             // 等待页面布局完成以后，在让加载更多
-                            if (this.canLoadMore) {
-                                this.onLoading();
-                                this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                            }
+                            setTimeout(() => {
+                                if (this.canLoadMore) {
+                                    this.onLoading();
+                                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                                }
+                            }, 100);
                         }}
                         // onScrollEndDrag={this._onScrollEndDrag}
                         windowSize={300}
@@ -178,8 +180,7 @@ class TaskReleaseMana extends PureComponent {
                         //     console.log('onMomentumScrollBegin');
                         //
                         // }}
-                        onScrollBeginDrag={()=>{
-                            // console.log("onScrollBeginDrag");
+                        onMomentumScrollBegin={() => {
                             this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                         }}
                     />
@@ -260,7 +261,7 @@ class TaskReleaseMana extends PureComponent {
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity:0.7, fontSize:13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }

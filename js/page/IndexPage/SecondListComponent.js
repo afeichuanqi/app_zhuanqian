@@ -31,6 +31,7 @@ class SecondListComponent extends PureComponent {
             const {pageName} = data;
             if (pageName == `IndexPage_1`) {
                 this.flatList.scrollToTop_();
+                this.props.showAnimated(false);
             }
         });
     }
@@ -114,6 +115,7 @@ class SecondListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+                ref={ref => this.flatList = ref}
                 type={2}
                 style={{zIndex: -100, elevation: -100}}
                 onLoading={(load) => {

@@ -46,7 +46,6 @@ target 'AwesomeProject' do
 
 
 
-  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
@@ -58,6 +57,9 @@ target 'AwesomeProject' do
 
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
   target 'AwesomeProjectTests' do
     inherit! :search_paths
