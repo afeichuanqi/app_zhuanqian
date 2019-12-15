@@ -100,7 +100,7 @@ export default function onAction(state = defaultContent, action) {
         case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
             // const columnUnreadLength4 = [...state.columnUnreadLength];
             let temArr4 = [...state.friendArr];
-            let NewUnReadLength1 ;
+            let NewUnReadLength1;
             const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
             if (fromUserIndex1 != -1) {
                 const item1 = temArr4[fromUserIndex1];
@@ -116,6 +116,14 @@ export default function onAction(state = defaultContent, action) {
                 friendArr: temArr4,
                 unMessageLength: NewUnReadLength1,
                 // columnUnreadLength: columnUnreadLength4,
+            };
+        case Types.FRIEND_INIT:
+
+            return {
+                ...state,
+                friendArr: [],
+                unMessageLength: 0,
+                columnUnreadLength: [0, 0, 0, 0],
             };
         default:
             return state;

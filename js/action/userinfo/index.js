@@ -24,7 +24,7 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
                 data: data,
             });
         }).catch(msg => {
-
+            console.log(msg);
             callback(false, {msg});
             dispatch({type: Types.LOGIN_FAIL});
         });

@@ -32,6 +32,7 @@ import Toast from '../common/Toast';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import BackPressComponent from '../common/BackPressComponent';
+import ImageViewerModal from '../common/ImageViewerModal';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
@@ -367,11 +368,19 @@ class AvatarColumn extends Component {
     render() {
         return <View style={{backgroundColor: bottomTheme, width, paddingVertical: 10, paddingBottom: 50}}>
             <View style={{marginTop: 5, marginLeft: 10}}>
-                <FastImage
-                    style={[styles.imgStyle]}
-                    source={{uri: this.props.shopInfo.avatar_url}}
-                    resizeMode={FastImage.stretch}
-                />
+                <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => {
+                        this.imageViewer.show([{url:this.props.shopInfo.avatar_url}])
+                    }}
+                >
+                    <FastImage
+                        style={[styles.imgStyle]}
+                        source={{uri: this.props.shopInfo.avatar_url}}
+                        resizeMode={FastImage.stretch}
+                    />
+                </TouchableOpacity>
+
                 {/*左上*/}
                 <View style={{
                     position: 'absolute',
@@ -454,6 +463,7 @@ class AvatarColumn extends Component {
                     letterSpacing: 1,
                 }}>{this.props.shopInfo.fan_num}粉丝</Text>
             </TouchableOpacity>
+            <ImageViewerModal ref={ref => this.imageViewer = ref}/>
         </View>;
     }
 

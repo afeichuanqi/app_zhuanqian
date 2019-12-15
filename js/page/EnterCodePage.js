@@ -280,7 +280,7 @@ class CodeInput extends PureComponent {
             } else {
 
                 // console.log(data.msg, 'data.msg');
-                // this.props.showError(data.msg);
+                this.props.showError(data.msg);
                 this.iptArrayNum = new Array(this.props.iptNum);
                 this.refs[`text0`].focus();
                 this.forceUpdate();

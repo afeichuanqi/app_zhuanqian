@@ -44,8 +44,9 @@ export default class Toast extends Component {
         this.animation = Animated.timing(
             this.state.opacityValue,
             {
+                useNativeDriver: true,
                 toValue: this.props.opacity,
-                duration: this.props.fadeInDuration,
+                duration: 1000,
             }
         )
         this.animation.start(() => {
@@ -65,8 +66,9 @@ export default class Toast extends Component {
             this.animation = Animated.timing(
                 this.state.opacityValue,
                 {
+                    useNativeDriver: true,
                     toValue: 0.0,
-                    duration: this.props.fadeOutDuration,
+                    duration: 1000,
                 }
             )
             this.animation.start(() => {
@@ -88,18 +90,18 @@ export default class Toast extends Component {
 
     render() {
         let pos;
-        switch (this.props.position) {
-            case 'top':
-                pos = this.props.positionValue;
-                break;
-            case 'center':
-                pos = height / 2;
-                break;
-            case 'bottom':
-                pos = height - this.props.positionValue;
-                break;
-        }
-
+        // switch (this.props.position) {
+        //     case 'top':
+        //         pos = this.props.positionValue;
+        //         break;
+        //     case 'center':
+        //         pos = height / 2;
+        //         break;
+        //     case 'bottom':
+        //         pos = height - this.props.positionValue;
+        //         break;
+        // }
+        pos = height / 2;
         const view = this.state.isShow ?
             <View
                 style={[styles.container, { top: pos }]}
@@ -108,7 +110,7 @@ export default class Toast extends Component {
                 <Animated.View
                     style={[styles.content, { opacity: this.state.opacityValue }, this.props.style]}
                 >
-                    {React.isValidElement(this.state.text) ? this.state.text : <Text style={this.props.textStyle}>{this.state.text}</Text>}
+                    {React.isValidElement(this.state.text) ? this.state.text : <Text style={[this.props.textStyle,{fontSize:15}]}>{this.state.text}</Text>}
                 </Animated.View>
             </View> : null;
         return view;
@@ -128,6 +130,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         borderRadius: 5,
         padding: 10,
+        paddingHorizontal:10,
+        paddingVertical:8,
     },
     text: {
         color: 'white'

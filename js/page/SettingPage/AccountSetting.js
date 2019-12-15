@@ -16,8 +16,8 @@ import NavigationUtils from '../../navigator/NavigationUtils';
 import actions from '../../action';
 import {connect} from 'react-redux';
 import PickerSex from '../../common/PickerSex';
-import MyModalBox from '../../common/MyModalBox';
 import BackPressComponent from '../../common/BackPressComponent';
+import ChatSocket from '../../util/ChatSocket';
 
 const {width} = Dimensions.get('window');
 
@@ -26,6 +26,7 @@ class AccountSetting extends PureComponent {
         super(props);
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -54,7 +55,8 @@ class AccountSetting extends PureComponent {
         />;
         const {userinfo} = this.props;
         // console.log(userinfo.login);
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '账号管理', null, theme, 'black', 16,()=>{},false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '账号管理', null, theme, 'black', 16, () => {
+        }, false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -71,7 +73,7 @@ class AccountSetting extends PureComponent {
                     }, userinfo.login ? userinfo.userid : '', false)}
 
                     {ViewUtil.getSettingMenu('昵称', () => {
-                        NavigationUtils.goPage({},'UpdateUserName')
+                        NavigationUtils.goPage({}, 'UpdateUserName');
                         // this.myModalBox.show();
                     }, userinfo.login ? userinfo.username : '')}
                     {ViewUtil.getSettingMenu('性别', () => {
@@ -104,8 +106,10 @@ class AccountSetting extends PureComponent {
     }
 
     _clearAccountInfo = () => {
+
+        ChatSocket.quitAccount();
         this.props.onClearUserinfoAll();
-        NavigationUtils.goBack(this.props.navigation)
+        NavigationUtils.goBack(this.props.navigation);
     };
     username = '';
 

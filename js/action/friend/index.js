@@ -55,7 +55,13 @@ export function onSetFriendMsgIsRead(FriendId) {
         },
     };
 }
-
+//好友队列初始化
+export function onFriendInitialiZation() {
+    return {
+        type: Types.FRIEND_INIT,
+        data: {},
+    };
+}
 //将msgid设置为已读
 // export function onSetMsgIdIsRead(msgId) {
 //     // console.log(code, 'code');

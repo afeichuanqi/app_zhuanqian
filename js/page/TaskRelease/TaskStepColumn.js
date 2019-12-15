@@ -145,7 +145,15 @@ class TaskStepColumn extends Component {
         if (stepNo === 0) {//为添加
             tmpArr.push({type, typeData: data, timestamp, uploadStatus: 0});
         } else {
-            tmpArr[stepNo - 1] = {type, typeData: data, timestamp, uploadStatus: 0};//为修改
+            let uploadStatus = 0;
+            if (data.uri && Object.prototype.toString.call(data.uri) === '[object String]'
+                && (data.uri.indexOf('http://') !== -1 || data.uri.indexOf('http://') !== -1)
+            ) {
+                uploadStatus = 1;//已经上传完毕的图片
+            } else {
+                uploadStatus = 0;//需要上传
+            }
+            tmpArr[stepNo - 1] = {type, typeData: data, timestamp, uploadStatus: uploadStatus};//为修改
         }
         this.setState({
             stepDataArr: tmpArr,

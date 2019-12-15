@@ -32,6 +32,7 @@ import SecondListComponent from './IndexPage/SecondListComponent';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import Toast from '../common/Toast';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -116,6 +117,10 @@ class HomePage extends PureComponent {
             >
                 {navigationBar}
                 {/*顶部搜索栏样式*/}
+                {/*<Toast*/}
+                {/*    position={'center'}*/}
+                {/*    ref={ref => this.toast = ref}*/}
+                {/*/>*/}
                 <View style={{flex: 1}}>
                     <View style={{
                         paddingHorizontal: 10,
@@ -287,6 +292,7 @@ class HomePage extends PureComponent {
     };
 
     SearchOnFocus = () => {
+        // this.toast.show('text');
         NavigationUtils.goPage({}, 'SearchPage');
         // NavigationUtils.goPage({}, 'ImageExample');
     };

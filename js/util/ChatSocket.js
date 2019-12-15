@@ -1,6 +1,8 @@
 import types from '../action/Types';
 import Message from '../action';
 import ReconnectingWebSocket from './ReconnectingWebSocket';
+import {onMessageInitialiZation} from '../action/message';
+import {onFriendInitialiZation} from '../action/friend';
 
 class ChatSocket {
     connectionstatus = false;
@@ -89,6 +91,12 @@ class ChatSocket {
                 case types.MESSAGE_FORIMAGE_SENDTO_USERID_SUCCESS:
                     this.dispatch(Message.onSetImageMsgStatus(data.uuid, data.msgId, data.sendDate, data.sendStatus, data.content));
                     break;
+                case types.ACCOUNT_QUIT_RESPONSE://收到退出账号消息
+                    this.dispatch(Message.onMessageInitialiZation());
+                    this.dispatch(Message.onFriendInitialiZation());
+                    this.token = '';
+                    // this.dispatch(Message.onSetImageMsgStatus(data.uuid, data.msgId, data.sendDate, data.sendStatus, data.content));
+                    break;
 
 
             }
@@ -134,6 +142,10 @@ class ChatSocket {
     //查询所有好友消息
     selectAllFriendMessage = (pageCount) => {
         this.sendToServer(types.MESSAGE_SELECT_ALL, {pageCount});
+    };
+    //退出当前账号
+    quitAccount = () => {
+        this.sendToServer(types.ACCOUNT_QUIT, {});
     };
     //设置信息id已读取
     setMsgIdIsRead = (FriendId, toUserid) => {
@@ -196,6 +208,10 @@ class ChatSocket {
                 return;
             }
             this.verifyIdentidy();
+            return;
+        }
+        if (!this.token || this.token == '') {
+            this.dispatch(Message.onChangeSocketStatue('未登录'));
             return;
         }
         if (typeof this.dispatch != 'function') {

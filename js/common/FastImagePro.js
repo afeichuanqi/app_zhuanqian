@@ -10,6 +10,7 @@ import React, {Component} from 'react';
 import {View, Image, ActivityIndicator} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {equalsObj} from '../util/CommonUtils';
+import Global from './Global';
 
 class FastImagePro extends Component {
     constructor(props) {
@@ -25,11 +26,27 @@ class FastImagePro extends Component {
         });
     };
     onLoadEnd = () => {
+
         this.setState({
             isSuccess: true,
         });
     };
+    onLoad=(e)=>{
+        if(this.props.source.uri && this.props.source.uri.startsWith('http:')){
+            const width = e.nativeEvent.width;
+            const height = e.nativeEvent.height;
+            const url = this.props.source.uri;
 
+            const index = Global.imageSizeArr.findIndex(item => item.url == url);
+            if (index === -1) {
+                Global.imageSizeArr.push({url, width, height});
+            } else {
+                Global.imageSizeArr[index].width = width;
+                Global.imageSizeArr[index].height = height;
+            }
+        }
+
+    }
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
         if (this.state.isSuccess !== nextState.isSuccess
             || !equalsObj(this.props.source, nextProps.source)
@@ -48,6 +65,7 @@ class FastImagePro extends Component {
                 {...this.props}
                 onLoadStart={this.onLoadStart}
                 onLoadEnd={this.onLoadEnd}
+                onLoad={this.onLoad}
             />
             {!isSuccess && <View style={[style, {
                 position: 'absolute',

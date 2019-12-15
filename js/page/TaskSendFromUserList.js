@@ -201,12 +201,12 @@ class TaskReleaseMana extends PureComponent {
     _renderIndexPath = ({item, index}) => {
         return <TouchableOpacity
             onPress={() => {
-                if (item.task_status == 0) {
+                if (this.params.status == 0) {
                     NavigationUtils.goPage({userid: item.userid}, 'ShopInfoPage');
                 } else {
                     NavigationUtils.goPage({
                         task_id: this.params.taskid,
-                        status: item.task_status,
+                        status: this.params.status,
                         sendFormId: item.id,
                     }, 'MyTaskReview');
                 }
@@ -233,17 +233,17 @@ class TaskReleaseMana extends PureComponent {
                         <Text style={{
                             fontSize: 12,
                             color: 'rgba(0,0,0,0.8)',
-                        }}>{item.task_status == 1 ? '审核时间' : item.task_status == 0 ? '进行中' : item.task_status == -1 ? '驳回时间' : ''}:</Text>
+                        }}>{this.params.status == 1 ? '审核时间' : this.params.status == 0 ? '进行中' : this.params.status == -1 ? '驳回时间' : ''}:</Text>
                         <Text style={{
                             fontSize: 12,
                             color: 'rgba(0,0,0,0.8)',
-                        }}>{item.task_status == 0 ? item.send_date1 : item.review_time1}</Text>
+                        }}>{this.params.status == 0 ? item.send_date1 : item.review_time1}</Text>
                     </View>
                 </View>
             </View>
             <View>
                 <Text
-                    style={{color: bottomTheme}}>{item.task_status == 1 ? '已完成' : item.task_status == 0 ? '进行中' : item.task_status == -1 ? '已驳回' : ''}</Text>
+                    style={{color: bottomTheme}}>{this.params.status == 1 ? '已完成' :this.params.status == 0 ? '进行中' : this.params.status == -1 ? '已驳回' : ''}</Text>
             </View>
         </TouchableOpacity>;
     };

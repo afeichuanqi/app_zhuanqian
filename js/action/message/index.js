@@ -45,6 +45,13 @@ export function onSetImageMsgStatus(uuid, msgId, sendDate, sendStatus,content) {
         data: {uuid, msgId, sendDate, sendStatus,content},
     };
 }
+//消息队列初始化
+export function onMessageInitialiZation() {
+    return {
+        type: Types.MESSAGE_INIT,
+        data: {},
+    };
+}
 //图片是否发送成功回调
 // export function onSetMsgImageStatus(uuid, msgId, sendDate, sendStatus,data,token) {
 //     return dispatch => {

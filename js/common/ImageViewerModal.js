@@ -6,7 +6,7 @@ import Global from './Global';
 import {saveImg} from '../util/ImageUtil';
 import Toast from './Toast';
 
-export default class App extends React.Component {
+export default class ImageViewerModal extends React.Component {
     state = {
         visible: false,
         index: 0,

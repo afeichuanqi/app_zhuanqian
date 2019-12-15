@@ -589,6 +589,60 @@ export function selectOrderTasks(data, token) {
         }
     });
 }
+/**
+ * 重新做此任务
+ */
+export function userRedoTask(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/userRedoTask', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 重新做此任务
+ */
+export function userGiveUpTask(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/userGiveUpTask', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询提交信息
+ */
+export function selectOrderTaskInfo(data) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setPostHeader('token', token);
+            const ret = await http.post('user/selectOrderTaskInfo', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 查询任务简单信息

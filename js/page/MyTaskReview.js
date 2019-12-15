@@ -82,7 +82,7 @@ class MyTaskReview extends PureComponent {
                 // NavigationUtils.goBack(this.props.navigation);
             }
 
-        }).catch(()=>{
+        }).catch(() => {
             // this.setState({
             //     isLoading: false,
             //     hideLoaded: false,
@@ -138,8 +138,9 @@ class MyTaskReview extends PureComponent {
             }, 'ChatRoomPage');
         }, this.taskDatas && this.taskDatas.length > 0 ? true : false);
         const {taskData, unReviewCount, isEnd, haveReviewCount, isEmpty} = this.state;
-        const {task_status} = taskData;
-
+        const {task_status,isReject} = taskData;
+        let ImageIndex = 0;
+        this.reviewPic = [];
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -153,7 +154,8 @@ class MyTaskReview extends PureComponent {
                 {isEmpty ? <EmptyComponent height={screenHeight - 100} message={'没有更多的任务需要审核啦 ～ ～'}/> :
                     <View style={{flex: 1}}>
                         <ScrollView style={{backgroundColor: '#e8e8e8', marginBottom: 50}}>
-                            {task_status === 0 ? <View style={{
+                            {task_status === 0 ?
+                                <View style={{
                                     backgroundColor: 'white',
                                     marginTop: 2,
                                     flexDirection: 'row',
@@ -173,27 +175,58 @@ class MyTaskReview extends PureComponent {
                                         <Text>个</Text>
                                     </View>
                                 </View> :
-                                task_status === -1 ? <View style={{
-                                    backgroundColor: 'white',
-                                    marginTop: 10,
-                                    flexDirection: 'row',
-                                    height: 40,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>
-                                    <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                                        <Text>驳回理由:</Text>
-                                        <Text
-                                            // numberOfLines={5}
-                                            // ellipsizeMode={'tail'}
-                                            style={{
-                                                width: screenWidth - 120,
-                                                fontSize: 12,
-                                                color: 'red',
-                                                marginLeft: 10,
-                                            }}>{JSON.parse(taskData.reason_for_rejection).turnDownInfo}</Text>
+                                isReject === 1 ?
+
+                                    <View style={{
+                                        backgroundColor: 'white',
+                                        marginTop: 10,
+                                        // flexDirection: 'row',
+                                        // height: 40,
+                                        // alignItems: 'center',
+                                        justifyContent: 'center',
+                                        paddingLeft: 15,
+                                        // paddingVertical: 5,
+                                        paddingVertical: 10,
+                                    }}>
+                                        <View style={{alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap'}}>
+                                            <Text style={{color: 'red'}}>驳回理由:</Text>
+                                            <Text
+                                                // numberOfLines={5}
+                                                // ellipsizeMode={'tail'}
+                                                style={{
+                                                    width: screenWidth - 120,
+                                                    fontSize: 14,
+                                                    color: 'red',
+                                                    marginLeft: 10,
+                                                }}>{JSON.parse(taskData.reason_for_rejection).turnDownInfo}</Text>
+                                        </View>
+                                        {JSON.parse(taskData.reason_for_rejection).image && JSON.parse(taskData.reason_for_rejection).image.map((url, index, arrs) => {
+                                            return <TouchableOpacity
+                                                key={index}
+                                                activeOpacity={0.6}
+                                                onPress={() => {
+                                                    let urls = [];
+                                                    arrs.map((item, index) => {
+                                                        urls.push({url: item});
+                                                        if (index === arrs.length - 1) {
+                                                            this.imageModal.show(urls,url);
+                                                        }
+                                                    });
+
+                                                }}
+                                            >
+                                                <FastImagePro
+                                                    style={{height: 80, width: 80, marginTop: 10}}
+                                                    source={{uri: url}}
+                                                    // resizeMode={Image_.resizeMode.contain}
+                                                />
+
+                                            </TouchableOpacity>;
+
+                                        })}
+
                                     </View>
-                                </View> : null
+                                    : null
                             }
 
                             <TouchableOpacity
@@ -216,7 +249,7 @@ class MyTaskReview extends PureComponent {
                                         borderRadius: 25,
                                     }}/>
                                 <View style={{marginLeft: 15, height: 40, justifyContent: 'space-around'}}>
-                                    <View style={{flexDirection: 'row', width: 100}}>
+                                    <View style={{flexDirection: 'row', width: Dimensions.get('window').width - 80}}>
                                         <Text style={{fontSize: 15, color: 'black'}}>{taskData.username}</Text>
                                         <Text
                                             style={{
@@ -229,6 +262,7 @@ class MyTaskReview extends PureComponent {
                                     <Text style={{
                                         fontSize: 12,
                                         color: 'rgba(0,0,0,0.6)',
+                                        width: Dimensions.get('window').width - 80,
                                     }}>{task_status != 0 ? `审核时间:${taskData.review_time}` : `提交时间:${taskData.send_date}`}</Text>
                                 </View>
                                 <SvgUri style={{position: 'absolute', right: 15, top: 30}} width={15} height={15}
@@ -237,13 +271,15 @@ class MyTaskReview extends PureComponent {
 
                             {taskData.task_step_data && taskData.task_step_data.map((item, index, arr) => {
                                 const {type, typeData} = item;
-                                let ImageIndex = 0;
+
                                 // console.log(type, typeData, 'type, typeData');
                                 if (type === 5 && typeData && typeData.uri1) {
                                     // console.log(typeData.uri1ImgHeight, typeData.uri1ImgWidth, 'typeData.uri1ImgHeight');
 
+                                    this.reviewPic.push({url:typeData.uri1});
+
                                     ImageIndex += 1;
-                                    return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 600, typeData.uri1ImgWidth || screenWidth - 20, ImageIndex);
+                                    return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 500, typeData.uri1ImgWidth || screenWidth - 40, ImageIndex);
                                 } else if (type === 6 && typeData.collectInfoContent) {
                                     return this.getTextView(typeData.collectInfoContent);
                                 } else {
@@ -358,9 +394,9 @@ class MyTaskReview extends PureComponent {
             </SafeAreaViewPlus>
         );
     }
-
     thisTaskPass = (taskStepId) => {
         const {userinfo} = this.props;
+        this.toastS.hide()
         passTaskForSendFormTaskId({SendFormTaskId: taskStepId}, userinfo.token).then(result => {
             EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {
             });//刷新审核页面
@@ -440,9 +476,10 @@ class MyTaskReview extends PureComponent {
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
-                    this.imageModal.show([{
-                        url: url,
-                    }]);
+                    this.imageModal.show(this.reviewPic,url);
+                    // this.imageModal.show([{
+                    //     url: url,
+                    // }]);
                 }}
             >
                 <FastImagePro

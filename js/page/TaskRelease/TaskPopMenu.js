@@ -12,13 +12,9 @@ import MyModal from '../../common/MyModalBox';
 import SvgUri from 'react-native-svg-uri';
 import add_image from '../../res/svg/add_image.svg';
 import PickerImage from '../../common/PickerImage';
-import Animated, {Easing} from 'react-native-reanimated';
 import Image from 'react-native-fast-image';
 
-const {width, height} = Dimensions.get('window');
-const {timing} = Animated;
-const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const {width} = Dimensions.get('window');
 
 class TaskPopMenu extends PureComponent {
     constructor(props) {
@@ -232,6 +228,7 @@ class TaskPopMenu extends PureComponent {
 
     _checkTextArea = () => {
         const istrue = (this.inputData.info && this.inputData.info.length > 0) ? true : false;
+        console.log(istrue);
         this.textArea.showAnimated(!istrue);
         return istrue;
     };
@@ -246,12 +243,13 @@ class TaskPopMenu extends PureComponent {
         return istrue;
     };
     _checkImageSelect = () => {
-        const istrue = (this.inputData.uri && this.inputData.uri.path) ? true : false;
+        const istrue = (this.inputData.uri ) ? true : false;
+        console.log(istrue,this.inputData.uri);
         this.imageSelect.showAnimated(!istrue);
         return istrue;
     };
     _sureClick = () => {
-        // console.log(this.inputType);
+        console.log('我被单击');
         switch (this.inputType) {
             case 1:
                 if (this._checkTextArea() && this._checkTextInputPro()) {
@@ -319,9 +317,7 @@ class TextInputPro extends PureComponent {
         });
 
     };
-    animations = {
-        width: new Animated.Value(0),
-    };
+
 
     render() {
         return <TextInput
@@ -374,9 +370,7 @@ class ImageSelect extends PureComponent {
         //     easing: Easing.inOut(Easing.linear),
         // }).start();
     };
-    animations = {
-        width: new Animated.Value(0),
-    };
+
 
     render() {
         // console.log(this.state.image, '111');
@@ -462,9 +456,6 @@ class TextArea extends PureComponent {
             },
         });
 
-    };
-    animations = {
-        width: new Animated.Value(0),
     };
 
     render() {

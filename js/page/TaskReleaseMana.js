@@ -211,7 +211,7 @@ class FristListComponent extends PureComponent {
     _updateList = (refreshing) => {
         const {userinfo, task_status} = this.props;
         if (refreshing) {
-            // this.page = {pageIndex: 0};
+            this.page = {pageIndex: 0};
             this.setState({
                 isLoading: true,
             });

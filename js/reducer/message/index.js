@@ -90,6 +90,13 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 msgArr: data.msgArr,
             };
+        case Types.MESSAGE_INIT://初始化消息队列
+            return {
+                ...state,
+                conn_status: false,
+                identIdy: false,
+                msgArr: [],
+            };
         default:
             return state;
     }

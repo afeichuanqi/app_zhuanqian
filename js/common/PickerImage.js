@@ -125,8 +125,8 @@ class PickerImage extends PureComponent {
     };
     _selTakePhone = () => {
         ImagePicker.openCamera({
-            width: Platform.OS === 'ios' ? 1800 : 600,
-            height: Platform.OS === 'ios' ? 1200 : 400,
+            width: Platform.OS === 'ios' ? 1200 : 600,
+            height: Platform.OS === 'ios' ? 800 : 400,
             cropping: this.props.cropping,
             mediaType: 'photo',
             freeStyleCropEnabled: true,
@@ -144,8 +144,8 @@ class PickerImage extends PureComponent {
     };
     _selAlbum = () => {
         ImagePicker.openPicker({
-            width: Platform.OS === 'ios' ? 1800 : 600,
-            height: Platform.OS === 'ios' ? 1200 : 400,
+            width: Platform.OS === 'ios' ? 1200 : 600,
+            height: Platform.OS === 'ios' ? 800 : 400,
             cropping: this.props.cropping,
             mediaType: 'photo',
             freeStyleCropEnabled: true,
@@ -252,8 +252,8 @@ class PickerImage extends PureComponent {
             onPress={() => {
                 ImagePicker.openCropper({
                     path: uri,
-                    width: (Platform.OS === 'ios') ? width * 3 : width,
-                    height: (Platform.OS === 'ios') ? height * 3 : height,
+                    width: (Platform.OS === 'ios') ? width * 2 : width,
+                    height: (Platform.OS === 'ios') ? height * 2 : height,
                     freeStyleCropEnabled: true,
                     showCropGuidelines: true,
                     compressImageQuality: 0.7,

@@ -23,7 +23,8 @@ export default {
 
     //清空账号信息
     CLEAR_USERINFO_ALL:"CLEAR_USERINFO_ALL",
-    //消息处理
+    //退出账号
+    ACCOUNT_QUIT:'ACCOUNT_QUIT',
     // 验证身份
     VERIFY_IDENTIDY: 'VERIFY_IDENTIDY',
     //服务器状态设置
@@ -34,6 +35,10 @@ export default {
     MESSAGE_FORIMAGE_SENDTO_USERID: 'MESSAGE_FORIMAGE_SENDTO_USERID',
     //发送图片消息成功
     MESSAGE_FORIMAGE_SENDTO_USERID_SUCCESS: 'MESSAGE_FORIMAGE_SENDTO_USERID_SUCCESS',
+    //初始化消息队列
+    MESSAGE_INIT: 'MESSAGE_INIT',
+    //初始化好友列表队列
+    FRIEND_INIT: 'FRIEND_INIT',
     //接受消息给当前的消息列表设置新的状态
     MESSAGE_FROMOF_USERID: 'MESSAGE_FROMOF_USERID',
     //接受消息给好友列表设置新的状态
@@ -47,6 +52,7 @@ export default {
     // 设置图片消息状态吗
     // MESSAGE_SET_STATUS: 'MESSAGE_SET_STATUS',
 
+    ACCOUNT_QUIT_RESPONSE:'ACCOUNT_QUIT_RESPONSE',
 
 
     //返回所有好友消息

@@ -25,7 +25,7 @@ import {
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {cancelUserSignUp, selectOrderTasks} from '../util/AppService';
+import {cancelUserSignUp, selectOrderTasks, userRedoTask} from '../util/AppService';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import Toast from '../common/Toast';
@@ -202,7 +202,6 @@ class FristListComponent extends PureComponent {
         selectOrderTasks({status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
 
             if (refreshing) {
-                // console.log('我被触发');
                 this.setState({
                     taskData: result,
                     isLoading: false,
@@ -234,11 +233,18 @@ class FristListComponent extends PureComponent {
             }}
             onPress={() => {
                 if (this.props.status == 3) {
-                    NavigationUtils.goPage({item: item}, 'TaskRejectDetailsPage');
+                    NavigationUtils.goPage({sendFormId: item.sendFormId}, 'TaskRejectDetailsPage');
                 } else {
                     NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
                 }
 
+            }}
+            redoTask={() => {
+                userRedoTask({SendFormTaskId: item.sendFormId}, this.props.userinfo.token).then((result) => {
+                    NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
+                }).catch(msg => {
+                    this.toast.show(msg);
+                });
             }}
         />;
     };
@@ -281,7 +287,9 @@ class FristListComponent extends PureComponent {
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
         return <View style={{flex: 1}}>
-
+            <Toast
+                ref={ref => this.toast = ref}
+            />
             <AnimatedFlatList
                 style={{backgroundColor: '#e8e8e8'}}
                 ListEmptyComponent={<EmptyComponent height={height - 100} message={'您还没有相关任务'}/>}
@@ -423,57 +431,14 @@ class OrdersItem extends React.Component {
                         }}>
                         <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>等待审核</Text>
                     </View> : status == 3 ?
-                        <View style={{flexDirection: 'row'}}>
-                            {item.again_send_status == 1 ? <View
-
-                                style={{
-                                    height: 25, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 5, marginTop: 5,
-
-                                }}>
-                                <Text style={{color: bottomTheme, fontSize: 12}}>已重新提交</Text>
-                            </View> : item.again_send_status == 2 ? <View
-
-                                style={{
-                                    height: 25, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 5, marginTop: 5,
-
-                                }}>
-                                <Text style={{color: bottomTheme, fontSize: 12}}>最终审核</Text>
-                            </View> : (item.isSignUpExp == 0 && item.align_num <= 1) ?//当报名已经过期。且被拒绝次数小于或者等于1
-                                <View
-
-                                    style={{
-                                        height: 25, justifyContent: 'center',
-                                        alignItems: 'center', borderRadius: 5, marginTop: 5,
-
-                                    }}>
-                                    <Text style={{color: bottomTheme, fontSize: 12}}>已放弃重新提交</Text>
-                                </View> : (item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) ?//当报名未过期。且被拒绝次数小于或者等于1
-                                    <TouchableOpacity
-                                        onPress={this.props.onPress}
-                                        style={{
-                                            backgroundColor: bottomTheme,
-                                            width: 60,
-                                            height: 25,
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            borderRadius: 5,
-                                            marginTop: 5,
-                                        }}>
-                                        <Text style={{color: 'white', fontSize: 12}}>重新提交</Text>
-                                    </TouchableOpacity> : null}
-
-
-                            {/*<TouchableOpacity*/}
-                            {/*    onPress={this.props.showRejection}*/}
-                            {/*    style={{*/}
-                            {/*        backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',*/}
-                            {/*        alignItems: 'center', borderRadius: 5, marginTop: 5,*/}
-                            {/*    }}>*/}
-                            {/*    <Text style={{color: 'white', fontSize: 12}}>具体理由</Text>*/}
-                            {/*</TouchableOpacity>*/}
-                        </View>
+                        <TouchableOpacity
+                            onPress={this.props.redoTask}
+                            style={{
+                                backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',
+                                alignItems: 'center', borderRadius: 5,
+                            }}>
+                            <Text style={{color: 'white', fontSize: 12}}>重做</Text>
+                        </TouchableOpacity>
                         : null}
             </View>
 
