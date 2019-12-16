@@ -197,7 +197,7 @@ class ToolsItemComponent extends PureComponent {
             activeOpacity={0.6}
             style={{
                 width: 140, height: 65,
-                borderRadius: 5,
+                borderRadius: 10,
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexDirection: 'row',

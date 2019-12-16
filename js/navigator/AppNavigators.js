@@ -26,7 +26,7 @@ import MyTaskReview from '../page/MyTaskReview';
 import TaskTurnDownPage from '../page/TaskTurnDownPage';
 import MyOrderManaPage from '../page/MyOrderManaPage';
 import TaskSendFromUserList from '../page/TaskSendFromUserList';
-import MessageTypePage from '../page/MessageTypePage';
+import MessageTypePage from '../page/MessageAppealPage';
 import MyAttentionList from '../page/MyAttentionList';
 import TaskOrdersMana from '../page/TaskOrdersMana';
 import HisAttentionList from '../page/HisAttentionList';

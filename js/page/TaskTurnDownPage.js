@@ -154,6 +154,7 @@ class MyTaskReview extends PureComponent {
                                 style={{
                                     height: 100, width: width - 20, backgroundColor: '#e8e8e8',
                                     paddingHorizontal: 5, padding: 0, textAlignVertical: 'top',
+                                    paddingTop:3,
                                 }}
                                 placeholder={'请输入驳回理由'}
                                 placeholderTextColor={'#7f7f7f'}

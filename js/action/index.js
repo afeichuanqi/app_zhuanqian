@@ -1,6 +1,6 @@
 import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken} from './userinfo';
 import {verifyIdentIdy,setConnectionStatus,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus,onMessageInitialiZation} from './message';
-import {onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead,onFriendInitialiZation} from './friend';
+import {onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead,onFriendInitialiZation,onSetOtherTypeUnread,setAppeal_2IsRead,setAppeal_3IsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
 import {onSetTaskReleaseInfo} from './taskInfo';
 
@@ -28,7 +28,9 @@ export default {
     onSetAllFriendUnRead,
     onSetFriendMsgIsRead,
     onFriendInitialiZation,
-
+    onSetOtherTypeUnread,
+    setAppeal_2IsRead,
+    setAppeal_3IsRead,
     //状态
     onChangeSocketStatue,
     //任务发布信息

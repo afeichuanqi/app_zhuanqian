@@ -163,7 +163,7 @@ class ChatWindow extends PureComponent {
         inverted: false,
         allPanelAnimateDuration: 100,
         messageList: [],
-        showUserName: false,
+        showUserName: true,
         panelContainerStyle: {},
         sendMessage: (type, content, isInverted) => {
             console.log(type, content, isInverted, 'send');
@@ -184,6 +184,10 @@ class ChatWindow extends PureComponent {
             id: '88886666',
             avatar: require('../source/image/defaultAvatar.png'),
             nickName: 'Test',
+        },
+        guzhuInfo: {
+            guzhuUserId: '88886666',
+            hasToDo: 0,
         },
         panelSource: [
             {
@@ -1057,6 +1061,7 @@ class ChatWindow extends PureComponent {
                                     ref={(e) => (this.messageItem = e)}
                                     systemClick={this.props.systemClick}
                                     user={this.props.userProfile}
+                                    guzhuInfo={this.props.guzhuInfo}
                                     chatType={chatType}
                                     lastReadAt={this.props.lastReadAt}
                                     showIsRead={this.props.showIsRead}

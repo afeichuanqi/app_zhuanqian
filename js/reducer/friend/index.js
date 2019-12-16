@@ -4,7 +4,8 @@ const defaultContent = {
     friendArr: [],
     unMessageLength: 0,
     columnUnreadLength: [0, 0, 0, 0],
-
+    appeal_2: 0,
+    appeal_3: 0,
 
 };
 
@@ -13,90 +14,114 @@ export default function onAction(state = defaultContent, action) {
     switch (type) {
         case Types.MESSAGE_FRIEND_ALL :
             const temArr = data.friendArr;
-            // const columnUnreadLength1 = [0, 0, 0, 0];
-
             let unMessageLength = 0;
-
             for (let i = 0; i < temArr.length; i++) {
                 const item = temArr[i];
                 const {unReadLength, columnType} = item;
 
                 unMessageLength += unReadLength;
-                // columnUnreadLength1[parseInt(columnType) - 1] = columnUnreadLength1[parseInt(columnType) - 1] + unReadLength;
             }
-            // console.log(columnUnreadLength1, 'columnUnreadLength1');
             return {
                 ...state,
                 friendArr: temArr,
                 unMessageLength,
-                // columnUnreadLength: columnUnreadLength1,
             };
 
         case Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS ://设置好友的未读消息数
             let temArr2 = [...state.friendArr];
-            // let column1 = state.column1;
-            // const columnUnreadLength2 = [...state.columnUnreadLength];
             let nowUnMessageLength = state.unMessageLength;
             const FriendIdIndex = temArr2.findIndex(d => d.FriendId === data.FriendId);
-            const originalFriendUnReadLen = temArr2[FriendIdIndex].unReadLength;
-
-            //设置分类消息数
-            // columnUnreadLength2[parseInt(temArr2[FriendIdIndex].columnType) - 1] -= temArr2[FriendIdIndex].unReadLength;
-
-            temArr2[FriendIdIndex].unReadLength = 0;
-            temArr2 = temArr2.sort((data1, data2) => {
-                return data2.unReadLength - data1.unReadLength;
-            });
+            if (FriendIdIndex !== -1) {
+                const originalFriendUnReadLen = temArr2[FriendIdIndex].unReadLength;
+                temArr2[FriendIdIndex].unReadLength = 0;
+                temArr2 = temArr2.sort((data1, data2) => {
+                    return data2.unReadLength - data1.unReadLength;
+                });
+                return {
+                    ...state,
+                    friendArr: temArr2,
+                    unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
+                };
+            } else {
+                return {
+                    ...state,
+                };
+            }
+        case Types.FRIEND_SET_OTHER_MSG_UN_READ:
             return {
                 ...state,
-                friendArr: temArr2,
-                unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
-                // columnUnreadLength: columnUnreadLength2,
+                appeal_2: data.appeal_2,
+                appeal_3: data.appeal_3,
+            };
+        case Types.FRIEND_SET_OTHER_MSG_UN_READ_APPEAL2:
+            return {
+                ...state,
+                appeal_2: 0,
+            };
+        case Types.FRIEND_SET_OTHER_MSG_UN_READ_APPEAL3:
+            return {
+                ...state,
+                appeal_3: 0,
             };
         case Types.MESSAGE_FROMOF_USERID_Friend:
-            // const columnUnreadLength3 = [...state.columnUnreadLength];
-            let temArr3 = [...state.friendArr];
-            let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
-            const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
 
-            if (fromUserIndex != -1) {//找到了此用户
-                const item = temArr3[fromUserIndex];
-                item.msg_type = data.msg_type;
-                item.msg = data.content;
-                item.sendDate = data.sendDate;
-                item.unReadLength = data.fromUserid != data.ToUserId && data.isAddNewMsgLength && item.unReadLength + 1;
-                temArr3[fromUserIndex] = item;
-                // columnUnreadLength3[parseInt(item.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
-            } else {
-                // columnUnreadLength3[parseInt(data.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
-                temArr3.push({
-                    userid: data.fromUserid,
-                    username: data.username,
-                    avatar_url: data.avatar_url,
-                    msg: data.content,
-                    sendDate: data.sendDate,
-                    msg_type: data.msg_type,
-                    msgId: data.msgId,
-                    unReadLength: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? 1 : 0 : 0,
-                    FriendId: data.FriendId,
-                    columnType: data.columnType,
-                    taskUri: data.taskUri,
-                    taskId: data.taskId,
+            if (data.columnType == 1) {
+                let temArr3 = [...state.friendArr];
+                let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
+                const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
 
+                if (fromUserIndex != -1) {//找到了此用户
+                    const item = temArr3[fromUserIndex];
+                    item.msg_type = data.msg_type;
+                    item.msg = data.content;
+                    item.sendDate = data.sendDate;
+                    item.unReadLength = data.fromUserid != data.ToUserId && data.isAddNewMsgLength && item.unReadLength + 1;
+                    temArr3[fromUserIndex] = item;
+                    // columnUnreadLength3[parseInt(item.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
+                } else {
+                    // columnUnreadLength3[parseInt(data.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
+                    temArr3.push({
+                        userid: data.fromUserid,
+                        username: data.username,
+                        avatar_url: data.avatar_url,
+                        msg: data.content,
+                        sendDate: data.sendDate,
+                        msg_type: data.msg_type,
+                        msgId: data.msgId,
+                        unReadLength: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? 1 : 0 : 0,
+                        FriendId: data.FriendId,
+                        columnType: data.columnType,
+                        taskUri: data.taskUri,
+                        taskId: data.taskId,
+
+                    });
+                }
+                temArr3 = temArr3.sort((data1, data2) => {
+                    return data2.sendDate - data1.sendDate;
                 });
+                return {
+                    ...state,
+                    friendArr: temArr3,
+                    unMessageLength: NewUnReadLength,
+                };
             }
-            temArr3 = temArr3.sort((data1, data2) => {
-                // if(data1.unReadLength){
-                //
-                // }
-                return data2.sendDate - data1.sendDate;
-            });
-            return {
-                ...state,
-                friendArr: temArr3,
-                unMessageLength: NewUnReadLength,
-                // columnUnreadLength: columnUnreadLength3,
-            };
+            let state_ = {};
+            if (data.columnType == 2) {
+                state_ = {
+                    ...state,
+                    appeal_2: 1,
+                };
+            } else if (data.columnType == 3) {
+                state_ = {
+                    ...state,
+                    appeal_3: 1,
+                };
+            } else {
+                state_ = {
+                    ...state,
+                };
+            }
+            return state_;
         case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
             // const columnUnreadLength4 = [...state.columnUnreadLength];
             let temArr4 = [...state.friendArr];
@@ -108,15 +133,21 @@ export default function onAction(state = defaultContent, action) {
                 item1.unReadLength = 0;
                 temArr4[fromUserIndex1] = item1;
                 // columnUnreadLength4[parseInt(item1.columnType) - 1] -= item1.unReadLength;
+                return {
+                    ...state,
+                    friendArr: temArr4,
+                    unMessageLength: NewUnReadLength1,
+                    // columnUnreadLength: columnUnreadLength4,
+                };
             }
-
-
             return {
                 ...state,
-                friendArr: temArr4,
-                unMessageLength: NewUnReadLength1,
+                // friendArr: temArr4,
+                // unMessageLength: NewUnReadLength1,
                 // columnUnreadLength: columnUnreadLength4,
             };
+
+
         case Types.FRIEND_INIT:
 
             return {

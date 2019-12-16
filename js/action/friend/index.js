@@ -21,6 +21,22 @@ export function onSetAllFriendUnRead(FriendId) {
     return {type: Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS, data: {FriendId}};
 }
 
+// 设置其他类型未读消息数
+export function onSetOtherTypeUnread(appeal2Unread, appeal3Unread) {
+    // console.log(appeal1Unread, appeal2Unread, 'appeal1Unread,appeal2Unread');
+    return {type: Types.FRIEND_SET_OTHER_MSG_UN_READ, data: {appeal_2: appeal2Unread, appeal_3: appeal3Unread}};
+}
+// 设置其他类型未读消息数
+export function setAppeal_2IsRead() {
+    // console.log(appeal1Unread, appeal2Unread, 'appeal1Unread,appeal2Unread');
+    return {type: Types.FRIEND_SET_OTHER_MSG_UN_READ_APPEAL2, data: {}};
+}
+// 设置其他类型未读消息数
+export function setAppeal_3IsRead() {
+    // console.log(appeal1Unread, appeal2Unread, 'appeal1Unread,appeal2Unread');
+    return {type: Types.FRIEND_SET_OTHER_MSG_UN_READ_APPEAL3, data: {}};
+}
+
 // 好友来了一条新的消息
 export function onSetNewMsgForRromUserid(
     fromUserid_, msg_type_, content_, msgId_, sendDate_, ToUserId_, sendStatus_, username, avatar_url, FriendId, columnType, taskUri, taskId,
@@ -55,6 +71,7 @@ export function onSetFriendMsgIsRead(FriendId) {
         },
     };
 }
+
 //好友队列初始化
 export function onFriendInitialiZation() {
     return {
@@ -62,6 +79,7 @@ export function onFriendInitialiZation() {
         data: {},
     };
 }
+
 //将msgid设置为已读
 // export function onSetMsgIdIsRead(msgId) {
 //     // console.log(code, 'code');

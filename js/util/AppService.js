@@ -578,7 +578,25 @@ export function selectOrderTasks(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
             http.setPostHeader('token', token);
-            const ret = await http.post('user/selectOrderTasks', data);
+                const ret = await http.post('user/selectOrderTasks', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 获取所有诉求消息
+ */
+export function getUserAppealFriendList(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+                const ret = await http.post('user/getUserAppealFriendList', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -633,6 +651,44 @@ export function selectOrderTaskInfo(data) {
         try {
             // http.setPostHeader('token', token);
             const ret = await http.post('user/selectOrderTaskInfo', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+
+/**
+ * 查询提交信息
+ */
+export function setUserIdMessageIsRead(data,token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/setUserIdMessageIsRead', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询提交信息
+ */
+export function selectAppealNum(token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setGetHeader('token', token);
+            const ret = await http.get('user/selectAppealNum');
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -728,6 +784,25 @@ export function selectSendFormForTaskId(data, token) {
         try {
             http.setPostHeader('token', token);
             const ret = await http.post('user/selectSendFormForTaskId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
+ * // 查询该任务做的所有信息
+ */
+export function createAppealInfo(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/createAppealInfo', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {

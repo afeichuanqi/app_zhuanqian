@@ -13,7 +13,7 @@ import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
 import Image from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
-import {isFriendChat, selectSimpleTaskInfo, uploadQiniuImage} from '../util/AppService';
+import {createAppealInfo, isFriendChat, selectSimpleTaskInfo, uploadQiniuImage} from '../util/AppService';
 import actions from '../action';
 import ImageViewerModal from '../common/ImageViewerModal';
 import Toast from '../common/Toast';
@@ -75,7 +75,12 @@ class TaskInfo extends React.Component {
             <View style={{height: 60, justifyContent: 'flex-start'}}>
                 <TouchableOpacity
                     onPress={() => {
-                        NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
+                        if (columnType == 2) {
+                            NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
+                        } else {
+                            NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
+                        }
+
                     }
                     }
                     style={{
@@ -87,7 +92,7 @@ class TaskInfo extends React.Component {
                         borderRadius: 3,
                         marginTop: 20,
                     }}>
-                    <Text style={{color: 'white', fontSize: 12}}>查看详情</Text>
+                    <Text style={{color: 'white', fontSize: 12}}>{columnType == 2 ? '任务来往' : '查看详情'}</Text>
                 </TouchableOpacity>
 
             </View>
@@ -100,16 +105,17 @@ class ChatRoomPage extends React.Component {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
-        this.pageCount = 10;
-        const {columnType, task_id, fromUserinfo, taskUri} = this.params;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        const {columnType, task_id, fromUserinfo, taskUri, sendFormId} = this.params;
+        // this={...this,...}
         this.columnType = columnType;
         this.task_id = task_id;
-        // console.log(this.task_id,"this.task_id");
         this.fromUserinfo = fromUserinfo;
         this.taskUri = taskUri;
-        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        this.sendFormId = sendFormId;
     }
 
+    pageCount = 10;
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -117,27 +123,64 @@ class ChatRoomPage extends React.Component {
 
     componentDidMount(): void {
         this.backPress.componentDidMount();
-        this._updatePage(this.columnType, this.task_id, this.fromUserinfo.id);
+        this._updatePage();
 
 
     }
 
-    _updatePage = (columnType, task_id, toUserid) => {
+    _updatePage = () => {
+        //初始化申诉或者投诉信息
+        if (this.columnType == 2 || this.columnType == 3) { //诉求信息
+            console.log({
+                columnType: this.columnType,
+                taskid: this.task_id,
+                toUserid: this.fromUserinfo.id,
+                task_form_id: this.sendFormId,
+            });
+            createAppealInfo({
+                columnType: this.columnType,
+                taskid: this.task_id,
+                toUserid: this.fromUserinfo.id,
+                task_form_id: this.sendFormId,
+            }, this.props.userinfo.token).then(result => {
+                if (result.haveToDo == 0 || !result.guzhuUserId) {
+                    this.toast.show('您与雇主并无任务来往,会话创建失败');
+                    return;
+                }
+                console.log(result);
+                if (result.id) {
+                    this.guzhuUserId = result.guzhuUserId;
+                    this.haveToDo = result.haveToDo;
+                    this.FriendId = result.id;
+
+                    ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+                }
+
+            }).catch(msg => {
+                this.toast.show(msg);
+
+            });
+            return;
+        }
+
+
         isFriendChat({
-            columnType,
-            taskid: task_id,
-            toUserid: toUserid,
+            columnType: this.columnType,
+            taskid: this.task_id,
+            toUserid: this.fromUserinfo.id,
         }, this.props.userinfo.token).then(result => {
+            if (result.haveToDo == 0 || !result.guzhuUserId) {
+                this.toast.show('您与雇主并无任务来往,会话创建失败');
+                return;
+            }
             if (result.id) {
+                this.guzhuUserId = result.guzhuUserId;
+                this.haveToDo = result.haveToDo;
                 this.FriendId = result.id;
                 ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
             }
 
         }).catch(msg => {
-            this.setState({
-                isLoading: false,
-                hideLoaded: false,
-            });
             this.toast.show(msg);
 
         });
@@ -191,6 +234,7 @@ class ChatRoomPage extends React.Component {
                         id: parseInt(this.fromUserinfo.id),
                         nickName: this.fromUserinfo.username,
                     },
+
                     renderTime: renTime,
                     sendStatus: parseInt(item.sendStatus),
                     time: item.sendDate,
@@ -260,6 +304,7 @@ class ChatRoomPage extends React.Component {
                         userinfo={userinfo}
                         columnType={this.columnType}
                         appealClick={this._appealClick}
+                        sendFormId={this.sendFormId}
                     />}
 
                     <ChatScreen
@@ -283,13 +328,15 @@ class ChatRoomPage extends React.Component {
                         renderLoadEarlier={() => {
                             return <View style={{height: 80}}/>;
                         }}
-                        userProfile={{id: userinfo.userid, avatar: userinfo.avatar_url}}
+                        userProfile={{id: userinfo.userid, avatar: userinfo.avatar_url, username: userinfo.username}}
                         placeholder={'想咨询TA点什么呢'}
                         useVoice={false}
                         ref={(e) => this.chat = e}
                         messageList={this.getMessages()}
                         sendMessage={this.sendMessage}
+                        showUserName={true}
                         pressAvatar={this._pressAvatar}
+                        guzhuInfo={{guzhuUserId: this.guzhuUserId, haveToDo: this.haveToDo}}
                         onMessagePress={(type, index, content) => {
                             if (type == 'image') {
 
@@ -347,38 +394,52 @@ class ChatRoomPage extends React.Component {
     }
 
     _imgSelect = (image) => {
-        const FriendId = this.FriendId;
-        const {userinfo, onAddMesage} = this.props;//我的用户信息
-        const userId = userinfo.userid;
-        const token = userinfo.token;
-        // const {fromUserinfo, taskUri} = this.params;//他的用户信息
-        const columnType = this.columnType;
-        let toUserid = this.fromUserinfo.id;
-        if (userId == toUserid) {
+        if (!this.FriendId) {
+            this.show('重新打开会话试试 ～ ～');
             return;
         }
-        const uuid = getUUID();//获取一条uuid
-        let mime = image.mime;
-        const mimeIndex = mime.indexOf('/');
-        mime = mime.substring(mimeIndex + 1, mime.length);
-        const path = `file://${image.path}`;
-        onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(), FriendId);//插入一条临时图片数据
-        uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
-            ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
-        });
+        if (this.haveToDo == 1) {
+            const FriendId = this.FriendId;
+            const {userinfo, onAddMesage} = this.props;//我的用户信息
+            const userId = userinfo.userid;
+            const token = userinfo.token;
+            // const {fromUserinfo, taskUri} = this.params;//他的用户信息
+            const columnType = this.columnType;
+            let toUserid = this.fromUserinfo.id;
+            if (userId == toUserid) {
+                return;
+            }
+            const uuid = getUUID();//获取一条uuid
+            let mime = image.mime;
+            const mimeIndex = mime.indexOf('/');
+            mime = mime.substring(mimeIndex + 1, mime.length);
+            const path = `file://${image.path}`;
+            onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(), FriendId);//插入一条临时图片数据
+            uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
+                ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
+            });
+        }
+
     };
     sendMessage = (type, content) => {
-        const FriendId = this.FriendId;
-        const {userinfo} = this.props;
-        const userId = userinfo.userid;
-        const columnType = this.columnType;
-        let toUserid = this.fromUserinfo.id;
-        if (userId == toUserid) {
+        if (!this.FriendId) {
+            this.show('重新打开会话试试 ～ ～');
             return;
         }
-        const uuid = getUUID();
-        // console.log(this.fromUserinfo,"this.fromUserinfo");
-        ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
+        if (this.haveToDo == 1) {
+            const FriendId = this.FriendId;
+            const {userinfo} = this.props;
+            const userId = userinfo.userid;
+            const columnType = this.columnType;
+            let toUserid = this.fromUserinfo.id;
+            if (userId == toUserid) {
+                return;
+            }
+            const uuid = getUUID();
+            // console.log(this.fromUserinfo,"this.fromUserinfo");
+            ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
+        }
+
     };
     _pressAvatar = () => {
         NavigationUtils.goPage({userid: this.fromUserinfo.id}, 'ShopInfoPage');

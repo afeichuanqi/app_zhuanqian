@@ -20,8 +20,6 @@ import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
-import FastImage from 'react-native-fast-image';
-import Image from 'react-native-fast-image';
 import ImageViewerModal from '../common/ImageViewerModal';
 import {selectOrderTaskInfo, userGiveUpTask, userRedoTask} from '../util/AppService';
 import EmptyComponent from '../common/EmptyComponent';
@@ -80,15 +78,27 @@ class TaskRejectDetailsPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '驳回详情', null, 'white', 'black', 16, null, false);
-        // const {taskData, isLoading, hideLoaded} = this.state;
-        // const {item} = this.params;
-        // console.log(item);
         const {sendFormInfo} = this.state;
         const {
             task_status, reason_for_rejection, userid, username, review_time, task_step_data, avatar_url,
             taskId, taskUri,
         } = sendFormInfo;
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, task_status == -1 ? '驳回详情' : '提交详情', null, 'white', 'black', 16, () => {
+            // const fromUserinfo = {
+            //     avatar_url: avatar_url,
+            //     id: userid,
+            //     username: username,
+            //
+            // };
+            NavigationUtils.goPage({
+                task_id: this.params.taskId,
+                sendFormId: this.params.sendFormId,
+                fromUserinfo: this.params.fromUserinfo,
+                columnType: 2,
+                taskUri: this.params.task_uri,
+            }, 'ChatRoomPage');
+        }, false, task_status == -1 ? true : false, '申诉');
+
         if (!sendFormInfo.task_status) {
             return <EmptyComponent height={height - 50}/>;
         }
@@ -211,7 +221,7 @@ class TaskRejectDetailsPage extends PureComponent {
                         })}
 
                     </ScrollView>
-                    <View style={{
+                    {task_status === -1 && <View style={{
                         position: 'absolute',
                         bottom: 0,
                         flexDirection: 'row',
@@ -276,20 +286,7 @@ class TaskRejectDetailsPage extends PureComponent {
                             <Text style={{color: 'white'}}>重做</Text>
                         </TouchableOpacity>
 
-                    </View>
-
-
-                    {/*<ToastSelect*/}
-                    {/*    rightTitle={'通过'}*/}
-                    {/*    sureClick={() => this.thisTaskPass(taskData.taskStepId)}*/}
-                    {/*    ref={ref => this.toastS = ref}>*/}
-                    {/*    <View style={{*/}
-                    {/*        height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',*/}
-                    {/*        paddingTop: 10,*/}
-                    {/*    }}>*/}
-                    {/*        <Text style={{fontSize: 14}}>仔细确认是否通过此任务的验证？</Text>*/}
-                    {/*    </View>*/}
-                    {/*</ToastSelect>*/}
+                    </View>}
                 </View>
                 <ImageViewerModal ref={ref => this.imgModal = ref}/>
                 <ToastSelect

@@ -257,28 +257,29 @@ export default class ChatItem extends PureComponent {
                         <TouchableOpacity
                             activeOpacity={0.8}
                             onPress={this.props.systemClick}
-                            style={{width: width - 20,  backgroundColor: 'white',paddingTop:15, paddingHorizontal:15,
-                                borderRadius:3,
+                            style={{
+                                width: width - 20, backgroundColor: 'white', paddingTop: 15, paddingHorizontal: 15,
+                                borderRadius: 3,
                             }}>
                             <Text style={{fontSize: 14, fontWeight: 'bold'}}>{message.title}</Text>
                             <Text
                                 style={{fontSize: 11, color: 'rgba(0,0,0,0.5)', marginTop: 10}}>{message.content}</Text>
                             <View style={{
                                 // marginVertical: 15,
-                                marginTop:10,
-                                paddingVertical:10,
+                                marginTop: 10,
+                                paddingVertical: 10,
 
                                 // height: 50,
                                 // backgroundColor: 'rgba(0,0,0,0.1)',
                                 width: width - 60,
-                                alignItems:'flex-start',
-                                justifyContent:'center',
+                                alignItems: 'flex-start',
+                                justifyContent: 'center',
 
-                                borderTopWidth:0.3,
-                                borderTopColor:'rgba(0,0,0,0.1)',
+                                borderTopWidth: 0.3,
+                                borderTopColor: 'rgba(0,0,0,0.1)',
 
                             }}>
-                                <Text style={{color:'#2196F3'}}>了解更多安全交易规范</Text>
+                                <Text style={{color: '#2196F3'}}>了解更多安全交易规范</Text>
                             </View>
 
                         </TouchableOpacity>
@@ -306,14 +307,16 @@ export default class ChatItem extends PureComponent {
     };
 
     render() {
-        const {user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle} = this.props;
+        const {user = {}, guzhuInfo, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle} = this.props;
         const isSelf = user.id === message.targetId;
         const {type} = message;
         const avatar = isSelf ? user.avatar : message.chatInfo.avatar;
         const nickName = isSelf ? '' : message.chatInfo.nickName;
         const avatarSource = typeof (avatar) === 'number' ? avatar : {uri: avatar};
         const Element = isOpen ? TouchableWithoutFeedback : View;
-        const showName = chatType === 'group' && showUserName && type !== 'system';
+        const showName = showUserName && type !== 'system';
+        // const
+        // console.log(nickName,"nickName",showUserName);
         return (
             <View>
                 <Element
@@ -360,12 +363,34 @@ export default class ChatItem extends PureComponent {
                                     </TouchableOpacity>
                             }
                             <View style={[
-                                {justifyContent: showName && type === 'voice' ? 'flex-start' : 'center'},
+                                {justifyContent: showName ? 'flex-start' : 'center'},
                                 type === 'system' && {flex: 1},
                             ]}>
                                 {
-                                    showName && !isSelf ?
-                                        <Text style={[styles.userName, userNameStyle]}>{nickName}</Text>
+                                    showName ?
+                                        <View style={{
+                                            marginBottom: 10,
+                                            marginLeft: !isSelf ? 14 : 0, alignItems: 'center',
+                                            marginRight: isSelf ? 14 : 0,
+                                            flexDirection: 'row', justifyContent: isSelf ? 'flex-end' : 'flex-start',
+                                        }}>
+                                            <View style={{
+                                                backgroundColor: message.targetId == guzhuInfo.guzhuUserId ? 'red' : '#2196F3',
+                                                paddingHorizontal: 3,
+                                                paddingVertical: 2,
+                                                borderRadius: 3,
+                                                marginRight: 5,
+                                            }}>
+                                                <Text style={{
+                                                    fontSize: 12,
+                                                    color: 'white',
+                                                }}>{message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单人'}</Text>
+                                            </View>
+                                            <Text style={{
+                                                fontSize: 12,
+                                                color: '#888888',
+                                            }}>{isSelf ? user.username : nickName}</Text>
+                                        </View>
                                         : null
                                 }
                                 {this._renderContent(isSelf)}
@@ -475,8 +500,8 @@ const styles = StyleSheet.create({
     },
     userName: {
         fontSize: 12,
-        color: '#aaa',
-        marginBottom: 2,
-        marginLeft: 14
-    }
-})
+        color: '#858585',
+        marginBottom: 10,
+        marginLeft: 14,
+    },
+});

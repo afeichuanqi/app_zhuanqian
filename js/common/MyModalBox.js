@@ -41,7 +41,7 @@ class MyModalBox extends PureComponent {
 
     hide = () => {
         this._anim = timing(this.animations.scale, {
-            duration: 300,
+            duration: 200,
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {

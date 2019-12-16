@@ -31,6 +31,8 @@ import {connect} from 'react-redux';
 import {getCurrentTime} from '../common/Chat-ui/app/chat/utils';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import {selectAppealNum} from '../util/AppService';
+import actions from '../action';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -47,10 +49,6 @@ class MessagePage extends PureComponent {
 
     };
 
-    componentDidMount() {
-        ChatSocket.selectAllFriendMessage(20);
-
-    }
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
@@ -106,7 +104,14 @@ class MessagePage extends PureComponent {
                     }}>互动{statusText != '' ? `(${statusText})` : unMessageLength ? unMessageLength > 0 ? `(${unMessageLength})` : '' : ''}</Text>
                 </View>
 
-                <MsgList friend={this.props.friend} RefreshHeight={this.animations.val}/>
+                <MsgList
+                    setAppeal_2IsRead={this.props.setAppeal_2IsRead}
+                    setAppeal_3IsRead={this.props.setAppeal_3IsRead}
+                    onSetOtherTypeUnread={this.props.onSetOtherTypeUnread}
+                    userinfo={this.props.userinfo}
+                    friend={this.props.friend} RefreshHeight={this.animations.val}
+
+                />
 
             </View>
         );
@@ -117,38 +122,6 @@ class MessagePage extends PureComponent {
     };
 }
 
-class MessageColumn extends PureComponent {
-    render() {
-        const {columnUnreadLength} = this.props;
-        // console.log(columnUnreadLength, 'columnUnreadLength');
-        return <View style={{
-            width: width - 20,
-            height: 100,
-            backgroundColor: 'white',
-            position: 'absolute',
-            top: 0,
-            borderRadius: 10,
-            shadowColor: '#d9d9d9',
-            shadowRadius: 5,
-            shadowOpacity: 1,
-            shadowOffset: {w: 1, h: 1},
-            elevation: 3,//安卓的阴影
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-        }}>
-            <MessageColumnItem type={0} unReadLength={columnUnreadLength[0]} svgXmlData={message_xitong}
-                               title={'通知消息'}/>
-            <MessageColumnItem type={1} columnType={2} unReadLength={columnUnreadLength[1]} svgXmlData={zaixiankefu}
-                               title={'工作邀约'}
-                               size={48}/>
-            <MessageColumnItem type={2} columnType={3} unReadLength={columnUnreadLength[2]} svgXmlData={huodongxiaoxi}
-                               title={'诉求消息'}
-                               size={42}/>
-            <MessageColumnItem type={3} columnType={4} unReadLength={columnUnreadLength[3]} svgXmlData={huodongxiaoxi}
-                               title={'在线客服'}/>
-        </View>;
-    }
-}
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -163,6 +136,7 @@ class MsgList extends Component {
     };
 
     componentDidMount(): void {
+        this.onRefresh();
         EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
             const {pageName} = data;
             if (pageName == `MessagePage`) {
@@ -194,7 +168,7 @@ class MsgList extends Component {
 
     render() {
         const friendData = this.props.friend.friendArr;
-        const columnUnreadLength = this.props.friend.columnUnreadLength;
+
         const {isLoading, hideLoaded} = this.state;
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent height={height - 210}/>}
@@ -214,7 +188,12 @@ class MsgList extends Component {
 
                     }}/>
 
-                    <MessageColumn columnUnreadLength={columnUnreadLength}/>
+                    <MessageColumnRedux
+                        // setAppeal_2IsRead={this.props.setAppeal_2IsRead}
+                        // setAppeal_3IsRead={this.props.setAppeal_3IsRead}
+                        // appeal_2={appeal_2}
+                        // appeal_3={appeal_3}
+                    />
                     <View style={{height: 70}}/>
                 </View>
 
@@ -224,7 +203,7 @@ class MsgList extends Component {
 
             }}
             ref={ref => this.flatList = ref}
-            data={this.filterFriend(friendData, 1)}
+            data={friendData}
             scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
@@ -258,28 +237,12 @@ class MsgList extends Component {
         />;
     }
 
-    // getData = (refreshing) => {
-    //     if (refreshing) {
-    //         this.page = {pageIndex: 0};
-    //         this.setState({
-    //             isLoading: true,
-    //         });
-    //     } else {
-    //         this.page = {pageIndex: this.page.pageIndex + 1};
-    //     }
-    //     if (refreshing) {
-    //         ChatSocket.selectAllFriendMessage();
-    //         this.setState({
-    //             taskData: result,
-    //             isLoading: false,
-    //             hideLoaded: result.length >= 10 ? false : true,
-    //         });
-    //     } else {
-    //
-    //     }
-    // };
 
     onRefresh = () => {
+        selectAppealNum(this.props.userinfo.token).then(result => {
+            console.log(result, 'result');
+            this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength);
+        });
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
     };
     _renderIndexPath = ({item, index}) => {
@@ -296,8 +259,13 @@ class MsgList extends Component {
 const mapStateToProps = state => ({
     friend: state.friend,
     socketStatus: state.socketStatus,
+    userinfo: state.userinfo,
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    onSetOtherTypeUnread: (app2, app3) => dispatch(actions.onSetOtherTypeUnread(app2, app3)),
+    setAppeal_2IsRead: () => dispatch(actions.setAppeal_2IsRead()),
+    setAppeal_3IsRead: () => dispatch(actions.setAppeal_3IsRead()),
+});
 const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePage);
 
 
@@ -345,11 +313,12 @@ class MessageItemComponent extends Component {
     };
     _onPress = () => {
 
-        if (this.props.item.unReadLength > 0) {
+
+        const {item} = this.props;
+        const {columnType, taskId, taskTitle, avatar_url, username, userid, unReadLength} = item;
+        if (unReadLength > 0) {
             ChatSocket.setFromUserIdMessageIsRead(this.props.item.FriendId);
         }
-        const {item} = this.props;
-        const {columnType, taskId, taskTitle, avatar_url, username, userid} = item;
         // console.log("item",item);
         const fromUserinfo = {
             avatar_url: avatar_url,
@@ -480,16 +449,87 @@ class MessageItemComponent extends Component {
 
 }
 
-class MessageColumnItem extends PureComponent {
+
+
+class MessageColumn extends Component {
+    // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+    //     if (this.props.appeal_2 !== nextProps.appeal_2
+    //         || this.props.appeal_3 !== nextProps.appeal_3
+    //     ) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
+    render() {
+        const {appeal_2, appeal_3} = this.props.friend;
+        const {setAppeal_2IsRead, setAppeal_3IsRead} = this.props;
+
+        return <View style={{
+            width: width - 20,
+            height: 100,
+            backgroundColor: 'white',
+            position: 'absolute',
+            top: 0,
+            borderRadius: 10,
+            shadowColor: '#d9d9d9',
+            shadowRadius: 5,
+            shadowOpacity: 1,
+            shadowOffset: {w: 1, h: 1},
+            elevation: 3,//安卓的阴影
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+        }}>
+            <MessageColumnItem type={0} unReadNum={0} svgXmlData={message_xitong}
+                               title={'通知消息'}/>
+            <MessageColumnItem setMsgAllRead={setAppeal_2IsRead} type={1} columnType={2}
+                               unReadNum={appeal_2} svgXmlData={zaixiankefu}
+                               title={'申诉消息'}
+                               size={48}/>
+            <MessageColumnItem setMsgAllRead={setAppeal_3IsRead} type={2} columnType={3}
+                               unReadNum={appeal_3} svgXmlData={huodongxiaoxi}
+                               title={'投诉消息'}
+                               size={42}/>
+            <MessageColumnItem type={3} columnType={4} unReadNum={0} svgXmlData={huodongxiaoxi}
+                               title={'在线客服'}/>
+        </View>;
+    }
+}
+const mapStateToProps_ = state => ({
+    friend: state.friend,
+});
+const mapDispatchToProps_ = dispatch => ({
+    setAppeal_2IsRead: () => dispatch(actions.setAppeal_2IsRead()),
+    setAppeal_3IsRead: () => dispatch(actions.setAppeal_3IsRead()),
+});
+const MessageColumnRedux = connect(mapStateToProps_, mapDispatchToProps_)(MessageColumn);
+class MessageColumnItem extends Component {
     static defaultProps = {
         title: '系统通知',
         type: 0,
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            unReadNum: this.props.unReadNum,
+        };
+    }
+
+
+    componentWillReceiveProps(nextProps) {
+        if (this.state.unReadNum !== nextProps.unReadNum) {
+            this.setState({
+                unReadNum: nextProps.unReadNum,
+            });
+        }
+    }
+
     render() {
 
 
-        const {title, unReadLength, type} = this.props;
+        const {title, type} = this.props;
+        const {unReadNum} = this.state;
         let source = null;
 
         if (type == 0) {
@@ -503,6 +543,7 @@ class MessageColumnItem extends PureComponent {
         }
         return <TouchableOpacity
             onPress={() => {
+                this.props.setMsgAllRead();
                 NavigationUtils.goPage({type: this.props.columnType}, 'MessageTypePage');
             }}
             activeOpacity={0.6}
@@ -516,21 +557,17 @@ class MessageColumnItem extends PureComponent {
                     backgroundColor: 'white',
                 }}/>
 
-                {/*</View>*/}
-
-                {/*<SvgUri style={{*/}
-                {/*    */}
-                {/*}} width={size} height={size} svgXmlData={svgXmlData}/>*/}
-                {unReadLength ? unReadLength > 0 && <View style={{
-                    borderRadius: 10, justifyContent: 'center', alignItems: 'center',
-                    position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
-                    // paddingVertical:1,
-                }}>
-                    <Text style={{
-                        fontSize: 10,
-                        color: 'white',
-                    }}>{unReadLength}</Text>
-                </View> : null}
+                {unReadNum > 0 ? <View style={{
+                    borderRadius: 10,
+                    position: 'absolute',
+                    top: -2,
+                    right: -2,
+                    backgroundColor: 'red',
+                    width: 13,
+                    height: 13,
+                    borderWidth: 2,
+                    borderColor: 'white',
+                }}/> : null}
             </View>
 
             <Text style={{

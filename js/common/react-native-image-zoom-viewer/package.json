@@ -1,0 +1,69 @@
+{
+  "_from": "react-native-image-zoom-viewer",
+  "_id": "react-native-image-zoom-viewer@2.2.27",
+  "_inBundle": false,
+  "_integrity": "sha1-+zMUxdyGrDPaSMsxv0kg2X7stus=",
+  "_location": "/react-native-image-zoom-viewer",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-image-zoom-viewer",
+    "name": "react-native-image-zoom-viewer",
+    "escapedName": "react-native-image-zoom-viewer",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/react-native-image-zoom-viewer/download/react-native-image-zoom-viewer-2.2.27.tgz",
+  "_shasum": "fb3314c5dc86ac33da48cb31bf4920d97eecb6eb",
+  "_spec": "react-native-image-zoom-viewer",
+  "_where": "/Users/panfeilong/Desktop/react-native/AwesomeProject",
+  "author": {
+    "name": "ascoders"
+  },
+  "bugs": {
+    "url": "https://github.com/ascoders/react-native-image-viewer/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "react-native-image-pan-zoom": "^2.1.9"
+  },
+  "deprecated": false,
+  "description": "react native image viewer,大图浏览",
+  "devDependencies": {
+    "@types/react": "*",
+    "@types/react-native": "*",
+    "ascoders-tslint-config": "^1.0.2",
+    "react": "*",
+    "react-native": "*",
+    "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.13.0",
+    "typescript": "^2.9.2"
+  },
+  "homepage": "https://github.com/ascoders/react-native-image-viewer#readme",
+  "keywords": [
+    "image-viewer"
+  ],
+  "license": "MIT",
+  "main": "built/index.js",
+  "name": "react-native-image-zoom-viewer",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ascoders/react-native-image-viewer.git"
+  },
+  "scripts": {
+    "prepare": "rm -rf built && tsc",
+    "start": "tsc -w --outDir demo/built"
+  },
+  "types": "built/index.d.ts",
+  "version": "2.2.27"
+}

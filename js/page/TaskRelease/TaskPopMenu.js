@@ -334,14 +334,13 @@ class TextInputPro extends PureComponent {
             placeholderTextColor={'#727272'}
             style={{
                 height: 30,
-                // backgroundColor: '#e8e8e8',
                 marginTop: 10,
                 fontSize: 13,
                 paddingHorizontal: 5,
                 borderRadius: 5,
                 padding: 0,
-                // borderWidth: this.animations.width,
-                // borderColor: `rgba(255, 0, 0, 1)`,
+                // paddingTop:3,
+
                 borderWidth: 0.3,
                 borderColor: 'rgba(0,0,0,0.3)',
             }}
@@ -483,7 +482,7 @@ class TextArea extends PureComponent {
                     borderRadius: 5,
                     padding: 0,
                     textAlignVertical: 'top',
-
+                    paddingTop:5,
                     borderWidth: 0.3,
                     borderColor: 'rgba(0,0,0,0.3)',
                     // borderColor: `rgba(255, 0, 0, 1)`,

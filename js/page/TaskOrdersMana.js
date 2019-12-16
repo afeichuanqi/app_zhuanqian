@@ -199,7 +199,11 @@ class FristListComponent extends PureComponent {
         } else {
             this.page = {pageIndex: this.page.pageIndex + 1};
         }
-        selectOrderTasks({status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
+        selectOrderTasks({
+            status,
+            pageIndex: this.page.pageIndex,
+
+        }, userinfo.token).then(result => {
 
             if (refreshing) {
                 this.setState({
@@ -233,7 +237,16 @@ class FristListComponent extends PureComponent {
             }}
             onPress={() => {
                 if (this.props.status == 3) {
-                    NavigationUtils.goPage({sendFormId: item.sendFormId}, 'TaskRejectDetailsPage');
+                    NavigationUtils.goPage({
+                        sendFormId: item.sendFormId,
+                        taskId: item.taskId,
+                        fromUserinfo: {
+                            avatar:item.avatar_url,
+                            id:item.userid,
+                            username:item.username
+                        },
+                        task_uri:item.task_uri,
+                    }, 'TaskRejectDetailsPage');
                 } else {
                     NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
                 }

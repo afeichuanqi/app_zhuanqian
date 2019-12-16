@@ -110,7 +110,7 @@ export default class Toast extends Component {
                 <Animated.View
                     style={[styles.content, { opacity: this.state.opacityValue }, this.props.style]}
                 >
-                    {React.isValidElement(this.state.text) ? this.state.text : <Text style={[this.props.textStyle,{fontSize:15}]}>{this.state.text}</Text>}
+                    {React.isValidElement(this.state.text) ? this.state.text : <Text style={[this.props.textStyle,{fontSize:17}]}>{this.state.text}</Text>}
                 </Animated.View>
             </View> : null;
         return view;
@@ -128,10 +128,10 @@ const styles = StyleSheet.create({
     },
     content: {
         backgroundColor: 'black',
-        borderRadius: 5,
-        padding: 10,
-        paddingHorizontal:10,
-        paddingVertical:8,
+        borderRadius: 8,
+        // padding: 10,
+        paddingHorizontal:15,
+        paddingVertical:10,
     },
     text: {
         color: 'white'

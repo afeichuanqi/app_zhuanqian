@@ -23,7 +23,7 @@ class ChatSocket {
         ws.onopen = () => {
             this.dispatch(Message.onChangeSocketStatue(''));
             this.connectionstatus = true;
-            this.verifyIdentidy(this.token);
+            this.verifyIdentidy();
             this.dispatch(Message.setConnectionStatus(true));
         };
 
@@ -163,6 +163,7 @@ class ChatSocket {
     setFromUserIdMessageIsRead = (FriendId) => {
         this.sendToServer(types.MESSAGE_SET_USER_ID_IS_READ, {
             FriendId,
+            // columnType
         });
     };
     //发送消息给指定用户
