@@ -1,7 +1,6 @@
 import Types from '../../action/Types';
 
 const defaultContent = {
-    conn_status: false,
     identIdy: false,
     msgArr: [],
 };
@@ -14,11 +13,6 @@ export default function onAction(state = defaultContent, action) {
             return {
                 ...state,
                 identIdy: data.identIdy,
-            };
-        case Types.SET_CONN_CODE :
-            return {
-                ...state,
-                conn_status: data.conn_status,
             };
         case Types.MESSAGE_FROMOF_USERID://来自好友消息
             const temArr = [...state.msgArr];

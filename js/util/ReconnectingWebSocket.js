@@ -1,4 +1,5 @@
-import {NativeModules} from 'react-native'
+import {NativeModules} from 'react-native';
+
 const {WebSocketModule} = NativeModules;
 
 let timeout;
@@ -18,10 +19,12 @@ let settings = {
 };
 
 
-class ReconnectingWebSocket extends WebSocket{
-    constructor(url,protocols,options) {
-        if (!options) { options = {}; }
-        super(url,protocols,{headers:options.headers});
+class ReconnectingWebSocket extends WebSocket {
+    constructor(url, protocols, options) {
+        if (!options) {
+            options = {};
+        }
+        super(url, protocols, {headers: options.headers});
 
         // Overwrite and define settings with options if they exist.
         for (let key in settings) {
@@ -31,7 +34,6 @@ class ReconnectingWebSocket extends WebSocket{
                 this[key] = settings[key];
             }
         }
-
         // These should be treated as read-only properties
 
         /** The URL as resolved by the constructor. This is always an absolute URL. Read only. */
@@ -43,65 +45,66 @@ class ReconnectingWebSocket extends WebSocket{
         this.protocols = protocols;
     }
 
-    _unregisterEvents(){
+    _unregisterEvents() {
         if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
             return super._unregisterEvents();
         }
     }
 
-    _registerEvents(){
+    _registerEvents() {
         super._registerEvents();
         this._subscriptions.push(
-
             /** @Override onopen **/
             this._eventEmitter.addListener('websocketOpen', ev => {
-                if (ev.id !== this._socketId) {
-                    return;
-                }
+                console.log(ev.id, 'websocketOpen', this._socketId);
+                // if (ev.id !== this._socketId) {
+                //     return;
+                // }
 
                 clearTimeout(timeout);
-                this.reconnectAttempts = 0
+                this.reconnectAttempts = 0;
             }),
 
             /** @Override onclose **/
             this._eventEmitter.addListener('websocketClosed', ev => {
-                if (ev.id !== this._socketId) {
-                    return;
-                }
+                console.log(ev.id, 'websocketClosed', this._socketId);
+                // console.log(ev.id ,'websocketClosed', this._socketId);
+                // if (ev.id !== this._socketId) {
+                //     return;
+                // }
 
                 let _timeout = this.reconnectInterval * Math.pow(this.reconnectDecay, this.reconnectAttempts);
 
                 clearTimeout(timeout);
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.reconnectAttempts++;
-                    this.reconnect()
+                    this.reconnect();
                 }, _timeout > this.maxReconnectInterval ? this.maxReconnectInterval : _timeout);
             }),
 
             /** @Override onerror **/
             this._eventEmitter.addListener('websocketFailed', ev => {
-                if (ev.id !== this._socketId) {
-                    return;
-                }
-
+                console.log(ev.id, 'websocketFailed', this._socketId);
+                // if (ev.id !== this._socketId) {
+                //     return;
+                // }
                 let _timeout = this.reconnectInterval * Math.pow(this.reconnectDecay, this.reconnectAttempts);
 
                 clearTimeout(timeout);
-                setTimeout(()=>{
+
+                setTimeout(() => {
                     this.reconnectAttempts++;
-                    this.reconnect()
+                    this.reconnect();
                 }, _timeout > this.maxReconnectInterval ? this.maxReconnectInterval : _timeout);
-            })
-        )
+            }),
+        );
     }
 
-    reconnect(){
-
+    reconnect = () => {
         if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
             return;
         }
-
-        setTimeout(()=>{
+        setTimeout(() => {
 
             WebSocketModule.connect(
                 this.url,
@@ -110,13 +113,13 @@ class ReconnectingWebSocket extends WebSocket{
                 this._socketId,
             );
 
-            timeout=setTimeout(()=>{
-                this.reconnect()
-            },this.timeoutInterval)
+            timeout = setTimeout(() => {
+                this.reconnect();
+            }, this.timeoutInterval);
 
         }, this.reconnectInterval);
 
-    }
+    };
 }
 
 export default ReconnectingWebSocket;

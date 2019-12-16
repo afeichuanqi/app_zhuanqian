@@ -156,6 +156,8 @@ class BottomBar extends Component {
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
         if (this.props.navigationIndex !== nextProps.navigationIndex
             || (this.props.friend && (this.props.friend.unMessageLength !== nextProps.friend.unMessageLength))
+            || (this.props.friend && (this.props.friend.appeal_3 !== nextProps.friend.appeal_3))
+            || (this.props.friend && (this.props.friend.appeal_2 !== nextProps.friend.appeal_2))
         ) {
             return true;
         }
@@ -195,7 +197,8 @@ class BottomBar extends Component {
     render() {
         // console.log('我被render');
         const {navigationIndex} = this.props;
-        const {unMessageLength} = this.props.friend;
+        const {unMessageLength, appeal_2, appeal_3} = this.props.friend;
+        const isOtherUnread = (appeal_2 > 0 || appeal_3 > 0) ? true : false;
         return <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -226,6 +229,7 @@ class BottomBar extends Component {
                 navigationIndex === 2 ? true : false,
                 37,
                 unMessageLength ? unMessageLength : 0,
+                isOtherUnread,
             )}
             {this._renderBottomBar(
                 navigationIndex === 3 ? myA : my,
@@ -243,16 +247,11 @@ class BottomBar extends Component {
         if (index === 3) { //我的栏目被单击
             const token = userinfo.token;
             onGetUserInFoForToken(token, (loginStatus, msg) => {
-                // console.log(loginStatus, msg, 'loginStatus, msg');
-                //成功或者失败要做什么
             });
-            // if (token) {
-            //
-            // }
         }
 
     };
-    _renderBottomBar = (svgXmlData, onPress, key, isActive, size = 35, unReadLength = 0) => {
+    _renderBottomBar = (svgXmlData, onPress, key, isActive, size = 35, unReadLength = 0, isOtherUnRead = false) => {
 
         return <TouchableOpacity
             onPress={() => {
@@ -268,14 +267,28 @@ class BottomBar extends Component {
                 {unReadLength > 0 && <View style={{
                     position: 'absolute',
                     right: -11,
-                    top: 0,
+                    top: -3,
                     backgroundColor: 'red',
                     paddingHorizontal: 5,
                     borderRadius: 8,
+                    borderWidth: 3,
+                    borderColor: 'white',
                 }}>
                     <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
                 </View>}
+                {unReadLength == 0 && isOtherUnRead && <View style={{
+                    position: 'absolute',
+                    right: -3,
+                    top: 0,
+                    backgroundColor: 'red',
+                    borderRadius: 8,
+                    width: 13,
+                    height: 13,
+                    borderWidth: 3,
+                    borderColor: 'white',
+                }}/>
 
+                }
             </View>
 
 

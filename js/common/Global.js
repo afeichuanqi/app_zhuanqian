@@ -4,5 +4,10 @@ const Global = {
     IndexPage_Index: 0,
     TaskHallPage_Index: 0,
 
+
+    //socket方面
+    token: '',
+    dispatch:{},
+    ws:null,
 };
 module.exports = Global;

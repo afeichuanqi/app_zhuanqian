@@ -15,14 +15,12 @@ import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
 import {theme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
-import ChatSocket from '../util/ChatSocket';
-import {connect} from 'react-redux';
+// import ChatSocket from '../util/ChatSocket';
+// import {connect} from 'react-redux';
 
 class Welcome extends PureComponent {
     constructor(props) {
         super(props);
-        // console.log('welcome执行');
-        ChatSocket.setDispatch(this.props.dispatch);
     }
 
     state = {
@@ -86,11 +84,10 @@ class Welcome extends PureComponent {
     }
 }
 
-const mapStateToProps = state => ({
-    userinfo: state.userinfo,
-});
-const mapDispatchToProps = dispatch => ({
-    dispatch: dispatch,
-});
-const WelcomeRedux = connect(mapStateToProps, mapDispatchToProps)(Welcome);
-export default WelcomeRedux;
+// const mapStateToProps = state => ({
+//     userinfo: state.userinfo,
+// });
+// const mapDispatchToProps = dispatch => ({
+// });
+// const WelcomeRedux = connect(mapStateToProps, mapDispatchToProps)(Welcome);
+export default Welcome;

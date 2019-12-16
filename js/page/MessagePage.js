@@ -169,7 +169,7 @@ class MsgList extends Component {
     render() {
         const friendData = this.props.friend.friendArr;
 
-        const {isLoading, hideLoaded} = this.state;
+        const {isLoading} = this.state;
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent height={height - 210}/>}
             ListHeaderComponent={
@@ -188,12 +188,7 @@ class MsgList extends Component {
 
                     }}/>
 
-                    <MessageColumnRedux
-                        // setAppeal_2IsRead={this.props.setAppeal_2IsRead}
-                        // setAppeal_3IsRead={this.props.setAppeal_3IsRead}
-                        // appeal_2={appeal_2}
-                        // appeal_3={appeal_3}
-                    />
+                    <MessageColumnRedux/>
                     <View style={{height: 70}}/>
                 </View>
 
@@ -256,21 +251,6 @@ class MsgList extends Component {
     };
 }
 
-const mapStateToProps = state => ({
-    friend: state.friend,
-    socketStatus: state.socketStatus,
-    userinfo: state.userinfo,
-});
-const mapDispatchToProps = dispatch => ({
-    onSetOtherTypeUnread: (app2, app3) => dispatch(actions.onSetOtherTypeUnread(app2, app3)),
-    setAppeal_2IsRead: () => dispatch(actions.setAppeal_2IsRead()),
-    setAppeal_3IsRead: () => dispatch(actions.setAppeal_3IsRead()),
-});
-const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePage);
-
-
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-
 class MessageItemComponent extends Component {
 
     static defaultProps = {
@@ -316,9 +296,9 @@ class MessageItemComponent extends Component {
 
         const {item} = this.props;
         const {columnType, taskId, taskTitle, avatar_url, username, userid, unReadLength} = item;
-        if (unReadLength > 0) {
-            ChatSocket.setFromUserIdMessageIsRead(this.props.item.FriendId);
-        }
+        // if (unReadLength > 0) {
+        //     ChatSocket.setFromUserIdMessageIsRead(this.props.item.FriendId,this.columnType);
+        // }
         // console.log("item",item);
         const fromUserinfo = {
             avatar_url: avatar_url,
@@ -368,8 +348,15 @@ class MessageItemComponent extends Component {
                             resizeMode={FastImage.resizeMode.stretch}
                         />
                         {unReadLength ? unReadLength > 0 && <View style={{
-                            borderRadius: 10, justifyContent: 'center', alignItems: 'center',
-                            position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
+                            borderRadius: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            position: 'absolute',
+                            top: -8, right: -8,
+                            backgroundColor: 'red',
+                            paddingHorizontal: 5,
+                            borderWidth: 2,
+                            borderColor: 'white',
                             // paddingVertical:1,
                         }}>
                             <Text style={{
@@ -394,7 +381,7 @@ class MessageItemComponent extends Component {
                                 marginLeft: 10,
                             }}>{username}</Text>
                             <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>{
-                                columnType == 1 ? `任务ID:${taskId}` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
+                                columnType == 1 ? `任务咨询` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
                             }</Text>
 
 
@@ -449,17 +436,23 @@ class MessageItemComponent extends Component {
 
 }
 
+const mapStateToProps = state => ({
+    friend: state.friend,
+    socketStatus: state.socketStatus,
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({
+    onSetOtherTypeUnread: (app2, app3) => dispatch(actions.onSetOtherTypeUnread(app2, app3)),
+    setAppeal_2IsRead: () => dispatch(actions.setAppeal_2IsRead()),
+    setAppeal_3IsRead: () => dispatch(actions.setAppeal_3IsRead()),
+});
+const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePage);
 
 
-class MessageColumn extends Component {
-    // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-    //     if (this.props.appeal_2 !== nextProps.appeal_2
-    //         || this.props.appeal_3 !== nextProps.appeal_3
-    //     ) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
+
+class MessageColumn extends PureComponent {
 
     render() {
         const {appeal_2, appeal_3} = this.props.friend;
@@ -495,6 +488,7 @@ class MessageColumn extends Component {
         </View>;
     }
 }
+
 const mapStateToProps_ = state => ({
     friend: state.friend,
 });
@@ -503,6 +497,7 @@ const mapDispatchToProps_ = dispatch => ({
     setAppeal_3IsRead: () => dispatch(actions.setAppeal_3IsRead()),
 });
 const MessageColumnRedux = connect(mapStateToProps_, mapDispatchToProps_)(MessageColumn);
+
 class MessageColumnItem extends Component {
     static defaultProps = {
         title: '系统通知',
@@ -543,7 +538,9 @@ class MessageColumnItem extends Component {
         }
         return <TouchableOpacity
             onPress={() => {
-                this.props.setMsgAllRead();
+                if (unReadNum > 0) {
+                    this.props.setMsgAllRead();
+                }
                 NavigationUtils.goPage({type: this.props.columnType}, 'MessageTypePage');
             }}
             activeOpacity={0.6}

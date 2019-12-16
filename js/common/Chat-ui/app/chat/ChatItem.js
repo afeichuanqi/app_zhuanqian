@@ -426,6 +426,8 @@ const styles = StyleSheet.create({
     subEmojiStyle: {
         width: 25,
         height: 25,
+        marginRight:3,
+
     },
     commentBar__input: {
         borderRadius: 18,

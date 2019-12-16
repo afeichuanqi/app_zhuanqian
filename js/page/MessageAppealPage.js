@@ -29,6 +29,8 @@ import ViewUtil from '../util/ViewUtil';
 import jiaoliu from '../res/svg/jiaoliu.svg';
 import BackPressComponent from '../common/BackPressComponent';
 import {getUserAppealFriendList, setUserIdMessageIsRead} from '../util/AppService';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -158,9 +160,14 @@ class MsgList extends Component {
     };
 
     componentDidMount(): void {
+        EventBus.getInstance().addListener(`update_message_appeal_${this.props.type}_page`, this.listener = data => {
+            this.updatePage(true);
+        });
         this.updatePage(true);
     }
-
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListener(this.listener);
+    }
     render() {
         // const friendData = this.props.friend.friendArr;
 
@@ -240,7 +247,7 @@ class MsgList extends Component {
 
 
         getUserAppealFriendList({columnType: type, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
-            console.log(result, 'result\'');
+            // console.log(result, 'result\'');
             if (refreshing) {
                 this.setState({
                     friendData: result,
@@ -270,15 +277,6 @@ class MsgList extends Component {
     };
 
 }
-
-const mapStateToProps = state => ({
-    userinfo: state.userinfo,
-});
-const mapDispatchToProps = dispatch => ({});
-const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessageAppealPage);
-
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-
 class MessageItemComponent extends PureComponent {
 
     static defaultProps = {
@@ -390,9 +388,15 @@ class MessageItemComponent extends PureComponent {
                     resizeMode={FastImage.stretch}
                 />
                 {unReadLength ? unReadLength > 0 && <View style={{
-                    borderRadius: 10, justifyContent: 'center', alignItems: 'center',
-                    position: 'absolute', top: -5, right: -5, backgroundColor: 'red', paddingHorizontal: 5,
-                    // paddingVertical:1,
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    top: -8, right: -8,
+                    backgroundColor: 'red',
+                    paddingHorizontal: 5,
+                    borderWidth: 2,
+                    borderColor: 'white',
                 }}>
                     <Text style={{
                         fontSize: 10,
@@ -474,6 +478,15 @@ class MessageItemComponent extends PureComponent {
 
 
 }
+const mapStateToProps = state => ({
+    userinfo: state.userinfo,
+});
+const mapDispatchToProps = dispatch => ({});
+const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessageAppealPage);
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
+
 
 
 export default MessagePageRedux;

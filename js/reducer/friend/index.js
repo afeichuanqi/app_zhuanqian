@@ -31,7 +31,7 @@ export default function onAction(state = defaultContent, action) {
             let temArr2 = [...state.friendArr];
             let nowUnMessageLength = state.unMessageLength;
             const FriendIdIndex = temArr2.findIndex(d => d.FriendId === data.FriendId);
-            if (FriendIdIndex !== -1) {
+            if (FriendIdIndex !== -1 && data.columnType == 1) {
                 const originalFriendUnReadLen = temArr2[FriendIdIndex].unReadLength;
                 temArr2[FriendIdIndex].unReadLength = 0;
                 temArr2 = temArr2.sort((data1, data2) => {
@@ -104,48 +104,46 @@ export default function onAction(state = defaultContent, action) {
                     friendArr: temArr3,
                     unMessageLength: NewUnReadLength,
                 };
-            }
-            let state_ = {};
-            if (data.columnType == 2) {
-                state_ = {
-                    ...state,
-                    appeal_2: 1,
-                };
-            } else if (data.columnType == 3) {
-                state_ = {
-                    ...state,
-                    appeal_3: 1,
-                };
             } else {
-                state_ = {
-                    ...state,
-                };
+                let state_ = {};
+                if (data.columnType == 2) {
+                    state_ = {
+                        ...state,
+                        appeal_2: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? state.appeal_2 + 1 : 0 : 0,
+                    };
+                } else if (data.columnType == 3) {
+                    state_ = {
+                        ...state,
+                        appeal_3: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? state.appeal_3 + 1 : 0 : 0,
+                    };
+                } else {
+                    state_ = {
+                        ...state,
+                    };
+                }
+                return state_;
             }
-            return state_;
+
         case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
-            // const columnUnreadLength4 = [...state.columnUnreadLength];
             let temArr4 = [...state.friendArr];
             let NewUnReadLength1;
             const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
+            console.log(fromUserIndex1, 'fromUserIndex1');
             if (fromUserIndex1 != -1) {
                 const item1 = temArr4[fromUserIndex1];
                 NewUnReadLength1 = state.unMessageLength - item1.unReadLength;
                 item1.unReadLength = 0;
                 temArr4[fromUserIndex1] = item1;
-                // columnUnreadLength4[parseInt(item1.columnType) - 1] -= item1.unReadLength;
                 return {
                     ...state,
                     friendArr: temArr4,
                     unMessageLength: NewUnReadLength1,
-                    // columnUnreadLength: columnUnreadLength4,
+                };
+            } else {
+                return {
+                    ...state,
                 };
             }
-            return {
-                ...state,
-                // friendArr: temArr4,
-                // unMessageLength: NewUnReadLength1,
-                // columnUnreadLength: columnUnreadLength4,
-            };
 
 
         case Types.FRIEND_INIT:

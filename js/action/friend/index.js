@@ -16,9 +16,9 @@ export function onSelectAllFriend(friendArr) {
 // }
 
 // 设置当前的好友所有消息为已读
-export function onSetAllFriendUnRead(FriendId) {
+export function onSetAllFriendUnRead(FriendId,columnType) {
     // console.log(code, 'code');
-    return {type: Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS, data: {FriendId}};
+    return {type: Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS, data: {FriendId,columnType}};
 }
 
 // 设置其他类型未读消息数
@@ -64,7 +64,7 @@ export function onSetNewMsgForRromUserid(
 
 // 设置好友的一条消息已经读取
 export function onSetFriendMsgIsRead(FriendId) {
-    // console.log(code, 'code');
+    console.log(FriendId, 'FriendId');
     return {
         type: Types.MESSAGE_SET_MSG_ID_READ_SUCCESS, data: {
             FriendId,

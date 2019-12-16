@@ -1,5 +1,5 @@
 import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken} from './userinfo';
-import {verifyIdentIdy,setConnectionStatus,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus,onMessageInitialiZation} from './message';
+import {verifyIdentIdy,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus,onMessageInitialiZation} from './message';
 import {onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onSetFriendMsgIsRead,onFriendInitialiZation,onSetOtherTypeUnread,setAppeal_2IsRead,setAppeal_3IsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
 import {onSetTaskReleaseInfo} from './taskInfo';
@@ -14,7 +14,7 @@ export default {
     onGetUserInFoForToken,
     //消息列表
     verifyIdentIdy,
-    setConnectionStatus,
+
     onMessageFrom,
     onAddMesage,
     onSetMsgStatus,

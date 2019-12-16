@@ -32,7 +32,6 @@ import SecondListComponent from './IndexPage/SecondListComponent';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import Toast from '../common/Toast';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -58,7 +57,9 @@ class HomePage extends PureComponent {
     };
 
     componentDidMount() {
-        ChatSocket.connctionServer(this.props.userinfo.token);
+        Global.token = this.props.userinfo.token;
+        Global.dispatch = this.props.dispatch;
+        ChatSocket.connctionServer();
 
     }
 
@@ -375,7 +376,7 @@ class FristListComponent extends PureComponent {
             const {pageName} = data;
             if (pageName == `IndexPage_0`) {
                 this.flatList.scrollToTop_();
-                this.props.showAnimated(false)
+                this.props.showAnimated(false);
             }
         });
     }
@@ -384,6 +385,7 @@ class FristListComponent extends PureComponent {
 
         EventBus.getInstance().removeListener(this.listener);
     }
+
     render() {
         const containerWidth = width - 20;
         const {lunboData} = this.state;
@@ -475,6 +477,7 @@ const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
 const mapDispatchToProps = dispatch => ({
+    dispatch: dispatch,
     // onLogin: (phone, code, callback) => dispatch(actions.onLogin(phone, code, callback)),
 });
 const HomePageRedux = connect(mapStateToProps, mapDispatchToProps)(HomePage);

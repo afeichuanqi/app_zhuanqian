@@ -21,6 +21,7 @@ import gantanhao from '../res/svg/gantanhao.svg';
 import DeviceInfo from 'react-native-device-info';
 import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
+import Global from '../common/Global';
 
 export default class EnterCodePage extends PureComponent {
     constructor(props) {
@@ -273,7 +274,7 @@ class CodeInput extends PureComponent {
                 const {routes, navigation} = this.props;
                 const key = routes[1].routes[1].key;
 
-                ChatSocket.setToken(data.token);//进行验证token
+                Global.token = data.token;//进行验证token
                 ChatSocket.verifyIdentidy();//进行验证token
                 NavigationUtils.goBack(navigation, key);
                 ChatSocket.selectAllFriendMessage(20);//进行获取好友列表

@@ -10,10 +10,10 @@ export function verifyIdentIdy(code) {
     return {type: Types.VERIFY_IDENTIDY, data: {identIdy: code}};
 }
 
-//连接成功
-export function setConnectionStatus(code) {
-    return {type: Types.SET_CONN_CODE, data: {conn_status: code}};
-}
+// //连接成功
+// export function setConnectionStatus(code) {
+//     return {type: Types.SET_CONN_CODE, data: {conn_status: code}};
+// }
 
 //收到消息
 export function onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus,FriendId) {

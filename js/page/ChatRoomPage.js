@@ -18,6 +18,8 @@ import actions from '../action';
 import ImageViewerModal from '../common/ImageViewerModal';
 import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const {width, height} = Dimensions.get('window');
 
@@ -160,37 +162,44 @@ class ChatRoomPage extends React.Component {
                 this.toast.show(msg);
 
             });
-            return;
+
+        } else { //咨询信息
+            isFriendChat({
+                columnType: this.columnType,
+                taskid: this.task_id,
+                toUserid: this.fromUserinfo.id,
+            }, this.props.userinfo.token).then(result => {
+                if (result.haveToDo == 0 || !result.guzhuUserId) {
+                    this.toast.show('您与雇主并无任务来往,会话创建失败');
+                    return;
+                }
+                if (result.id) {
+                    this.guzhuUserId = result.guzhuUserId;
+                    this.haveToDo = result.haveToDo;
+                    this.FriendId = result.id;
+                    ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+                }
+
+            }).catch(msg => {
+                this.toast.show(msg);
+
+            });
         }
 
 
-        isFriendChat({
-            columnType: this.columnType,
-            taskid: this.task_id,
-            toUserid: this.fromUserinfo.id,
-        }, this.props.userinfo.token).then(result => {
-            if (result.haveToDo == 0 || !result.guzhuUserId) {
-                this.toast.show('您与雇主并无任务来往,会话创建失败');
-                return;
-            }
-            if (result.id) {
-                this.guzhuUserId = result.guzhuUserId;
-                this.haveToDo = result.haveToDo;
-                this.FriendId = result.id;
-                ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
-            }
-
-        }).catch(msg => {
-            this.toast.show(msg);
-
-        });
     };
     state = {};
     imageArr = [];
 
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
-        ChatSocket.setMsgIdIsRead(this.FriendId, this.fromUserinfo.id);
+        if (this.columnType == 1) { //诉求信息
+            // ChatSocket.setMsgIdIsRead(this.FriendId, this.fromUserinfo.id);
+            ChatSocket.setFromUserIdMessageIsRead(this.FriendId,this.columnType);
+        } else if (this.columnType == 2 || this.columnType == 3) {
+            EventBus.getInstance().fireEvent(`update_message_appeal_${this.columnType}_page`, {//刷新列表
+            });
+        }
     }
 
 
