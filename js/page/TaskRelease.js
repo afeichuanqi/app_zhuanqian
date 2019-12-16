@@ -420,6 +420,7 @@ class TaskRelease extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexDirection: 'row',
+                            backgroundColor: "rgba(0,0,0,0.1)",
                         }}>
                         <SvgUri width={20} fill={'rgba(0,0,0,0.9)'} style={{marginLeft: 5}} height={20}
                                 svgXmlData={task_yulan}/>
@@ -743,7 +744,7 @@ class InputSelect extends Component {
                 activeOpacity={1}
                 onPress={() => {
                     if (!this.state.showPopBtn) {
-                        PopButtomMenu = require('../common/PopButtomMenu').default;
+                        PopButtomMenu = require('./TaskRelease/PopButtomMenu').default;
                         this.setState({
                             showPopBtn: true,
                         }, () => {

@@ -64,22 +64,20 @@ export default function onAction(state = defaultContent, action) {
                 appeal_3: 0,
             };
         case Types.MESSAGE_FROMOF_USERID_Friend:
-
             if (data.columnType == 1) {
                 let temArr3 = [...state.friendArr];
                 let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
                 const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
 
                 if (fromUserIndex != -1) {//找到了此用户
+                    // console.log
                     const item = temArr3[fromUserIndex];
                     item.msg_type = data.msg_type;
                     item.msg = data.content;
                     item.sendDate = data.sendDate;
                     item.unReadLength = data.fromUserid != data.ToUserId && data.isAddNewMsgLength && item.unReadLength + 1;
                     temArr3[fromUserIndex] = item;
-                    // columnUnreadLength3[parseInt(item.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
                 } else {
-                    // columnUnreadLength3[parseInt(data.columnType) - 1] += data.fromUserid != data.ToUserId ? 1 : 0;
                     temArr3.push({
                         userid: data.fromUserid,
                         username: data.username,
@@ -128,7 +126,6 @@ export default function onAction(state = defaultContent, action) {
             let temArr4 = [...state.friendArr];
             let NewUnReadLength1;
             const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
-            console.log(fromUserIndex1, 'fromUserIndex1');
             if (fromUserIndex1 != -1) {
                 const item1 = temArr4[fromUserIndex1];
                 NewUnReadLength1 = state.unMessageLength - item1.unReadLength;

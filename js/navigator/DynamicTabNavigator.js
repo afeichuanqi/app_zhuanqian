@@ -265,13 +265,14 @@ class BottomBar extends Component {
                         style={{marginBottom: 2}}
                 />
                 {unReadLength > 0 && <View style={{
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     position: 'absolute',
-                    right: -11,
-                    top: -3,
+                    top: -2, right: -8,
                     backgroundColor: 'red',
                     paddingHorizontal: 5,
-                    borderRadius: 8,
-                    borderWidth: 3,
+                    borderWidth: 2,
                     borderColor: 'white',
                 }}>
                     <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>

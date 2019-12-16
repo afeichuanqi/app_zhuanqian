@@ -46,6 +46,7 @@ class MyOrderManaPage extends PureComponent {
         this._updatePage();
 
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -348,22 +349,22 @@ class MyOrderManaPage extends PureComponent {
                 <Text>已完成：{(parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
-            {/*<TouchableOpacity*/}
-            {/*    onPress={() => {*/}
-            {/*        NavigationUtils.goPage({*/}
-            {/*            task_id: this.state.taskInfo.id,*/}
-            {/*            type: 3,*/}
-            {/*        }, 'MessageTypePage');*/}
-            {/*    }}*/}
-            {/*    style={{*/}
-            {/*        flexDirection: 'row', alignItems: 'center', width: (width) / 2,*/}
-            {/*        justifyContent: 'space-between',*/}
-            {/*        paddingHorizontal: 10,*/}
-            {/*        paddingVertical: 10,*/}
-            {/*    }}>*/}
-            {/*    <Text>投诉：{(parseInt(taskInfo.complaintCount))}</Text>*/}
-            {/*    <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>*/}
-            {/*</TouchableOpacity>*/}
+            <TouchableOpacity
+                onPress={() => {
+                    NavigationUtils.goPage({
+                        keyword: this.state.taskInfo.id,
+                        type: 3,
+                    }, 'MessageAppealPage');
+                }}
+                style={{
+                    flexDirection: 'row', alignItems: 'center', width: (width) / 2,
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                }}>
+                <Text>投诉：{(parseInt(taskInfo.appeal_3_num))}</Text>
+                <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
+            </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
                     NavigationUtils.goPage({
@@ -381,22 +382,22 @@ class MyOrderManaPage extends PureComponent {
                 <Text>进行中：{(parseInt(taskInfo.task_sign_up_num) - parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
-            {/*<TouchableOpacity*/}
-            {/*    onPress={() => {*/}
-            {/*        NavigationUtils.goPage({*/}
-            {/*            task_id: this.state.taskInfo.id,*/}
-            {/*            type: 2,*/}
-            {/*        }, 'MessageTypePage');*/}
-            {/*    }}*/}
-            {/*    style={{*/}
-            {/*        flexDirection: 'row', alignItems: 'center', width: (width) / 2,*/}
-            {/*        justifyContent: 'space-between',*/}
-            {/*        paddingHorizontal: 10,*/}
-            {/*        paddingVertical: 10,*/}
-            {/*    }}>*/}
-            {/*    <Text>申诉：{(parseInt(taskInfo.appealCount))}</Text>*/}
-            {/*    <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>*/}
-            {/*</TouchableOpacity>*/}
+            <TouchableOpacity
+                onPress={() => {
+                    NavigationUtils.goPage({
+                        keyword: this.state.taskInfo.id,
+                        type: 2,
+                    }, 'MessageAppealPage');
+                }}
+                style={{
+                    flexDirection: 'row', alignItems: 'center', width: (width) / 2,
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                }}>
+                <Text>申诉：{(parseInt(taskInfo.appeal_2_num))}</Text>
+                <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
+            </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
                     NavigationUtils.goPage({
@@ -560,7 +561,7 @@ class UpdateTaskPrice extends PureComponent {
     render() {
         const {rewardNum, rewardPrice} = this.props;
         const {price, error} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20, paddingBottom:10}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20, paddingBottom: 10}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text>当前数量：</Text>
                 <Text style={{color: 'red'}}>{rewardNum}</Text>
@@ -617,7 +618,7 @@ class UpdateTaskNum extends PureComponent {
     render() {
         const {rewardPrice} = this.props;
         const {price, error} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20,paddingBottom:10}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20, paddingBottom: 10}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text>当前价格：</Text>
                 <Text style={{color: 'red'}}>{rewardPrice}元</Text>

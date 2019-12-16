@@ -152,12 +152,14 @@ class MyTaskReview extends PureComponent {
 
                                 multiline={true}
                                 style={{
-                                    height: 100, width: width - 20, backgroundColor: '#e8e8e8',
+                                    height: 100, width: width - 20, backgroundColor: '#ececec',
                                     paddingHorizontal: 5, padding: 0, textAlignVertical: 'top',
-                                    paddingTop:3,
+                                    paddingTop:5,
+                                    paddingLeft:5,
+                                    borderRadius:5,
                                 }}
                                 placeholder={'请输入驳回理由'}
-                                placeholderTextColor={'#7f7f7f'}
+                                // placeholderTextColor={'#7f7f7f'}
                                 maxLength={300}
                             />
 
@@ -188,6 +190,7 @@ class MyTaskReview extends PureComponent {
                                             // borderWidth: this.animations.width,
                                             borderColor: 'rgba(0,0,0,0.6)',
                                             marginTop: 10, marginRight: 10,
+                                            borderRadius:5,
                                             // borderWidth:1, borderColor:'rgba(255,0,0,1)',
                                         }}>
                                         {item.uri ? <Image
@@ -201,6 +204,7 @@ class MyTaskReview extends PureComponent {
                                         <View style={{
                                             width: 55, height: 55, backgroundColor: 'rgba(0,0,0,0.5)',
                                             justifyContent: 'center', alignItems: 'center', position: 'absolute',
+
                                         }}>
                                             <Text style={{fontSize: 12, color: 'white'}}>正在上传</Text>
                                         </View>

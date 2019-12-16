@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Image, ActivityIndicator} from 'react-native';
+import {View, Image, ActivityIndicator, Platform} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {equalsObj} from '../util/CommonUtils';
 import Global from './Global';
@@ -31,22 +31,49 @@ class FastImagePro extends Component {
             isSuccess: true,
         });
     };
-    onLoad=(e)=>{
-        if(this.props.source.uri && this.props.source.uri.startsWith('http:')){
-            const width = e.nativeEvent.width;
-            const height = e.nativeEvent.height;
-            const url = this.props.source.uri;
 
-            const index = Global.imageSizeArr.findIndex(item => item.url == url);
-            if (index === -1) {
-                Global.imageSizeArr.push({url, width, height});
-            } else {
-                Global.imageSizeArr[index].width = width;
-                Global.imageSizeArr[index].height = height;
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        if (Platform.OS === 'android') {
+            if (!this.props.source.uri || this.props.source.uri !== nextProps.source.uri) {
+                if (nextProps.source.uri && nextProps.source.uri.startsWith('http:')) {
+                    const url = nextProps.source.uri;
+                    Image.getSize(
+                        url,
+                        (width: number, height: number) => {
+                            const index = Global.imageSizeArr.findIndex(item => item.url == url);
+                            if (index === -1) {
+                                Global.imageSizeArr.push({url, width, height});
+                            } else {
+                                Global.imageSizeArr[index].width = width;
+                                Global.imageSizeArr[index].height = height;
+                            }
+                        });
+                }
             }
         }
 
     }
+
+    onLoad = (e) => {
+        if (Platform.OS === 'ios') {
+            if (this.props.source.uri && this.props.source.uri.startsWith('http:')) {
+                const width = e.nativeEvent.width;
+                const height = e.nativeEvent.height;
+                const url = this.props.source.uri;
+
+                const index = Global.imageSizeArr.findIndex(item => item.url == url);
+                if (index === -1) {
+                    Global.imageSizeArr.push({url, width, height});
+                } else {
+                    Global.imageSizeArr[index].width = width;
+                    Global.imageSizeArr[index].height = height;
+                }
+            }
+        }
+
+
+    };
+
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
         if (this.state.isSuccess !== nextState.isSuccess
             || !equalsObj(this.props.source, nextProps.source)
@@ -67,16 +94,17 @@ class FastImagePro extends Component {
                 onLoadEnd={this.onLoadEnd}
                 onLoad={this.onLoad}
             />
+            {/*<Text style={{textAlign:}}>*/}
             {!isSuccess && <View style={[style, {
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                justifyContent:'center',
-                alignItems:'center',
+                justifyContent: 'center',
+                alignItems: 'center',
             }]}>
                 {/*<ActivityIndicator size="small" color="black"/>*/}
                 <Image
-                    style={{width:50,height:50}}
+                    style={{width: 50, height: 50}}
                     source={require('../res/img/image_loading.gif')}
                 />
             </View>}

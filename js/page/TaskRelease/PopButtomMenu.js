@@ -47,13 +47,13 @@ class PopButtomMenu extends PureComponent {
 
     hide = (item) => {
         // console.log(item);
-        if(item){
+        if (item) {
             this.props.select(item);
         }
 
         this._anim = timing(this.animations.bottom, {
             duration: 200,
-            toValue: -(200 + (width / 3)),
+            toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
             this.timer = setTimeout(() => {
@@ -70,26 +70,30 @@ class PopButtomMenu extends PureComponent {
             visible: true,
         }, () => {
             this._anim = timing(this.animations.bottom, {
-                duration: 100,
-                toValue: 0,
+                duration: 200,
+                toValue: -400,
                 easing: Easing.inOut(Easing.cubic),
             }).start();
         });
     };
     animations = {
-        bottom: new Animated.Value(-(200 + (width / 3))),
+        bottom: new Animated.Value(0),
+
     };
 
     render() {
         const {visible} = this.state;
         const {menuArr} = this.props;
-
+        const opacity = Animated.interpolate(this.animations.bottom, {
+            inputRange: [-400,-100, 0],
+            outputRange: [1,0.3, 0],
+            extrapolate: 'clamp',
+        });
         return (
 
             <Modal
                 transparent
                 visible={visible}
-                animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 
@@ -101,12 +105,14 @@ class PopButtomMenu extends PureComponent {
                                   }}
                 >
                     <Animated.View style={{
-                        width, position: 'absolute', bottom: this.animations.bottom, backgroundColor: 'white',
-                        borderTopLeftRadius: 10, borderTopRightRadius: 10,
+                        width, position: 'absolute', bottom: -400, backgroundColor: 'white',
+                        borderTopLeftRadius: 5, borderTopRightRadius: 5,
+                        transform: [{translateY: this.animations.bottom}], opacity,
                     }}>
                         <View style={{
                             width, alignItems: 'center', height: 50, justifyContent: 'center',
                             borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
+
                         }}>
                             <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>{this.props.popTitle}</Text>
                         </View>
@@ -142,10 +148,11 @@ class PopButtomMenu extends PureComponent {
                 this.hide(item);
             }}
             style={{
-                width, alignItems: 'center', paddingVertical: 15,
+                width, alignItems: 'center', paddingVertical: 14,
                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
+
             }}>
-            <Text>{item.title}</Text>
+            <Text >{item.title}</Text>
         </TouchableOpacity>;
     };
 }

@@ -646,10 +646,10 @@ export function userGiveUpTask(data, token) {
 /**
  * 查询提交信息
  */
-export function selectOrderTaskInfo(data) {
+export function selectOrderTaskInfo(data,token) {
     return new Promise(async function (resolve, reject) {
         try {
-            // http.setPostHeader('token', token);
+            http.setPostHeader('token', token);
             const ret = await http.post('user/selectOrderTaskInfo', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);

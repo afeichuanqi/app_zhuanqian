@@ -60,7 +60,7 @@ class ChatSocket {
                     //收到回调进行未读消息数回调
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
-                    Global.dispatch(Message.onSetAllFriendUnRead(data.FriendId,data.columnType));
+                    Global.dispatch(Message.onSetAllFriendUnRead(data.FriendId, data.columnType));
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
                     if (data.msgArr && data.msgArr.length > 0) {
@@ -102,6 +102,10 @@ class ChatSocket {
 
     //验证身份
     verifyIdentidy = () => {
+        console.log(Global.ws.readyState,"Global.ws.readyState");
+        if (Global.ws.readyState !== 1) {
+            return;
+        }
         const msgData = {
             type: types.VERIFY_IDENTIDY,
             data: {
@@ -110,7 +114,9 @@ class ChatSocket {
         };
         const msgStr = JSON.stringify(msgData);
         try {
-            Global.ws.send(msgStr);
+            if (Global.ws.readyState === 1) {
+                Global.ws.send(msgStr);
+            }
         } catch (e) {
             Global.dispatch(Message.onChangeSocketStatue('异常代码:000X1'));
         }
@@ -133,48 +139,35 @@ class ChatSocket {
         this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {friendId, pageCount});
     };
     //设置我和fromuserinf的消息为已经读区
-    setFromUserIdMessageIsRead = (FriendId,columnType) => {
+    setFromUserIdMessageIsRead = (FriendId, columnType) => {
         this.sendToServer(types.MESSAGE_SET_USER_ID_IS_READ, {
             FriendId,
-            columnType:columnType
+            columnType: columnType,
             // columnType
         });
     };
     //发送消息给指定用户
     sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo) => {
-        if (!this.connectionstatus) {
-            return false;
-        }
-        if (!this.isVerifyIdentIdy) {
-            return false;
-        }
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId,
         });
+
         Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo.avatar_url, FriendId, columnType, taskUri, taskId, false));
         Global.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(), FriendId));
-
-        // Global.dispatch(Message.onMessageFrom(fromUserid, msg_type, content, msgId, sendDate, ToUserId, sendStatus));
         return true;
     };
     //发送图片消息给指定用户
     sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId) => {
-        if (!this.connectionstatus) {
-            return false;
-        }
-        if (!this.isVerifyIdentIdy) {
-            return false;
-        }
 
         this.sendToServer(types.MESSAGE_FORIMAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId,
         });
+
         Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri, taskId, false));//发送一个消息给好友列表 提示有新消息
         return true;
     };
     sendToServer = (type, data) => {
-        if (!this.connectionstatus) {
-            // Global.ws.onclose()
+        if (Global.ws.readyState !== 1) {
             Global.dispatch(Message.onChangeSocketStatue('正在连接...'));
             Global.ws.reconnect();
             return;
@@ -189,8 +182,6 @@ class ChatSocket {
         }
         if (!Global.token || Global.token == '') {
             Global.dispatch(Message.onChangeSocketStatue('未登录'));
-
-
             return;
         }
         if (typeof Global.dispatch != 'function') {
@@ -199,16 +190,16 @@ class ChatSocket {
         const msgData = {
             type, data,
         };
+
         const msgStr = JSON.stringify(msgData);
         try {
-            Global.ws.send(msgStr);
+            if (Global.ws.readyState === 1) {
+                Global.ws.send(msgStr);
+            }
         } catch (e) {
             Global.dispatch(Message.onChangeSocketStatue('异常代码:000X1'));
         }
     };
 }
-
-
-// const ChatSocketRedux = connect(mapStateToProps, mapDispatchToProps)(ChatSocket);
 const ChatSocketSinge = new ChatSocket();
 export default ChatSocketSinge;

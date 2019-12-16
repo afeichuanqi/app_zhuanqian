@@ -117,7 +117,7 @@ class TaskSumComponent extends PureComponent {
                             fontSize: titleFontSize,
                             color: 'black',
 
-                        }}>{item.taskTitle}</Text>
+                        }}>{item.taskId} - {item.taskTitle}</Text>
                         {item.recommendIsExp == 1 && <View style={{
                             height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
                             alignItems: 'center',

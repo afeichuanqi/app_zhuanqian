@@ -48,8 +48,9 @@ class TaskRejectDetailsPage extends PureComponent {
     };
 
     componentDidMount() {
-        selectOrderTaskInfo({sendFormId: this.params.sendFormId}).then(result => {
-            // console.log(result);
+        // console.log('11111');
+        selectOrderTaskInfo({sendFormId: this.params.sendFormId}, this.props.userinfo.token).then(result => {
+            console.log(result.length > 0, 'result.length > 0');
             if (result.length > 0) {
                 this.setState({
                     sendFormInfo: result[0],
@@ -83,13 +84,26 @@ class TaskRejectDetailsPage extends PureComponent {
             task_status, reason_for_rejection, userid, username, review_time, task_step_data, avatar_url,
             taskId, taskUri,
         } = sendFormInfo;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, task_status == -1 ? '驳回详情' : '提交详情', null, 'white', 'black', 16, () => {
-            // const fromUserinfo = {
-            //     avatar_url: avatar_url,
-            //     id: userid,
-            //     username: username,
-            //
-            // };
+        let title = '';
+        if (task_status == -1) {
+            title = '驳回详情';
+        } else {
+            title = '提交详情';
+        }
+        if (task_status == 0) {
+            title += `(待审核)`;
+        }
+        if (task_status == 1) {
+            title += `(待审核)`;
+        }
+        if (task_status == -2) {
+            title += `(已放弃再次提交)`;
+        }
+        if (task_status == -3) {
+            title += `(已经过期)`;
+        }
+
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, title, null, 'white', 'black', 16, () => {
             NavigationUtils.goPage({
                 task_id: this.params.taskId,
                 sendFormId: this.params.sendFormId,
@@ -97,9 +111,8 @@ class TaskRejectDetailsPage extends PureComponent {
                 columnType: 2,
                 taskUri: this.params.task_uri,
             }, 'ChatRoomPage');
-        }, false, task_status == -1 ? true : false, '申诉');
-
-        if (!sendFormInfo.task_status) {
+        }, false, (task_status == -1 && userid == this.props.userinfo.userid) ? true : false, '申诉');
+        if (!sendFormInfo.task_step_data) {
             return <EmptyComponent height={height - 50}/>;
         }
         let ImageIndex = 0;
@@ -114,7 +127,7 @@ class TaskRejectDetailsPage extends PureComponent {
                     ref={ref => this.toast = ref}
                 />
                 <View style={{flex: 1}}>
-                    <ScrollView style={{backgroundColor: '#f0f0f0', marginBottom: 50}}>
+                    <ScrollView style={{backgroundColor: '#f0f0f0', marginBottom: (task_status == -1 && userid == this.props.userinfo.userid) ? 50 : 0}}>
 
 
                         <TouchableOpacity
@@ -221,7 +234,7 @@ class TaskRejectDetailsPage extends PureComponent {
                         })}
 
                     </ScrollView>
-                    {task_status === -1 && <View style={{
+                    {task_status === -1 && userid == this.props.userinfo.userid && <View style={{
                         position: 'absolute',
                         bottom: 0,
                         flexDirection: 'row',

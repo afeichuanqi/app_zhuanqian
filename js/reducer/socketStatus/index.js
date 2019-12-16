@@ -1,7 +1,7 @@
 import Types from '../../action/Types';
 
 const defaultContent = {
-    statusText: '未连接',
+    statusText: '',
 };
 
 export default function onAction(state = defaultContent, action) {

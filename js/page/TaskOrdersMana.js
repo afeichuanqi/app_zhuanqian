@@ -396,9 +396,9 @@ class OrdersItem extends React.Component {
                                 width: width - 130,
 
                             }}>驳回理由:
-                            {JSON.parse(item.rejectionContent).image.length > 0 && JSON.parse(item.rejectionContent).image.map((item, index) => {
-                                return '</图片点击查看详细>';
-                            })}
+                            {/*{JSON.parse(item.rejectionContent).image.length > 0 && JSON.parse(item.rejectionContent).image.map((item, index) => {*/}
+                            {/*    return '</图片点击查看详细>';*/}
+                            {/*})}*/}
                             {item.rejectionContent && JSON.parse(item.rejectionContent).turnDownInfo}
                         </Text>
 

@@ -19,89 +19,8 @@ import ImageViewerModal from '../common/ImageViewerModal';
 import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
-import EventTypes from '../util/EventTypes';
 
 const {width, height} = Dimensions.get('window');
-
-class TaskInfo extends React.Component {
-    state = {
-        taskInfo: {},
-    };
-
-    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-        if (this.props.task_id != nextProps.task_id
-            || this.state.taskInfo != nextState.taskInfo
-        ) {
-            return true;
-        }
-        return false;
-    }
-
-    componentDidMount(): void {
-        selectSimpleTaskInfo({task_id: this.props.task_id}, this.props.userinfo.token).then(taskInfo => {
-            // console.log(taskInfo);
-            this.setState({
-                taskInfo,
-            });
-        });
-
-    }
-
-    render() {
-        const {taskInfo} = this.state;
-        const {columnType} = this.props;
-
-        return <View style={{
-            height: 70, width, backgroundColor: 'white', position: 'absolute', zIndex: 1,
-            paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', flexDirection: 'row',
-            borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0',
-        }}>
-            <View style={{flexDirection: 'row'}}>
-                <Image
-                    style={{height: 50, width: 50, backgroundColor: 5, borderRadius: 3}}
-                    source={{uri: taskInfo.task_uri}}
-                    resizeMode={Image.resizeMode.stretch}
-                />
-                <View style={{marginLeft: 10, justifyContent: 'space-between'}}>
-                    <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.5)'}}>{taskInfo.task_title}</Text>
-                    <Text style={{
-                        fontSize: 11,
-                        color: 'rgba(0,0,0,0.5)',
-                    }}>
-                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : ''}
-                    </Text>
-
-                </View>
-            </View>
-            <View style={{height: 60, justifyContent: 'flex-start'}}>
-                <TouchableOpacity
-                    onPress={() => {
-                        if (columnType == 2) {
-                            NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
-                        } else {
-                            NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
-                        }
-
-                    }
-                    }
-                    style={{
-                        height: 25,
-                        width: 60,
-                        backgroundColor: 'red',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 3,
-                        marginTop: 20,
-                    }}>
-                    <Text style={{color: 'white', fontSize: 12}}>{columnType == 2 ? '任务来往' : '查看详情'}</Text>
-                </TouchableOpacity>
-
-            </View>
-
-        </View>;
-    }
-}
 
 class ChatRoomPage extends React.Component {
     constructor(props) {
@@ -109,7 +28,6 @@ class ChatRoomPage extends React.Component {
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
         const {columnType, task_id, fromUserinfo, taskUri, sendFormId} = this.params;
-        // this={...this,...}
         this.columnType = columnType;
         this.task_id = task_id;
         this.fromUserinfo = fromUserinfo;
@@ -195,7 +113,7 @@ class ChatRoomPage extends React.Component {
         this.backPress.componentWillUnmount();
         if (this.columnType == 1) { //诉求信息
             // ChatSocket.setMsgIdIsRead(this.FriendId, this.fromUserinfo.id);
-            ChatSocket.setFromUserIdMessageIsRead(this.FriendId,this.columnType);
+            ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
         } else if (this.columnType == 2 || this.columnType == 3) {
             EventBus.getInstance().fireEvent(`update_message_appeal_${this.columnType}_page`, {//刷新列表
             });
@@ -314,6 +232,7 @@ class ChatRoomPage extends React.Component {
                         columnType={this.columnType}
                         appealClick={this._appealClick}
                         sendFormId={this.sendFormId}
+                        guzhuUserId={this.guzhuUserId}
                     />}
 
                     <ChatScreen
@@ -435,6 +354,7 @@ class ChatRoomPage extends React.Component {
             this.show('重新打开会话试试 ～ ～');
             return;
         }
+        // console.log(this.haveToDo);
         if (this.haveToDo == 1) {
             const FriendId = this.FriendId;
             const {userinfo} = this.props;
@@ -445,7 +365,7 @@ class ChatRoomPage extends React.Component {
                 return;
             }
             const uuid = getUUID();
-            // console.log(this.fromUserinfo,"this.fromUserinfo");
+            console.log(this.fromUserinfo, 'this.fromUserinfo');
             ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
         }
 
@@ -459,6 +379,102 @@ class ChatRoomPage extends React.Component {
         </View>;
     };
 }
+
+class TaskInfo extends React.Component {
+    state = {
+        taskInfo: {},
+    };
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (
+            this.props.task_id != nextProps.task_id
+            || this.props.guzhuUserId != nextProps.guzhuUserId
+            || this.state.taskInfo != nextState.taskInfo
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    componentDidMount(): void {
+        selectSimpleTaskInfo({task_id: this.props.task_id}, this.props.userinfo.token).then(taskInfo => {
+            // console.log(taskInfo);
+            this.setState({
+                taskInfo,
+            });
+        });
+
+    }
+
+    render() {
+        const {taskInfo} = this.state;
+        const {columnType} = this.props;
+
+        return <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+                NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
+            }}
+            style={{
+                height: 70, width, backgroundColor: 'white', position: 'absolute', zIndex: 1,
+                paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', flexDirection: 'row',
+                borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0',
+            }}>
+            <View style={{flexDirection: 'row'}}>
+                <Image
+                    style={{height: 50, width: 50, backgroundColor: 5, borderRadius: 3}}
+                    source={{uri: taskInfo.task_uri}}
+                    resizeMode={Image.resizeMode.stretch}
+                />
+                <View style={{marginLeft: 10, justifyContent: 'space-between'}}>
+                    <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
+                    <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.5)'}}>{taskInfo.task_title}</Text>
+                    <Text style={{
+                        fontSize: 11,
+                        color: 'rgba(0,0,0,0.5)',
+                    }}>
+                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : ''}
+                    </Text>
+
+                </View>
+            </View>
+            <View style={{height: 60, justifyContent: 'flex-start'}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        if (columnType == 2) {
+                            NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
+                        }
+
+                        if (columnType == 1) {
+                            NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
+                        }
+                        if (columnType == 3) {
+                            NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
+                        }
+
+                    }
+                    }
+                    style={{
+                        height: 25,
+                        width: 60,
+                        backgroundColor: 'red',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 3,
+                        marginTop: 20,
+                    }}>
+                    <Text style={{
+                        color: 'white',
+                        fontSize: 12,
+                    }}>{(columnType == 2 || columnType == 3) ? '任务来往' : '查看详情'}</Text>
+                </TouchableOpacity>
+
+            </View>
+
+        </TouchableOpacity>;
+    }
+}
+
 
 const mapStateToProps = state => ({
     userinfo: state.userinfo,

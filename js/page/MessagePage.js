@@ -295,7 +295,7 @@ class MessageItemComponent extends Component {
 
 
         const {item} = this.props;
-        const {columnType, taskId, taskTitle, avatar_url, username, userid, unReadLength} = item;
+        const {columnType, taskId, taskTitle, avatar_url, username, userid, unReadLength,taskUri} = item;
         // if (unReadLength > 0) {
         //     ChatSocket.setFromUserIdMessageIsRead(this.props.item.FriendId,this.columnType);
         // }
@@ -307,7 +307,7 @@ class MessageItemComponent extends Component {
             taskTitle: taskTitle,
 
         };
-        NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType, task_id: taskId, taskTitle}, 'ChatRoomPage');
+        NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType, task_id: taskId, taskTitle,taskUri}, 'ChatRoomPage');
     };
 
     render() {
@@ -541,7 +541,7 @@ class MessageColumnItem extends Component {
                 if (unReadNum > 0) {
                     this.props.setMsgAllRead();
                 }
-                NavigationUtils.goPage({type: this.props.columnType}, 'MessageTypePage');
+                NavigationUtils.goPage({type: this.props.columnType}, 'MessageAppealPage');
             }}
             activeOpacity={0.6}
             style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>

@@ -122,7 +122,7 @@ class MyTaskReview extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `任务审核 (${this.taskDatas && (this.pageIndex + 1) > this.taskDatas.length ? this.taskDatas.length : this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `任务审核 (${this.taskDatas && (this.pageIndex + 1) > this.taskDatas.length ? this.taskDatas.length : this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, null, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
             const {task_id, taskUri} = this.params;
             const fromUserinfo = {
@@ -131,14 +131,15 @@ class MyTaskReview extends PureComponent {
                 username: data.username,
             };
             NavigationUtils.goPage({
-                fromUserinfo: fromUserinfo,
-                columnType: 1,
                 task_id: task_id,
-                taskUri,
+                sendFormId: taskData.taskStepId,
+                fromUserinfo: fromUserinfo,
+                columnType: 3,
+                taskUri: taskUri,
             }, 'ChatRoomPage');
-        }, this.taskDatas && this.taskDatas.length > 0 ? true : false);
+        }, false, this.taskDatas && this.taskDatas.length > 0 ? true : false, '投诉', 'black', '');
         const {taskData, unReviewCount, isEnd, haveReviewCount, isEmpty} = this.state;
-        const {task_status,isReject} = taskData;
+        const {task_status, isReject} = taskData;
         let ImageIndex = 0;
         this.reviewPic = [];
         return (
@@ -209,7 +210,7 @@ class MyTaskReview extends PureComponent {
                                                     arrs.map((item, index) => {
                                                         urls.push({url: item});
                                                         if (index === arrs.length - 1) {
-                                                            this.imageModal.show(urls,url);
+                                                            this.imageModal.show(urls, url);
                                                         }
                                                     });
 
@@ -276,7 +277,7 @@ class MyTaskReview extends PureComponent {
                                 if (type === 5 && typeData && typeData.uri1) {
                                     // console.log(typeData.uri1ImgHeight, typeData.uri1ImgWidth, 'typeData.uri1ImgHeight');
 
-                                    this.reviewPic.push({url:typeData.uri1});
+                                    this.reviewPic.push({url: typeData.uri1});
 
                                     ImageIndex += 1;
                                     return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 500, typeData.uri1ImgWidth || screenWidth - 40, ImageIndex);
@@ -394,12 +395,12 @@ class MyTaskReview extends PureComponent {
             </SafeAreaViewPlus>
         );
     }
+
     thisTaskPass = (taskStepId) => {
         const {userinfo} = this.props;
-        this.toastS.hide()
+        this.toastS.hide();
         passTaskForSendFormTaskId({SendFormTaskId: taskStepId}, userinfo.token).then(result => {
-            EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {
-            });//刷新审核页面
+            EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {});//刷新审核页面
 
             this.setState({
                 unReviewCount: this.state.unReviewCount - 1,
@@ -476,7 +477,7 @@ class MyTaskReview extends PureComponent {
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
-                    this.imageModal.show(this.reviewPic,url);
+                    this.imageModal.show(this.reviewPic, url);
                     // this.imageModal.show([{
                     //     url: url,
                     // }]);

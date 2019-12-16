@@ -30,10 +30,11 @@ import jiaoliu from '../res/svg/jiaoliu.svg';
 import BackPressComponent from '../common/BackPressComponent';
 import {getUserAppealFriendList, setUserIdMessageIsRead} from '../util/AppService';
 import EventBus from '../common/EventBus';
-import EventTypes from '../util/EventTypes';
+
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 
 class MessageAppealPage extends PureComponent {
@@ -60,7 +61,7 @@ class MessageAppealPage extends PureComponent {
     };
 
     render() {
-
+        console.log(this.params.keyword,"this.params.keyword");
 
         let statusBar = {
             hidden: false,
@@ -89,19 +90,24 @@ class MessageAppealPage extends PureComponent {
 
                         <TextPro
                             value={this.task_id}
-                            onBlur={(text) => {
-                                this.task_id = text;
-                                this.forceUpdate();
-                            }}
+                            onSubmitEditing={this.onSubmitEditing}
                         />
                     </View>
-                    <MsgList task_id={this.task_id} type={type} userinfo={this.props.userinfo}/>
+                    <MsgList ref={ref => this.myList = ref}
+                             task_id={this.task_id}
+                             type={type}
+                             userinfo={this.props.userinfo}
+                             keyword={this.params.keyword}
+                    />
                 </View>
 
             </View>
         );
     }
 
+    onSubmitEditing = (content) => {
+        this.myList.setKeyWord(content);
+    };
     animations = {
         val: new Animated.Value(1),
     };
@@ -116,7 +122,7 @@ class TextPro extends Component {
         const {content} = this.state;
 
         return <TextInput
-            placeholder={'请输入任务ID'}
+            placeholder={'请输入任务ID、用户ID、用户名 '}
             returnKeyType={'search'}
             style={{
                 padding: 0,
@@ -133,13 +139,14 @@ class TextPro extends Component {
                     content: text,
                 });
             }}
-            onBlur={this._onBlur}
+            onBlur={() => {
+                this.props.onSubmitEditing(this.state.content);
+            }}
+            // onSubmitEditing={() => {
+            //     this.props.onSubmitEditing(this.state.content);
+            // }}
         />;
     }
-
-    _onBlur = () => {
-        this.props.onBlur(this.state.content);
-    };
 }
 
 
@@ -149,31 +156,57 @@ class MsgList extends Component {
         isLoading: false,
         hideLoaded: true,
     };
+    setKeyWord = (setKeyWord, update = true) => {
+        this.page.keyWord = setKeyWord;
+        if (update) {
+            const {type, userinfo} = this.props;
+            getUserAppealFriendList({
+                columnType: type,
+                pageIndex: this.page.pageIndex,
+                keyword: this.page.keyWord,
+            }, userinfo.token).then(result => {
+                this.setState({
+                    friendData: result,
+                    hideLoaded: result.length >= 20 ? false : true,
+                });
+            });
+        }
+        // this.updatePage(true);
+    };
 
     constructor(props) {
         super(props);
-        this.page = {pageIndex: 20};
+        this.page = {pageIndex: 20,keyWord:this.props.keyword};
+        console.log(this.page);
     }
-
-    page: {
-        pageIndex: 20
-    };
 
     componentDidMount(): void {
         EventBus.getInstance().addListener(`update_message_appeal_${this.props.type}_page`, this.listener = data => {
-            this.updatePage(true);
+            const {type, userinfo} = this.props;
+            getUserAppealFriendList({
+                columnType: type,
+                pageIndex: this.page.pageIndex,
+                keyword: this.page.keyWord,
+            }, userinfo.token).then(result => {
+                this.setState({
+                    friendData: result,
+                    hideLoaded: result.length >= 20 ? false : true,
+                });
+            });
         });
         this.updatePage(true);
     }
+
     componentWillUnmount(): void {
         EventBus.getInstance().removeListener(this.listener);
     }
+
     render() {
         // const friendData = this.props.friend.friendArr;
 
         const {isLoading, hideLoaded, friendData} = this.state;
         return <FlatList
-            ListEmptyComponent={<EmptyComponent/>}
+            ListEmptyComponent={<EmptyComponent height={height-100}/>}
 
             style={{
                 flex: 1,
@@ -198,7 +231,6 @@ class MsgList extends Component {
             }}
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
-                console.log('onEndReached.....');
                 setTimeout(() => {
                     // 等待页面布局完成以后，在让加载更多
                     if (this.canLoadMore) {
@@ -237,7 +269,7 @@ class MsgList extends Component {
         });
         const {userinfo, type} = this.props;
         if (refreshing) {
-            this.page = {pageIndex: 20};
+            this.page = {pageIndex: 20,keyWord:this.props.keyword};
             this.setState({
                 isLoading: true,
             });
@@ -246,7 +278,11 @@ class MsgList extends Component {
         }
 
 
-        getUserAppealFriendList({columnType: type, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
+        getUserAppealFriendList({
+            columnType: type,
+            pageIndex: this.page.pageIndex,
+            keyword: this.page.keyWord,
+        }, userinfo.token).then(result => {
             // console.log(result, 'result\'');
             if (refreshing) {
                 this.setState({
@@ -277,6 +313,7 @@ class MsgList extends Component {
     };
 
 }
+
 class MessageItemComponent extends PureComponent {
 
     static defaultProps = {
@@ -478,6 +515,7 @@ class MessageItemComponent extends PureComponent {
 
 
 }
+
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
@@ -485,8 +523,6 @@ const mapDispatchToProps = dispatch => ({});
 const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessageAppealPage);
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-
-
 
 
 export default MessagePageRedux;

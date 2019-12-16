@@ -74,12 +74,15 @@ class ReconnectingWebSocket extends WebSocket {
                 // }
 
                 let _timeout = this.reconnectInterval * Math.pow(this.reconnectDecay, this.reconnectAttempts);
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                    setTimeout(() => {
+                        this.reconnectAttempts++;
+                        this.reconnect();
+                    }, _timeout > this.maxReconnectInterval ? this.maxReconnectInterval : _timeout);
+                }
 
-                clearTimeout(timeout);
-                setTimeout(() => {
-                    this.reconnectAttempts++;
-                    this.reconnect();
-                }, _timeout > this.maxReconnectInterval ? this.maxReconnectInterval : _timeout);
             }),
 
             /** @Override onerror **/
@@ -89,13 +92,15 @@ class ReconnectingWebSocket extends WebSocket {
                 //     return;
                 // }
                 let _timeout = this.reconnectInterval * Math.pow(this.reconnectDecay, this.reconnectAttempts);
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                    setTimeout(() => {
+                        this.reconnectAttempts++;
+                        this.reconnect();
+                    }, _timeout > this.maxReconnectInterval ? this.maxReconnectInterval : _timeout);
+                }
 
-                clearTimeout(timeout);
-
-                setTimeout(() => {
-                    this.reconnectAttempts++;
-                    this.reconnect();
-                }, _timeout > this.maxReconnectInterval ? this.maxReconnectInterval : _timeout);
             }),
         );
     }
