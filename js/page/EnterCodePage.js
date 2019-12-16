@@ -242,11 +242,15 @@ class CodeInput extends PureComponent {
                             this.refs[`text${index + 1}`].focus();
                         }
                         if (index + 1 == this.props.iptNum) {
-                            this._onLogin();
+                            this.refs[`text2`] && this.refs[`text2`].blur();
+                            setTimeout(() => {
+                                this._onLogin();
+                            }, 500);
+
                             this.forceUpdate();
                         }
                     }
-                    this.forceUpdate();
+                    // this.forceUpdate();
                 }}
                 ref={`text${index}`}
                 maxLength={1}

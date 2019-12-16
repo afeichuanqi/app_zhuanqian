@@ -97,10 +97,10 @@ class TaskRejectDetailsPage extends PureComponent {
             title += `(待审核)`;
         }
         if (task_status == -2) {
-            title += `(已放弃再次提交)`;
+            title += `(已放弃)`;
         }
         if (task_status == -3) {
-            title += `(已经过期)`;
+            title += `(已过期)`;
         }
 
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, title, null, 'white', 'black', 16, () => {
@@ -127,7 +127,10 @@ class TaskRejectDetailsPage extends PureComponent {
                     ref={ref => this.toast = ref}
                 />
                 <View style={{flex: 1}}>
-                    <ScrollView style={{backgroundColor: '#f0f0f0', marginBottom: (task_status == -1 && userid == this.props.userinfo.userid) ? 50 : 0}}>
+                    <ScrollView style={{
+                        backgroundColor: '#f0f0f0',
+                        marginBottom: (task_status == -1 && userid == this.props.userinfo.userid) ? 50 : 0,
+                    }}>
 
 
                         <TouchableOpacity
@@ -248,16 +251,14 @@ class TaskRejectDetailsPage extends PureComponent {
 
                         <TouchableOpacity
                             onPress={() => {
-                                const fromUserinfo = {
-                                    avatar_url: avatar_url,
-                                    id: userid,
-                                    username: username,
-                                };
+
+                                console.log(this.params.fromUserinfo,"this.params.fromUserinfo");
                                 NavigationUtils.goPage({
-                                    task_id: taskId,
-                                    fromUserinfo,
-                                    columnType: 1,
-                                    taskUri,
+                                    task_id: this.params.taskId,
+                                    sendFormId: this.params.sendFormId,
+                                    fromUserinfo: this.params.fromUserinfo,
+                                    columnType: 5,
+                                    taskUri: this.params.task_uri,
                                 }, 'ChatRoomPage');
                             }}
                             activeOpacity={0.5}

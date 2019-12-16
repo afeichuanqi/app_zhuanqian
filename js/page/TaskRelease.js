@@ -410,7 +410,7 @@ class TaskRelease extends PureComponent {
                     {/*顶部提示*/}
                     <ComplyColumn/>
                 </ScrollView>
-                <View style={{borderTopWidth: 0.5, borderTopColor: '#e8e8e8', flexDirection: 'row'}}>
+                <View style={{borderTopWidth: 0.5, borderTopColor: '#f0f0f0', flexDirection: 'row'}}>
                     <TouchableOpacity
                         onPress={this._goReleaseTest}
                         activeOpacity={0.6}

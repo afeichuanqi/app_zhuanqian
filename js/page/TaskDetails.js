@@ -113,7 +113,7 @@ class TaskDetails extends PureComponent {
                 });
             } else {
                 const totalData = {fromUserinfo, taskData, stepData: JSON.parse(stepData)};
-                console.log(stepData,"stepData");
+                console.log(stepData, 'stepData');
                 this.setState({
                     totalData,
                     StatusForTask,
@@ -385,6 +385,7 @@ class TaskDetails extends PureComponent {
                                         columnType: 1,
                                         task_id: this.task_id,
                                         taskUri: taskData.taskUri,
+                                        sendFormId: -1,
                                     }, 'ChatRoomPage');
                                 }}
                                 style={{marginRight: 10}}>
@@ -654,7 +655,7 @@ class BottomBtns extends PureComponent {
     render() {
         const {test, StatusForTask} = this.props;
         return <View>
-            {test ? <View style={{ flexDirection: 'row'}}>
+            {test ? <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
                     onPress={this.props.updateStep}
                     activeOpacity={0.6}
@@ -664,7 +665,7 @@ class BottomBtns extends PureComponent {
                         justifyContent: 'center',
                         alignItems: 'center',
                         flexDirection: 'row',
-                        backgroundColor: "rgba(0,0,0,0.1)",
+                        backgroundColor: 'rgba(0,0,0,0.1)',
                     }}>
 
                     <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>修改</Text>
@@ -688,7 +689,7 @@ class BottomBtns extends PureComponent {
                         }}>{this.props.update ? '确认修改' : '申请发布'}</Text>
                 </TouchableOpacity>
 
-            </View> : <View style={{ flexDirection: 'row'}}>
+            </View> : <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
                     activeOpacity={0.6}
                     style={{
@@ -697,7 +698,7 @@ class BottomBtns extends PureComponent {
                         justifyContent: 'center',
                         alignItems: 'center',
                         flexDirection: 'row',
-                        backgroundColor: "rgba(0,0,0,0.1)",
+                        backgroundColor: '#f0f0f0',
                     }}>
                     <SvgUri width={17} fill={'rgba(0,0,0,0.7)'} style={{marginLeft: 5}} height={17}
                             svgXmlData={taskHallNext}/>

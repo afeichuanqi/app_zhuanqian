@@ -9,13 +9,12 @@
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme, theme} from '../appSet';
-import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
     ActivityIndicator,
     Dimensions,
     FlatList,
-    RefreshControl, StyleSheet, Text,
+    RefreshControl, Text,
     View, TouchableOpacity, StatusBar,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -26,6 +25,8 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import TabBar from '../common/TabBar';
 import {TabView} from 'react-native-tab-view';
+import SvgUri from 'react-native-svg-uri';
+import goback from '../res/svg/goback.svg';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -76,34 +77,48 @@ class UserBillListPage extends PureComponent {
         />;
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '帐单', null, theme, 'black', 16, null, false);
+        // let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '帐单', null, theme, 'black', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus
                 topColor={theme}
             >
                 {navigationBar}
-                {TopColumn}
-                <TabBar
-                    style={{
-                        height: 35,
-                        backgroundColor: theme,
-                        paddingLeft: 10,
+                {/*{TopColumn}*/}
+                <View>
+                    <TabBar
+                        style={{
+                            marginTop: 10,
+                            height: 35,
+                            backgroundColor: theme,
+                            width: 150,
+                            alignSelf: 'center',
+                        }}
+                        position={this.position}
+                        contentContainerStyle={{paddingTop: 10}}
+                        routes={navigationRoutes}
+                        index={0}
+                        sidePadding={0}
+                        handleIndexChange={this.handleIndexChange}
+                        // indicatorStyle={styles.indicator}
+                        bounces={true}
+                        titleMarginHorizontal={25}
+                        activeStyle={{fontSize: 17, color: [33, 150, 243]}}
+                        inactiveStyle={{fontSize: 14, color: [0, 0, 0], height: 10}}
+                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
+                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                            NavigationUtils.goBack(this.props.navigation);
+                        }}
+                        style={{
+                            position: 'absolute',
+                            top: 20, left: 10,
+                        }}>
+                        <SvgUri width={20} height={20} svgXmlData={goback}/>
+                    </TouchableOpacity>
+                </View>
 
-                    }}
-                    position={this.position}
-                    contentContainerStyle={{paddingTop: 10}}
-                    routes={navigationRoutes}
-                    index={0}
-                    sidePadding={0}
-                    handleIndexChange={this.handleIndexChange}
-                    // indicatorStyle={styles.indicator}
-                    bounces={true}
-                    titleMarginHorizontal={25}
-                    activeStyle={{fontSize: 14, color: [33, 150, 243]}}
-                    inactiveStyle={{fontSize: 13, color: [0, 0, 0], height: 10}}
-                    indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
-                />
                 <TabView
                     ref={ref => this.tabView = ref}
                     indicatorStyle={{backgroundColor: 'white'}}

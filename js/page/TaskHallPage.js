@@ -84,7 +84,7 @@ class TaskHallPage extends PureComponent {
                 {/*顶部样式*/}
                 <View style={{
                     backgroundColor: bottomTheme,
-                    height: 44,
+                    height: 55,
                     width,
                     alignItems: 'center',
 
@@ -97,7 +97,7 @@ class TaskHallPage extends PureComponent {
                         style={{
                             position: 'absolute',
                             left: 20,
-                            top: 15,
+                            top: 23,
 
                         }}>
                         <SvgUri width={21} height={21} fill={'white'} svgXmlData={search}/>
@@ -106,17 +106,15 @@ class TaskHallPage extends PureComponent {
 
                     <TabBar
                         style={{
-                            height: 40,
+                            height: 48,
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 17}}
+                        contentContainerStyle={{paddingTop: 25}}
                         routes={navigationRoutes}
                         index={navigationIndex}
-                        // sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
-                        // indicatorStyle={styles.indicator}
                         bounces={true}
-                        titleMarginHorizontal={25}
+                        titleMarginHorizontal={20}
                         activeStyle={{fontSize: 18, color: [255, 255, 255]}}
                         inactiveStyle={{fontSize: 14, color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: 'white', borderRadius: 3}}
@@ -130,9 +128,7 @@ class TaskHallPage extends PureComponent {
                         style={{
                             position: 'absolute',
                             right: 10,
-                            top: 15,
-                            // width: 70,
-                            // height: 25,
+                            top: 23,
                             paddingHorizontal: 10,
                             paddingVertical: 3,
                             borderRadius: 20,
@@ -512,7 +508,7 @@ class HeadlineComponent extends PureComponent {
                 }}>{item.taskTitle}</Text>
             <Text style={{
                 color: 'red', fontSize: 16,
-                marginRight: 20,
+                marginRight: 10,
             }}>+{item.rewardPrice}元</Text>
         </View>;
     };
@@ -576,7 +572,7 @@ class TopLeftFilterComponent extends Component {
 
                         {Lindex === index && <View style={{
                             height: 3,
-                            width: 15,
+                            width: 17,
                             backgroundColor: bottomTheme,
                             position: 'absolute',
                             bottom: -8,

@@ -33,6 +33,7 @@ class ChatRoomPage extends React.Component {
         this.fromUserinfo = fromUserinfo;
         this.taskUri = taskUri;
         this.sendFormId = sendFormId;
+        console.log(this.sendFormId, 'this.sendFormId');
     }
 
     pageCount = 10;
@@ -51,12 +52,7 @@ class ChatRoomPage extends React.Component {
     _updatePage = () => {
         //初始化申诉或者投诉信息
         if (this.columnType == 2 || this.columnType == 3) { //诉求信息
-            console.log({
-                columnType: this.columnType,
-                taskid: this.task_id,
-                toUserid: this.fromUserinfo.id,
-                task_form_id: this.sendFormId,
-            });
+
             createAppealInfo({
                 columnType: this.columnType,
                 taskid: this.task_id,
@@ -86,6 +82,7 @@ class ChatRoomPage extends React.Component {
                 columnType: this.columnType,
                 taskid: this.task_id,
                 toUserid: this.fromUserinfo.id,
+                sendFormId: this.sendFormId,
             }, this.props.userinfo.token).then(result => {
                 if (result.haveToDo == 0 || !result.guzhuUserId) {
                     this.toast.show('您与雇主并无任务来往,会话创建失败');
@@ -111,10 +108,9 @@ class ChatRoomPage extends React.Component {
 
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
-        if (this.columnType == 1) { //诉求信息
-            // ChatSocket.setMsgIdIsRead(this.FriendId, this.fromUserinfo.id);
+        if (this.columnType == 1 || this.columnType == 5) {
             ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
-        } else if (this.columnType == 2 || this.columnType == 3) {
+        } else if (this.columnType == 2 || this.columnType == 3) { //诉求信息
             EventBus.getInstance().fireEvent(`update_message_appeal_${this.columnType}_page`, {//刷新列表
             });
         }
@@ -168,18 +164,55 @@ class ChatRoomPage extends React.Component {
                 });
             }
             if (index === arrs.length - 1) {//最后一条
-                if (arrs.length < 10 && arrs.length > 0) {
-                    tmpArr.push({
-                        id: -10,
-                        type: 'system',
-                        content: '为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付',
-                        title: '安全交易规范',
-                        chatInfo: {
-                            avatar: this.fromUserinfo.avatar_url,
-                            id: parseInt(this.fromUserinfo.id),
-                            nickName: this.fromUserinfo.username,
-                        },
-                    });
+                if (arrs.length < 10) {
+                    if (this.columnType == 1) {
+                        tmpArr.push({
+                            id: -1,
+                            type: 'system',
+                            content: '为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付',
+                            title: '安全交易规范',
+                            btnTitle: '了解更多安全交易规范',
+                            chatInfo: {
+                                avatar: this.fromUserinfo.avatar_url,
+                                id: parseInt(this.fromUserinfo.id),
+                                nickName: this.fromUserinfo.username,
+                            },
+                            onClick: () => {
+                                NavigationUtils.goPage({type: 2}, 'UserProtocol');
+                            },
+                        });
+                    } else if (this.columnType == 2 || this.columnType == 3) {
+                        tmpArr.push({
+                            id: -2,
+                            type: 'system',
+                            content: `为了确保【${this.columnType == 2 ? '申诉' : '投诉'}】正常进行，请双方诉求前先仔细沟通，诉求中请素质交流`,
+                            title: `确保${this.columnType == 2 ? '申诉' : '投诉'}正常进行`,
+                            btnTitle: '了解诉求须知',
+                            chatInfo: {
+                                avatar: this.fromUserinfo.avatar_url,
+                                id: parseInt(this.fromUserinfo.id),
+                                nickName: this.fromUserinfo.username,
+                            },
+                            onClick: () => {
+                                NavigationUtils.goPage({type: 2}, 'UserProtocol');
+                            },
+                        });
+                    }else if (this.columnType == 5) {
+                        tmpArr.push({
+                            id: -3,
+                            type: 'system',
+                            content: `当提交任务被驳回时,您可以在此页面仔细询问雇主是否达到要求,善于理解、沟通、素质交流`,
+                            title: `驳回沟通注意事项`,
+                            btnTitle: '',
+                            chatInfo: {
+                                avatar: this.fromUserinfo.avatar_url,
+                                id: parseInt(this.fromUserinfo.id),
+                                nickName: this.fromUserinfo.username,
+                            },
+                            onClick: null,
+                        });
+                    }
+
                 }
             }
         });
@@ -237,10 +270,6 @@ class ChatRoomPage extends React.Component {
 
                     <ChatScreen
                         onEndReachedThreshold={0.3}
-                        systemClick={() => {
-                            // NavigationUtils
-                            NavigationUtils.goPage({type: 2}, 'UserProtocol');
-                        }}
                         allPanelAnimateDuration={0}
                         loadHistory={this.onRefresh}
                         inverted={true}
@@ -322,10 +351,7 @@ class ChatRoomPage extends React.Component {
     }
 
     _imgSelect = (image) => {
-        if (!this.FriendId) {
-            this.show('重新打开会话试试 ～ ～');
-            return;
-        }
+
         if (this.haveToDo == 1) {
             const FriendId = this.FriendId;
             const {userinfo, onAddMesage} = this.props;//我的用户信息
@@ -344,16 +370,18 @@ class ChatRoomPage extends React.Component {
             const path = `file://${image.path}`;
             onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(), FriendId);//插入一条临时图片数据
             uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
-                ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
-            });
+                ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
+            })
+        }else{
+            if (!this.FriendId) {
+                this.toast.show('重新打开会话试试 ～ ～');
+                return;
+            }
         }
 
     };
     sendMessage = (type, content) => {
-        if (!this.FriendId) {
-            this.show('重新打开会话试试 ～ ～');
-            return;
-        }
+
         // console.log(this.haveToDo);
         if (this.haveToDo == 1) {
             const FriendId = this.FriendId;
@@ -365,8 +393,12 @@ class ChatRoomPage extends React.Component {
                 return;
             }
             const uuid = getUUID();
-            console.log(this.fromUserinfo, 'this.fromUserinfo');
-            ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo);
+            ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
+            // console.log(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo,this.sendFormId);
+        }else{
+            if (!this.FriendId) {
+                this.toast.show('重新打开会话试试 ～ ～');
+            }
         }
 
     };
@@ -388,6 +420,7 @@ class TaskInfo extends React.Component {
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
         if (
             this.props.task_id != nextProps.task_id
+            || this.props.sendFormId != nextProps.sendFormId
             || this.props.guzhuUserId != nextProps.guzhuUserId
             || this.state.taskInfo != nextState.taskInfo
         ) {
@@ -414,41 +447,44 @@ class TaskInfo extends React.Component {
             activeOpacity={1}
             onPress={() => {
                 NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
+
+
             }}
             style={{
-                height: 70, width, backgroundColor: 'white', position: 'absolute', zIndex: 1,
+                height: 80, width, backgroundColor: 'white', position: 'absolute', zIndex: 1,
                 paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', flexDirection: 'row',
                 borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0',
             }}>
             <View style={{flexDirection: 'row'}}>
                 <Image
-                    style={{height: 50, width: 50, backgroundColor: 5, borderRadius: 3}}
+                    style={{height: 60, width: 60, backgroundColor: 5, borderRadius: 3}}
                     source={{uri: taskInfo.task_uri}}
                     resizeMode={Image.resizeMode.stretch}
                 />
-                <View style={{marginLeft: 10, justifyContent: 'space-between'}}>
+                <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
                     <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.5)'}}>{taskInfo.task_title}</Text>
+                    <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.5)'}}>{taskInfo.task_title}</Text>
                     <Text style={{
                         fontSize: 11,
-                        color: 'rgba(0,0,0,0.5)',
+                        color: 'red',
                     }}>
-                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : ''}
+                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : columnType === 5 ? '驳回咨询' : ''}
                     </Text>
 
                 </View>
             </View>
-            <View style={{height: 60, justifyContent: 'flex-start'}}>
+            <View style={{height: 60, justifyContent: 'flex-end'}}>
                 <TouchableOpacity
                     onPress={() => {
-                        if (columnType == 2) {
+                        if (columnType == 2 || columnType == 3) {
                             NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
                         }
 
                         if (columnType == 1) {
+
                             NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
                         }
-                        if (columnType == 3) {
+                        if (columnType == 5) {
                             NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
                         }
 
@@ -465,8 +501,8 @@ class TaskInfo extends React.Component {
                     }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: 12,
-                    }}>{(columnType == 2 || columnType == 3) ? '任务来往' : '查看详情'}</Text>
+                        fontSize: 13,
+                    }}>{(columnType == 2 || columnType == 3 || columnType == 5) ? '任务来往' : '查看详情'}</Text>
                 </TouchableOpacity>
 
             </View>

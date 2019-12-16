@@ -235,7 +235,6 @@ class MsgList extends Component {
 
     onRefresh = () => {
         selectAppealNum(this.props.userinfo.token).then(result => {
-            console.log(result, 'result');
             this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength);
         });
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
@@ -295,7 +294,7 @@ class MessageItemComponent extends Component {
 
 
         const {item} = this.props;
-        const {columnType, taskId, taskTitle, avatar_url, username, userid, unReadLength,taskUri} = item;
+        const {columnType, taskId, taskTitle, avatar_url, username, userid, unReadLength, taskUri, sendFormId} = item;
         // if (unReadLength > 0) {
         //     ChatSocket.setFromUserIdMessageIsRead(this.props.item.FriendId,this.columnType);
         // }
@@ -307,19 +306,25 @@ class MessageItemComponent extends Component {
             taskTitle: taskTitle,
 
         };
-        NavigationUtils.goPage({fromUserinfo: fromUserinfo, columnType, task_id: taskId, taskTitle,taskUri}, 'ChatRoomPage');
+        NavigationUtils.goPage({
+            fromUserinfo: fromUserinfo,
+            columnType,
+            task_id: taskId,
+            taskTitle,
+            taskUri,
+            sendFormId,
+        }, 'ChatRoomPage');
     };
 
     render() {
 
         const scale = Animated.interpolate(this.animations.scale, {
             inputRange: [0, 1],
-            outputRange: [0.99, 1],
+            outputRange: [0.90, 1],
             extrapolate: 'clamp',
         });
         const {marginHorizontal, item} = this.props;
         const {avatar_url, columnType, msg, msg_type, taskId, taskTitle, unReadLength, username, taskUri} = item;
-        // console.log(taskUri,"taskUri");
         return <AnimatedTouchableOpacity
             onPress={this._onPress}
             activeOpacity={1}
@@ -380,8 +385,8 @@ class MessageItemComponent extends Component {
                                 opacity: 0.9,
                                 marginLeft: 10,
                             }}>{username}</Text>
-                            <Text style={{marginLeft: 10, fontSize: 12, color: 'black', opacity: 0.5}}>{
-                                columnType == 1 ? `任务咨询` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
+                            <Text style={{marginLeft: 10, fontSize: 10, color: 'black', opacity: 0.5}}>{
+                                columnType == 1 ? `任务咨询` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : columnType == 5 ? '驳回咨询' :  ''
                             }</Text>
 
 

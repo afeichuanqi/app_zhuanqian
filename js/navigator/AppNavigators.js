@@ -19,7 +19,7 @@ import TaskRelease from '../page/TaskRelease';
 import {Testing} from '../page/Testing';
 import TaskDetails from '../page/TaskDetails';
 import SettingPage from '../page/SettingPage';
-import ChatSettings from '../page/ChatSettings';
+import ChatSettings from '../page/ChatRoomPage/ChatSettings';
 import AccountSetting from '../page/SettingPage/AccountSetting';
 import UserProtocol from '../page/SettingPage/UserProtocol';
 import MyTaskReview from '../page/MyTaskReview';

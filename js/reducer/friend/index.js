@@ -27,11 +27,12 @@ export default function onAction(state = defaultContent, action) {
                 unMessageLength,
             };
 
-        case Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS ://设置好友的未读消息数
+        case Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS ://设置好友的消息已经读取成功
+            console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS');
             let temArr2 = [...state.friendArr];
             let nowUnMessageLength = state.unMessageLength;
             const FriendIdIndex = temArr2.findIndex(d => d.FriendId === data.FriendId);
-            if (FriendIdIndex !== -1 && data.columnType == 1) {
+            if(FriendIdIndex!==-1){
                 const originalFriendUnReadLen = temArr2[FriendIdIndex].unReadLength;
                 temArr2[FriendIdIndex].unReadLength = 0;
                 temArr2 = temArr2.sort((data1, data2) => {
@@ -42,17 +43,30 @@ export default function onAction(state = defaultContent, action) {
                     friendArr: temArr2,
                     unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
                 };
-            } else {
-                return {
-                    ...state,
-                };
             }
+            return {
+                ...state,
+                // friendArr: temArr2,
+                // unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
+            };
+
         case Types.FRIEND_SET_OTHER_MSG_UN_READ:
             return {
                 ...state,
                 appeal_2: data.appeal_2,
                 appeal_3: data.appeal_3,
             };
+        case Types.FRIEND_SET_APPEAL_2_MSG_UN_READ:
+            return {
+                ...state,
+                appeal_2: 1,
+            };
+        case Types.FRIEND_SET_APPEAL_3_MSG_UN_READ:
+            return {
+                ...state,
+                appeal_3: 1,
+            };
+        // case Types.
         case Types.FRIEND_SET_OTHER_MSG_UN_READ_APPEAL2:
             return {
                 ...state,
@@ -64,83 +78,64 @@ export default function onAction(state = defaultContent, action) {
                 appeal_3: 0,
             };
         case Types.MESSAGE_FROMOF_USERID_Friend:
-            if (data.columnType == 1) {
-                let temArr3 = [...state.friendArr];
-                let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
-                const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
+            console.log('MESSAGE_FROMOF_USERID_Friend');
+            let temArr3 = [...state.friendArr];
+            let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
+            const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
 
-                if (fromUserIndex != -1) {//找到了此用户
-                    // console.log
-                    const item = temArr3[fromUserIndex];
-                    item.msg_type = data.msg_type;
-                    item.msg = data.content;
-                    item.sendDate = data.sendDate;
-                    item.unReadLength = data.fromUserid != data.ToUserId && data.isAddNewMsgLength && item.unReadLength + 1;
-                    temArr3[fromUserIndex] = item;
-                } else {
-                    temArr3.push({
-                        userid: data.fromUserid,
-                        username: data.username,
-                        avatar_url: data.avatar_url,
-                        msg: data.content,
-                        sendDate: data.sendDate,
-                        msg_type: data.msg_type,
-                        msgId: data.msgId,
-                        unReadLength: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? 1 : 0 : 0,
-                        FriendId: data.FriendId,
-                        columnType: data.columnType,
-                        taskUri: data.taskUri,
-                        taskId: data.taskId,
+            if (fromUserIndex != -1) {//找到了此用户
+                const item = temArr3[fromUserIndex];
+                item.msg_type = data.msg_type;
+                item.msg = data.content;
+                item.sendDate = data.sendDate;
+                item.unReadLength = data.fromUserid != data.ToUserId && data.isAddNewMsgLength && item.unReadLength + 1;
+                temArr3[fromUserIndex] = item;
+            } else {
+                temArr3.push({
+                    userid: data.fromUserid,
+                    username: data.username,
+                    avatar_url: data.avatar_url,
+                    msg: data.content,
+                    sendDate: data.sendDate,
+                    msg_type: data.msg_type,
+                    msgId: data.msgId,
+                    unReadLength: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? 1 : 0 : 0,
+                    FriendId: data.FriendId,
+                    columnType: data.columnType,
+                    taskUri: data.taskUri,
+                    taskId: data.taskId,
+                    sendFormId: data.sendFormId,
 
-                    });
-                }
-                temArr3 = temArr3.sort((data1, data2) => {
-                    return data2.sendDate - data1.sendDate;
                 });
-                return {
-                    ...state,
-                    friendArr: temArr3,
-                    unMessageLength: NewUnReadLength,
-                };
-            } else {
-                let state_ = {};
-                if (data.columnType == 2) {
-                    state_ = {
-                        ...state,
-                        appeal_2: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? state.appeal_2 + 1 : 0 : 0,
-                    };
-                } else if (data.columnType == 3) {
-                    state_ = {
-                        ...state,
-                        appeal_3: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? state.appeal_3 + 1 : 0 : 0,
-                    };
-                } else {
-                    state_ = {
-                        ...state,
-                    };
-                }
-                return state_;
             }
+            temArr3 = temArr3.sort((data1, data2) => {
+                return data2.sendDate - data1.sendDate;
+            });
+            return {
+                ...state,
+                friendArr: temArr3,
+                unMessageLength: NewUnReadLength,
+            };
 
-        case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
-            let temArr4 = [...state.friendArr];
-            let NewUnReadLength1;
-            const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
-            if (fromUserIndex1 != -1) {
-                const item1 = temArr4[fromUserIndex1];
-                NewUnReadLength1 = state.unMessageLength - item1.unReadLength;
-                item1.unReadLength = 0;
-                temArr4[fromUserIndex1] = item1;
-                return {
-                    ...state,
-                    friendArr: temArr4,
-                    unMessageLength: NewUnReadLength1,
-                };
-            } else {
-                return {
-                    ...state,
-                };
-            }
+        // case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
+        //     let temArr4 = [...state.friendArr];
+        //     let NewUnReadLength1;
+        //     const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
+        //     if (fromUserIndex1 != -1) {
+        //         const item1 = temArr4[fromUserIndex1];
+        //         NewUnReadLength1 = state.unMessageLength - item1.unReadLength;
+        //         item1.unReadLength = 0;
+        //         temArr4[fromUserIndex1] = item1;
+        //         return {
+        //             ...state,
+        //             friendArr: temArr4,
+        //             unMessageLength: NewUnReadLength1,
+        //         };
+        //     } else {
+        //         return {
+        //             ...state,
+        //         };
+        //     }
 
 
         case Types.FRIEND_INIT:

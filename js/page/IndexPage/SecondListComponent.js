@@ -59,12 +59,16 @@ class SecondListComponent extends PureComponent {
                 <View style={{position: 'absolute', right: 5, top: 5}}>
                     <Text style={{fontSize: 16, color: 'white', fontWeight: 'bold'}}>¥{item.reward_price}</Text>
                 </View>
-                {/*<View style={{position:'absolute',right:5, bottom:10,}}>*/}
-                {/*    <Text style={{color: 'white', fontSize: 12,fontWeight:'bold'}}>*/}
-                {/*        {item.title}|{item.task_name}*/}
-                {/*    </Text>*/}
-                {/*</View>*/}
-                <View style={{position: 'absolute', left: 5, bottom: 10}}>
+                <View
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        bottom: 0,
+                        height: 30,
+                        backgroundColor: 'rgba(0,0,0,0.2)',
+                        borderBottomRightRadius:5,
+                        borderBottomLeftRadius:5,
+                    }}>
                     <Text style={{color: 'white', fontSize: 13, width: 120}}>
                         {item.task_title}
                     </Text>

@@ -80,7 +80,7 @@ class MyTaskReview extends PureComponent {
                 <Toast
                     ref={ref => this.toast = ref}
                 />
-                <ScrollView style={{backgroundColor: '#e8e8e8'}}>
+                <ScrollView style={{backgroundColor: '#ececec'}}>
 
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -152,7 +152,7 @@ class MyTaskReview extends PureComponent {
 
                                 multiline={true}
                                 style={{
-                                    height: 100, width: width - 20, backgroundColor: '#ececec',
+                                    height: 100, width: width - 20, backgroundColor: '#f1f1f1',
                                     paddingHorizontal: 5, padding: 0, textAlignVertical: 'top',
                                     paddingTop:5,
                                     paddingLeft:5,
@@ -184,7 +184,7 @@ class MyTaskReview extends PureComponent {
 
                                             width: 55,
                                             height: 55,
-                                            backgroundColor: '#e8e8e8',
+                                            backgroundColor: '#f1f1f1',
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                             // borderWidth: this.animations.width,

@@ -241,11 +241,11 @@ class FristListComponent extends PureComponent {
                         sendFormId: item.sendFormId,
                         taskId: item.taskId,
                         fromUserinfo: {
-                            avatar:item.avatar_url,
-                            id:item.userid,
-                            username:item.username
+                            avatar_url: item.avatar_url,
+                            id: item.userid,
+                            username: item.username,
                         },
-                        task_uri:item.task_uri,
+                        task_uri: item.task_uri,
                     }, 'TaskRejectDetailsPage');
                 } else {
                     NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
@@ -299,7 +299,7 @@ class FristListComponent extends PureComponent {
 
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
-        return <View style={{flex: 1}}>
+        return <View style={{flex:1}}>
             <Toast
                 ref={ref => this.toast = ref}
             />
@@ -320,10 +320,11 @@ class FristListComponent extends PureComponent {
                 }
                 ListFooterComponent={() => this.genIndicator(hideLoaded)}
                 onEndReached={() => {
-                    console.log('onEndReached.....');
+
                     setTimeout(() => {
                         // 等待页面布局完成以后，在让加载更多
                         if (this.canLoadMore) {
+                            console.log('onLoading.....');
                             this.onLoading();
                             this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                         }
@@ -332,6 +333,7 @@ class FristListComponent extends PureComponent {
                 windowSize={300}
                 onEndReachedThreshold={0.01}
                 onMomentumScrollBegin={() => {
+                    console.log('onMomentumScrollBegin')
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
@@ -432,10 +434,10 @@ class OrdersItem extends React.Component {
                     <TouchableOpacity
                         onPress={this.props.cancelSignUp}
                         style={{
-                            backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',
+                             width: 60, height: 25, justifyContent: 'center',
                             alignItems: 'center', borderRadius: 5,
                         }}>
-                        <Text style={{color: 'white', fontSize: 12}}>取消报名</Text>
+                        <Text style={{color: bottomTheme, fontSize: 12}}>取消报名</Text>
                     </TouchableOpacity>
                     : status == 2 ? <View
                         style={{
@@ -447,10 +449,10 @@ class OrdersItem extends React.Component {
                         <TouchableOpacity
                             onPress={this.props.redoTask}
                             style={{
-                                backgroundColor: bottomTheme, width: 60, height: 25, justifyContent: 'center',
-                                alignItems: 'center', borderRadius: 5,
+                                width: 50, height: 20, justifyContent: 'center',
+                                alignItems: 'center', borderRadius: 3
                             }}>
-                            <Text style={{color: 'white', fontSize: 12}}>重做</Text>
+                            <Text style={{color: bottomTheme, fontSize: 12}}>重新提交</Text>
                         </TouchableOpacity>
                         : null}
             </View>

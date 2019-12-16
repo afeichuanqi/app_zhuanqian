@@ -8,19 +8,20 @@
 
 import React, {PureComponent} from 'react';
 import {Dimensions, StatusBar, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {theme} from '../appSet';
-import NavigationBar from '../common/NavigationBar';
-import ViewUtil from '../util/ViewUtil';
-import NavigationUtils from '../navigator/NavigationUtils';
+import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
+import {theme} from '../../appSet';
+import NavigationBar from '../../common/NavigationBar';
+import ViewUtil from '../../util/ViewUtil';
+import NavigationUtils from '../../navigator/NavigationUtils';
 import Image from 'react-native-fast-image';
-import menu_right from '../res/svg/menu_right.svg';
+import menu_right from '../../res/svg/menu_right.svg';
 import SvgUri from 'react-native-svg-uri';
-import RadioComponent from '../common/RadioComponent';
+import RadioComponent from '../../common/RadioComponent';
 import {connect} from 'react-redux';
-import {insertReportList, selectIsBeBlackList, setToBlackList} from '../util/AppService';
-import MyModalBox from '../common/MyModalBox';
-import BackPressComponent from '../common/BackPressComponent';
+import {insertReportList, selectIsBeBlackList, setToBlackList} from '../../util/AppService';
+import MyModalBox from '../../common/MyModalBox';
+import BackPressComponent from '../../common/BackPressComponent';
+import Toast from '../../common/Toast';
 
 const {width, height} = Dimensions.get('window');
 
@@ -36,6 +37,7 @@ class ChatSetting extends PureComponent {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentDidMount() {
         this.backPress.componentDidMount();
         const {userinfo} = this.props;
@@ -67,11 +69,7 @@ class ChatSetting extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        const {userinfo} = this.props;
-        // const {token} = userinfo;
         const {fromUserinfo} = this.params;
-        // const {userinfo} = this.props;
-
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '聊天设置', null, theme, 'black', 16, () => {
         }, false);
         return (
@@ -80,6 +78,9 @@ class ChatSetting extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <View style={{flex: 1}}>
                     <View style={{
                         height: 20,
@@ -148,49 +149,38 @@ class ChatSetting extends PureComponent {
                     </TouchableOpacity>
                 </View>
                 <MyModalBox
-                    titleComponent={<Text style={{fontSize: 12, color: 'red', marginLeft: 10}}>请勿频繁提交或提交不属实的内容</Text>}
-                    title={'举报内容'} style={{
-                    // height:
-                    width: width - 40,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    padding: 10,
-                    borderRadius: 5,
-                    // borderTopWidth:3,
-                    // borderTopColor:'#2196F3',
-                }}
+                    title={'举报内容'}
+                    style={{
+                        width: width - 40,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'white',
+                        borderRadius: 5,
+                    }}
                     sureClick={this._sureClick}
                     rightTitle={'举报'}
                     ref={ref => this.myModalBox = ref}>
-                    <View style={{
-                        paddingBottom: 10,
-                        width: width - 40,
-                        paddingHorizontal: 15,
-                    }}>
-                        <TextInput
-                            ref={ref => this.textInput = ref}
-                            autoCapitalize={'none'}
-                            autoComplete={'off'}
-                            autoCorrect={false}
-                            blurOnSubmit={false}
-                            onChangeText={this._onChangeText}
-                            maxLength={100}
-                            multiline={true}
+                    <TextInput
+                        ref={ref => this.textInput = ref}
+                        autoCapitalize={'none'}
+                        autoComplete={'off'}
+                        autoCorrect={false}
+                        blurOnSubmit={false}
+                        onChangeText={this._onChangeText}
+                        maxLength={100}
+                        multiline={true}
+                        style={{
+                            height: 130,
+                            backgroundColor: '#f7f7f7',
+                            padding: 0,
+                            paddingTop: 8,
+                            width: width - 40,
+                            fontSize: 13,
+                            paddingHorizontal: 10,
+                            textAlignVertical: 'top',
+                        }}
 
-                            style={{
-                                height: 130,
-                                backgroundColor: '#f7f7f7',
-                                marginTop: 10,
-                                fontSize: 13,
-                                paddingHorizontal: 5,
-                                borderRadius: 5,
-                                padding: 0,
-                                textAlignVertical: 'top',
-                            }}
-
-                        />
-                    </View>
+                    />
 
                 </MyModalBox>
             </SafeAreaViewPlus>
@@ -221,6 +211,7 @@ class ChatSetting extends PureComponent {
             }, token).then(() => {
                 this.myModalBox.hide();
                 this.reportText = '';
+                this.toast.show('举报成功')
             });
         }
 

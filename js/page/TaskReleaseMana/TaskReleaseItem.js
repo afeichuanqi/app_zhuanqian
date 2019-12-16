@@ -1,26 +1,28 @@
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LabelBigComponent from '../../common/LabelBigComponent';
 import ViewUtil from '../../util/ViewUtil';
 import {bottomTheme} from '../../appSet';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
-
+const {width} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
     render() {
-        const titleFontSize = 14;
         const {item} = this.props;
         return <View style={{}}>
+
+
             <TouchableOpacity
-                onPress={this.props.onPress}
                 activeOpacity={0.6}
+                onPress={this.props.onPress}
                 style={{
-                    // flex: 1,
+                    flex: 1,
                     flexDirection: 'row',
                     paddingHorizontal: 10,
-                    paddingTop: 18,
-                    height: 80,
-                    backgroundColor: 'white',
+                    paddingTop: 25,
+                    paddingBottom: 25,
+                    height: 90,
+                    backgroundColor:'white',
                 }}
             >
                 <FastImage
@@ -28,59 +30,72 @@ export default class TaskReleaseItem extends PureComponent {
                     source={{uri: item.task_uri}}
                     resizeMode={FastImage.resizeMode.stretch}
                 />
-                {/*左上*/}
                 <View style={{
-                    position: 'absolute',
-                    top: 20,
-                    left: 70,
-                    flexDirection: 'row',
+                    height: 50, width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
+
                 }}>
-                    <Text style={{
-                        fontSize: 14,
-                        color: 'black',
-                    }}>{`${item.id} - ${item.task_title}`}</Text>
-                </View>
-                {/*左下*/}
-                <View style={{
-                    position: 'absolute',
-                    bottom: 13,
-                    left: 70,
-                    flexDirection: 'row',
-                }}>
-                    <LabelBigComponent paddingVertical={1} fontSize={12} title={item.task_name}/>
-                </View>
-                {/*右上*/}
-                <View style={{
-                    position: 'absolute',
-                    top: 20,
-                    right: 10,
-                }}>
-                    <Text style={{
-                        fontSize: 16,
-                        color: 'red',
-                    }}>+{item.reward_price}元</Text>
-                </View>
-                {/*右下*/}
-                <View style={{
-                    position: 'absolute',
-                    bottom: 13,
-                    right: 10,
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                }}>
-                    <Text style={{
-                        fontSize: 12,
-                        // color:''
-                        opacity: 0.5,
-                        // fontWeight: '100',
-                    }}>进行中:{item.task_ing_num}</Text>
-                    <View style={{height: 10, width: 1, marginHorizontal: 5, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                    <Text style={{
-                        fontSize: 12,
-                        // color:''
-                        opacity: 0.5,
-                        // fontWeight: '100',
-                    }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        {/*标题*/}
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                color: 'black',
+
+                            }}>{`${item.id} - ${item.task_title}`}</Text>
+                            {item.recommendIsExp == 1 && <View style={{
+                                height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                                alignItems: 'center',
+                                justifyContent: 'center', marginLeft: 5,
+                            }}>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>推</Text>
+                            </View>}
+                            {item.topIsExp == 1 && <View style={{
+                                height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginLeft: 3,
+                            }}>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>顶</Text>
+                            </View>}
+                        </View>
+                        {/*价格*/}
+                        <View style={{}}>
+                            <Text style={{
+                                fontSize: 16,
+                                color: 'red',
+                            }}>+{item.reward_price} 元</Text>
+                        </View>
+                    </View>
+                    <View
+                        style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        {/*标签*/}
+                        <View style={{
+                            flexDirection: 'row',
+                        }}>
+                            <LabelBigComponent paddingVertical={1} fontSize={12} title={item.task_name}/>
+                            {/*<LabelBigComponent title={item.taskName}/>*/}
+                        </View>
+                        {/*剩余数*/}
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <Text style={{
+                                fontSize: 13,
+                                opacity: 0.5,
+                            }}>进行中:{item.task_ing_num}</Text>
+                            <View
+                                style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
+                            <Text style={{
+                                fontSize: 13,
+                                opacity: 0.5,
+                            }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>
+                        </View>
+
+                    </View>
                 </View>
             </TouchableOpacity>
             {(this.props.task_status == 0 || this.props.task_status == 2)? <View style={{
@@ -88,7 +103,7 @@ export default class TaskReleaseItem extends PureComponent {
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
-                backgroundColor: 'rgba(255,255,255,0.5)',
+                backgroundColor: 'rgba(255,255,255,0.8)',
                 flexDirection: 'row',
             }}>
 
@@ -119,10 +134,7 @@ export default class TaskReleaseItem extends PureComponent {
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getDeleteIco(this.props.deleteTask)}
             </View> : null}
-
-            {/*{ViewUtil.getLine()}*/}
-            {/**/}
-        </View>;
+        </View>
     }
 
     _reViewClick = () => {

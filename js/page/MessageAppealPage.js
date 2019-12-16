@@ -220,7 +220,7 @@ class MsgList extends Component {
             refreshControl={
                 <RefreshControl
                     refreshing={isLoading}
-                    onRefresh={() => this.onRefresh()}
+                    onRefresh={this.onRefresh}
                 />
             }
 
@@ -264,9 +264,6 @@ class MsgList extends Component {
         this.updatePage(true);
     };
     updatePage = (refreshing) => {
-        this.setState({
-            isLoading: true,
-        });
         const {userinfo, type} = this.props;
         if (refreshing) {
             this.page = {pageIndex: 20,keyWord:this.props.keyword};
@@ -284,19 +281,11 @@ class MsgList extends Component {
             keyword: this.page.keyWord,
         }, userinfo.token).then(result => {
             // console.log(result, 'result\'');
-            if (refreshing) {
-                this.setState({
-                    friendData: result,
-                    isLoading: false,
-                    hideLoaded: result.length >= 20 ? false : true,
-                });
-            } else {
-                const tmpArr = [...this.state.friendData];
-                this.setState({
-                    friendData: tmpArr.concat(result),
-                    hideLoaded: result.length >= 20 ? false : true,
-                });
-            }
+            this.setState({
+                friendData: result,
+                isLoading: false,
+                hideLoaded: result.length >= 20 ? false : true,
+            });
         }).catch(err => {
             this.setState({
                 isLoading: false,
@@ -393,7 +382,7 @@ class MessageItemComponent extends PureComponent {
 
         const scale = Animated.interpolate(this.animations.scale, {
             inputRange: [0, 1],
-            outputRange: [0.99, 1],
+            outputRange: [0.90, 1],
             extrapolate: 'clamp',
         });
         const {titleFontSize, marginHorizontal, item} = this.props;
@@ -457,7 +446,7 @@ class MessageItemComponent extends PureComponent {
                     opacity: 0.9,
                     marginLeft: 10,
                 }}>{username}</Text>
-                <Text style={{marginLeft: 10, fontSize: 12, color: 'red', opacity: 0.5}}>{
+                <Text style={{marginLeft: 10, fontSize: 11, color: 'red', opacity: 0.5}}>{
                     columnType == 1 ? '任务咨询' : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : ''
                 }</Text>
 

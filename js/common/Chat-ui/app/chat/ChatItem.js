@@ -256,7 +256,7 @@ export default class ChatItem extends PureComponent {
                     return (
                         <TouchableOpacity
                             activeOpacity={0.8}
-                            onPress={this.props.systemClick}
+                            onPress={message.onClick}
                             style={{
                                 width: width - 20, backgroundColor: 'white', paddingTop: 15, paddingHorizontal: 15,
                                 borderRadius: 3,
@@ -279,7 +279,7 @@ export default class ChatItem extends PureComponent {
                                 borderTopColor: 'rgba(0,0,0,0.1)',
 
                             }}>
-                                <Text style={{color: '#2196F3'}}>了解更多安全交易规范</Text>
+                                <Text style={{color: '#2196F3'}}>{message.btnTitle}</Text>
                             </View>
 
                         </TouchableOpacity>
@@ -376,9 +376,9 @@ export default class ChatItem extends PureComponent {
                                         }}>
                                             <View style={{
                                                 backgroundColor: message.targetId == guzhuInfo.guzhuUserId ? 'red' : '#2196F3',
-                                                paddingHorizontal: 3,
+                                                paddingHorizontal: 7,
                                                 paddingVertical: 2,
-                                                borderRadius: 3,
+                                                borderRadius: 4,
                                                 marginRight: 5,
                                             }}>
                                                 <Text style={{

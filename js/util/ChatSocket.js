@@ -39,7 +39,7 @@ class ChatSocket {
                     Global.dispatch(Message.onMessageFrom(data.fromUserid, data.msg_type,
                         data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.FriendId));//发送给消息列表
 
-                    Global.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url, data.FriendId, data.columnType, data.taskUri, data.taskId));//发送给好友列表
+                    Global.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url, data.FriendId, data.columnType, data.taskUri, data.taskId, true, data.sendFormId));//发送给好友列表
                     break;
                 case types.MESSAGE_SENDTO_USERID_STATUS://消息回调
 
@@ -60,16 +60,19 @@ class ChatSocket {
                     //收到回调进行未读消息数回调
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
+
                     Global.dispatch(Message.onSetAllFriendUnRead(data.FriendId, data.columnType));
+
+
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
                     if (data.msgArr && data.msgArr.length > 0) {
                         Global.dispatch(Message.onGetMegForUserid(data.msgArr));
                     }
                     break;
-                case types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
-                    Global.dispatch(Message.onSetFriendMsgIsRead(data.FriendId));
-                    break;
+                // case types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
+                //     Global.dispatch(Message.onSetFriendMsgIsRead(data.FriendId));
+                //     break;
                 case types.MESSAGE_FORIMAGE_SENDTO_USERID_SUCCESS:
                     Global.dispatch(Message.onSetImageMsgStatus(data.uuid, data.msgId, data.sendDate, data.sendStatus, data.content));
                     break;
@@ -102,7 +105,7 @@ class ChatSocket {
 
     //验证身份
     verifyIdentidy = () => {
-        console.log(Global.ws.readyState,"Global.ws.readyState");
+        console.log(Global.ws.readyState, 'Global.ws.readyState');
         if (Global.ws.readyState !== 1) {
             return;
         }
@@ -130,9 +133,9 @@ class ChatSocket {
         this.sendToServer(types.ACCOUNT_QUIT, {});
     };
     //设置信息id已读取
-    setMsgIdIsRead = (FriendId, toUserid) => {
-        this.sendToServer(types.MESSAGE_SET_MSG_ID_READ, {FriendId, toUserid});
-    };
+    // setMsgIdIsRead = (FriendId, toUserid) => {
+    //     this.sendToServer(types.MESSAGE_SET_MSG_ID_READ, {FriendId, toUserid});
+    // };
     //获取userid所有消息
     selectAllMsgForFromUserid = (friendId, pageCount) => {
 
@@ -147,23 +150,32 @@ class ChatSocket {
         });
     };
     //发送消息给指定用户
-    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo) => {
+    sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo, sendFormId) => {
+
+
+        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo. avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));
+
+
+        // console.log(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo,avatar_url, FriendId, columnType, taskUri, taskId, false,sendFormId,'onSetNewMsgForRromUserid');
+        console.log(sendFormId,"sendFormId");
+
+        Global.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(), FriendId));
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
-            toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId,
+            toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId,
         });
 
-        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo.avatar_url, FriendId, columnType, taskUri, taskId, false));
-        Global.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(), FriendId));
+
         return true;
     };
-    //发送图片消息给指定用户
-    sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId) => {
 
+    //发送图片消息给指定用户
+    sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId) => {
+        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));//发送一个消息给好友列表 提示有新消息
         this.sendToServer(types.MESSAGE_FORIMAGE_SENDTO_USERID, {
-            toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId,
+            toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId,
         });
 
-        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri, taskId, false));//发送一个消息给好友列表 提示有新消息
+
         return true;
     };
     sendToServer = (type, data) => {
@@ -201,5 +213,6 @@ class ChatSocket {
         }
     };
 }
+
 const ChatSocketSinge = new ChatSocket();
 export default ChatSocketSinge;

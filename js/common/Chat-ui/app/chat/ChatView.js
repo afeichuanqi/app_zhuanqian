@@ -1059,7 +1059,6 @@ class ChatWindow extends PureComponent {
                             renderItem={({item, index}) =>
                                 <ChatItem
                                     ref={(e) => (this.messageItem = e)}
-                                    systemClick={this.props.systemClick}
                                     user={this.props.userProfile}
                                     guzhuInfo={this.props.guzhuInfo}
                                     chatType={chatType}

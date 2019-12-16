@@ -26,7 +26,7 @@ export default {
     onSelectAllFriend,
     // onSelectAllFriendUnRead,
     onSetAllFriendUnRead,
-    onSetFriendMsgIsRead,
+    // onSetFriendMsgIsRead,
     onFriendInitialiZation,
     onSetOtherTypeUnread,
     setAppeal_2IsRead,

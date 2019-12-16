@@ -9,7 +9,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 // const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 // const {timing} = Animated;
 
-const topBottomVal = 17;
+
 const {width} = Dimensions.get('window');
 
 class TaskSumComponent extends PureComponent {

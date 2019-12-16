@@ -213,12 +213,10 @@ class TaskPopMenu extends PureComponent {
                 sureClick={this._sureClick}
                 title={this.state.title}
                 style={{
-                    // height:
                     width: width - 40,
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: 'white',
-                    // padding: 10,
                     borderRadius: 5,
                 }}>
                 {Component}

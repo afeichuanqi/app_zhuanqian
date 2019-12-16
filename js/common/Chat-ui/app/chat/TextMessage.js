@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     borderRadius: 12,
     paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingVertical: 10,
     maxWidth: width - 160,
     minHeight: 20,
   },
