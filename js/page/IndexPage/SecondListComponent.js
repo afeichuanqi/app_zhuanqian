@@ -10,7 +10,6 @@ import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
 
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 const lunboHeight = 220;
 
 class SecondListComponent extends PureComponent {
@@ -112,9 +111,6 @@ class SecondListComponent extends PureComponent {
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
-            // zIndex: -100,
-            // elevation: -100,
-            // overflow: 'hidden',
             transform: [{translateY: this.props.translateY}],
         }}>
             <View style={{height: 30}}/>

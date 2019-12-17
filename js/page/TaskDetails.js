@@ -447,9 +447,7 @@ class TaskDetails extends PureComponent {
                         onPress={() => {
                             const handle = findNodeHandle(this.moreSvg);
                             UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
-                                // console.log(pageX, pageY);
                                 this.taskDetailsPop.show(pageX, pageY);
-                                // this.taskMenu.show();
                             });
                         }}
                         style={{position: 'absolute', top: goBackTop, right: 0, zIndex: 10, width: 40, marginTop: 3}}>
@@ -464,6 +462,7 @@ class TaskDetails extends PureComponent {
                     shareClick={() => {
                         this.toastShare.show();
                     }}
+                    toast={this.toast}
                 />
                 {/*分享弹窗*/}
                 <ToastShare ref={ref => this.toastShare = ref}/>
@@ -559,6 +558,7 @@ class TaskDetailsPop extends Component {
     // }
     componentDidMount(): void {
         selectUserIsFavoriteTask({task_id: this.props.task_id}, this.props.userinfo.token).then(data => {
+
             this.setState({
                 isFavorite: data.status,
             });
@@ -574,7 +574,9 @@ class TaskDetailsPop extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.task_id != nextProps.task_id || this.state.isFavorite != nextState.isFavorite) {
+        if (this.props.task_id != nextProps.task_id || this.state.isFavorite != nextState.isFavorite
+
+        ) {
             return true;
         }
         return false;
@@ -623,7 +625,7 @@ class TaskDetailsPop extends Component {
                             task_id: task_id,
                             favorite_status: is_favorite,
                         }, userinfo.token).then(result => {
-                            console.log(is_favorite, 'is_favorite');
+                            this.props.toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`);
                             this.setState({
                                 isFavorite: is_favorite,
                             });
@@ -698,14 +700,14 @@ class BottomBtns extends PureComponent {
                         justifyContent: 'center',
                         alignItems: 'center',
                         flexDirection: 'row',
-                        backgroundColor: '#f0f0f0',
+                        backgroundColor: '#f6f6f6',
                     }}>
                     <SvgUri width={17} fill={'rgba(0,0,0,0.7)'} style={{marginLeft: 5}} height={17}
                             svgXmlData={taskHallNext}/>
                     <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    activeOpacity={0.5}
+                    activeOpacity={(StatusForTask.status === 0 || StatusForTask.status === 4 || StatusForTask.status === 5) ? 0.5 : 1}
                     onPress={this.props.startSignUp}
                     style={{
                         height: 60,
@@ -713,7 +715,7 @@ class BottomBtns extends PureComponent {
                         justifyContent: 'center',
                         alignItems: 'center',
                         flexDirection: 'row',
-                        backgroundColor: bottomTheme,
+                        backgroundColor: (StatusForTask.status === 0 || StatusForTask.status === 4 || StatusForTask.status === 5) ? bottomTheme : 'rgba(33,150,243,0.6)',
                     }}>
                     <Text
                         style={{

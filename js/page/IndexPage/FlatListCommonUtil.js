@@ -50,7 +50,6 @@ export default class FlatListCommonUtil extends PureComponent {
             this.page = {pageIndex: this.page.pageIndex + 1};
         }
         selectAllRecommendTask({pageIndex: this.page.pageIndex, type: this.props.type}).then(result => {
-            console.log(result);
             if (refresh) {
                 this.setState({
                     taskData: result,
@@ -100,7 +99,7 @@ export default class FlatListCommonUtil extends PureComponent {
             onEndReached={() => {
                 setTimeout(() => {
                     // 等待页面布局完成以后，在让加载更多
-                    if (this.canLoadMore) {
+                    if (this.canLoadMore && taskData.length >= 10) {
                         this.onLoading();
                         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                     }

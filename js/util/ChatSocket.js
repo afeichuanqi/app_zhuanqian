@@ -91,7 +91,7 @@ class ChatSocket {
             if (typeof Global.dispatch != 'function') {
                 return;
             }
-            Global.dispatch(Message.onChangeSocketStatue('连接中...'));
+            Global.dispatch(Message.onChangeSocketStatue('刷新重连'));
 
         };
         Global.ws.onerror = () => {
@@ -151,20 +151,11 @@ class ChatSocket {
     };
     //发送消息给指定用户
     sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo, sendFormId) => {
-
-
         Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo. avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));
-
-
-        // console.log(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo,avatar_url, FriendId, columnType, taskUri, taskId, false,sendFormId,'onSetNewMsgForRromUserid');
-        console.log(sendFormId,"sendFormId");
-
         Global.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(), FriendId));
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId,
         });
-
-
         return true;
     };
 

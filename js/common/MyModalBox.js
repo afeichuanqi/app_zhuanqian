@@ -76,7 +76,7 @@ class MyModalBox extends PureComponent {
             <Modal
                 transparent
                 visible={visible}
-                animationType={'fade'}
+                // animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 
@@ -118,7 +118,7 @@ class MyModalBox extends PureComponent {
                             </TouchableOpacity>
                         </View>
                         {this.props.children}
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flexDirection: 'row'}}>
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={this._cancel}
@@ -127,6 +127,7 @@ class MyModalBox extends PureComponent {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     height: 50,
+                                    top:1
                                     // backgroundColor:'red',
                                 }}>
                                 <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
@@ -141,6 +142,7 @@ class MyModalBox extends PureComponent {
                                     alignItems: 'center',
                                     height: 50,
                                     backgroundColor:bottomTheme,
+                                    top:1
                                 }}>
                                 <Text style={{color: 'white'}}>{rightTitle}</Text>
                             </TouchableOpacity>

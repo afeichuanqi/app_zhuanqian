@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Text, TextInput, ScrollView, TouchableOpacity, Image, View, Dimensions} from 'react-native';
+import {Text, TextInput, ScrollView, TouchableOpacity, Image, View, Dimensions, RefreshControl} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -17,7 +17,6 @@ import jiaoliu from '../res/svg/jiaoliu.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
 import Toast from '../common/Toast';
 import SvgUri from 'react-native-svg-uri';
-import task_icon from '../res/svg/task_icon.svg';
 import menu_right from '../res/svg/menu_right.svg';
 import LabelBigComponent from '../common/LabelBigComponent';
 import {addUserTaskNum, selectTaskInfo_, stopUserTask, updateUserTaskPrice} from '../util/AppService';
@@ -25,6 +24,7 @@ import {connect} from 'react-redux';
 import MyModalBoxTwo from '../common/MyModalBoxTwo';
 import ToastSelect from '../common/ToastSelect';
 import BackPressComponent from '../common/BackPressComponent';
+import FastImage from 'react-native-fast-image';
 
 const {width} = Dimensions.get('window');
 
@@ -38,6 +38,7 @@ class MyOrderManaPage extends PureComponent {
     state = {
         // interVal: 100,
         taskInfo: {},
+        isLoading:true
 
     };
 
@@ -54,14 +55,21 @@ class MyOrderManaPage extends PureComponent {
     _updatePage = () => {
         const {userinfo} = this.props;
         const {taskid} = this.params;
-
+        this.setState({
+            isLoading:true
+        })
         selectTaskInfo_({
             task_id: taskid,
         }, userinfo.token).then(result => {
             this.setState({
                 taskInfo: result,
+                isLoading:false
             });
-        });
+        }).catch(msg=>{
+            this.setState({
+                isLoading:false
+            });
+        })
     };
 
     componentWillUnmount() {
@@ -69,6 +77,7 @@ class MyOrderManaPage extends PureComponent {
     }
 
     getTaskItem = (taskInfo) => {
+
         return <TouchableOpacity
             onPress={() => {
                 NavigationUtils.goPage({test: false, task_id: this.params.taskid}, 'TaskDetails');
@@ -83,16 +92,18 @@ class MyOrderManaPage extends PureComponent {
 
             }}
         >
-            <View style={{
-                height: 45,
-                width: 43,
-                backgroundColor: bottomTheme,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 5,
-            }}>
-                <SvgUri width={25} height={25} fill={'white'} svgXmlData={task_icon}/>
-            </View>
+            <FastImage
+                style={{
+                    height: 45,
+                    width: 43,
+                    backgroundColor: bottomTheme,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 5,
+                }}
+                source={{uri: taskInfo.task_uri}}
+                resizeMode={FastImage.resizeMode.stretch}
+            />
             {/*左上*/}
             <View style={{
                 position: 'absolute',
@@ -163,7 +174,7 @@ class MyOrderManaPage extends PureComponent {
         StatusBar.setBackgroundColor(theme, true);
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '任务管理', jiaoliu, null, null, null, () => {
         }, false);
-        const {taskInfo} = this.state;
+        const {taskInfo,isLoading} = this.state;
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -174,7 +185,15 @@ class MyOrderManaPage extends PureComponent {
                 <Toast
                     ref={ref => this.toast = ref}
                 />
-                <ScrollView style={{flex: 1, backgroundColor: '#e8e8e8'}}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            // title={'更新任务中'}
+                            refreshing={isLoading}
+                            onRefresh={this._updatePage}
+                        />
+                    }
+                    style={{flex: 1, backgroundColor: '#e8e8e8'}}>
                     {this.getTaskItem(taskInfo)}
                     <View style={{
                         width: width - 20,

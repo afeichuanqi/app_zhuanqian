@@ -160,26 +160,18 @@ class TaskReleaseMana extends PureComponent {
                                 onRefresh={this.onRefresh}
                             />
                         }
-                        // onScroll={this._onScroll}
                         ListFooterComponent={() => this.genIndicator(hideLoaded)}
                         onEndReached={() => {
-                            // console.log('onEndReached.....');
-                            // console.log(this.canLoadMore);
                             // 等待页面布局完成以后，在让加载更多
                             setTimeout(() => {
-                                if (this.canLoadMore) {
+                                if (this.canLoadMore && this.taskData >= 10) {
                                     this.onLoading();
                                     this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                                 }
                             }, 100);
                         }}
-                        // onScrollEndDrag={this._onScrollEndDrag}
                         windowSize={300}
                         onEndReachedThreshold={0.01}
-                        // onMomentumScrollBegin={() => {
-                        //     console.log('onMomentumScrollBegin');
-                        //
-                        // }}
                         onMomentumScrollBegin={() => {
                             this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                         }}
@@ -243,7 +235,7 @@ class TaskReleaseMana extends PureComponent {
             </View>
             <View>
                 <Text
-                    style={{color: bottomTheme}}>{this.params.status == 1 ? '已完成' :this.params.status == 0 ? '进行中' : this.params.status == -1 ? '已驳回' : ''}</Text>
+                    style={{color: bottomTheme}}>{this.params.status == 1 ? '已完成' : this.params.status == 0 ? '进行中' : this.params.status == -1 ? '已驳回' : ''}</Text>
             </View>
         </TouchableOpacity>;
     };

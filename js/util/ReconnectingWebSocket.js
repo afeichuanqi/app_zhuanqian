@@ -56,7 +56,7 @@ class ReconnectingWebSocket extends WebSocket {
         this._subscriptions.push(
             /** @Override onopen **/
             this._eventEmitter.addListener('websocketOpen', ev => {
-                console.log(ev.id, 'websocketOpen', this._socketId);
+                // console.log(ev.id, 'websocketOpen', this._socketId);
                 // if (ev.id !== this._socketId) {
                 //     return;
                 // }
@@ -67,7 +67,7 @@ class ReconnectingWebSocket extends WebSocket {
 
             /** @Override onclose **/
             this._eventEmitter.addListener('websocketClosed', ev => {
-                console.log(ev.id, 'websocketClosed', this._socketId);
+                // console.log(ev.id, 'websocketClosed', this._socketId);
                 // console.log(ev.id ,'websocketClosed', this._socketId);
                 // if (ev.id !== this._socketId) {
                 //     return;
@@ -87,7 +87,7 @@ class ReconnectingWebSocket extends WebSocket {
 
             /** @Override onerror **/
             this._eventEmitter.addListener('websocketFailed', ev => {
-                console.log(ev.id, 'websocketFailed', this._socketId);
+                // console.log(ev.id, 'websocketFailed', this._socketId);
                 // if (ev.id !== this._socketId) {
                 //     return;
                 // }

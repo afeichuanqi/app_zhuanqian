@@ -200,6 +200,16 @@ class FristListComponent extends PureComponent {
         }, 500);
         //收到消息刷新任务
         EventBus.getInstance().addListener(EventTypes.update_task_release_mana, this.listener = data => {
+            if (data.index === this.props.task_status) {
+                const {userinfo, task_status} = this.props;
+                selectTaskReleaseList({task_status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
+                    this.setState({
+                        taskData: result,
+                        isLoading: false,
+                        hideLoaded: result.length >= 10 ? false : true,
+                    });
+                });
+            }
             this._updateList(true);
         });
     }
@@ -338,7 +348,7 @@ class FristListComponent extends PureComponent {
                     console.log('onEndReached.....');
                     // 等待页面布局完成以后，在让加载更多
                     setTimeout(() => {
-                        if (this.canLoadMore) {
+                        if (this.canLoadMore && taskData.length >= 10) {
                             this.onLoading();
                             this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                         }

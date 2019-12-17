@@ -155,16 +155,6 @@ class MsgList extends Component {
         this.page = {pageCount: 20};
     }
 
-    filterFriend = (friendArr, type) => {
-        let tmpArr = [];
-
-        for (let i = 0; i < friendArr.length; i++) {
-            if (friendArr[i].columnType == type) {
-                tmpArr.push(friendArr[i]);
-            }
-        }
-        return tmpArr;
-    };
 
     render() {
         const friendData = this.props.friend.friendArr;
@@ -205,7 +195,7 @@ class MsgList extends Component {
             refreshControl={
                 <RefreshControl
                     refreshing={isLoading}
-                    onRefresh={() => this.onRefresh()}
+                    onRefresh={this.onRefresh}
                 />
             }
             onScroll={Animated.event([
@@ -221,7 +211,7 @@ class MsgList extends Component {
             onEndReached={() => {
                 // 等待页面布局完成以后，在让加载更多
                 setTimeout(() => {
-                    if (this.canLoadMore) {
+                    if (this.canLoadMore && friendData.length >= 20) {
                         this.onLoading();
                         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                     }
@@ -245,6 +235,7 @@ class MsgList extends Component {
     };
 
     onLoading = () => {
+
         this.page.pageCount = this.page.pageCount + 20;
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
     };
@@ -295,10 +286,6 @@ class MessageItemComponent extends Component {
 
         const {item} = this.props;
         const {columnType, taskId, taskTitle, avatar_url, username, userid, unReadLength, taskUri, sendFormId} = item;
-        // if (unReadLength > 0) {
-        //     ChatSocket.setFromUserIdMessageIsRead(this.props.item.FriendId,this.columnType);
-        // }
-        // console.log("item",item);
         const fromUserinfo = {
             avatar_url: avatar_url,
             id: userid,
@@ -386,7 +373,7 @@ class MessageItemComponent extends Component {
                                 marginLeft: 10,
                             }}>{username}</Text>
                             <Text style={{marginLeft: 10, fontSize: 10, color: 'black', opacity: 0.5}}>{
-                                columnType == 1 ? `任务咨询` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : columnType == 5 ? '驳回咨询' :  ''
+                                columnType == 1 ? `任务咨询` : columnType == 2 ? '申诉' : columnType == 3 ? '投诉' : columnType == 4 ? '聊天' : columnType == 5 ? '驳回咨询' : ''
                             }</Text>
 
 

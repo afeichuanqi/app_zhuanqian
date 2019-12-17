@@ -400,8 +400,7 @@ class MyTaskReview extends PureComponent {
         const {userinfo} = this.props;
         this.toastS.hide();
         passTaskForSendFormTaskId({SendFormTaskId: taskStepId}, userinfo.token).then(result => {
-            EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {});//刷新审核页面
-
+            EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {index: 0});//刷新审核页面
             this.setState({
                 unReviewCount: this.state.unReviewCount - 1,
                 haveReviewCount: this.state.haveReviewCount + 1,

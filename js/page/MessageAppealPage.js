@@ -61,7 +61,7 @@ class MessageAppealPage extends PureComponent {
     };
 
     render() {
-        console.log(this.params.keyword,"this.params.keyword");
+        console.log(this.params.keyword, 'this.params.keyword');
 
         let statusBar = {
             hidden: false,
@@ -176,7 +176,7 @@ class MsgList extends Component {
 
     constructor(props) {
         super(props);
-        this.page = {pageIndex: 20,keyWord:this.props.keyword};
+        this.page = {pageIndex: 20, keyWord: this.props.keyword};
         console.log(this.page);
     }
 
@@ -206,7 +206,7 @@ class MsgList extends Component {
 
         const {isLoading, hideLoaded, friendData} = this.state;
         return <FlatList
-            ListEmptyComponent={<EmptyComponent height={height-100}/>}
+            ListEmptyComponent={<EmptyComponent height={height - 100}/>}
 
             style={{
                 flex: 1,
@@ -233,7 +233,7 @@ class MsgList extends Component {
             onEndReached={() => {
                 setTimeout(() => {
                     // 等待页面布局完成以后，在让加载更多
-                    if (this.canLoadMore) {
+                    if (this.canLoadMore && this.friendData >= 20) {
                         this.onLoading();
                         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                     }
@@ -266,7 +266,7 @@ class MsgList extends Component {
     updatePage = (refreshing) => {
         const {userinfo, type} = this.props;
         if (refreshing) {
-            this.page = {pageIndex: 20,keyWord:this.props.keyword};
+            this.page = {pageIndex: 20, keyWord: this.props.keyword};
             this.setState({
                 isLoading: true,
             });

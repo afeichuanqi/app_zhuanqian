@@ -154,9 +154,9 @@ class MyTaskReview extends PureComponent {
                                 style={{
                                     height: 100, width: width - 20, backgroundColor: '#f1f1f1',
                                     paddingHorizontal: 5, padding: 0, textAlignVertical: 'top',
-                                    paddingTop:5,
-                                    paddingLeft:5,
-                                    borderRadius:5,
+                                    paddingTop: 5,
+                                    paddingLeft: 5,
+                                    borderRadius: 5,
                                 }}
                                 placeholder={'请输入驳回理由'}
                                 // placeholderTextColor={'#7f7f7f'}
@@ -190,7 +190,7 @@ class MyTaskReview extends PureComponent {
                                             // borderWidth: this.animations.width,
                                             borderColor: 'rgba(0,0,0,0.6)',
                                             marginTop: 10, marginRight: 10,
-                                            borderRadius:5,
+                                            borderRadius: 5,
                                             // borderWidth:1, borderColor:'rgba(255,0,0,1)',
                                         }}>
                                         {item.uri ? <Image
@@ -351,7 +351,7 @@ class MyTaskReview extends PureComponent {
                     SendFormTaskId: taskData.taskStepId,
                     turnDownInfo: JSON.stringify(imageData),
                 }, userinfo.token).then(err => {
-                    EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {});//刷新审核页面
+                    EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {index: 0});//刷新审核页面
                     this.toast.show('驳回成功');
                     NavigationUtils.goBack(this.props.navigation);
 

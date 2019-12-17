@@ -30,6 +30,8 @@ import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -184,9 +186,25 @@ class FristListComponent extends PureComponent {
         setTimeout(() => {
             this._updateList(true);
         }, 500);
+        EventBus.getInstance().addListener(EventTypes.update_task_orders_mana, this.listener = data => {
+            if (data.index === this.props.status - 1) {
+                const {userinfo, status} = this.props;
+                selectOrderTasks({
+                    status,
+                    pageIndex: this.page.pageIndex,
+                }, userinfo.token).then(result => {
+                    this.setState({
+                        taskData: result,
+                        isLoading: false,
+                        hideLoaded: result.length >= 10 ? false : true,
+                    });
+                })
+            }
+        });
     }
 
     componentWillUnmount() {
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     _updateList = (refreshing) => {
@@ -234,6 +252,7 @@ class FristListComponent extends PureComponent {
             item={item}
             cancelSignUp={() => {
                 this._cancelSignUp(item);
+                EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {index:2});
             }}
             onPress={() => {
                 if (this.props.status == 3) {
@@ -255,6 +274,7 @@ class FristListComponent extends PureComponent {
             redoTask={() => {
                 userRedoTask({SendFormTaskId: item.sendFormId}, this.props.userinfo.token).then((result) => {
                     NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
+                    EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {index:2});
                 }).catch(msg => {
                     this.toast.show(msg);
                 });
@@ -299,7 +319,7 @@ class FristListComponent extends PureComponent {
 
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
-        return <View style={{flex:1}}>
+        return <View style={{flex: 1}}>
             <Toast
                 ref={ref => this.toast = ref}
             />
@@ -323,8 +343,7 @@ class FristListComponent extends PureComponent {
 
                     setTimeout(() => {
                         // 等待页面布局完成以后，在让加载更多
-                        if (this.canLoadMore) {
-                            console.log('onLoading.....');
+                        if (this.canLoadMore && taskData.length >= 10) {
                             this.onLoading();
                             this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                         }
@@ -333,7 +352,7 @@ class FristListComponent extends PureComponent {
                 windowSize={300}
                 onEndReachedThreshold={0.01}
                 onMomentumScrollBegin={() => {
-                    console.log('onMomentumScrollBegin')
+                    console.log('onMomentumScrollBegin');
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
@@ -434,7 +453,7 @@ class OrdersItem extends React.Component {
                     <TouchableOpacity
                         onPress={this.props.cancelSignUp}
                         style={{
-                             width: 60, height: 25, justifyContent: 'center',
+                            width: 60, height: 25, justifyContent: 'center',
                             alignItems: 'center', borderRadius: 5,
                         }}>
                         <Text style={{color: bottomTheme, fontSize: 12}}>取消报名</Text>
@@ -450,7 +469,7 @@ class OrdersItem extends React.Component {
                             onPress={this.props.redoTask}
                             style={{
                                 width: 50, height: 20, justifyContent: 'center',
-                                alignItems: 'center', borderRadius: 3
+                                alignItems: 'center', borderRadius: 3,
                             }}>
                             <Text style={{color: bottomTheme, fontSize: 12}}>重新提交</Text>
                         </TouchableOpacity>
