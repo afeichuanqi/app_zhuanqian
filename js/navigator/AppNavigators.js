@@ -34,6 +34,8 @@ import UserBillListPage from '../page/UserBillListPage';
 import FriendPromotionPage from '../page/FriendPromotionPage';
 import UpdateUserName from '../page/SettingPage/UpdateUserName';
 import TaskRejectDetailsPage from '../page/TaskRejectDetailsPage';
+import MyFavoritePage from '../page/MyFavoritePage';
+import MyShieldPage from '../page/MyShieldPage';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 
@@ -225,6 +227,18 @@ const MainNavigator = createStackNavigator({
         },
         ImageExample: {
             screen: ImageExample,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        MyFavoritePage: {
+            screen: MyFavoritePage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        MyShieldPage: {
+            screen: MyShieldPage,
             navigationOptions: {
                 header: null,
             },

@@ -32,11 +32,12 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import BackPressComponent from '../common/BackPressComponent';
 import goback from '../res/svg/goback.svg';
+import Toast from '../common/Toast';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-
+let toast = null;
 
 class MyAttention extends PureComponent {
     constructor(props) {
@@ -90,29 +91,28 @@ class MyAttention extends PureComponent {
             >
                 {navigationBar}
                 {/*{TopColumn}*/}
-                <View>
+                <Toast
+                    ref={ref => toast = ref}
+                />
+                <View style={{paddingBottom: 10, marginTop: 10}}>
                     <TabBar
                         style={{
-                            marginTop: 10,
                             height: 35,
-                            backgroundColor: theme,
-                            paddingLeft: 10,
-                            width: 180,
+                            width: 150,
                             alignSelf: 'center',
 
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 10}}
+                        contentContainerStyle={{paddingTop: 15}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
-                        // indicatorStyle={styles.indicator}
                         bounces={true}
                         titleMarginHorizontal={20}
-                        activeStyle={{fontSize: 16, color: [33, 150, 243]}}
-                        inactiveStyle={{fontSize: 14, color: [0, 0, 0], height: 10}}
-                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
+                        activeStyle={{fontSize: 13, color: [0, 0, 0]}}
+                        inactiveStyle={{fontSize: 13, color: [150, 150, 150], height: 10}}
+                        indicatorStyle={{height: 2, backgroundColor: bottomTheme, borderRadius: 3}}
                     />
                     <TouchableOpacity
                         onPress={() => {
@@ -120,7 +120,7 @@ class MyAttention extends PureComponent {
                         }}
                         style={{
                             position: 'absolute',
-                            top: 20, left: 10,
+                            top: 15, left: 10,
                         }}>
                         <SvgUri width={20} height={20} svgXmlData={goback}/>
                     </TouchableOpacity>
@@ -233,7 +233,7 @@ class MyAttentionList extends PureComponent {
             <View style={{flex: 1}}>
                 <AnimatedFlatList
                     style={{backgroundColor: '#f5f5f5', paddingTop: 5}}
-                    ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关任务'}/>}
+                    ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有任何关注'}/>}
                     ref={ref => this.flatList = ref}
                     data={taskData}
                     scrollEventThrottle={1}
@@ -252,7 +252,7 @@ class MyAttentionList extends PureComponent {
                         console.log('onEndReached.....');
                         setTimeout(() => {
                             // 等待页面布局完成以后，在让加载更多
-                            if (this.canLoadMore) {
+                            if (this.canLoadMore && taskData.length > 10) {
                                 this.onLoading();
                                 this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                             }
@@ -344,40 +344,33 @@ class AttentionItem extends PureComponent {
 
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{marginLeft: 15}}>
-                        <Text style={{fontSize: 15}}>{item.username}</Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)', marginTop: 7}}>{item.fan_num}位粉丝</Text>
+                        <Text style={{fontSize: 14}}>{item.username}</Text>
+                        <Text style={{fontSize: 12, opacity: 0.5, marginTop: 7}}>{item.fan_num}位粉丝</Text>
                     </View>
                 </View>
             </View>
             {type == 1 && <TouchableOpacity
                 onPress={() => {
                     let attention_type = this.state.attentionStatus == 0 ? 1 : 0;
-                    console.log(item);
                     attentionUserId({
                         be_user_id: item.userId,
                         type: attention_type,
                     }, this.props.userinfo.token).then(result => {
-                        // console.log(attention_type);
                         this.setState({
                             attentionStatus: attention_type,
                         });
-                        // this.updateShopInfo();
-                        // this.toast.show(`${attention_type == 0 ? '取消关注' : '关注'}成功`);
+                        toast.show(`${attention_type==0?'取消关注成功':'关注成功'}`)
                     }).catch(msg => {
-                        // console.log(msg);
-                        // this.toast.show(msg);
                     });
                 }}
                 style={{
-                    // borderWidth: 0.3,
                     paddingHorizontal: 7,
                     paddingVertical: 4,
-                    // borderColor: 'rgba(0,0,0,0.2)',
                     borderRadius: 2,
-                    backgroundColor: bottomTheme,
+                    backgroundColor: attentionStatus == 1 ? '#5faff3' : bottomTheme,
                 }}>
                 <Text
-                    style={{color: 'white', fontSize: 12}}>{attentionStatus == 1 ? '已关注' : '+ 关注'}</Text>
+                    style={{color: 'white', fontSize: 12}}>{attentionStatus == 1 ? '✓ 已关注' : '+ 关注'}</Text>
             </TouchableOpacity>}
 
         </TouchableOpacity>;
@@ -397,8 +390,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 40,
-        height: 40,
+        width: 45,
+        height: 45,
         borderRadius: 25,
         // 设置高度
         // height:150

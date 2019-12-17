@@ -91,7 +91,7 @@ class ChatSocket {
             if (typeof Global.dispatch != 'function') {
                 return;
             }
-            Global.dispatch(Message.onChangeSocketStatue('刷新重连'));
+            Global.dispatch(Message.onChangeSocketStatue(''));
 
         };
         Global.ws.onerror = () => {

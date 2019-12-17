@@ -187,7 +187,8 @@ class FristListComponent extends PureComponent {
             this._updateList(true);
         }, 500);
         EventBus.getInstance().addListener(EventTypes.update_task_orders_mana, this.listener = data => {
-            if (data.index === this.props.status - 1) {
+            const index = data.indexs.findIndex(item => item == (this.props.status - 1));
+            if (index != -1) {
                 const {userinfo, status} = this.props;
                 selectOrderTasks({
                     status,
@@ -198,7 +199,7 @@ class FristListComponent extends PureComponent {
                         isLoading: false,
                         hideLoaded: result.length >= 10 ? false : true,
                     });
-                })
+                });
             }
         });
     }
@@ -252,7 +253,6 @@ class FristListComponent extends PureComponent {
             item={item}
             cancelSignUp={() => {
                 this._cancelSignUp(item);
-                EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {index:2});
             }}
             onPress={() => {
                 if (this.props.status == 3) {
@@ -274,7 +274,7 @@ class FristListComponent extends PureComponent {
             redoTask={() => {
                 userRedoTask({SendFormTaskId: item.sendFormId}, this.props.userinfo.token).then((result) => {
                     NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
-                    EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {index:2});
+                    EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0, 2]});
                 }).catch(msg => {
                     this.toast.show(msg);
                 });
@@ -285,7 +285,7 @@ class FristListComponent extends PureComponent {
         const {userinfo} = this.props;
 
         cancelUserSignUp({sign_up_id: item.signUpId}, userinfo.token).then(result => {
-            this._updateList(true);
+            EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0]});
         }).catch(msg => {
             this.props.toast.show(msg);
         });

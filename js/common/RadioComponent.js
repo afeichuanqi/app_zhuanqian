@@ -5,12 +5,25 @@ import {bottomTheme} from '../appSet';
 
 const {timing} = Animated;
 export default class RadioComponent extends PureComponent {
-    state = {
-        Checked: this.props.Checked,
+    static defaultProps = {
+        Checked: false,
     };
-    animations = {
-        left: new Animated.Value(0),
-    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            Checked: this.props.Checked,
+        };
+        this.animations = {
+            left: props.Checked ? new Animated.Value(1) : new Animated.Value(0),
+        };
+
+    }
+
+    componentDidMount(): void {
+
+    }
+
     _radioClick = () => {
         const {Checked} = this.state;
 
@@ -95,8 +108,13 @@ export default class RadioComponent extends PureComponent {
             activeOpacity={1}
             onPress={this._radioClick}
             style={{
-                width: 60, height: 30, borderRadius: 20, backgroundColor: '#ececec', borderWidth: 1,
+                width: 60,
+                height: 30,
+                borderRadius: 20,
+                backgroundColor: this.props.Checked ? bottomTheme : '#ececec',
+                borderWidth: 1,
                 borderColor: '#e8e8e8',
+
             }}>
             <Animated.View style={{
                 height: 30, width: 30, backgroundColor: 'white', borderRadius: 20, shadowColor: '#d9d9d9',

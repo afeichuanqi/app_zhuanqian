@@ -36,15 +36,11 @@ import ImageViewerModal from '../common/ImageViewerModal';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
-let taskId = 0;
-let taskUri = '';
 
 class ShopInfoPage extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
-        taskId = this.params.taskId;
-        taskUri = this.params.taskUri;
         this.state = {
             shopInfo: {},
             attentionStatus: 0,

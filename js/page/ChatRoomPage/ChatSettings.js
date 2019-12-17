@@ -168,6 +168,7 @@ class ChatSetting extends PureComponent {
                         blurOnSubmit={false}
                         onChangeText={this._onChangeText}
                         maxLength={100}
+                        placeholder={'请勿频繁提交或提交不属实的内容'}
                         multiline={true}
                         style={{
                             height: 130,
@@ -211,7 +212,7 @@ class ChatSetting extends PureComponent {
             }, token).then(() => {
                 this.myModalBox.hide();
                 this.reportText = '';
-                this.toast.show('举报成功')
+                this.toast.show('举报成功');
             });
         }
 

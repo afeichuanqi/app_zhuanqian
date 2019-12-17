@@ -119,7 +119,7 @@ class ChatRoomPage extends React.Component {
 
     getMessages = () => {
         const tmpArr = [];
-
+        this.imageArr = [];
         this.props.message.msgArr.forEach((item, index, arrs) => {
             if (item.FriendId == this.FriendId) {
                 const PreviousIndex = tmpArr.length;
@@ -138,8 +138,6 @@ class ChatRoomPage extends React.Component {
                             this.imageArr.push({url});
                         }
                     }
-
-
                 }
                 tmpArr.push({
                     id: item.msgId ? item.msgId : item.uuid,
@@ -197,7 +195,7 @@ class ChatRoomPage extends React.Component {
                                 NavigationUtils.goPage({type: 2}, 'UserProtocol');
                             },
                         });
-                    }else if (this.columnType == 5) {
+                    } else if (this.columnType == 5) {
                         tmpArr.push({
                             id: -3,
                             type: 'system',
@@ -371,8 +369,8 @@ class ChatRoomPage extends React.Component {
             onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(), FriendId);//插入一条临时图片数据
             uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
                 ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
-            })
-        }else{
+            });
+        } else {
             if (!this.FriendId) {
                 this.toast.show('重新打开会话试试 ～ ～');
                 return;
@@ -395,7 +393,7 @@ class ChatRoomPage extends React.Component {
             const uuid = getUUID();
             ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
             // console.log(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo,this.sendFormId);
-        }else{
+        } else {
             if (!this.FriendId) {
                 this.toast.show('重新打开会话试试 ～ ～');
             }

@@ -85,27 +85,25 @@ class UserBillListPage extends PureComponent {
             >
                 {navigationBar}
                 {/*{TopColumn}*/}
-                <View>
+                <View style={{paddingBottom:10,marginTop:5}}>
                     <TabBar
                         style={{
-                            marginTop: 10,
                             height: 35,
-                            backgroundColor: theme,
-                            width: 150,
+                            width: 200,
                             alignSelf: 'center',
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 10}}
+                        contentContainerStyle={{paddingTop: 15}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
                         // indicatorStyle={styles.indicator}
                         bounces={true}
-                        titleMarginHorizontal={25}
-                        activeStyle={{fontSize: 17, color: [33, 150, 243]}}
-                        inactiveStyle={{fontSize: 14, color: [0, 0, 0], height: 10}}
-                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
+                        titleMarginHorizontal={45}
+                        activeStyle={{fontSize: 13, color: [0, 0, 0]}}
+                        inactiveStyle={{fontSize: 13, color: [150, 150, 150], height: 10}}
+                        indicatorStyle={{height: 2, backgroundColor: bottomTheme, borderRadius: 3}}
                     />
                     <TouchableOpacity
                         onPress={() => {
@@ -113,7 +111,7 @@ class UserBillListPage extends PureComponent {
                         }}
                         style={{
                             position: 'absolute',
-                            top: 20, left: 10,
+                            top: 15, left: 10
                         }}>
                         <SvgUri width={20} height={20} svgXmlData={goback}/>
                     </TouchableOpacity>
@@ -194,7 +192,7 @@ class UserBillList extends PureComponent {
             type: this.props.type,
             pageIndex: this.page.pageIndex,
         }, userinfo.token).then(result => {
-            console.log(result);
+            // console.log(result);
             if (isRefresh) {
                 this.setState({
                     taskData: result,
@@ -243,19 +241,18 @@ class UserBillList extends PureComponent {
                 // onScroll={this._onScroll}
                 ListFooterComponent={() => this.genIndicator(hideLoaded)}
                 onEndReached={() => {
-                    console.log('onEndReached.....');
                     // 等待页面布局完成以后，在让加载更多
                     setTimeout(() => {
-                        if (this.canLoadMore) {
+                        if (this.canLoadMore && taskData.length >= 10) {
                             this.onLoading();
                             this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                         }
                     }, 100);
                 }}
-                // onScrollEndDrag={this._onScrollEndDrag}
                 windowSize={300}
                 onEndReachedThreshold={0.01}
                 onMomentumScrollBegin={() => {
+                    // console.log('我被触发');
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
@@ -274,7 +271,6 @@ class UserBillList extends PureComponent {
                 if (item.bill_task_id) {
                     NavigationUtils.goPage({test: false, task_id: item.bill_task_id}, 'TaskDetails');
                 }
-
             }}
             key={item.id}
             style={{

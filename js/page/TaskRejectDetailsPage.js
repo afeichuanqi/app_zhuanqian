@@ -28,6 +28,8 @@ import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
 import ToastSelect from '../common/ToastSelect';
 import Toast from '../common/Toast';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -252,7 +254,7 @@ class TaskRejectDetailsPage extends PureComponent {
                         <TouchableOpacity
                             onPress={() => {
 
-                                console.log(this.params.fromUserinfo,"this.params.fromUserinfo");
+                                console.log(this.params.fromUserinfo, 'this.params.fromUserinfo');
                                 NavigationUtils.goPage({
                                     task_id: this.params.taskId,
                                     sendFormId: this.params.sendFormId,
@@ -283,10 +285,11 @@ class TaskRejectDetailsPage extends PureComponent {
                         </TouchableOpacity>
                         <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
                         <TouchableOpacity onPress={() => {//重做
-
-
                             userRedoTask({SendFormTaskId: this.params.sendFormId}, this.props.userinfo.token).then((result) => {
                                 NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
+                                EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {
+                                    indexs: [0, 2],
+                                });//页面跳转到顶部
                             }).catch(msg => {
                                 this.toast.show(msg);
                             });

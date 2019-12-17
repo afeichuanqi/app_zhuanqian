@@ -250,11 +250,6 @@ class FristListComponent extends PureComponent {
         ) {
             return;
         }
-        // if (Y_ < 20
-        //     || Y_ > -20
-        // ) {
-        //     return;
-        // }
 
         if (Platform.OS === 'android') {
             if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {

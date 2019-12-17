@@ -9,7 +9,6 @@
 import React, {PureComponent} from 'react';
 import {
     Modal,
-    View,
     PermissionsAndroid,
     Dimensions,
     Text,

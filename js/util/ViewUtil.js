@@ -24,7 +24,7 @@ export default class ViewUtil {
 
                 </TouchableOpacity>
                 <View>
-                    <Text style={{color: fontColor, fontSize, fontWeight: 'bold'}}>{title}</Text>
+                    <Text style={{color: fontColor, fontSize}}>{title}</Text>
                 </View>
                 <TouchableOpacity
                     onPress={rightClick}

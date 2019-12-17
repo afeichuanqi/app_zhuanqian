@@ -176,7 +176,6 @@ class BottomBar extends Component {
         }
 
         this.bottomBarOnPress(index);
-
         if (index === this.props.navigationIndex) { //按下了相同的底部导航
             let pageName = '';
 

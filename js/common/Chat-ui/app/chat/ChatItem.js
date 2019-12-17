@@ -4,7 +4,7 @@ import {
     View,
     TouchableOpacity,
     Text,
-    StyleSheet, Dimensions,
+    StyleSheet, Dimensions, Platform,
 } from 'react-native';
 import Image from 'react-native-fast-image';
 import TextMessage from './TextMessage';
@@ -377,7 +377,7 @@ export default class ChatItem extends PureComponent {
                                             <View style={{
                                                 backgroundColor: message.targetId == guzhuInfo.guzhuUserId ? 'red' : '#2196F3',
                                                 paddingHorizontal: 7,
-                                                paddingVertical: 2,
+                                                paddingVertical: Platform.OS == 'android' ? 1 : 2,
                                                 borderRadius: 4,
                                                 marginRight: 5,
                                             }}>
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     subEmojiStyle: {
         width: 25,
         height: 25,
-        marginRight:3,
+        marginRight: 3,
 
     },
     commentBar__input: {

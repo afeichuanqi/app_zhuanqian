@@ -16,6 +16,9 @@ import setting from '../res/svg/setting.svg';
 import shop from '../res/svg/shop.svg';
 import guanzhu from '../res/svg/mysvg/guanzhu1.svg';
 import bill1 from '../res/svg/mysvg/bill1.svg';
+import yaoqing2 from '../res/svg/mysvg/yaoqing2.svg';
+import pingbi1 from '../res/svg/mysvg/pingbi1.svg';
+import favorite_1 from '../res/svg/mysvg/favorite_1.svg';
 import my_fabu from '../res/svg/my_fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import FastImage from 'react-native-fast-image';
@@ -41,7 +44,9 @@ class MyPage extends PureComponent {
         super(props);
     }
 
-    state = {};
+    state = {
+        isLoading: false,
+    };
 
     componentDidMount() {
 
@@ -58,8 +63,8 @@ class MyPage extends PureComponent {
             // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
         const titleTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-200, 0, 100],
-            outputRange: [250, 55, 18],
+            inputRange: [-400, 0, 100],
+            outputRange: [450, 55, 18],
             extrapolate: 'clamp',
         });
         const titleFontSize = Animated.interpolate(this.scrollY, {
@@ -77,9 +82,8 @@ class MyPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        const {userinfo, onUploadAvatar} = this.props;
-        // console.log(userinfo.upload_avatar_loading, 'userinfo.upload_avatar_loading');
-        // console.log(userinfo);
+        const {userinfo, onUploadAvatar, onGetUserInFoForToken} = this.props;
+        const {isLoading} = this.state;
         return (
             <View
                 style={{flex: 1}}
@@ -120,11 +124,6 @@ class MyPage extends PureComponent {
                     </Animated.View>
                     <AnimatedScrollView
                         style={{zIndex: 1}}
-                        // refreshControl={<RefreshControl
-                        //     // title={'更新任务中'}
-                        //     // refreshing={isLoading}
-                        //     onRefresh={() => this.onRefresh()}
-                        // />}
                         onScroll={Animated.event([
                             {
                                 nativeEvent: {
@@ -132,11 +131,24 @@ class MyPage extends PureComponent {
                                 },
                             },
                         ])}
+                        refreshControl={
+                            <RefreshControl
+                                // title={'更新任务中'}
+                                refreshing={isLoading}
+                                onRefresh={() => {
+                                    this.setState({
+                                        isLoading: true,
+                                    });
+                                    onGetUserInFoForToken(userinfo.token, () => {
+                                        this.setState({
+                                            isLoading: false,
+                                        });
+                                    });
+                                }}
+                            />
+                        }
                         scrollEventThrottle={1}
                     >
-                        {/*<View style={{backgroundColor: 'transparent', height: 50}}>*/}
-
-                        {/*</View>*/}
                         <TopInfoColumn onUploadAvatar={onUploadAvatar} userinfo={userinfo} scrollY={this.scrollY}/>
                         <BottomInfoColumn userinfo={userinfo}/>
                     </AnimatedScrollView>
@@ -177,6 +189,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
+    onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
 });
 const MyPageRedux = connect(mapStateToProps, mapDispatchToProps)(MyPage);
 export default MyPageRedux;
@@ -225,6 +238,7 @@ class ToolsItemComponent extends PureComponent {
 
 
 class BottomInfoColumn extends PureComponent {
+
     render() {
         return <View style={{}}>
             <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
@@ -235,6 +249,7 @@ class BottomInfoColumn extends PureComponent {
             <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+
                 style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
             >
                 <ToolsItemComponent
@@ -265,30 +280,24 @@ class BottomInfoColumn extends PureComponent {
                 NavigationUtils.goPage({}, '');
 
             })}
-            {ViewUtil.getSettingItem(bill1, '邀请好友', '好友邀请得奖励', () => {
+            {ViewUtil.getSettingItem(yaoqing2, '邀请好友', '好友邀请得奖励', () => {
                 MenuClick('FriendPromotionPage');
             })}
+            {ViewUtil.getSettingItem(favorite_1, '我的收藏', '收藏精品任务', () => {
+                MenuClick('MyFavoritePage');
+            })}
+            {ViewUtil.getSettingItem(pingbi1, '屏蔽用户', '屏蔽用户列表', () => {
+                MenuClick('MyShieldPage');
+            })}
             {ViewUtil.getMenuLine()}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
-            {/*{ViewUtil.getSettingItem(shop, '附件管理', '已经上传')}*/}
 
 
         </View>;
     }
 }
+
+
+
 
 class TopInfoColumn extends PureComponent {
     genDataInfo = (value, title) => {
@@ -389,7 +398,8 @@ class TopInfoColumn extends PureComponent {
                     {this.genDataInfo(userinfo.login ? userinfo.guaranteed_amount : 0, '保证金')}
                 </View>
             </Animated.View>
-            <PickerImage showMorePhotos={true} cropping={true} includeBase64={true} select={this._avatarSelect} popTitle={'选取头像'}
+            <PickerImage showMorePhotos={true} cropping={true} includeBase64={true} select={this._avatarSelect}
+                         popTitle={'选取头像'}
                          ref={ref => this.pickerImage = ref}/>
         </View>;
     }
@@ -400,7 +410,7 @@ class TopInfoColumn extends PureComponent {
         const mimeIndex = mime.indexOf('/');
         mime = mime.substring(mimeIndex + 1, mime.length);
         const uri = `file://${imageData.path}`;
-        this.props.onUploadAvatar(userinfo.token, {mime,uri}, (isTrue, data) => {
+        this.props.onUploadAvatar(userinfo.token, {mime, uri}, (isTrue, data) => {
         });
     };
 }

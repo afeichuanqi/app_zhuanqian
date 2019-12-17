@@ -667,7 +667,7 @@ class BottomBtns extends PureComponent {
                         justifyContent: 'center',
                         alignItems: 'center',
                         flexDirection: 'row',
-                        backgroundColor: 'rgba(0,0,0,0.1)',
+                        backgroundColor: '#f6f6f6',
                     }}>
 
                     <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>修改</Text>
