@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React, {PureComponent, Component} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
@@ -22,9 +22,9 @@ import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import {connect} from 'react-redux';
 import {getNoticeList} from '../util/AppService';
-import FastImage from 'react-native-fast-image';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
+import {equalsObj} from '../util/CommonUtils';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -63,12 +63,11 @@ class SystemNotificationPage extends PureComponent {
         } else {
             this.page.pageIndex += 1;
         }
-        // console.log(getNoticeList);
         getNoticeList({
             pageIndex: this.page.pageIndex,
         }, userinfo.token).then(result => {
-            console.log('getNoticeList', result);
             if (isRefresh) {
+                console.log('我被触发isRefresh');
                 this.setState({
                     taskData: result,
                     isLoading: false,
@@ -76,6 +75,7 @@ class SystemNotificationPage extends PureComponent {
                 });
             } else {
                 const tmpArr = [...this.state.taskData];
+                console.log('我被触发onload');
                 this.setState({
                     taskData: tmpArr.concat(result),
                     hideLoaded: result.length >= 10 ? false : true,
@@ -83,7 +83,6 @@ class SystemNotificationPage extends PureComponent {
             }
 
         }).catch(msg => {
-            console.log(msg);
             this.setState({
                 isLoading: false,
                 hideLoaded: false,
@@ -117,10 +116,9 @@ class SystemNotificationPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-
-                <View style={{flex: 1}}>
+                <View style={{flex:1, marginBottom:10}}>
                     <AnimatedFlatList
-                        style={{backgroundColor: '#f5f5f5', paddingTop: 3}}
+                        style={{backgroundColor: '#f1f1f1'}}
                         ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关任务'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
@@ -138,19 +136,20 @@ class SystemNotificationPage extends PureComponent {
                         onEndReached={() => {
                             // 等待页面布局完成以后，在让加载更多
                             setTimeout(() => {
-                                if (this.canLoadMore && this.taskData >= 10) {
+                                if (this.canLoadMore && taskData.length >= 10) {
                                     this.onLoading();
                                     this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                                 }
                             }, 100);
                         }}
                         windowSize={300}
-                        onEndReachedThreshold={0.01}
+                        onEndReachedThreshold={0.3}
                         onMomentumScrollBegin={() => {
                             this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                         }}
                     />
                 </View>
+
 
             </SafeAreaViewPlus>
         );
@@ -163,45 +162,7 @@ class SystemNotificationPage extends PureComponent {
         this._updatePage(false);
     };
     _renderIndexPath = ({item, index}) => {
-        return <TouchableOpacity
-            onPress={() => {
-                NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
-            }}
-            key={index}
-            style={{
-                width: width - 40,
-
-                paddingHorizontal: 10,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                alignSelf: 'center',
-
-
-
-            }}>
-            <View>
-                <Text style={{fontSize: 12, opacity: 0.5, marginVertical: 10}}>{item.send_date1}</Text>
-            </View>
-            <View style={{
-                width: width - 20, backgroundColor: 'white',
-                paddingHorizontal: 10,borderRadius: 10,
-            }}>
-                <Text style={{marginVertical: 10, fontSize:16}}>{item.title}</Text>
-                <View style={{height: 1, width: width - 40, backgroundColor: '#e8e8e8'}}/>
-                <Text style={{marginVertical: 15, fontSize: 13, opacity: 0.5,width: width - 40,}}>{item.content}</Text>
-                {item.is_read == 0 && <View style={{
-                    position: 'absolute',
-                    right: 10,
-                    top: 10,
-                    width: 5,
-                    height: 5,
-                    backgroundColor: 'red',
-                    borderRadius: 5,
-                }}/>}
-
-            </View>
-
-        </TouchableOpacity>;
+        return <NoticeItem item={item}/>;
     };
     page = {
         pageIndex: 0,
@@ -219,6 +180,66 @@ class SystemNotificationPage extends PureComponent {
 
                 <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
             </View>;
+    }
+}
+
+class NoticeItem extends Component {
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (!equalsObj(this.props.item, nextProps.item)) {
+            return true;
+        }
+        return false;
+    }
+
+    render() {
+        const {item} = this.props;
+        return <TouchableOpacity
+            key={item.id}
+            onPress={() => {
+                if (item.title.indexOf('审核') != -1) {
+                    NavigationUtils.goPage({navigationIndex: 0}, 'TaskReleaseMana');
+                }
+                if (item.title.indexOf('驳回') != -1) {
+                    NavigationUtils.goPage({navigationIndex: 2}, 'TaskOrdersMana');
+                }
+                if (item.title.indexOf('通过') != -1) {
+                    NavigationUtils.goPage({navigationIndex: 3}, 'TaskOrdersMana');
+                }
+
+            }}
+            style={{
+                width: width - 40,
+
+                paddingHorizontal: 10,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                alignSelf: 'center',
+
+
+            }}>
+            <View>
+                <Text style={{fontSize: 12, opacity: 0.5, marginVertical: 10}}>{item.send_date1}</Text>
+            </View>
+            <View style={{
+                width: width - 20, backgroundColor: 'white',
+                paddingHorizontal: 10, borderRadius: 10,
+            }}>
+                <Text style={{marginVertical: 10, fontSize: 16}}>{item.title}</Text>
+                <View style={{height: 1, width: width - 40, backgroundColor: '#e8e8e8'}}/>
+                <Text style={{marginVertical: 15, fontSize: 13, opacity: 0.5, width: width - 40}}>{item.content}</Text>
+                {item.is_read == 0 && <View style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 10,
+                    width: 5,
+                    height: 5,
+                    backgroundColor: 'red',
+                    borderRadius: 5,
+                }}/>}
+
+            </View>
+
+        </TouchableOpacity>;
     }
 }
 

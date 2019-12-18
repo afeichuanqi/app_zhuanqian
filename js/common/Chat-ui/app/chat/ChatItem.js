@@ -261,26 +261,22 @@ export default class ChatItem extends PureComponent {
                                 width: width - 20, backgroundColor: 'white', paddingTop: 15, paddingHorizontal: 15,
                                 borderRadius: 3,
                             }}>
-                            <Text style={{fontSize: 14, fontWeight: 'bold'}}>{message.title}</Text>
+                            <Text style={{fontSize: 15, fontWeight: 'bold'}}>{message.title}</Text>
                             <Text
-                                style={{fontSize: 11, color: 'rgba(0,0,0,0.5)', marginTop: 10}}>{message.content}</Text>
-                            <View style={{
-                                // marginVertical: 15,
-                                marginTop: 10,
-                                paddingVertical: 10,
+                                style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 10, marginBottom:10}}>{message.content}</Text>
 
-                                // height: 50,
-                                // backgroundColor: 'rgba(0,0,0,0.1)',
+                            {message.btnTitle.length > 0 && <View style={{
+                                paddingVertical: 10,
                                 width: width - 60,
                                 alignItems: 'flex-start',
                                 justifyContent: 'center',
-
                                 borderTopWidth: 0.3,
                                 borderTopColor: 'rgba(0,0,0,0.1)',
 
                             }}>
                                 <Text style={{color: '#2196F3'}}>{message.btnTitle}</Text>
-                            </View>
+                            </View>}
+
 
                         </TouchableOpacity>
                     );

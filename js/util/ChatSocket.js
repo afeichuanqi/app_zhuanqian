@@ -79,8 +79,7 @@ class ChatSocket {
                     Global.token = '';
                     break;
                 case types.NOTICE_USER_MESSAGE://收到系统消息
-                    console.log('收到消息');
-                    Global.dispatch(Message.onSetNoticeMsg(data.type - 1));
+                    Global.dispatch(Message.onSetNoticeMsg(data.type));
                     break;
 
 

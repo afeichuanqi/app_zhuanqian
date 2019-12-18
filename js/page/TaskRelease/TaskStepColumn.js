@@ -11,14 +11,12 @@ import {
     Dimensions,
     View,
     Text,
-    Clipboardl,
     TextInput,
     Clipboard,
     StyleSheet,
     TouchableOpacity,
     Linking,
 } from 'react-native';
-import Image from 'react-native-fast-image';
 import {bottomTheme} from '../../appSet';
 import SvgUri from 'react-native-svg-uri';
 import task_delete from '../../res/svg/task_delete.svg';
@@ -674,7 +672,7 @@ class TaskStepColumn extends Component {
                             }
                         </View>}
 
-                        <PickerImage popTitle={'选取验证图'} includeBase64={true} cropping={false}
+                        <PickerImage popTitle={'选取验证图'}
                                      select={this._selectVerifyImg}
                                      ref={`pickerImg${timestamp}`}/>
                     </View>

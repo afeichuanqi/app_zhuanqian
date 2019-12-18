@@ -6,11 +6,11 @@
  * @flow
  */
 
-import React, {PureComponent,Component} from 'react';
+import React, {PureComponent, Component} from 'react';
 import {ActivityIndicator, RefreshControl} from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView} from 'react-native';
 import {bottomTheme} from '../appSet';
 import setting from '../res/svg/setting.svg';
 import shop from '../res/svg/shop.svg';
@@ -32,6 +32,7 @@ import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import FastImagePro from '../common/FastImagePro';
 import {equalsObj} from '../util/CommonUtils';
+import {updateNoticeIsReadForType} from '../util/AppService';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -45,9 +46,7 @@ class MyPage extends PureComponent {
         super(props);
     }
 
-    state = {
-        isLoading: false,
-    };
+    state = {};
 
     componentDidMount() {
 
@@ -84,7 +83,6 @@ class MyPage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const {userinfo, onUploadAvatar, onGetUserInFoForToken} = this.props;
-        const {isLoading} = this.state;
         return (
             <View
                 style={{flex: 1}}
@@ -132,22 +130,16 @@ class MyPage extends PureComponent {
                                 },
                             },
                         ])}
-                        refreshControl={
-                            <RefreshControl
-                                // title={'更新任务中'}
-                                refreshing={isLoading}
-                                onRefresh={() => {
-                                    this.setState({
-                                        isLoading: true,
-                                    });
-                                    onGetUserInFoForToken(userinfo.token, () => {
-                                        this.setState({
-                                            isLoading: false,
-                                        });
-                                    });
-                                }}
-                            />
-                        }
+                        // refreshControl={
+                        //     <RefreshControl
+                        //         refreshing={false}
+                        //         enabled={false}
+                        //         onRefresh={() => {
+                        //             onGetUserInFoForToken(userinfo.token, () => {
+                        //             });
+                        //         }}
+                        //     />
+                        // }
                         scrollEventThrottle={1}
                     >
                         <TopInfoColumn onUploadAvatar={onUploadAvatar} userinfo={userinfo} scrollY={this.scrollY}/>
@@ -207,7 +199,7 @@ class BottomInfoColumn extends Component {
 
     render() {
 
-        const {onSetNoticeMsgIsRead, friend} = this.props;
+        const {onSetNoticeMsgIsRead, friend, userinfo} = this.props;
         const {notice_arr} = friend;
         return <View style={{}}>
             <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
@@ -227,9 +219,9 @@ class BottomInfoColumn extends Component {
                     source={require('../res/img/my/fabu.png')}
                     onPress={() => {
                         MenuClick('TaskReleaseMana');
-                        notice_arr[0] > 0 && onSetNoticeMsgIsRead(0);
+                        notice_arr[1] > 0 && onSetNoticeMsgIsRead(1) && updateNoticeIsReadForType({type:1}, userinfo.token);
                     }}
-                    isOtherMsg={notice_arr[0] > 0}
+                    isOtherMsg={notice_arr[1] > 0}
 
                 />
                 <ToolsItemComponent
@@ -238,9 +230,9 @@ class BottomInfoColumn extends Component {
                     info={'有任务、赚赏金'}
                     onPress={() => {
                         MenuClick('TaskOrdersMana');
-                        notice_arr[1] > 0 && onSetNoticeMsgIsRead(1);
+                        notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
                     }}
-                    isOtherMsg={notice_arr[1] > 0}
+                    isOtherMsg={notice_arr[2] > 0}
                 />
                 <ToolsItemComponent/>
                 <ToolsItemComponent/>
@@ -261,7 +253,7 @@ class BottomInfoColumn extends Component {
                 <View style={{
                     position: 'absolute',
                     right: 10, top: 10, width: 5, height: 5, borderRadius: 8,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                 }}/>}
             </View>
 

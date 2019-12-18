@@ -23,6 +23,27 @@ import ImageUtil from '../util/ImageUtil';
 
 const {timing} = Animated;
 const {width} = Dimensions.get('window');
+export const ImgOption = Platform.OS === 'android' ? {
+    cropping: true,
+    mediaType: 'photo',
+    freeStyleCropEnabled: true,
+    showCropGuidelines: true,
+    compressImageQuality: 0.7,
+    cropperChooseText: '确认',
+    cropperCancelText: '取消',
+    cropperToolbarTitle: '剪裁图片',
+} : {
+    width: 1800,
+    height: 1200,
+    cropping: true,
+    mediaType: 'photo',
+    freeStyleCropEnabled: true,
+    showCropGuidelines: true,
+    compressImageQuality: 0.7,
+    cropperChooseText: '确认',
+    cropperCancelText: '取消',
+    cropperToolbarTitle: '剪裁图片',
+};
 
 class PickerImage extends PureComponent {
     constructor(props) {
@@ -88,11 +109,11 @@ class PickerImage extends PureComponent {
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.setState({
                     visible: false,
                 });
-            },0)
+            }, 0);
 
         });
 
@@ -123,18 +144,7 @@ class PickerImage extends PureComponent {
         bottom: new Animated.Value(0),
     };
     _selTakePhone = () => {
-        ImagePicker.openCamera({
-            width: Platform.OS === 'ios' ? 1200 : 600,
-            height: Platform.OS === 'ios' ? 800 : 400,
-            cropping: this.props.cropping,
-            mediaType: 'photo',
-            freeStyleCropEnabled: true,
-            showCropGuidelines: true,
-            compressImageQuality: 0.7,
-            cropperChooseText: '确认',
-            cropperCancelText: '取消',
-            cropperToolbarTitle: '剪裁图片',
-        }).then(image => {
+        ImagePicker.openCamera(ImgOption).then(image => {
             this.hide();
 
             this.props.select(image, this.timestamp);
@@ -142,18 +152,7 @@ class PickerImage extends PureComponent {
 
     };
     _selAlbum = () => {
-        ImagePicker.openPicker({
-            width: Platform.OS === 'ios' ? 1200 : 600,
-            height: Platform.OS === 'ios' ? 800 : 400,
-            cropping: this.props.cropping,
-            mediaType: 'photo',
-            freeStyleCropEnabled: true,
-            showCropGuidelines: true,
-            compressImageQuality: 0.7,
-            cropperChooseText: '确认',
-            cropperCancelText: '取消',
-            cropperToolbarTitle: '剪裁图片',
-        }).then(image => {
+        ImagePicker.openPicker(ImgOption).then(image => {
             this.hide();
             this.props.select(image, this.timestamp);
 
@@ -169,7 +168,6 @@ class PickerImage extends PureComponent {
             <Modal
                 transparent
                 visible={visible}
-                // animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 
@@ -189,12 +187,6 @@ class PickerImage extends PureComponent {
                         borderTopRightRadius: 10,
                         transform: [{translateY: this.animations.bottom}],
                     }}>
-                        {/*<View style={{*/}
-                        {/*    width, alignItems: 'center', height: 20, justifyContent: 'center',*/}
-                        {/*    borderBottomWidth: 1, borderBottomColor: '#e8e8e8',*/}
-                        {/*}}>*/}
-                        {/*    <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>{this.props.popTitle}</Text>*/}
-                        {/*</View>*/}
                         {showMorePhotos && <FlatList
                             showsHorizontalScrollIndicator={false}
                             horizontal={true}
@@ -222,19 +214,6 @@ class PickerImage extends PureComponent {
                             }}>
                             <Text style={{}}>{'从相册选一张'}</Text>
                         </TouchableOpacity>
-                        {/*<View style={{*/}
-                        {/*    height: 10, backgroundColor: '#e8e8e8',*/}
-                        {/*}}/>*/}
-                        {/*<TouchableOpacity*/}
-                        {/*    onPress={() => {*/}
-                        {/*        this.hide(null);*/}
-                        {/*    }}*/}
-                        {/*    style={{*/}
-                        {/*        width, alignItems: 'center', height: 50, justifyContent: 'center',*/}
-
-                        {/*    }}>*/}
-                        {/*    <Text>取消</Text>*/}
-                        {/*</TouchableOpacity>*/}
                     </Animated.View>
                 </TouchableOpacity>
             </Modal>
@@ -250,15 +229,10 @@ class PickerImage extends PureComponent {
         return <TouchableOpacity
             onPress={() => {
                 ImagePicker.openCropper({
+                    ...ImgOption,
                     path: uri,
                     width: (Platform.OS === 'ios') ? width * 2 : width,
                     height: (Platform.OS === 'ios') ? height * 2 : height,
-                    freeStyleCropEnabled: true,
-                    showCropGuidelines: true,
-                    compressImageQuality: 0.7,
-                    cropperChooseText: '确认',
-                    cropperCancelText: '取消',
-                    cropperToolbarTitle: '剪裁图片',
                 }).then(image => {
                     this.hide();
                     this.props.select(image, this.timestamp);

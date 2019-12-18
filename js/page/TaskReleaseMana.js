@@ -49,20 +49,22 @@ class TaskReleaseMana extends PureComponent {
     constructor(props) {
         super(props);
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        this.params = this.props.navigation.state.params;
+        this.state = {
+            navigationIndex: this.params.navigationIndex || 0,
+            navigationRoutes: [
+                {key: 'first', title: '进行中'},
+                {key: 'second', title: '已暂停'},
+                {key: 'second1', title: '待上架'},
+            ],
+        };
     }
 
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
-    state = {
-        navigationIndex: 0,
-        navigationRoutes: [
-            {key: 'first', title: '进行中'},
-            {key: 'second', title: '已暂停'},
-            {key: 'second1', title: '待上架'},
-        ],
-    };
+
 
     componentDidMount() {
         this.backPress.componentDidMount();
@@ -135,7 +137,6 @@ class TaskReleaseMana extends PureComponent {
                     position={this.position}
                     renderTabBar={() => null}
                     onIndexChange={index => {
-
                         this.setState({
                             navigationIndex: index,
                         });

@@ -7,7 +7,7 @@ import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import message_more from '../res/svg/message_more.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {getUUID} from '../util/CommonUtils';
+import {equalsObj, getUUID} from '../util/CommonUtils';
 import {connect} from 'react-redux';
 import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
@@ -20,8 +20,8 @@ import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
-
-const {width, height} = Dimensions.get('window');
+import {ImgOption} from '../common/PickerImage';
+const {width} = Dimensions.get('window');
 
 class ChatRoomPage extends React.Component {
     constructor(props) {
@@ -109,9 +109,9 @@ class ChatRoomPage extends React.Component {
 
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
+        ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
         if (this.columnType == 1 || this.columnType == 5) {
             this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
-            ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
         } else if (this.columnType == 2 || this.columnType == 3) { //诉求信息
             EventBus.getInstance().fireEvent(`update_message_appeal_${this.columnType}_page`, {//刷新列表
             });
@@ -228,9 +228,7 @@ class ChatRoomPage extends React.Component {
 
     };
     _appealClick = () => {
-        // const {fromUserinfo, columnType, task_id} = this.params;
         this.columnType = 2;
-        // this.task_id = task_id;
         this._updatePage(this.columnType, this.task_id, this.fromUserinfo.id);
     };
 
@@ -249,6 +247,8 @@ class ChatRoomPage extends React.Component {
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
         });
+        const msgList = this.getMessages();
+
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -289,7 +289,7 @@ class ChatRoomPage extends React.Component {
                         placeholder={'想咨询TA点什么呢'}
                         useVoice={false}
                         ref={(e) => this.chat = e}
-                        messageList={this.getMessages()}
+                        messageList={msgList}
                         sendMessage={this.sendMessage}
                         showUserName={true}
                         pressAvatar={this._pressAvatar}
@@ -304,19 +304,11 @@ class ChatRoomPage extends React.Component {
                             icon: <Image source={require('../res/img/photo.png')} style={{width: 30, height: 30}}/>,
                             title: '照片',
                             onPress: () => {
-                                ImagePicker.openPicker({
-                                    width: Platform.OS === 'ios' ? 1800 : 600,
-                                    height: Platform.OS === 'ios' ? 1200 : 400,
-                                    cropping: true,
-                                    mediaType: 'photo',
-                                    cropperChooseText: '确认',
-                                    cropperCancelText: '取消',
-                                    cropperToolbarTitle: '选择图片',
-                                    freeStyleCropEnabled: true,
-                                    showCropGuidelines: true,
-                                    compressImageQuality: 0.7,
-                                }).then(image => {
+                                ImagePicker.openPicker(ImgOption).then(image => {
+                                    // console.log(image)
                                     this._imgSelect(image);
+                                }).catch(err=>{
+                                    console.log(err);
                                 });
                             },
                         },
@@ -325,18 +317,7 @@ class ChatRoomPage extends React.Component {
                                              style={{width: 30, height: 30}}/>,
                                 title: '拍照',
                                 onPress: () => {
-                                    ImagePicker.openCamera({
-                                        width: 300,
-                                        height: 400,
-                                        // cropping: true,
-                                        mediaType: 'photo',
-                                        cropperChooseText: '确认',
-                                        cropperCancelText: '取消',
-                                        cropperToolbarTitle: '选择图片',
-                                        freeStyleCropEnabled: true,
-                                        showCropGuidelines: true,
-                                        compressImageQuality: 0.7,
-                                    }).then(image => {
+                                    ImagePicker.openCamera(ImgOption).then(image => {
                                         this._imgSelect(image);
                                     });
                                 },
@@ -422,7 +403,7 @@ class TaskInfo extends React.Component {
             this.props.task_id != nextProps.task_id
             || this.props.sendFormId != nextProps.sendFormId
             || this.props.guzhuUserId != nextProps.guzhuUserId
-            || this.state.taskInfo != nextState.taskInfo
+            || !equalsObj(this.state.taskInfo, nextState.taskInfo)
         ) {
             return true;
         }
@@ -431,7 +412,6 @@ class TaskInfo extends React.Component {
 
     componentDidMount(): void {
         selectSimpleTaskInfo({task_id: this.props.task_id}, this.props.userinfo.token).then(taskInfo => {
-            // console.log(taskInfo);
             this.setState({
                 taskInfo,
             });
@@ -461,8 +441,6 @@ class TaskInfo extends React.Component {
                         }}/>
                     </View>
                 </View>
-
-
             </SkeletonPlaceholder>;
         }
 
@@ -471,8 +449,6 @@ class TaskInfo extends React.Component {
             activeOpacity={1}
             onPress={() => {
                 NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
-
-
             }}
             style={{
                 height: 80, width, backgroundColor: 'white', position: 'absolute', zIndex: 1,
@@ -486,13 +462,14 @@ class TaskInfo extends React.Component {
                     resizeMode={Image.resizeMode.stretch}
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                    <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.5)'}}>{taskInfo.task_title}</Text>
+                    <Text style={{fontSize: 17}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
+                    <Text style={{fontSize: 13, opacity:0.5}}>{taskInfo.task_title}</Text>
                     <Text style={{
-                        fontSize: 12,
+                        fontSize: 13,
                         color: 'red',
+                        marginTop:3,
                     }}>
-                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : columnType === 5 ? '驳回咨询' : ''}
+                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : columnType === 5 ? '驳回沟通' : ''}
                     </Text>
 
                 </View>
@@ -516,7 +493,7 @@ class TaskInfo extends React.Component {
                     }
                     style={{
                         height: 25,
-                        width: 60,
+                        width: 70,
                         backgroundColor: 'red',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -525,7 +502,7 @@ class TaskInfo extends React.Component {
                     }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: 12,
+                        fontSize: 13,
                     }}>{(columnType == 2 || columnType == 3 || columnType == 5) ? '任务来往' : '查看详情'}</Text>
                 </TouchableOpacity>
 

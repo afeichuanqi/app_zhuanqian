@@ -49,18 +49,18 @@ class EmptyComponent extends PureComponent {
         return (
             <View style={{
                 height: this.props.height, justifyContent: 'center', alignItems: 'center',
-                backgroundColor: '#f7f7f7', width,
+                backgroundColor: '#fafafa', width,
 
             }}>
                 <View style={{
                     justifyContent: 'center',
                     marginTop: this.props.marginTop,
                     alignItems: 'center',
-                    shadowColor: '#c7c7c7',
+                    shadowColor: '#f5f5f5',
 
                 }}>
-                    <Image source={require('../res/img/kongxiangzi.png')} style={{width: 100, height: 70}}/>
-                    <Text style={{marginTop: 10, color: 'black', opacity: 0.7}}>{this.props.message}</Text>
+                    <Image source={require('../res/img/kongxiangzi.png')} style={{width: 80, height: 50}}/>
+                    <Text style={{marginTop: 20, fontSize: 13,color: 'black', opacity: 0.7}}>{this.props.message} ~ ~</Text>
                 </View>
             </View>
         );

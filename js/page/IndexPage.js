@@ -122,6 +122,7 @@ class HomePage extends PureComponent {
                 {/*    position={'center'}*/}
                 {/*    ref={ref => this.toast = ref}*/}
                 {/*/>*/}
+
                 <View style={{flex: 1}}>
                     <View style={{
                         paddingHorizontal: 10,

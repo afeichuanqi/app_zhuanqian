@@ -1036,6 +1036,27 @@ export function getNoticeList(data, token) {
         }
     });
 }
+/**
+ * 设置某一类型的消息被读取
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function updateNoticeIsReadForType(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/updateNoticeIsReadForType', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 查询用户任务收藏状态

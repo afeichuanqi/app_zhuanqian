@@ -41,22 +41,24 @@ class TaskOrdersMana extends PureComponent {
     constructor(props) {
         super(props);
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        this.params = this.props.navigation.state.params;
+        this.state = {
+            navigationIndex: this.params.navigationIndex || 0,
+            navigationRoutes: [
+                // {key: 'first', title: '全部'},
+                {key: 'second', title: '未提交'},
+                {key: 'second1', title: '审核中'},
+                {key: 'second2', title: '未通过'},
+                {key: 'second3', title: '已通过'},
+            ],
+        };
     }
 
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
-    state = {
-        navigationIndex: 0,
-        navigationRoutes: [
-            // {key: 'first', title: '全部'},
-            {key: 'second', title: '未提交'},
-            {key: 'second1', title: '审核中'},
-            {key: 'second2', title: '未通过'},
-            {key: 'second3', title: '已通过'},
-        ],
-    };
+
 
     componentDidMount() {
         this.backPress.componentDidMount();

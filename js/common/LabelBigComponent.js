@@ -38,7 +38,7 @@ class LabelBigComponent extends PureComponent {
             style={{
                 paddingHorizontal,
                 paddingVertical,
-                backgroundColor: '#f3f3f3',
+                backgroundColor: '#f5f5f5',
                 borderRadius: 4,
                 marginRight,
                 marginTop,

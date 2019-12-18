@@ -168,7 +168,7 @@ class BottomBar extends Component {
     }
 
     _BottomBarClick = (index) => {
-
+        const {onPress, onGetUserInFoForToken, userinfo, navigationIndex} = this.props;
         if (index === 0) {
             StatusBar.setBarStyle('dark-content', true);
             StatusBar.setBackgroundColor(theme, true);
@@ -177,8 +177,16 @@ class BottomBar extends Component {
             StatusBar.setBackgroundColor(bottomTheme, true);
         }
 
-        this.bottomBarOnPress(index);
-        if (index === this.props.navigationIndex) { //按下了相同的底部导航
+        // this.bottomBarOnPress(index);
+
+        onPress(index);
+        if (index === 3 ) { //我的栏目被单击
+            const token = userinfo.token;
+            onGetUserInFoForToken(token, (loginStatus, msg) => {
+            });
+        }
+
+        if (index === navigationIndex) { //按下了相同的底部导航
             let pageName = '';
 
             if (index === 0) {
@@ -229,7 +237,7 @@ class BottomBar extends Component {
                 navigationIndex === 2 ? true : false,
                 37,
                 unMessageLength ? unMessageLength : 0,
-                (appeal_2 > 0 || appeal_3 > 0 || notice_arr[0] > 0 || notice_arr[1] > 0 || notice_arr[2] > 0),
+                (appeal_2 > 0 || appeal_3 > 0 || notice_arr[1] > 0 || notice_arr[2] > 0),
             )}
             {this._renderBottomBar(
                 navigationIndex === 3 ? myA : my,
@@ -238,19 +246,13 @@ class BottomBar extends Component {
                 navigationIndex === 3 ? true : false,
                 37,
                 0,
-                (notice_arr[0] > 0 || notice_arr[1] > 0 || notice_arr[2] > 0),
+                (notice_arr[1] > 0 || notice_arr[2] > 0),
             )}
         </View>;
     }
 
     bottomBarOnPress = (index) => {
-        const {onPress, onGetUserInFoForToken, userinfo} = this.props;
-        onPress(index);
-        if (index === 3) { //我的栏目被单击
-            const token = userinfo.token;
-            onGetUserInFoForToken(token, (loginStatus, msg) => {
-            });
-        }
+
 
     };
     _renderBottomBar = (svgXmlData, onPress, key, isActive, size = 35, unReadLength = 0, isOtherUnRead = false) => {

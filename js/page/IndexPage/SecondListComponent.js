@@ -54,9 +54,14 @@ class SecondListComponent extends PureComponent {
             <View style={{
                 backgroundColor: 'rgba(0,0,0,0.1)', position: 'absolute', top: 0, right: 0,
                 width: 120, height: 120,
+                borderRadius:5,
             }}>
                 <View style={{position: 'absolute', right: 5, top: 5}}>
-                    <Text style={{fontSize: 16, color: 'white', fontWeight: 'bold'}}>¥{item.reward_price}</Text>
+                    <Text style={{
+                        fontSize: 16,
+                        color: 'white',
+                        fontWeight: 'bold',
+                    }}>{item.reward_price ? `¥${item.reward_price.toFixed(2)}` : ''} </Text>
                 </View>
                 <View
                     style={{
@@ -65,10 +70,10 @@ class SecondListComponent extends PureComponent {
                         bottom: 0,
                         height: 30,
                         backgroundColor: 'rgba(0,0,0,0.2)',
-                        borderBottomRightRadius:5,
-                        borderBottomLeftRadius:5,
+                        borderBottomRightRadius: 5,
+                        borderBottomLeftRadius: 5,
                     }}>
-                    <Text style={{color: 'white', fontSize: 13, width: 120}}>
+                    <Text style={{color: 'white', fontSize: 14, width: 120, textAlign:'center'}}>
                         {item.task_title}
                     </Text>
                 </View>
@@ -122,7 +127,7 @@ class SecondListComponent extends PureComponent {
                     this.props.onLoad(load);
                 }}
                 ListHeaderComponent={
-                    <View style={{height: 220, backgroundColor:'white'}}>
+                    <View style={{height: 220, backgroundColor: 'white'}}>
                         <View style={{marginTop: 20, paddingLeft: 10}}>
                             <Text style={{fontSize: 17, opacity: 0.9}}>最新发布</Text>
                         </View>
@@ -177,17 +182,12 @@ class SecondListComponent extends PureComponent {
 const styles = StyleSheet.create({
     carousel: {
         flex: 1,
-        // justifyContent:'center'
     },
     imgStyle: {
-        // 设置背景颜色
         backgroundColor: '#E8E8E8',
-        // 设置宽度
         width: 120,
         height: 120,
         borderRadius: 10,
-        // 设置高度
-        // height:150
     },
 });
 export default SecondListComponent;

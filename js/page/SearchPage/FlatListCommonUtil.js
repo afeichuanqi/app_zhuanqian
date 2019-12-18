@@ -1,10 +1,9 @@
 import React, {PureComponent} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, Text, View, Dimensions} from 'react-native';
 import Animated from 'react-native-reanimated';
-import TaskSumComponent from '../../common/TaskSumComponent';
-import {getAllTask, getSearchContent} from '../../util/AppService';
+import {getSearchContent} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
-import {bottomTheme} from '../../appSet';
+import TaskInfoComponent from '../../common/TaskInfoComponent';
 
 const {height, width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -102,7 +101,7 @@ export default class FlatListCommonUtil extends PureComponent {
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
                 // 等待页面布局完成以后，在让加载更多
-                if (this.canLoadMore) {
+                if (this.canLoadMore && taskData.length>=10) {
                     this.onLoading();
                     this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                 }
@@ -149,7 +148,7 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent item={item} key={index}/>;
+        return <TaskInfoComponent item={item} key={index}/>;
     };
 
 }

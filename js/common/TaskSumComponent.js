@@ -7,36 +7,21 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import SvgUri from 'react-native-svg-uri';
-// import Animated, {Easing} from 'react-native-reanimated';
-
-// const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-// const {timing} = Animated;
+import {equalsObj} from '../util/CommonUtils';
 
 
 const {width} = Dimensions.get('window');
 
 class TaskSumComponent extends Component {
 
-    // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-    //     if (this.state.value !== nextState.value) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-        return this.props.item.taskId !== nextProps.item.taskId;
 
-    }
-
-    isZuijinTime = (date) => {
-        const newDate = new Date(date);
-
-        const str = newDate.getTime();
-        const now = Date.now();
-
-        return str > (now - 5 * 60 * 1000);
-
-    };
+    // isZuijinTime = (date) => {
+    //     const newDate = new Date(date);
+    //     const str = newDate.getTime();
+    //     const now = Date.now();
+    //     return str > (now - 5 * 60 * 1000);
+    //
+    // };
     static defaultProps = {
         titleFontSize: 15,
         marginHorizontal: 10,
@@ -62,49 +47,29 @@ class TaskSumComponent extends Component {
     }
 
     componentDidMount(): void {
+    }
 
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (!equalsObj(this.props.item, nextProps.item)) {
+            return true;
+        }
+        return false;
 
     }
 
-    // animations = {
-    //     scale: new Animated.Value(1),
-    // };
-    // _onPressIn = () => {
-    //     //隐藏box
-    //     this._anim = Animated.timing(this.animations.scale, {
-    //         duration: 200,
-    //         toValue: 0,
-    //         // easing: Easing.inOut(Easing.ease),
-    //     }).start();
-    // };
-    // _onPressOut = () => {
-    //     //隐藏box
-    //     this._anim = Animated.timing(this.animations.scale, {
-    //         duration: 200,
-    //         toValue: 1,
-    //         // easing: Easing.inOut(Easing.ease),
-    //     }).start();
-    // };
-
     render() {
-        // const scale = this.animations.scale.interpolate( {
-        //     inputRange: [0, 1],
-        //     outputRange: [0.95, 1],
-        //     extrapolate: 'clamp',
-        // });
-        const {titleFontSize, marginHorizontal, item} = this.props;
-        // console.log(item);
+        const {item} = this.props;
         let maxWidth = width - 80;
-        const isZuijin = this.isZuijinTime(item.updateTime);
+        // const isZuijin = this.isZuijinTime(item.updateTime);
         if (item.recommendIsExp == 1) {
             maxWidth -= 40;
         }
         if (item.topIsExp == 1) {
             maxWidth -= 40;
         }
-        if (isZuijin) {
-            maxWidth -= 49;
-        }
+        // if (isZuijin) {
+        //     maxWidth -= 60;
+        // }
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
@@ -113,16 +78,12 @@ class TaskSumComponent extends Component {
             }}
             style={{
                 flex: 1,
-                // flexDirection: 'row',
-
                 paddingTop: 15,
                 paddingBottom: 25,
-                // borderBottomWidth: 0.7,
-                // borderBottomColor: '#d8d8d8',
-                alignItems:'center',
-                backgroundColor:'white',
+                alignItems: 'center',
+                backgroundColor: 'white',
                 height: 130,
-                marginBottom:5,
+                marginBottom: 5,
             }}
         >
 
@@ -142,73 +103,50 @@ class TaskSumComponent extends Component {
                                 fontSize: 17,
                                 color: 'black',
                                 fontWeight: '500',
-                                // width:width-200
                                 maxWidth: maxWidth,
+                                marginRight: 10,
                             }}>{item.taskId} - {item.taskTitle}</Text>
-                        {isZuijin && <View style={{
-                            height: 15,
-                            paddingHorizontal: 3,
-                            borderRadius: 3,
-                            borderWidth: 0.8,
-                            borderColor: bottomTheme,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginLeft: 5,
-                        }}>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: 10}}>最近刷新</Text>
-                        </View>}
-                        {item.recommendIsExp == 1 && <View style={{
-                            height: 15,
-                            paddingHorizontal: 3,
-                            borderRadius: 3,
-                            borderWidth: 0.8,
-                            borderColor: bottomTheme,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginLeft: 5,
-                        }}>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: 10}}>推荐</Text>
+
+                        {item.recommendIsExp == 1 && <View style={styles.labelStyle}>
+                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: 12}}>推荐</Text>
                         </View>}
 
 
-                        {item.topIsExp == 1 && <View style={{
-                            height: 15,
-                            paddingHorizontal: 3,
-                            borderRadius: 3,
-                            borderWidth: 0.8,
-                            borderColor: bottomTheme,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginLeft: 5,
-                        }}>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: 10}}>置顶</Text>
+                        {item.topIsExp == 1 && <View style={styles.labelStyle}>
+                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: 12}}>置顶</Text>
                         </View>}
+                        {/*{isZuijin && <View style={styles.labelStyle}>*/}
+                        {/*    <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: 12}}>最近刷新</Text>*/}
+                        {/*</View>}*/}
                     </View>
                     {/*价格*/}
                     <View style={{}}>
                         <Text style={{
-                            fontSize: 17,
+                            fontSize: 18,
                             color: 'red',
                             fontWeight: '500',
                         }}>+ {item.rewardPrice}元</Text>
                     </View>
                 </View>
                 {/*剩余数*/}
+
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    marginTop: 5,
+                    marginTop: 10,
                 }}>
+
                     <Text style={{
-                        fontSize: 13,
-                        opacity: 0.5,
+                        fontSize: 15,
+                        opacity: 0.8,
+                        color: 'red',
                     }}>{parseInt(item.taskPassNum)}人已完成</Text>
                     <View
                         style={{width: 0.3, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 10}}/>
                     <Text style={{
-                        fontSize: 13,
-                        opacity: 0.5,
-                        color:'red',
+                        fontSize: 15,
+                        opacity: 0.8,
+                        color: 'red',
                     }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}个名额</Text>
                 </View>
                 <View
@@ -222,37 +160,65 @@ class TaskSumComponent extends Component {
                     <View style={{
                         flexDirection: 'row',
                     }}>
-                        <LabelBigComponent paddingHorizontal={8} fontSize={11} title={item.typeTitle}/>
-                        <LabelBigComponent paddingHorizontal={8} fontSize={11} title={item.taskName}/>
+                        <LabelBigComponent paddingHorizontal={8} fontSize={12} title={item.typeTitle}/>
+                        <LabelBigComponent paddingHorizontal={8} fontSize={12} title={item.taskName}/>
                     </View>
                 </View>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={()=>{this.props.imageViewModal.show([{url: item.taskUri}])}}
+                    style={{
+                        position: 'absolute',
+                        top: 30,
+                        right: 0,
+                    }}
+                >
+                    <FastImage
+                        style={{
+                            backgroundColor: '#E8E8E8',
+                            width: 65,
+                            height: 70,
+                            borderRadius: 3,
+
+                        }}
+                        source={{uri: item.taskUri}}
+                        resizeMode={FastImage.resizeMode.stretch}
+                    />
+                </TouchableOpacity>
+
                 <TouchableOpacity
                     onPress={() => {
                         NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
                     }}
-                    style={{marginTop: 10, flexDirection: 'row', alignItems: 'center', width: 200}}>
-                    <View>
-                        <FastImage
-                            style={[styles.imgStyle]}
-                            source={{uri: item.avatarUrl}}
-                            resizeMode={FastImage.resizeMode.stretch}
-                        />
-                        <SvgUri style={{
-                            position: 'absolute',
-                            right: -2,
-                            bottom: -2,
-                            backgroundColor: item.sex == 0 ? '#3b8ae8' : '#e893d8',
-                            borderRadius: 20,
+                    style={{
+                        marginTop: 5,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <View>
+                            <FastImage
+                                style={[styles.imgStyle]}
+                                source={{uri: item.avatarUrl}}
+                                resizeMode={FastImage.resizeMode.stretch}
+                            />
+                            <SvgUri style={{
+                                position: 'absolute',
+                                right: -2,
+                                bottom: -2,
+                                backgroundColor: item.sex == 0 ? '#3b8ae8' : '#e893d8',
+                                borderRadius: 20,
 
-                        }} fill={'white'} width={10} height={10}
-                                svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
+                            }} fill={'white'} width={10} height={10}
+                                    svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
+                        </View>
+                        <Text style={{fontSize: 13, marginLeft: 10}}>{item.userName}</Text>
                     </View>
 
-                    <Text style={{fontSize: 12, marginLeft: 8,width: 100}}>{item.userName}</Text>
 
                 </TouchableOpacity>
             </View>
-            {/*<View style={{width,height:5, backgroundColor:'#d8d8d8'}}/>*/}
 
         </TouchableOpacity>;
 
@@ -265,13 +231,19 @@ class TaskSumComponent extends Component {
 export default TaskSumComponent;
 const styles = StyleSheet.create({
     imgStyle: {
-        // 设置背景颜色
         backgroundColor: '#E8E8E8',
-        // 设置宽度
         width: 20,
         height: 20,
         borderRadius: 25,
-        // 设置高度
-        // height:150
+    },
+    labelStyle: {
+        height: 15,
+        paddingHorizontal: 3,
+        borderRadius: 3,
+        borderWidth: 0.8,
+        borderColor: bottomTheme,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 5,
     },
 });

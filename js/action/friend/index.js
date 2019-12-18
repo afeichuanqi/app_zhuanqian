@@ -123,6 +123,7 @@ export function onSetNoticeMsg(type) {
 
 // 设置系统消息
 export function onSetNoticeMsgIsRead(type) {
+
     return {type: Types.SET_NEW_NOTICE_MSG_IS_READ, data: {type}};
 }
 // 设置系统消息
