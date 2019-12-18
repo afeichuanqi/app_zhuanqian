@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, Text, Dimensions, TextInput} from 'react-native';
+import {View, Text, Dimensions, TextInput, TouchableOpacity} from 'react-native';
 import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../../appSet';
 import NavigationBar from '../../common/NavigationBar';
@@ -17,6 +17,8 @@ import actions from '../../action';
 import {connect} from 'react-redux';
 import BackPressComponent from '../../common/BackPressComponent';
 import Toast from '../../common/Toast';
+import SvgUri from 'react-native-svg-uri';
+import phone_input_clear from '../../res/svg/phone_input_clear.svg';
 
 const {width} = Dimensions.get('window');
 
@@ -58,10 +60,10 @@ class UpdateUserName extends PureComponent {
         />;
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '昵称', null, theme, 'black', 16, () => {
             const {onSetUserName, userinfo} = this.props;
-            onSetUserName(userinfo.token, this.state.text, (bool,msg) => {
-                if(bool){
+            onSetUserName(userinfo.token, this.state.text, (bool, msg) => {
+                if (bool) {
                     this.toast.show('修改成功');
-                }else{
+                } else {
                     this.toast.show(msg);
                 }
 
@@ -105,6 +107,19 @@ class UpdateUserName extends PureComponent {
                             <Text style={{opacity: 0.5}}>/12</Text>
                         </View>
                     </View>
+                    {this.state.text.length > 0 && <TouchableOpacity
+                        onPress={() => {
+                            this.setState({
+                                text: '',
+                            });
+                        }}
+                        style={{position: 'absolute', top: 18, right: 15}}
+                        activeOpacity={0.7}>
+                        <SvgUri width={13}
+                                height={13}
+                                fill={'rgba(0,0,0,0.6)'}
+                                svgXmlData={phone_input_clear}/>
+                    </TouchableOpacity>}
 
 
                 </View>

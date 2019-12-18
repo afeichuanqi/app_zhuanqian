@@ -3,6 +3,7 @@ import Types from '../../action/Types';
 const defaultContent = {
     identIdy: false,
     msgArr: [],
+
 };
 
 export default function onAction(state = defaultContent, action) {
@@ -54,7 +55,6 @@ export default function onAction(state = defaultContent, action) {
         case Types.MESSAGE_SET_STATUS://消息加状态
             const temArr__ = [...state.msgArr];
             const index = temArr__.findIndex(d => d.uuid === data.uuid);
-            // console.log(temArr__,"indexindex");
             const temJson = temArr__[index];
             temJson.msgId = data.msgId;
             temJson.sendDate = data.sendDate;

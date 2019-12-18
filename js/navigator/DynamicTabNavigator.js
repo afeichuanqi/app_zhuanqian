@@ -28,6 +28,7 @@ import actions from '../action';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import {equalsObj} from '../util/CommonUtils';
 
 type Props = {};
 
@@ -158,6 +159,7 @@ class BottomBar extends Component {
             || (this.props.friend && (this.props.friend.unMessageLength !== nextProps.friend.unMessageLength))
             || (this.props.friend && (this.props.friend.appeal_3 !== nextProps.friend.appeal_3))
             || (this.props.friend && (this.props.friend.appeal_2 !== nextProps.friend.appeal_2))
+            || !equalsObj(this.props.friend.notice_arr, nextProps.friend.notice_arr)
         ) {
             return true;
         }
@@ -196,8 +198,7 @@ class BottomBar extends Component {
     render() {
         // console.log('我被render');
         const {navigationIndex} = this.props;
-        const {unMessageLength, appeal_2, appeal_3} = this.props.friend;
-        const isOtherUnread = (appeal_2 > 0 || appeal_3 > 0) ? true : false;
+        const {unMessageLength, appeal_2, appeal_3, notice_arr} = this.props.friend;
         return <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -228,7 +229,7 @@ class BottomBar extends Component {
                 navigationIndex === 2 ? true : false,
                 37,
                 unMessageLength ? unMessageLength : 0,
-                isOtherUnread,
+                (appeal_2 > 0 || appeal_3 > 0 || notice_arr[0] > 0 || notice_arr[1] > 0 || notice_arr[2] > 0),
             )}
             {this._renderBottomBar(
                 navigationIndex === 3 ? myA : my,
@@ -236,6 +237,8 @@ class BottomBar extends Component {
                 3,
                 navigationIndex === 3 ? true : false,
                 37,
+                0,
+                (notice_arr[0] > 0 || notice_arr[1] > 0 || notice_arr[2] > 0),
             )}
         </View>;
     }

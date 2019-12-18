@@ -24,9 +24,10 @@ export function onSetAllFriendUnRead(FriendId, columnType) {
 }
 
 // 设置其他类型未读消息数
-export function onSetOtherTypeUnread(appeal2Unread, appeal3Unread) {
+export function onSetOtherTypeUnread(appeal2Unread, appeal3Unread,noticeArr) {
     // console.log(appeal1Unread, appeal2Unread, 'appeal1Unread,appeal2Unread');
-    return {type: Types.FRIEND_SET_OTHER_MSG_UN_READ, data: {appeal_2: appeal2Unread, appeal_3: appeal3Unread}};
+    console.log(noticeArr,"noticeArr");
+    return {type: Types.FRIEND_SET_OTHER_MSG_UN_READ, data: {appeal_2: appeal2Unread, appeal_3: appeal3Unread,noticeArr}};
 }
 
 // 设置其他类型未读消息数
@@ -42,9 +43,9 @@ export function setAppeal_3IsRead() {
 // 好友来了一条新的消息
 export function onSetNewMsgForRromUserid(
     fromUserid_, msg_type_, content_, msgId_, sendDate_, ToUserId_, sendStatus_, username, avatar_url, FriendId, columnType, taskUri, taskId,
-    isAddNewMsgLength = true, sendFormId
+    isAddNewMsgLength = true, sendFormId,
 ) {
-    console.log("onSetNewMsgForRromUserid",{
+    console.log('onSetNewMsgForRromUserid', {
         fromUserid: fromUserid_,
         msg_type: msg_type_,
         content: content_,
@@ -115,10 +116,17 @@ export function onFriendInitialiZation() {
     };
 }
 
-//将msgid设置为已读
-// export function onSetMsgIdIsRead(msgId) {
-//     // console.log(code, 'code');
-//     return {type: Types.MESSAGE_SET_MSGID_IS_READ, data: {msgId}};
-// }
+// 设置系统消息
+export function onSetNoticeMsg(type) {
+    return {type: Types.NEW_NOTICE_MSG, data: {type}};
+}
 
+// 设置系统消息
+export function onSetNoticeMsgIsRead(type) {
+    return {type: Types.SET_NEW_NOTICE_MSG_IS_READ, data: {type}};
+}
+// 设置系统消息
+export function onSetNoticeMsgIsAllRead() {
+    return {type: Types.SET_NEW_NOTICE_MSG_IS_ALL_READ, data: {}};
+}
 

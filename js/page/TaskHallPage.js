@@ -20,6 +20,7 @@ const {timing} = Animated;
 import NavigationBar from '../common/NavigationBar';
 import TabBar from '../common/TabBar';
 import search from '../res/svg/search.svg';
+import jia from '../res/svg/jia.svg';
 import fabu from '../res/svg/fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import {TabView} from 'react-native-tab-view';
@@ -84,67 +85,51 @@ class TaskHallPage extends PureComponent {
                 {/*顶部样式*/}
                 <View style={{
                     backgroundColor: bottomTheme,
-                    height: 55,
+                    height: 50,
                     width,
                     alignItems: 'center',
-
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    paddingHorizontal: 15,
                 }}>
-                    {/*搜索图标*/}
-                    <TouchableOpacity
-                        onPress={() => {
-                            NavigationUtils.goPage({}, 'SearchPage');
-                        }}
-                        style={{
-                            position: 'absolute',
-                            left: 20,
-                            top: 23,
-
-                        }}>
-                        <SvgUri width={21} height={21} fill={'white'} svgXmlData={search}/>
-                    </TouchableOpacity>
-
-
                     <TabBar
                         style={{
-                            height: 48,
+                            height: 45,
+                            width: 200,
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 25}}
+                        contentContainerStyle={{paddingTop: 15}}
                         routes={navigationRoutes}
                         index={navigationIndex}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
-                        titleMarginHorizontal={20}
-                        activeStyle={{fontSize: 18, color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: 14, color: [255, 255, 255], height: 10}}
-                        indicatorStyle={{height: 3, backgroundColor: 'white', borderRadius: 3}}
+                        titleMarginHorizontal={15}
+                        activeStyle={{fontSize: 19, color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: 16, color: [255, 255, 255], height: 10}}
+                        indicatorStyle={{height: 3, backgroundColor: 'white', borderRadius: 3, top: -5}}
                     />
-                    {/*发布按钮图标*/}
-                    <TouchableOpacity
-                        onPress={() => {
-                            NavigationUtils.goPage({}, 'TaskRelease');
-                        }}
-                        activeOpacity={0.6}
-                        style={{
-                            position: 'absolute',
-                            right: 10,
-                            top: 23,
-                            paddingHorizontal: 10,
-                            paddingVertical: 3,
-                            borderRadius: 20,
-                            backgroundColor: 'white',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                        }}>
-                        <SvgUri style={{marginRight: 3}} width={16} height={16} fill={bottomTheme} svgXmlData={fabu}/>
-                        <Text style={{
-                            color: bottomTheme,
-                            fontSize: 13,
-                        }}>发布</Text>
-                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+                        {/*加图标*/}
+                        <TouchableOpacity
+                            onPress={() => {
+                                NavigationUtils.goPage({}, 'TaskRelease');
+                            }}
+                        >
+                            <SvgUri width={21} height={21} fill={'white'} svgXmlData={jia}/>
+                        </TouchableOpacity>
+                        <View style={{height: 13, width: 0.4, backgroundColor: 'white', marginHorizontal: 12}}/>
+                        {/*搜索图标*/}
+                        <TouchableOpacity
+                            onPress={() => {
+                                NavigationUtils.goPage({}, 'SearchPage');
+                            }}
+                        >
+                            <SvgUri width={21} height={21} fill={'white'} svgXmlData={search}/>
+                        </TouchableOpacity>
+
+
+                    </View>
                 </View>
-                {/*<FristListComponent/>*/}
                 <TabView
                     // ref={ref => this.tabView = ref}
                     indicatorStyle={{backgroundColor: 'white'}}
@@ -279,11 +264,18 @@ class FristListComponent extends PureComponent {
     };
     _sureClick = (arr) => {
         this.flatList.setTypes(arr.toString());
-
         this.hide();
         setTimeout(() => {
             this.flatList._updateList(true);
         }, 200);
+        if (arr.length > 0) {
+            this.typeItem.setTitle(`类型·${arr.length}`);
+        } else {
+            if (this.typeItem.getTitle().length !== 2) {
+                this.typeItem.setTitle(`类型`);
+            }
+
+        }
     };
     _columnTypeClick = (item) => {
         this.flatList.setColumnType(item.id);
@@ -333,34 +325,7 @@ class FristListComponent extends PureComponent {
                 }}>
                     <TopLeftFilterComponent onPress={this._columnTypeClick}
                                             ref={ref => this.topLeftFilterComponent = ref}/>
-                    <TouchableOpacity
-                        activeOpacity={0.6}
-                        onPress={this._onPress}
-                        style={{height: 40, justifyContent: 'center', marginRight: 8}}>
-                        <View
-                            // activeOpacity={0.6}
-                            onPress={this._onPress}
-                            style={{
-                                paddingHorizontal: 8,
-                                paddingVertical: 4,
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                            }}>
-                            <Text style={[{
-                                fontSize: 14,
-                                fontWeight: '400',
-                                opacity: 0.6,
-                            }, !show ? {color: 'black', opacity: 0.6} : {color: bottomTheme}]}>类型 </Text>
-                            {
-                                !show ? <SvgUri style={{marginTop: 3}} width={10} height={10}
-                                                svgXmlData={zhankai}/> :
-                                    <SvgUri style={{marginTop: 3}} width={10} height={10}
-                                            svgXmlData={yincang}/>
-                            }
-
-                        </View>
-                    </TouchableOpacity>
-                    {/*<FilterBtnComponent ref={ref => this.filterBtnComponent = ref} onPress={this._topLeftClick}/>*/}
+                    <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>
                 </View>
                 {/*筛选器*/}
                 <HeadlineComponent index={this.props.index} ref={ref => this.headlineComponent = ref}/>
@@ -397,6 +362,58 @@ class FristListComponent extends PureComponent {
             show: false,
         });
     };
+}
+
+class TypeItem extends PureComponent {
+    state = {
+        title: '类型',
+    };
+    setTitle = (title) => {
+        this.setState({
+            title,
+        });
+    };
+    getTitle = () => {
+        return this.state.title;
+    };
+
+    render() {
+        const {show, onPress} = this.props;
+        const {title} = this.state;
+
+        return <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={onPress}
+            style={{height: 40, justifyContent: 'center', marginRight: 8}}>
+            <View
+                // activeOpacity={0.6}
+                onPress={this.onPress}
+                style={{
+                    paddingHorizontal: 8,
+                    paddingVertical: 4,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    backgroundColor: title.length > 2 ? 'rgba(33,150,243,0.1)' : '#f0f0f0',
+                    borderRadius: 5,
+
+                }}>
+                <Text style={[{
+                    fontSize: 13, marginRight: 3,
+                }, title.length > 2 ? {color: bottomTheme} : !show ? {
+                    color: 'black',
+                    opacity: 0.5,
+                } : {color: bottomTheme}]}>{title}</Text>
+                {
+                    !show ? <SvgUri style={{marginTop: 3}} fill={title.length > 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
+                                    width={10} height={10}
+                                    svgXmlData={zhankai}/> :
+                        <SvgUri style={{marginTop: 3}} fill={bottomTheme} width={10} height={10}
+                                svgXmlData={yincang}/>
+                }
+
+            </View>
+        </TouchableOpacity>;
+    }
 }
 
 class HeadlineComponent extends PureComponent {
@@ -449,7 +466,7 @@ class HeadlineComponent extends PureComponent {
             borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 20}}>
-                <SvgUri style={{marginLeft: 20, marginTop: 3}} width={60} height={60} svgXmlData={remenrenwu}/>
+                <SvgUri style={{marginLeft: 20, marginTop: 2}} width={60} height={60} svgXmlData={remenrenwu}/>
             </View>
             {/*分隔符*/}
             <View
@@ -495,16 +512,16 @@ class HeadlineComponent extends PureComponent {
             <Text
                 numberOfLines={1}
                 style={{
-                    fontSize: 15,
+                    fontSize: 17,
                     color: bottomTheme,
                     width: width - 190,
                     marginLeft: 10,
 
                 }}>{item.taskTitle}</Text>
             <Text style={{
-                color: 'red', fontSize: 16,
+                color: 'red', fontSize: 17,
                 marginRight: 10,
-            }}>+{item.rewardPrice}元</Text>
+            }}>+{item.rewardPrice} 元</Text>
         </View>;
     };
 }
@@ -543,7 +560,7 @@ class TopLeftFilterComponent extends Component {
         const {index} = this.state;
         const {filterArray} = this.props;
         return <View style={{
-            paddingHorizontal: 10, flexDirection: 'row',
+            paddingHorizontal: 12, flexDirection: 'row',
             justifyContent: 'space-between', height: 40, alignItems: 'center', width: 200,
 
         }}>
@@ -555,24 +572,22 @@ class TopLeftFilterComponent extends Component {
                         style={{marginLeft: 8, alignItems: 'center', justifyContent: 'center'}}
                         onPress={() => this._onPress(Lindex)}
                     >
-                        <Animated.Text style={[{
-                            fontSize: 14,
-                            fontWeight: '400',
-                            // transform: [{translationY:80}],
-                            // transfrom
+                        <Text style={[{
+                            fontSize: 15,
+                            // fontWeight: '400',
                         }, Lindex === index ? {
-                            color: bottomTheme,
-                            fontSize: 16,
-                        } : {color: '#595959'}]}>{item.title}</Animated.Text>
+                            color: 'black',
+                            fontWeight: '400',
+                        } : {color: '#767676'}]}>{item.title}</Text>
 
-                        {Lindex === index && <View style={{
-                            height: 3,
-                            width: 17,
-                            backgroundColor: bottomTheme,
-                            position: 'absolute',
-                            bottom: -8,
-                            // left:8,
-                        }}/>}
+                        {/*{Lindex === index && <View style={{*/}
+                        {/*    height: 3,*/}
+                        {/*    width: 17,*/}
+                        {/*    backgroundColor: bottomTheme,*/}
+                        {/*    position: 'absolute',*/}
+                        {/*    bottom: -8,*/}
+                        {/*    // left:8,*/}
+                        {/*}}/>}*/}
 
                     </TouchableOpacity>;
                 })}

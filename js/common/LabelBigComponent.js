@@ -9,7 +9,7 @@ class LabelBigComponent extends PureComponent {
         title: '高价',
         paddingHorizontal: 6,
         paddingVertical: Platform.OS === 'android' ? 0 : 3,
-        fontSize: 12,
+        fontSize: 13,
         marginRight: 5,
         marginTop: 0,
 
@@ -45,7 +45,7 @@ class LabelBigComponent extends PureComponent {
             }}>
             <Text style={{
                 fontSize,
-                opacity: 0.5,
+                opacity: 0.7,
                 color: 'black',
             }}>{title}</Text>
         </TouchableOpacity>;

@@ -12,11 +12,11 @@ class ChatSocket {
             return;
         }
         const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
+        // const URL = 'ws://localhost:433/';
         Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
         Global.ws.onopen = () => {
-            console.log('onopen');
             Global.dispatch(Message.onChangeSocketStatue(''));
-            this.connectionstatus = true;
+            Global.connectionstatus = true;
             this.verifyIdentidy();//重新被链接时再次验证身份
         };
 
@@ -60,10 +60,7 @@ class ChatSocket {
                     //收到回调进行未读消息数回调
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
-
                     Global.dispatch(Message.onSetAllFriendUnRead(data.FriendId, data.columnType));
-
-
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
                     if (data.msgArr && data.msgArr.length > 0) {
@@ -81,13 +78,21 @@ class ChatSocket {
                     Global.dispatch(Message.onFriendInitialiZation());
                     Global.token = '';
                     break;
+                case types.NOTICE_USER_MESSAGE://收到系统消息
+                    console.log('收到消息');
+                    Global.dispatch(Message.onSetNoticeMsg(data.type - 1));
+                    break;
 
 
             }
         };
         //连接关闭的时候触发
-        Global.ws.onclose = () => {
-            this.connectionstatus = false;
+        Global.ws.onclose = (e) => {
+            console.log('连接被关闭')
+            console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
+            console.log(e)
+            Global.connectionstatus = false;
+            // Global.dispatch(Message.onChangeSocketStatue('连接关闭'));
             if (typeof Global.dispatch != 'function') {
                 return;
             }
@@ -95,7 +100,7 @@ class ChatSocket {
 
         };
         Global.ws.onerror = () => {
-            this.connectionstatus = false;
+            Global.connectionstatus = false;
             if (typeof Global.dispatch != 'function') {
                 return;
             }
@@ -105,8 +110,8 @@ class ChatSocket {
 
     //验证身份
     verifyIdentidy = () => {
-        console.log(Global.ws.readyState, 'Global.ws.readyState');
-        if (Global.ws.readyState !== 1) {
+        // console.log(Global.ws.readyState, 'Global.ws.readyState');
+        if (!Global.connectionstatus) {
             return;
         }
         const msgData = {
@@ -117,7 +122,7 @@ class ChatSocket {
         };
         const msgStr = JSON.stringify(msgData);
         try {
-            if (Global.ws.readyState === 1) {
+            if (Global.connectionstatus) {
                 Global.ws.send(msgStr);
             }
         } catch (e) {
@@ -151,7 +156,7 @@ class ChatSocket {
     };
     //发送消息给指定用户
     sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo, sendFormId) => {
-        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo. avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));
+        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo.avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));
         Global.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(), FriendId));
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId,
@@ -170,7 +175,7 @@ class ChatSocket {
         return true;
     };
     sendToServer = (type, data) => {
-        if (Global.ws.readyState !== 1) {
+        if (!Global.connectionstatus) {
             Global.dispatch(Message.onChangeSocketStatue('正在连接...'));
             Global.ws.reconnect();
             return;
@@ -196,7 +201,7 @@ class ChatSocket {
 
         const msgStr = JSON.stringify(msgData);
         try {
-            if (Global.ws.readyState === 1) {
+            if (Global.connectionstatus) {
                 Global.ws.send(msgStr);
             }
         } catch (e) {

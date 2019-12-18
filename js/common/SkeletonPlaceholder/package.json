@@ -1,0 +1,55 @@
+{
+  "_from": "react-native-skeleton-placeholder",
+  "_id": "react-native-skeleton-placeholder@1.0.3",
+  "_inBundle": false,
+  "_integrity": "sha1-vK1IBmzQRti+1zxgRGubsd4xIRE=",
+  "_location": "/react-native-skeleton-placeholder",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-skeleton-placeholder",
+    "name": "react-native-skeleton-placeholder",
+    "escapedName": "react-native-skeleton-placeholder",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/react-native-skeleton-placeholder/download/react-native-skeleton-placeholder-1.0.3.tgz",
+  "_shasum": "bcad48066cd046d8bed73c60446b9bb1de312111",
+  "_spec": "react-native-skeleton-placeholder",
+  "_where": "/Users/panfeilong/Desktop/react-native/AwesomeProject",
+  "author": {
+    "name": "Henrique Ramos",
+    "email": "chenrique.ramos12@gmail.com",
+    "url": "https://github.com/chramos"
+  },
+  "bugs": {
+    "url": "https://github.com/chramos/react-native-skeleton-placeholder/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "SkeletonPlaceholder is a React Native library to easily create an amazing loading effect.",
+  "homepage": "https://github.com/chramos/react-native-skeleton-placeholder#readme",
+  "keywords": [
+    "skeleton",
+    "shimmer",
+    "loading",
+    "placeholder"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "react-native-skeleton-placeholder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chramos/react-native-skeleton-placeholder.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.3"
+}

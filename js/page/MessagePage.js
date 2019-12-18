@@ -33,6 +33,8 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {selectAppealNum} from '../util/AppService';
 import actions from '../action';
+import {onSetNoticeMsgIsRead} from '../action/friend';
+import {equalsObj} from '../util/CommonUtils';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -225,7 +227,8 @@ class MsgList extends Component {
 
     onRefresh = () => {
         selectAppealNum(this.props.userinfo.token).then(result => {
-            this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength);
+            console.log(result,"result");
+            this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength,result.noticeArr);
         });
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
     };
@@ -323,7 +326,7 @@ class MessageItemComponent extends Component {
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 transform: [{scale}],
-                height: 70,
+                height: 80,
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 // backgroundColor:'red',
@@ -434,9 +437,7 @@ const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
 const mapDispatchToProps = dispatch => ({
-    onSetOtherTypeUnread: (app2, app3) => dispatch(actions.onSetOtherTypeUnread(app2, app3)),
-    setAppeal_2IsRead: () => dispatch(actions.setAppeal_2IsRead()),
-    setAppeal_3IsRead: () => dispatch(actions.setAppeal_3IsRead()),
+    onSetOtherTypeUnread: (app2, app3,noticeArr) => dispatch(actions.onSetOtherTypeUnread(app2, app3,noticeArr)),
 });
 const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePage);
 
@@ -444,12 +445,23 @@ const MessagePageRedux = connect(mapStateToProps, mapDispatchToProps)(MessagePag
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 
-class MessageColumn extends PureComponent {
+class MessageColumn extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.friend.appeal_2 != nextProps.friend.appeal_2
+            || (this.props.friend.appeal_3 != nextProps.friend.appeal_3
+                || !equalsObj(this.props.friend.notice_arr, nextProps.friend.notice_arr))
+        ) {
+            return true;
+        }
+        return false;
+
+    }
 
     render() {
-        const {appeal_2, appeal_3} = this.props.friend;
-        const {setAppeal_2IsRead, setAppeal_3IsRead} = this.props;
-
+        const {appeal_2, appeal_3, notice_arr} = this.props.friend;
+        const {setAppeal_2IsRead, setAppeal_3IsRead, onSetNoticeMsgIsAllRead} = this.props;
+        // console.log(notice_arr,"notice_arr");
+        const noticeIsNew = notice_arr.find(item => item > 0);
         return <View style={{
             width: width - 20,
             height: 100,
@@ -465,7 +477,9 @@ class MessageColumn extends PureComponent {
             flexDirection: 'row',
             justifyContent: 'space-around',
         }}>
-            <MessageColumnItem type={0} unReadNum={0} svgXmlData={message_xitong}
+            <MessageColumnItem type={0} onSetNoticeMsgIsAllRead={onSetNoticeMsgIsAllRead}
+                               unReadNum={noticeIsNew ? 1 : 0}
+                               svgXmlData={message_xitong}
                                title={'通知消息'}/>
             <MessageColumnItem setMsgAllRead={setAppeal_2IsRead} type={1} columnType={2}
                                unReadNum={appeal_2} svgXmlData={zaixiankefu}
@@ -487,6 +501,7 @@ const mapStateToProps_ = state => ({
 const mapDispatchToProps_ = dispatch => ({
     setAppeal_2IsRead: () => dispatch(actions.setAppeal_2IsRead()),
     setAppeal_3IsRead: () => dispatch(actions.setAppeal_3IsRead()),
+    onSetNoticeMsgIsAllRead: () => dispatch(actions.onSetNoticeMsgIsAllRead()),
 });
 const MessageColumnRedux = connect(mapStateToProps_, mapDispatchToProps_)(MessageColumn);
 
@@ -530,10 +545,18 @@ class MessageColumnItem extends Component {
         }
         return <TouchableOpacity
             onPress={() => {
-                if (unReadNum > 0) {
-                    this.props.setMsgAllRead();
+                const {type} = this.props;
+
+                if (type == 1 || type == 2) {
+                    if (unReadNum > 0) {
+                        this.props.setMsgAllRead();
+                    }
+                    NavigationUtils.goPage({type: this.props.columnType}, 'MessageAppealPage');
                 }
-                NavigationUtils.goPage({type: this.props.columnType}, 'MessageAppealPage');
+                if (type == 0) {
+                    this.props.onSetNoticeMsgIsAllRead();
+                    NavigationUtils.goPage({}, 'SystemNotificationPage');
+                }
             }}
             activeOpacity={0.6}
             style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>
@@ -541,7 +564,7 @@ class MessageColumnItem extends Component {
 
                 <Image source={source} style={{
 
-                    width: 40, height: 40,
+                    width: 45, height: 45,
 
                     backgroundColor: 'white',
                 }}/>
@@ -562,7 +585,7 @@ class MessageColumnItem extends Component {
             <Text style={{
                 fontSize: 12,
                 color: 'black',
-                opacity: 0.8,
+                opacity: 0.9,
                 marginTop: 5,
 
             }}>{title}</Text>

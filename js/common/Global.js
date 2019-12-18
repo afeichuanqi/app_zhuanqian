@@ -9,5 +9,6 @@ const Global = {
     token: '',
     dispatch:{},
     ws:null,
+    connectionstatus:false,
 };
 module.exports = Global;

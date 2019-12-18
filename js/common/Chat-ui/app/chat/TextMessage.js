@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     borderColor: '#fff',
-    marginTop: 16
+    marginTop: 8
   },
   left_triangle: {
     borderLeftWidth: 0,

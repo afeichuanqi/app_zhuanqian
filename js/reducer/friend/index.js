@@ -6,7 +6,7 @@ const defaultContent = {
     columnUnreadLength: [0, 0, 0, 0],
     appeal_2: 0,
     appeal_3: 0,
-
+    notice_arr: [0, 0, 0, 0],
 };
 
 export default function onAction(state = defaultContent, action) {
@@ -14,6 +14,7 @@ export default function onAction(state = defaultContent, action) {
     switch (type) {
         case Types.MESSAGE_FRIEND_ALL :
             const temArr = data.friendArr;
+            //console.log('MESSAGE_FRIEND_ALL');
             let unMessageLength = 0;
             for (let i = 0; i < temArr.length; i++) {
                 const item = temArr[i];
@@ -28,12 +29,14 @@ export default function onAction(state = defaultContent, action) {
             };
 
         case Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS ://设置好友的消息已经读取成功
-            console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS');
             let temArr2 = [...state.friendArr];
-            let nowUnMessageLength = state.unMessageLength;
+            //console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS', data.FriendId);
+            // let nowUnMessageLength = state.unMessageLength;
             const FriendIdIndex = temArr2.findIndex(d => d.FriendId === data.FriendId);
-            if(FriendIdIndex!==-1){
+            //console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS', FriendIdIndex);
+            if (FriendIdIndex !== -1) {
                 const originalFriendUnReadLen = temArr2[FriendIdIndex].unReadLength;
+                //console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS', temArr2);
                 temArr2[FriendIdIndex].unReadLength = 0;
                 temArr2 = temArr2.sort((data1, data2) => {
                     return data2.unReadLength - data1.unReadLength;
@@ -41,13 +44,11 @@ export default function onAction(state = defaultContent, action) {
                 return {
                     ...state,
                     friendArr: temArr2,
-                    unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
+                    unMessageLength: state.unMessageLength - originalFriendUnReadLen,
                 };
             }
             return {
                 ...state,
-                // friendArr: temArr2,
-                // unMessageLength: nowUnMessageLength - originalFriendUnReadLen,
             };
 
         case Types.FRIEND_SET_OTHER_MSG_UN_READ:
@@ -55,6 +56,28 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 appeal_2: data.appeal_2,
                 appeal_3: data.appeal_3,
+                notice_arr: data.noticeArr,
+            };
+        case Types.NEW_NOTICE_MSG:
+            const tmp = [...state.notice_arr];
+            //console.log(data.type);
+            tmp[data.type] = 1;
+            return {
+                ...state,
+                notice_arr: tmp,
+            };
+
+        case Types.SET_NEW_NOTICE_MSG_IS_READ:
+            const tmp1 = [...state.notice_arr];
+            tmp1[data.type] = 0;
+            return {
+                ...state,
+                notice_arr: tmp1,
+            };
+        case Types.SET_NEW_NOTICE_MSG_IS_ALL_READ:
+            return {
+                ...state,
+                notice_arr: [0, 0, 0, 0],
             };
         case Types.FRIEND_SET_APPEAL_2_MSG_UN_READ:
             return {
@@ -78,9 +101,9 @@ export default function onAction(state = defaultContent, action) {
                 appeal_3: 0,
             };
         case Types.MESSAGE_FROMOF_USERID_Friend:
-            console.log('MESSAGE_FROMOF_USERID_Friend');
+            //console.log('MESSAGE_FROMOF_USERID_Friend');
             let temArr3 = [...state.friendArr];
-            let NewUnReadLength = data.isAddNewMsgLength ? state.unMessageLength + 1 : state.unMessageLength;
+            let NewUnReadLength = (data.fromUserid != data.ToUserId && data.isAddNewMsgLength) ? state.unMessageLength + 1 : state.unMessageLength;
             const fromUserIndex = temArr3.findIndex(d => d.FriendId == data.FriendId);
 
             if (fromUserIndex != -1) {//找到了此用户
@@ -88,7 +111,7 @@ export default function onAction(state = defaultContent, action) {
                 item.msg_type = data.msg_type;
                 item.msg = data.content;
                 item.sendDate = data.sendDate;
-                item.unReadLength = data.fromUserid != data.ToUserId && data.isAddNewMsgLength && item.unReadLength + 1;
+                item.unReadLength = (data.fromUserid != data.ToUserId && data.isAddNewMsgLength) ? item.unReadLength + 1 : item.unReadLength;
                 temArr3[fromUserIndex] = item;
             } else {
                 temArr3.push({
@@ -99,7 +122,7 @@ export default function onAction(state = defaultContent, action) {
                     sendDate: data.sendDate,
                     msg_type: data.msg_type,
                     msgId: data.msgId,
-                    unReadLength: data.fromUserid != data.ToUserId ? data.isAddNewMsgLength ? 1 : 0 : 0,
+                    unReadLength: (data.fromUserid != data.ToUserId && data.isAddNewMsgLength) ? 1 : 0,
                     FriendId: data.FriendId,
                     columnType: data.columnType,
                     taskUri: data.taskUri,
@@ -116,28 +139,6 @@ export default function onAction(state = defaultContent, action) {
                 friendArr: temArr3,
                 unMessageLength: NewUnReadLength,
             };
-
-        // case Types.MESSAGE_SET_MSG_ID_READ_SUCCESS:
-        //     let temArr4 = [...state.friendArr];
-        //     let NewUnReadLength1;
-        //     const fromUserIndex1 = temArr4.findIndex(d => d.FriendId == data.FriendId);
-        //     if (fromUserIndex1 != -1) {
-        //         const item1 = temArr4[fromUserIndex1];
-        //         NewUnReadLength1 = state.unMessageLength - item1.unReadLength;
-        //         item1.unReadLength = 0;
-        //         temArr4[fromUserIndex1] = item1;
-        //         return {
-        //             ...state,
-        //             friendArr: temArr4,
-        //             unMessageLength: NewUnReadLength1,
-        //         };
-        //     } else {
-        //         return {
-        //             ...state,
-        //         };
-        //     }
-
-
         case Types.FRIEND_INIT:
 
             return {

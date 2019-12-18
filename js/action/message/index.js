@@ -52,26 +52,7 @@ export function onMessageInitialiZation() {
         data: {},
     };
 }
-//图片是否发送成功回调
-// export function onSetMsgImageStatus(uuid, msgId, sendDate, sendStatus,data,token) {
-//     return dispatch => {
-//         uploadMsgImage(data, token).then((data) => {
-//             callback(true, data);
-//             // console.log(data, 'data');
-//             dispatch({
-//                 type: Types.UPLOAD_AVATAR_SUCCESS,
-//                 data: {avatar_url: data.imageUrl},
-//             });
-//         }).catch((msg) => {
-//             callback(false, {msg});
-//         });
-//
-//     };
-//     // return {
-//     //     type: Types.MESSAGE_SET_STATUS,
-//     //     data: {uuid, msgId, sendDate, sendStatus},
-//     // };
-// }
+
 //获取所有消息
 export function onGetMegForUserid(msgArr) {
     return {
@@ -79,9 +60,3 @@ export function onGetMegForUserid(msgArr) {
         data: {msgArr},
     };
 }
-// //发送消息
-// export function onMessageTo(fromUserid, msg_type, content, msgId, sendDate) {
-//     return dispatch => {
-//         dispatch({type: Types.MESSAGE_FROMOF_USERID, data: {fromUserid, msg_type, content, msgId,sendDate}});
-//     };
-// }

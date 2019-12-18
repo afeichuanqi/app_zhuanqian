@@ -122,7 +122,7 @@ class SecondListComponent extends PureComponent {
                     this.props.onLoad(load);
                 }}
                 ListHeaderComponent={
-                    <View style={{height: 220}}>
+                    <View style={{height: 220, backgroundColor:'white'}}>
                         <View style={{marginTop: 20, paddingLeft: 10}}>
                             <Text style={{fontSize: 17, opacity: 0.9}}>最新发布</Text>
                         </View>

@@ -19,6 +19,7 @@ import ImageViewerModal from '../common/ImageViewerModal';
 import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
+import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 
 const {width, height} = Dimensions.get('window');
 
@@ -109,6 +110,7 @@ class ChatRoomPage extends React.Component {
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
         if (this.columnType == 1 || this.columnType == 5) {
+            this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
             ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
         } else if (this.columnType == 2 || this.columnType == 3) { //诉求信息
             EventBus.getInstance().fireEvent(`update_message_appeal_${this.columnType}_page`, {//刷新列表
@@ -440,6 +442,30 @@ class TaskInfo extends React.Component {
     render() {
         const {taskInfo} = this.state;
         const {columnType} = this.props;
+        if (!taskInfo.task_uri) {
+            return <SkeletonPlaceholder minOpacity={0.2}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 80}}>
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={{height: 60, width: 60, backgroundColor: 5, borderRadius: 3, marginLeft: 10}}/>
+                        <View style={{justifyContent: 'space-around', marginLeft: 10}}>
+                            <View style={{height: 15, width: 30}}/>
+                            <View style={{height: 13, width: 100}}/>
+                            <View style={{height: 11, width: 30}}/>
+                        </View>
+                    </View>
+                    <View style={{height: 60, justifyContent: 'flex-end', marginRight: 10}}>
+                        <View style={{
+                            height: 25,
+                            width: 60,
+                            borderRadius: 3,
+                        }}/>
+                    </View>
+                </View>
+
+
+            </SkeletonPlaceholder>;
+        }
+
 
         return <TouchableOpacity
             activeOpacity={1}
@@ -463,7 +489,7 @@ class TaskInfo extends React.Component {
                     <Text style={{fontSize: 15}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
                     <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.5)'}}>{taskInfo.task_title}</Text>
                     <Text style={{
-                        fontSize: 11,
+                        fontSize: 12,
                         color: 'red',
                     }}>
                         {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : columnType === 5 ? '驳回咨询' : ''}
@@ -499,7 +525,7 @@ class TaskInfo extends React.Component {
                     }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: 13,
+                        fontSize: 12,
                     }}>{(columnType == 2 || columnType == 3 || columnType == 5) ? '任务来往' : '查看详情'}</Text>
                 </TouchableOpacity>
 
@@ -517,6 +543,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 
     onAddMesage: (fromUserid, msg_type, content, ToUserId, uuid, sendDate, FriendId) => dispatch(actions.onAddMesage(fromUserid, msg_type, content, ToUserId, uuid, sendDate, FriendId)),
+    onSetAllFriendUnRead: (FriendId, columnType) => dispatch(actions.onSetAllFriendUnRead(FriendId, columnType)),
 });
 const ChatRoomPageRedux = connect(mapStateToProps, mapDispatchToProps)(ChatRoomPage);
 export default ChatRoomPageRedux;

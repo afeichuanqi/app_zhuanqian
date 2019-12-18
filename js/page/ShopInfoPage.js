@@ -24,7 +24,7 @@ import ViewUtil from '../util/ViewUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
-import TaskSumComponent from '../common/TaskSumComponent';
+import TaskSumComponent from '../common/TaskInfoComponent';
 import {attentionUserId, selectShopInfoForUserId, selectTaskListForUserId} from '../util/AppService';
 import {connect} from 'react-redux';
 import EmptyComponent from '../common/EmptyComponent';
@@ -385,7 +385,7 @@ class AvatarColumn extends Component {
                     flexDirection: 'row',
                 }}>
                     <Text style={{
-                        fontSize: 15,
+                        fontSize: 16,
                         color: 'white',
                     }}>{this.props.shopInfo.username}</Text>
                 </View>
@@ -397,7 +397,7 @@ class AvatarColumn extends Component {
                     flexDirection: 'row',
                 }}>
                     <Text style={{
-                        fontSize: 13,
+                        fontSize: 14,
                         color: 'white',
                     }}>ID:{this.props.shopInfo.userId}</Text>
                 </View>

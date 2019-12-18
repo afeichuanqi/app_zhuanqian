@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React, {PureComponent,Component} from 'react';
 import {ActivityIndicator, RefreshControl} from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 
@@ -31,6 +31,7 @@ import actions from '../action';
 import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import FastImagePro from '../common/FastImagePro';
+import {equalsObj} from '../util/CommonUtils';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -150,7 +151,7 @@ class MyPage extends PureComponent {
                         scrollEventThrottle={1}
                     >
                         <TopInfoColumn onUploadAvatar={onUploadAvatar} userinfo={userinfo} scrollY={this.scrollY}/>
-                        <BottomInfoColumn userinfo={userinfo}/>
+                        <BottomInfoColumnRedux/>
                     </AnimatedScrollView>
                     {/*名字*/}
                     <AnimatedTouchableOpacity
@@ -194,16 +195,114 @@ const mapDispatchToProps = dispatch => ({
 const MyPageRedux = connect(mapStateToProps, mapDispatchToProps)(MyPage);
 export default MyPageRedux;
 
+class BottomInfoColumn extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+
+        if (this.props.friend.notice_arr && !equalsObj(this.props.friend.notice_arr, nextProps.friend.notice_arr)) {
+            return true;
+        }
+        return false;
+
+    }
+
+    render() {
+
+        const {onSetNoticeMsgIsRead, friend} = this.props;
+        const {notice_arr} = friend;
+        return <View style={{}}>
+            <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
+                <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+                    我的工具
+                </Text>
+            </View>
+            <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+
+                style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
+            >
+                <ToolsItemComponent
+                    title={'发布管理'}
+                    info={'有需求、大家做'}
+                    source={require('../res/img/my/fabu.png')}
+                    onPress={() => {
+                        MenuClick('TaskReleaseMana');
+                        notice_arr[0] > 0 && onSetNoticeMsgIsRead(0);
+                    }}
+                    isOtherMsg={notice_arr[0] > 0}
+
+                />
+                <ToolsItemComponent
+                    title={'接单管理'}
+                    source={require('../res/img/my/jiedan.png')}
+                    info={'有任务、赚赏金'}
+                    onPress={() => {
+                        MenuClick('TaskOrdersMana');
+                        notice_arr[1] > 0 && onSetNoticeMsgIsRead(1);
+                    }}
+                    isOtherMsg={notice_arr[1] > 0}
+                />
+                <ToolsItemComponent/>
+                <ToolsItemComponent/>
+            </ScrollView>
+
+            {ViewUtil.getSettingItem(guanzhu, '我的关注', '关注列表', () => {
+                MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
+                // NavigationUtils.goPage();
+            })}
+            <View>
+                {ViewUtil.getSettingItem(bill1, '帐单展示', '支出、收入', () => {
+                    MenuClick('UserBillListPage');
+                    NavigationUtils.goPage({}, '');
+
+                })}
+
+                {notice_arr[2] > 0 &&
+                <View style={{
+                    position: 'absolute',
+                    right: 10, top: 10, width: 5, height: 5, borderRadius: 8,
+                    backgroundColor:'red',
+                }}/>}
+            </View>
+
+            {ViewUtil.getSettingItem(yaoqing2, '邀请好友', '好友邀请得奖励', () => {
+                MenuClick('FriendPromotionPage');
+            })}
+            {ViewUtil.getSettingItem(favorite_1, '我的收藏', '收藏精品任务', () => {
+                MenuClick('MyFavoritePage');
+            })}
+            {ViewUtil.getSettingItem(pingbi1, '屏蔽用户', '屏蔽用户列表', () => {
+                MenuClick('MyShieldPage');
+            })}
+            {ViewUtil.getMenuLine()}
+
+
+        </View>;
+    }
+}
+
+const mapStateToProps_ = state => ({
+    userinfo: state.userinfo,
+    friend: state.friend,
+});
+const mapDispatchToProps_ = dispatch => ({
+    onSetNoticeMsgIsRead: (type) => dispatch(actions.onSetNoticeMsgIsRead(type)),
+    // onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
+    // onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
+});
+
+
 class ToolsItemComponent extends PureComponent {
     static defaultProps = {
         title: '发布管理',
         info: '提升简历活跃',
         svgXmlData: my_fabu,
         source: require('../res/img/my/fabu.png'),
+        isOtherMsg: false,
     };
 
     render() {
-        const {title, info, source} = this.props;
+        const {title, info, source, isOtherMsg} = this.props;
 
         return <TouchableOpacity
             onPress={this.props.onPress}
@@ -231,72 +330,21 @@ class ToolsItemComponent extends PureComponent {
                 <Text style={{fontSize: 11, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
             <FastImage source={source} style={{width: 35, height: 35}}/>
-
+            {isOtherMsg && <View style={{
+                height: 8,
+                width: 8,
+                position: 'absolute',
+                right: 5,
+                top: 5,
+                backgroundColor: 'red',
+                borderRadius: 5,
+            }}/>}
         </TouchableOpacity>;
     }
 }
 
 
-class BottomInfoColumn extends PureComponent {
-
-    render() {
-        return <View style={{}}>
-            <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
-                <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
-                    我的工具
-                </Text>
-            </View>
-            <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-
-                style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
-            >
-                <ToolsItemComponent
-                    title={'发布管理'}
-                    info={'有需求、大家做'}
-                    source={require('../res/img/my/fabu.png')}
-                    onPress={() => {
-                        MenuClick('TaskReleaseMana');
-                    }}/>
-                <ToolsItemComponent
-                    title={'接单管理'}
-                    source={require('../res/img/my/jiedan.png')}
-                    info={'有任务、赚赏金'}
-                    onPress={() => {
-                        MenuClick('TaskOrdersMana');
-                    }}
-                />
-                <ToolsItemComponent/>
-                <ToolsItemComponent/>
-            </ScrollView>
-
-            {ViewUtil.getSettingItem(guanzhu, '我的关注', '关注列表', () => {
-                MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
-                // NavigationUtils.goPage();
-            })}
-            {ViewUtil.getSettingItem(bill1, '帐单展示', '支出、收入', () => {
-                MenuClick('UserBillListPage');
-                NavigationUtils.goPage({}, '');
-
-            })}
-            {ViewUtil.getSettingItem(yaoqing2, '邀请好友', '好友邀请得奖励', () => {
-                MenuClick('FriendPromotionPage');
-            })}
-            {ViewUtil.getSettingItem(favorite_1, '我的收藏', '收藏精品任务', () => {
-                MenuClick('MyFavoritePage');
-            })}
-            {ViewUtil.getSettingItem(pingbi1, '屏蔽用户', '屏蔽用户列表', () => {
-                MenuClick('MyShieldPage');
-            })}
-            {ViewUtil.getMenuLine()}
-
-
-        </View>;
-    }
-}
-
-
+const BottomInfoColumnRedux = connect(mapStateToProps_, mapDispatchToProps_)(BottomInfoColumn);
 
 
 class TopInfoColumn extends PureComponent {

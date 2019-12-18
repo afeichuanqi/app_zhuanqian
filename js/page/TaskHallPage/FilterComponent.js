@@ -253,10 +253,8 @@ class TypeComponent extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
 
-        if (this.props.checked != nextProps.checked || this.state.checked != nextState.checked) {
-            return true;
-        }
-        return false;
+        return this.props.checked != nextProps.checked || this.state.checked != nextState.checked;
+
     }
 
     _onPress = () => {

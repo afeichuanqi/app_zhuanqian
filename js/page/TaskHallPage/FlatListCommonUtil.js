@@ -89,7 +89,7 @@ export default class FlatListCommonUtil extends PureComponent {
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
 
-            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 150}/>}
+            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 200}/>}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}
@@ -97,7 +97,9 @@ export default class FlatListCommonUtil extends PureComponent {
             scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
-
+            style={{
+                backgroundColor:'#f1f1f1',
+            }}
             refreshControl={
                 <RefreshControl
                     // title={'更新任务中'}

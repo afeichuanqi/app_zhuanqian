@@ -68,7 +68,7 @@ export default class FlatListCommonUtil extends PureComponent {
         }).catch(() => {
             this.setState({
                 isLoading: false,
-                hideLoaded: false,
+                hideLoaded: true,
             });
         });
     };
@@ -78,8 +78,7 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 300}/>}
-            // style={this.props.style}
+            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 310}/>}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}
@@ -87,6 +86,9 @@ export default class FlatListCommonUtil extends PureComponent {
             scrollEventThrottle={1}
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
+            style={{
+                backgroundColor:'#f1f1f1',
+            }}
             refreshControl={
                 <RefreshControl
                     // title={'更新任务中'}

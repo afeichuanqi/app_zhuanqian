@@ -322,6 +322,7 @@ class AttentionItem extends PureComponent {
                 // marginBottom:3,
                 borderBottomWidth: 0.3,
                 borderBottomColor: 'rgba(0,0,0,0.2)',
+
             }}>
 
             <View style={{flexDirection: 'row'}}>
@@ -344,7 +345,7 @@ class AttentionItem extends PureComponent {
 
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{marginLeft: 15}}>
-                        <Text style={{fontSize: 14}}>{item.username}</Text>
+                        <Text style={{fontSize: 15}}>{item.username}</Text>
                         <Text style={{fontSize: 12, opacity: 0.5, marginTop: 7}}>{item.fan_num}位粉丝</Text>
                     </View>
                 </View>

@@ -36,6 +36,7 @@ import UpdateUserName from '../page/SettingPage/UpdateUserName';
 import TaskRejectDetailsPage from '../page/TaskRejectDetailsPage';
 import MyFavoritePage from '../page/MyFavoritePage';
 import MyShieldPage from '../page/MyShieldPage';
+import SystemNotificationPage from '../page/SystemNotificationPage';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 
@@ -239,6 +240,12 @@ const MainNavigator = createStackNavigator({
         },
         MyShieldPage: {
             screen: MyShieldPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        SystemNotificationPage: {
+            screen: SystemNotificationPage,
             navigationOptions: {
                 header: null,
             },

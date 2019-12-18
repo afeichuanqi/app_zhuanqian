@@ -401,7 +401,7 @@ class MessageItemComponent extends PureComponent {
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 transform: [{scale}],
-                height: 70,
+                height: 80,
                 // backgroundColor:'red',
             }}
             onPressIn={this._onPressIn}
@@ -474,7 +474,7 @@ class MessageItemComponent extends PureComponent {
             </View>
             <View style={{
                 position: 'absolute',
-                bottom: 5,
+                bottom: 10,
                 left: 50,
             }}>
                 <Text style={{
