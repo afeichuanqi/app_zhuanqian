@@ -250,7 +250,7 @@ class FristListComponent extends PureComponent {
         }).catch(err => {
             this.setState({
                 isLoading: false,
-                hideLoaded: false,
+                hideLoaded: true,
             });
         });
     };

@@ -18,6 +18,7 @@ let defaultConfig = {
 
 let instance = axios;
 let baseUrl = defaultConfig.baseUrl + '/';
+// const urlWriteList = ['user/sendSms','user/verifyCode'];
 
 class Axios {
     constructor(props) {
@@ -28,10 +29,13 @@ class Axios {
         }
         //拦截
         instance.interceptors.request.use((config) => {
+            // const {url, headers} = config;
+            // const item = urlWriteList.find(item => url.indexOf(item) !== -1);
+            // if (!item && !headers.token) {//不是白名单 且 没有token
+            //     return Promise.reject('您未登录');
+            // }
             return config;
         }, (error) => {
-            // console.log(error);
-
             return Promise.reject(error);
         });
 
@@ -74,12 +78,10 @@ class Axios {
     }
 
     async post(url, params) {
-        // console.log({phone:'15061142750'} instanceof Object,"params instanceof Object")
+
         if (params instanceof Object) {
             params = await qs.stringify(params);
-            // console.log(params);
         }
-
         try {
             let response = await instance.post(baseUrl + url, params);
             if (response) {

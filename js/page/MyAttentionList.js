@@ -346,10 +346,11 @@ class AttentionItem extends PureComponent {
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{marginLeft: 15}}>
                         <Text style={{fontSize: 15}}>{item.username}</Text>
-                        <Text style={{fontSize: 12, opacity: 0.5, marginTop: 7}}>{item.fan_num}位粉丝</Text>
+                        <Text style={{fontSize: 13, opacity: 0.6, marginTop: 7}}>{item.fan_num}位粉丝</Text>
                     </View>
                 </View>
             </View>
+            {/*<RadioComponent Checked={true} ref={ref => this.radioComponent = ref} select={this._select}/>*/}
             {type == 1 && <TouchableOpacity
                 onPress={() => {
                     let attention_type = this.state.attentionStatus == 0 ? 1 : 0;
@@ -367,7 +368,7 @@ class AttentionItem extends PureComponent {
                 style={{
                     paddingHorizontal: 7,
                     paddingVertical: 4,
-                    borderRadius: 2,
+                    borderRadius: 5,
                     backgroundColor: attentionStatus == 1 ? '#5faff3' : bottomTheme,
                 }}>
                 <Text

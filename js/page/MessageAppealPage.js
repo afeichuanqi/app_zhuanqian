@@ -285,7 +285,7 @@ class MsgList extends Component {
         }).catch(err => {
             this.setState({
                 isLoading: false,
-                hideLoaded: false,
+                hideLoaded: true,
             });
         });
 

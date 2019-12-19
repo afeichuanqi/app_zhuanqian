@@ -566,7 +566,7 @@ class TaskStepColumn extends Component {
                                     activeOpacity={0.6}
                                     onPress={() => {
                                         // this.
-                                        this.refs[`pickerImg${timestamp}`].show(timestamp);
+                                        this.refs[`pickerImg`].show(timestamp);
 
                                     }}
                                     style={{
@@ -672,9 +672,7 @@ class TaskStepColumn extends Component {
                             }
                         </View>}
 
-                        <PickerImage popTitle={'选取验证图'}
-                                     select={this._selectVerifyImg}
-                                     ref={`pickerImg${timestamp}`}/>
+
                     </View>
                 </StepBox>;
             case 6://收集信息
@@ -830,7 +828,9 @@ class TaskStepColumn extends Component {
         // console.log('我被render');
         return (
             <View style={{marginBottom: 15}}>
-
+                <PickerImage popTitle={'选取验证图'}
+                             select={this._selectVerifyImg}
+                             ref={`pickerImg`}/>
                 {this.state.stepDataArr.map((item, index, arr) => {
                     console.log(this.state.stepDataArr, 'item.timestamp');
                     return this.getStepColumn(index + 1, item.type, item.typeData, utilClick, item.timestamp, item.uploadStatus,

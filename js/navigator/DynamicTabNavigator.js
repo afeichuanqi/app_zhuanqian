@@ -29,7 +29,8 @@ import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {equalsObj} from '../util/CommonUtils';
-
+import Animated, {Easing} from 'react-native-reanimated';
+const {timing} = Animated;
 type Props = {};
 
 const {width, height} = Dimensions.get('window');
@@ -180,7 +181,7 @@ class BottomBar extends Component {
         // this.bottomBarOnPress(index);
 
         onPress(index);
-        if (index === 3 ) { //我的栏目被单击
+        if (index === 3) { //我的栏目被单击
             const token = userinfo.token;
             onGetUserInFoForToken(token, (loginStatus, msg) => {
             });
@@ -204,7 +205,6 @@ class BottomBar extends Component {
     };
 
     render() {
-        // console.log('我被render');
         const {navigationIndex} = this.props;
         const {unMessageLength, appeal_2, appeal_3, notice_arr} = this.props.friend;
         return <View style={{
@@ -214,56 +214,97 @@ class BottomBar extends Component {
             borderTopWidth: 0.8,
             borderTopColor: '#c0c0c0',
         }}>
-            {this._renderBottomBar(
-                navigationIndex === 0 ? homeA : home,
-                this._BottomBarClick,
-                0,
-                navigationIndex === 0 ? true : false,
-                35,
-            )
-
-            }
-            {this._renderBottomBar(
-                navigationIndex === 1 ? hallA : hall,
-                this._BottomBarClick,
-                1,
-                navigationIndex === 1 ? true : false,
-                35,
-            )}
-            {this._renderBottomBar(
-                navigationIndex === 2 ? messageA : message,
-                this._BottomBarClick,
-                2,
-                navigationIndex === 2 ? true : false,
-                37,
-                unMessageLength ? unMessageLength : 0,
-                (appeal_2 > 0 || appeal_3 > 0 || notice_arr[1] > 0 || notice_arr[2] > 0),
-            )}
-            {this._renderBottomBar(
-                navigationIndex === 3 ? myA : my,
-                this._BottomBarClick,
-                3,
-                navigationIndex === 3 ? true : false,
-                37,
-                0,
-                (notice_arr[1] > 0 || notice_arr[2] > 0),
-            )}
+            <BottomBarItem
+                svgXmlData={navigationIndex === 0 ? homeA : home}
+                onPress={this._BottomBarClick}
+                index={0}
+                isActive={navigationIndex === 0 ? true : false}
+                size={35}
+            />
+            <BottomBarItem
+                svgXmlData={navigationIndex === 1 ? hallA : hall}
+                onPress={this._BottomBarClick}
+                index={1}
+                isActive={navigationIndex === 1 ? true : false}
+                size={35}
+            />
+            <BottomBarItem
+                svgXmlData={navigationIndex === 2 ? messageA : message}
+                onPress={this._BottomBarClick}
+                index={2}
+                isActive={navigationIndex === 2 ? true : false}
+                size={37}
+                unReadLength={unMessageLength ? unMessageLength : 0}
+                isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || notice_arr[1] > 0 || notice_arr[2] > 0)}
+            />
+            <BottomBarItem
+                svgXmlData={navigationIndex === 3 ? myA : my}
+                onPress={this._BottomBarClick}
+                index={3}
+                isActive={navigationIndex === 3 ? true : false}
+                size={37}
+                unReadLength={0}
+                isOtherUnRead={(notice_arr[1] > 0 || notice_arr[2] > 0)}
+            />
         </View>;
     }
 
-    bottomBarOnPress = (index) => {
+}
 
-
+class BottomBarItem extends Component {
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.props.unReadLength != nextProps.unReadLength
+            || this.props.isOtherUnRead != nextProps.isOtherUnRead
+            || this.props.isActive != nextProps.isActive
+        ) {
+            return true;
+        }
+        return false;
+    }
+    animations = {
+        scale: new Animated.Value(1),
     };
-    _renderBottomBar = (svgXmlData, onPress, key, isActive, size = 35, unReadLength = 0, isOtherUnRead = false) => {
+    _onPressIn = () => {
+        //隐藏box
+        this._anim = timing(this.animations.scale, {
+            duration: 100,
+            toValue: 0,
+            easing: Easing.inOut(Easing.ease),
+        }).start();
+    };
+    _onPressOut = () => {
+        //隐藏box
+        this._anim = timing(this.animations.scale, {
+            duration: 100,
+            toValue: 1,
+            easing: Easing.inOut(Easing.ease),
+        }).start();
+    };
 
-        return <TouchableOpacity
+    render() {
+        const scale = Animated.interpolate(this.animations.scale, {
+            inputRange: [0, 1],
+            outputRange: [0.8, 1],
+            extrapolate: 'clamp',
+        });
+        const {svgXmlData, onPress, index, isActive, size = 35, unReadLength = 0, isOtherUnRead = false} = this.props;
+        return <AnimatedTouchableOpacity
+            activeOpacity={1}
             onPress={() => {
-                onPress(key);
+                onPress(index);
             }}
-            style={{width: width / 4, height: 50, justifyContent: 'center', alignItems: 'center'}}>
-            <View>
-                <SvgUri fill={isActive ? bottomTheme : 'rgba(0,0,0,0.5)'} width={size}
+            onPressIn={this._onPressIn}
+            onPressOut={this._onPressOut}
+            style={{
+                width: width / 4,
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+
+            }}>
+            <Animated.View style={{transform: [{scale}],}}>
+                <SvgUri fill={isActive ? bottomTheme : 'rgba(0,0,0,0.5)'}
+                        width={size}
                         height={size}
                         svgXmlData={svgXmlData}
                         style={{marginBottom: 2}}
@@ -291,16 +332,14 @@ class BottomBar extends Component {
                     height: 13,
                     borderWidth: 3,
                     borderColor: 'white',
-                }}/>
-
-                }
-            </View>
+                }}/>}
+            </Animated.View>
 
 
-        </TouchableOpacity>;
-    };
+        </AnimatedTouchableOpacity>;
+    }
 }
-
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const mapStateToProps = state => ({
     friend: state.friend,
     nav: state.nav,

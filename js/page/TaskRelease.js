@@ -236,9 +236,8 @@ class TaskRelease extends PureComponent {
 
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
-        const data = this._getTaskReleaseData();
-        console.log(data, 'data');
-        this.props.onSetTaskReleaseInfo(data);
+        // const data = this._getTaskReleaseData();
+        // this.props.onSetTaskReleaseInfo(data);
     }
 
 
@@ -341,15 +340,18 @@ class TaskRelease extends PureComponent {
                 });
             }
         } else {
+            const {userinfo} = this.props;
+            const {token} = userinfo;
+            if (!token || token.length === 0) {
+                this.toast.show('您未登录哦 ～ ～ ');
+                return;
+            }
             const data = this._getFormData();
             data.task_id = this.taskInfo.taskId;
-
             const error = judgeTaskData(data, true);
             if (error != '') {
                 this.toast.show(error);
             } else {
-                const {userinfo} = this.props;
-                const {token} = userinfo;
                 updateTaskReleaseData(data, token).then(result => {
                     NavigationUtils.goBack(this.props.navigation);
                     this.params.updatePage && this.params.updatePage();
@@ -420,7 +422,7 @@ class TaskRelease extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexDirection: 'row',
-                            backgroundColor: "rgba(0,0,0,0.1)",
+                            backgroundColor: '#f6f6f6',
                         }}>
                         <SvgUri width={20} fill={'rgba(0,0,0,0.9)'} style={{marginLeft: 5}} height={20}
                                 svgXmlData={task_yulan}/>
@@ -585,6 +587,7 @@ class BottomInfoForm extends Component {
         // if (ReplayNumArray) {
         //
         // }
+        console.log('render');
         return <View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('项目名称', 1, {
@@ -1060,7 +1063,7 @@ class StepInfo extends Component {
                     const timestamp = !timestamp_ ? new Date().getTime() : timestamp_;//有则保存 无则创建
                     let imageData = {};
                     // console.log(data.uri && Object.prototype.toString.call(data.uri)==='[object Object]',"Object.prototype.toString.call(data.uri)")
-                    if (data.uri && Object.prototype.toString.call(data.uri)==='[object Object]') { //是否是本地图片
+                    if (data.uri && Object.prototype.toString.call(data.uri) === '[object Object]') { //是否是本地图片
 
                         imageData = data.uri;
                         data.uri = `file://${imageData.path}`;//先展示本地数据
@@ -1068,7 +1071,7 @@ class StepInfo extends Component {
                         // 上传至云空间
                         setTimeout(() => {
                             const {userinfo} = this.props;
-                            if(imageData.mime){
+                            if (imageData.mime) {
                                 let mime = imageData.mime;
                                 const mimeIndex = mime.indexOf('/');
                                 mime = mime.substring(mimeIndex + 1, mime.length);
@@ -1078,7 +1081,7 @@ class StepInfo extends Component {
                                 }).catch(err => {
                                     this.taskStep.setImageStatusOrUrl(timestamp, -1, '');
                                 });
-                            }else{
+                            } else {
                                 this.taskStep.setImageStatusOrUrl(timestamp, -1, '');
                             }
 
@@ -1101,162 +1104,161 @@ class StepInfo extends Component {
                     // }
 
                 }}
-                    ref={ref => this.taskPop = ref}/>
-                {/*图片浏览器*/}
-                {/*<ImageViewerModal*/}
-                {/*    ref={ref => this.imageViewerModal = ref}*/}
-                {/*/>*/}
-                    </View>;
+                ref={ref => this.taskPop = ref}/>
+            {/*图片浏览器*/}
+            {/*<ImageViewerModal*/}
+            {/*    ref={ref => this.imageViewerModal = ref}*/}
+            {/*/>*/}
+        </View>;
 
-                    }
+    }
 
-                    genMenu = (title, svgXmlData, click, index) => {
-                    return <TouchableOpacity
-                    key={index}
-                    activeOpacity={0.6}
-                    onPress={() => {
-                    this.laPop.hide(false);
-                    click();
-                    }
-                    }
-                    style={{
-                    width: 100, height: 35,
-                    alignItems: 'center', flexDirection: 'row',
-                    }}>
-                    <SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>
-                    <Text style={{fontSize: 15}}>{title}</Text>
-                    </TouchableOpacity>;
-                    };
-                    _svgClick = () => {
-                    this.props.scollToEnd();
-                    const handle = findNodeHandle(this.svg);
-                    UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
-                    this.laPop.show(pageX, pageY);
-                    });
-                    };
-                    }
+    genMenu = (title, svgXmlData, click, index) => {
+        return <TouchableOpacity
+            key={index}
+            activeOpacity={0.6}
+            onPress={() => {
+                this.laPop.hide(false);
+                click();
+            }
+            }
+            style={{
+                width: 100, height: 35,
+                alignItems: 'center', flexDirection: 'row',
+            }}>
+            <SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>
+            <Text style={{fontSize: 15}}>{title}</Text>
+        </TouchableOpacity>;
+    };
+    _svgClick = () => {
+        this.props.scollToEnd();
+        const handle = findNodeHandle(this.svg);
+        UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+            this.laPop.show(pageX, pageY);
+        });
+    };
+}
 
-                    class TypeSelect extends Component {
+class TypeSelect extends Component {
 
-                    static defaultProps = {
-                    title: '请选择类型',
-                    typeArr: [],
-                    defaultId: 1,
-                    };
-                    state = {
-                    id: this.props.defaultId,
-                    };
+    static defaultProps = {
+        title: '请选择类型',
+        typeArr: [],
+        defaultId: 1,
+    };
+    state = {
+        id: this.props.defaultId,
+    };
 
-                    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-                    if (this.props.defaultId != nextProps.defaultId) {
-                    this.setState({
-                    id: nextProps.defaultId,
-                    });
-                    }
-                    }
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        if (this.props.defaultId != nextProps.defaultId) {
+            this.setState({
+                id: nextProps.defaultId,
+            });
+        }
+    }
 
-                    render() {
-                    const {title, typeArr} = this.props;
-                    return <View style={[{backgroundColor: 'white', paddingBottom: 20}, this.props.style]}>
-                    <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
-                    <Text style={{fontSize: 15}}>{title}</Text>
-                    </View>
-                    <View style={{
+    render() {
+        const {title, typeArr} = this.props;
+        return <View style={[{backgroundColor: 'white', paddingBottom: 20}, this.props.style]}>
+            <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
+                <Text style={{fontSize: 15}}>{title}</Text>
+            </View>
+            <View style={{
 
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
 
-                    }}>
-                    {typeArr.map((item, index, arr) => {
+            }}>
+                {typeArr.map((item, index, arr) => {
                     return <TypeComponent checked={this.state.id === item.id ? true : false} ref={`typeBtn${item.id}`}
-                    key={item.id}
-                    onPress={this._typeClick}
-                    data={item} index={item.id}/>;
+                                          key={item.id}
+                                          onPress={this._typeClick}
+                                          data={item} index={item.id}/>;
 
-                    })}
+                })}
 
-                    </View>
-                    </View>;
-                    }
+            </View>
+        </View>;
+    }
 
-                    // typeData = this.props.typeArr[this.st];
-                    _typeClick = (index, data, checked) => {
-                    if (checked) {
-                    this.typeData = data;
-                    console.log(data.id, 'data.id');
-                    this.setState({
-                    id: data.id,
-                    });
-                    }
+    // typeData = this.props.typeArr[this.st];
+    _typeClick = (index, data, checked) => {
+        if (checked) {
+            this.typeData = data;
+            console.log(data.id, 'data.id');
+            this.setState({
+                id: data.id,
+            });
+        }
 
-                    };
-                    getTypeData = () => {
-                    const index = this.props.typeArr.findIndex(e => e.id == this.state.id);
-                    if (index != -1) {
-                    return this.props.typeArr[index];
-                    } else {
-                    return {};
-                    }
+    };
+    getTypeData = () => {
+        const index = this.props.typeArr.findIndex(e => e.id == this.state.id);
+        if (index != -1) {
+            return this.props.typeArr[index];
+        } else {
+            return {};
+        }
 
-                    };
-                    }
+    };
+}
 
-                    class TypeComponent extends Component {
-                    static defaultProps = {
-                    data: {id: 1, title: 'test'},
-                    };
-
-
-                    componentDidMount(): void {
-
-                    }
+class TypeComponent extends Component {
+    static defaultProps = {
+        data: {id: 1, title: 'test'},
+    };
 
 
-                    shouldComponentUpdate(nextProps, nextState) {
+    componentDidMount(): void {
 
-                    if (this.props.checked != nextProps.checked || this.props.data.title != nextProps.data.title || this.props.data.id != nextProps.data.id) {
-                    // console.log('我该更新了');
-                    return true;
-                    }
-                    return false;
-                    }
+    }
 
-                    _onPress = () => {
-                    this.props.onPress(this.props.index, this.props.data, true);
 
-                    };
+    shouldComponentUpdate(nextProps, nextState) {
 
-                    render() {
-                    const {checked, data} = this.props;
+        if (this.props.checked != nextProps.checked || this.props.data.title != nextProps.data.title || this.props.data.id != nextProps.data.id) {
+            // console.log('我该更新了');
+            return true;
+        }
+        return false;
+    }
 
-                    return <TouchableOpacity
-                    onPress={this._onPress}
-                    style={[{
-                    width: width / 4 - 20,
-                    height: 25,
-                    marginTop: 10,
-                    backgroundColor: '#f1f1f1',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginHorizontal: 10,
-                    borderRadius: 3,
-                    borderWidth: 0.3,
-                    borderColor: 'rgba(0,0,0,0.2)',
-                    }, !checked ? {backgroundColor: '#f3f3f3'} : {
-                    backgroundColor: 'rgba(33,150,243,0.1)',
-                    borderWidth: 0.3, borderColor: bottomTheme,
-                    }]}>
-                    <Text style={[{
-                    fontSize: 14,
-                    color: 'rgba(255,255,255,0.5)',
-                    opacity: 0.8,
-                    }, !checked ? {
-                    color: 'black',
-                    opacity: 0.7,
-                    } : {color: bottomTheme}]}>{data.title}</Text>
-                    </TouchableOpacity>;
-                    }
-                    }
+    _onPress = () => {
+        this.props.onPress(this.props.index, this.props.data, true);
 
-                    export default TaskReleaseRedux;
-;
+    };
+
+    render() {
+        const {checked, data} = this.props;
+
+        return <TouchableOpacity
+            onPress={this._onPress}
+            style={[{
+                width: width / 4 - 20,
+                height: 25,
+                marginTop: 10,
+                backgroundColor: '#f1f1f1',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginHorizontal: 10,
+                borderRadius: 3,
+                borderWidth: 0.3,
+                borderColor: 'rgba(0,0,0,0.2)',
+            }, !checked ? {backgroundColor: '#f3f3f3'} : {
+                backgroundColor: 'rgba(33,150,243,0.1)',
+                borderWidth: 0.3, borderColor: bottomTheme,
+            }]}>
+            <Text style={[{
+                fontSize: 14,
+                color: 'rgba(255,255,255,0.5)',
+                opacity: 0.8,
+            }, !checked ? {
+                color: 'black',
+                opacity: 0.7,
+            } : {color: bottomTheme}]}>{data.title}</Text>
+        </TouchableOpacity>;
+    }
+}
+
+export default TaskReleaseRedux;

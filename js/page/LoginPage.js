@@ -187,7 +187,7 @@ class LoginPage extends PureComponent {
     // };
     _getCode = () => {
         // this.WXLogin();
-        console.log(this.phone, 'this.phone');
+        // console.log(this.phone, 'this.phone');
         const isTrue = isPoneAvailable(this.phone);
         //
         if (!isTrue) {
@@ -247,7 +247,7 @@ class PhoneInput extends PureComponent {
     render() {
         const {phone, errMsg} = this.state;
         // console.log('render');
-        console.log(errMsg);
+        // console.log(errMsg);
         return <>
             <TextInput
                 value={phone}

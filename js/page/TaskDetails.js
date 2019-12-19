@@ -484,8 +484,6 @@ class TaskDetails extends PureComponent {
                     signUp: true,
                 }, () => {
                     this.toast.show('报名成功');
-
-
                 });
                 this._updateTaskStatus().then();
             }).catch((msg) => {
@@ -514,6 +512,10 @@ class TaskDetails extends PureComponent {
     };
     _sendStepData = () => {
         const {userinfo} = this.props;
+        if(!userinfo.token || userinfo.token.length===0){
+            this.toast.show('您未登录哦 ～ ～ ');
+            return;
+        }
         if (!this.params.update) {
             const {FormData} = this.params;
             const {token} = userinfo;

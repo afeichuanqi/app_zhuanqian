@@ -129,6 +129,12 @@ class AgainSend extends PureComponent {
             }, 1000);
         });
     };
+
+    componentWillUnmount() {
+
+        this.timer && clearInterval(this.timer);
+    }
+
     showError = (msg) => {
         this.setState({
             errorMsg: msg,
@@ -145,7 +151,7 @@ class AgainSend extends PureComponent {
                 marginTop: 20,
                 paddingHorizontal: 40,
             }}>
-            {errorMsg.length > 0 ? <View
+            {errorMsg && errorMsg.length > 0 ? <View
                 ref={ref => this.errorInfo = ref}
                 style={{
                     flexDirection: 'row', alignItems: 'center', marginRight: 20,
@@ -211,13 +217,15 @@ class CodeInput extends PureComponent {
 
     getCodeIpt = (index) => {
 
-        return <View style={{
-            width: 50,
-            paddingBottom: 10,
-            borderBottomWidth: 1,
-            borderBottomColor: '#e8e8e8',
-            marginHorizontal: 5,
-        }}>
+        return <View
+            key={index}
+            style={{
+                width: 50,
+                paddingBottom: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: '#e8e8e8',
+                marginHorizontal: 5,
+            }}>
             <TextInput
                 value={this.iptArrayNum[index]}
                 keyboardType={'number-pad'}

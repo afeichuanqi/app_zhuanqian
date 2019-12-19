@@ -72,8 +72,9 @@ class SecondListComponent extends PureComponent {
                         backgroundColor: 'rgba(0,0,0,0.2)',
                         borderBottomRightRadius: 5,
                         borderBottomLeftRadius: 5,
+                        paddingHorizontal:5,
                     }}>
-                    <Text style={{color: 'white', fontSize: 14, width: 120, textAlign:'center'}}>
+                    <Text style={{color: 'white', fontSize: 14, width: 120}}>
                         {item.task_title}
                     </Text>
                 </View>

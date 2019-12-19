@@ -243,7 +243,7 @@ class FristListComponent extends PureComponent {
         }).catch(err => {
             this.setState({
                 isLoading: false,
-                hideLoaded: false,
+                hideLoaded: true,
             });
         });
     };
@@ -365,13 +365,17 @@ class FristListComponent extends PureComponent {
 }
 
 class OrdersItem extends React.Component {
+
+
     render() {
         const {item, status} = this.props;
 
-        return <View style={{
-            backgroundColor: 'white', borderBottomWidth: 0.3,
-            borderBottomColor: '#e8e8e8',
-        }}>
+        return <View
+
+            style={{
+                backgroundColor: 'white', borderBottomWidth: 0.3,
+                borderBottomColor: '#e8e8e8',
+            }}>
             <TouchableOpacity
                 onPress={this.props.onPress}
                 style={{
