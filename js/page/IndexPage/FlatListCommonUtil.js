@@ -11,14 +11,33 @@ import Animated from 'react-native-reanimated';
 import {selectAllRecommendTask} from '../../util/AppService';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import EmptyComponent from '../../common/EmptyComponent';
-import ImageViewerModal from '../../common/ImageViewerModal';
 
 const {height} = Dimensions.get('window');
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
+
+    constructor(props) {
+        super(props);
+        this.page = {
+            pageIndex: 0,
+        };
+    }
+
     componentDidMount(): void {
-        this._updateList(true);
+        // selectAllRecommendTask({pageIndex: this.page.pageIndex, type: this.props.type}).then(result => {
+        //     this.setState({
+        //         taskData: result,
+        //         isLoading: false,
+        //         hideLoaded: result.length >= 30 ? false : true,
+        //     });
+        // }).catch(() => {
+        //     this.setState({
+        //         isLoading: false,
+        //         hideLoaded: true,
+        //     });
+        // });
+        this._updateList(true, this.props.type == 1 ? true : false);
     }
 
     static defaultProps = {
@@ -36,16 +55,17 @@ export default class FlatListCommonUtil extends PureComponent {
         isLoading: false,
         hideLoaded: false,
     };
-    page: {
-        pageIndex: 0,
-    };
-    _updateList = (refresh) => {
+
+    _updateList = (refresh, hideRefresh = false) => {
         if (refresh) {
-            this.props.onRefresh(true);
-            this.page = {pageIndex: 0};
-            this.setState({
-                isLoading: true,
-            });
+            if (!hideRefresh) {
+                this.props.onRefresh(true);
+                this.page = {pageIndex: 0};
+                this.setState({
+                    isLoading: true,
+                });
+            }
+
         } else {
             this.props.onLoading(true);
             this.page = {pageIndex: this.page.pageIndex + 1};
@@ -78,53 +98,46 @@ export default class FlatListCommonUtil extends PureComponent {
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
-        return <View style={{height: '100%'}}>
-            <ImageViewerModal ref={ref => this.imageViewModal = ref}/>
-            <AnimatedFlatList
+        return <AnimatedFlatList
 
-                ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 310}/>}
-                ListHeaderComponent={ListHeaderComponent}
-                ref={ref => this.flatList = ref}
-                data={taskData}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={1}
-                renderItem={data => this._renderIndexPath(data)}
-                keyExtractor={(item, index) => index + ''}
-                style={{
-                    backgroundColor: '#f1f1f1',
-                    height: '100%',
-                }}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={isLoading}
-                        onRefresh={() => this.onRefresh()}
-                    />
-                }
-                onScroll={onScroll}
-                ListFooterComponent={() => this.genIndicator(hideLoaded)}
-                onEndReached={() => {
-                    setTimeout(() => {
-                        // 等待页面布局完成以后，在让加载更多
-                        if (this.canLoadMore && taskData.length >= 10) {
-                            this.onLoading();
-                            this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                        }
-                    }, 100);
-                }}
-                windowSize={300}
-                onEndReachedThreshold={0.3}
-                onScrollEndDrag={onScrollEndDrag}
-                onScrollBeginDrag={onScrollBeginDrag}
-                onMomentumScrollBegin={() => {
-                    this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
-                }}
-                onMomentumScrollEnd={onMomentumScrollEnd}
-
-                // onMomentumScrollBegin={(e) => {
-                //
-                // }}
-            />
-        </View>;
+            ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 350}/>}
+            ListHeaderComponent={ListHeaderComponent}
+            ref={ref => this.flatList = ref}
+            data={taskData}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={1}
+            renderItem={data => this._renderIndexPath(data)}
+            keyExtractor={(item, index) => index + ''}
+            style={{
+                backgroundColor: '#f1f1f1',
+                // height: '100%',
+            }}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isLoading}
+                    onRefresh={() => this.onRefresh()}
+                />
+            }
+            onScroll={onScroll}
+            ListFooterComponent={() => this.genIndicator(hideLoaded)}
+            onEndReached={() => {
+                setTimeout(() => {
+                    // 等待页面布局完成以后，在让加载更多
+                    if (this.canLoadMore && taskData.length >= 10) {
+                        this.onLoading();
+                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                    }
+                }, 100);
+            }}
+            windowSize={300}
+            onEndReachedThreshold={0.3}
+            onScrollEndDrag={onScrollEndDrag}
+            onScrollBeginDrag={onScrollBeginDrag}
+            onMomentumScrollBegin={() => {
+                this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
+            }}
+            onMomentumScrollEnd={onMomentumScrollEnd}
+        />;
     }
 
     // _onMomentumScrollBegin=(3)=>{

@@ -28,10 +28,10 @@ class ChatSocket {
                     const {msg, status} = data;
                     Global.dispatch(Message.verifyIdentIdy(status));
                     if (status === 0) {
-                        Global.dispatch(Message.onChangeSocketStatue(''));
+                        // Global.dispatch(Message.onChangeSocketStatue(''));
                         this.isVerifyIdentIdy = true;
                     } else {
-                        Global.dispatch(Message.onChangeSocketStatue('未登录'));
+                        // Global.dispatch(Message.onChangeSocketStatue(''));
                         this.isVerifyIdentIdy = false;
                     }
                     break;
@@ -87,11 +87,7 @@ class ChatSocket {
         };
         //连接关闭的时候触发
         Global.ws.onclose = (e) => {
-            console.log('连接被关闭')
-            console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
-            console.log(e)
             Global.connectionstatus = false;
-            // Global.dispatch(Message.onChangeSocketStatue('连接关闭'));
             if (typeof Global.dispatch != 'function') {
                 return;
             }
@@ -181,14 +177,14 @@ class ChatSocket {
         }
         if (!this.isVerifyIdentIdy) {
             if (!Global.token || Global.token == '') {
-                Global.dispatch(Message.onChangeSocketStatue('离线'));
+                // Global.dispatch(Message.onChangeSocketStatue('离线'));
                 return;
             }
             this.verifyIdentidy();
             return;
         }
         if (!Global.token || Global.token == '') {
-            Global.dispatch(Message.onChangeSocketStatue('未登录'));
+            // Global.dispatch(Message.onChangeSocketStatue(''));
             return;
         }
         if (typeof Global.dispatch != 'function') {

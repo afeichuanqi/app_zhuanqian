@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text, Dimensions} from 'react-native';
-import FastImage from 'react-native-fast-image';
+// import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
 import {bottomTheme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -8,6 +8,8 @@ import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import SvgUri from 'react-native-svg-uri';
 import {equalsObj} from '../util/CommonUtils';
+import Global from './Global';
+import FastImagePro from './FastImagePro';
 
 
 const {width} = Dimensions.get('window');
@@ -78,11 +80,11 @@ class TaskSumComponent extends Component {
             }}
             style={{
                 flex: 1,
-                paddingTop: 15,
+                paddingTop: 10,
                 paddingBottom: 25,
                 alignItems: 'center',
                 backgroundColor: 'white',
-                height: 130,
+                height: 120,
                 marginBottom: 5,
             }}
         >
@@ -100,9 +102,9 @@ class TaskSumComponent extends Component {
                         <Text
                             numberOfLines={1}
                             style={{
-                                fontSize: 17,
+                                fontSize: 15,
                                 color: 'black',
-                                fontWeight: '500',
+                                fontWeight: '400',
                                 maxWidth: maxWidth,
                                 marginRight: 10,
                             }}>{item.taskId} - {item.taskTitle}</Text>
@@ -122,7 +124,7 @@ class TaskSumComponent extends Component {
                     {/*价格*/}
                     <View style={{}}>
                         <Text style={{
-                            fontSize: 18,
+                            fontSize: 16,
                             color: 'red',
                             fontWeight: '500',
                         }}>+ {item.rewardPrice}元</Text>
@@ -133,19 +135,19 @@ class TaskSumComponent extends Component {
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: 8,
                 }}>
 
                     <Text style={{
-                        fontSize: 15,
-                        opacity: 0.8,
+                        fontSize: 13,
+                        // opacity: 0.8,
                         color: 'red',
                     }}>{parseInt(item.taskPassNum)}人已完成</Text>
                     <View
                         style={{width: 0.3, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 10}}/>
                     <Text style={{
-                        fontSize: 15,
-                        opacity: 0.8,
+                        fontSize: 13,
+                        // opacity: 0.8,
                         color: 'red',
                     }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}个名额</Text>
                 </View>
@@ -154,35 +156,35 @@ class TaskSumComponent extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        marginTop: 10,
+                        marginTop: 8,
                     }}>
                     {/*标签*/}
                     <View style={{
                         flexDirection: 'row',
                     }}>
-                        <LabelBigComponent paddingHorizontal={8} fontSize={12} title={item.typeTitle}/>
-                        <LabelBigComponent paddingHorizontal={8} fontSize={12} title={item.taskName}/>
+                        <LabelBigComponent paddingHorizontal={8} fontSize={11} title={item.typeTitle}/>
+                        <LabelBigComponent paddingHorizontal={8} fontSize={11} title={item.taskName}/>
                     </View>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={()=>{this.props.imageViewModal.show([{url: item.taskUri}])}}
+                    onPress={()=>{Global.imageViewModal.show([{url: item.taskUri}])}}
                     style={{
                         position: 'absolute',
-                        top: 30,
+                        top: 25,
                         right: 0,
                     }}
                 >
-                    <FastImage
+                    <FastImagePro
                         style={{
                             backgroundColor: '#E8E8E8',
-                            width: 65,
+                            width: 60,
                             height: 70,
-                            borderRadius: 3,
+                            borderRadius: 2,
 
                         }}
                         source={{uri: item.taskUri}}
-                        resizeMode={FastImage.resizeMode.stretch}
+                        // resizeMode={FastImage.resizeMode.stretch}
                     />
                 </TouchableOpacity>
 
@@ -198,10 +200,9 @@ class TaskSumComponent extends Component {
                     }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View>
-                            <FastImage
+                            <FastImagePro
                                 style={[styles.imgStyle]}
                                 source={{uri: item.avatarUrl}}
-                                resizeMode={FastImage.resizeMode.stretch}
                             />
                             <SvgUri style={{
                                 position: 'absolute',
@@ -213,7 +214,7 @@ class TaskSumComponent extends Component {
                             }} fill={'white'} width={10} height={10}
                                     svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                         </View>
-                        <Text style={{fontSize: 13, marginLeft: 10}}>{item.userName}</Text>
+                        <Text style={{fontSize: 13, marginLeft: 10,color:'black'}}>{item.userName}</Text>
                     </View>
 
 

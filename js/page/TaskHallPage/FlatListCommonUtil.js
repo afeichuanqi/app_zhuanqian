@@ -88,9 +88,7 @@ export default class FlatListCommonUtil extends PureComponent {
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
-        return <View style={{height: '100%'}}>
-            <ImageViewerModal ref={ref => this.imageViewModal = ref}/>
-            <AnimatedFlatList
+        return <AnimatedFlatList
                 ListEmptyComponent={<EmptyComponent message={'暂时没有符合任务'} height={height - 200}/>}
                 ListHeaderComponent={ListHeaderComponent}
                 ref={ref => this.flatList = ref}
@@ -130,7 +128,6 @@ export default class FlatListCommonUtil extends PureComponent {
                 }}
                 onMomentumScrollEnd={onMomentumScrollEnd}
             />
-        </View>;
     }
 
     // _onMomentumScrollBegin=(3)=>{

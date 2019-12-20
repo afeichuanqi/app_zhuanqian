@@ -94,11 +94,11 @@ class TaskHallPage extends PureComponent {
                 }}>
                     <TabBar
                         style={{
-                            height: 45,
+                            height: 50,
                             width: 200,
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 15}}
+                        contentContainerStyle={{paddingTop: 20}}
                         routes={navigationRoutes}
                         index={navigationIndex}
                         handleIndexChange={this.handleIndexChange}
@@ -393,8 +393,8 @@ class TypeItem extends PureComponent {
                     paddingVertical: 4,
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    backgroundColor: title.length > 2 ? 'rgba(33,150,243,0.1)' : '#f0f0f0',
-                    borderRadius: 5,
+                    backgroundColor: title.length > 2 ? 'rgba(33,152,245,0.1)' : '#f0f0f0',
+                    borderRadius: 3,
 
                 }}>
                 <Text style={[{
@@ -404,10 +404,10 @@ class TypeItem extends PureComponent {
                     opacity: 0.5,
                 } : {color: bottomTheme}]}>{title}</Text>
                 {
-                    !show ? <SvgUri style={{marginTop: 3}} fill={title.length > 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
-                                    width={10} height={10}
+                    !show ? <SvgUri style={{marginTop: 6}} fill={title.length > 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
+                                    width={7} height={7}
                                     svgXmlData={zhankai}/> :
-                        <SvgUri style={{marginTop: 3}} fill={bottomTheme} width={10} height={10}
+                        <SvgUri style={{marginTop: 6}} fill={bottomTheme} width={7} height={7}
                                 svgXmlData={yincang}/>
                 }
 
@@ -573,8 +573,8 @@ class TopLeftFilterComponent extends Component {
                         onPress={() => this._onPress(Lindex)}
                     >
                         <Text style={[{
-                            fontSize: 15,
-                            // fontWeight: '400',
+                            fontSize: 14,
+                            fontWeight: '400',
                         }, Lindex === index ? {
                             color: 'black',
                             fontWeight: '400',

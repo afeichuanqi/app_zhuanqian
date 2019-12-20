@@ -93,17 +93,17 @@ class UserBillListPage extends PureComponent {
                             alignSelf: 'center',
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 15}}
+                        contentContainerStyle={{paddingTop: 13}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
                         // indicatorStyle={styles.indicator}
                         bounces={true}
-                        titleMarginHorizontal={45}
-                        activeStyle={{fontSize: 13, color: [0, 0, 0]}}
-                        inactiveStyle={{fontSize: 13, color: [150, 150, 150], height: 10}}
-                        indicatorStyle={{height: 2, backgroundColor: bottomTheme, borderRadius: 3}}
+                        titleMarginHorizontal={30}
+                        activeStyle={{fontSize: 14, color: [0, 0, 0], fontWeight:'bold'}}
+                        inactiveStyle={{fontSize: 14, color: [150, 150, 150], height: 10}}
+                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                     />
                     <TouchableOpacity
                         onPress={() => {
@@ -284,9 +284,9 @@ class UserBillList extends PureComponent {
                 borderBottomColor: 'rgba(0,0,0,0.1)',
             }}>
             <View>
-                <Text style={{fontSize: 14}}>{item.bill_title}</Text>
-                <Text style={{marginTop: 8, opacity: 0.7, fontSize: 13}}>余额:{item.bill_balance}</Text>
-                <Text style={{marginTop: 8, opacity: 0.5, fontSize: 12}}>{item.bill_date1}</Text>
+                <Text style={{fontSize: 14,color:'black'}}>{item.bill_title}</Text>
+                <Text style={{marginTop: 8, opacity: 0.7, fontSize: 13,color:'black'}}>余额:{item.bill_balance}</Text>
+                <Text style={{marginTop: 8, opacity: 0.5, fontSize: 12,color:'black'}}>{item.bill_date1}</Text>
             </View>
             <View style={{alignSelf: 'flex-start', marginTop: 20}}>
                 <Text style={{
@@ -297,7 +297,8 @@ class UserBillList extends PureComponent {
                 <Text style={{
                     opacity: 0.5,
                     marginTop: 10,
-                    textAlign: 'right',
+                    textAlign: 'right',color:'black'
+
                 }}>{item.bill_status == 1 ? '支付成功' : '处理中'}</Text>
             </View>
 

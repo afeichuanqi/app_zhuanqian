@@ -462,8 +462,8 @@ class TaskInfo extends React.Component {
                     resizeMode={Image.resizeMode.stretch}
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                    <Text style={{fontSize: 17}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 13, opacity:0.5}}>{taskInfo.task_title}</Text>
+                    <Text style={{fontSize: 17,color:'black'}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
+                    <Text style={{fontSize: 13, opacity:0.5,color:'black'}}>{taskInfo.task_title}</Text>
                     <Text style={{
                         fontSize: 13,
                         color: 'red',

@@ -103,16 +103,16 @@ class MyAttention extends PureComponent {
 
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 15}}
+                        contentContainerStyle={{paddingTop: 13}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={20}
-                        activeStyle={{fontSize: 13, color: [0, 0, 0]}}
-                        inactiveStyle={{fontSize: 13, color: [150, 150, 150], height: 10}}
-                        indicatorStyle={{height: 2, backgroundColor: bottomTheme, borderRadius: 3}}
+                        activeStyle={{fontSize: 14, color: [0, 0, 0]}}
+                        inactiveStyle={{fontSize: 14, color: [150, 150, 150], height: 10}}
+                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                     />
                     <TouchableOpacity
                         onPress={() => {
@@ -346,7 +346,7 @@ class AttentionItem extends PureComponent {
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{marginLeft: 15}}>
                         <Text style={{fontSize: 15}}>{item.username}</Text>
-                        <Text style={{fontSize: 13, opacity: 0.6, marginTop: 7}}>{item.fan_num}位粉丝</Text>
+                        <Text style={{fontSize: 13, opacity: 0.6, marginTop: 7,color:'black'}}>{item.fan_num}位粉丝</Text>
                     </View>
                 </View>
             </View>

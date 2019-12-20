@@ -1,13 +1,14 @@
 import React, {PureComponent} from 'react';
 import {Dimensions, Platform, StyleSheet, Text, TouchableOpacity, FlatList, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
 import FlatListCommonUtil from './FlatListCommonUtil';
-import {bottomTheme, theme} from '../../appSet';
+import {bottomTheme} from '../../appSet';
 import {getBestNewTask} from '../../util/AppService';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
+import FastImagePro from '../../common/FastImagePro';
+import LinearGradient from 'react-native-linear-gradient';
 
 const width = Dimensions.get('window').width;
 const lunboHeight = 220;
@@ -45,40 +46,48 @@ class SecondListComponent extends PureComponent {
                 NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
             }}
             key={item.id}
-            style={{height: 120, width: 120, marginRight: 10}}>
-            <FastImage
-                style={[styles.imgStyle]}
+            style={{height: 120, width: 130,}}>
+            <FastImagePro
+                style={{
+                    backgroundColor: '#E8E8E8',
+                    width: 120,
+                    height: 120,
+                    borderRadius: 5,
+                }}
                 source={{uri: item.task_uri}}
-                resizeMode={FastImage.resizeMode.stretch}
             />
-            <View style={{
-                backgroundColor: 'rgba(0,0,0,0.1)', position: 'absolute', top: 0, right: 0,
-                width: 120, height: 120,
-                borderRadius:5,
-            }}>
-                <View style={{position: 'absolute', right: 5, top: 5}}>
-                    <Text style={{
-                        fontSize: 16,
-                        color: 'white',
-                        fontWeight: 'bold',
-                    }}>{item.reward_price ? `¥${item.reward_price.toFixed(2)}` : ''} </Text>
-                </View>
-                <View
-                    style={{
-                        position: 'absolute',
-                        left: 0,
-                        bottom: 0,
-                        height: 30,
-                        backgroundColor: 'rgba(0,0,0,0.2)',
-                        borderBottomRightRadius: 5,
-                        borderBottomLeftRadius: 5,
-                        paddingHorizontal:5,
-                    }}>
-                    <Text style={{color: 'white', fontSize: 14, width: 120}}>
-                        {item.task_title}
+            <LinearGradient
+                start={{x: 0, y: 0.5}}
+                end={{x: 0.5, y: 0}}
+                colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.0)']}
+                style={{height: 120, width: 120, position: 'absolute',borderRadius: 5,}}>
+                <View style={{
+                    width: 120,
+                    position:'absolute',
+                    bottom:5,
+                    paddingLeft:5,
+
+
+                }}>
+
+                    <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
+                        {item.title}
+                    </Text>
+                    <Text style={{color: 'white', fontSize: 12, marginTop:5, fontWeight:'bold'}}>
+                        {item.task_name}
                     </Text>
                 </View>
-            </View>
+                <View style={{
+                    // flexDirection: 'row',
+                    position:'absolute',
+                    top:5,right:5,
+                }}>
+                    <Text style={{color:'white', fontSize:14, fontWeight:'bold'}}>¥ {item.reward_price && parseFloat(item.reward_price).toFixed(2)}</Text>
+                </View>
+            </LinearGradient>
+
+
+
         </TouchableOpacity>;
     };
     scrollY = new Animated.Value(0);
@@ -130,7 +139,7 @@ class SecondListComponent extends PureComponent {
                 ListHeaderComponent={
                     <View style={{height: 220, backgroundColor: 'white'}}>
                         <View style={{marginTop: 20, paddingLeft: 10}}>
-                            <Text style={{fontSize: 17, opacity: 0.9}}>最新发布</Text>
+                            <Text style={{fontSize: 17, opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
                         <View style={{paddingHorizontal: 10, marginTop: 10}}>
                             <FlatList
@@ -186,7 +195,7 @@ const styles = StyleSheet.create({
     },
     imgStyle: {
         backgroundColor: '#E8E8E8',
-        width: 120,
+        width: 110,
         height: 120,
         borderRadius: 10,
     },

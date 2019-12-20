@@ -15,7 +15,7 @@ import MessagePage from '../page/MessagePage';
 import MyPage from '../page/MyPage';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {TabView} from 'react-native-tab-view';
-import hall from '../res/svg/indexPage/hall.svg';
+import hall_ from '../res/svg/indexPage/hall.svg';
 import hallA from '../res/svg/indexPage/hallA.svg';
 import home from '../res/svg/indexPage/home.svg';
 import homeA from '../res/svg/indexPage/homeA.svg';
@@ -29,8 +29,9 @@ import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {equalsObj} from '../util/CommonUtils';
-import Animated, {Easing} from 'react-native-reanimated';
-const {timing} = Animated;
+// import Animated, {Easing} from 'react-native-reanimated';
+import ImageViewerModal from '../common/ImageViewerModal';
+// const {timing} = Animated;
 type Props = {};
 
 const {width, height} = Dimensions.get('window');
@@ -51,11 +52,13 @@ class DynamicTabNavigator extends Component<Props> {
     }
 
     render() {
+
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus
                 topColor={theme}
             >
+                <ImageViewerModal ref={ref => Global.imageViewModal = ref}/>
                 <TabView
                     indicatorStyle={{backgroundColor: 'white'}}
                     navigationState={{index: navigationIndex, routes: navigationRoutes}}
@@ -219,32 +222,36 @@ class BottomBar extends Component {
                 onPress={this._BottomBarClick}
                 index={0}
                 isActive={navigationIndex === 0 ? true : false}
-                size={35}
+                size={25}
+                title={'首页'}
             />
             <BottomBarItem
-                svgXmlData={navigationIndex === 1 ? hallA : hall}
+                svgXmlData={navigationIndex === 1 ? hallA : hall_}
                 onPress={this._BottomBarClick}
                 index={1}
                 isActive={navigationIndex === 1 ? true : false}
-                size={35}
+                size={26}
+                title={'大厅'}
             />
             <BottomBarItem
                 svgXmlData={navigationIndex === 2 ? messageA : message}
                 onPress={this._BottomBarClick}
                 index={2}
                 isActive={navigationIndex === 2 ? true : false}
-                size={37}
+                size={27}
                 unReadLength={unMessageLength ? unMessageLength : 0}
                 isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || notice_arr[1] > 0 || notice_arr[2] > 0)}
+                title={'消息'}
             />
             <BottomBarItem
                 svgXmlData={navigationIndex === 3 ? myA : my}
                 onPress={this._BottomBarClick}
                 index={3}
                 isActive={navigationIndex === 3 ? true : false}
-                size={37}
+                size={27}
                 unReadLength={0}
                 isOtherUnRead={(notice_arr[1] > 0 || notice_arr[2] > 0)}
+                title={'我的'}
             />
         </View>;
     }
@@ -261,85 +268,102 @@ class BottomBarItem extends Component {
         }
         return false;
     }
-    animations = {
-        scale: new Animated.Value(1),
-    };
-    _onPressIn = () => {
-        //隐藏box
-        this._anim = timing(this.animations.scale, {
-            duration: 100,
-            toValue: 0,
-            easing: Easing.inOut(Easing.ease),
-        }).start();
-    };
+
+    // animations = {
+    //     scale: new Animated.Value(1),
+    // };
+    // _onPressIn = () => {
+    //     //隐藏box
+    //     this._anim = timing(this.animations.scale, {
+    //         duration: 200,
+    //         toValue: 0,
+    //         easing: Easing.inOut(Easing.ease),
+    //     }).start(()=>{
+    //         this._anim = timing(this.animations.scale, {
+    //             duration: 200,
+    //             toValue: 1,
+    //             easing: Easing.inOut(Easing.ease),
+    //         }).start();
+    //     });
+    // };
     _onPressOut = () => {
         //隐藏box
-        this._anim = timing(this.animations.scale, {
-            duration: 100,
-            toValue: 1,
-            easing: Easing.inOut(Easing.ease),
-        }).start();
+
     };
 
     render() {
-        const scale = Animated.interpolate(this.animations.scale, {
-            inputRange: [0, 1],
-            outputRange: [0.8, 1],
-            extrapolate: 'clamp',
-        });
-        const {svgXmlData, onPress, index, isActive, size = 35, unReadLength = 0, isOtherUnRead = false} = this.props;
-        return <AnimatedTouchableOpacity
-            activeOpacity={1}
+        // const scale = Animated.interpolate(this.animations.scale, {
+        //     inputRange: [0, 1],
+        //     outputRange: [0.8, 1],
+        //     extrapolate: 'clamp',
+        // });
+        const {svgXmlData, onPress, index, isActive, size = 35, unReadLength = 0, isOtherUnRead = false, title} = this.props;
+        return <TouchableOpacity
+            // activeOpacity={1}
             onPress={() => {
+                // this._anim = timing(this.animations.scale, {
+                //     duration: 200,
+                //     toValue: 0,
+                //     easing: Easing.inOut(Easing.ease),
+                // }).start(()=>{
+                //     this._anim = timing(this.animations.scale, {
+                //         duration: 200,
+                //         toValue: 1,
+                //         easing: Easing.inOut(Easing.ease),
+                //     }).start();
+                // });
                 onPress(index);
             }}
-            onPressIn={this._onPressIn}
-            onPressOut={this._onPressOut}
+            // onPressIn={this._onPressIn}
+            // onPressOut={this._onPressOut}
             style={{
                 width: width / 4,
-                height: 50,
+                height: 45,
                 justifyContent: 'center',
                 alignItems: 'center',
 
             }}>
-            <Animated.View style={{transform: [{scale}],}}>
-                <SvgUri fill={isActive ? bottomTheme : 'rgba(0,0,0,0.5)'}
-                        width={size}
-                        height={size}
-                        svgXmlData={svgXmlData}
-                        style={{marginBottom: 2}}
-                />
-                {unReadLength > 0 && <View style={{
-                    borderRadius: 10,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'absolute',
-                    top: -2, right: -8,
-                    backgroundColor: 'red',
-                    paddingHorizontal: 5,
-                    borderWidth: 2,
-                    borderColor: 'white',
-                }}>
-                    <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
-                </View>}
-                {unReadLength == 0 && isOtherUnRead && <View style={{
-                    position: 'absolute',
-                    right: -3,
-                    top: 0,
-                    backgroundColor: 'red',
-                    borderRadius: 8,
-                    width: 13,
-                    height: 13,
-                    borderWidth: 3,
-                    borderColor: 'white',
-                }}/>}
-            </Animated.View>
+            <SvgUri fill={isActive ? bottomTheme : 'rgba(0,0,0,0.5)'}
+                    width={size}
+                    height={size}
+                    svgXmlData={svgXmlData}
+                    style={{marginBottom: 0}}
+            />
+            <Text style={[{
+                fontSize: 11,
+
+            }, {color: isActive ? bottomTheme : 'rgba(0,0,0,0.6)'}]}>{title}</Text>
+            {unReadLength > 0 && <View style={{
+                borderRadius: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                top: -2, right: -8,
+                backgroundColor: 'red',
+                paddingHorizontal: 5,
+                borderWidth: 2,
+                borderColor: 'white',
+            }}>
+                <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
+            </View>}
+            {unReadLength == 0 && isOtherUnRead && <View style={{
+                position: 'absolute',
+                right: -3,
+                top: 0,
+                backgroundColor: 'red',
+                borderRadius: 8,
+                width: 13,
+                height: 13,
+                borderWidth: 3,
+                borderColor: 'white',
+            }}/>}
 
 
-        </AnimatedTouchableOpacity>;
+        </TouchableOpacity>;
     }
 }
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
+// const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const mapStateToProps = state => ({
     friend: state.friend,
     nav: state.nav,

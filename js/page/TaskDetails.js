@@ -24,10 +24,10 @@ import NavigationBar from '../common/NavigationBar';
 import FastImage from 'react-native-fast-image';
 import SvgUri from 'react-native-svg-uri';
 import TaskStepColumn from './TaskRelease/TaskStepColumn';
-import Animated from 'react-native-reanimated';
+import Animated, {Easing} from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import {
-    addTaskReleaseData,
+    addTaskReleaseData, getNewTaskId,
     selectTaskInfo, selectUserIsFavoriteTask,
     selectUserStatusForTaskId,
     sendTaskStepForm, setUserFavoriteTask,
@@ -48,9 +48,12 @@ import shoucang_ from '../res/svg/shoucang_.svg';
 import ToastShare from '../common/ToastShare';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-
+const {
+    timing,
+} = Animated;
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+let toast = null;
 
 class TaskDetails extends PureComponent {
     constructor(props) {
@@ -180,7 +183,7 @@ class TaskDetails extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const RefreshHeight = Animated.interpolate(this.animations.value, {
-            inputRange: [-200, -0.1, 0],
+            inputRange: [-200, -0.01, 0],
             outputRange: [250, 20, 0],
             extrapolate: 'clamp',
         });
@@ -194,7 +197,7 @@ class TaskDetails extends PureComponent {
             >
                 {navigationBar}
                 <Toast
-                    ref={ref => this.toast = ref}
+                    ref={ref => toast = ref}
                 />
                 <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
 
@@ -218,16 +221,6 @@ class TaskDetails extends PureComponent {
                             opacity: NameOpacity,
                         }}>
                         <Text style={{color: 'white', fontSize: 16}}>{taskData && taskData.title}</Text>
-                        {/*<TouchableOpacity*/}
-
-                        {/*    style={{*/}
-                        {/*        position: 'absolute',*/}
-                        {/*        right: 15,*/}
-                        {/*        // top:2*/}
-                        {/*    }}>*/}
-                        {/*    */}
-                        {/*</TouchableOpacity>*/}
-
                     </Animated.View>
                     <Animated.View
                         style={{
@@ -363,7 +356,7 @@ class TaskDetails extends PureComponent {
                                     resizeMode={FastImage.stretch}
                                 />
                                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                                    <Text>{fromUserinfo && fromUserinfo.username}</Text>
+                                    <Text style={{color:'black'}}>{fromUserinfo && fromUserinfo.username}</Text>
                                     <Text style={{color: 'red', opacity: 0.8, fontSize: 12}}>{
                                         taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
                                             :
@@ -462,7 +455,7 @@ class TaskDetails extends PureComponent {
                     shareClick={() => {
                         this.toastShare.show();
                     }}
-                    toast={this.toast}
+                    toast={toast}
                 />
                 {/*分享弹窗*/}
                 <ToastShare ref={ref => this.toastShare = ref}/>
@@ -483,11 +476,11 @@ class TaskDetails extends PureComponent {
                 this.setState({
                     signUp: true,
                 }, () => {
-                    this.toast.show('报名成功');
+                    toast.show('报名成功');
                 });
                 this._updateTaskStatus().then();
             }).catch((msg) => {
-                this.toast.show(msg);
+                toast.show(msg);
             });
 
         }
@@ -497,13 +490,13 @@ class TaskDetails extends PureComponent {
             const taskText = JSON.stringify(task_step_data);
             const error = judgeSendTaskData(taskText);
             if (error != '') {//任务步骤正确是否正确填写完毕
-                this.toast.show(error);
+                toast.show(error);
             } else {
                 sendTaskStepForm({task_id: this.task_id, task_step_data: taskText}, userinfo.token).then(result => {
-                    this.toast.show('提交成功,等待审核');
+                    toast.show('提交成功,等待审核');
                     this._updateTaskStatus().then();
                 }).catch((msg) => {
-                    this.toast.show(msg);
+                    toast.show(msg);
                 });
             }
 
@@ -512,8 +505,8 @@ class TaskDetails extends PureComponent {
     };
     _sendStepData = () => {
         const {userinfo} = this.props;
-        if(!userinfo.token || userinfo.token.length===0){
-            this.toast.show('您未登录哦 ～ ～ ');
+        if (!userinfo.token || userinfo.token.length === 0) {
+            toast.show('您未登录哦 ～ ～ ');
             return;
         }
         if (!this.params.update) {
@@ -521,26 +514,26 @@ class TaskDetails extends PureComponent {
             const {token} = userinfo;
             const error = judgeTaskData(FormData);
             if (error != '') {
-                this.toast.show(error);
+                toast.show(error);
                 return;
             }
             addTaskReleaseData(FormData, token).then(result => {
-                this.toast.show('发布成功 ~ ~ ');
+                toast.show('发布成功 ~ ~ ');
             }).catch(err => {
-                this.toast.show(err);
+                toast.show(err);
             });
         } else {
             const {FormData} = this.params;
             const {token} = userinfo;
             const error = judgeTaskData(FormData, true);
             if (error != '') {
-                this.toast.show(error);
+                toast.show(error);
                 return;
             }
             updateTaskReleaseData(FormData, token).then(result => {
-                this.toast.show('修改成功 ~ ~ ');
+                toast.show('修改成功 ~ ~ ');
             }).catch(err => {
-                this.toast.show(err);
+                toast.show(err);
             });
         }
     };
@@ -551,13 +544,6 @@ class TaskDetailsPop extends Component {
         isFavorite: 0,
     };
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.task_id != this.props.task_id) {
-    //         //刷新
-    //         console.log('s刷新');
-    //
-    //     }
-    // }
     componentDidMount(): void {
         selectUserIsFavoriteTask({task_id: this.props.task_id}, this.props.userinfo.token).then(data => {
 
@@ -694,20 +680,8 @@ class BottomBtns extends PureComponent {
                 </TouchableOpacity>
 
             </View> : <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                    activeOpacity={0.6}
-                    style={{
-                        height: 60,
-                        width: width / 3,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        backgroundColor: '#f6f6f6',
-                    }}>
-                    <SvgUri width={17} fill={'rgba(0,0,0,0.7)'} style={{marginLeft: 5}} height={17}
-                            svgXmlData={taskHallNext}/>
-                    <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
-                </TouchableOpacity>
+                <ChangeTask
+                />
                 <TouchableOpacity
                     activeOpacity={(StatusForTask.status === 0 || StatusForTask.status === 4 || StatusForTask.status === 5) ? 0.5 : 1}
                     onPress={this.props.startSignUp}
@@ -730,6 +704,63 @@ class BottomBtns extends PureComponent {
 
             </View>}
         </View>;
+    }
+}
+
+class ChangeTask extends Component {
+    animations = {
+        rotate: new Animated.Value(0),
+    };
+    _onPress = () => {
+        //隐藏box
+        toast.show('已切换');
+        getNewTaskId().then(result => {
+            const taskId = result.task_id;
+            EventBus.getInstance().fireEvent(EventTypes.update_task_page, {
+                test: false,
+                task_id: taskId,
+            });
+
+        }).catch(msg => {
+        });
+        this._anim = timing(this.animations.rotate, {
+            duration: 1000,
+            toValue: 1,
+            easing: Easing.inOut(Easing.ease),
+        }).start();
+        this.animations.rotate.setValue(0);
+    };
+
+
+    render() {
+        // const rotate = this.runProgression();
+        const rotate = Animated.concat(
+            Animated.interpolate(this.animations.rotate, {
+                inputRange: [0, 1],
+                outputRange: [0, 360],
+            }),
+            'deg',
+        );
+        return <TouchableOpacity
+            onPress={this._onPress}
+            activeOpacity={0.6}
+            style={{
+                height: 60,
+                width: width / 3,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                backgroundColor: '#f6f6f6',
+            }}>
+            <Animated.View
+                style={{transform: [{rotate: rotate}]}}
+            >
+                <SvgUri width={13} fill={'rgba(0,0,0,0.7)'} style={{}} height={13}
+                        svgXmlData={taskHallNext}/>
+            </Animated.View>
+
+            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
+        </TouchableOpacity>;
     }
 }
 

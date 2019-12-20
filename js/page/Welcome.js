@@ -6,84 +6,98 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {
-    View,
-    Text,
-} from 'react-native';
-import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import NavigationBar from '../common/NavigationBar';
-import {theme} from '../appSet';
-import NavigationUtils from '../navigator/NavigationUtils';
-// import ChatSocket from '../util/ChatSocket';
-// import {connect} from 'react-redux';
 
-class Welcome extends PureComponent {
+    Animated,
+    Dimensions, StyleSheet,
+} from 'react-native';
+import NavigationUtils from '../navigator/NavigationUtils';
+import RNBootSplash from 'react-native-bootsplash';
+
+let bootSplashLogo = require('../../assets/bootsplash_logo.png');
+
+class Welcome extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    state = {
-        interVal: 100,
-
-    };
+    opacity = new Animated.Value(1);
+    translateY = new Animated.Value(0);
+    opacity1 = new Animated.Value(1);
 
     componentDidMount() {
-        const {navigation} = this.props;
-        NavigationUtils.navigation = navigation;
-        this.timer = setInterval(() => {
-            // this.setState
-            console.log(this.state.interVal);
-            this.setState({
-                interVal: this.state.interVal - 100,
-            }, () => {
-                if (this.state.interVal === 0) {
-                    NavigationUtils.toHomePage();
-                }
-            });
 
-
-        }, 100);
-        //申请微信注册
-
-        // this.requestPermission();
     }
 
+    startAnimated = () => {
+
+        RNBootSplash.hide();
+        let useNativeDriver = true;
+        Animated.stagger(250, [
+            Animated.spring(this.translateY, {useNativeDriver, toValue: -50}),
+            Animated.spring(this.translateY, {
+                useNativeDriver,
+                toValue: Dimensions.get('window').height,
+            }),
+        ]).start(() => {
+
+        });
+        this.timer = setTimeout(() => {
+            NavigationUtils.navigation = this.props.navigation;
+            NavigationUtils.toHomePage();
+        }, 300);
+    };
 
     componentWillUnmount() {
-        this.timer && clearInterval(this.timer);
-
+        this.timer && clearTimeout(this.timer);
     }
 
     render() {
-        const {interVal} = this.state;
 
-        let statusBar = {
-            hidden: false,
-
-        };
-        let navigationBar = <NavigationBar
-            hide={true}
-            statusBar={statusBar}
-        />;
         return (
-            <SafeAreaViewPlus
-                topColor={theme}
-            >
-                {navigationBar}
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
-                    <Text>{interVal}ms进入HomePage</Text>
-                </View>
-
-            </SafeAreaViewPlus>
+            <Animated.View style={[styles.container, {opacity: this.opacity1}]}>
+                <Animated.View
+                    style={[
+                        StyleSheet.absoluteFill,
+                        styles.bootsplash,
+                        {opacity: this.opacity},
+                    ]}
+                >
+                    <Animated.Image
+                        source={bootSplashLogo}
+                        fadeDuration={0}
+                        onLoadEnd={this.startAnimated}
+                        style={[
+                            styles.logo,
+                            {transform: [{translateY: this.translateY}]},
+                        ]}
+                    />
+                </Animated.View>
+            </Animated.View>
         );
     }
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2196F3',
+    },
+
+    bootsplash: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2196F3',
+    },
+    logo: {
+        height: 100,
+        width: 100,
+    },
+});
 // const mapStateToProps = state => ({
 //     userinfo: state.userinfo,
 // });

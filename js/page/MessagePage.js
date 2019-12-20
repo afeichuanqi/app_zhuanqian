@@ -391,7 +391,7 @@ class MessageColumnItem extends Component {
                 fontSize: 13,
                 color: 'black',
                 opacity: 0.8,
-                marginTop: 10,
+                marginTop: 7,
 
             }}>{title}</Text>
 

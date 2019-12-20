@@ -85,13 +85,15 @@ export default class TaskReleaseItem extends PureComponent {
                         }}>
                             <Text style={{
                                 fontSize: 13,
-                                opacity: 0.5,
+                                opacity: 0.7,
+                                color:'black'
                             }}>进行中:{item.task_ing_num}</Text>
                             <View
                                 style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
                             <Text style={{
                                 fontSize: 13,
-                                opacity: 0.5,
+                                opacity: 0.7,
+                                color:'black'
                             }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>
                         </View>
 
@@ -103,7 +105,7 @@ export default class TaskReleaseItem extends PureComponent {
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
-                backgroundColor: 'rgba(255,255,255,0.8)',
+                backgroundColor: 'rgba(255,255,255,0.4)',
                 flexDirection: 'row',
             }}>
 

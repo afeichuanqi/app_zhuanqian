@@ -203,7 +203,7 @@ class PickerImage extends PureComponent {
                                 width, alignItems: 'center', paddingVertical: 15,
                                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
                             }}>
-                            <Text>{'拍一张照片'}</Text>
+                            <Text style={{color:'black'}}>{'拍一张照片'}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.6}
@@ -212,7 +212,7 @@ class PickerImage extends PureComponent {
                                 width, alignItems: 'center', paddingVertical: 15,
                                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
                             }}>
-                            <Text style={{}}>{'从相册选一张'}</Text>
+                            <Text style={{color:'black'}}>{'从相册选一张'}</Text>
                         </TouchableOpacity>
                     </Animated.View>
                 </TouchableOpacity>

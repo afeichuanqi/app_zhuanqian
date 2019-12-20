@@ -67,7 +67,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
                     <TextArea
                         ref={ref => this.textArea = ref}
                         value={this.inputData.info ? this.inputData.info : ''}
@@ -87,7 +87,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
                     <TextInputPro
                         ref={ref => this.textInputPro = ref}
                         inputValue={this.inputData.inputValue ? this.inputData.inputValue : ''}
@@ -117,7 +117,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}
@@ -137,7 +137,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}

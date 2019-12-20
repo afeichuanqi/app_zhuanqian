@@ -6,6 +6,7 @@ const {timing} = Animated;
 
 import FastImage from 'react-native-fast-image';
 import {getCurrentTime} from '../../common/Chat-ui/app/chat/utils';
+import Global from '../../common/Global';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const width = Dimensions.get('window').width;
@@ -138,7 +139,6 @@ export default class MessageItemComponent extends Component {
                                 color: 'black',
                                 opacity: 0.9,
                                 marginLeft: 10,
-                                fontWeight: 'bold',
                             }}>{username}</Text>
                             <Text style={{
                                 marginLeft: 10,
@@ -180,17 +180,22 @@ export default class MessageItemComponent extends Component {
                     }}>{getCurrentTime(parseInt(item.sendDate))}</Text>
                 </View>
             </View>
-            <FastImage
-                style={{
-                    backgroundColor: '#9d9d9d',
-                    // 设置宽度
-                    width: 55,
-                    height: 55,
-                    borderRadius: 2,
-                }}
-                source={{uri: taskUri}}
-                resizeMode={FastImage.resizeMode.stretch}
-            />
+            <TouchableOpacity
+                onPress={()=>{Global.imageViewModal.show([{url:taskUri}])}}
+            >
+                <FastImage
+                    style={{
+                        backgroundColor: '#9d9d9d',
+                        // 设置宽度
+                        width: 55,
+                        height: 55,
+                        borderRadius: 2,
+                    }}
+                    source={{uri: taskUri}}
+                    resizeMode={FastImage.resizeMode.stretch}
+                />
+            </TouchableOpacity>
+
 
 
         </AnimatedTouchableOpacity>;

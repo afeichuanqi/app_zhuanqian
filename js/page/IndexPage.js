@@ -14,6 +14,7 @@ import {
     StyleSheet,
     Platform,
     TouchableOpacity,
+    StatusBar
 } from 'react-native';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -60,6 +61,16 @@ class HomePage extends PureComponent {
         Global.token = this.props.userinfo.token;
         Global.dispatch = this.props.dispatch;
         ChatSocket.connctionServer();
+        if(Platform.OS==='android'){
+            setTimeout(()=>{
+                StatusBar.setBarStyle('dark-content', true);
+                StatusBar.setBackgroundColor(theme, true);
+            },500)
+        }else{
+            StatusBar.setBarStyle('dark-content', true);
+            StatusBar.setBackgroundColor(theme, true);
+        }
+
 
     }
 
@@ -324,27 +335,6 @@ class FristListComponent extends PureComponent {
             ;
     };
     scrollY = new Animated.Value(0);
-    // AnimatedEvent = Animated.event(
-    //     [
-    //         {
-    //             nativeEvent: {
-    //                 contentOffset: {
-    //                     y: y =>
-    //                         Animated.block([
-    //                             Animated.call(
-    //                                 [y],
-    //                                 ([offsetY]) => (this.props.onScroll(offsetY)),
-    //                             ),
-    //                         ]),
-    //                 },
-    //             },
-    //         },
-    //     ],
-    //     {
-    //         useNativeDriver: true,
-    //     },
-    // );
-
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
         const {showAnimated} = this.props;
@@ -443,9 +433,7 @@ class FristListComponent extends PureComponent {
 
                         </View>
                     </View>
-                    //
                 }
-                // onScroll={}
             />
             <Animated.View style={{
                 width, height: 40, justifyContent: 'space-between', position: 'absolute',

@@ -48,7 +48,7 @@ class StepBox extends PureComponent {
             }}>
                 <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
                     {this.getNumNo(this.props.no)}
-                    <Text style={{fontSize: 15, marginLeft: 5, letterSpacing: 3}}>第{this.props.no}步</Text>
+                    <Text style={{fontSize: 15, marginLeft: 5, letterSpacing: 3,color:'black'}}>第{this.props.no}步</Text>
                 </View>
                 {this.props.children}
                 {/*<View style={{height:40}}/>*/}

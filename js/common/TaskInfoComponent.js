@@ -159,12 +159,14 @@ class TaskInfoComponent extends PureComponent {
                         <Text style={{
                             fontSize: 13,
                             opacity: 0.5,
+                            color:'black'
                         }}>{parseInt(item.taskPassNum)}人已完成</Text>
                         <View
                             style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
                         <Text style={{
                             fontSize: 13,
                             opacity: 0.5,
+                            color:'black'
                         }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
                     </View>
 

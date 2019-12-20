@@ -69,7 +69,7 @@ class TextInputPro extends PureComponent {
         return <TextInput
             value={this.state.defaultValue}
             editable={rightComponentData.editable}
-            style={{flex: 1, color: 'black', padding: 0, fontSize: 13}}
+            style={{flex: 1, color: 'black', padding: 0, fontSize: 14}}
             placeholder={rightComponentData.info}
             placeholderTextColor={'#7b798d'}
             onChangeText={this._onChangeText}
@@ -124,10 +124,10 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
             break;
     }
     return <View style={{
-        width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
+        width, flexDirection: 'row', height: 45, paddingHorizontal: 10, paddingVertical: 10,
         alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
     }}>
-        <Text style={{width: width / 4.2}}>{title}</Text>
+        <Text style={{width: width / 4.2, color: 'black', fontSize: 15}}>{title}</Text>
         {rightComponent}
         {rightComponentSvg}
     </View>;
@@ -138,10 +138,12 @@ class ComplyColumn extends Component {
     state = {
         isTrue: true,
     };
+    getIsTrue = () => {
+        return this.state.isTrue;
+    };
 
     render() {
         const {isTrue} = this.state;
-
         return <View style={{width, marginTop: 20, paddingTop: 20, marginBottom: 40}}>
             <TouchableOpacity
                 activeOpacity={0.6}
@@ -156,7 +158,7 @@ class ComplyColumn extends Component {
                         svgXmlData={isTrue ? task_sure1 : task_sure}/>
 
 
-                <Text style={{fontSize: 13}}>我已阅读并同意遵守</Text>
+                <Text style={{fontSize: 13, color: 'black'}}>我已阅读并同意遵守</Text>
                 <TouchableOpacity
                     activeOpacity={0.8}
 
@@ -165,7 +167,7 @@ class ComplyColumn extends Component {
                     <Text style={{color: 'red', fontSize: 13}}>《发布规则》</Text>
                 </TouchableOpacity>
 
-                <Text style={{fontSize: 13}}>全部内容</Text>
+                <Text style={{fontSize: 13, color: 'black'}}>全部内容</Text>
             </TouchableOpacity>
             <View style={{padding: 10}}>
                 <Text
@@ -236,8 +238,8 @@ class TaskRelease extends PureComponent {
 
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
-        // const data = this._getTaskReleaseData();
-        // this.props.onSetTaskReleaseInfo(data);
+        const data = this._getTaskReleaseData();
+        this.props.onSetTaskReleaseInfo(data);
     }
 
 
@@ -340,6 +342,12 @@ class TaskRelease extends PureComponent {
                 });
             }
         } else {
+            const isTrue = this.complyColumn.getIsTrue();
+            if(!isTrue){
+                this.toast.show('您未同意发布规则哦 ～ ～ ');
+                return ;
+
+            }
             const {userinfo} = this.props;
             const {token} = userinfo;
             if (!token || token.length === 0) {
@@ -410,7 +418,7 @@ class TaskRelease extends PureComponent {
                         scrollTo={this._scrollTo}
                         scollToEnd={this._scollToEnd}/>
                     {/*顶部提示*/}
-                    <ComplyColumn/>
+                    <ComplyColumn ref={ref => this.complyColumn = ref}/>
                 </ScrollView>
                 <View style={{borderTopWidth: 0.5, borderTopColor: '#f6f6f6', flexDirection: 'row'}}>
                     <TouchableOpacity
@@ -760,7 +768,7 @@ class InputSelect extends Component {
 
                 }}
             >
-                <Text style={{fontSize: 13}}>{title}</Text>
+                <Text style={{fontSize: 14}}>{title}</Text>
             </TouchableOpacity>
             {this.state.showPopBtn ?
                 <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
@@ -912,7 +920,7 @@ class RadioInfoComponent extends Component {
                     borderRadius: 8,
                 }}/>}
             </View>
-            <Text style={{fontSize: 13, marginLeft: 5}}>{item.title}</Text>
+            <Text style={{fontSize: 14, marginLeft: 5, color: 'black'}}>{item.title}</Text>
         </TouchableOpacity>;
     };
 
@@ -1127,7 +1135,7 @@ class StepInfo extends Component {
                 alignItems: 'center', flexDirection: 'row',
             }}>
             <SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>
-            <Text style={{fontSize: 15}}>{title}</Text>
+            <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
         </TouchableOpacity>;
     };
     _svgClick = () => {

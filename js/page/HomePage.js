@@ -32,8 +32,7 @@ class HomePage extends PureComponent {
     }
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         return (
             <SafeAreaViewPlus
                 topColor={theme}

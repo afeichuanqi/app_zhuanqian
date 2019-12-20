@@ -318,7 +318,7 @@ class ToolsItemComponent extends PureComponent {
                 marginTop: 10,
             }}>
             <View>
-                <Text style={{fontSize: 15}}>{title}</Text>
+                <Text style={{fontSize: 15,color:'black'}}>{title}</Text>
                 <Text style={{fontSize: 11, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
             <FastImage source={source} style={{width: 35, height: 35}}/>

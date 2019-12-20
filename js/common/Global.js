@@ -10,5 +10,7 @@ const Global = {
     dispatch:{},
     ws:null,
     connectionstatus:false,
+
+    imageViewModal:null,
 };
 module.exports = Global;

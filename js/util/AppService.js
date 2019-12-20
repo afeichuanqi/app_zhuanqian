@@ -56,6 +56,26 @@ export function startSignUpTask(data, token) {
         }
     });
 }
+/**
+ * 用户报名
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function getNewTaskId() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+
+            const ret = await http.get('user/getNewTaskId');
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 用户提交任务
@@ -995,7 +1015,7 @@ export function getHotTasks() {
 }
 
 /**
- * 获取热门任务
+ * 获取搜索内容
  * @param data
  * @param token
  * @returns {Promise<any> | Promise<*>}

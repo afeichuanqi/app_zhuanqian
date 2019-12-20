@@ -33,6 +33,7 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import BackPressComponent from '../common/BackPressComponent';
 import ImageViewerModal from '../common/ImageViewerModal';
+import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
@@ -102,7 +103,7 @@ class ShopInfoPage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
 
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `${this.state.shopInfo.username}的店铺`, null, bottomTheme, 'white', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `${this.state.shopInfo.username ? this.state.shopInfo.username + '的店铺' : ''}`, null, bottomTheme, 'white', 16, () => {
         }, false);
         return (
             <SafeAreaViewPlus
@@ -262,11 +263,10 @@ class ShopList extends Component {
         const {shopInfo} = this.props;
 
         const {commodityData, hideLoaded, isLoading} = this.state;
-
+        // console.log(shopInfo,"shopInfo");
         return <AnimatedFlatList
             ListHeaderComponent={
                 <View style={{backgroundColor: '#e8e8e8'}}>
-
                     <AvatarColumn
                         attentionStatus={this.props.attentionStatus}
                         attentionUserId={this.props.attentionUserId}
@@ -276,6 +276,47 @@ class ShopList extends Component {
                     />
                     <ShopData shopInfo={shopInfo}/>
                 </View>
+                // !isLoading ?  : <View><SkeletonPlaceholder minOpacity={0.2}>
+                //     <View style={{
+                //         flexDirection: 'row',
+                //         justifyContent: 'space-between',
+                //         alignItems: 'center',
+                //         height: 80,
+                //         marginTop: 15,
+                //     }}>
+                //         <View style={{flexDirection: 'row'}}>
+                //             <View
+                //                 style={{height: 60, width: 60, backgroundColor: 5, borderRadius: 30, marginLeft: 10}}/>
+                //             <View style={{justifyContent: 'space-around', marginLeft: 10}}>
+                //                 <View style={{height: 11, width: 30}}/>
+                //                 <View style={{height: 11, width: 60}}/>
+                //                 <View style={{height: 11, width: 60}}/>
+                //             </View>
+                //
+                //         </View>
+                //
+                //         <View style={{height: 60, justifyContent: 'flex-end', marginRight: 10}}>
+                //             <View style={{
+                //                 height: 20,
+                //                 width: 60,
+                //                 borderRadius: 3,
+                //             }}/>
+                //         </View>
+                //     </View>
+                //     <View style={{height: 20, width: 60, marginLeft: 10}}/>
+                //     <View style={{
+                //         flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, paddingHorizontal: 20,
+                //         justifyContent: 'center',
+                //     }}>
+                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
+                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
+                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
+                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
+                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
+                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
+                //     </View>
+                // </SkeletonPlaceholder></View>
+
 
             }
             style={{
@@ -291,7 +332,6 @@ class ShopList extends Component {
             refreshControl={
                 <RefreshControl
                     // title={'更新任务中'}
-                    // style={{backgroundColor:'blue'}}
                     color={'black'}
                     refreshing={isLoading}
                     onRefresh={() => this.onRefresh()}
@@ -309,7 +349,7 @@ class ShopList extends Component {
                 // console.log('onEndReached.....');
                 // 等待页面布局完成以后，在让加载更多
                 setTimeout(() => {
-                    if (this.canLoadMore && commodityData.length>=10) {
+                    if (this.canLoadMore && commodityData.length >= 10) {
                         this.onLoading();
                         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                     }
@@ -328,8 +368,8 @@ class ShopList extends Component {
 class ShopData extends Component {
     getTaskDataColumn = (title, value) => {
         return <View style={{width: width / 3, justifyContent: 'center', alignItems: 'center', height: 70}}>
-            <Text style={{fontSize: 15}}>{value}</Text>
-            <Text style={{fontSize: 12, opacity: 0.6, marginTop: 5}}>{title}</Text>
+            <Text style={{fontSize: 15, color: 'black'}}>{value}</Text>
+            <Text style={{fontSize: 12, opacity: 0.7, marginTop: 5, color: 'black'}}>{title}</Text>
         </View>;
     };
 
@@ -367,7 +407,7 @@ class AvatarColumn extends Component {
                 <TouchableOpacity
                     activeOpacity={0.6}
                     onPress={() => {
-                        this.imageViewer.show([{url:this.props.shopInfo.avatar_url}])
+                        this.imageViewer.show([{url: this.props.shopInfo.avatar_url}]);
                     }}
                 >
                     <FastImage
