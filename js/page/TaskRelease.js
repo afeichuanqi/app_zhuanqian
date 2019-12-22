@@ -266,6 +266,7 @@ class TaskRelease extends PureComponent {
             singOrder: data.columnData.orderReplayNum,
         };
         const stepData = data.stepData;
+        console.log(taskData);
         NavigationUtils.goPage({
             fromUserinfo,
             taskData,
@@ -274,6 +275,7 @@ class TaskRelease extends PureComponent {
             FormData,
             update: this.taskInfo.update,
         }, 'TaskDetails');
+
     };
     //生成表单提交数据
     _getFormData = () => {

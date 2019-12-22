@@ -4,6 +4,8 @@ import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
 import {bottomTheme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
+import Emoji from 'react-native-emoji';
+import {getEmojis} from '../util/CommonUtils';
 // import Animated, {Easing} from 'react-native-reanimated';
 
 // const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -77,7 +79,21 @@ class TaskInfoComponent extends PureComponent {
         //     extrapolate: 'clamp',
         // });
         const {titleFontSize, marginHorizontal, item} = this.props;
+        let taskTitle = item.taskTitle;
+        let emojiArr = [];
+        const json = getEmojis(taskTitle);
+        if (json) {
+            taskTitle = json.content;
+            emojiArr = json.emojiArr;
+        }
+        // let castArr = taskTitle.match(emoji);
 
+        // if(castArr){
+        //     castArr.forEach((item) => {
+        //         emojiArr.push(item);
+        //         taskTitle = taskTitle.replace(item, '');
+        //     });
+        // }
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
@@ -117,7 +133,9 @@ class TaskInfoComponent extends PureComponent {
                             fontSize: titleFontSize,
                             color: 'black',
 
-                        }}>{item.taskId} - {item.taskTitle}</Text>
+                        }}>{item.taskId} - {taskTitle} {emojiArr.map((item) => {
+                            return <Emoji name={item} style={{fontSize: 15}}/>;
+                        })}</Text>
                         {item.recommendIsExp == 1 && <View style={{
                             height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
                             alignItems: 'center',
@@ -159,14 +177,14 @@ class TaskInfoComponent extends PureComponent {
                         <Text style={{
                             fontSize: 13,
                             opacity: 0.5,
-                            color:'black'
+                            color: 'black',
                         }}>{parseInt(item.taskPassNum)}人已完成</Text>
                         <View
                             style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
                         <Text style={{
                             fontSize: 13,
                             opacity: 0.5,
-                            color:'black'
+                            color: 'black',
                         }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
                     </View>
 

@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import kongxiangzi from '../res/svg/kongxiangzi.svg';
+
 import {Dimensions, Text, View} from 'react-native';
 import Image from 'react-native-fast-image';
 
@@ -29,23 +29,25 @@ class EmptyComponent extends PureComponent {
     }
 
     static defaultProps = {
-        svgXmlData: kongxiangzi,
+
         message: '您还没有收到消息',
         marginTop: 0,
         height: height,
+        type: 1,
     };
 
     render() {
-
-        // const {interVal} = this.state;
-        //
-        // let statusBar = {
-        //     hidden: false,
-        // };
-        // let navigationBar = <NavigationBar
-        //     hide={true}
-        //     statusBar={statusBar}
-        // />;
+        let source = null;
+        const type = this.props.type;
+        if (type === 1) {
+            source = require('../res/img/empty/task_empty.png');
+        } else if (type === 2) {
+            source = require('../res/img/empty/message_empty.png');
+        }else if (type === 3) {
+            source = require('../res/img/empty/favirite_empty.png');
+        }else if (type === 4) {
+            source = require('../res/img/empty/write_empty.png');
+        }
         return (
             <View style={{
                 height: this.props.height, justifyContent: 'center', alignItems: 'center',
@@ -53,14 +55,11 @@ class EmptyComponent extends PureComponent {
 
             }}>
                 <View style={{
-                    justifyContent: 'center',
                     marginTop: this.props.marginTop,
-                    alignItems: 'center',
-                    shadowColor: '#f5f5f5',
-
                 }}>
-                    <Image source={require('../res/img/kongxiangzi.png')} style={{width: 80, height: 50}}/>
-                    <Text style={{marginTop: 20, fontSize: 13,color: 'black', opacity: 0.7}}>{this.props.message} ~ ~</Text>
+                    <Image resizeMode={'contain'} source={source} style={{width: 120, height: 120}}/>
+                    <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.6)', marginTop: 10}}>{this.props.message} ~
+                        ~</Text>
                 </View>
             </View>
         );

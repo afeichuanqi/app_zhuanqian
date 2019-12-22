@@ -63,12 +63,12 @@ class HomePage extends PureComponent {
         ChatSocket.connctionServer();
         if(Platform.OS==='android'){
             setTimeout(()=>{
-                StatusBar.setBarStyle('dark-content', true);
-                StatusBar.setBackgroundColor(theme, true);
+                StatusBar.setBarStyle('dark-content', false);
+                StatusBar.setBackgroundColor(theme, false);
             },500)
         }else{
-            StatusBar.setBarStyle('dark-content', true);
-            StatusBar.setBackgroundColor(theme, true);
+            StatusBar.setBarStyle('dark-content', false);
+            StatusBar.setBackgroundColor(theme, false);
         }
 
 
@@ -376,13 +376,14 @@ class FristListComponent extends PureComponent {
 
         EventBus.getInstance().removeListener(this.listener);
     }
-
+    // 0 lunboHeight
+    // 25  lunboHeight - 25
     render() {
         const containerWidth = width - 20;
         const {lunboData} = this.state;
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-220, 0, lunboHeight - 20],
-            outputRange: [lunboHeight + 220, lunboHeight - 10, 20],
+            outputRange: [lunboHeight + 220, lunboHeight -5, 25],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{

@@ -202,7 +202,7 @@ class MsgList extends Component {
 
         const {isLoading, hideLoaded, friendData} = this.state;
         return <FlatList
-            ListEmptyComponent={<EmptyComponent height={height - 100}/>}
+            ListEmptyComponent={<EmptyComponent type={4} height={height - 100}/>}
 
             style={{
                 flex: 1,

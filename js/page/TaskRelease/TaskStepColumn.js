@@ -88,7 +88,7 @@ class StepBox extends PureComponent {
             activeOpacity={0.6}
             style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10}}>
             <SvgUri width={size} height={size} fill={'rgba(0,0,0,0.5)'} svgXmlData={svgXmlData}/>
-            <Text style={{marginLeft: 5}}>{title}</Text>
+            <Text style={{marginLeft: 5, color:'black'}}>{title}</Text>
         </TouchableOpacity>;
     };
     getNumNo = (num) => {
@@ -257,7 +257,7 @@ class TaskStepColumn extends Component {
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={{
                             marginTop: 20, fontSize: 15, lineHeight: 25,
-                            letterSpacing: 0.2,
+                            letterSpacing: 0.2, color:'black'
                         }}>{typeData.info}</Text>
                     </View>
                     <View style={{
@@ -298,7 +298,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2,
+                        letterSpacing: 0.2, color:'black'
                     }}>{typeData.info}</Text>
                     <View style={{
                         flexDirection: 'row',
@@ -367,7 +367,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2,
+                        letterSpacing: 0.2, color:'black'
                     }}>{typeData.info}</Text>
                     <View style={{flexDirection: 'row', marginTop: 20, paddingHorizontal: 10, alignItems: 'center'}}>
 
@@ -421,7 +421,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2,
+                        letterSpacing: 0.2, color:'black'
                     }}>{typeData.info}</Text>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -489,7 +489,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2,
+                        letterSpacing: 0.2, color:'black'
                     }}>{typeData.info}</Text>
                     <View
 
@@ -682,7 +682,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2,
+                        letterSpacing: 0.2, color:'black'
                     }}>{typeData.collectInfo}</Text>
                     <View style={{
                         flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, alignItems: 'center',

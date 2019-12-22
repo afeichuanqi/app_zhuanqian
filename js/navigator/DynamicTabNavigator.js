@@ -6,8 +6,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity} from 'react-native';
-import SvgUri from 'react-native-svg-uri';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image} from 'react-native';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
 import {bottomTheme, theme} from '../appSet';
@@ -15,23 +14,13 @@ import MessagePage from '../page/MessagePage';
 import MyPage from '../page/MyPage';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {TabView} from 'react-native-tab-view';
-import hall_ from '../res/svg/indexPage/hall.svg';
-import hallA from '../res/svg/indexPage/hallA.svg';
-import home from '../res/svg/indexPage/home.svg';
-import homeA from '../res/svg/indexPage/homeA.svg';
-import message from '../res/svg/indexPage/message.svg';
-import messageA from '../res/svg/indexPage/messageA.svg';
-import my from '../res/svg/indexPage/my.svg';
-import myA from '../res/svg/indexPage/myA.svg';
 import {connect} from 'react-redux';
 import actions from '../action';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {equalsObj} from '../util/CommonUtils';
-// import Animated, {Easing} from 'react-native-reanimated';
 import ImageViewerModal from '../common/ImageViewerModal';
-// const {timing} = Animated;
 type Props = {};
 
 const {width, height} = Dimensions.get('window');
@@ -65,14 +54,22 @@ class DynamicTabNavigator extends Component<Props> {
                     renderScene={this.renderScene}
                     renderTabBar={() => null}
                     onIndexChange={(index) => {
-                        this.setState({navigationIndex: index});
+                        if (navigationIndex !== index) {
+                            this.setState({navigationIndex: index});
+                        }
+
                     }}
                     initialLayout={{width}}
-                    lazy={true}
+                    lazy={false}
+                    timingConfig={{duration: 1}}
+                    // swipeEnabled={false}
                 />
                 <BottomBarRedux onPress={(index) => {
+                    // console.log(index);
+                    // console.log('BottomBarRedux',index);
                     this.jumpTo(navigationRoutes[index].key);
-                }} navigationIndex={navigationIndex} jumpTo={this.jumpTo} navigationRoutes={navigationRoutes}/>
+                    // this.setState({navigationIndex: index});
+                }} navigationIndex={navigationIndex}/>
             </SafeAreaViewPlus>
 
         );
@@ -98,7 +95,7 @@ class BottomBar extends Component {
 
         // -------------记录下当前的路由------------- //
         let {routes, type, key} = this.props.nav;
-        const activeRouterName = routes[1].routes[routes[1].routes.length - 1].routeName;
+        const activeRouterName = routes[0].routes[routes[0].routes.length - 1].routeName;
 
         if (activeRouterName == 'HomePage') {
             if (nextProps.navigationIndex === 0) {
@@ -120,10 +117,10 @@ class BottomBar extends Component {
         // -------------End记录下当前的路由------------- //
 
         if (!key || key.length === 0) {
-            key = routes[1].routes[routes[1].index].key;
+            key = routes[0].routes[routes[0].index].key;
         }
+        if (type === 'Navigation/BACK' && key === routes[0].routes[1].key) {//需要返回到主页面
 
-        if (type === 'Navigation/BACK' && key === routes[1].routes[1].key) {//需要返回到主页面
             // console.log(this.props.navigationIndex, 'this.props.navigationIndex');
             // -------------记录下当前的路由------------- //
             if (nextProps.navigationIndex === 0) {
@@ -140,21 +137,21 @@ class BottomBar extends Component {
             }
             // -------------End记录下当前的路由------------- //
             if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
-                StatusBar.setBarStyle('dark-content', true);
-                StatusBar.setBackgroundColor(theme, true);
+                StatusBar.setBarStyle('dark-content', false);
+                StatusBar.setBackgroundColor(theme, false);
 
             } else {
-                StatusBar.setBarStyle('light-content', true);
-                StatusBar.setBackgroundColor(bottomTheme, true);
+                StatusBar.setBarStyle('light-content', false);
+                StatusBar.setBackgroundColor(bottomTheme, false);
             }
             return;
         }
-        if ((type === 'Navigation/BACK' && key === routes[1].routes[2].key && routes[1].routes[1].routeName === 'TaskReleaseMana')
+        if ((type === 'Navigation/BACK' && routes[0].routes[2] && key === routes[0].routes[2].key && routes[0].routes[1].routeName === 'TaskReleaseMana')
             ||
-            (type === 'Navigation/BACK' && key === routes[1].routes[2].key && routes[1].routes[1].routeName === 'TaskOrdersMana')
+            (type === 'Navigation/BACK' && routes[0].routes[2] && key === routes[0].routes[2].key && routes[0].routes[1].routeName === 'TaskOrdersMana')
         ) {
-            StatusBar.setBarStyle('light-content', true);
-            StatusBar.setBackgroundColor(bottomTheme, true);
+            StatusBar.setBarStyle('light-content', false);
+            StatusBar.setBackgroundColor(bottomTheme, false);
         }
     }
 
@@ -174,11 +171,11 @@ class BottomBar extends Component {
     _BottomBarClick = (index) => {
         const {onPress, onGetUserInFoForToken, userinfo, navigationIndex} = this.props;
         if (index === 0) {
-            StatusBar.setBarStyle('dark-content', true);
-            StatusBar.setBackgroundColor(theme, true);
+            StatusBar.setBarStyle('dark-content', false);
+            StatusBar.setBackgroundColor(theme, false);
         } else {
-            StatusBar.setBarStyle('light-content', true);
-            StatusBar.setBackgroundColor(bottomTheme, true);
+            StatusBar.setBarStyle('light-content', false);
+            StatusBar.setBackgroundColor(bottomTheme, false);
         }
 
         // this.bottomBarOnPress(index);
@@ -218,7 +215,7 @@ class BottomBar extends Component {
             borderTopColor: '#c0c0c0',
         }}>
             <BottomBarItem
-                svgXmlData={navigationIndex === 0 ? homeA : home}
+                source={navigationIndex === 0 ? require('../res/img/bottomBarIcon/homeC.png') : require('../res/img/bottomBarIcon/home.png')}
                 onPress={this._BottomBarClick}
                 index={0}
                 isActive={navigationIndex === 0 ? true : false}
@@ -226,7 +223,7 @@ class BottomBar extends Component {
                 title={'首页'}
             />
             <BottomBarItem
-                svgXmlData={navigationIndex === 1 ? hallA : hall_}
+                source={navigationIndex === 1 ? require('../res/img/bottomBarIcon/hallC.png') : require('../res/img/bottomBarIcon/hall.png')}
                 onPress={this._BottomBarClick}
                 index={1}
                 isActive={navigationIndex === 1 ? true : false}
@@ -234,7 +231,7 @@ class BottomBar extends Component {
                 title={'大厅'}
             />
             <BottomBarItem
-                svgXmlData={navigationIndex === 2 ? messageA : message}
+                source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
                 onPress={this._BottomBarClick}
                 index={2}
                 isActive={navigationIndex === 2 ? true : false}
@@ -244,7 +241,7 @@ class BottomBar extends Component {
                 title={'消息'}
             />
             <BottomBarItem
-                svgXmlData={navigationIndex === 3 ? myA : my}
+                source={navigationIndex === 3 ? require('../res/img/bottomBarIcon/myC.png') : require('../res/img/bottomBarIcon/my.png')}
                 onPress={this._BottomBarClick}
                 index={3}
                 isActive={navigationIndex === 3 ? true : false}
@@ -269,53 +266,12 @@ class BottomBarItem extends Component {
         return false;
     }
 
-    // animations = {
-    //     scale: new Animated.Value(1),
-    // };
-    // _onPressIn = () => {
-    //     //隐藏box
-    //     this._anim = timing(this.animations.scale, {
-    //         duration: 200,
-    //         toValue: 0,
-    //         easing: Easing.inOut(Easing.ease),
-    //     }).start(()=>{
-    //         this._anim = timing(this.animations.scale, {
-    //             duration: 200,
-    //             toValue: 1,
-    //             easing: Easing.inOut(Easing.ease),
-    //         }).start();
-    //     });
-    // };
-    _onPressOut = () => {
-        //隐藏box
-
-    };
-
     render() {
-        // const scale = Animated.interpolate(this.animations.scale, {
-        //     inputRange: [0, 1],
-        //     outputRange: [0.8, 1],
-        //     extrapolate: 'clamp',
-        // });
-        const {svgXmlData, onPress, index, isActive, size = 35, unReadLength = 0, isOtherUnRead = false, title} = this.props;
+        const { source, onPress, index,  unReadLength = 0, isOtherUnRead = false, title} = this.props;
         return <TouchableOpacity
-            // activeOpacity={1}
             onPress={() => {
-                // this._anim = timing(this.animations.scale, {
-                //     duration: 200,
-                //     toValue: 0,
-                //     easing: Easing.inOut(Easing.ease),
-                // }).start(()=>{
-                //     this._anim = timing(this.animations.scale, {
-                //         duration: 200,
-                //         toValue: 1,
-                //         easing: Easing.inOut(Easing.ease),
-                //     }).start();
-                // });
                 onPress(index);
             }}
-            // onPressIn={this._onPressIn}
-            // onPressOut={this._onPressOut}
             style={{
                 width: width / 4,
                 height: 45,
@@ -323,40 +279,41 @@ class BottomBarItem extends Component {
                 alignItems: 'center',
 
             }}>
-            <SvgUri fill={isActive ? bottomTheme : 'rgba(0,0,0,0.5)'}
-                    width={size}
-                    height={size}
-                    svgXmlData={svgXmlData}
-                    style={{marginBottom: 0}}
-            />
-            <Text style={[{
-                fontSize: 11,
+            <View>
+                <Image
+                    style={{height: 25, width: 25}}
+                    source={source}
+                />
+                {unReadLength == 0 && isOtherUnRead && <View style={{
+                    position: 'absolute',
+                    right: -5,
+                    top: -5,
+                    backgroundColor: 'red',
+                    borderRadius: 8,
+                    width: 13,
+                    height: 13,
+                    borderWidth: 3,
+                    borderColor: 'white',
+                }}/>}
+                {unReadLength > 0 && <View style={{
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    top: -8, right: -11,
+                    backgroundColor: 'red',
+                    paddingHorizontal: 5,
+                    borderWidth: 2,
+                    borderColor: 'white',
+                }}>
+                    <Text style={{color: 'white', fontSize: 12}}>5</Text>
+                </View>}
 
-            }, {color: isActive ? bottomTheme : 'rgba(0,0,0,0.6)'}]}>{title}</Text>
-            {unReadLength > 0 && <View style={{
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute',
-                top: -2, right: -8,
-                backgroundColor: 'red',
-                paddingHorizontal: 5,
-                borderWidth: 2,
-                borderColor: 'white',
-            }}>
-                <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
-            </View>}
-            {unReadLength == 0 && isOtherUnRead && <View style={{
-                position: 'absolute',
-                right: -3,
-                top: 0,
-                backgroundColor: 'red',
-                borderRadius: 8,
-                width: 13,
-                height: 13,
-                borderWidth: 3,
-                borderColor: 'white',
-            }}/>}
+            </View>
+
+
+
+
 
 
         </TouchableOpacity>;

@@ -7,42 +7,117 @@
  */
 
 import React, {PureComponent} from 'react';
+import {Animated, Dimensions, StyleSheet, View,} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
-import {StatusBar} from 'react-native';
+import RNBootSplash from 'react-native-bootsplash';
+import NavigationUtils from '../navigator/NavigationUtils';
+
+let bootSplashLogo = require('../../assets/bootsplash_logo.png');
 
 class HomePage extends PureComponent {
     constructor(props) {
         super(props);
     }
 
+    opacity = new Animated.Value(1);
+    translateY = new Animated.Value(0);
     state = {
-        interVal: 100,
-
+        showAnimated: true,
     };
 
     componentDidMount() {
-
-
     }
 
     componentWillUnmount() {
-
+        this.timer && clearTimeout(this.timer);
     }
 
+    startAnimated = () => {
+
+        RNBootSplash.hide();
+        let useNativeDriver = true;
+        Animated.stagger(250, [
+            Animated.spring(this.translateY, {useNativeDriver, toValue: -50}),
+            Animated.spring(this.translateY, {
+                useNativeDriver,
+                toValue: Dimensions.get('window').height,
+            }),
+        ]).start();
+        Animated.timing(this.opacity, {
+            useNativeDriver,
+            toValue: 0,
+            duration: 700,
+            delay: 250,
+        }).start(() => {
+            NavigationUtils.navigation = this.props.navigation;
+            this.setState({
+                showAnimated: false,
+            });
+        });
+    };
+
     render() {
+        const {showAnimated} = this.state;
 
         return (
-            <SafeAreaViewPlus
-                topColor={theme}
-                bottomInset={false}
-            >
-                <DynamicTabNavigator/>
+            <View style={{flex: 1}}>
+                {showAnimated && <Animated.View style={[styles.container, {opacity: this.opacity},]}>
+                    <Animated.View
+                        style={[
+                            StyleSheet.absoluteFill,
+                            styles.bootsplash,
 
-            </SafeAreaViewPlus>
+                        ]}
+                    >
+                        <Animated.Image
+                            source={bootSplashLogo}
+                            fadeDuration={0}
+                            onLoadEnd={this.startAnimated}
+                            style={[
+                                styles.logo,
+                                {transform: [{translateY: this.translateY}]},
+                            ]}
+                        />
+                    </Animated.View>
+                </Animated.View>}
+
+                <SafeAreaViewPlus
+                    topColor={theme}
+                    bottomInset={false}
+                >
+                    <DynamicTabNavigator/>
+
+                </SafeAreaViewPlus>
+            </View>
+
         );
     }
 }
 
+const styles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height:Dimensions.get('window').height,
+        width:Dimensions.get('window').width,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2196F3',
+        zIndex:100,
+    },
+
+    bootsplash: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2196F3',
+    },
+    logo: {
+        height: 100,
+        width: 100,
+    },
+});
 export default HomePage;

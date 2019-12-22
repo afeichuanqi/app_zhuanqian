@@ -226,7 +226,7 @@ export const judgeSendTaskData = (task_step_data) => {
     }
     return '';
 };
-export const equalsObj = (oldData, newData) =>{
+export const equalsObj = (oldData, newData) => {
     // 类型为基本类型时,如果相同,则返回true
     if (oldData === newData) {
         return true;
@@ -262,17 +262,39 @@ export const equalsObj = (oldData, newData) =>{
     // 走到这里,说明数组或者对象中所有元素都相同,返回true
     return true;
 };
+export const getEmojis = (content) => {
+    let contentTmp = content;
+
+    const emoji = new RegExp(/:([a-zA-Z0-9_\-\+]+):/g);
+    let castArr = contentTmp.match(emoji);
+    const emojiArr = [];
+    if (castArr) {
+        castArr.forEach((item) => {
+            emojiArr.push(item);
+            contentTmp = contentTmp.replace(item, '');
+        });
+        return {
+            content:contentTmp,
+            emojiArr
+        }
+    }else{
+        return null
+    }
+
+};
+
 /**
  * 判断此对象是否是Object类型
  * @param {Object} obj
  */
-function  isObject(obj){
-    return Object.prototype.toString.call(obj)==='[object Object]';
+function isObject(obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]';
 };
+
 /**
  * 判断此类型是否是Array类型
  * @param {Array} arr
  */
-function isArray(arr){
-    return Object.prototype.toString.call(arr)==='[object Array]';
+function isArray(arr) {
+    return Object.prototype.toString.call(arr) === '[object Array]';
 };

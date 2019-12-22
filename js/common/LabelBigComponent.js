@@ -8,10 +8,12 @@ class LabelBigComponent extends PureComponent {
     static defaultProps = {
         title: '高价',
         paddingHorizontal: 6,
-        paddingVertical: Platform.OS === 'android' ? 0 : 3,
+        paddingVertical: Platform.OS === 'android' ? 1 : 2,
         fontSize: 13,
         marginRight: 5,
         marginTop: 0,
+        contaiStyle:{},
+        textStyle:{}
 
     };
 
@@ -35,19 +37,22 @@ class LabelBigComponent extends PureComponent {
                 onClick && onClick(title);
             }}
             activeOpacity={onClick ? 0.6 : 1}
-            style={{
+            style={[{
                 paddingHorizontal,
                 paddingVertical,
                 backgroundColor: '#f5f5f5',
                 borderRadius: 4,
                 marginRight,
                 marginTop,
-            }}>
-            <Text style={{
+                // borderWidth:1,
+                // borderColor:'#f5f5f5',
+
+            },this.props.contaiStyle]}>
+            <Text style={[{
                 fontSize,
                 opacity: 0.7,
-                color: 'black',
-            }}>{title}</Text>
+                color:'black'
+            },this.props.textStyle]}>{title}</Text>
         </TouchableOpacity>;
     }
 }

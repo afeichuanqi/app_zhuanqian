@@ -33,6 +33,7 @@ import {getHotTasks} from '../util/AppService';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import Image from 'react-native-fast-image';
 // import FilterComponent from './TaskHall/FilterComponent';
 let FilterComponent = null;
 
@@ -393,7 +394,7 @@ class TypeItem extends PureComponent {
                     paddingVertical: 4,
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    backgroundColor: title.length > 2 ? 'rgba(33,152,245,0.1)' : '#f0f0f0',
+                    backgroundColor: title.length > 2 ? 'rgba(33,152,245,0.1)' : '#f5f5f5',
                     borderRadius: 3,
 
                 }}>
@@ -401,7 +402,7 @@ class TypeItem extends PureComponent {
                     fontSize: 13, marginRight: 3,
                 }, title.length > 2 ? {color: bottomTheme} : !show ? {
                     color: 'black',
-                    opacity: 0.5,
+                    opacity: 0.6,
                 } : {color: bottomTheme}]}>{title}</Text>
                 {
                     !show ? <SvgUri style={{marginTop: 6}} fill={title.length > 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
@@ -462,16 +463,13 @@ class HeadlineComponent extends PureComponent {
             backgroundColor: 'white',
             flexDirection: 'row',
             alignItems: 'center',
-            borderBottomWidth: 0.3,
+            borderBottomWidth: 1,
             borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
-            <View style={{flexDirection: 'row', alignItems: 'center', height: 20}}>
-                <SvgUri style={{marginLeft: 20, marginTop: 2}} width={60} height={60} svgXmlData={remenrenwu}/>
-            </View>
-            {/*分隔符*/}
-            <View
-                style={{height: 25, width: 0.7, backgroundColor: 'rgba(0,0,0,0.2)', marginLeft: 20, borderRadius: 3}}/>
-            {/*热门任务*/}
+            <Image resizeMode={'stretch'} source={require('../res/img/index_hot.png')} style={{
+                width: 40, height: 15, marginLeft: 20,
+                marginBottom: 3,
+            }}/>
             <View style={{
                 flex: 1,
                 overflow: 'hidden',
@@ -507,21 +505,30 @@ class HeadlineComponent extends PureComponent {
                 height: 40,
                 flexDirection: 'row',
                 alignItems: 'center', justifyContent: 'space-between',
-
+                paddingRight: 10,
             }}>
             <Text
                 numberOfLines={1}
                 style={{
-                    fontSize: 17,
-                    color: bottomTheme,
-                    width: width - 190,
-                    marginLeft: 10,
+                    color: 'black',
+                    width: width - 140,
+                    marginLeft: 7, opacity: 0.8,
+                    marginTop:1,
 
-                }}>{item.taskTitle}</Text>
-            <Text style={{
-                color: 'red', fontSize: 17,
-                marginRight: 10,
-            }}>+{item.rewardPrice} 元</Text>
+                }}>{item.taskTitle}元元元元元元元元元元元元元元元元元元元元元元元元元</Text>
+
+            <View style={{flexDirection: 'row', alignItems: 'center',height:25}}>
+                <Text style={{
+                    color: 'red', fontSize: 19,
+                    marginRight: 1,
+                }}>
+                    {item.rewardPrice}
+                </Text>
+                <Text style={{fontSize: 14, color: 'red', top:1, marginRight: 5}}>元</Text>
+                <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')} style={{width: 8, height: 8}}/>
+            </View>
+
+
         </View>;
     };
 }

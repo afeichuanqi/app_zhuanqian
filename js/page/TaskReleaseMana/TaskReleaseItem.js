@@ -5,10 +5,19 @@ import ViewUtil from '../../util/ViewUtil';
 import {bottomTheme} from '../../appSet';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
+import {getEmojis} from '../../util/CommonUtils';
+import Emoji from 'react-native-emoji';
 const {width} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
     render() {
         const {item} = this.props;
+        let taskTitle = item.task_title;
+        let emojiArr = [];
+        const json = getEmojis(taskTitle);
+        if (json) {
+            taskTitle = json.content;
+            emojiArr = json.emojiArr;
+        }
         return <View style={{}}>
 
 
@@ -44,7 +53,12 @@ export default class TaskReleaseItem extends PureComponent {
                                 fontSize: 15,
                                 color: 'black',
 
-                            }}>{`${item.id} - ${item.task_title}`}</Text>
+                            }}>
+                                {item.id} - {taskTitle} {emojiArr.map((item) => {
+                                return <Emoji name={item} style={{fontSize: 15}}/>;
+                            })}
+
+                            </Text>
                             {item.recommendIsExp == 1 && <View style={{
                                 height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
                                 alignItems: 'center',

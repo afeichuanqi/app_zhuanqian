@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Dimensions, Platform, StyleSheet, Text, TouchableOpacity, FlatList, View} from 'react-native';
+import {Dimensions, Platform, Image, Text, TouchableOpacity, FlatList, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import FlatListCommonUtil from './FlatListCommonUtil';
 import {bottomTheme} from '../../appSet';
@@ -7,8 +7,9 @@ import {getBestNewTask} from '../../util/AppService';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
-import FastImagePro from '../../common/FastImagePro';
-import LinearGradient from 'react-native-linear-gradient';
+// import FastImage from '../../common/FastImage';
+import FastImage from 'react-native-fast-image';
+// import LinearGradient from 'react-native-linear-gradient';
 
 const width = Dimensions.get('window').width;
 const lunboHeight = 220;
@@ -41,54 +42,7 @@ class SecondListComponent extends PureComponent {
     }
 
     _renderBestNewItem = ({item, index}) => {
-        return <TouchableOpacity
-            onPress={() => {
-                NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
-            }}
-            key={item.id}
-            style={{height: 120, width: 130,}}>
-            <FastImagePro
-                style={{
-                    backgroundColor: '#E8E8E8',
-                    width: 120,
-                    height: 120,
-                    borderRadius: 5,
-                }}
-                source={{uri: item.task_uri}}
-            />
-            <LinearGradient
-                start={{x: 0, y: 0.5}}
-                end={{x: 0.5, y: 0}}
-                colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.0)']}
-                style={{height: 120, width: 120, position: 'absolute',borderRadius: 5,}}>
-                <View style={{
-                    width: 120,
-                    position:'absolute',
-                    bottom:5,
-                    paddingLeft:5,
-
-
-                }}>
-
-                    <Text style={{color: 'white', fontSize: 13, fontWeight:'bold'}}>
-                        {item.title}
-                    </Text>
-                    <Text style={{color: 'white', fontSize: 12, marginTop:5, fontWeight:'bold'}}>
-                        {item.task_name}
-                    </Text>
-                </View>
-                <View style={{
-                    // flexDirection: 'row',
-                    position:'absolute',
-                    top:5,right:5,
-                }}>
-                    <Text style={{color:'white', fontSize:14, fontWeight:'bold'}}>¥ {item.reward_price && parseFloat(item.reward_price).toFixed(2)}</Text>
-                </View>
-            </LinearGradient>
-
-
-
-        </TouchableOpacity>;
+        return <ScrollItem item={item}/>;
     };
     scrollY = new Animated.Value(0);
 
@@ -119,10 +73,9 @@ class SecondListComponent extends PureComponent {
     };
 
     render() {
-
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, 185],
-            outputRange: [lunboHeight + 200, lunboHeight - 15, 20],
+            inputRange: [-200, 0, 205],
+            outputRange: [lunboHeight + 210, lunboHeight +10, 25],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -137,7 +90,7 @@ class SecondListComponent extends PureComponent {
                     this.props.onLoad(load);
                 }}
                 ListHeaderComponent={
-                    <View style={{height: 220, backgroundColor: 'white'}}>
+                    <View style={{height: 250, backgroundColor: 'white'}}>
                         <View style={{marginTop: 20, paddingLeft: 10}}>
                             <Text style={{fontSize: 17, opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
@@ -189,16 +142,59 @@ class SecondListComponent extends PureComponent {
     }
 }
 
-const styles = StyleSheet.create({
-    carousel: {
-        flex: 1,
-    },
-    imgStyle: {
-        backgroundColor: '#E8E8E8',
-        width: 110,
-        height: 120,
-        borderRadius: 10,
-    },
-});
+class ScrollItem extends React.Component {
+    state = {
+        loadEnd: false,
+
+    };
+
+    render() {
+
+        const {item} = this.props;
+        return <TouchableOpacity
+            onPress={() => {
+                NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
+            }}
+            key={item.id}
+            style={{height: 160, width: 150, paddingHorizontal:5}}>
+            <View style={{width: 140,}}>
+                <FastImage
+                    style={{
+                        backgroundColor: 'rgba(0,0,0,0.2)',
+
+                        height: 100,
+                        borderRadius: 5,
+                    }}
+
+                    source={{uri: item.task_uri}}
+                />
+                <Image source={require('../../res/img/zuixinfabu.png')} style={{position:'absolute',right:0,top:0,width:40,height:15}}/>
+            </View>
+            {item.task_name && <Text numberOfLines={1} style={{fontSize:13,width: 140,color:'black',marginTop:8,
+                opacity:0.8,
+            }}>{item.title} | {item.task_name}</Text>}
+            {item.reward_price && <View style={{flexDirection: 'row', height: 25, alignItems: 'center',marginTop:2,
+                zIndex:10,elevation:1
+            }}>
+                <Text style={{
+                    fontSize: 16,
+                    color: 'red',
+                    marginRight: 1,
+                }}>{item.reward_price}</Text>
+                <Text style={{
+                    fontSize: 13,
+                    color: 'red',
+                    fontWeight: '500',
+                    top: 1,
+                }}>元</Text>
+            </View>}
+
+
+
+
+        </TouchableOpacity>;
+    }
+}
+
 export default SecondListComponent;
 

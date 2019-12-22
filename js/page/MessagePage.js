@@ -19,9 +19,7 @@ import {
 } from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
-import message_xitong from '../res/svg/message_xitong.svg';
-import zaixiankefu from '../res/svg/zaixiankefu.svg';
-import huodongxiaoxi from '../res/svg/huodongxiaoxi.svg';
+
 import Animated from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
 import EmptyComponent from '../common/EmptyComponent';
@@ -43,16 +41,7 @@ class MessagePage extends PureComponent {
         super(props);
     }
 
-    state = {
-        interVal: 100,
 
-    };
-
-
-    componentWillUnmount() {
-        this.timer && clearInterval(this.timer);
-
-    }
 
     render() {
         const RefreshHeight = Animated.interpolate(this.animations.val, {
@@ -159,7 +148,7 @@ class MsgList extends Component {
         const friendData = this.props.friend.friendArr;
         const {isLoading} = this.state;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent height={height - 210}/>}
+            ListEmptyComponent={<EmptyComponent type={2} height={height - 210}/>}
             ListHeaderComponent={
                 <View style={{
                     justifyContent: 'center',
@@ -284,17 +273,17 @@ class MessageColumn extends Component {
         }}>
             <MessageColumnItem type={0} onSetNoticeMsgIsAllRead={onSetNoticeMsgIsAllRead}
                                unReadNum={noticeIsNew ? 1 : 0}
-                               svgXmlData={message_xitong}
+
                                title={'通知消息'}/>
             <MessageColumnItem setMsgAllRead={setAppeal_2IsRead} type={1} columnType={2}
-                               unReadNum={appeal_2} svgXmlData={zaixiankefu}
+                               unReadNum={appeal_2}
                                title={'申诉消息'}
                                size={48}/>
             <MessageColumnItem setMsgAllRead={setAppeal_3IsRead} type={2} columnType={3}
-                               unReadNum={appeal_3} svgXmlData={huodongxiaoxi}
+                               unReadNum={appeal_3}
                                title={'投诉消息'}
                                size={42}/>
-            <MessageColumnItem type={3} columnType={4} unReadNum={0} svgXmlData={huodongxiaoxi}
+            <MessageColumnItem type={3} columnType={4} unReadNum={0}
                                title={'在线客服'}/>
         </View>;
     }
@@ -340,13 +329,13 @@ class MessageColumnItem extends Component {
         let source = null;
 
         if (type == 0) {
-            source = require('../res/img/message_zixun.png');
+            source = require('../res/img/message/message_xitong.png');
         } else if (type == 1) {
-            source = require('../res/img/message_shensu.png');
+            source = require('../res/img/message/message_shensu.png');
         } else if (type == 2) {
-            source = require('../res/img/message_tousu.png');
+            source = require('../res/img/message/message_tousu.png');
         } else if (type == 3) {
-            source = require('../res/img/message_liaotian.png');
+            source = require('../res/img/message/message_liaotian.png');
         }
         return <TouchableOpacity
             onPress={() => {
@@ -367,11 +356,14 @@ class MessageColumnItem extends Component {
             style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>
             <View>
 
-                <Image source={source} style={{
+                <Image source={source}
+                       resizeMode={'stretch'}
+                       style={{
 
                     width: 45, height: 45,
 
                     backgroundColor: 'white',
+
                 }}/>
 
                 {unReadNum > 0 ? <View style={{

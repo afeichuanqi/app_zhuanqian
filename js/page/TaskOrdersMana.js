@@ -32,6 +32,8 @@ import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import {getEmojis} from '../util/CommonUtils';
+import Emoji from 'react-native-emoji';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -369,7 +371,16 @@ class OrdersItem extends React.Component {
 
     render() {
         const {item, status} = this.props;
-
+        let taskTitle = item.task_title;
+        let emojiArr = [];
+        const json = getEmojis(taskTitle);
+        if (json) {
+            taskTitle = json.content;
+            emojiArr = json.emojiArr;
+        }
+        const TextTitle = <Text style={{fontWeight: 'bold',color:'black'}}>{item.taskId} - {taskTitle} {emojiArr.map((item) => {
+            return <Emoji name={item} style={{fontSize: 15}}/>;
+        })}</Text>;
         return <View
 
             style={{
@@ -394,7 +405,7 @@ class OrdersItem extends React.Component {
                         resizeMode={FastImage.resizeMode.stretch}
                     />
                     {status == 1 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
+                        {TextTitle}
                         <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>到期时间:{item.orderExpTime}</Text>
                         <Text style={{color: 'red', fontSize: 13, marginTop: 5}}>请在{item.orderTimeTitle}内完成</Text>
                     </View> : status == 2 ? <View style={{marginLeft: 10}}>
@@ -406,8 +417,8 @@ class OrdersItem extends React.Component {
                             marginTop: 5,
                         }}>将在{item.reviewTimeTitle}内完成审核,期限外自动完成</Text>
                     </View> : status == 3 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
+                        {TextTitle}
+                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5,color:'black'}}>审核时间:{item.review_time1}</Text>
                         {(item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) &&
                         <Text style={{fontSize: 13, marginTop: 5, color: 'red'}}>
                             请于 {item.orderExpTime} 之前重新提交
@@ -431,8 +442,8 @@ class OrdersItem extends React.Component {
 
 
                     </View> : status == 4 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
+                        {TextTitle}
+                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5,color:'black'}}>审核时间:{item.review_time1}</Text>
                         <Text
                             ellipsizeMode={'tail'}
                             numberOfLines={2}

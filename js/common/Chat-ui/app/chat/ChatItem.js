@@ -12,14 +12,16 @@ import ImageMessage from './ImageMessage';
 // import VideoMessage from './VideoMessage'
 // import VoiceMessage from './VoiceMessage'
 import {EMOJIS_DATA} from '../source/emojis';
-
+import Emoji_ from 'react-native-emoji';
 const {width} = Dimensions.get('window');
 
 const PATTERNS = {
-    url: /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i,
-    phone: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,7}/,
-    emoji: new RegExp('\\/\\{[a-zA-Z_]{1,14}\\}'),
-};
+        url: /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i,
+        phone: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,7}/,
+        emoji: new RegExp('\\/\\{[a-zA-Z_]{1,14}\\}'),
+        localEmoji: new RegExp(/:([a-zA-Z0-9_\-\+]+):/g),
+    }
+;
 
 export default class ChatItem extends PureComponent {
     constructor(props) {
@@ -58,6 +60,19 @@ export default class ChatItem extends PureComponent {
 
     _matchContentString = (textContent, views, isSelf) => {
         // 匹配得到index并放入数组中
+        // textContent =
+        let emojiArrs = textContent.match(PATTERNS.localEmoji);
+        // emojiArrs.forEach((item) => {
+        //     textContent = textContent.replace(item, <Emoji_ name={item} style={{fontSize: 15}}/>);
+        // });
+        const emojiArr = [];
+        if(emojiArrs){
+            emojiArrs.forEach((item) => {
+                views.push(<Emoji_ name={item} style={{fontSize: 15}}/>)
+                // emojiArr.push(item);
+                textContent = textContent.replace(item, '');
+            });
+        }
         const {leftMessageTextStyle, rightMessageTextStyle} = this.props;
         if (textContent.length === 0) {
             return;
@@ -263,7 +278,12 @@ export default class ChatItem extends PureComponent {
                             }}>
                             <Text style={{fontSize: 15, fontWeight: 'bold'}}>{message.title}</Text>
                             <Text
-                                style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 10, marginBottom:10}}>{message.content}</Text>
+                                style={{
+                                    fontSize: 12,
+                                    color: 'rgba(0,0,0,0.5)',
+                                    marginTop: 10,
+                                    marginBottom: 10,
+                                }}>{message.content}</Text>
 
                             {message.btnTitle.length > 0 && <View style={{
                                 paddingVertical: 10,

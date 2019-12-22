@@ -27,7 +27,6 @@ import {onAddSearchTitle} from '../action/search';
 import FlatListCommonUtil from './SearchPage/FlatListCommonUtil';
 
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 const topIputHeight = (Platform.OS === 'ios') ? 30 : 30;
 
 class SearchPage extends PureComponent {

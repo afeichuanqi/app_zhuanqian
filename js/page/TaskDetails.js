@@ -36,7 +36,7 @@ import {
 import taskHallNext from '../res/svg/taskHallNext.svg';
 import goback from '../res/svg/goback.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
+import {getEmojis, judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
 import liaotian from '../res/svg/liaotian.svg';
 import BackPressComponent from '../common/BackPressComponent';
@@ -48,6 +48,8 @@ import shoucang_ from '../res/svg/shoucang_.svg';
 import ToastShare from '../common/ToastShare';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import Emoji from 'react-native-emoji';
+
 const {
     timing,
 } = Animated;
@@ -191,6 +193,19 @@ class TaskDetails extends PureComponent {
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
+        console.log(taskData);
+        let taskTitle = '';
+        let emojiArr = [];
+        if (taskData) {
+            taskTitle = taskData.title;
+
+            const json = getEmojis(taskTitle);
+            if (json) {
+                taskTitle = json.content;
+                emojiArr = json.emojiArr;
+            }
+        }
+
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -220,7 +235,9 @@ class TaskDetails extends PureComponent {
                             zIndex: 2,
                             opacity: NameOpacity,
                         }}>
-                        <Text style={{color: 'white', fontSize: 16}}>{taskData && taskData.title}</Text>
+                        <Text style={{color: 'white', fontSize: 16}}>{taskTitle} {emojiArr.map((item) => {
+                            return <Emoji name={item} style={{fontSize: 15}}/>;
+                        })}</Text>
                     </Animated.View>
                     <Animated.View
                         style={{
@@ -262,14 +279,16 @@ class TaskDetails extends PureComponent {
 
                                     <View>
                                         <Text style={{fontSize: 16, opacity: 0.9, color: 'black'}}>
-                                            {taskData && taskData.title}
+                                            {taskTitle} {emojiArr.map((item) => {
+                                            return <Emoji name={item} style={{fontSize: 15}}/>;
+                                        })}
                                         </Text>
                                         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                                             <Text
                                                 style={{
                                                     color: 'rgba(0,0,0,0.7)',
                                                     fontSize: 12,
-                                                }}>{taskData && taskData.title}</Text>
+                                                }}>{taskData && taskData.taskType.title}</Text>
                                             <View style={{
                                                 height: 10, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)',
                                                 marginHorizontal: 10,
@@ -356,7 +375,7 @@ class TaskDetails extends PureComponent {
                                     resizeMode={FastImage.stretch}
                                 />
                                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                                    <Text style={{color:'black'}}>{fromUserinfo && fromUserinfo.username}</Text>
+                                    <Text style={{color: 'black'}}>{fromUserinfo && fromUserinfo.username}</Text>
                                     <Text style={{color: 'red', opacity: 0.8, fontSize: 12}}>{
                                         taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
                                             :

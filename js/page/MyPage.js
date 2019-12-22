@@ -216,7 +216,7 @@ class BottomInfoColumn extends Component {
                 <ToolsItemComponent
                     title={'发布管理'}
                     info={'有需求、大家做'}
-                    source={require('../res/img/my/fabu.png')}
+                    source={require('../res/img/my/fabu_mana.png')}
                     onPress={() => {
                         MenuClick('TaskReleaseMana');
                         notice_arr[1] > 0 && onSetNoticeMsgIsRead(1) && updateNoticeIsReadForType({type:1}, userinfo.token);
@@ -226,7 +226,7 @@ class BottomInfoColumn extends Component {
                 />
                 <ToolsItemComponent
                     title={'接单管理'}
-                    source={require('../res/img/my/jiedan.png')}
+                    source={require('../res/img/my/jiedan_mana.png')}
                     info={'有任务、赚赏金'}
                     onPress={() => {
                         MenuClick('TaskOrdersMana');
@@ -234,7 +234,16 @@ class BottomInfoColumn extends Component {
                     }}
                     isOtherMsg={notice_arr[2] > 0}
                 />
-                <ToolsItemComponent/>
+                <ToolsItemComponent
+                    title={'充值管理'}
+                    source={require('../res/img/my/chongzhi_mana.png')}
+                    info={'做任务、充赏金'}
+                    onPress={() => {
+                        MenuClick('TaskOrdersMana');
+                        notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
+                    }}
+                    isOtherMsg={notice_arr[2] > 0}
+                />
                 <ToolsItemComponent/>
             </ScrollView>
 
@@ -289,7 +298,7 @@ class ToolsItemComponent extends PureComponent {
         title: '发布管理',
         info: '提升简历活跃',
         svgXmlData: my_fabu,
-        source: require('../res/img/my/fabu.png'),
+        source: require('../res/img/my/fabu_mana.png'),
         isOtherMsg: false,
     };
 

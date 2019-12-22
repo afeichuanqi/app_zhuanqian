@@ -105,6 +105,7 @@ class LoginPage extends PureComponent {
                         marginTop: 40,
                         marginLeft: 40,
                         fontSize: 20,
+                        color:'black'
                     }}>账号登录</Text>
                     <View style={{width, justifyContent: 'center', alignItems: 'center', marginTop: 80}}>
 

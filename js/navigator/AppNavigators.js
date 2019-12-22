@@ -268,8 +268,8 @@ const MainNavigator = createStackNavigator({
     },
 );
 const AppContainer = createSwitchNavigator({
-        Init: InitNavigator,
-        Main: MainNavigator,
+        Init: MainNavigator,
+        Main: InitNavigator,
     }, {
         navigationOptions: {
             header: null,

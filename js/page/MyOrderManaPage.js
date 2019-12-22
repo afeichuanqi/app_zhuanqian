@@ -25,6 +25,8 @@ import MyModalBoxTwo from '../common/MyModalBoxTwo';
 import ToastSelect from '../common/ToastSelect';
 import BackPressComponent from '../common/BackPressComponent';
 import FastImage from 'react-native-fast-image';
+import {getEmojis} from '../util/CommonUtils';
+import Emoji from 'react-native-emoji';
 
 const {width} = Dimensions.get('window');
 
@@ -77,6 +79,17 @@ class MyOrderManaPage extends PureComponent {
     }
 
     getTaskItem = (taskInfo) => {
+        console.log(taskInfo);
+        let taskTitle = taskInfo.task_title;
+        let emojiArr = [];
+        if(taskTitle){
+
+            const json = getEmojis(taskTitle);
+            if (json) {
+                taskTitle = json.content;
+                emojiArr = json.emojiArr;
+            }
+        }
 
         return <TouchableOpacity
             onPress={() => {
@@ -114,7 +127,9 @@ class MyOrderManaPage extends PureComponent {
                 <Text style={{
                     fontSize: 15,
                     color: 'black',
-                }}>{taskInfo.id} - {taskInfo.task_title}</Text>
+                }}>{taskInfo.id} - {taskTitle} {emojiArr.map((item) => {
+                    return <Emoji name={item} style={{fontSize: 15}}/>;
+                })}</Text>
             </View>
             {/*左下*/}
             <View style={{

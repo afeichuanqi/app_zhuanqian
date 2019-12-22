@@ -80,7 +80,7 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent} = this.props;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent message={'暂无符合搜索记录'} height={height - 80}/>}
+            ListEmptyComponent={<EmptyComponent type={4} message={'暂无符合搜索记录'} height={height - 80}/>}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}

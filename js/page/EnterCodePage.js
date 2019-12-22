@@ -70,6 +70,7 @@ export default class EnterCodePage extends PureComponent {
                         marginTop: 40,
                         marginLeft: 40,
                         fontSize: 20,
+                        color:'black'
                     }}>输入验证码</Text>
                     {/*<View></View>*/}
                     <Text style={{
@@ -77,6 +78,7 @@ export default class EnterCodePage extends PureComponent {
                         fontSize: 12,
                         marginTop: 10,
                         opacity: 0.6,
+                        color:'black'
                     }}>验证码已经发送至{this.params.phone}</Text>
 
                     <CodeInputRedux showError={this._showError} phone={this.params.phone}
@@ -225,11 +227,11 @@ class CodeInput extends PureComponent {
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 marginHorizontal: 5,
+                // justifyContent:'center',
             }}>
             <TextInput
                 value={this.iptArrayNum[index]}
                 keyboardType={'number-pad'}
-                // autoFocus={index == 0 ? true : false}
                 onKeyPress={({nativeEvent}) => {
                     if (index == 0) {
                         return;
@@ -264,8 +266,11 @@ class CodeInput extends PureComponent {
                 maxLength={1}
                 style={{
                     fontSize: 20,
-                    marginLeft: 25,
+                    // marginLeft: 25,
+                    color:'black',
+
                     width: 50,
+                    textAlign:'center',
 
                 }}/>
         </View>;
@@ -284,7 +289,7 @@ class CodeInput extends PureComponent {
             if (isTrue) {
                 this.props.showError('');
                 const {routes, navigation} = this.props;
-                const key = routes[1].routes[1].key;
+                const key = routes[0].routes[1].key;
 
                 Global.token = data.token;//进行验证token
                 ChatSocket.verifyIdentidy();//进行验证token
