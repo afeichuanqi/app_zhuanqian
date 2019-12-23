@@ -239,7 +239,7 @@ class MyOrderManaPage extends PureComponent {
                                 }}
                                 style={{
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 3,
+                                    alignItems: 'center', borderRadius: 5,
                                 }}>
                                 <Text style={{color: 'white'}}>加量</Text>
                             </TouchableOpacity>
@@ -263,7 +263,7 @@ class MyOrderManaPage extends PureComponent {
                                 }}
                                 style={{
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 3,
+                                    alignItems: 'center', borderRadius: 5,
                                 }}>
                                 <Text style={{color: 'white'}}>加价</Text>
                             </TouchableOpacity>
@@ -482,9 +482,10 @@ class MyOrderManaPage extends PureComponent {
                     height: 50,
                     justifyContent: 'center',
                     alignItems: 'center',
+
                 }}>
                 <Image source={require('../res/img/orderMana/xiugai.png')}
-                       style={{width: 18, height: 18}}/>
+                       style={{width: 23, height: 23,}}/>
                 <Text style={{marginTop: 5}}>修改</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -519,7 +520,7 @@ class MyOrderManaPage extends PureComponent {
                         require('../res/img/orderMana/task_stop.png')
                         :
                         require('../res/img/orderMana/shangjia.png')}
-                    style={{width: 20, height: 20}}/>
+                    style={{width: 23, height: 23}}/>
                 <Text style={{marginTop: 5}}> {this.state.taskInfo.task_status == 0 ? '暂停' : '运行'}</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -539,7 +540,7 @@ class MyOrderManaPage extends PureComponent {
                     alignItems: 'center',
                 }}>
                 <Image source={require('../res/img/orderMana/xiajia.png')}
-                       style={{width: 20, height: 20}}/>
+                       style={{width: 23, height: 23}}/>
                 <Text style={{marginTop: 5}}>下架</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{

@@ -294,7 +294,9 @@ class CodeInput extends PureComponent {
                 Global.token = data.token;//进行验证token
                 ChatSocket.verifyIdentidy();//进行验证token
                 NavigationUtils.goBack(navigation, key);
-                ChatSocket.selectAllFriendMessage(20);//进行获取好友列表
+                setTimeout(()=>{
+                    ChatSocket.selectAllFriendMessage(20);//进行获取好友列表
+                },2000)
             } else {
 
                 // console.log(data.msg, 'data.msg');

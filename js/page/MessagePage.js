@@ -42,7 +42,6 @@ class MessagePage extends PureComponent {
     }
 
 
-
     render() {
         const RefreshHeight = Animated.interpolate(this.animations.val, {
             inputRange: [-200, -0.1, 0],
@@ -124,11 +123,14 @@ class MsgList extends Component {
     };
 
     componentDidMount(): void {
-        this.onRefresh();
+        this.timer = setTimeout(() => {
+            this.onRefresh();
+        }, 1000);
+
+
         EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
             const {pageName} = data;
             if (pageName == `MessagePage`) {
-                // this.flatList.get
                 this.flatList.getNode().scrollToOffset({animated: true, viewPosition: 0, index: 0});
             }
         });
@@ -136,6 +138,7 @@ class MsgList extends Component {
 
     componentWillUnmount(): void {
         EventBus.getInstance().removeListener(this.listener);
+        this.timer && clearTimeout(this.timer);
     }
 
     constructor(props) {
@@ -215,6 +218,7 @@ class MsgList extends Component {
             this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength, result.noticeArr);
         });
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
+        console.log('我被触发');
     };
     _renderIndexPath = ({item, index}) => {
         return <MessageItemComponent key={item.FriendId} item={item}/>;
@@ -360,11 +364,11 @@ class MessageColumnItem extends Component {
                        resizeMode={'stretch'}
                        style={{
 
-                    width: 45, height: 45,
+                           width: 45, height: 45,
 
-                    backgroundColor: 'white',
+                           backgroundColor: 'white',
 
-                }}/>
+                       }}/>
 
                 {unReadNum > 0 ? <View style={{
                     borderRadius: 10,

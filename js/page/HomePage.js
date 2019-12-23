@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Animated, Dimensions, StyleSheet, View,} from 'react-native';
+import {Animated, Dimensions, StyleSheet, View, Text} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
@@ -63,7 +63,7 @@ class HomePage extends PureComponent {
 
         return (
             <View style={{flex: 1}}>
-                {showAnimated && <Animated.View style={[styles.container, {opacity: this.opacity},]}>
+                {showAnimated && <Animated.View style={[styles.container, {opacity: this.opacity}]}>
                     <Animated.View
                         style={[
                             StyleSheet.absoluteFill,
@@ -81,6 +81,16 @@ class HomePage extends PureComponent {
                             ]}
                         />
                     </Animated.View>
+                    <View style={{
+                        position: 'absolute',
+                        bottom: 100, height: 25, width: Dimensions.get('window').width, alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <Text style={{color:'white', fontSize:22}}>兼职 赚钱</Text>
+                        {/*<Text style={{color:'white'}}>芜湖易尔通</Text>*/}
+
+                    </View>
+
                 </Animated.View>}
 
                 <SafeAreaViewPlus
@@ -101,12 +111,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: 0,
-        height:Dimensions.get('window').height,
-        width:Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#2196F3',
-        zIndex:100,
+        zIndex: 100,
     },
 
     bootsplash: {

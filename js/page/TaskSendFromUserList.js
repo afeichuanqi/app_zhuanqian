@@ -218,8 +218,8 @@ class TaskReleaseMana extends PureComponent {
                 />
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{flexDirection: 'row', marginLeft: 10}}>
-                        <Text style={{fontSize: 15}}>{item.username}</Text>
-                        <Text style={{marginLeft: 5}}>(ID:{item.userid})</Text>
+                        <Text style={{fontSize: 15,color:'black'}}>{item.username}</Text>
+                        <Text style={{marginLeft: 5,color:'black'}}>(ID:{item.userid})</Text>
                     </View>
                     <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 5, alignItems: 'center'}}>
                         <Text style={{

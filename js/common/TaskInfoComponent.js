@@ -100,15 +100,17 @@ class TaskInfoComponent extends PureComponent {
                 NavigationUtils.goPage({test: false, task_id: item.taskId}, 'TaskDetails');
                 this.props.onPress && this.props.onPress(item.taskId);
             }}
+            key={item.taskId}
             style={{
                 flex: 1,
                 flexDirection: 'row',
-                marginHorizontal: marginHorizontal,
+                paddingHorizontal: marginHorizontal,
                 paddingTop: 15,
                 paddingBottom: 25,
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 // transform: [{scale}],
+                backgroundColor:'white',
                 height: 85,
             }}
             // onPressIn={this._onPressIn}

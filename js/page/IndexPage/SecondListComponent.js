@@ -165,13 +165,13 @@ class ScrollItem extends React.Component {
                         height: 100,
                         borderRadius: 5,
                     }}
-
+                    // resizeMode={'stretch'}
                     source={{uri: item.task_uri}}
                 />
                 <Image source={require('../../res/img/zuixinfabu.png')} style={{position:'absolute',right:0,top:0,width:40,height:15}}/>
             </View>
             {item.task_name && <Text numberOfLines={1} style={{fontSize:13,width: 140,color:'black',marginTop:8,
-                opacity:0.8,
+                opacity:0.7,
             }}>{item.title} | {item.task_name}</Text>}
             {item.reward_price && <View style={{flexDirection: 'row', height: 25, alignItems: 'center',marginTop:2,
                 zIndex:10,elevation:1

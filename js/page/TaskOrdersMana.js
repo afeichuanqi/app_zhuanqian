@@ -371,15 +371,22 @@ class OrdersItem extends React.Component {
 
     render() {
         const {item, status} = this.props;
-        let taskTitle = item.task_title;
+        if (!item.taskId) {
+            return null;
+        }
+        let taskTitle = item.task_title ? item.task_title : '';
         let emojiArr = [];
         const json = getEmojis(taskTitle);
         if (json) {
             taskTitle = json.content;
             emojiArr = json.emojiArr;
         }
-        const TextTitle = <Text style={{fontWeight: 'bold',color:'black'}}>{item.taskId} - {taskTitle} {emojiArr.map((item) => {
-            return <Emoji name={item} style={{fontSize: 15}}/>;
+        const TextTitle = <Text
+            style={{
+                fontWeight: 'bold',
+                color: 'black',
+            }}>{item && item.taskId} - {taskTitle} {emojiArr.map((item, index) => {
+            return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
         })}</Text>;
         return <View
 
@@ -418,7 +425,12 @@ class OrdersItem extends React.Component {
                         }}>将在{item.reviewTimeTitle}内完成审核,期限外自动完成</Text>
                     </View> : status == 3 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5,color:'black'}}>审核时间:{item.review_time1}</Text>
+                        <Text style={{
+                            fontSize: 13,
+                            opacity: 0.7,
+                            marginTop: 5,
+                            color: 'black',
+                        }}>审核时间:{item.review_time1}</Text>
                         {(item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) &&
                         <Text style={{fontSize: 13, marginTop: 5, color: 'red'}}>
                             请于 {item.orderExpTime} 之前重新提交
@@ -443,7 +455,7 @@ class OrdersItem extends React.Component {
 
                     </View> : status == 4 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5,color:'black'}}>审核时间:{item.review_time1}</Text>
+                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
                         <Text
                             ellipsizeMode={'tail'}
                             numberOfLines={2}

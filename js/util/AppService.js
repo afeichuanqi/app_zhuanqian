@@ -991,6 +991,28 @@ export function selectShopInfoForUserId(data, token) {
         }
     });
 }
+/**
+ * 查询用户所有浏览历史
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function getAllViewHistorys(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/getAllViewHistorys', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 查询用户店铺详情

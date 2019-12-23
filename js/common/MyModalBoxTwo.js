@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, Text, TouchableOpacity,ImageBackground} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated'
 const {timing} = Animated;
 import SvgUri from 'react-native-svg-uri';
@@ -96,7 +96,10 @@ class MyModalBox extends PureComponent {
                         transform: [{translateY: this.animations.translateY}],
                     }]}>
 
-                        <View style={{
+                        <ImageBackground
+                            source={require('../res/img/backgroundtoast.png')}
+
+                            style={{
                             paddingVertical: 10,
                             width: width - 40,
                             flexDirection: 'row',
@@ -119,7 +122,7 @@ class MyModalBox extends PureComponent {
                                 onPress={this.hide}>
                                 <SvgUri width={15} height={15} fill={'rgba(255,255,255,0.7)'} svgXmlData={cha}/>
                             </TouchableOpacity>
-                        </View>
+                        </ImageBackground>
                         {this.props.children}
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', backgroundColor:'white',
                             borderBottomLeftRadius:5, borderBottomRightRadius:5,
@@ -142,19 +145,18 @@ class MyModalBox extends PureComponent {
                             {/*        backgroundColor: 'rgba(0,0,0,0.5)',*/}
                             {/*        marginTop: 15,*/}
                             {/*    }}/>*/}
-                            <TouchableOpacity
-                                activeOpacity={0.6}
-                                onPress={this._sure}
-                                style={{
-                                    width: (width - 40) / 2,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    height: 50,
-                                    backgroundColor:bottomTheme,
+                            <ImageBackground
+                                style={{width: (width - 40) / 2,height: 50,top: 1,justifyContent: 'center',
+                                    alignItems: 'center', backgroundColor: bottomTheme,}}
+                                source={require('../res/img/buttombackground.png')}>
+                                <TouchableOpacity
+                                    activeOpacity={0.6}
+                                    onPress={this._sure}
+                                >
+                                    <Text style={{color: 'white'}}>{rightTitle}</Text>
+                                </TouchableOpacity>
+                            </ImageBackground>
 
-                                }}>
-                                <Text style={{color: 'white'}}>{rightTitle}</Text>
-                            </TouchableOpacity>
                         </View>
                     </Animated.View>
 

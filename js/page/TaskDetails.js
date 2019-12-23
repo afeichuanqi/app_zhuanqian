@@ -608,7 +608,7 @@ class TaskDetailsPop extends Component {
                         justifyContent: 'center',
                     }}>
                     {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
-                    <Text style={{fontSize: 15, opacity: 0.7}}>接单说明</Text>
+                    <Text style={{fontSize: 15, opacity: 0.7,color:'black'}}>接单说明</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     // key={index}
@@ -622,7 +622,7 @@ class TaskDetailsPop extends Component {
                         alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                     }}>
                     <SvgUri width={18} fill={'rgba(0,0,0,0.7)'} height={18} svgXmlData={fenxiang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7}}>分享</Text>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7,color:'black'}}>分享</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.6}
@@ -645,7 +645,7 @@ class TaskDetailsPop extends Component {
                     }}>
                     <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={18}
                             svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7}}>收藏</Text>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7,color:'black'}}>收藏</Text>
                 </TouchableOpacity>
 
             </TaskMenu>

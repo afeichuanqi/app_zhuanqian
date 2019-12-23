@@ -119,7 +119,7 @@ export default class TaskReleaseItem extends PureComponent {
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
-                backgroundColor: 'rgba(255,255,255,0.4)',
+                backgroundColor: 'rgba(255,255,255,0.7)',
                 flexDirection: 'row',
             }}>
 
@@ -135,7 +135,7 @@ export default class TaskReleaseItem extends PureComponent {
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
-                backgroundColor: 'rgba(255,255,255,0.5)',
+                backgroundColor: 'rgba(255,255,255,0.7)',
                 flexDirection: 'row',
             }}>
 

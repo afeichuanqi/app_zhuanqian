@@ -302,28 +302,28 @@ class ChatWindow extends PureComponent {
         pressAvatar: (isSelf, targetId) => {
             console.log(isSelf, targetId);
         },
-        emojiIcon: <Image source={require('../source/image/emoji.png')} style={{width: 30, height: 30}}/>,
+        emojiIcon: <Image source={require('../source/image/emoji.png')} style={{width: 25, height: 25}}/>,
         messageSelectIcon: <Image source={require('../source/image/check.png')} style={{width: 14, height: 14}}/>,
         messageDelIcon: <Image source={require('../source/image/delete.png')} style={{width: 22, height: 22}}/>,
-        keyboardIcon: <Image source={require('../source/image/keyboard.png')} style={{width: 30, height: 30}}/>,
-        plusIcon: <Image source={require('../source/image/more.png')} style={{width: 30, height: 30}}/>,
-        voiceIcon: <Image source={require('../source/image/voice.png')} style={{width: 30, height: 30}}/>,
-        sendIcon: <Image source={require('../source/image/sendAble.png')} style={{width: 30, height: 30}}/>,
-        sendUnableIcon: <Image source={require('../source/image/send.png')} style={{width: 30, height: 30}}/>,
+        keyboardIcon: <Image source={require('../source/image/keyboard.png')} style={{width: 25, height: 25}}/>,
+        plusIcon: <Image source={require('../source/image/more.png')} style={{width: 25, height: 25}}/>,
+        // voiceIcon: <Image source={require('../source/image/voice.png')} style={{width: 25, height: 25}}/>,
+        sendIcon: <Image source={require('../source/image/sendAble.png')} style={{width: 25, height: 25}}/>,
+        sendUnableIcon: <Image source={require('../source/image/send.png')} style={{width: 25, height: 25}}/>,
         messageErrorIcon: <Image source={require('../source/image/waring.png')} style={{width: 20, height: 20}}/>,
-        voiceErrorIcon: <Image source={require('../source/image/voiceError.png')} style={{width: 60, height: 60}}/>,
-        voiceCancelIcon: <Image source={require('../source/image/voiceCancel.png')} style={{width: 60, height: 60}}/>,
-        voiceSpeakIcon: [
-            require('../source/image/speak0.png'),
-            require('../source/image/speak1.png'),
-            require('../source/image/speak2.png'),
-            require('../source/image/speak3.png'),
-            require('../source/image/speak4.png'),
-            require('../source/image/speak5.png'),
-            require('../source/image/speak6.png'),
-            require('../source/image/speak7.png'),
-            require('../source/image/speak8.png'),
-        ],
+        // voiceErrorIcon: <Image source={require('../source/image/voiceError.png')} style={{width: 60, height: 60}}/>,
+        // voiceCancelIcon: <Image source={require('../source/image/voiceCancel.png')} style={{width: 60, height: 60}}/>,
+        // voiceSpeakIcon: [
+        //     require('../source/image/speak0.png'),
+        //     require('../source/image/speak1.png'),
+        //     require('../source/image/speak2.png'),
+        //     require('../source/image/speak3.png'),
+        //     require('../source/image/speak4.png'),
+        //     require('../source/image/speak5.png'),
+        //     require('../source/image/speak6.png'),
+        //     require('../source/image/speak7.png'),
+        //     require('../source/image/speak8.png'),
+        // ],
         voiceVolume: 10,
         delMessage: (content, isInverted) => {
             console.log(content, isInverted);
@@ -1118,7 +1118,7 @@ class ChatWindow extends PureComponent {
                         emojiIcon={this.props.emojiIcon}
                         keyboardIcon={this.props.keyboardIcon}
                         plusIcon={this.props.plusIcon}
-                        voiceIcon={this.props.voiceIcon}
+                        // voiceIcon={this.props.voiceIcon}
                         sendIcon={this.props.sendIcon}
                         sendUnableIcon={this.props.sendUnableIcon}
                         ref={e => (this.InputBar = e)}

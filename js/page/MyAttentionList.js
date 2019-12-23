@@ -345,7 +345,7 @@ class AttentionItem extends PureComponent {
 
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{marginLeft: 15}}>
-                        <Text style={{fontSize: 15}}>{item.username}</Text>
+                        <Text style={{fontSize: 15,color:'black'}}>{item.username}</Text>
                         <Text style={{fontSize: 13, opacity: 0.6, marginTop: 7,color:'black'}}>{item.fan_num}位粉丝</Text>
                     </View>
                 </View>

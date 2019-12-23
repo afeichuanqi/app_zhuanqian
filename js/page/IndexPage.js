@@ -376,8 +376,6 @@ class FristListComponent extends PureComponent {
 
         EventBus.getInstance().removeListener(this.listener);
     }
-    // 0 lunboHeight
-    // 25  lunboHeight - 25
     render() {
         const containerWidth = width - 20;
         const {lunboData} = this.state;

@@ -56,6 +56,7 @@ class EmptyComponent extends PureComponent {
             }}>
                 <View style={{
                     marginTop: this.props.marginTop,
+                    alignItems:'center',
                 }}>
                     <Image resizeMode={'contain'} source={source} style={{width: 120, height: 120}}/>
                     <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.6)', marginTop: 10}}>{this.props.message} ~

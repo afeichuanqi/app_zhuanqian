@@ -7,13 +7,15 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions,  Text, TouchableOpacity} from 'react-native';
-import Animated, {Easing} from 'react-native-reanimated'
+import {Modal, View, Dimensions, Text, ImageBackground, TouchableOpacity} from 'react-native';
+import Animated, {Easing} from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
+
 const {width} = Dimensions.get('window');
 const {timing} = Animated;
+
 class MyModalBox extends PureComponent {
     constructor(props) {
         super(props);
@@ -23,7 +25,7 @@ class MyModalBox extends PureComponent {
         width: 200,
         height: 500,
         rightTitle: '添加',
-        titleComponent:null
+        titleComponent: null,
     };
     state = {
         visible: false,
@@ -94,21 +96,23 @@ class MyModalBox extends PureComponent {
                         transform: [{scale: this.animations.scale}],
                     }]}>
 
-                        <View style={{
-                            paddingVertical: 10,
-                            width: width - 40,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            paddingHorizontal: 15,
-                            backgroundColor: bottomTheme,
-                            borderTopLeftRadius: 5,
-                            borderTopRightRadius: 5,
-                            paddingTop:20,
-                            paddingBottom:15,
+                        <ImageBackground
+                            source={require('../res/img/backgroundtoast.png')}
+                            style={{
+                                paddingVertical: 10,
+                                width: width - 40,
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                paddingHorizontal: 15,
+                                backgroundColor: bottomTheme,
+                                borderTopLeftRadius: 5,
+                                borderTopRightRadius: 5,
+                                paddingTop: 20,
+                                paddingBottom: 15,
 
-                        }}>
-                            <View style={{flexDirection:'row', alignItems:'flex-end'}}>
-                                <Text style={{fontSize: 16,color:'white'}}>{this.props.title}</Text>
+                            }}>
+                            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                <Text style={{fontSize: 16, color: 'white'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -116,7 +120,7 @@ class MyModalBox extends PureComponent {
                                 onPress={this.hide}>
                                 <SvgUri width={15} height={15} fill={'rgba(255,255,255,0.8)'} svgXmlData={cha}/>
                             </TouchableOpacity>
-                        </View>
+                        </ImageBackground>
                         {this.props.children}
                         <View style={{flexDirection: 'row'}}>
                             <TouchableOpacity
@@ -127,25 +131,22 @@ class MyModalBox extends PureComponent {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     height: 50,
-                                    top:1
+                                    top: 1,
                                     // backgroundColor:'red',
                                 }}>
                                 <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
                             </TouchableOpacity>
-
-                            <TouchableOpacity
-                                activeOpacity={0.6}
-                                onPress={this._sure}
-                                style={{
-                                    width: (width - 40) / 2,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    height: 50,
-                                    backgroundColor:bottomTheme,
-                                    top:1
-                                }}>
-                                <Text style={{color: 'white'}}>{rightTitle}</Text>
-                            </TouchableOpacity>
+                            <ImageBackground
+                                style={{width: (width - 40) / 2,height: 50,top: 1,justifyContent: 'center',
+                                    alignItems: 'center', backgroundColor: bottomTheme,}}
+                                source={require('../res/img/buttombackground.png')}>
+                                <TouchableOpacity
+                                    activeOpacity={0.6}
+                                    onPress={this._sure}
+                                    >
+                                    <Text style={{color: 'white'}}>{rightTitle}</Text>
+                                </TouchableOpacity>
+                            </ImageBackground>
                         </View>
                     </Animated.View>
 

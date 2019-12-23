@@ -14,11 +14,12 @@ import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView} from '
 import {bottomTheme} from '../appSet';
 import setting from '../res/svg/setting.svg';
 import shop from '../res/svg/shop.svg';
-import guanzhu from '../res/svg/mysvg/guanzhu1.svg';
-import bill1 from '../res/svg/mysvg/bill1.svg';
-import yaoqing2 from '../res/svg/mysvg/yaoqing2.svg';
-import pingbi1 from '../res/svg/mysvg/pingbi1.svg';
-import favorite_1 from '../res/svg/mysvg/favorite_1.svg';
+import guanzhu2 from '../res/svg/mysvg/guanzhu2.svg';
+import bill from '../res/svg/mysvg/bill.svg';
+import yaoqing1 from '../res/svg/mysvg/yaoqing1.svg';
+import pingbi3 from '../res/svg/mysvg/pingbi3.svg';
+import viewHistory from '../res/svg/mysvg/viewHistory.svg';
+import favorite2 from '../res/svg/mysvg/favorite2.svg';
 import my_fabu from '../res/svg/my_fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import FastImage from 'react-native-fast-image';
@@ -247,12 +248,12 @@ class BottomInfoColumn extends Component {
                 <ToolsItemComponent/>
             </ScrollView>
 
-            {ViewUtil.getSettingItem(guanzhu, '我的关注', '关注列表', () => {
+            {ViewUtil.getSettingItem(guanzhu2, '我的关注', '关注列表', () => {
                 MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
                 // NavigationUtils.goPage();
             })}
             <View>
-                {ViewUtil.getSettingItem(bill1, '帐单展示', '支出、收入', () => {
+                {ViewUtil.getSettingItem(bill, '帐单展示', '支出、收入', () => {
                     MenuClick('UserBillListPage');
                     NavigationUtils.goPage({}, '');
 
@@ -266,14 +267,17 @@ class BottomInfoColumn extends Component {
                 }}/>}
             </View>
 
-            {ViewUtil.getSettingItem(yaoqing2, '邀请好友', '好友邀请得奖励', () => {
+            {ViewUtil.getSettingItem(yaoqing1, '邀请好友', '好友邀请得奖励', () => {
                 MenuClick('FriendPromotionPage');
             })}
-            {ViewUtil.getSettingItem(favorite_1, '我的收藏', '收藏精品任务', () => {
+            {ViewUtil.getSettingItem(favorite2, '我的收藏', '收藏精品任务', () => {
                 MenuClick('MyFavoritePage');
             })}
-            {ViewUtil.getSettingItem(pingbi1, '屏蔽用户', '屏蔽用户列表', () => {
+            {ViewUtil.getSettingItem(pingbi3, '屏蔽用户', '屏蔽用户列表', () => {
                 MenuClick('MyShieldPage');
+            })}
+            {ViewUtil.getSettingItem(viewHistory, '浏览历史', '浏览历史', () => {
+                MenuClick('MyViewHistoryPage');
             })}
             {ViewUtil.getMenuLine()}
 
