@@ -14,7 +14,8 @@ import {
     StyleSheet,
     Platform,
     TouchableOpacity,
-    StatusBar
+    StatusBar,
+    Linking,
 } from 'react-native';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -33,6 +34,9 @@ import SecondListComponent from './IndexPage/SecondListComponent';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import {Command} from 'react-native/ReactCommon/hermes/inspector/tools/msggen/src/Command';
+import {getLunboList} from '../util/AppService';
+import {equalsObj} from '../util/CommonUtils';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -61,12 +65,12 @@ class HomePage extends PureComponent {
         Global.token = this.props.userinfo.token;
         Global.dispatch = this.props.dispatch;
         ChatSocket.connctionServer();
-        if(Platform.OS==='android'){
-            setTimeout(()=>{
+        if (Platform.OS === 'android') {
+            setTimeout(() => {
                 StatusBar.setBarStyle('dark-content', false);
                 StatusBar.setBackgroundColor(theme, false);
-            },500)
-        }else{
+            }, 500);
+        } else {
             StatusBar.setBarStyle('dark-content', false);
             StatusBar.setBackgroundColor(theme, false);
         }
@@ -312,28 +316,7 @@ class HomePage extends PureComponent {
 }
 
 class FristListComponent extends PureComponent {
-    state = {
-        lunboData: [
-            {imgUrl: 'http://img2.imgtn.bdimg.com/it/u=3292807210,3869414696&fm=26&gp=0.jpg'},
-            {imgUrl: 'http://static.open-open.com/lib/uploadImg/20160101/20160101125439_819.jpg'},
-        ],
-    };
-    _renderItem = ({item, index}) => {
-        return <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-            }}
-        >
-            <FastImage
 
-                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
-                source={{uri: `${item.imgUrl}`}}
-                resizeMode={FastImage.resizeMode.stretch}
-                key={index}
-            />
-        </TouchableOpacity>
-            ;
-    };
     scrollY = new Animated.Value(0);
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
@@ -376,12 +359,19 @@ class FristListComponent extends PureComponent {
 
         EventBus.getInstance().removeListener(this.listener);
     }
+
+    onMomentumScrollEnd = (e) => {
+        if (Platform.OS === 'ios') {
+            this.nowY = e.nativeEvent.contentOffset.y;
+        }
+
+    };
+
     render() {
-        const containerWidth = width - 20;
-        const {lunboData} = this.state;
+
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-220, 0, lunboHeight - 20],
-            outputRange: [lunboHeight + 220, lunboHeight -5, 25],
+            outputRange: [lunboHeight + 220, lunboHeight, 20],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -393,6 +383,7 @@ class FristListComponent extends PureComponent {
                 style={{zIndex: -100, elevation: -100}}
                 onScrollBeginDrag={this._onScroll}
                 onScrollEndDrag={this._onScroll}
+                onMomentumScrollEnd={this.onMomentumScrollEnd}
                 onScroll={Animated.event([
                     {
                         nativeEvent: {
@@ -403,63 +394,119 @@ class FristListComponent extends PureComponent {
                 onLoading={(load) => {
                     this.props.onLoad(load);
                 }}
-                ListHeaderComponent={
-                    <View>
-
-                        <View style={{
-                            alignItems: 'center',
-                            height: lunboHeight,
-                            paddingTop: 10,
-                            backgroundColor: theme,
-                            width: width,
-                            // zIndex: 1,
-
-                        }}>
-                            {/*轮播图*/}
-                            <Carousel
-                                style={styles.carousel}
-                                timeout={3000}
-                                data={lunboData}
-                                renderItem={this._renderItem}
-                                itemWidth={containerWidth}
-                                containerWidth={containerWidth}
-                                separatorWidth={0}
-                                pagingEnable={true}
-                                paginationDefaultColor={'rgba(255,255,255,0.5)'}
-                                paginationActiveColor={'rgba(255,255,255,1)'}
-                            />
-                            <View style={{height: 40}}/>
-
-                        </View>
-                    </View>
-                }
+                ListHeaderComponent={<LunBoComponent/>}
             />
             <Animated.View style={{
-                width, height: 40, justifyContent: 'space-between', position: 'absolute',
+                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -5,
                 backgroundColor: 'white', transform: [{translateY: columnTop}],
             }}>
                 <Text
                     style={{
                         fontSize: 12,
                         color: bottomTheme,
-                        position: 'absolute',
-                        left: 15,
-                        top: 16,
-
+                        // position: 'absolute',
+                        // left: 15,
+                        // top: 16,
+                        marginLeft: 15,
+                        marginTop: 20,
                     }}>为您推荐</Text>
 
                 <View style={{
                     width: 50,
                     backgroundColor: bottomTheme,
                     height: 2,
-                    position: 'absolute',
-                    left: 15,
-                    bottom: 3,
+                    // position: 'absolute',
+                    // left: 15,
+                    // bottom: 3,
+                    marginLeft: 15,
                 }}/>
             </Animated.View>
         </Animated.View>;
     }
 }
+
+class LunBoComponent extends React.Component {
+    updatePage = () => {
+
+    };
+    state = {
+        lunboData: [],
+    };
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return !equalsObj(this.state.lunboData, nextState.lunboData);
+    }
+
+    componentDidMount() {
+        getLunboList().then(result => {
+            this.setState({
+                lunboData: result,
+            });
+        });
+    }
+
+    _renderItem = ({item, index}) => {
+
+        return <TouchableOpacity
+            key={item.id}
+            activeOpacity={0.8}
+            onPress={() => {
+                console.log(item);
+                if (item.type == 1) {
+                    console.log(item.page_name, item.params);
+                    NavigationUtils.goPage(item.params, item.page_name);
+
+                } else {
+                    Linking.canOpenURL(item.page_name).then(supported => {
+                        if (!supported) {
+                        } else {
+                            Linking.openURL(item.page_name);
+                        }
+                    });
+                }
+            }}
+        >
+            <FastImage
+                style={[styles.imgStyle, {height: '100%', width: '100%'}]}
+                source={{uri: `${item.image_url}`}}
+                resizeMode={FastImage.resizeMode.stretch}
+                key={index}
+            />
+        </TouchableOpacity>
+            ;
+    };
+
+    render() {
+        const containerWidth = width - 20;
+        const {lunboData} = this.state;
+        return <View style={{
+            alignItems: 'center',
+            height: lunboHeight,
+            paddingTop: 10,
+            backgroundColor: theme,
+            width: width,
+            // zIndex: 1,
+
+        }}>
+            {/*轮播图*/}
+            <Carousel
+                style={styles.carousel}
+                timeout={3000}
+                data={lunboData}
+                renderItem={this._renderItem}
+                itemWidth={containerWidth}
+                containerWidth={containerWidth}
+                separatorWidth={0}
+                pagingEnable={true}
+                paginationDefaultColor={'rgba(255,255,255,1)'}
+                paginationActiveColor={bottomTheme}
+            />
+            <View style={{height: 40}}/>
+
+        </View>;
+    }
+}
+
 
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
@@ -485,3 +532,4 @@ const styles = StyleSheet.create({
     },
 });
 export default HomePageRedux;
+;

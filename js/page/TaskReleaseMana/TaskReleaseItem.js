@@ -122,9 +122,7 @@ export default class TaskReleaseItem extends PureComponent {
                 paddingHorizontal: 11,
                 alignItems: 'center',
                 flexDirection: 'row',
-                backgroundColor: 'rgba(255,255,255,0.8)',
-                // borderBottomWidth:0.3,
-                // borderBottomColor:'rgba(33,150,243,0.5)',
+                backgroundColor: 'rgba(255,255,255,0.1)',
             }}>
 
                 {ViewUtil.getReviewIco(parseInt(item.review_num), this._reViewClick)}
@@ -139,7 +137,7 @@ export default class TaskReleaseItem extends PureComponent {
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
-                backgroundColor: 'rgba(255,255,255,0.7)',
+                backgroundColor: 'rgba(255,255,255,1)',
                 flexDirection: 'row',
             }}>
 

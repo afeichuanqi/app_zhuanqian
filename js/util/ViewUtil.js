@@ -144,24 +144,24 @@ export default class ViewUtil {
     static getReviewIco = (reviewNum, click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
-                style={{height: 17, width: 17}}
-                source={require('../res/img/task_release_review.png')}
+                style={{height: 13, width: 11}}
+                source={require('../res/img/taskReView/review.png')}
             />
-            <Text style={{fontSize: 14, marginLeft: 3, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
 
         </TouchableOpacity>;
     };
     static getzhidingIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
-                style={{height: 17, width: 17}}
-                source={require('../res/img/task_top.png')}
+                style={{height: 13, width: 11}}
+                source={require('../res/img/taskReView/zhiding.png')}
             />
-            <Text style={{fontSize: 14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
 
         </TouchableOpacity>;
     };
@@ -169,25 +169,25 @@ export default class ViewUtil {
         return <TouchableOpacity
 
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
-                style={{height: 17, width: 17}}
-                source={require('../res/img/task_recommended.png')}
+                style={{height: 13, width: 13}}
+                source={require('../res/img/taskReView/tuijian.png')}
             />
-            <Text style={{fontSize: 14, marginLeft: 3, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
     };
     static getUpdateIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 14}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
 
             <Image
-                style={{height: 14, width: 14}}
-                source={require('../res/img/task_update.png')}
+                style={{height: 13, width: 13}}
+                source={require('../res/img/taskReView/update.png')}
             />
-            <Text style={{fontSize: 13, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
     };

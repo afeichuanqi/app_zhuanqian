@@ -550,6 +550,24 @@ export function getAllTask(data) {
         }
     });
 }
+/**
+ * 获取所有任务
+ */
+export function getLunboList() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setPostHeader('token', token);
+            const ret = await http.get('user/getLunboList');
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 最新首页

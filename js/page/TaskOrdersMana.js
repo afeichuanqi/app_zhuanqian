@@ -455,7 +455,7 @@ class OrdersItem extends React.Component {
 
                     </View> : status == 4 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核时间:{item.review_time1}</Text>
+                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5,color:'black'}}>审核时间:{item.review_time1}</Text>
                         <Text
                             ellipsizeMode={'tail'}
                             numberOfLines={2}

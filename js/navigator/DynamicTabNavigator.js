@@ -56,12 +56,19 @@ class DynamicTabNavigator extends Component<Props> {
                     onIndexChange={(index) => {
                         if (navigationIndex !== index) {
                             this.setState({navigationIndex: index});
+                            if (index === 0) {
+                                StatusBar.setBarStyle('dark-content', false);
+                                StatusBar.setBackgroundColor(theme, false);
+                            } else {
+                                StatusBar.setBarStyle('light-content', false);
+                                StatusBar.setBackgroundColor(bottomTheme, false);
+                            }
                         }
 
                     }}
                     initialLayout={{width}}
                     lazy={false}
-                    timingConfig={{duration: 1}}
+                    timingConfig={{duration: 10}}
                     // swipeEnabled={false}
                 />
                 <BottomBarRedux onPress={(index) => {
@@ -170,15 +177,6 @@ class BottomBar extends Component {
 
     _BottomBarClick = (index) => {
         const {onPress, onGetUserInFoForToken, userinfo, navigationIndex} = this.props;
-        if (index === 0) {
-            StatusBar.setBarStyle('dark-content', false);
-            StatusBar.setBackgroundColor(theme, false);
-        } else {
-            StatusBar.setBarStyle('light-content', false);
-            StatusBar.setBackgroundColor(bottomTheme, false);
-        }
-
-        // this.bottomBarOnPress(index);
 
         onPress(index);
         if (index === 3) { //我的栏目被单击

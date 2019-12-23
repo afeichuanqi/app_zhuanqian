@@ -50,7 +50,7 @@ class LabelBigComponent extends PureComponent {
             },this.props.contaiStyle]}>
             <Text style={[{
                 fontSize,
-                opacity: 0.7,
+                opacity: 0.5,
                 color:'black'
             },this.props.textStyle]}>{title}</Text>
         </TouchableOpacity>;

@@ -185,8 +185,8 @@ class TaskDetails extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const RefreshHeight = Animated.interpolate(this.animations.value, {
-            inputRange: [-200, -0.01, 0],
-            outputRange: [250, 20, 0],
+            inputRange: [-400, -0.01, 0],
+            outputRange: [450, 20, 0],
             extrapolate: 'clamp',
         });
         const {fromUserinfo, taskData, stepData} = this.state.totalData;
@@ -223,7 +223,7 @@ class TaskDetails extends PureComponent {
                     }}/>
 
                     <Animated.View
-                        style={{width, position: 'absolute', top: TitleTop, alignItems: 'center', zIndex: 2}}>
+                        style={{width, position: 'absolute', top: 0,transform: [{translateY: TitleTop}], alignItems: 'center', zIndex: 2}}>
                         <Text style={{color: 'white', fontSize: 18}}>任务详情</Text>
                     </Animated.View>
                     <Animated.View
@@ -257,6 +257,7 @@ class TaskDetails extends PureComponent {
                                 },
                             },
                         ])}
+
 
                     >
                         <View style={{backgroundColor: bottomTheme, height: 30}}/>

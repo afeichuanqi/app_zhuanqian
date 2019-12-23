@@ -7,10 +7,8 @@ import {getBestNewTask} from '../../util/AppService';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
-// import FastImage from '../../common/FastImage';
 import FastImage from 'react-native-fast-image';
 import SkeletonPlaceholder from '../../common/SkeletonPlaceholder';
-// import LinearGradient from 'react-native-linear-gradient';
 
 const width = Dimensions.get('window').width;
 const lunboHeight = 220;
@@ -72,11 +70,16 @@ class SecondListComponent extends PureComponent {
         }
         this.nowY = y;
     };
+    onMomentumScrollEnd = (e) => {
+        if (Platform.OS === 'ios') {
+            this.nowY = e.nativeEvent.contentOffset.y;
+        }
 
+    };
     render() {
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-200, 0, 205],
-            outputRange: [lunboHeight + 210, lunboHeight + 10, 25],
+            inputRange: [-210, 0, 205],
+            outputRange: [lunboHeight + 215, lunboHeight, 20],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -91,7 +94,7 @@ class SecondListComponent extends PureComponent {
                     this.props.onLoad(load);
                 }}
                 ListHeaderComponent={
-                    <View style={{height: 250, backgroundColor: 'white'}}>
+                    <View style={{height: 230, backgroundColor: 'white'}}>
                         <View style={{marginTop: 20, paddingLeft: 10}}>
                             <Text style={{fontSize: 17, opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
@@ -107,6 +110,7 @@ class SecondListComponent extends PureComponent {
                 }
                 onScrollBeginDrag={this._onScroll}
                 onScrollEndDrag={this._onScroll}
+                onMomentumScrollEnd={this.onMomentumScrollEnd}
                 onScroll={Animated.event([
                     {
                         nativeEvent: {
@@ -117,16 +121,15 @@ class SecondListComponent extends PureComponent {
             />
 
             <Animated.View style={{
-                width, height: 40, justifyContent: 'space-between', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}],
+                width, height: 30, justifyContent: 'space-between', position: 'absolute',
+                backgroundColor: 'white', transform: [{translateY: columnTop}],top:5
             }}>
                 <Text
                     style={{
                         fontSize: 12,
                         color: bottomTheme,
-                        position: 'absolute',
-                        left: 15,
-                        top: 16,
+                        marginLeft:15,
+                        marginTop:10,
 
                     }}>最近刷新</Text>
 
@@ -134,9 +137,7 @@ class SecondListComponent extends PureComponent {
                     width: 50,
                     backgroundColor: bottomTheme,
                     height: 2,
-                    position: 'absolute',
-                    left: 15,
-                    bottom: 3,
+                    marginLeft:15,
                 }}/>
             </Animated.View>
         </Animated.View>;
@@ -165,12 +166,12 @@ class ScrollItem extends React.Component {
                 NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
             }}
             key={item.id}
-            style={{height: 160, width: 150, paddingHorizontal: 5}}>
-            <View style={{width: 140}}>
+            style={{height: 160, width: 110, paddingHorizontal: 5}}>
+            <View style={{width: 100}}>
                 <FastImage
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
-
+                        width:100,
                         height: 100,
                         borderRadius: 5,
                     }}
@@ -178,15 +179,15 @@ class ScrollItem extends React.Component {
                     source={{uri: item.task_uri}}
                 />
                 <Image source={require('../../res/img/zuixinfabu.png')}
-                       style={{position: 'absolute', right: 0, top: 0, width: 40, height: 15}}/>
+                       style={{position: 'absolute', right: 0, top: 0, width: 35, height: 13}}/>
             </View>
-            <View style={{ width: 140, flexDirection:'row', alignItems:'center', marginTop: 8}}>
+            <View style={{ width: 100, flexDirection:'row', alignItems:'center', marginTop:3}}>
                 <Text numberOfLines={1} style={{fontSize: 12, color: 'black', opacity:0.7}}>{item.title}</Text>
-                <View style={{width:3,height:3, borderRadius:3, backgroundColor:'black', marginHorizontal:2, opacity:0.7}}/>
-                <Text numberOfLines={1} style={{fontSize: 12, color: 'black',width: 110, opacity:0.7}}>{item.task_name}</Text>
+                <View style={{width:2,height:2, borderRadius:2, backgroundColor:'black', marginHorizontal:2, opacity:0.7}}/>
+                <Text numberOfLines={1} style={{fontSize: 12, color: 'black',width: 65, opacity:0.7}}>{item.task_name}</Text>
             </View>
             {item.reward_price && <View style={{
-                flexDirection: 'row', height: 25, alignItems: 'center', marginTop: 2,
+                flexDirection: 'row', height: 25, alignItems: 'center',
                 zIndex: 10, elevation: 1,
             }}>
                 <Text style={{

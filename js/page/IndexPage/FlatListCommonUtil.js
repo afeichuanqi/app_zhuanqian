@@ -112,7 +112,6 @@ export default class FlatListCommonUtil extends PureComponent {
             keyExtractor={(item, index) => index + ''}
             style={{
                 backgroundColor: '#f1f1f1',
-                // height: '100%',
             }}
             refreshControl={
                 <RefreshControl

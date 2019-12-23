@@ -21,12 +21,10 @@ import NavigationBar from '../common/NavigationBar';
 import TabBar from '../common/TabBar';
 import search from '../res/svg/search.svg';
 import jia from '../res/svg/jia.svg';
-import fabu from '../res/svg/fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import {TabView} from 'react-native-tab-view';
 import zhankai from '../res/svg/zhankai.svg';
 import yincang from '../res/svg/yincang.svg';
-import remenrenwu from '../res/svg/remenrenwu.svg';
 import FlatListCommonUtil from './TaskHallPage/FlatListCommonUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {getHotTasks} from '../util/AppService';
@@ -34,7 +32,7 @@ import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import Image from 'react-native-fast-image';
-// import FilterComponent from './TaskHall/FilterComponent';
+
 let FilterComponent = null;
 
 const width = Dimensions.get('window').width;
@@ -283,6 +281,12 @@ class FristListComponent extends PureComponent {
         this.flatList._updateList(true);
 
     };
+    onMomentumScrollEnd = (e) => {
+        if (Platform.OS === 'ios') {
+            this.nowY = e.nativeEvent.contentOffset.y;
+        }
+
+    };
 
     render() {
         const marginTop = Animated.interpolate(this.animations.val, {
@@ -306,6 +310,7 @@ class FristListComponent extends PureComponent {
                     ref={ref => this.flatList = ref}
                     onScrollBeginDrag={this._onScroll}
                     onScrollEndDrag={this._onScroll}
+                    onMomentumScrollEnd={this.onMomentumScrollEnd}
                     onRefresh={() => {
                         this.headlineComponent.updatePage();
                     }}
@@ -399,7 +404,7 @@ class TypeItem extends PureComponent {
 
                 }}>
                 <Text style={[{
-                    fontSize: 13, marginRight: 3,
+                    fontSize: 15, marginRight: 3,
                 }, title.length > 2 ? {color: bottomTheme} : !show ? {
                     color: 'black',
                     opacity: 0.6,
@@ -463,11 +468,13 @@ class HeadlineComponent extends PureComponent {
             backgroundColor: 'white',
             flexDirection: 'row',
             alignItems: 'center',
-            borderBottomWidth: 1,
+            borderBottomWidth: 0.3,
             borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
-            <Image resizeMode={'stretch'} source={require('../res/img/index_hot.png')} style={{
-                width: 40, height: 15, marginLeft: 20,
+            <Image
+                resizeMode={'stretch'}
+                source={require('../res/img/index_hot.png')} style={{
+                width: 45, height: 18, marginLeft: 20,
                 marginBottom: 3,
             }}/>
             <View style={{
@@ -512,19 +519,20 @@ class HeadlineComponent extends PureComponent {
                 style={{
                     color: 'black',
                     width: width - 140,
-                    marginLeft: 7, opacity: 0.8,
-                    marginTop:1,
+                    marginLeft: 5, opacity: 0.8,
+                    // marginTop:1,
+                    fontSize: 16,
 
-                }}>{item.taskTitle}元元元元元元元元元元元元元元元元元元元元元元元元元</Text>
+                }}>{item.taskTitle}</Text>
 
-            <View style={{flexDirection: 'row', alignItems: 'center',height:25}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', height: 25}}>
                 <Text style={{
-                    color: 'red', fontSize: 19,
+                    color: 'red', fontSize: 18,
                     marginRight: 1,
                 }}>
                     {item.rewardPrice}
                 </Text>
-                <Text style={{fontSize: 14, color: 'red', top:1, marginRight: 5}}>元</Text>
+                <Text style={{fontSize: 14, color: 'red', top: 1, marginRight: 5}}>元</Text>
                 <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')} style={{width: 8, height: 8}}/>
             </View>
 
@@ -580,7 +588,7 @@ class TopLeftFilterComponent extends Component {
                         onPress={() => this._onPress(Lindex)}
                     >
                         <Text style={[{
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: '400',
                         }, Lindex === index ? {
                             color: 'black',

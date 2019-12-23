@@ -125,7 +125,7 @@ class MsgList extends Component {
     componentDidMount(): void {
         this.timer = setTimeout(() => {
             this.onRefresh();
-        }, 1000);
+        }, 5000);
 
 
         EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {

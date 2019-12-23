@@ -12,6 +12,7 @@ export default class FlatListCommonUtil extends PureComponent {
         },
         onLoading: () => {
         },
+
     };
 
     componentDidMount(): void {
@@ -96,7 +97,7 @@ export default class FlatListCommonUtil extends PureComponent {
                 renderItem={data => this._renderIndexPath(data)}
                 keyExtractor={(item, index) => index + ''}
                 style={{
-                    backgroundColor: '#f1f1f1',
+                    backgroundColor: '#f6f6f6',
                     height: '100%',
                 }}
                 refreshControl={

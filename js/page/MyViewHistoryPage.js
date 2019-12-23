@@ -47,7 +47,6 @@ class MyViewHistoryPage extends PureComponent {
     };
 
     componentDidMount() {
-        console.log('getAllViewHistorys');
         this.backPress.componentDidMount();
         this._updatePage(true);
     }

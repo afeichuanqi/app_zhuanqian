@@ -88,7 +88,7 @@ class TaskSumComponent extends Component {
                 alignItems: 'center',
                 backgroundColor: 'white',
                 height: 130,
-                marginBottom: 5,
+                marginBottom: 7
             }}
         >
 
@@ -107,14 +107,14 @@ class TaskSumComponent extends Component {
                         <Text
                             numberOfLines={1}
                             style={{
-                                fontSize: 15,
+                                fontSize: 16,
                                 color: 'black',
-                                fontWeight: '400',
+                                // fontWeight: '400',
                                 maxWidth: maxWidth,
                                 marginRight: 10,
                             }}>
                             {taskTitle} {emojiArr.map((item,index) => {
-                            return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
+                            return <Emoji key={index} name={item} style={{fontSize: 16}}/>;
                         })}
                         </Text>
 
@@ -128,9 +128,9 @@ class TaskSumComponent extends Component {
                         </View>}
                     </View>
                     {/*价格*/}
-                    <View style={{flexDirection: 'row', height: 25, alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', height: 25, alignItems: 'center', marginRight:10}}>
                         <Text style={{
-                            fontSize: 19,
+                            fontSize: 18,
                             color: 'red',
                             marginRight: 1,
                         }}>{item.rewardPrice}</Text>
@@ -151,12 +151,12 @@ class TaskSumComponent extends Component {
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={{
-                            fontSize: 18,
+                            fontSize: 15,
                             color: bottomTheme,
-                            bottom: 2,
+                            bottom: 1,
                         }}>{parseInt(item.taskPassNum)}</Text>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: 12,
                             color: 'rgba(0,0,0,0.7)',
                         }}>人已完成</Text>
                     </View>
@@ -165,16 +165,16 @@ class TaskSumComponent extends Component {
                         style={{width: 0.5, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 7}}/>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: 12,
                             color: 'rgba(0,0,0,0.7)',
                         }}>剩余</Text>
                         <Text style={{
-                            fontSize: 18,
+                            fontSize: 15,
                             color: 'red',
-                            bottom: 2,
+                            bottom: 1,
                         }}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: 12,
                             color: 'rgba(0,0,0,0.7)',
                         }}>个名额</Text>
                     </View>
@@ -192,14 +192,14 @@ class TaskSumComponent extends Component {
                         flexDirection: 'row',
                     }}>
                         <LabelBigComponent
-                            contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
-                            textStyle={{color: '#2196F3'}}
+                            // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
+                            // textStyle={{color: '#2196F3'}}
                             paddingHorizontal={8}
                             fontSize={11}
                             title={item.typeTitle}/>
                         <LabelBigComponent
-                            contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
-                            textStyle={{color: '#2196F3'}}
+                            // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
+                            // textStyle={{color: '#2196F3'}}
                             paddingHorizontal={8}
                             fontSize={11} title={item.taskName}/>
                     </View>
@@ -211,15 +211,15 @@ class TaskSumComponent extends Component {
                     }}
                     style={{
                         position: 'absolute',
-                        top: 35,
-                        right: 0,
+                        top: 30,
+                        right: 10,
                     }}
                 >
                     <FastImagePro
                         style={{
                             backgroundColor: '#E8E8E8',
-                            width: 60,
-                            height: 65,
+                            width: 55,
+                            height: 55,
                             borderRadius: 2,
 
                         }}
@@ -233,7 +233,7 @@ class TaskSumComponent extends Component {
                         NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
                     }}
                     style={{
-                        marginTop: 5,
+                        marginTop: 10,
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -256,7 +256,7 @@ class TaskSumComponent extends Component {
                             }} fill={'white'} width={10} height={10}
                                     svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                         </View>
-                        <Text style={{fontSize: 13, marginLeft: 10, color: 'black'}}>{item.userName}</Text>
+                        <Text style={{fontSize: 12, marginLeft: 10,  color: 'rgba(0,0,0,0.8)',}}>{item.userName}</Text>
                     </View>
 
 
