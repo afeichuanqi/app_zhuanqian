@@ -241,7 +241,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white'}}>加量</Text>
+                                <Text style={{color: 'white', fontWeight:'bold'}}>加量</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{
@@ -265,7 +265,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white'}}>加价</Text>
+                                <Text style={{color: 'white', fontWeight:'bold'}}>加价</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

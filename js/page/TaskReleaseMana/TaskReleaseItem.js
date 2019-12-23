@@ -89,7 +89,9 @@ export default class TaskReleaseItem extends PureComponent {
                         <View style={{
                             flexDirection: 'row',
                         }}>
-                            <LabelBigComponent paddingVertical={1} fontSize={12} title={item.task_name}/>
+                            <LabelBigComponent
+
+                                paddingVertical={1} fontSize={12} title={item.task_name}/>
                             {/*<LabelBigComponent title={item.taskName}/>*/}
                         </View>
                         {/*剩余数*/}
@@ -119,8 +121,10 @@ export default class TaskReleaseItem extends PureComponent {
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
-                backgroundColor: 'rgba(255,255,255,0.7)',
                 flexDirection: 'row',
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                // borderBottomWidth:0.3,
+                // borderBottomColor:'rgba(33,150,243,0.5)',
             }}>
 
                 {ViewUtil.getReviewIco(parseInt(item.review_num), this._reViewClick)}

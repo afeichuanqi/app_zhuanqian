@@ -135,7 +135,7 @@ class TaskInfoComponent extends PureComponent {
                             fontSize: titleFontSize,
                             color: 'black',
 
-                        }}>{item.taskId} - {taskTitle} {emojiArr.map((item) => {
+                        }}>{taskTitle} {emojiArr.map((item) => {
                             return <Emoji name={item} style={{fontSize: 15}}/>;
                         })}</Text>
                         {item.recommendIsExp == 1 && <View style={{

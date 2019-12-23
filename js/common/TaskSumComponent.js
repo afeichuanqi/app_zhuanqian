@@ -113,7 +113,7 @@ class TaskSumComponent extends Component {
                                 maxWidth: maxWidth,
                                 marginRight: 10,
                             }}>
-                            {item.taskId} - {taskTitle} {emojiArr.map((item,index) => {
+                            {taskTitle} {emojiArr.map((item,index) => {
                             return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
                         })}
                         </Text>

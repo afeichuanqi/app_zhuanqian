@@ -62,6 +62,7 @@ export default class ViewUtil {
 
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingRight: 10}}>
+
                     <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>
 
@@ -112,12 +113,12 @@ export default class ViewUtil {
     static getReReviewIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
-                style={{height: 15, width: 18}}
-                source={require('../res/img/task_chongxinfabu.png')}
+                style={{height: 13, width: 13}}
+                source={require('../res/img/taskReView/task_chongxinfabu.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 8, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
 
         </TouchableOpacity>;
     };
@@ -131,12 +132,12 @@ export default class ViewUtil {
     static getDeleteIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
             <Image
-                style={{height: 15, width: 15}}
-                source={require('../res/img/task_delete.png')}
+                style={{height: 13, width: 13}}
+                source={require('../res/img/taskReView/task_delete.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 8, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
 
         </TouchableOpacity>;
     };
@@ -145,11 +146,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
             <Image
-                style={{height: 15, width: 15}}
-                resizeMode={'stretch'}
-                source={require('../res/img/taskReView/review.png')}
+                style={{height: 17, width: 17}}
+                source={require('../res/img/task_release_review.png')}
             />
-            <Text style={{fontSize: 13, marginLeft: 8, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
+            <Text style={{fontSize: 14, marginLeft: 3, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
 
         </TouchableOpacity>;
     };
@@ -158,11 +158,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
             <Image
-                style={{height: 15, width: 15}}
-                source={require('../res/img/taskReView/zhiding.png')}
-                resizeMode={'stretch'}
+                style={{height: 17, width: 17}}
+                source={require('../res/img/task_top.png')}
             />
-            <Text style={{fontSize: 13, marginLeft: 8, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
+            <Text style={{fontSize: 14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
 
         </TouchableOpacity>;
     };
@@ -172,25 +171,23 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
             <Image
-                style={{height: 15, width: 15}}
-                source={require('../res/img/taskReView/tuijian.png')}
-                resizeMode={'stretch'}
+                style={{height: 17, width: 17}}
+                source={require('../res/img/task_recommended.png')}
             />
-            <Text style={{fontSize: 13, marginLeft: 8, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+            <Text style={{fontSize: 14, marginLeft: 3, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
     };
     static getUpdateIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 17}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: 14}}>
 
             <Image
-                style={{height: 15, width: 15}}
-                source={require('../res/img/taskReView/update.png')}
-                resizeMode={'stretch'}
+                style={{height: 14, width: 14}}
+                source={require('../res/img/task_update.png')}
             />
-            <Text style={{fontSize: 13, marginLeft: 8, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+            <Text style={{fontSize: 13, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
     };

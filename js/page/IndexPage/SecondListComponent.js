@@ -9,6 +9,7 @@ import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
 // import FastImage from '../../common/FastImage';
 import FastImage from 'react-native-fast-image';
+import SkeletonPlaceholder from '../../common/SkeletonPlaceholder';
 // import LinearGradient from 'react-native-linear-gradient';
 
 const width = Dimensions.get('window').width;
@@ -75,7 +76,7 @@ class SecondListComponent extends PureComponent {
     render() {
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-200, 0, 205],
-            outputRange: [lunboHeight + 210, lunboHeight +10, 25],
+            outputRange: [lunboHeight + 210, lunboHeight + 10, 25],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -151,13 +152,21 @@ class ScrollItem extends React.Component {
     render() {
 
         const {item} = this.props;
+
+        if (!item.task_name) {
+            return <SkeletonPlaceholder minOpacity={0.2}>
+                <View style={{width: 140, height: 100, marginRight: 10}}/>
+                <View style={{height: 15, width: 100, marginTop: 5}}/>
+                <View style={{height: 20, width: 50, marginTop: 2}}/>
+            </SkeletonPlaceholder>;
+        }
         return <TouchableOpacity
             onPress={() => {
                 NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
             }}
             key={item.id}
-            style={{height: 160, width: 150, paddingHorizontal:5}}>
-            <View style={{width: 140,}}>
+            style={{height: 160, width: 150, paddingHorizontal: 5}}>
+            <View style={{width: 140}}>
                 <FastImage
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
@@ -168,13 +177,17 @@ class ScrollItem extends React.Component {
                     // resizeMode={'stretch'}
                     source={{uri: item.task_uri}}
                 />
-                <Image source={require('../../res/img/zuixinfabu.png')} style={{position:'absolute',right:0,top:0,width:40,height:15}}/>
+                <Image source={require('../../res/img/zuixinfabu.png')}
+                       style={{position: 'absolute', right: 0, top: 0, width: 40, height: 15}}/>
             </View>
-            {item.task_name && <Text numberOfLines={1} style={{fontSize:13,width: 140,color:'black',marginTop:8,
-                opacity:0.7,
-            }}>{item.title} | {item.task_name}</Text>}
-            {item.reward_price && <View style={{flexDirection: 'row', height: 25, alignItems: 'center',marginTop:2,
-                zIndex:10,elevation:1
+            <View style={{ width: 140, flexDirection:'row', alignItems:'center', marginTop: 8}}>
+                <Text numberOfLines={1} style={{fontSize: 12, color: 'black', opacity:0.7}}>{item.title}</Text>
+                <View style={{width:3,height:3, borderRadius:3, backgroundColor:'black', marginHorizontal:2, opacity:0.7}}/>
+                <Text numberOfLines={1} style={{fontSize: 12, color: 'black',width: 110, opacity:0.7}}>{item.task_name}</Text>
+            </View>
+            {item.reward_price && <View style={{
+                flexDirection: 'row', height: 25, alignItems: 'center', marginTop: 2,
+                zIndex: 10, elevation: 1,
             }}>
                 <Text style={{
                     fontSize: 16,
@@ -188,8 +201,6 @@ class ScrollItem extends React.Component {
                     top: 1,
                 }}>元</Text>
             </View>}
-
-
 
 
         </TouchableOpacity>;
