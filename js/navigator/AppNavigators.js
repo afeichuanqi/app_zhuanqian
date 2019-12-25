@@ -53,12 +53,23 @@ const InitNavigator = createStackNavigator({
     },
 });
 const IOS_MODAL_ROUTES = ['TaskDetails'];
+// const IOS_MODAL_ROUTES1 = ['TaskRelease'];
 const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
     const isModal = IOS_MODAL_ROUTES.some(
         screenName =>
             screenName === transitionProps.scene.route.routeName ||
             (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName),
     );
+    // const isModal1 = IOS_MODAL_ROUTES1.some(
+    //     screenName =>
+    //         screenName === transitionProps.scene.route.routeName ||
+    //         (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName),
+    // );
+    // if (isModal1 && Platform.OS === 'android') {
+    //     return {
+    //         screenInterpolator: CardStackStyleInterpolator.forNoAnimation,
+    //     };
+    // }
     if (isModal) {
         return {
             screenInterpolator: CardStackStyleInterpolator.forFadeFromBottomAndroid,

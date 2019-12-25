@@ -6,10 +6,17 @@
  * @flow
  */
 
-import React, {PureComponent, Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import {
-    View, Text, TouchableOpacity, Dimensions, ScrollView, TextInput, findNodeHandle,
+    Dimensions,
+    findNodeHandle,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
     UIManager,
+    View,
+    Platform,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme} from '../appSet';
@@ -192,15 +199,14 @@ class TaskRelease extends PureComponent {
                 app_task_review_time: AppTskDefaultData.app_task_review_time,
                 app_task_order_time_limit: AppTskDefaultData.app_task_order_time_limit,
                 app_task_single_order_select: AppTskDefaultData.app_task_single_order_select,
-
             },
+            showColumn: false,
         };
         this.params = this.props.navigation.state.params;
         const {update} = this.params;
         this.taskInfo = this.props.taskInfo;
         this.taskInfo.update = update;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
-
     }
 
     onBackPress = () => {
@@ -208,38 +214,12 @@ class TaskRelease extends PureComponent {
         return true;
     };
 
-    componentDidMount() {
-        const {task_id, update} = this.params;
-        const {userinfo} = this.props;
-        if (task_id) {
-            genTaskReleaseInfoData({task_id}, userinfo.token).then(taskInfo => {
-                const stepData = JSON.parse(taskInfo.stepData);
-                taskInfo.stepData = stepData;
-                taskInfo.columnData.rewardPrice = taskInfo.columnData.rewardPrice.toString();
-                taskInfo.columnData.rewardNum = taskInfo.columnData.rewardNum.toString();
-                this.taskInfo = taskInfo;
-
-                this.taskInfo.update = update;//加标示
-                this.taskInfo.taskId = task_id;//加标示
-                this.forceUpdate();
-            });
-        } else {
-
-
-        }
-
-        selectTaskReleaseData().then((result) => {
-            this.setState({
-                data: result,
-            });
-        });
-        this.backPress.componentDidMount();
-    }
 
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
         const data = this._getTaskReleaseData();
         this.props.onSetTaskReleaseInfo(data);
+        this.timer && clearTimeout(this.timer);
     }
 
 
@@ -303,10 +283,10 @@ class TaskRelease extends PureComponent {
         const stepIndex = stepData && stepData.findIndex(d => d.type == 5);
         // console.log(stepIndex, 'stepIndex');
 
-        const task_uri = stepIndex != -1 ? (stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '') : '';
+        const task_uri = stepIndex !== -1 ? (stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '') : '';
 
         const task_steps = JSON.stringify(stepData);
-        const data = {
+        return {
             task_type_id,
             task_device_id,
             task_name,
@@ -320,7 +300,6 @@ class TaskRelease extends PureComponent {
             task_steps,
             task_uri,
         };
-        return data;
 
     };
     _addTaskReleaseData = () => {
@@ -345,9 +324,9 @@ class TaskRelease extends PureComponent {
             }
         } else {
             const isTrue = this.complyColumn.getIsTrue();
-            if(!isTrue){
+            if (!isTrue) {
                 this.toast.show('您未同意发布规则哦 ～ ～ ');
-                return ;
+                return;
 
             }
             const {userinfo} = this.props;
@@ -374,6 +353,87 @@ class TaskRelease extends PureComponent {
 
     };
 
+    componentDidMount() {
+
+        const {task_id, update} = this.params;
+        const {userinfo} = this.props;
+        if (task_id) {
+            genTaskReleaseInfoData({task_id}, userinfo.token).then(taskInfo => {
+                const stepData = JSON.parse(taskInfo.stepData);
+                taskInfo.stepData = stepData;
+                taskInfo.columnData.rewardPrice = taskInfo.columnData.rewardPrice.toString();
+                taskInfo.columnData.rewardNum = taskInfo.columnData.rewardNum.toString();
+                this.taskInfo = taskInfo;
+                this.taskInfo.update = update;//加标示
+                this.taskInfo.taskId = task_id;//加标示
+                this.forceUpdate();
+            });
+        } else {
+        }
+
+        selectTaskReleaseData().then((result) => {
+            this.setState({
+                data: result,
+            });
+        });
+        this.timer = setTimeout(() => {
+            this.setState({
+                showColumn: true,
+            });
+        }, Platform.OS === 'android' ? 200 : 150);
+        this.backPress.componentDidMount();
+    }
+
+    renderColumn = () => {
+        return <View style={{flex: 1, backgroundColor: '#e8e8e8'}}>
+            <View style={{height: 40, backgroundColor: 'white'}}>
+                <Text style={{fontSize: 15, marginTop: 10, marginLeft: 10, color: 'black'}}>请选择类型</Text>
+            </View>
+            <View style={{marginTop: 10, height: 40, backgroundColor: 'white'}}>
+                <Text style={{fontSize: 15, marginTop: 10, marginLeft: 10, color: 'black'}}>支持设备</Text>
+            </View>
+            <View style={{backgroundColor: 'white', marginTop: 10}}>
+                {this.getXuniTitle('项目名称', '请输入项目名称')}
+                {this.getXuniTitle('标题', '关键字')}
+                {this.getXuniTitle('任务说明', '需求备注')}
+                {this.getXuniTitle('接单时限', '15分钟')}
+                {this.getXuniTitle('做单次数', '每人一次')}
+            </View>
+            <View style={{backgroundColor: 'white', marginTop: 10}}>
+                {this.getXuniTitle('悬赏单价', '最低 0.5 元')}
+                {this.getXuniTitle('悬赏数量', '最少 10 单')}
+                {this.getXuniTitle('预付赏金', '服务费、成交额12%')}
+
+            </View>
+            <View style={{backgroundColor: 'white', marginTop: 10}}>
+                <View style={{
+                    flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 15, alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}>
+                    <Text style={{fontSize: 14, color: 'black'}}>添加步骤</Text>
+                    <SvgUri width={20} style={{marginLeft: 5}} height={20}
+                            svgXmlData={step_add}/>
+                </View>
+
+            </View>
+            {/*顶部提示*/}
+            <ComplyColumn ref={ref => this.complyColumn = ref}/>
+        </View>;
+    };
+    getXuniTitle = (title, placeholder) => {
+        return <View style={{
+            flexDirection: 'row',
+            paddingHorizontal: 10,
+            paddingVertical: Platform.OS === 'android' ? 10 : 15,
+            alignItems: 'center',
+        }}>
+            <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
+            <TextInput style={{marginLeft: 20, fontSize: 15, color: 'black', padding: 0}}
+                       placeholderTextColor={'rgba(0,0,0,0.5)'}
+                       placeholder={placeholder}/>
+        </View>;
+    };
+
     render() {
         let statusBar = {
             hidden: false,
@@ -385,10 +445,11 @@ class TaskRelease extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const {userinfo} = this.props;
-        const {data} = this.state;
+        const {data, showColumn} = this.state;
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16, () => {
             NavigationUtils.goPage({type: 1}, 'UserProtocol');
         }, false, true, '发布须知', 'white');
+        console.log(this.taskInfo);
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -398,7 +459,7 @@ class TaskRelease extends PureComponent {
                 <Toast
                     ref={ref => this.toast = ref}
                 />
-                <ScrollView
+                {showColumn ? <ScrollView
                     keyboardShouldPersistTaps={'always'}
                     ref={ref => this.scrollView = ref}
                     style={{backgroundColor: '#e8e8e8'}}>
@@ -412,7 +473,7 @@ class TaskRelease extends PureComponent {
                         ref={ref => this.deviceSelect = ref}
                         typeArr={data.app_task_device}
                         style={{marginTop: 10}} title={'支持设备'}/>
-                    {/*栏目加步骤*/}
+                    {/*/!*栏目加步骤*!/*/}
                     <BottomInfoForm
                         taskInfo={this.taskInfo}
                         data={data}
@@ -421,7 +482,8 @@ class TaskRelease extends PureComponent {
                         scollToEnd={this._scollToEnd}/>
                     {/*顶部提示*/}
                     <ComplyColumn ref={ref => this.complyColumn = ref}/>
-                </ScrollView>
+                </ScrollView> : this.renderColumn()}
+
                 <View style={{borderTopWidth: 0.5, borderTopColor: '#f6f6f6', flexDirection: 'row'}}>
                     <TouchableOpacity
                         onPress={this._goReleaseTest}
@@ -597,7 +659,7 @@ class BottomInfoForm extends Component {
         // if (ReplayNumArray) {
         //
         // }
-        console.log('render');
+        // console.log('render');
         return <View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('项目名称', 1, {
@@ -770,7 +832,7 @@ class InputSelect extends Component {
 
                 }}
             >
-                <Text style={{fontSize: 14}}>{title}</Text>
+                <Text style={{fontSize: 14,color:'black'}}>{title}</Text>
             </TouchableOpacity>
             {this.state.showPopBtn ?
                 <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
@@ -952,7 +1014,7 @@ class InputSetting extends Component {
             width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
             alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
-            <Text style={{width: width / 4.2, fontSize: 13}}>{title}</Text>
+            <Text style={{width: width / 4.2, fontSize: 13,color:'black'}}>{title}</Text>
             <TextInput
                 editable={rightComponentData.editable}
                 style={{flex: 1, color: 'red', padding: 0, fontSize: 13}}
@@ -1072,7 +1134,6 @@ class StepInfo extends Component {
                     // 获取一个时间戳
                     const timestamp = !timestamp_ ? new Date().getTime() : timestamp_;//有则保存 无则创建
                     let imageData = {};
-                    // console.log(data.uri && Object.prototype.toString.call(data.uri)==='[object Object]',"Object.prototype.toString.call(data.uri)")
                     if (data.uri && Object.prototype.toString.call(data.uri) === '[object Object]') { //是否是本地图片
 
                         imageData = data.uri;
@@ -1107,18 +1168,8 @@ class StepInfo extends Component {
                             this.props.scollToEnd();
                         }, 200);
                     }
-                    // if (rightTitle === '更新') {
-                    //     setTimeout(() => {
-                    //         this.props.scollToEnd();
-                    //     }, 200);
-                    // }
-
                 }}
                 ref={ref => this.taskPop = ref}/>
-            {/*图片浏览器*/}
-            {/*<ImageViewerModal*/}
-            {/*    ref={ref => this.imageViewerModal = ref}*/}
-            {/*/>*/}
         </View>;
 
     }
@@ -1172,7 +1223,7 @@ class TypeSelect extends Component {
         const {title, typeArr} = this.props;
         return <View style={[{backgroundColor: 'white', paddingBottom: 20}, this.props.style]}>
             <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
-                <Text style={{fontSize: 15}}>{title}</Text>
+                <Text style={{fontSize: 15 ,color:'black'}}>{title}</Text>
             </View>
             <View style={{
 
@@ -1228,7 +1279,6 @@ class TypeComponent extends Component {
     shouldComponentUpdate(nextProps, nextState) {
 
         if (this.props.checked != nextProps.checked || this.props.data.title != nextProps.data.title || this.props.data.id != nextProps.data.id) {
-            // console.log('我该更新了');
             return true;
         }
         return false;
