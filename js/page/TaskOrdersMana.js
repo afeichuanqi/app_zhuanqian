@@ -413,11 +413,11 @@ class OrdersItem extends React.Component {
                     />
                     {status == 1 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>到期时间:{item.orderExpTime}</Text>
+                        <Text style={{fontSize: 13,color:'black', opacity: 0.7, marginTop: 5}}>到期时间:{item.orderExpTime}</Text>
                         <Text style={{color: 'red', fontSize: 13, marginTop: 5}}>请在{item.orderTimeTitle}内完成</Text>
                     </View> : status == 2 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>{item.taskId} - {item.task_title}</Text>
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5}}>审核期限:{item.reviewExpTime}</Text>
+                        <Text style={{fontWeight: 'bold',color:'black'}}>{item.taskId} - {item.task_title}</Text>
+                        <Text style={{fontSize: 13,color:'black', opacity: 0.7, marginTop: 5}}>审核期限:{item.reviewExpTime}</Text>
                         <Text style={{
                             color: 'red',
                             fontSize: 13,

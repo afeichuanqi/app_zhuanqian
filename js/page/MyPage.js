@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent, Component} from 'react';
-import {ActivityIndicator, RefreshControl} from 'react-native';
+import {ActivityIndicator, ImageBackground} from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView} from 'react-native';
@@ -240,12 +240,20 @@ class BottomInfoColumn extends Component {
                     source={require('../res/img/my/chongzhi_mana.png')}
                     info={'做任务、充赏金'}
                     onPress={() => {
-                        MenuClick('TaskOrdersMana');
-                        notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
+                        MenuClick('RechargePage');
                     }}
                     isOtherMsg={notice_arr[2] > 0}
                 />
-                <ToolsItemComponent/>
+                <ToolsItemComponent
+                    title={'提现管理'}
+                    source={require('../res/img/my/tixian_mana.png')}
+                    info={'赏金提现'}
+                    onPress={() => {
+                        MenuClick('WithDrawPage');
+                        // notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
+                    }}
+                    isOtherMsg={notice_arr[2] > 0}
+                />
             </ScrollView>
 
             {ViewUtil.getSettingItem(guanzhu2, '我的关注', '关注列表', () => {
@@ -381,13 +389,16 @@ class TopInfoColumn extends PureComponent {
         // });
         const {userinfo} = this.props;
         const opacity = Animated.interpolate(this.props.scrollY, {
-            inputRange: [0, 120],
-            outputRange: [1, 0.1],
+            inputRange: [0, 30,120],
+            outputRange: [1, 0.1,0.1],
             extrapolate: 'clamp',
         });
         // console.log('');
         // console.log(userinfo);
-        return <View style={{backgroundColor: bottomTheme}}>
+        return <ImageBackground
+            resizeMode={'stretch'}
+            source={require('../res/img/my/my_background.png')}
+            style={{backgroundColor: bottomTheme}}>
             <View style={{marginTop: 130, height: 0}}/>
             <Animated.View
                 style={{height: 130, opacity, position: 'absolute', top: 0}}>
@@ -440,7 +451,6 @@ class TopInfoColumn extends PureComponent {
                 </View>
                 {/*基本信息栏目*/}
                 <View style={{
-                    // marginTop: 50,
                     flexDirection: 'row',
                     justifyContent: 'space-around',
 
@@ -454,7 +464,7 @@ class TopInfoColumn extends PureComponent {
             <PickerImage showMorePhotos={true} cropping={true} includeBase64={true} select={this._avatarSelect}
                          popTitle={'选取头像'}
                          ref={ref => this.pickerImage = ref}/>
-        </View>;
+        </ImageBackground>;
     }
 
     _avatarSelect = (imageData) => {

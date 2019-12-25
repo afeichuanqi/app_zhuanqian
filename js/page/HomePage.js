@@ -7,12 +7,13 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Animated, Dimensions, StyleSheet, View, Text} from 'react-native';
+import {Animated, Dimensions, StyleSheet, View, Text, StatusBar} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationUtils from '../navigator/NavigationUtils';
+import PromotionToast from '../common/PromotionToast';
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
 
@@ -52,9 +53,12 @@ class HomePage extends PureComponent {
             delay: 250,
         }).start(() => {
             NavigationUtils.navigation = this.props.navigation;
+            StatusBar.setBarStyle('dark-content', false);
+            StatusBar.setBackgroundColor(theme, false);
             this.setState({
                 showAnimated: false,
             });
+            this.promotionToast.show()
         });
     };
 
@@ -86,7 +90,7 @@ class HomePage extends PureComponent {
                         bottom: 100, height: 25, width: Dimensions.get('window').width, alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                        <Text style={{color:'white', fontSize:22}}>兼职 赚钱</Text>
+                        <Text style={{color: 'white', fontSize: 22}}>兼职 赚钱</Text>
                         {/*<Text style={{color:'white'}}>芜湖易尔通</Text>*/}
 
                     </View>
@@ -100,6 +104,7 @@ class HomePage extends PureComponent {
                     <DynamicTabNavigator/>
 
                 </SafeAreaViewPlus>
+                <PromotionToast ref={ref => this.promotionToast = ref}/>
             </View>
 
         );

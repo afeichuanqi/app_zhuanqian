@@ -136,17 +136,21 @@ class MyModalBox extends PureComponent {
                                 }}>
                                 <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
                             </TouchableOpacity>
-                            <ImageBackground
-                                style={{width: (width - 40) / 2,height: 50,top: 1,justifyContent: 'center',
-                                    alignItems: 'center', backgroundColor: bottomTheme,}}
-                                source={require('../res/img/buttombackground.png')}>
-                                <TouchableOpacity
-                                    activeOpacity={0.6}
-                                    onPress={this._sure}
-                                    >
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                onPress={this._sure}
+                            >
+                                <ImageBackground
+                                    style={{
+                                        width: (width - 40) / 2, height: 50, top: 1, justifyContent: 'center',
+                                        alignItems: 'center', backgroundColor: bottomTheme,
+                                    }}
+                                    source={require('../res/img/buttombackground.png')}>
+
                                     <Text style={{color: 'white'}}>{rightTitle}</Text>
-                                </TouchableOpacity>
-                            </ImageBackground>
+
+                                </ImageBackground>
+                            </TouchableOpacity>
                         </View>
                     </Animated.View>
 

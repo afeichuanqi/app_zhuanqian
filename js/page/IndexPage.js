@@ -34,7 +34,6 @@ import SecondListComponent from './IndexPage/SecondListComponent';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import {Command} from 'react-native/ReactCommon/hermes/inspector/tools/msggen/src/Command';
 import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 
@@ -65,15 +64,14 @@ class HomePage extends PureComponent {
         Global.token = this.props.userinfo.token;
         Global.dispatch = this.props.dispatch;
         ChatSocket.connctionServer();
-        if (Platform.OS === 'android') {
-            setTimeout(() => {
-                StatusBar.setBarStyle('dark-content', false);
-                StatusBar.setBackgroundColor(theme, false);
-            }, 500);
-        } else {
-            StatusBar.setBarStyle('dark-content', false);
-            StatusBar.setBackgroundColor(theme, false);
-        }
+        // if (Platform.OS === 'android') {
+        //     setTimeout(() => {
+        //
+        //     }, 500);
+        // } else {
+        //     StatusBar.setBarStyle('dark-content', false);
+        //     StatusBar.setBackgroundColor(theme, false);
+        // }
 
 
     }

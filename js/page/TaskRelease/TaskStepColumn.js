@@ -15,7 +15,7 @@ import {
     Clipboard,
     StyleSheet,
     TouchableOpacity,
-    Linking,
+    Linking, Image,
 } from 'react-native';
 import {bottomTheme} from '../../appSet';
 import SvgUri from 'react-native-svg-uri';
@@ -48,7 +48,8 @@ class StepBox extends PureComponent {
             }}>
                 <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
                     {this.getNumNo(this.props.no)}
-                    <Text style={{fontSize: 15, marginLeft: 5, letterSpacing: 3,color:'black'}}>第{this.props.no}步</Text>
+                    <Text
+                        style={{fontSize: 15, marginLeft: 5, letterSpacing: 3, color: 'black'}}>第{this.props.no}步</Text>
                 </View>
                 {this.props.children}
                 {/*<View style={{height:40}}/>*/}
@@ -88,7 +89,7 @@ class StepBox extends PureComponent {
             activeOpacity={0.6}
             style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10}}>
             <SvgUri width={size} height={size} fill={'rgba(0,0,0,0.5)'} svgXmlData={svgXmlData}/>
-            <Text style={{marginLeft: 5, color:'black'}}>{title}</Text>
+            <Text style={{marginLeft: 5, color: 'black'}}>{title}</Text>
         </TouchableOpacity>;
     };
     getNumNo = (num) => {
@@ -257,7 +258,7 @@ class TaskStepColumn extends Component {
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={{
                             marginTop: 20, fontSize: 15, lineHeight: 25,
-                            letterSpacing: 0.2, color:'black'
+                            letterSpacing: 0.2, color: 'black',
                         }}>{typeData.info}</Text>
                     </View>
                     <View style={{
@@ -298,7 +299,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2, color:'black'
+                        letterSpacing: 0.2, color: 'black',
                     }}>{typeData.info}</Text>
                     <View style={{
                         flexDirection: 'row',
@@ -346,7 +347,17 @@ class TaskStepColumn extends Component {
                                             }}>
                                             <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
                                         </TouchableOpacity>
-                                    </View> : null
+                                    </View> : uploadStatus == 1 ?
+                                        <Image
+                                            resizeMode={'contain'}
+                                            source={require('../../res/img/yanzhengbiaozhu/yanzhengtu.png')}
+                                            style={{
+                                                position: 'absolute',
+                                                left: 0,
+                                                top: 0,
+                                                width: 40,
+                                                height: 15,
+                                            }}/> : null
                             }
                         </TouchableOpacity>
 
@@ -367,7 +378,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2, color:'black'
+                        letterSpacing: 0.2, color: 'black',
                     }}>{typeData.info}</Text>
                     <View style={{flexDirection: 'row', marginTop: 20, paddingHorizontal: 10, alignItems: 'center'}}>
 
@@ -421,7 +432,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2, color:'black'
+                        letterSpacing: 0.2, color: 'black',
                     }}>{typeData.info}</Text>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -475,7 +486,17 @@ class TaskStepColumn extends Component {
                                             }}>
                                             <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
                                         </TouchableOpacity>
-                                    </View> : null
+                                    </View> : uploadStatus == 1 ?
+                                        <Image
+                                            resizeMode={'contain'}
+                                            source={require('../../res/img/yanzhengbiaozhu/tuwenshuoming.png')}
+                                            style={{
+                                                position: 'absolute',
+                                                left: 0,
+                                                top: 0,
+                                                width: 40,
+                                                height: 15,
+                                            }}/> : null
                             }
                         </View>
 
@@ -489,7 +510,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2, color:'black'
+                        letterSpacing: 0.2, color: 'black',
                     }}>{typeData.info}</Text>
                     <View
 
@@ -550,7 +571,17 @@ class TaskStepColumn extends Component {
                                             }}>
                                             <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
                                         </TouchableOpacity>
-                                    </View> : null
+                                    </View> : uploadStatus == 1 ?
+                                        <Image
+                                            resizeMode={'contain'}
+                                            source={require('../../res/img/yanzhengbiaozhu/yanzhengtu.png')}
+                                            style={{
+                                                position: 'absolute',
+                                                left: 0,
+                                                top: 0,
+                                                width: 40,
+                                                height: 15,
+                                            }}/> : null
                             }
                         </TouchableOpacity>
                         {/*{}*/}
@@ -682,7 +713,7 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <Text style={{
                         marginTop: 20, fontSize: 15, paddingHorizontal: 10, lineHeight: 25,
-                        letterSpacing: 0.2, color:'black'
+                        letterSpacing: 0.2, color: 'black',
                     }}>{typeData.collectInfo}</Text>
                     <View style={{
                         flexDirection: 'row', marginTop: 10, paddingHorizontal: 10, alignItems: 'center',

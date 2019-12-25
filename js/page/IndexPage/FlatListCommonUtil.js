@@ -25,21 +25,22 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     componentDidMount(): void {
-        // selectAllRecommendTask({pageIndex: this.page.pageIndex, type: this.props.type}).then(result => {
-        //     this.setState({
-        //         taskData: result,
-        //         isLoading: false,
-        //         hideLoaded: result.length >= 30 ? false : true,
-        //     });
-        // }).catch(() => {
-        //     this.setState({
-        //         isLoading: false,
-        //         hideLoaded: true,
-        //     });
-        // });
-        setTimeout(() => {
-            this._updateList(true, this.props.type == 1 ? true : false);
-        }, 500);
+        if (this.props.type === 1) {
+            selectAllRecommendTask({pageIndex: this.page.pageIndex, type: this.props.type}).then(result => {
+                this.setState({
+                    taskData: result,
+                    isLoading: false,
+                    hideLoaded: result.length >= 30 ? false : true,
+                });
+            }).catch(() => {
+                this.setState({
+                    isLoading: false,
+                    hideLoaded: true,
+                });
+            });
+        } else {
+            this._updateList(true);
+        }
 
     }
 
@@ -59,7 +60,7 @@ export default class FlatListCommonUtil extends PureComponent {
         hideLoaded: false,
     };
 
-    _updateList = (refresh, hideRefresh = false) => {
+    _updateList = (refresh) => {
         if (refresh) {
 
             this.props.onRefresh(true);

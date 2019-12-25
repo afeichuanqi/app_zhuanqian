@@ -171,19 +171,18 @@ class ScrollItem extends React.Component {
                 <FastImage
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
-                        width:100,
                         height: 100,
                         borderRadius: 5,
                     }}
                     // resizeMode={'stretch'}
                     source={{uri: item.task_uri}}
                 />
-                <Image source={require('../../res/img/zuixinfabu.png')}
-                       style={{position: 'absolute', right: 0, top: 0, width: 35, height: 13}}/>
+                <Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}
+                       style={{position: 'absolute', right: 0, top: 0, width: 35, height: 15}}/>
             </View>
-            <View style={{ width: 100, flexDirection:'row', alignItems:'center', marginTop:3}}>
+            <View style={{flexDirection:'row', alignItems:'center', marginTop:3}}>
                 <Text numberOfLines={1} style={{fontSize: 12, color: 'black', opacity:0.7}}>{item.title}</Text>
-                <View style={{width:2,height:2, borderRadius:2, backgroundColor:'black', marginHorizontal:2, opacity:0.7}}/>
+                <View style={{width:2,height:2, borderRadius:2, backgroundColor:'black', marginHorizontal:3, opacity:0.7}}/>
                 <Text numberOfLines={1} style={{fontSize: 12, color: 'black',width: 65, opacity:0.7}}>{item.task_name}</Text>
             </View>
             {item.reward_price && <View style={{

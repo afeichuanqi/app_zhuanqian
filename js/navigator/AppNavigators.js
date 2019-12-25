@@ -38,6 +38,8 @@ import MyFavoritePage from '../page/MyFavoritePage';
 import MyShieldPage from '../page/MyShieldPage';
 import MyViewHistoryPage from '../page/MyViewHistoryPage';
 import SystemNotificationPage from '../page/SystemNotificationPage';
+import RechargePage from '../page/RechargePage';
+import WithDrawPage from '../page/WithDrawPage';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 
@@ -253,6 +255,18 @@ const MainNavigator = createStackNavigator({
         },
         MyViewHistoryPage: {
             screen: MyViewHistoryPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        RechargePage: {
+            screen: RechargePage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        WithDrawPage: {
+            screen: WithDrawPage,
             navigationOptions: {
                 header: null,
             },

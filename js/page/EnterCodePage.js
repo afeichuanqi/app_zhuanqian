@@ -70,7 +70,7 @@ export default class EnterCodePage extends PureComponent {
                         marginTop: 40,
                         marginLeft: 40,
                         fontSize: 20,
-                        color:'black'
+                        color: 'black',
                     }}>输入验证码</Text>
                     {/*<View></View>*/}
                     <Text style={{
@@ -78,7 +78,7 @@ export default class EnterCodePage extends PureComponent {
                         fontSize: 12,
                         marginTop: 10,
                         opacity: 0.6,
-                        color:'black'
+                        color: 'black',
                     }}>验证码已经发送至{this.params.phone}</Text>
 
                     <CodeInputRedux showError={this._showError} phone={this.params.phone}
@@ -217,6 +217,10 @@ class CodeInput extends PureComponent {
 
     }
 
+    componentWillUnmount() {
+        this.timer && clearTimeout(this.timer);
+    }
+
     getCodeIpt = (index) => {
 
         return <View
@@ -267,10 +271,10 @@ class CodeInput extends PureComponent {
                 style={{
                     fontSize: 20,
                     // marginLeft: 25,
-                    color:'black',
+                    color: 'black',
 
                     width: 50,
-                    textAlign:'center',
+                    textAlign: 'center',
 
                 }}/>
         </View>;
@@ -294,9 +298,9 @@ class CodeInput extends PureComponent {
                 Global.token = data.token;//进行验证token
                 ChatSocket.verifyIdentidy();//进行验证token
                 NavigationUtils.goBack(navigation, key);
-                setTimeout(()=>{
+                this.timer = setTimeout(() => {
                     ChatSocket.selectAllFriendMessage(20);//进行获取好友列表
-                },2000)
+                }, 5000);
             } else {
 
                 // console.log(data.msg, 'data.msg');

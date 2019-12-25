@@ -15,7 +15,7 @@ import {
     ActivityIndicator,
     Dimensions,
     FlatList,
-    RefreshControl,  Text,
+    RefreshControl, Text,
     View, StatusBar,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -63,10 +63,8 @@ class MyViewHistoryPage extends PureComponent {
         }
 
         getAllViewHistorys({
-
             pageIndex: this.page.pageIndex,
         }, userinfo.token).then(result => {
-            console.log(result, 'result');
             if (isRefresh) {
                 this.setState({
                     taskData: result,
@@ -136,7 +134,7 @@ class MyViewHistoryPage extends PureComponent {
                         onEndReached={() => {
                             // 等待页面布局完成以后，在让加载更多
                             setTimeout(() => {
-                                if (this.canLoadMore && this.taskData >= 10) {
+                                if (this.canLoadMore && taskData.length >= 10) {
                                     this.onLoading();
                                     this.canLoadMore = false; // 加载更多时，不让再次的加载更多
                                 }
@@ -161,7 +159,14 @@ class MyViewHistoryPage extends PureComponent {
         this._updatePage(false);
     };
     _renderIndexPath = ({item, index}) => {
-        return <TaskInfoComponent key={item.taskId} item={item}/>;
+        // task_uri
+        item.avatarUrl = item.task_uri;
+        return <TaskInfoComponent
+            avatarStyle={{borderRadius: 3}}
+
+            key={item.taskId}
+            item={item}/>;
+
     };
     page = {
         pageIndex: 0,

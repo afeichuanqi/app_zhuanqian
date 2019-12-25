@@ -68,7 +68,7 @@ class DynamicTabNavigator extends Component<Props> {
                     }}
                     initialLayout={{width}}
                     lazy={false}
-                    timingConfig={{duration: 10}}
+                    timingConfig={{duration: 1}}
                     // swipeEnabled={false}
                 />
                 <BottomBarRedux onPress={(index) => {

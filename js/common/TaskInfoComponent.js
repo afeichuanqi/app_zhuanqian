@@ -117,7 +117,7 @@ class TaskInfoComponent extends PureComponent {
             // onPressOut={this._onPressOut}
         >
             <FastImage
-                style={[styles.imgStyle]}
+                style={[styles.imgStyle,this.props.avatarStyle]}
                 source={{uri: item.avatarUrl}}
                 resizeMode={FastImage.resizeMode.stretch}
             />

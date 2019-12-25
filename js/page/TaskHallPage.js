@@ -84,7 +84,7 @@ class TaskHallPage extends PureComponent {
                 {/*顶部样式*/}
                 <View style={{
                     backgroundColor: bottomTheme,
-                    height: 50,
+                    height: 60,
                     width,
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -474,8 +474,8 @@ class HeadlineComponent extends PureComponent {
             <Image
                 resizeMode={'stretch'}
                 source={require('../res/img/index_hot.png')} style={{
-                width: 45, height: 18, marginLeft: 20,
-                marginBottom: 3,
+                width: 42, height: 16, marginLeft: 20,
+                marginBottom: 5,
             }}/>
             <View style={{
                 flex: 1,
@@ -594,15 +594,6 @@ class TopLeftFilterComponent extends Component {
                             color: 'black',
                             fontWeight: '400',
                         } : {color: '#767676'}]}>{item.title}</Text>
-
-                        {/*{Lindex === index && <View style={{*/}
-                        {/*    height: 3,*/}
-                        {/*    width: 17,*/}
-                        {/*    backgroundColor: bottomTheme,*/}
-                        {/*    position: 'absolute',*/}
-                        {/*    bottom: -8,*/}
-                        {/*    // left:8,*/}
-                        {/*}}/>}*/}
 
                     </TouchableOpacity>;
                 })}

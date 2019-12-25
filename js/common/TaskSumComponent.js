@@ -107,14 +107,14 @@ class TaskSumComponent extends Component {
                         <Text
                             numberOfLines={1}
                             style={{
-                                fontSize: 16,
+                                fontSize: 17,
                                 color: 'black',
                                 // fontWeight: '400',
                                 maxWidth: maxWidth,
                                 marginRight: 10,
                             }}>
                             {taskTitle} {emojiArr.map((item,index) => {
-                            return <Emoji key={index} name={item} style={{fontSize: 16}}/>;
+                            return <Emoji key={index} name={item} style={{fontSize: 17}}/>;
                         })}
                         </Text>
 
