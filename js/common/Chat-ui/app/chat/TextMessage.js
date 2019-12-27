@@ -50,7 +50,7 @@ export default class TextMessage extends PureComponent {
             {views}
           </View>
           {chatType !== 'group' && isSelf && showIsRead && (
-            <Text style={[{ textAlign: 'right', fontSize: 13 }, isReadStyle]}>
+            <Text style={[{ textAlign: 'right', fontSize: 13 ,color:'black'}, isReadStyle]}>
               {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
             </Text>
           )}
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    borderRadius: 12,
-    paddingHorizontal: 15,
+    borderRadius: 8,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     maxWidth: width - 160,
     minHeight: 20,
@@ -101,20 +101,20 @@ const styles = StyleSheet.create({
     width: 0,
     height: 0,
     zIndex: 999,
-    borderWidth: 6,
+    borderWidth: 5,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     borderColor: '#fff',
-    marginTop: 8
+    marginTop: 5
   },
   left_triangle: {
     borderLeftWidth: 0,
-    borderRightWidth: Platform.OS === 'android' ? 6 : 10,
+    borderRightWidth: Platform.OS === 'android' ? 6 : 6,
     marginLeft: 5
   },
   right_triangle: {
     borderRightWidth: 0,
-    borderLeftWidth: Platform.OS === 'android' ? 6 : 10,
+    borderLeftWidth: Platform.OS === 'android' ? 6 : 6,
     borderColor: '#a0e75a',
     marginRight: 5
   },

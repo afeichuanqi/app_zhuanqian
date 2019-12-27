@@ -134,10 +134,15 @@ class MsgList extends Component {
                 this.flatList.getNode().scrollToOffset({animated: true, viewPosition: 0, index: 0});
             }
         });
+        EventBus.getInstance().addListener(EventTypes.update_message_page, this.listener1 = data => {
+            console.log("update_message_page111");
+            this.onRefresh();
+        });
     }
 
     componentWillUnmount(): void {
         EventBus.getInstance().removeListener(this.listener);
+        EventBus.getInstance().removeListener(this.listener1);
         this.timer && clearTimeout(this.timer);
     }
 
@@ -218,7 +223,6 @@ class MsgList extends Component {
             this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength, result.noticeArr);
         });
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
-        console.log('我被触发');
     };
     _renderIndexPath = ({item, index}) => {
         return <MessageItemComponent key={item.FriendId} item={item}/>;

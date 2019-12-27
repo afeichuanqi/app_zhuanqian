@@ -118,7 +118,7 @@ class SystemNotificationPage extends PureComponent {
                 {TopColumn}
                 <View style={{flex:1, marginBottom:10}}>
                     <AnimatedFlatList
-                        style={{backgroundColor: '#f1f1f1'}}
+                        style={{backgroundColor: '#f5f5f5'}}
                         ListEmptyComponent={<EmptyComponent type={4} height={height - 80} message={'您还没有相关任务'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
@@ -222,7 +222,7 @@ class NoticeItem extends Component {
             </View>
             <View style={{
                 width: width - 20, backgroundColor: 'white',
-                paddingHorizontal: 10, borderRadius: 10,
+                paddingHorizontal: 10, borderRadius: 10, paddingVertical:10,
             }}>
                 <Text style={{marginVertical: 10, fontSize: 16}}>{item.title}</Text>
                 <View style={{height: 1, width: width - 40, backgroundColor: '#e8e8e8'}}/>

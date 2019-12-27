@@ -65,27 +65,27 @@ const getCurrentTime = (time = 0) => {
   }
 
   if (delay > 1 && myday === oldday && oldyear === myyear) {
-    return `${oldm}/${oldd} ${oldh}:${oldmin}`
+    return `${oldm}-${oldd} ${oldh}:${oldmin}`
   }
 
   if (delay > 1 && myday === oldday && oldyear < myyear) {
-    return `${oldyear}/${oldm}/${oldd} ${oldh}:${oldmin}`
+    return `${oldyear}-${oldm}-${oldd} ${oldh}:${oldmin}`
   }
 
   if (delay > 1 && myday < oldday && oldyear === myyear) {
-    return `${oldm}/${oldd} ${oldh}:${oldmin}`
+    return `${oldm}-${oldd} ${oldh}:${oldmin}`
   }
 
   if (delay > 1 && myday > oldday && oldyear === myyear && delay > 7) {
-    return `${oldm}/${oldd} ${oldh}:${oldmin}`
+    return `${oldm}-${oldd} ${oldh}:${oldmin}`
   }
 
   if (delay > 1 && myday > oldday && delay >= 7 && oldyear < myyear) {
-    return `${oldyear}/${oldm}/${oldd} ${oldh}:${oldmin}`
+    return `${oldyear}-${oldm}-${oldd} ${oldh}:${oldmin}`
   }
 
   if (delay > 1 && myday < oldday && oldyear < myyear) {
-    return `${oldyear}/${oldm}/${oldd} ${oldh}:${oldmin}`
+    return `${oldyear}-${oldm}-${oldd} ${oldh}:${oldmin}`
   }
 }
 

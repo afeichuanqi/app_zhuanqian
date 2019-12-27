@@ -242,7 +242,7 @@ class ChatWindow extends PureComponent {
                         borderRadius: 4,
                         marginBottom: 10,
                     }}>
-                        <Text style={{color: '#333', fontSize: 10}}>好友关系异常，发送失败</Text>
+                        <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 12}}>好友关系异常，发送失败</Text>
                     </View>;
                 default :
                     return null;
@@ -263,8 +263,8 @@ class ChatWindow extends PureComponent {
         },
         renderMessageTime: (time) =>
             <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>
-                <View style={{backgroundColor: '#e6e6e6', paddingVertical: 4, paddingHorizontal: 8, borderRadius: 16}}>
-                    <Text style={{color: '#333', fontSize: 10}}>{getCurrentTime(parseInt(time))}</Text>
+                <View style={{backgroundColor: '#f5f5f5', paddingVertical: 4, paddingHorizontal: 8, borderRadius: 16}}>
+                    <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 12}}>{getCurrentTime(parseInt(time))}</Text>
                 </View>
             </View>,
         placeholder: '请输入...',
@@ -862,107 +862,115 @@ class ChatWindow extends PureComponent {
         await this.props.loadHistory();
     };
 
-    _onEmojiSelected(code) {
-        let emojiReg = new RegExp('\\[[^\\]]+\\]', 'g');
-        if (code === '') {
-            return;
-        }
-
-        let lastText = '';
-        let currentTextLength = this.state.messageContent.length;
-
-        if (code === '/{del}') { // 删除键
-            if (currentTextLength === 0) {
+    _onEmojiSelected(code, index) {
+        if (index === 0) {
+            let emojiReg = new RegExp('\\[[^\\]]+\\]', 'g');
+            if (code === '') {
                 return;
             }
 
-            if (this.state.cursorIndex < currentTextLength) { // 光标在字符串中间
-                let emojiIndex = this.state.messageContent.search(emojiReg); // 匹配到的第一个表情符位置
+            let lastText = '';
+            let currentTextLength = this.state.messageContent.length;
 
-                if (emojiIndex === -1) { // 没有匹配到表情符
-                    let preStr = this.state.messageContent.substring(0, this.state.cursorIndex);
-                    let nextStr = this.state.messageContent.substring(this.state.cursorIndex);
-                    lastText = preStr.substring(0, preStr.length - 1) + nextStr;
+            if (code === '/{del}') { // 删除键
+                if (currentTextLength === 0) {
+                    return;
+                }
 
-                    this.setState({
-                        cursorIndex: preStr.length - 1,
-                    });
-                } else {
-                    let preStr = this.state.messageContent.substring(0, this.state.cursorIndex);
-                    let nextStr = this.state.messageContent.substring(this.state.cursorIndex);
+                if (this.state.cursorIndex < currentTextLength) { // 光标在字符串中间
+                    let emojiIndex = this.state.messageContent.search(emojiReg); // 匹配到的第一个表情符位置
 
-                    let lastChar = preStr.charAt(preStr.length - 1);
-                    if (lastChar === ']') {
-                        let castArray = preStr.match(emojiReg);
+                    if (emojiIndex === -1) { // 没有匹配到表情符
+                        let preStr = this.state.messageContent.substring(0, this.state.cursorIndex);
+                        let nextStr = this.state.messageContent.substring(this.state.cursorIndex);
+                        lastText = preStr.substring(0, preStr.length - 1) + nextStr;
 
-                        if (!castArray) {
-                            let cast = castArray[castArray.length - 1];
+                        this.setState({
+                            cursorIndex: preStr.length - 1,
+                        });
+                    } else {
+                        let preStr = this.state.messageContent.substring(0, this.state.cursorIndex);
+                        let nextStr = this.state.messageContent.substring(this.state.cursorIndex);
 
-                            lastText = preStr.substring(0, preStr.length - cast.length) + nextStr;
+                        let lastChar = preStr.charAt(preStr.length - 1);
+                        if (lastChar === ']') {
+                            let castArray = preStr.match(emojiReg);
 
-                            this.setState({
-                                cursorIndex: preStr.length - cast.length,
-                            });
+                            if (!castArray) {
+                                let cast = castArray[castArray.length - 1];
+
+                                lastText = preStr.substring(0, preStr.length - cast.length) + nextStr;
+
+                                this.setState({
+                                    cursorIndex: preStr.length - cast.length,
+                                });
+                            } else {
+                                lastText = preStr.substring(0, preStr.length - 1) + nextStr;
+
+                                this.setState({
+                                    cursorIndex: preStr.length - 1,
+                                });
+                            }
                         } else {
                             lastText = preStr.substring(0, preStr.length - 1) + nextStr;
-
                             this.setState({
                                 cursorIndex: preStr.length - 1,
                             });
                         }
+                    }
+                } else { // 光标在字符串最后
+                    let lastChar = this.state.messageContent.charAt(currentTextLength - 1);
+                    if (lastChar === ']') {
+                        let castArray = this.state.messageContent.match(emojiReg);
+
+                        if (castArray) {
+                            let cast = castArray[castArray.length - 1];
+                            lastText = this.state.messageContent.substring(0, this.state.messageContent.length - cast.length);
+
+                            this.setState({
+                                cursorIndex: this.state.messageContent.length - cast.length,
+                            });
+                        } else {
+                            lastText = this.state.messageContent.substring(0, this.state.messageContent.length - 1);
+
+                            this.setState({
+                                cursorIndex: this.state.messageContent.length - 1,
+                            });
+                        }
                     } else {
-                        lastText = preStr.substring(0, preStr.length - 1) + nextStr;
+                        lastText = this.state.messageContent.substring(0, currentTextLength - 1);
                         this.setState({
-                            cursorIndex: preStr.length - 1,
+                            cursorIndex: currentTextLength - 1,
                         });
                     }
                 }
-            } else { // 光标在字符串最后
-                let lastChar = this.state.messageContent.charAt(currentTextLength - 1);
-                if (lastChar === ']') {
-                    let castArray = this.state.messageContent.match(emojiReg);
+            } else {
+                if (currentTextLength >= this.state.cursorIndex) {
+                    lastText = this.state.messageContent + EMOJIS_ZH[code];
 
-                    if (castArray) {
-                        let cast = castArray[castArray.length - 1];
-                        lastText = this.state.messageContent.substring(0, this.state.messageContent.length - cast.length);
-
-                        this.setState({
-                            cursorIndex: this.state.messageContent.length - cast.length,
-                        });
-                    } else {
-                        lastText = this.state.messageContent.substring(0, this.state.messageContent.length - 1);
-
-                        this.setState({
-                            cursorIndex: this.state.messageContent.length - 1,
-                        });
-                    }
-                } else {
-                    lastText = this.state.messageContent.substring(0, currentTextLength - 1);
                     this.setState({
-                        cursorIndex: currentTextLength - 1,
+                        cursorIndex: lastText.length,
+                    });
+                } else {
+                    let preTemp = this.state.messageContent.substring(0, this.state.cursorIndex);
+                    let nextTemp = this.state.messageContent.substring(this.state.cursorIndex, currentTextLength);
+                    lastText = preTemp + EMOJIS_ZH[code] + nextTemp;
+
+                    this.setState({
+                        cursorIndex: this.state.cursorIndex + EMOJIS_ZH[code].length,
                     });
                 }
             }
+            this.setState({
+                messageContent: lastText,
+            });
         } else {
-            if (currentTextLength >= this.state.cursorIndex) {
-                lastText = this.state.messageContent + EMOJIS_ZH[code];
-
-                this.setState({
-                    cursorIndex: lastText.length,
-                });
-            } else {
-                let preTemp = this.state.messageContent.substring(0, this.state.cursorIndex);
-                let nextTemp = this.state.messageContent.substring(this.state.cursorIndex, currentTextLength);
-                lastText = preTemp + EMOJIS_ZH[code] + nextTemp;
-
-                this.setState({
-                    cursorIndex: this.state.cursorIndex + EMOJIS_ZH[code].length,
-                });
-            }
+            this.setState({
+                messageContent: this.state.messageContent + code,
+            });
         }
-        this.setState({
-            messageContent: lastText,
-        });
+
+
     }
 
     savePressIndex = (id) => {
@@ -1194,8 +1202,8 @@ class ChatWindow extends PureComponent {
                                 iphoneXBottomPadding={this.props.iphoneXBottomPadding}
                                 HeaderHeight={this.HeaderHeight}
                                 allPanelHeight={this.props.allPanelHeight}
-                                onPress={(item) => {
-                                    this._onEmojiSelected(item.value);
+                                onPress={(item, index) => {
+                                    this._onEmojiSelected(item.value, index);
                                 }}
                             />
                             : null

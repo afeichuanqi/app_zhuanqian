@@ -6,7 +6,8 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image} from 'react-native';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, BackHandler} from 'react-native';
+import Animated from 'react-native-reanimated';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
 import {bottomTheme, theme} from '../appSet';
@@ -21,6 +22,10 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {equalsObj} from '../util/CommonUtils';
 import ImageViewerModal from '../common/ImageViewerModal';
+import ChatSocket from '../util/ChatSocket';
+import BackPressComponent from '../common/BackPressComponent';
+
+const {SpringUtils, spring} = Animated;
 type Props = {};
 
 const {width, height} = Dimensions.get('window');
@@ -98,10 +103,34 @@ class DynamicTabNavigator extends Component<Props> {
 }
 
 class BottomBar extends Component {
+    constructor(props) {
+        super(props);
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+    }
+
+    componentDidMount(): void {
+        this.backPress.componentDidMount();
+    }
+
+    onBackPress = () => {
+        const {nav} = this.props;
+        if (nav.routes[0].index === 0) {
+            if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+                console.log('exitApp');
+                BackHandler.exitApp();
+                return false;
+            }
+            this.lastBackPressed = Date.now();
+            return true;//默认行为
+        }
+        return true;//默认行为
+    };
+
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
 
         // -------------记录下当前的路由------------- //
         let {routes, type, key} = this.props.nav;
+
         const activeRouterName = routes[0].routes[routes[0].routes.length - 1].routeName;
 
         if (activeRouterName == 'HomePage') {
@@ -179,12 +208,17 @@ class BottomBar extends Component {
         const {onPress, onGetUserInFoForToken, userinfo, navigationIndex} = this.props;
 
         onPress(index);
-        if (index === 3) { //我的栏目被单击
+        if (index === 3 && this.props.navigationIndex !== index) { //我的栏目被单击
             const token = userinfo.token;
             onGetUserInFoForToken(token, (loginStatus, msg) => {
             });
         }
-
+        if (index === 2) { //消息栏目被单击
+            if (this.props.userinfo.token && this.props.userinfo.token.length > 0 && !ChatSocket.isVerifyIdentIdy) {
+                Global.token = this.props.userinfo.token;
+                ChatSocket.verifyIdentidy();
+            }
+        }
         if (index === navigationIndex) { //按下了相同的底部导航
             let pageName = '';
 
@@ -216,37 +250,31 @@ class BottomBar extends Component {
                 source={navigationIndex === 0 ? require('../res/img/bottomBarIcon/homeC.png') : require('../res/img/bottomBarIcon/home.png')}
                 onPress={this._BottomBarClick}
                 index={0}
+                navigationIndex={navigationIndex}
                 isActive={navigationIndex === 0 ? true : false}
-                size={25}
-                title={'首页'}
             />
             <BottomBarItem
                 source={navigationIndex === 1 ? require('../res/img/bottomBarIcon/hallC.png') : require('../res/img/bottomBarIcon/hall.png')}
                 onPress={this._BottomBarClick}
                 index={1}
+                navigationIndex={navigationIndex}
                 isActive={navigationIndex === 1 ? true : false}
-                size={26}
-                title={'大厅'}
             />
             <BottomBarItem
                 source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
                 onPress={this._BottomBarClick}
                 index={2}
                 isActive={navigationIndex === 2 ? true : false}
-                size={27}
-                unReadLength={unMessageLength ? unMessageLength : 0}
+                unReadLength={unMessageLength > 0 ? unMessageLength : 0}
                 isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || notice_arr[1] > 0 || notice_arr[2] > 0)}
-                title={'消息'}
             />
             <BottomBarItem
                 source={navigationIndex === 3 ? require('../res/img/bottomBarIcon/myC.png') : require('../res/img/bottomBarIcon/my.png')}
                 onPress={this._BottomBarClick}
                 index={3}
                 isActive={navigationIndex === 3 ? true : false}
-                size={27}
                 unReadLength={0}
-                isOtherUnRead={(notice_arr[1] > 0 || notice_arr[2] > 0)}
-                title={'我的'}
+                isOtherUnReaxd={(notice_arr[1] > 0 || notice_arr[2] > 0)}
             />
         </View>;
     }
@@ -264,12 +292,44 @@ class BottomBarItem extends Component {
         return false;
     }
 
+    onPress = () => {
+        const {onPress, index} = this.props;
+        this.props.onPress(index);
+    };
+    animations = {
+        scale: new Animated.Value(1),
+    };
+    onPressIn = () => {
+        if(!this.props.isActive){
+            this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+                ...SpringUtils.makeDefaultConfig(),
+                bounciness: 13,
+                speed: 20,
+                toValue:0.7,
+            })).start(() => {
+
+            });
+            setTimeout(()=>{
+                this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+                    ...SpringUtils.makeDefaultConfig(),
+                    bounciness: 30,
+                    speed: 10,
+                    toValue:1,
+                })).start(() => {
+
+                });
+            },100)
+        }
+
+    };
+
     render() {
-        const { source, onPress, index,  unReadLength = 0, isOtherUnRead = false, title} = this.props;
+        const {source, unReadLength = 0, isOtherUnRead = false} = this.props;
         return <TouchableOpacity
-            onPress={() => {
-                onPress(index);
-            }}
+            activeOpacity={1}
+            onPress={this.onPress}
+            onPressIn={this.onPressIn}
+            // onPressOut={this.onPressOut}
             style={{
                 width: width / 4,
                 height: 45,
@@ -277,7 +337,9 @@ class BottomBarItem extends Component {
                 alignItems: 'center',
 
             }}>
-            <View>
+            <Animated.View
+                style={{transform: [{scale: this.animations.scale}]}}
+            >
                 <Image
                     style={{height: 25, width: 25}}
                     source={source}
@@ -304,21 +366,16 @@ class BottomBarItem extends Component {
                     borderWidth: 2,
                     borderColor: 'white',
                 }}>
-                    <Text style={{color: 'white', fontSize: 12}}>5</Text>
+                    <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
                 </View>}
 
-            </View>
-
-
-
-
+            </Animated.View>
 
 
         </TouchableOpacity>;
     }
 }
 
-// const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const mapStateToProps = state => ({
     friend: state.friend,
     nav: state.nav,

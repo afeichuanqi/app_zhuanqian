@@ -1,4 +1,7 @@
 'use strict';
+import SvgUri from 'react-native-svg-uri';
+import message_more from '../../../res/svg/message_more.svg';
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({__proto__: []} instanceof Array && function (d, b) {
@@ -572,6 +575,24 @@ var ImageViewer = /** @class */ (function (_super) {
                 })}>
                     {ImageElements}
                 </react_native_1.Animated.View>
+                <react_native_1.TouchableOpacity
+                    style={{
+                    position: 'absolute',
+                    right: 20,
+                    top: 33,
+                    zIndex: 14,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+
+                }}
+                    onPress={()=>{
+                        this.setState({
+                            isShowMenu:true
+                        })
+                    }}
+                >
+                    <SvgUri width={25} height={25} fill={'white'} svgXmlData={message_more}/>
+                </react_native_1.TouchableOpacity>
                 {this.props.renderIndicator((this.state.currentShowIndex || 0) + 1, this.props.imageUrls.length)}
 
                 {this.props.imageUrls[this.state.currentShowIndex || 0] &&
@@ -598,7 +619,15 @@ var ImageViewer = /** @class */ (function (_super) {
                 {this.props.menus({cancel: this.handleLeaveMenu, saveToLocal: this.saveToLocal})}
             </react_native_1.View>);
         }
-        return (<react_native_1.View style={this.styles.menuContainer}>
+        return (<react_native_1.TouchableOpacity
+            activeOpacity={1}
+            style={this.styles.menuContainer}
+                                                 onPress={()=>{
+                                                     this.setState({
+                                                         isShowMenu:false
+                                                     })
+                                                 }}
+        >
             <react_native_1.View style={this.styles.menuShadow}/>
             <react_native_1.View style={this.styles.menuContent}>
                 <react_native_1.TouchableHighlight underlayColor="#F2F2F2" onPress={this.saveToLocal}
@@ -612,9 +641,10 @@ var ImageViewer = /** @class */ (function (_super) {
                         style={this.styles.operateText}>{this.props.menuContext.cancel}</react_native_1.Text>
                 </react_native_1.TouchableHighlight>
             </react_native_1.View>
-        </react_native_1.View>);
+        </react_native_1.TouchableOpacity>);
     };
     ImageViewer.prototype.render = function () {
+
         var childs = null;
         childs = (<react_native_1.View>
             {this.getContent()}

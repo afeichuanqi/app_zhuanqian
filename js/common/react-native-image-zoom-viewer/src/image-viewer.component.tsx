@@ -19,7 +19,9 @@ import {
 import ImageZoom from 'react-native-image-pan-zoom';
 import styles from './image-viewer.style';
 import {IImageInfo, IImageSize, Props, State} from './image-viewer.type';
+import SvgUri from "react-native-svg-uri";
 
+import message_more from '../../../res/svg/message_more.svg';
 export default class ImageViewer extends React.Component<Props, State> {
     public static defaultProps = new Props();
     public state = new State();
@@ -434,7 +436,7 @@ export default class ImageViewer extends React.Component<Props, State> {
         // 获得屏幕宽高
         const screenWidth = this.width;
         const screenHeight = this.height;
-
+        console.log("getContent");
         const ImageElements = this.props.imageUrls.map((image, index) => {
             if ((this.state.currentShowIndex || 0) > index + 1 || (this.state.currentShowIndex || 0) < index - 1) {
                 return <View key={index} style={{width: screenWidth, height: screenHeight}}/>;
@@ -586,6 +588,7 @@ export default class ImageViewer extends React.Component<Props, State> {
         });
 
         return (
+
             <Animated.View style={{zIndex: 9}}>
                 <Animated.View style={{...this.styles.container, opacity: this.fadeAnim}}>
                     {this!.props!.renderHeader!(this.state.currentShowIndex)}

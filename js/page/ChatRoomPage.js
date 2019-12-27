@@ -7,7 +7,7 @@ import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import message_more from '../res/svg/message_more.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {equalsObj, getUUID} from '../util/CommonUtils';
+import {equalsObj, getEmojis, getUUID} from '../util/CommonUtils';
 import {connect} from 'react-redux';
 import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
@@ -21,6 +21,9 @@ import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 import {ImgOption} from '../common/PickerImage';
+import AnimatedFadeIn from '../common/AnimatedFadeIn';
+import Emoji from 'react-native-emoji';
+
 const {width} = Dimensions.get('window');
 
 class ChatRoomPage extends React.Component {
@@ -34,7 +37,6 @@ class ChatRoomPage extends React.Component {
         this.fromUserinfo = fromUserinfo;
         this.taskUri = taskUri;
         this.sendFormId = sendFormId;
-        console.log(this.sendFormId, 'this.sendFormId');
     }
 
     pageCount = 10;
@@ -60,16 +62,15 @@ class ChatRoomPage extends React.Component {
                 toUserid: this.fromUserinfo.id,
                 task_form_id: this.sendFormId,
             }, this.props.userinfo.token).then(result => {
+                this.appealInfo = result.appealInfo;
                 if (result.haveToDo == 0 || !result.guzhuUserId) {
                     this.toast.show('您与雇主并无任务来往,会话创建失败');
                     return;
                 }
-                console.log(result);
                 if (result.id) {
                     this.guzhuUserId = result.guzhuUserId;
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
-
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
                 }
 
@@ -260,6 +261,8 @@ class ChatRoomPage extends React.Component {
                 />
                 <View style={{flex: 1}}>
                     {this.task_id && <TaskInfo
+
+                        appealInfo={this.appealInfo}
                         task_id={this.task_id}
                         userinfo={userinfo}
                         columnType={this.columnType}
@@ -269,6 +272,30 @@ class ChatRoomPage extends React.Component {
                     />}
 
                     <ChatScreen
+                        renderErrorMessage={(messageStatus) => {
+                            let statusText = '';
+                            if (messageStatus === -1) {
+                                statusText = '您被对方屏蔽,关系异常';
+                            } else if (messageStatus === -2) {
+                                statusText = '您与对方并无好友关系';
+                            } else if (messageStatus === -2) {
+                                statusText = '此好友会话状态被关闭';
+                            } else {
+                                return null;
+                            }
+                            return <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginHorizontal: 80,
+                                backgroundColor: '#c8c8c8',
+                                paddingVertical: 3,
+                                borderRadius: 40,
+                                marginBottom: 10,
+                            }}>
+                                <Text style={{color: 'rgba(255,255,255,1)', fontSize: 12}}>{statusText}</Text>
+                            </View>;
+
+                        }}
                         onEndReachedThreshold={0.3}
                         allPanelAnimateDuration={0}
                         loadHistory={this.onRefresh}
@@ -307,7 +334,7 @@ class ChatRoomPage extends React.Component {
                                 ImagePicker.openPicker(ImgOption).then(image => {
                                     // console.log(image)
                                     this._imgSelect(image);
-                                }).catch(err=>{
+                                }).catch(err => {
                                     console.log(err);
                                 });
                             },
@@ -328,7 +355,8 @@ class ChatRoomPage extends React.Component {
                 </View>
 
             </SafeAreaViewPlus>
-        );
+        )
+            ;
     }
 
     _imgSelect = (image) => {
@@ -375,7 +403,6 @@ class ChatRoomPage extends React.Component {
             }
             const uuid = getUUID();
             ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
-            // console.log(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo,this.sendFormId);
         } else {
             if (!this.FriendId) {
                 this.toast.show('重新打开会话试试 ～ ～');
@@ -386,11 +413,7 @@ class ChatRoomPage extends React.Component {
     _pressAvatar = () => {
         NavigationUtils.goPage({userid: this.fromUserinfo.id}, 'ShopInfoPage');
     };
-    renderMessageTime = (time) => {
-        return <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>
-            <Text style={{color: '#333', fontSize: 11, opacity: 0.7}}>{time}</Text>
-        </View>;
-    };
+
 }
 
 class TaskInfo extends React.Component {
@@ -421,7 +444,7 @@ class TaskInfo extends React.Component {
 
     render() {
         const {taskInfo} = this.state;
-        const {columnType} = this.props;
+        const {columnType, appealInfo} = this.props;
         if (!taskInfo.task_uri) {
             return <SkeletonPlaceholder minOpacity={0.2}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 80}}>
@@ -431,6 +454,7 @@ class TaskInfo extends React.Component {
                             <View style={{height: 15, width: 30}}/>
                             <View style={{height: 13, width: 100}}/>
                             <View style={{height: 11, width: 30}}/>
+
                         </View>
                     </View>
                     <View style={{height: 60, justifyContent: 'flex-end', marginRight: 10}}>
@@ -443,7 +467,35 @@ class TaskInfo extends React.Component {
                 </View>
             </SkeletonPlaceholder>;
         }
-
+        let statusText = '';
+        if (columnType === 1) {
+            statusText = '任务咨询';
+        } else if (columnType === 2) {
+            statusText = '申诉';
+        } else if (columnType === 3) {
+            statusText = '投诉';
+        } else if (columnType === 4) {
+            statusText = '聊天';
+        } else if (columnType === 5) {
+            statusText = '驳回沟通';
+        }
+        if (appealInfo) {
+            const {appeal_status} = appealInfo;
+            if (appeal_status == 0) {
+                statusText += '';
+            } else if (appeal_status == -1) {
+                statusText += '被驳回,会话状态被关闭';
+            } else if (appeal_status == 1) {
+                statusText += '已成立,会话状态已关闭';
+            }
+        }
+        let taskTitle = taskInfo.task_title;
+        let emojiArr = [];
+        const json = getEmojis(taskTitle);
+        if (json) {
+            taskTitle = json.content;
+            emojiArr = json.emojiArr;
+        }
 
         return <TouchableOpacity
             activeOpacity={1}
@@ -461,16 +513,26 @@ class TaskInfo extends React.Component {
                     source={{uri: taskInfo.task_uri}}
                     resizeMode={Image.resizeMode.stretch}
                 />
-                <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                    <Text style={{fontSize: 17,color:'black'}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 13, opacity:0.5,color:'black'}}>{taskInfo.task_title}</Text>
-                    <Text style={{
-                        fontSize: 13,
-                        color: 'red',
-                        marginTop:3,
-                    }}>
-                        {columnType === 1 ? '任务咨询' : columnType === 2 ? '申诉' : columnType === 3 ? '投诉' : columnType === 4 ? '聊天' : columnType === 5 ? '驳回沟通' : ''}
+                <View style={{marginLeft: 10, justifyContent: 'space-between',height: 60,}}>
+                    <Text style={{fontSize: 18, color: 'black'}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
+                    <Text style={{fontSize: 13, opacity: 0.5, color: 'black'}}>
+
+                        {taskTitle} {emojiArr.map((item,index) => {
+                        return <Emoji key={index} name={item} style={{fontSize: 13, opacity: 0.5, color: 'black'}}/>;
+                    })}
                     </Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+                        <AnimatedFadeIn>
+                            <Text style={{
+                                fontSize: 13, opacity: 0.5, color: 'black',
+                                marginTop: 3,
+                            }}>
+                                {statusText}
+                            </Text>
+                        </AnimatedFadeIn>
+                    </View>
+
 
                 </View>
             </View>

@@ -88,7 +88,9 @@ class TaskSumComponent extends Component {
                 alignItems: 'center',
                 backgroundColor: 'white',
                 height: 130,
-                marginBottom: 7
+                // marginBottom: 7,
+                borderBottomWidth:1,
+                borderBottomColor:'#e2e2e2',
             }}
         >
 
@@ -107,14 +109,13 @@ class TaskSumComponent extends Component {
                         <Text
                             numberOfLines={1}
                             style={{
-                                fontSize: 17,
+                                fontSize: 16,
                                 color: 'black',
-                                // fontWeight: '400',
                                 maxWidth: maxWidth,
                                 marginRight: 10,
                             }}>
                             {taskTitle} {emojiArr.map((item,index) => {
-                            return <Emoji key={index} name={item} style={{fontSize: 17}}/>;
+                            return <Emoji key={index} name={item} style={{fontSize: 16}}/>;
                         })}
                         </Text>
 
@@ -211,7 +212,7 @@ class TaskSumComponent extends Component {
                     }}
                     style={{
                         position: 'absolute',
-                        top: 30,
+                        top: 40,
                         right: 10,
                     }}
                 >

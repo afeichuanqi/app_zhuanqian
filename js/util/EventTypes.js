@@ -5,5 +5,6 @@ export default {
     update_task_orders_mana: 'update_task_orders_mana',
     update_message_appeal_2_page: 'update_message_appeal_2_page',
     update_message_appeal_3_page: 'update_message_appeal_3_page',
+    update_message_page: 'update_message_page',
     scroll_top_for_page:'scroll_top_for_page',
 };

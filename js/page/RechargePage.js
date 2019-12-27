@@ -14,16 +14,15 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions, Text,
     View, StatusBar,
-    TextInput, TouchableOpacity, Image,
+    TextInput, TouchableOpacity, Image,ScrollView
 } from 'react-native';
-import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {bottomTheme} from '../appSet';
 import Toast from '../common/Toast';
+import FastImage from 'react-native-fast-image';
 
-const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 class RechargePage extends PureComponent {
@@ -77,11 +76,56 @@ class RechargePage extends PureComponent {
                 <Toast
                     ref={ref => this.toast = ref}
                 />
-                <View style={{flex: 1, backgroundColor: '#f0f0f0'}}>
-                    <View style={{backgroundColor: 'white', padding: 10, marginTop: 3}}>
+                <ScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
+                    <View
+                        // activeOpacity={0.6}
+                        style={{
+                            flexDirection: 'row',
+                            padding: 10,
+                            paddingLeft: 15,
+                            backgroundColor: 'white',
+                            marginTop: 3,
+                            alignItems: 'center',
+                        }}>
+                        <FastImage
+                            source={{uri: this.props.userinfo.avatar_url}}
+                            style={{width: 50, height: 50, borderRadius: 25}}
+                        />
+                        <View style={{marginLeft: 10, justifyContent: 'space-around', height: 50, paddingVertical:5}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={{fontSize: 16, color: 'black'}}>{this.props.userinfo.username}</Text>
+                                <Text style={{
+                                    color: 'black',
+                                    opacity: 0.5,
+                                    marginLeft: 10,
+                                }}>{this.props.userinfo.userid}</Text>
+                            </View>
+                            <View style={{flexDirection:'row', alignItems:'center'}}>
+                                <Text style={{
+                                    color: 'black',
+                                    opacity: 0.5,
+                                    fontSize: 12,
+                                }}>余额:</Text>
+                                <Text style={{
+                                    color: 'black',
+                                    opacity: 0.5,
+                                    fontSize: 12,
+                                    marginLeft:5,
+                                }}>{this.props.userinfo.task_currency}</Text>
+                            </View>
+                        </View>
+
+                    </View>
+                    <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
                         <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.8)'}}>请输入充值金额:</Text>
                         <View style={{marginVertical: 20, marginLeft: 5, flexDirection: 'row'}}>
-                            <Text style={{fontSize: 25, fontWeight: 'bold',color:'black', position: 'absolute', left: 0}}>¥</Text>
+                            <Text style={{
+                                fontSize: 25,
+                                fontWeight: 'bold',
+                                color: 'black',
+                                position: 'absolute',
+                                left: 0,
+                            }}>¥</Text>
                             <TextInput
                                 keyboardType={'number-pad'}
                                 onChangeText={(text) => {
@@ -112,22 +156,27 @@ class RechargePage extends PureComponent {
                         }}>
                         <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>确认充值</Text>
                     </TouchableOpacity>
-                    <View style={{marginTop: 30, alignSelf: 'center'}}>
-                        <Text style={{color: bottomTheme, opacity: 0.5, fontSize: 12}}>每天可提现一次,最小提现金额3元</Text>
-                        <Text style={{
-                            color: bottomTheme,
-                            opacity: 0.5,
-                            fontSize: 12,
-                            marginTop: 10,
-                            alignSelf: 'center',
-                        }}>超过10元提现手续费2%</Text>
-                    </View>
+                    {/*<View style={{marginTop: 30, alignSelf: 'center'}}>*/}
+                    {/*    <Text style={{color: bottomTheme, opacity: 0.5, fontSize: 12}}>每天可提现一次,最小提现金额3元</Text>*/}
+                    {/*    <Text style={{*/}
+                    {/*        color: bottomTheme,*/}
+                    {/*        opacity: 0.5,*/}
+                    {/*        fontSize: 12,*/}
+                    {/*        marginTop: 10,*/}
+                    {/*        alignSelf: 'center',*/}
+                    {/*    }}>超过10元提现手续费2%</Text>*/}
+                    {/*</View>*/}
                     <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>温馨提示:
-                            提现：周日只2
+                        <Text style={{fontWeight: 'bold', fontSize:15}}>充值须知
+                        </Text>
+                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                        </Text>
+                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
+                        </Text>
+                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                         </Text>
                     </View>
-                </View>
+                </ScrollView>
 
             </SafeAreaViewPlus>
         );

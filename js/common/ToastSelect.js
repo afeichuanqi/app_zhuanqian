@@ -7,12 +7,13 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Animated, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions,  Text, TouchableOpacity} from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 const {width} = Dimensions.get('window');
-
-class MyModalBox extends PureComponent {
+import Animated from 'react-native-reanimated';
+const {SpringUtils,spring} = Animated;
+class ToastSelect extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -39,28 +40,32 @@ class MyModalBox extends PureComponent {
     }
 
     hide = () => {
-        this._anim = Animated.timing(this.animations.scale, {
-            duration: 200,
-            toValue: 0,
-            // easing: Easing.inOut(Easing.ease),
-        }).start(() => {
+        this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+            ...SpringUtils.makeDefaultConfig(),
+            bounciness: 0,
+            speed: 20,
+            toValue:0
+        })).start(() => {
+
+
+        });
+        setTimeout(() => {
             this.setState({
                 visible: false,
             });
-
-        });
+        }, 300);
 
     };
     show = () => {
         this.setState({
             visible: true,
         }, () => {
-            this._anim = Animated.timing(this.animations.scale, {
-                // useNativeDriver: true,
-                duration: 200,
-                toValue: 1,
-                // easing: Easing.inOut(Easing.cubic),
-            }).start();
+            this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+                ...SpringUtils.makeDefaultConfig(),
+                bounciness: 13,
+                speed: 8,
+                toValue:1
+            })).start();
 
         });
     };
@@ -91,7 +96,7 @@ class MyModalBox extends PureComponent {
                                   }}
                 >
                     <Animated.View style={[this.props.style, {
-                        transform: [{scale: this.animations.scale}],
+                        transform: [{scale: this.animations.scale}], opacity:this.animations.scale,
                         // transform: 1,
                     }]}>
 
@@ -132,13 +137,7 @@ class MyModalBox extends PureComponent {
                                 }}>
                                 <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
                             </TouchableOpacity>
-                            {/*<View*/}
-                            {/*    style={{*/}
-                            {/*        height: 20,*/}
-                            {/*        width: 1.5,*/}
-                            {/*        backgroundColor: 'rgba(0,0,0,0.5)',*/}
-                            {/*        marginTop: 15,*/}
-                            {/*    }}/>*/}
+
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={this._sure}
@@ -169,4 +168,4 @@ class MyModalBox extends PureComponent {
 }
 
 
-export default MyModalBox;
+export default ToastSelect;

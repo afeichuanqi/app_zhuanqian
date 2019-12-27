@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../../navigator/NavigationUtils';
+
 const {timing} = Animated;
 
 import FastImage from 'react-native-fast-image';
 import {getCurrentTime} from '../../common/Chat-ui/app/chat/utils';
 import Global from '../../common/Global';
+import {equalsObj} from '../../util/CommonUtils';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const width = Dimensions.get('window').width;
@@ -17,6 +19,7 @@ export default class MessageItemComponent extends Component {
         marginHorizontal: 20,
 
     };
+
 
     constructor(props) {
         super(props);
@@ -37,7 +40,7 @@ export default class MessageItemComponent extends Component {
     _onPressIn = () => {
         //隐藏box
         this._anim = timing(this.animations.scale, {
-            duration: 200,
+            duration: 100,
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start();
@@ -45,7 +48,7 @@ export default class MessageItemComponent extends Component {
     _onPressOut = () => {
         //隐藏box
         this._anim = timing(this.animations.scale, {
-            duration: 200,
+            duration: 100,
             toValue: 1,
             easing: Easing.inOut(Easing.ease),
         }).start();
@@ -181,7 +184,9 @@ export default class MessageItemComponent extends Component {
                 </View>
             </View>
             <TouchableOpacity
-                onPress={()=>{Global.imageViewModal.show([{url:taskUri}])}}
+                onPress={() => {
+                    Global.imageViewModal.show([{url: taskUri}]);
+                }}
             >
                 <FastImage
                     style={{
@@ -195,7 +200,6 @@ export default class MessageItemComponent extends Component {
                     resizeMode={FastImage.resizeMode.stretch}
                 />
             </TouchableOpacity>
-
 
 
         </AnimatedTouchableOpacity>;

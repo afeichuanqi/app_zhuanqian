@@ -7,12 +7,12 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, Image, Dimensions, Text,  TouchableOpacity} from 'react-native';
+import {Modal, Image, Dimensions, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
 
 const {width, height} = Dimensions.get('window');
-const {timing} = Animated;
+const {timing, spring, SpringUtils} = Animated;
 
 class MyModalBox extends PureComponent {
     constructor(props) {
@@ -40,27 +40,32 @@ class MyModalBox extends PureComponent {
     }
 
     hide = () => {
-        this._anim = timing(this.animations.scale, {
-            duration: 200,
+        this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+            ...SpringUtils.makeDefaultConfig(),
+            bounciness: 0,
+            speed: 20,
             toValue: 0,
-            easing: Easing.inOut(Easing.ease),
-        }).start(() => {
+        })).start(() => {
+
+        });
+        setTimeout(() => {
             this.setState({
                 visible: false,
             });
+        }, 300);
 
-        });
 
     };
     show = () => {
         this.setState({
             visible: true,
         }, () => {
-            this._anim = timing(this.animations.scale, {
-                duration: 200,
+            this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+                ...SpringUtils.makeDefaultConfig(),
+                bounciness: 13,
+                speed: 8,
                 toValue: 1,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
+            })).start();
 
         });
     };
@@ -80,22 +85,25 @@ class MyModalBox extends PureComponent {
 
             >
                 <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'
+                    flex: 1, backgroundColor: 'rgba(0,0,0,0.8)',
                 }}
                                   activeOpacity={1}
                                   onPress={() => {
                                       this.hide();
                                   }}
                 >
-                    <Animated.View style={[this.props.style, {
-                        transform: [{scale: this.animations.scale}],
-                    }]}>
+                    <Animated.View style={{
+                        transform: [{scale: this.animations.scale}], opacity: this.animations.scale,
+
+
+                    }}>
                         <Image
 
                             source={require('../res/img/toastImg/yaoqinghaoyouImg.png')}
                             style={{
                                 width: width,
                                 height: height / 1.5,
+
                             }}
                         />
                         <TouchableOpacity

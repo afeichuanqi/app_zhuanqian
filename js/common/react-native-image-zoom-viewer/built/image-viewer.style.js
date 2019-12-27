@@ -35,8 +35,8 @@ exports.default = (function (width, height, backgroundColor) {
             alignItems: 'center',
             backgroundColor: 'white',
             height: 40,
-            borderBottomColor: '#ccc',
-            borderBottomWidth: 1
+            borderBottomColor: '#c2c2c2',
+            borderBottomWidth: 0.3
         },
         operateText: { color: '#333' },
         loadingTouchable: { width: width, height: height },

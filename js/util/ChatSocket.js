@@ -28,10 +28,8 @@ class ChatSocket {
                     const {msg, status} = data;
                     Global.dispatch(Message.verifyIdentIdy(status));
                     if (status === 0) {
-                        // Global.dispatch(Message.onChangeSocketStatue(''));
                         this.isVerifyIdentIdy = true;
                     } else {
-                        // Global.dispatch(Message.onChangeSocketStatue(''));
                         this.isVerifyIdentIdy = false;
                     }
                     break;
@@ -105,8 +103,10 @@ class ChatSocket {
 
     //验证身份
     verifyIdentidy = () => {
-        // console.log(Global.ws.readyState, 'Global.ws.readyState');
         if (!Global.connectionstatus) {
+            return;
+        }
+        if (!Global.token || Global.token.length === 0) {
             return;
         }
         const msgData = {

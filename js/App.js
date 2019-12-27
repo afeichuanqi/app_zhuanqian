@@ -12,8 +12,11 @@ import {Provider} from 'react-redux';
 import store from './store';
 import {PersistGate} from 'redux-persist/es/integration/react';
 import {persistStore} from 'redux-persist';
+import CodePush from 'react-native-code-push';
+
 type Props = {}
-export default class App extends Component<Props> {
+
+export class App extends Component<Props> {
 
     render() {
         let persistor = persistStore(store);
@@ -26,3 +29,7 @@ export default class App extends Component<Props> {
         );
     }
 }
+
+const codePushOptions = {checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME};
+const AppCodePush = CodePush(codePushOptions)(App);
+export default AppCodePush;

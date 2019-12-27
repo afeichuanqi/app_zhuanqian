@@ -8,13 +8,13 @@
 
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, Text, ImageBackground, TouchableOpacity} from 'react-native';
-import Animated, {Easing} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
 
 const {width} = Dimensions.get('window');
-const {timing} = Animated;
+const {SpringUtils,spring} = Animated;
 
 class MyModalBox extends PureComponent {
     constructor(props) {
@@ -42,27 +42,32 @@ class MyModalBox extends PureComponent {
     }
 
     hide = () => {
-        this._anim = timing(this.animations.scale, {
-            duration: 200,
-            toValue: 0,
-            easing: Easing.inOut(Easing.ease),
-        }).start(() => {
+        this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+            ...SpringUtils.makeDefaultConfig(),
+            bounciness: 0,
+            speed: 20,
+            toValue:0
+        })).start(() => {
+
+
+        });
+        setTimeout(() => {
             this.setState({
                 visible: false,
             });
-
-        });
+        }, 300);
 
     };
     show = () => {
         this.setState({
             visible: true,
         }, () => {
-            this._anim = timing(this.animations.scale, {
-                duration: 200,
-                toValue: 1,
-                easing: Easing.inOut(Easing.ease),
-            }).start();
+            this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+                ...SpringUtils.makeDefaultConfig(),
+                bounciness: 13,
+                speed: 8,
+                toValue:1
+            })).start();
 
         });
     };
@@ -93,7 +98,7 @@ class MyModalBox extends PureComponent {
                                   }}
                 >
                     <Animated.View style={[this.props.style, {
-                        transform: [{scale: this.animations.scale}],
+                        transform: [{scale: this.animations.scale}], opacity:this.animations.scale,
                     }]}>
 
                         <ImageBackground
@@ -165,8 +170,7 @@ class MyModalBox extends PureComponent {
     };
 
     _sure = () => {
-        // console.log('确认被单机');
-        // this.hide();
+
         this.props.sureClick();
     };
 }

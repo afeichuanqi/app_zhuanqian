@@ -22,6 +22,8 @@ import DeviceInfo from 'react-native-device-info';
 import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
 import Global from '../common/Global';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 export default class EnterCodePage extends PureComponent {
     constructor(props) {
@@ -294,16 +296,15 @@ class CodeInput extends PureComponent {
                 this.props.showError('');
                 const {routes, navigation} = this.props;
                 const key = routes[0].routes[1].key;
-
                 Global.token = data.token;//进行验证token
                 ChatSocket.verifyIdentidy();//进行验证token
                 NavigationUtils.goBack(navigation, key);
-                this.timer = setTimeout(() => {
-                    ChatSocket.selectAllFriendMessage(20);//进行获取好友列表
-                }, 5000);
-            } else {
+                setTimeout(()=>{
+                    EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面
+                },2000)
 
-                // console.log(data.msg, 'data.msg');
+
+            } else {
                 this.props.showError(data.msg);
                 this.iptArrayNum = new Array(this.props.iptNum);
                 this.refs[`text0`].focus();

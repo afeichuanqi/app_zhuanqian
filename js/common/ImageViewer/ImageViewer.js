@@ -1,48 +1,88 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, Dimensions, Text, TouchableOpacity, Modal, ActivityIndicator} from 'react-native';
-import ImageViewer from 'react-native-image-zoom-viewer';
+import {View, TouchableOpacity} from 'react-native';
+import Animated from 'react-native-reanimated';
 
-export default class ImageExample extends Component {
+const {
+    Clock,
+    Value,
+    set,
+    cond,
+    startClock,
+    clockRunning,
+    stopClock,
+    block,
+    spring,
+    SpringUtils,
+    debug
+} = Animated;
+
+function runTiming(clock, value, dest) {
+    const state = {
+        finished: new Value(1),
+        position: new Value(0),
+        time: new Value(0),
+        velocity: new Value(0),
+    };
+
+    const config = SpringUtils.makeConfigFromBouncinessAndSpeed({
+        ...SpringUtils.makeDefaultConfig(),
+        bounciness: 20,
+        speed: 8,
+    });
+
+    return block([
+        cond(
+            clockRunning(clock),
+            [
+                // if the clock is already running we update the toValue, in case a new dest has been passed in
+
+            ],
+            [
+                state.finished,
+                [
+                    set(state.finished, 0),
+                    set(state.position, value),
+                    set(config.toValue, dest),
+                    startClock(clock),
+                ],
+            ],
+        ),
+        spring(clock, state, config),
+        // cond(state.finished, stopClock(clock)),
+        state.position,
+    ]);
+}
+
+export default class AnimatedBox extends Component {
+    clock = new Clock();
+    transX = new Value(0);
 
     render() {
-        const images = [{
-            url: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576155012114&di=867e1081f8b8f5310360ddbdb80a84b8&imgtype=0&src=http%3A%2F%2F58pic.ooopic.com%2F58pic%2F11%2F20%2F35%2F77i58PICzwn.jpg'
-        }, {
-            url: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576155012115&di=12db94f2983139df17c09647fceaea33&imgtype=0&src=http%3A%2F%2Ffile04.16sucai.com%2Fd%2Ffile%2F2015%2F0417%2F309a1058647104845307bb338221485e.jpg'
-        }, {
-            url: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576155012115&di=f73d1105effd639147e7b1828db100ef&imgtype=0&src=http%3A%2F%2Fimg.bimg.126.net%2Fphoto%2FygtcxNtqBcH6kqzLKUS_9A%3D%3D%2F5760666873360998521.jpg'
-        }]
         return (
-            <Modal visible={true} transparent={true}>
-                <ImageViewer
-                    loadingRender={()=>{
-                        return <ActivityIndicator
-                            style={{color: 'red'}}
-                        />
-                    }}
+            <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                    console.log('');
+                    // const state = {
+                    //     finished: new Value(0),
+                    //     position: new Value(0),
+                    //     time: new Value(0),
+                    //     velocity: new Value(0),
+                    // };
+                    //
+                    // const config = SpringUtils.makeConfigFromBouncinessAndSpeed({
+                    //     ...SpringUtils.makeDefaultConfig(),
+                    //     bounciness: 20,
+                    //     speed: 8,
+                    // });
 
-                    imageUrls={images}/>
-            </Modal>
+                    this.transX = runTiming
+                }}
+                style={{flex: 1}}>
+                <Animated.View
+                    style={[{width: 100, height: 100, backgroundColor: 'red'}, {transform: [{scale: this.transX}]}]}
+                />
+            </TouchableOpacity>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    wrapper: {
-        borderColor: 'green',
-        borderWidth: 2,
-        overflow: 'hidden',
-    },
-    image: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
-
-        backgroundColor: 'black',
-    },
-});

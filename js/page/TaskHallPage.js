@@ -229,9 +229,10 @@ class FristListComponent extends PureComponent {
     _onScroll = (e) => {
         const y = e.nativeEvent.contentOffset.y;
         const Y_ = this.nowY - y;
-        if (Y_ < 10
-            && Y_ > -10
+        if (Y_ < 20
+            && Y_ > -20
         ) {
+
             return;
         }
 
@@ -321,8 +322,8 @@ class FristListComponent extends PureComponent {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: '#e8e8e8',
+                    borderBottomWidth: 0.3,
+                    borderBottomColor: 'rgba(0,0,0,0.3)',
                     zIndex: 3,
                     height: 40,
                     width,
@@ -469,13 +470,13 @@ class HeadlineComponent extends PureComponent {
             flexDirection: 'row',
             alignItems: 'center',
             borderBottomWidth: 0.3,
-            borderBottomColor: 'rgba(0,0,0,0.1)',
+            borderBottomColor: 'rgba(0,0,0,0.3)',
         }}>
             <Image
                 resizeMode={'stretch'}
                 source={require('../res/img/index_hot.png')} style={{
                 width: 42, height: 16, marginLeft: 20,
-                marginBottom: 5,
+                marginBottom:4,
             }}/>
             <View style={{
                 flex: 1,

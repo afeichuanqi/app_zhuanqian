@@ -14,6 +14,8 @@ import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationUtils from '../navigator/NavigationUtils';
 import PromotionToast from '../common/PromotionToast';
+// import CodePush from 'react-native-code-push';
+import Toast from '../common/Toast';
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
 
@@ -28,7 +30,59 @@ class HomePage extends PureComponent {
         showAnimated: true,
     };
 
-    componentDidMount() {
+    async componentDidMount() {
+        // const updateMessage = await CodePush.checkForUpdate() || {};
+        // console.log(updateMessage,"updateMessage");
+        // await CodePush.sync(
+        //     // 第一个参数吗，是个对象，可定义更新的动作
+        //     {
+        //         // 安装模式 'IMMEDIATE' 立刻安装， ON_NEXT_RESUME 下次启动安装
+        //         installMode: CodePush.InstallMode.ON_NEXT_RESUME,
+        //
+        //         // 强制更新模式下的安装，默认是IMMEDIATE 直接安装
+        //         mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
+        //
+        //         //更新确认弹窗设置，设置系统自带弹窗中的内容
+        //         updateDialog: {
+        //             mandatoryUpdateMessage: '强制更新内容: ' + updateMessage.description,
+        //             mandatoryContinueButtonLabel: '强制更新/确认',
+        //             optionalIgnoreButtonLabel: '取消',
+        //             optionalInstallButtonLabel: '安装',
+        //             optionalUpdateMessage: '本次更新内容: ' + updateMessage.description,
+        //             title: '发现新版本'
+        //         }
+        //     },
+        //     // 第二个参数，更新状态检测，返回数字
+        //     //0 已经是最新，1 安装完成、等待生效，2 忽略更新，3 未知错误，4 已经在下载了，5 查询更新，6 弹出了更新确认界面，7 下载中，8下载完成
+        //     (status) => {
+        //
+        //         switch (status) {
+        //             case 0:
+        //                 this.toast.show('已经是最新版本');
+        //                 break;
+        //             case 1 :
+        //                 !updateMessage.isMandatory && this.toast.show('更新完成, 再启动APP更新即生效');
+        //                 break;
+        //             case 3:
+        //                 this.toast.show('出错了，未知错误');
+        //                 break;
+        //             case 7 :
+        //                 this.toast.show('下载中');
+        //                 break;
+        //             case 8 :
+        //                 this.toast.show('8下载完成');
+        //                 break;
+        //         }
+        //     },
+        //     // 第三个参数，检测下载过程
+        //     ({receivedBytes, totalBytes}) => {
+        //         // console.log('DownloadProgress: ', receivedBytes, totalBytes);
+        //         // this.setState({
+        //         //     receivedBytes: (receivedBytes / 1024).toFixed(2),
+        //         //     totalBytes: (totalBytes / 1024).toFixed(2)
+        //         // })
+        //     },
+        // );
     }
 
     componentWillUnmount() {
@@ -57,8 +111,10 @@ class HomePage extends PureComponent {
             StatusBar.setBackgroundColor(theme, false);
             this.setState({
                 showAnimated: false,
+            },()=>{
+                this.promotionToast.show();
             });
-            this.promotionToast.show()
+
         });
     };
 
@@ -67,6 +123,9 @@ class HomePage extends PureComponent {
 
         return (
             <View style={{flex: 1}}>
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 {showAnimated && <Animated.View style={[styles.container, {opacity: this.opacity}]}>
                     <Animated.View
                         style={[

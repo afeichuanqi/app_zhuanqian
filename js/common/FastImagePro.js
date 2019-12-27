@@ -16,24 +16,24 @@ class FastImagePro extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSuccess: Platform.OS === 'android' ? true : false,
+            isSuccess: false,
         };
     }
 
 
     onLoadStart = () => {
-        if (Platform.OS === 'ios') {
+        // if (Platform.OS === 'ios') {
             this.setState({
                 isSuccess: false,
             });
-        }
+        // }
     };
     onLoadEnd = () => {
-        if (Platform.OS === 'ios') {
+        // if (Platform.OS === 'ios') {
             this.setState({
                 isSuccess: true,
             });
-        }
+        // }
     };
 
     componentDidMount(): void {

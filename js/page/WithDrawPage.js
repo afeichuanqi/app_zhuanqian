@@ -14,7 +14,7 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions, Text,
     View, StatusBar,
-    TextInput, TouchableOpacity,
+    TextInput, TouchableOpacity,Image
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
@@ -84,15 +84,23 @@ class WithDrawPage extends PureComponent {
                         marginTop:3,
                         alignItems:'center',
                     }}>
-                        <View style={{}}>
-                            <Text style={{fontWeight: 'bold',color:'rgba(0,0,0,0.8)'}}>支付宝:15061142750</Text>
-                            <Text style={{
-                                fontWeight: 'bold',
-                                fontSize: 12,
-                                opacity: 0.5,
-                                color: 'black',
-                                marginTop: 8,
-                            }}>点击可修改提现账户</Text>
+
+                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                            <Image
+                                style={{width:50,height:50, borderRadius:25}}
+                                source={require('../res/img/payType/alipay.png')}
+                            />
+                            <View style={{marginLeft:10}}>
+                                <Text style={{color:'rgba(0,0,0,1)'}}>支付宝:15061142750</Text>
+                                <Text style={{
+                                    fontWeight: 'bold',
+                                    fontSize: 12,
+                                    opacity: 0.5,
+                                    color: 'black',
+                                    marginTop: 8,
+                                }}>点击可修改提现账户</Text>
+                            </View>
+
                         </View>
                         <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
 
@@ -123,19 +131,24 @@ class WithDrawPage extends PureComponent {
                         }}>
                         <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>确认提现</Text>
                     </TouchableOpacity>
-                    <View style={{marginTop: 30, alignSelf: 'center'}}>
-                        <Text style={{color: bottomTheme, opacity: 0.5, fontSize: 12}}>每天可提现一次,最小提现金额3元</Text>
-                        <Text style={{
-                            color: bottomTheme,
-                            opacity: 0.5,
-                            fontSize: 12,
-                            marginTop: 10,
-                            alignSelf: 'center',
-                        }}>超过10元提现手续费2%</Text>
-                    </View>
+                    {/*<View style={{marginTop: 30, alignSelf: 'center'}}>*/}
+                    {/*    <Text style={{color: bottomTheme, opacity: 0.5, fontSize: 12}}>每天可提现一次,最小提现金额3元</Text>*/}
+                    {/*    <Text style={{*/}
+                    {/*        color: bottomTheme,*/}
+                    {/*        opacity: 0.5,*/}
+                    {/*        fontSize: 12,*/}
+                    {/*        marginTop: 10,*/}
+                    {/*        alignSelf: 'center',*/}
+                    {/*    }}>超过10元提现手续费2%</Text>*/}
+                    {/*</View>*/}
                     <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold'}}>温馨提示:
-                            提现：周日只2
+                        <Text style={{fontWeight: 'bold', fontSize:15}}>提现须知
+                        </Text>
+                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:10}}>1、目前支持支付宝和微信支付提现、后续其他提现方式及时公告通知大家
+                        </Text>
+                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>2、提现金额需大于1 小于1000元之间的证书，提现时间为工作日9:00 -- 17:00
+                        </Text>
+                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>3、每天只能提现一次,请知晓
                         </Text>
                     </View>
                 </View>

@@ -67,8 +67,8 @@ export default class ChatItem extends PureComponent {
         // });
         const emojiArr = [];
         if(emojiArrs){
-            emojiArrs.forEach((item) => {
-                views.push(<Emoji_ name={item} style={{fontSize: 15}}/>)
+            emojiArrs.forEach((item,index) => {
+                views.push(<Emoji_ key={index} name={item} style={{fontSize: 15}}/>)
                 // emojiArr.push(item);
                 textContent = textContent.replace(item, '');
             });
@@ -276,7 +276,7 @@ export default class ChatItem extends PureComponent {
                                 width: width - 20, backgroundColor: 'white', paddingTop: 15, paddingHorizontal: 15,
                                 borderRadius: 3,
                             }}>
-                            <Text style={{fontSize: 15, fontWeight: 'bold'}}>{message.title}</Text>
+                            <Text style={{fontSize: 15, fontWeight: 'bold',color:'black'}}>{message.title}</Text>
                             <Text
                                 style={{
                                     fontSize: 12,

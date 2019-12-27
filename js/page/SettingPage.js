@@ -15,7 +15,7 @@ import ViewUtil from '../util/ViewUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {connect} from 'react-redux';
 import BackPressComponent from '../common/BackPressComponent';
-
+import ClearCache from 'react-native-clear-cache';
 
 class SettingPage extends PureComponent {
     constructor(props) {
@@ -23,16 +23,26 @@ class SettingPage extends PureComponent {
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
-    state = {};
+    state = {
+        CacheSize: 0,
+
+    };
 
     componentDidMount() {
         this.backPress.componentDidMount();
+        ClearCache.getAppCacheSize(data => {
+            this.setState({
+                CacheSize: data,
+            });
+        });
 
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
     }
@@ -54,8 +64,9 @@ class SettingPage extends PureComponent {
             style={{backgroundColor: theme}} // 背景颜色
         />;
         const {userinfo} = this.props;
+        const {CacheSize} = this.state;
 
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '设置', null, theme, 'black', 16);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '设置', null, theme, 'black', 16, null, false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -71,7 +82,12 @@ class SettingPage extends PureComponent {
                         NavigationUtils.goPage({}, 'AccountSetting');
                     })}
                     {ViewUtil.getSettingMenu('清理储存空间', () => {
-                    }, '128.36KB')}
+                        ClearCache.clearAppCache(data => {
+                            this.setState({
+                                CacheSize: 0,
+                            });
+                        });
+                    }, `${CacheSize < 1 ? `${CacheSize * 1024}KB` : `${CacheSize}M`}`)}
                     {/*{ViewUtil.getSettingMenu('隐私政策')}*/}
                     {ViewUtil.getSettingMenu('接单规则', () => {
                         NavigationUtils.goPage({type: 2}, 'UserProtocol');

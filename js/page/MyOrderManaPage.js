@@ -27,6 +27,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import FastImage from 'react-native-fast-image';
 import {getEmojis} from '../util/CommonUtils';
 import Emoji from 'react-native-emoji';
+import ToastShare from '../common/ToastShare';
 
 const {width} = Dimensions.get('window');
 
@@ -330,6 +331,7 @@ class MyOrderManaPage extends PureComponent {
                         <Text style={{fontSize: 14, width: width - 80}}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
                     </View>
                 </ToastSelect>
+                <ToastShare ref={ref => this.toastShare = ref}/>
             </SafeAreaViewPlus>
         );
     }
@@ -543,7 +545,11 @@ class MyOrderManaPage extends PureComponent {
                        style={{width: 23, height: 23}}/>
                 <Text style={{marginTop: 5}}>下架</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{
+            <TouchableOpacity
+                onPress={()=>{
+                    this.toastShare.show()
+                }}
+                style={{
                 width: (width - 20) / 4,
                 height: 50,
                 justifyContent: 'center',

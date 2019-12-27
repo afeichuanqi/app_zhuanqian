@@ -30,16 +30,12 @@ export default function onAction(state = defaultContent, action) {
 
         case Types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS ://设置好友的消息已经读取成功
             let temArr2 = [...state.friendArr];
-            //console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS', data.FriendId);
-            // let nowUnMessageLength = state.unMessageLength;
             const FriendIdIndex = temArr2.findIndex(d => d.FriendId === data.FriendId);
-            //console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS', FriendIdIndex);
             if (FriendIdIndex !== -1) {
                 const originalFriendUnReadLen = temArr2[FriendIdIndex].unReadLength;
-                //console.log('MESSAGE_SET_USER_ID_IS_READ_SUCCESS', temArr2);
                 temArr2[FriendIdIndex].unReadLength = 0;
-                temArr2 = temArr2.sort((data1, data2) => {
-                    return data2.unReadLength - data1.unReadLength;
+                temArr2.sort((data1, data2) => {
+                    return data2.sendDate - data1.sendDate;
                 });
                 return {
                     ...state,
@@ -131,7 +127,7 @@ export default function onAction(state = defaultContent, action) {
 
                 });
             }
-            temArr3 = temArr3.sort((data1, data2) => {
+            temArr3.sort((data1, data2) => {
                 return data2.sendDate - data1.sendDate;
             });
             return {

@@ -203,7 +203,7 @@ class PickerImage extends PureComponent {
                                 width, alignItems: 'center', paddingVertical: 15,
                                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
                             }}>
-                            <Text style={{color:'black'}}>{'拍一张照片'}</Text>
+                            <Text style={{color: 'black'}}>{'拍一张照片'}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.6}
@@ -212,7 +212,7 @@ class PickerImage extends PureComponent {
                                 width, alignItems: 'center', paddingVertical: 15,
                                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
                             }}>
-                            <Text style={{color:'black'}}>{'从相册选一张'}</Text>
+                            <Text style={{color: 'black'}}>{'从相册选一张'}</Text>
                         </TouchableOpacity>
                     </Animated.View>
                 </TouchableOpacity>
@@ -221,11 +221,12 @@ class PickerImage extends PureComponent {
     }
 
     _renderBestNewItem = ({item, index}) => {
-        const {height, width, uri} = item;
+        let {height, width, uri} = item;
         const FlatListItemHeight = 130;
         const size = FlatListItemHeight / height;
         const imgWidth = width * size;
-
+        // if (uri.startsWith('ph://')) { uri = 'ph-upload' + uri.substring(2); }
+        console.log(item);
         return <TouchableOpacity
             onPress={() => {
                 ImagePicker.openCropper({
@@ -234,7 +235,7 @@ class PickerImage extends PureComponent {
                     width: (Platform.OS === 'ios') ? width * 2 : width,
                     height: (Platform.OS === 'ios') ? height * 2 : height,
                 }).then(image => {
-                    this.hide();
+                    // this.hide(true);
                     this.props.select(image, this.timestamp);
                 });
                 // NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');

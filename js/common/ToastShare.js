@@ -37,12 +37,14 @@ class ToastShare extends PureComponent {
             duration: 200,
             toValue: 150,
         }).start(() => {
+
+
+        });
+        setTimeout(()=>{
             this.setState({
                 visible: false,
             });
-
-        });
-
+        },150)
     };
     show = () => {
 

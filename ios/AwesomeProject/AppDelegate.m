@@ -11,8 +11,11 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+
+#import <CodePush/CodePush.h>
 #import "RNBootSplash.h"
 #import "RNUMConfigure.h"
+
 
 // ios 8.x or older
 
@@ -63,7 +66,8 @@ sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+//  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  return [CodePush bundleURL];
 #endif
 }
 

@@ -318,6 +318,13 @@ class FristListComponent extends PureComponent {
     scrollY = new Animated.Value(0);
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
+        const Y_ = this.nowY - y;
+        if (Y_ < 20
+            && Y_ > -20
+        ) {
+
+            return;
+        }
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -402,9 +409,6 @@ class FristListComponent extends PureComponent {
                     style={{
                         fontSize: 12,
                         color: bottomTheme,
-                        // position: 'absolute',
-                        // left: 15,
-                        // top: 16,
                         marginLeft: 15,
                         marginTop: 20,
                     }}>为您推荐</Text>
@@ -413,9 +417,6 @@ class FristListComponent extends PureComponent {
                     width: 50,
                     backgroundColor: bottomTheme,
                     height: 2,
-                    // position: 'absolute',
-                    // left: 15,
-                    // bottom: 3,
                     marginLeft: 15,
                 }}/>
             </Animated.View>

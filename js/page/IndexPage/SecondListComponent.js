@@ -21,7 +21,6 @@ class SecondListComponent extends PureComponent {
     componentDidMount(): void {
 
         getBestNewTask().then(data => {
-            console.log(data);
             this.setState({
                 bestNewData: data,
             });
@@ -40,13 +39,18 @@ class SecondListComponent extends PureComponent {
         EventBus.getInstance().removeListener(this.listener);
     }
 
-    _renderBestNewItem = ({item, index}) => {
-        return <ScrollItem item={item}/>;
-    };
+
     scrollY = new Animated.Value(0);
 
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
+        const Y_ = this.nowY - y;
+        if (Y_ < 20
+            && Y_ > -20
+        ) {
+
+            return;
+        }
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -76,6 +80,7 @@ class SecondListComponent extends PureComponent {
         }
 
     };
+
     render() {
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-210, 0, 205],
@@ -100,6 +105,7 @@ class SecondListComponent extends PureComponent {
                         </View>
                         <View style={{paddingHorizontal: 10, marginTop: 10}}>
                             <FlatList
+                                keyExtractor={(item, index) => index + ''}
                                 showsHorizontalScrollIndicator={false}
                                 horizontal={true}
                                 data={this.state.bestNewData}
@@ -122,14 +128,14 @@ class SecondListComponent extends PureComponent {
 
             <Animated.View style={{
                 width, height: 30, justifyContent: 'space-between', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}],top:5
+                backgroundColor: 'white', transform: [{translateY: columnTop}], top: 5,
             }}>
                 <Text
                     style={{
                         fontSize: 12,
                         color: bottomTheme,
-                        marginLeft:15,
-                        marginTop:10,
+                        marginLeft: 15,
+                        marginTop: 10,
 
                     }}>最近刷新</Text>
 
@@ -137,11 +143,15 @@ class SecondListComponent extends PureComponent {
                     width: 50,
                     backgroundColor: bottomTheme,
                     height: 2,
-                    marginLeft:15,
+                    marginLeft: 15,
                 }}/>
             </Animated.View>
         </Animated.View>;
     }
+
+    _renderBestNewItem = ({item, index}) => {
+        return <ScrollItem item={item}/>;
+    };
 }
 
 class ScrollItem extends React.Component {
@@ -180,10 +190,18 @@ class ScrollItem extends React.Component {
                 <Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}
                        style={{position: 'absolute', right: 0, top: 0, width: 35, height: 15}}/>
             </View>
-            <View style={{flexDirection:'row', alignItems:'center', marginTop:3}}>
-                <Text numberOfLines={1} style={{fontSize: 12, color: 'black', opacity:0.7}}>{item.title}</Text>
-                <View style={{width:2,height:2, borderRadius:2, backgroundColor:'black', marginHorizontal:3, opacity:0.7}}/>
-                <Text numberOfLines={1} style={{fontSize: 12, color: 'black',width: 65, opacity:0.7}}>{item.task_name}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
+                <Text numberOfLines={1} style={{fontSize: 12, color: 'black', opacity: 0.7}}>{item.title}</Text>
+                <View style={{
+                    width: 2,
+                    height: 2,
+                    borderRadius: 2,
+                    backgroundColor: 'black',
+                    marginHorizontal: 3,
+                    opacity: 0.7,
+                }}/>
+                <Text numberOfLines={1}
+                      style={{fontSize: 12, color: 'black', width: 65, opacity: 0.7}}>{item.task_name}</Text>
             </View>
             {item.reward_price && <View style={{
                 flexDirection: 'row', height: 25, alignItems: 'center',

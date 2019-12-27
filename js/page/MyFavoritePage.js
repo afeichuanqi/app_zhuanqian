@@ -183,10 +183,10 @@ class MyFavoritePage extends PureComponent {
                         resizeMode={FastImage.resizeMode.stretch}
                     />
                     <View style={{justifyContent: 'space-around', marginLeft: 12}}>
-                        <Text style={{fontSize: 14}}>{item.task_title}</Text>
+                        <Text style={{fontSize: 14,color:'black'}}>{item.task_title}</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{fontSize: 12, opacity: 0.5}}>剩余数:{item.rewardNum - item.signUpNum}</Text>
-                            <Text style={{fontSize: 12, opacity: 0.5, marginLeft: 10}}>编号:{item.taskId}</Text>
+                            <Text style={{fontSize: 12, opacity: 0.5,color:'black'}}>剩余数:{item.rewardNum - item.signUpNum}</Text>
+                            <Text style={{fontSize: 12, opacity: 0.5, marginLeft: 10,color:'black'}}>编号:{item.taskId}</Text>
                         </View>
                     </View>
 

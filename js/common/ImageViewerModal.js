@@ -27,7 +27,7 @@ export default class ImageViewerModal extends React.Component {
             if (i === tmpImages.length - 1) {
                 if (activeUrl != '') {
                     activeIndex = tmpImages.findIndex(item => item.url == activeUrl);
-                    console.log(activeIndex,"activeIndex");
+                    console.log(activeIndex, 'activeIndex');
                 }
                 this.setState({
                     index: activeIndex,
@@ -72,7 +72,7 @@ export default class ImageViewerModal extends React.Component {
     };
     onSave = async (url) => {
         const bool = await this.checkPermission();
-        if(bool){
+        if (bool) {
             saveImg(url, (msg) => {
                 this.toast.show(msg);
             });
@@ -113,6 +113,7 @@ export default class ImageViewerModal extends React.Component {
         }
 
     };
+
     render() {
 
         const {visible, images, index} = this.state;
@@ -127,6 +128,18 @@ export default class ImageViewerModal extends React.Component {
                 ref={ref => this.toast = ref}
             />
             <ImageViewer
+                // renderHeader={() => <TouchableOpacity style={{
+                //     position: 'absolute',
+                //     // left: 0,
+                //     right: 20,
+                //     top: 33,
+                //     zIndex: 13,
+                //     justifyContent: 'center',
+                //     alignItems: 'center',
+                //     backgroundColor: 'transparent'
+                // }}>
+                //     <SvgUri width={25} height={25} fill={'white'} svgXmlData={message_more}/>
+                // </TouchableOpacity>}
                 loadingRender={this.loadingRender}
                 onCancel={this.onCancel}
                 renderImage={this.renderImage}

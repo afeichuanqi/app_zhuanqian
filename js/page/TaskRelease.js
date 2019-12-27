@@ -460,7 +460,7 @@ class TaskRelease extends PureComponent {
                     ref={ref => this.toast = ref}
                 />
                 {showColumn ? <ScrollView
-                    keyboardShouldPersistTaps={'always'}
+                    // keyboardShouldPersistTaps={'always'}
                     ref={ref => this.scrollView = ref}
                     style={{backgroundColor: '#e8e8e8'}}>
 
