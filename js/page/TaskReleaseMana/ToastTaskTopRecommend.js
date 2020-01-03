@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import MyModalBoxTwo from '../../common/MyModalBoxTwo';
 import {Text, TextInput, View, Dimensions} from 'react-native';
+import Global from '../../common/Global';
 
 const {width} = Dimensions.get('window');
 
@@ -60,7 +61,7 @@ class TaskRecommend extends PureComponent {
 
     render() {
         const {price} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingBottom:10}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingBottom: 10}}>
             <View style={{paddingVertical: 10}}>
                 <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13}}>
                     推荐任务将在首页显示
@@ -93,7 +94,7 @@ class TaskRecommend extends PureComponent {
                             });
                             this.numText = text;
                             this.setState({
-                                price: (parseFloat(text) * 10).toFixed(2),
+                                price: (parseFloat(text) * parseFloat(Global.user_recommend_fee)).toFixed(2),
                             });
 
                         } else {
@@ -136,8 +137,8 @@ class TaskTop extends PureComponent {
 
     render() {
         const {price} = this.state;
-        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingBottom:10}}>
-            <View style={{paddingVertical: 10,paddingTop:15}}>
+        return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingBottom: 10}}>
+            <View style={{paddingVertical: 10, paddingTop: 15}}>
                 <Text style={{color: 'rgba(0,0,0,0.8)', width: width - 60, fontSize: 13}}>
                     置顶任务将在所有任务数保持前排
                 </Text>
@@ -169,7 +170,7 @@ class TaskTop extends PureComponent {
                             });
                             this.numText = text;
                             this.setState({
-                                price: (parseFloat(text) * 10).toFixed(2),
+                                price: (parseFloat(text) * parseFloat(Global.user_top_fee)).toFixed(2),
                             });
 
                         } else {

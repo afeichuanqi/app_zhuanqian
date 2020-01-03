@@ -57,7 +57,7 @@ export default class EmojiPanel extends PureComponent {
                     inputRange: [0, 1],
                     outputRange: [0, this.totalHeight],
                 }),
-                backgroundColor: '#f5f5f5',
+                backgroundColor: 'white',
                 opacity: this.props.emojiHeight.interpolate({
                     inputRange: [0, 1],
                     outputRange: [0, 1],
@@ -125,6 +125,7 @@ export default class EmojiPanel extends PureComponent {
                                             paddingHorizontal: 2,
                                             marginTop: 0,
                                             paddingVertical:20,
+
                                         }}>
                                             {
                                                 item.map((list, i) =>{
@@ -140,6 +141,8 @@ export default class EmojiPanel extends PureComponent {
                                                                 backgroundColor:'white',
                                                                 // paddingHorizontal: 20,
                                                                 marginBottom:5,
+                                                                borderWidth:0.3,
+                                                                borderColor:'rgba(0,0,0,0.3)',
                                                             }}
                                                             onPress={() => {
                                                                 this.props.onPress(list,index);

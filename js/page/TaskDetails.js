@@ -49,6 +49,7 @@ import ToastShare from '../common/ToastShare';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import Emoji from 'react-native-emoji';
+import ToastSelect from '../common/ToastSelect';
 
 const {
     timing,
@@ -223,7 +224,14 @@ class TaskDetails extends PureComponent {
                     }}/>
 
                     <Animated.View
-                        style={{width, position: 'absolute', top: 0,transform: [{translateY: TitleTop}], alignItems: 'center', zIndex: 2}}>
+                        style={{
+                            width,
+                            position: 'absolute',
+                            top: 0,
+                            transform: [{translateY: TitleTop}],
+                            alignItems: 'center',
+                            zIndex: 2,
+                        }}>
                         <Text style={{color: 'white', fontSize: 18}}>任务详情</Text>
                     </Animated.View>
                     <Animated.View
@@ -302,7 +310,7 @@ class TaskDetails extends PureComponent {
                                     </View>
 
                                     <Text style={{
-                                        fontSize: 16,
+                                        fontSize: 18,
                                         color: bottomTheme,
                                     }}>{taskData && taskData.rewardPrice}元</Text>
                                 </View>
@@ -436,6 +444,7 @@ class TaskDetails extends PureComponent {
                             userinfo={userinfo}
                             isEdit={(StatusForTask.status === 4) ? true : false}
                             stepArr={stepData || []}
+                            toast={toast}
                             showUtilColumn={false}/>
                     </Animated.ScrollView>
                     {/*底部按钮*/}
@@ -479,6 +488,7 @@ class TaskDetails extends PureComponent {
                 />
                 {/*分享弹窗*/}
                 <ToastShare ref={ref => this.toastShare = ref}/>
+
             </SafeAreaViewPlus>
         );
     }
@@ -609,7 +619,7 @@ class TaskDetailsPop extends Component {
                         justifyContent: 'center',
                     }}>
                     {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
-                    <Text style={{fontSize: 15, opacity: 0.7,color:'black'}}>接单说明</Text>
+                    <Text style={{fontSize: 15, opacity: 0.7, color: 'black'}}>接单说明</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     // key={index}
@@ -623,7 +633,7 @@ class TaskDetailsPop extends Component {
                         alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                     }}>
                     <SvgUri width={18} fill={'rgba(0,0,0,0.7)'} height={18} svgXmlData={fenxiang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7,color:'black'}}>分享</Text>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>分享</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.6}
@@ -646,7 +656,7 @@ class TaskDetailsPop extends Component {
                     }}>
                     <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={18}
                             svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7,color:'black'}}>收藏</Text>
+                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>收藏</Text>
                 </TouchableOpacity>
 
             </TaskMenu>
@@ -682,7 +692,9 @@ class BottomBtns extends PureComponent {
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.5}
-                    onPress={this.props.sendStepData}
+                    onPress={() => {
+                        this.toastS.show();
+                    }}
                     style={{
                         height: 60,
                         width: (width / 3) * 2,
@@ -723,6 +735,20 @@ class BottomBtns extends PureComponent {
 
 
             </View>}
+            <ToastSelect
+                rightTitle={this.props.update ? '确认修改' : '确认发布'}
+                sureClick={() => {
+                    this.toastS.hide();
+                    this.props.sendStepData;
+                }}
+                ref={ref => this.toastS = ref}>
+                <View style={{
+                    height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                    paddingTop: 10,
+                }}>
+                    <Text style={{fontSize: 14}}>{`是否确认此任务的${this.props.update ? '修改' : '发布'}？`}</Text>
+                </View>
+            </ToastSelect>
         </View>;
     }
 }

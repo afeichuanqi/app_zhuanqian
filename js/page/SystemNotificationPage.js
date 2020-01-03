@@ -116,7 +116,7 @@ class SystemNotificationPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <View style={{flex:1, marginBottom:10}}>
+                <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5'}}
                         ListEmptyComponent={<EmptyComponent type={4} height={height - 80} message={'您还没有相关任务'}/>}
@@ -185,24 +185,46 @@ class SystemNotificationPage extends PureComponent {
 
 class NoticeItem extends Component {
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-        if (!equalsObj(this.props.item, nextProps.item)) {
+        console.log(this.state.is_read, 'this.state.is_read != nextState.is_read', nextState.is_read, this.state.is_read != nextState.is_read);
+        if (!equalsObj(this.props.item, nextProps.item) || this.state.is_read != nextState.is_read) {
+            console.log('被执行');
             return true;
         }
         return false;
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            is_read: props.item.is_read,
+        };
+    }
+
     render() {
         const {item} = this.props;
+        const {is_read} = this.state;
+        console.log(is_read, 'is_read');
         return <TouchableOpacity
             key={item.id}
             onPress={() => {
-                if (item.title.indexOf('审核') != -1) {
+                this.setState({
+                    is_read: 1,
+                });
+                if (item.title.indexOf('发布任务') !== -1) {
+                    if (item.title.indexOf('审核成功') !== -1) {
+                        NavigationUtils.goPage({navigationIndex: 0}, 'TaskReleaseMana');
+                    }
+                    if (item.title.indexOf('审核失败') !== -1) {
+                        NavigationUtils.goPage({navigationIndex: 2}, 'TaskReleaseMana');
+                    }
+                }
+                if (item.title.indexOf('任务审核') !== -1) {
                     NavigationUtils.goPage({navigationIndex: 0}, 'TaskReleaseMana');
                 }
-                if (item.title.indexOf('驳回') != -1) {
+                if (item.title.indexOf('任务被驳回') !== -1) {
                     NavigationUtils.goPage({navigationIndex: 2}, 'TaskOrdersMana');
                 }
-                if (item.title.indexOf('通过') != -1) {
+                if (item.title.indexOf('通过') !== -1) {
                     NavigationUtils.goPage({navigationIndex: 3}, 'TaskOrdersMana');
                 }
 
@@ -222,12 +244,12 @@ class NoticeItem extends Component {
             </View>
             <View style={{
                 width: width - 20, backgroundColor: 'white',
-                paddingHorizontal: 10, borderRadius: 10, paddingVertical:10,
+                paddingHorizontal: 10, borderRadius: 10, paddingVertical: 10,
             }}>
                 <Text style={{marginVertical: 10, fontSize: 16}}>{item.title}</Text>
                 <View style={{height: 1, width: width - 40, backgroundColor: '#e8e8e8'}}/>
                 <Text style={{marginVertical: 15, fontSize: 13, opacity: 0.5, width: width - 40}}>{item.content}</Text>
-                {item.is_read == 0 && <View style={{
+                {is_read == 0 && <View style={{
                     position: 'absolute',
                     right: 10,
                     top: 10,

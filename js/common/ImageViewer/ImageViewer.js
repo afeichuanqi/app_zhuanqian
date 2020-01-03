@@ -1,88 +1,104 @@
-import React, {Component} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 const {
-    Clock,
-    Value,
+    block,
     set,
     cond,
-    startClock,
-    clockRunning,
-    stopClock,
-    block,
+    eq,
     spring,
+    startClock,
+    Value,
+    Clock,
     SpringUtils,
-    debug
 } = Animated;
 
-function runTiming(clock, value, dest) {
+function runSpring(clock, value, config) {
     const state = {
         finished: new Value(1),
+        velocity: new Value(0),
         position: new Value(0),
         time: new Value(0),
-        velocity: new Value(0),
     };
 
-    const config = SpringUtils.makeConfigFromBouncinessAndSpeed({
-        ...SpringUtils.makeDefaultConfig(),
-        bounciness: 20,
-        speed: 8,
-    });
-
     return block([
-        cond(
-            clockRunning(clock),
-            [
-                // if the clock is already running we update the toValue, in case a new dest has been passed in
-
-            ],
-            [
-                state.finished,
-                [
-                    set(state.finished, 0),
-                    set(state.position, value),
-                    set(config.toValue, dest),
-                    startClock(clock),
-                ],
-            ],
-        ),
+        cond(state.finished, [
+            set(state.finished, 0),
+            // set(state.position, value),
+            set(config.toValue, cond(eq(config.toValue, 100), -100, 100)),
+            startClock(clock),
+        ]),
         spring(clock, state, config),
-        // cond(state.finished, stopClock(clock)),
         state.position,
+
+
     ]);
 }
 
-export default class AnimatedBox extends Component {
-    clock = new Clock();
-    transX = new Value(0);
-
+class Snappable extends Component {
+    constructor(props) {
+        super(props);
+        const transX = new Value();
+        const clock = new Clock();
+        this._transY = runSpring(clock, transX, props.config);
+    }
     render() {
+        const { children } = this.props;
         return (
-            <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                    console.log('');
-                    // const state = {
-                    //     finished: new Value(0),
-                    //     position: new Value(0),
-                    //     time: new Value(0),
-                    //     velocity: new Value(0),
-                    // };
-                    //
-                    // const config = SpringUtils.makeConfigFromBouncinessAndSpeed({
-                    //     ...SpringUtils.makeDefaultConfig(),
-                    //     bounciness: 20,
-                    //     speed: 8,
-                    // });
-
-                    this.transX = runTiming
-                }}
-                style={{flex: 1}}>
-                <Animated.View
-                    style={[{width: 100, height: 100, backgroundColor: 'red'}, {transform: [{scale: this.transX}]}]}
-                />
-            </TouchableOpacity>
+            <Animated.View style={{ transform: [{ translateY: this._transY }] }}>
+                {children}
+            </Animated.View>
         );
     }
 }
+
+const configA = SpringUtils.makeDefaultConfig();
+const configB = SpringUtils.makeConfigFromBouncinessAndSpeed({
+    ...SpringUtils.makeDefaultConfig(),
+    bounciness: 10,
+    speed: 8,
+});
+const configC = SpringUtils.makeConfigFromOrigamiTensionAndFriction({
+    ...SpringUtils.makeDefaultConfig(),
+    tension: 10,
+    friction: new Value(4),
+});
+
+export default class Example extends React.Component {
+    render() {
+        return (
+            <View style={styles.container}>
+                <Snappable config={configA}>
+                    <View style={styles.box} />
+                </Snappable>
+                {/*<Snappable config={configB}>*/}
+                {/*    <View style={styles.box} />*/}
+                {/*</Snappable>*/}
+                {/*<Snappable config={configC}>*/}
+                {/*    <View style={styles.box} />*/}
+                {/*</Snappable>*/}
+            </View>
+        );
+    }
+}
+
+const CIRCLE_SIZE = 70;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    box: {
+        backgroundColor: 'tomato',
+        marginLeft: -(CIRCLE_SIZE / 2),
+        marginTop: -(CIRCLE_SIZE / 2),
+        width: CIRCLE_SIZE,
+        height: CIRCLE_SIZE,
+        margin: CIRCLE_SIZE,
+        borderRadius: CIRCLE_SIZE / 2,
+        borderColor: '#000',
+    },
+});

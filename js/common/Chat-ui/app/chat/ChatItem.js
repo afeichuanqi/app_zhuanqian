@@ -13,6 +13,7 @@ import ImageMessage from './ImageMessage';
 // import VoiceMessage from './VoiceMessage'
 import {EMOJIS_DATA} from '../source/emojis';
 import Emoji_ from 'react-native-emoji';
+
 const {width} = Dimensions.get('window');
 
 const PATTERNS = {
@@ -66,9 +67,9 @@ export default class ChatItem extends PureComponent {
         //     textContent = textContent.replace(item, <Emoji_ name={item} style={{fontSize: 15}}/>);
         // });
         const emojiArr = [];
-        if(emojiArrs){
-            emojiArrs.forEach((item,index) => {
-                views.push(<Emoji_ key={index} name={item} style={{fontSize: 15}}/>)
+        if (emojiArrs) {
+            emojiArrs.forEach((item, index) => {
+                views.push(<Emoji_ key={index} name={item} style={{fontSize: 15}}/>);
                 // emojiArr.push(item);
                 textContent = textContent.replace(item, '');
             });
@@ -267,7 +268,15 @@ export default class ChatItem extends PureComponent {
                     return this.props.renderFileMessage({isOpen, isSelf, message, index: parseInt(rowId)});
                 }
             case 'system':
+
                 if (this.props.renderSystemMessage === undefined) {
+                    const msgs = message.content.split('|');
+                    if (msgs.length == 0) {
+                        return null;
+                    }
+                    const title = msgs[0];
+                    const content = msgs[1];
+                    const btnTitle = msgs[2];
                     return (
                         <TouchableOpacity
                             activeOpacity={0.8}
@@ -276,16 +285,16 @@ export default class ChatItem extends PureComponent {
                                 width: width - 20, backgroundColor: 'white', paddingTop: 15, paddingHorizontal: 15,
                                 borderRadius: 3,
                             }}>
-                            <Text style={{fontSize: 15, fontWeight: 'bold',color:'black'}}>{message.title}</Text>
+                            <Text style={{fontSize: 15, fontWeight: 'bold', color: 'black'}}>{title}</Text>
                             <Text
                                 style={{
                                     fontSize: 12,
                                     color: 'rgba(0,0,0,0.5)',
                                     marginTop: 10,
                                     marginBottom: 10,
-                                }}>{message.content}</Text>
+                                }}>{content}</Text>
 
-                            {message.btnTitle.length > 0 && <View style={{
+                            {(btnTitle && btnTitle.length > 0) ? <View style={{
                                 paddingVertical: 10,
                                 width: width - 60,
                                 alignItems: 'flex-start',
@@ -294,8 +303,8 @@ export default class ChatItem extends PureComponent {
                                 borderTopColor: 'rgba(0,0,0,0.1)',
 
                             }}>
-                                <Text style={{color: '#2196F3'}}>{message.btnTitle}</Text>
-                            </View>}
+                                <Text style={{color: '#2196F3'}}>{btnTitle}</Text>
+                            </View> : null}
 
 
                         </TouchableOpacity>
@@ -324,7 +333,7 @@ export default class ChatItem extends PureComponent {
 
     render() {
         const {user = {}, guzhuInfo, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle} = this.props;
-        const isSelf = user.id === message.targetId;
+        const isSelf = user.id == message.targetId;
         const {type} = message;
         const avatar = isSelf ? user.avatar : message.chatInfo.avatar;
         const nickName = isSelf ? '' : message.chatInfo.nickName;
@@ -369,7 +378,7 @@ export default class ChatItem extends PureComponent {
                                     : <TouchableOpacity
                                         activeOpacity={0.7}
                                         disabled={isOpen}
-                                        onPress={() => this.props.onPressAvatar(isSelf, message.targetId)}
+                                        onPress={() => this.props.onPressAvatar(isSelf, message.targetId, message.isAdmin)}
                                     >
                                         {this.props.renderAvatar ? (
                                             this.props.renderAvatar(message)
@@ -391,7 +400,7 @@ export default class ChatItem extends PureComponent {
                                             flexDirection: 'row', justifyContent: isSelf ? 'flex-end' : 'flex-start',
                                         }}>
                                             <View style={{
-                                                backgroundColor: message.targetId == guzhuInfo.guzhuUserId ? 'red' : '#2196F3',
+                                                backgroundColor: message.isAdmin ? 'red' : message.targetId == guzhuInfo.guzhuUserId ? 'red' : '#2196F3',
                                                 paddingHorizontal: 7,
                                                 paddingVertical: Platform.OS == 'android' ? 1 : 2,
                                                 borderRadius: 4,
@@ -400,7 +409,7 @@ export default class ChatItem extends PureComponent {
                                                 <Text style={{
                                                     fontSize: 12,
                                                     color: 'white',
-                                                }}>{message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单人'}</Text>
+                                                }}>{message.isAdmin ? '客服' : message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单人'}</Text>
                                             </View>
                                             <Text style={{
                                                 fontSize: 12,
@@ -434,7 +443,7 @@ export default class ChatItem extends PureComponent {
 const styles = StyleSheet.create({
     commentBar: {
         width: width,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'white',
         justifyContent: 'center',
         borderColor: '#ccc',
         borderTopWidth: StyleSheet.hairlineWidth,

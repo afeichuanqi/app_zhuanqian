@@ -63,14 +63,12 @@ export default class FlatListCommonUtil extends PureComponent {
     _updateList = (refresh) => {
         if (refresh) {
 
-            this.props.onRefresh(true);
             this.page = {pageIndex: 0};
             this.setState({
                 isLoading: true,
             });
 
         } else {
-            this.props.onLoading(true);
             this.page = {pageIndex: this.page.pageIndex + 1};
         }
         selectAllRecommendTask({pageIndex: this.page.pageIndex, type: this.props.type}).then(result => {
@@ -80,14 +78,12 @@ export default class FlatListCommonUtil extends PureComponent {
                     isLoading: false,
                     hideLoaded: result.length >= 30 ? false : true,
                 });
-                this.props.onRefresh(false);
             } else {
                 const tmpArr = [...this.state.taskData];
                 this.setState({
                     taskData: tmpArr.concat(result),
                     hideLoaded: result.length >= 30 ? false : true,
                 });
-                this.props.onLoading(false);
             }
         }).catch(() => {
             this.setState({
@@ -151,6 +147,7 @@ export default class FlatListCommonUtil extends PureComponent {
 
     };
     onRefresh = () => {
+        this.props.onRefresh();
         this._updateList(true);
 
     };

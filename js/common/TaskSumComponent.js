@@ -224,6 +224,8 @@ class TaskSumComponent extends Component {
                             borderRadius: 2,
 
                         }}
+                        loadingWidth={55}
+                        loadingHeight={55}
                         source={{uri: item.taskUri}}
                         // resizeMode={FastImage.resizeMode.stretch}
                     />

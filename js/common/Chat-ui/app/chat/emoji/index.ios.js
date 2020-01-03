@@ -45,7 +45,7 @@ export default class EmojiPanel extends PureComponent {
             <Animated.View style={[styles.container, {
                 position: 'absolute',
                 height: this.totalHeight,
-                backgroundColor: '#f5f5f5',
+                backgroundColor: 'white',
                 top: this.props.emojiHeight.interpolate({
                     inputRange: [0, 1],
                     outputRange: [height, height - HeaderHeight - this.totalHeight],
@@ -130,6 +130,8 @@ export default class EmojiPanel extends PureComponent {
                                                             backgroundColor:'white',
                                                             // paddingHorizontal: 20,
                                                             marginBottom:5,
+                                                            borderWidth:0.3,
+                                                            borderColor:'rgba(0,0,0,0.3)',
                                                         }}
                                                         onPress={() => {
                                                             this.props.onPress(list,index);

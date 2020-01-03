@@ -122,6 +122,24 @@ export default class ViewUtil {
 
         </TouchableOpacity>;
     };
+    /**
+     * 重新发布
+     * @param reviewNum
+     * @param click
+     * @returns {*}
+     */
+    static getReReviewIngIco = (click) => {
+        return <View
+            onPress={click}
+            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            <Image
+                style={{height: 13, width: 13}}
+                source={require('../res/img/taskReView/reviewing.png')}
+            />
+            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核中</Text>
+
+        </View>;
+    };
 
     /**
      * 删除

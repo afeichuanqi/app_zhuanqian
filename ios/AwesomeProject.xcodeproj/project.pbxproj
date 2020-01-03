@@ -16,6 +16,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* AwesomeProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AwesomeProjectTests.m */; };
+		96312CE123BF40ED007D12D6 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 96312CE023BF40ED007D12D6 /* libresolv.tbd */; };
 		96964D71239F708E00B41DDB /* UMShareModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 96964D5F239F708E00B41DDB /* UMShareModule.m */; };
 		96964D72239F708E00B41DDB /* RNUMConfigure.m in Sources */ = {isa = PBXBuildFile; fileRef = 96964D60239F708E00B41DDB /* RNUMConfigure.m */; };
 		96964D73239F708E00B41DDB /* UMSocialSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 96964D66239F708E00B41DDB /* UMSocialSDKResources.bundle */; };
@@ -66,6 +67,7 @@
 		5320BA8D2637A04E903A06CA /* Pods-AwesomeProject-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeProject-tvOSTests/Pods-AwesomeProject-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		68C8722109C3DB2AAF346F61 /* libPods-AwesomeProject-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AwesomeProject-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73EFDCBEEE7F49F0D4F510FF /* Pods-AwesomeProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeProject/Pods-AwesomeProject.debug.xcconfig"; sourceTree = "<group>"; };
+		96312CE023BF40ED007D12D6 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		96964D5F239F708E00B41DDB /* UMShareModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMShareModule.m; sourceTree = "<group>"; };
 		96964D60239F708E00B41DDB /* RNUMConfigure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNUMConfigure.m; sourceTree = "<group>"; };
 		96964D61239F708E00B41DDB /* UMShareModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMShareModule.h; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96312CE123BF40ED007D12D6 /* libresolv.tbd in Frameworks */,
 				96964D77239F708E00B41DDB /* libSocialQQ.a in Frameworks */,
 				96964D74239F708E00B41DDB /* UShareUI.framework in Frameworks */,
 				96964D75239F708E00B41DDB /* UMShare.framework in Frameworks */,
@@ -167,6 +170,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				96312CE023BF40ED007D12D6 /* libresolv.tbd */,
 				96964D79239F713C00B41DDB /* libsqlite3.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,

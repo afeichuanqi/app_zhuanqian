@@ -9,6 +9,7 @@ import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
 import FastImage from 'react-native-fast-image';
 import SkeletonPlaceholder from '../../common/SkeletonPlaceholder';
+import FastImagePro from '../../common/FastImagePro';
 
 const width = Dimensions.get('window').width;
 const lunboHeight = 220;
@@ -44,13 +45,13 @@ class SecondListComponent extends PureComponent {
 
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
-        const Y_ = this.nowY - y;
-        if (Y_ < 20
-            && Y_ > -20
-        ) {
-
-            return;
-        }
+        // const Y_ = this.nowY - y;
+        // if (Y_ < 20
+        //     && Y_ > -20
+        // ) {
+        //
+        //     return;
+        // }
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -178,7 +179,10 @@ class ScrollItem extends React.Component {
             key={item.id}
             style={{height: 160, width: 110, paddingHorizontal: 5}}>
             <View style={{width: 100}}>
-                <FastImage
+                <FastImagePro
+                    loadingType={1}
+                    loadingWidth={100}
+                    loadingHeight={100}
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
                         height: 100,

@@ -231,7 +231,7 @@ class MyOrderManaPage extends PureComponent {
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 15, marginRight: 10}}>剩余数量:</Text>
-                                <Text>{(parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num))}</Text>
+                                <Text>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -255,7 +255,7 @@ class MyOrderManaPage extends PureComponent {
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 15, marginRight: 10}}>佣金:</Text>
-                                <Text>{(parseFloat(taskInfo.reward_price))}</Text>
+                                <Text>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -388,7 +388,7 @@ class MyOrderManaPage extends PureComponent {
             <TouchableOpacity
                 onPress={() => {
                     NavigationUtils.goPage({
-                        keyword: this.state.taskInfo.id,
+                        keyword: `taskId:${this.state.taskInfo.id}|`,
                         type: 3,
                     }, 'MessageAppealPage');
                 }}
@@ -421,7 +421,7 @@ class MyOrderManaPage extends PureComponent {
             <TouchableOpacity
                 onPress={() => {
                     NavigationUtils.goPage({
-                        keyword: this.state.taskInfo.id,
+                        keyword: `taskId:${this.state.taskInfo.id}|`,
                         type: 2,
                     }, 'MessageAppealPage');
                 }}
@@ -546,15 +546,15 @@ class MyOrderManaPage extends PureComponent {
                 <Text style={{marginTop: 5}}>下架</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={()=>{
-                    this.toastShare.show()
+                onPress={() => {
+                    this.toastShare.show();
                 }}
                 style={{
-                width: (width - 20) / 4,
-                height: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
+                    width: (width - 20) / 4,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
                 <Image source={require('../res/img/orderMana/fenxiang.png')}
                        style={{width: 23, height: 23}}/>
                 <Text style={{marginTop: 5}}>分享</Text>

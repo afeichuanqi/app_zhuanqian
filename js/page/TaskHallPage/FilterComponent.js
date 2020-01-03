@@ -31,7 +31,6 @@ export default class FilterComponent extends PureComponent {
     _typeClick = (index, data, checked) => {
         this.typeMap.set(data.id, checked);
     };
-    // hide
     animations = {
         translateY: new Animated.Value(0),
     };
@@ -234,20 +233,15 @@ class TypeComponent extends Component {
     };
 
     componentDidMount(): void {
-        // EventBus.getInstance().addListener(EventTypes.search_btn_click, this.listener = data => {
-        //     console.log(this.props.navigation.isFocused(), 'this.props.navigation.isFocused()');
-        //     if (this.props.navigation.isFocused()) {
-        //
-        //         this._getHotContent();
-        //     }
-        // });
     }
 
     ResetStatus = () => {
+        const {index, data} = this.props;
         if (this.state.checked) {
             this.setState({
                 checked: false,
             });
+            this.props.onPress(index, data, false);
         }
     };
 

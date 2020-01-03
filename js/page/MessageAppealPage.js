@@ -57,8 +57,6 @@ class MessageAppealPage extends PureComponent {
     };
 
     render() {
-        console.log(this.params.keyword, 'this.params.keyword');
-
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
@@ -122,8 +120,6 @@ class TextPro extends Component {
             returnKeyType={'search'}
             style={{
                 padding: 0,
-                // borderWidth:0.3,
-                // borderColor:'rgba(0,0,0,0.5)',
                 height: 25,
                 backgroundColor: '#f2f2f2',
                 borderRadius: 3,
@@ -136,11 +132,13 @@ class TextPro extends Component {
                 });
             }}
             onBlur={() => {
-                this.props.onSubmitEditing(this.state.content);
+                let text = this.state.content;
+
+                if (this.state.content === 0) {
+                    text = '';
+                }
+                this.props.onSubmitEditing(text);
             }}
-            // onSubmitEditing={() => {
-            //     this.props.onSubmitEditing(this.state.content);
-            // }}
         />;
     }
 }
@@ -173,7 +171,6 @@ class MsgList extends Component {
     constructor(props) {
         super(props);
         this.page = {pageIndex: 20, keyWord: this.props.keyword};
-        console.log(this.page);
     }
 
     componentDidMount(): void {
@@ -276,7 +273,6 @@ class MsgList extends Component {
             pageIndex: this.page.pageIndex,
             keyword: this.page.keyWord,
         }, userinfo.token).then(result => {
-            // console.log(result, 'result\'');
             this.setState({
                 friendData: result,
                 isLoading: false,

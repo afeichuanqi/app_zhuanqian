@@ -16,12 +16,13 @@ import {
     Image,
     FlatList,
     Platform,
+    View
 } from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageUtil from '../util/ImageUtil';
 
-const {timing} = Animated;
+const {timing,SpringUtils,spring,} = Animated;
 const {width} = Dimensions.get('window');
 export const ImgOption = Platform.OS === 'android' ? {
     cropping: true,
@@ -103,7 +104,14 @@ class PickerImage extends PureComponent {
         this.timer && clearTimeout(this.timer);
     }
 
-    hide = () => {
+    hide = (hideAnimated=false) => {
+        if(hideAnimated){
+            this.setState({
+                visible: false,
+            });
+            return ;
+        }
+
         this._anim = timing(this.animations.bottom, {
             duration: 200,
             toValue: 0,
@@ -131,11 +139,17 @@ class PickerImage extends PureComponent {
                 visible: true,
                 photos: data,
             }, () => {
-                this._anim = timing(this.animations.bottom, {
-                    duration: 200,
-                    toValue: -400,
-                    easing: Easing.inOut(Easing.cubic),
-                }).start();
+                spring(this.animations.bottom, SpringUtils.makeConfigFromBouncinessAndSpeed({
+                    ...SpringUtils.makeDefaultConfig(),
+                    bounciness: 10,
+                    speed: 8,
+                    toValue:-400
+                })).start();
+                // this._anim = timing(this.animations.bottom, {
+                //     duration: 200,
+                //     toValue: -400,
+                //     easing: Easing.inOut(Easing.cubic),
+                // }).start();
             });
         });
 
@@ -181,7 +195,7 @@ class PickerImage extends PureComponent {
                     <Animated.View style={{
                         width,
                         position: 'absolute',
-                        bottom: -400,
+                        bottom: -460,
                         backgroundColor: 'white',
                         borderTopLeftRadius: 10,
                         borderTopRightRadius: 10,
@@ -214,7 +228,9 @@ class PickerImage extends PureComponent {
                             }}>
                             <Text style={{color: 'black'}}>{'从相册选一张'}</Text>
                         </TouchableOpacity>
+                        <View style={{height:60, backgroundColor:'white'}}/>
                     </Animated.View>
+
                 </TouchableOpacity>
             </Modal>
         );
@@ -225,7 +241,6 @@ class PickerImage extends PureComponent {
         const FlatListItemHeight = 130;
         const size = FlatListItemHeight / height;
         const imgWidth = width * size;
-        // if (uri.startsWith('ph://')) { uri = 'ph-upload' + uri.substring(2); }
         console.log(item);
         return <TouchableOpacity
             onPress={() => {
@@ -235,10 +250,10 @@ class PickerImage extends PureComponent {
                     width: (Platform.OS === 'ios') ? width * 2 : width,
                     height: (Platform.OS === 'ios') ? height * 2 : height,
                 }).then(image => {
-                    // this.hide(true);
+
                     this.props.select(image, this.timestamp);
+                    this.hide(false);
                 });
-                // NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
             }}
             key={item.id}
             style={{padding: 1}}>

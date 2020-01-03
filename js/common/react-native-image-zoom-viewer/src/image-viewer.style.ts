@@ -1,3 +1,4 @@
+// @ts-ignore
 import { TextStyle, ViewStyle } from 'react-native';
 
 export default (

@@ -161,13 +161,13 @@ class TaskReleaseMana extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent toast={this.toast} task_status={0}
+                return <FristListComponent toast={this.toast} task_status={[0]}
                                            userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent toast={this.toast} task_status={2}
+                return <FristListComponent toast={this.toast} task_status={[2]}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent toast={this.toast} task_status={1}
+                return <FristListComponent toast={this.toast} task_status={[1, 3]}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -201,9 +201,13 @@ class FristListComponent extends PureComponent {
         }, 500);
         //收到消息刷新任务
         EventBus.getInstance().addListener(EventTypes.update_task_release_mana, this.listener = data => {
-            if (data.index === this.props.task_status) {
+            const findIndex = this.props.task_status.findIndex(item => item == data.index);
+            if (findIndex !== -1) {
                 const {userinfo, task_status} = this.props;
-                selectTaskReleaseList({task_status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
+                selectTaskReleaseList({
+                    task_status: task_status.join(','),
+                    pageIndex: this.page.pageIndex,
+                }, userinfo.token).then(result => {
                     this.setState({
                         taskData: result,
                         isLoading: false,
@@ -211,7 +215,7 @@ class FristListComponent extends PureComponent {
                     });
                 });
             }
-            this._updateList(true);
+            // this._updateList(true);
         });
     }
 
@@ -230,7 +234,10 @@ class FristListComponent extends PureComponent {
             this.page = {pageIndex: this.page.pageIndex + 1};
 
         }
-        selectTaskReleaseList({task_status, pageIndex: this.page.pageIndex}, userinfo.token).then(result => {
+        selectTaskReleaseList({
+            task_status: task_status.join(','),
+            pageIndex: this.page.pageIndex,
+        }, userinfo.token).then(result => {
 
             if (refreshing) {
                 // console.log('我被触发');
@@ -268,7 +275,7 @@ class FristListComponent extends PureComponent {
                 this.toastSelect.show();
             }}
             onPress={() => {
-                if (this.props.task_status == 1) {
+                if (item.task_status == 1) {
                     NavigationUtils.goPage({
                         task_id: item.id,
                         updateReleasePage: this._updateList,

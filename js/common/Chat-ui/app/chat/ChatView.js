@@ -262,10 +262,15 @@ class ChatWindow extends PureComponent {
             console.log('longPress', type, index, content, message);
         },
         renderMessageTime: (time) =>
-            <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 10}}>
-                <View style={{backgroundColor: '#f5f5f5', paddingVertical: 4, paddingHorizontal: 8, borderRadius: 16}}>
-                    <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 12}}>{getCurrentTime(parseInt(time))}</Text>
-                </View>
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingTop: 10,
+                paddingVertical: 4,
+                paddingHorizontal: 8,
+                borderRadius: 16,
+            }}>
+                <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 12}}>{getCurrentTime(parseInt(time))}</Text>
             </View>,
         placeholder: '请输入...',
         pressInText: '按住 说话',
@@ -568,9 +573,9 @@ class ChatWindow extends PureComponent {
         this.setState({voiceEnd: false});
     };
 
-    _PressAvatar = (isSelf, targetId) => {
+    _PressAvatar = (isSelf, targetId,isAdmin) => {
         const {pressAvatar} = this.props;
-        pressAvatar(isSelf, targetId);
+        pressAvatar(isSelf, targetId,isAdmin);
         this.closeAll();
     };
 

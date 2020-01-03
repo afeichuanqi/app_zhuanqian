@@ -17,6 +17,8 @@
     "axios": "^0.19.0",
     "babel-plugin-inline-import": "^3.0.0",
     "install": "^0.13.0",
+    "janalytics-react-native": "^1.4.4",
+    "jcore-react-native": "^1.6.0",
     "jimp": "^0.9.3",
     "jsc-android": "^241213.1.0",
     "moment": "^2.24.0",

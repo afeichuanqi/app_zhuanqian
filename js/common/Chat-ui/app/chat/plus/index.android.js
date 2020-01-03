@@ -43,7 +43,7 @@ export default class PlusPanel extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'white',
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: '#ccc',
     paddingHorizontal: 15,

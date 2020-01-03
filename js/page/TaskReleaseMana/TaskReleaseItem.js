@@ -7,6 +7,7 @@ import NavigationUtils from '../../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
 import {getEmojis} from '../../util/CommonUtils';
 import Emoji from 'react-native-emoji';
+
 const {width} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
     render() {
@@ -18,7 +19,7 @@ export default class TaskReleaseItem extends PureComponent {
             taskTitle = json.content;
             emojiArr = json.emojiArr;
         }
-        return <View style={{}}>
+        return <View style={{borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)'}}>
 
 
             <TouchableOpacity
@@ -31,7 +32,7 @@ export default class TaskReleaseItem extends PureComponent {
                     paddingTop: 25,
                     paddingBottom: 25,
                     height: 90,
-                    backgroundColor:'white',
+                    backgroundColor: 'white',
                 }}
             >
                 <FastImage
@@ -54,8 +55,8 @@ export default class TaskReleaseItem extends PureComponent {
                                 color: 'black',
 
                             }}>
-                                {item.id} - {taskTitle} {emojiArr.map((item) => {
-                                return <Emoji name={item} style={{fontSize: 15}}/>;
+                                {item.id} - {taskTitle} {emojiArr.map((item,index) => {
+                                return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
                             })}
 
                             </Text>
@@ -102,27 +103,32 @@ export default class TaskReleaseItem extends PureComponent {
                             <Text style={{
                                 fontSize: 13,
                                 opacity: 0.7,
-                                color:'black'
+                                color: 'black',
                             }}>进行中:{item.task_ing_num}</Text>
                             <View
-                                style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
+                                style={{
+                                    width: 0.7,
+                                    height: 13,
+                                    backgroundColor: 'rgba(0,0,0,0.5)',
+                                    marginHorizontal: 5,
+                                }}/>
                             <Text style={{
                                 fontSize: 13,
                                 opacity: 0.7,
-                                color:'black'
+                                color: 'black',
                             }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>
                         </View>
 
                     </View>
                 </View>
             </TouchableOpacity>
-            {(this.props.task_status == 0 || this.props.task_status == 2)? <View style={{
+            {(item.task_status == 0 || item.task_status == 2) ? <View style={{
                 height: 28,
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
                 flexDirection: 'row',
-                backgroundColor: 'rgba(255,255,255,0.1)',
+                backgroundColor: 'rgba(255,255,255,1)',
             }}>
 
                 {ViewUtil.getReviewIco(parseInt(item.review_num), this._reViewClick)}
@@ -132,7 +138,7 @@ export default class TaskReleaseItem extends PureComponent {
                 {ViewUtil.getrecommendedIco(this.props.setRecommendClick)}
                 <View style={{height: 15, width: 1, marginHorizontal: 8, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getUpdateIco(this.props.updateTaskUpdateTime)}
-            </View> : this.props.task_status == 1 ? <View style={{
+            </View> : item.task_status == 1 ? <View style={{
                 height: 25,
                 paddingVertical: 6,
                 paddingHorizontal: 11,
@@ -151,8 +157,27 @@ export default class TaskReleaseItem extends PureComponent {
                 })}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getDeleteIco(this.props.deleteTask)}
+            </View> : item.task_status == 3 ? <View style={{
+                height: 25,
+                paddingVertical: 6,
+                paddingHorizontal: 11,
+                alignItems: 'center',
+                backgroundColor: 'rgba(255,255,255,1)',
+                flexDirection: 'row',
+            }}>
+
+                {ViewUtil.getReReviewIngIco(() => {
+                    // const {taskid} = this.params;
+                    NavigationUtils.goPage({
+                        task_id: this.props.item.id,
+                        update: false,
+                        // updatePage: this._updatePage,
+                    }, 'TaskRelease');
+                })}
+                <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                {ViewUtil.getDeleteIco(this.props.deleteTask)}
             </View> : null}
-        </View>
+        </View>;
     }
 
     _reViewClick = () => {
@@ -165,7 +190,7 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: bottomTheme,
         // 设置宽度
-        width:49,
+        width: 49,
         height: 52,
         borderRadius: 5,
         // 设置高度

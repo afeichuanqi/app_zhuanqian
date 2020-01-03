@@ -4,7 +4,7 @@ import ReconnectingWebSocket from './ReconnectingWebSocket';
 import Global from '../common/Global';
 
 class ChatSocket {
-    connectionstatus = false;
+
     isVerifyIdentIdy = false;
 
     connctionServer = () => {

@@ -25,6 +25,10 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - JAnalytics (1.4.4):
+    - React
+  - JCore (1.6.0):
+    - React
   - JWT (3.0.0-beta.12):
     - Base64 (~> 1.1.2)
   - libwebp (1.0.3):
@@ -287,6 +291,8 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - JAnalytics (from `../node_modules/janalytics-react-native`)
+  - JCore (from `../node_modules/jcore-react-native`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - RCTWeChat (from `../node_modules/react-native-wechat`)
@@ -351,6 +357,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  JAnalytics:
+    :path: "../node_modules/janalytics-react-native"
+  JCore:
+    :path: "../node_modules/jcore-react-native"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -429,6 +439,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  JAnalytics: e68138dd3dd05b8dd4b8161e9eefb873b33c0067
+  JCore: 54f06adbbb4a28c11e8bd2466d2a0656ec2f16c9
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   libwebp: 3fc89febfa8af824571067b00adc108496febe24
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
@@ -472,6 +484,6 @@ SPEC CHECKSUMS:
   TOCropViewController: e9da34f484aedd4e5d5a8ab230ba217cfe16c729
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: aecf394d6eb0724f23ee343ce5527cb767b4e54d
+PODFILE CHECKSUM: 4401245641aae51c91923b8b186364ffaa3ba47b
 
 COCOAPODS: 1.7.1

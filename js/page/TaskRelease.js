@@ -53,6 +53,8 @@ import actions from '../action';
 import {judgeTaskData} from '../util/CommonUtils';
 import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
+import Global from '../common/Global';
+import ToastSelect from '../common/ToastSelect';
 
 let PopButtomMenu = null;
 const {width} = Dimensions.get('window');
@@ -246,7 +248,7 @@ class TaskRelease extends PureComponent {
             singOrder: data.columnData.orderReplayNum,
         };
         const stepData = data.stepData;
-        console.log(taskData);
+        //console.log(taskData);
         NavigationUtils.goPage({
             fromUserinfo,
             taskData,
@@ -449,7 +451,7 @@ class TaskRelease extends PureComponent {
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.taskInfo.update ? '任务修改' : '任务发布', null, bottomTheme, 'white', 16, () => {
             NavigationUtils.goPage({type: 1}, 'UserProtocol');
         }, false, true, '发布须知', 'white');
-        console.log(this.taskInfo);
+        //console.log(this.taskInfo);
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
@@ -502,7 +504,9 @@ class TaskRelease extends PureComponent {
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.5}
-                        onPress={this._addTaskReleaseData}
+                        onPress={() => {
+                            this.toastS.show();
+                        }}
                         style={{
                             height: 60,
                             width: (width / 3) * 2,
@@ -518,6 +522,20 @@ class TaskRelease extends PureComponent {
                         }}>{this.taskInfo.update ? '确认修改' : '申请发布'}</Text>
                     </TouchableOpacity>
                 </View>
+                <ToastSelect
+                    rightTitle={this.taskInfo.update ? '确认修改' : '确认发布'}
+                    sureClick={() => {
+                        this.toastS.hide();
+                        this._addTaskReleaseData();
+                    }}
+                    ref={ref => this.toastS = ref}>
+                    <View style={{
+                        height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                        paddingTop: 10,
+                    }}>
+                        <Text style={{fontSize: 14}}>{`是否确认此任务的${this.taskInfo.update ? '修改' : '发布'}？`}</Text>
+                    </View>
+                </ToastSelect>
             </SafeAreaViewPlus>
         );
     }
@@ -590,7 +608,6 @@ class BottomInfoForm extends Component {
         this.columnData.reviewTime = item;
     };
     _SelectSingleOrder = (item) => {
-        // console.log(item);
         this.columnData.singleOrder = item;
         if (item.id === 3) {
             this.replayNum.setNativeProps({
@@ -617,14 +634,14 @@ class BottomInfoForm extends Component {
     _changeRewardPrice = (text) => {
         this.columnData.rewardPrice = text;
         if (this.columnData.rewardNum != 0 && this.columnData.rewardNum != 0) {
-            this.inputSetting.setValue(this.columnData.rewardNum * this.columnData.rewardPrice + (this.columnData.rewardNum * this.columnData.rewardPrice) * 0.12);
+            this.inputSetting.setValue(((this.columnData.rewardNum * this.columnData.rewardPrice) * parseFloat(Global.user_service_fee)).toFixed(2));
         }
 
     };
     _changeRewardNum = (text) => {
         this.columnData.rewardNum = text;
         if (this.columnData.rewardNum != 0 && this.columnData.rewardNum != 0) {
-            this.inputSetting.setValue(this.columnData.rewardNum * this.columnData.rewardPrice + (this.columnData.rewardNum * this.columnData.rewardPrice) * 0.12);
+            this.inputSetting.setValue(((this.columnData.rewardNum * this.columnData.rewardPrice) * parseFloat(Global.user_service_fee)).toFixed(2));
         }
     };
     _changePrepaidBounty = (text) => {
@@ -633,13 +650,26 @@ class BottomInfoForm extends Component {
     getColumnData = () => {
         return this.columnData;
     };
-    state = {
-        showHistory: false,
-        stepData: [],
-    };
+    // state = {
+    //     showHistory: false,
+    //     stepData: [],
+    // };
+    componentDidMount(): void {
+        if (this.props.data && this.props.data.app_task_single_order) {
+            const index = this.props.data.app_task_single_order.findIndex(e => e.id == this.columnData.singleOrder.id);
+            if (index !== -1) {
+                const item = this.props.data.app_task_single_order[index];
+                this._SelectSingleOrder(item);
+            }
+        }
+        if (this.columnData && this.columnData.rewardNum) {
+            this._changeRewardNum(this.columnData.rewardNum);
+        }
+
+    }
 
     render() {
-        const {showHistory, stepData} = this.state;
+        // const {showHistory, stepData} = this.state;
 
         //悬赏单价
         const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -654,12 +684,6 @@ class BottomInfoForm extends Component {
             <Text style={{color: 'rgba(0,0,0,0.5)'}}>单</Text>
         </View>;
         const {userinfo} = this.props;
-        // const ReplayNumArray = this.props.data.app_task_single_order && this.props.data.app_task_single_order[3] && this.props.data.app_task_single_order[3].data;
-        // const
-        // if (ReplayNumArray) {
-        //
-        // }
-        // console.log('render');
         return <View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('项目名称', 1, {
@@ -740,41 +764,44 @@ class BottomInfoForm extends Component {
                 }}/>
                 {/*<View style={{position:'absolute',flex:1,width, height:150,backgroundColor:'rgba(0,0,0,0.1)'}}/>*/}
             </View>
-            {this.props.taskInfo.stepData && this.props.taskInfo.stepData.length > 0 && !showHistory ? <View
+            <StepInfo stepData={this.props.taskInfo.stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
+                      scrollTo={this.props.scrollTo}
+                      scollToEnd={this.props.scollToEnd}/>
+            {/*{this.props.taskInfo.stepData && this.props.taskInfo.stepData.length > 0 && !showHistory ? <View*/}
 
-                    style={{height: 80, width, justifyContent: 'center', alignItems: 'center'}}
-                >
-                    <Text style={{color: 'blue'}}>是否显示历史存档?</Text>
-                    <View style={{width: 150, flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
+            {/*        style={{height: 80, width, justifyContent: 'center', alignItems: 'center'}}*/}
+            {/*    >*/}
+            {/*        <Text style={{color: 'blue'}}>是否显示历史存档?</Text>*/}
+            {/*        <View style={{width: 150, flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>*/}
 
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.setState({
-                                    showHistory: true,
-                                    stepData: this.props.taskInfo.stepData,
-                                });
-                            }}
+            {/*            <TouchableOpacity*/}
+            {/*                onPress={() => {*/}
+            {/*                    this.setState({*/}
+            {/*                        showHistory: true,*/}
+            {/*                        stepData: this.props.taskInfo.stepData,*/}
+            {/*                    });*/}
+            {/*                }}*/}
 
-                        >
-                            <Text style={{color: 'blue'}}>是</Text>
+            {/*            >*/}
+            {/*                <Text style={{color: 'blue'}}>是</Text>*/}
 
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.setState({
-                                    showHistory: true,
-                                    stepData: [],
-                                });
-                            }}
+            {/*            </TouchableOpacity>*/}
+            {/*            <TouchableOpacity*/}
+            {/*                onPress={() => {*/}
+            {/*                    this.setState({*/}
+            {/*                        showHistory: true,*/}
+            {/*                        stepData: [],*/}
+            {/*                    });*/}
+            {/*                }}*/}
 
-                        >
-                            <Text style={{color: 'blue'}}>否</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> :
-                <StepInfo stepData={stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
-                          scrollTo={this.props.scrollTo}
-                          scollToEnd={this.props.scollToEnd}/>}
+            {/*            >*/}
+            {/*                <Text style={{color: 'blue'}}>否</Text>*/}
+            {/*            </TouchableOpacity>*/}
+            {/*        </View>*/}
+            {/*    </View> :*/}
+            {/*    <StepInfo stepData={stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}*/}
+            {/*              scrollTo={this.props.scrollTo}*/}
+            {/*              scollToEnd={this.props.scollToEnd}/>}*/}
         </View>;
     }
 }
@@ -832,7 +859,7 @@ class InputSelect extends Component {
 
                 }}
             >
-                <Text style={{fontSize: 14,color:'black'}}>{title}</Text>
+                <Text style={{fontSize: 14, color: 'black'}}>{title}</Text>
             </TouchableOpacity>
             {this.state.showPopBtn ?
                 <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
@@ -951,21 +978,22 @@ class RadioInfoComponent extends Component {
         this.setState({
             id: item.id,
         });
-        console.log('item', item);
         this.props.select(item);
     };
-
+    // constructor(props){
+    //     super(props);
+    //     const index = props.radioArr.findIndex(e => e.id == props.defaultId);
+    //     // this.props.select(props.radioArr[index]);
+    //     console.log(props.radioArr[index],"props.radioArr[index]");
+    // }
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        const index = this.props.radioArr.findIndex(e => e.id == nextProps.defaultId);
-        this.props.select(this.props.radioArr[index]);
         if (this.props.defaultId != nextProps.defaultId) {
-
+            const index = nextProps.radioArr.findIndex(e => e.id == nextProps.defaultId);
+            this.props.select(nextProps.radioArr[index]);
             this.setState({
                 id: nextProps.defaultId,
             });
-
         }
-
     }
 
     genRadio = (item, Nindex) => {
@@ -1014,7 +1042,7 @@ class InputSetting extends Component {
             width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
             alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
-            <Text style={{width: width / 4.2, fontSize: 13,color:'black'}}>{title}</Text>
+            <Text style={{width: width / 4.2, fontSize: 13, color: 'black'}}>{title}</Text>
             <TextInput
                 editable={rightComponentData.editable}
                 style={{flex: 1, color: 'red', padding: 0, fontSize: 13}}
@@ -1027,7 +1055,7 @@ class InputSetting extends Component {
     }
 
     setValue = (text) => {
-        console.log(text);
+        //console.log(text);
         this.setState({
             value: text.toString(),
         });
@@ -1223,7 +1251,7 @@ class TypeSelect extends Component {
         const {title, typeArr} = this.props;
         return <View style={[{backgroundColor: 'white', paddingBottom: 20}, this.props.style]}>
             <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
-                <Text style={{fontSize: 15 ,color:'black'}}>{title}</Text>
+                <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
             </View>
             <View style={{
 
@@ -1247,7 +1275,7 @@ class TypeSelect extends Component {
     _typeClick = (index, data, checked) => {
         if (checked) {
             this.typeData = data;
-            console.log(data.id, 'data.id');
+            //console.log(data.id, 'data.id');
             this.setState({
                 id: data.id,
             });

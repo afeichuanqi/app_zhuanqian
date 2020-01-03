@@ -49,6 +49,7 @@ class LoginPage extends PureComponent {
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
     }
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
@@ -82,8 +83,8 @@ class LoginPage extends PureComponent {
 
     render() {
         // const {phone} = this.state;
-        StatusBar.setBarStyle('dark-content',true)
-        StatusBar.setBackgroundColor(theme,true)
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
@@ -105,7 +106,7 @@ class LoginPage extends PureComponent {
                         marginTop: 40,
                         marginLeft: 40,
                         fontSize: 20,
-                        color:'black'
+                        color: 'black',
                     }}>账号登录</Text>
                     <View style={{width, justifyContent: 'center', alignItems: 'center', marginTop: 80}}>
 
@@ -187,6 +188,7 @@ class LoginPage extends PureComponent {
     //         });
     // };
     _getCode = () => {
+        this.phoneInput.onBlur();
         // this.WXLogin();
         // console.log(this.phone, 'this.phone');
         const isTrue = isPoneAvailable(this.phone);
@@ -244,6 +246,9 @@ class PhoneInput extends PureComponent {
             errMsg,
         });
     };
+    onBlur = () => {
+        this.textInput.blur();
+    };
 
     render() {
         const {phone, errMsg} = this.state;
@@ -251,6 +256,7 @@ class PhoneInput extends PureComponent {
         // console.log(errMsg);
         return <>
             <TextInput
+                ref={ref => this.textInput = ref}
                 value={phone}
                 dataDetectorTypes={'phoneNumber'}
                 // clearButtonMode={'always'}
@@ -264,7 +270,7 @@ class PhoneInput extends PureComponent {
                     fontSize: 15,
                     color: 'rgba(0,0,0,0.8)',
                     padding: 0,
-                    height:30
+                    height: 30,
                 }}/>
             {phone.length > 0 &&
             <TouchableOpacity

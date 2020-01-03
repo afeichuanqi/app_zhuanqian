@@ -96,7 +96,7 @@ class TaskRejectDetailsPage extends PureComponent {
             title += `(待审核)`;
         }
         if (task_status == 1) {
-            title += `(待审核)`;
+            title += `(已通过)`;
         }
         if (task_status == -2) {
             title += `(已放弃)`;
@@ -149,6 +149,7 @@ class TaskRejectDetailsPage extends PureComponent {
                                 marginTop: 10,
                             }}>
                             <FastImagePro
+                                loadingType={2}
                                 source={{uri: avatar_url}}
                                 style={{
                                     width: 40, height: 40,
@@ -210,6 +211,7 @@ class TaskRejectDetailsPage extends PureComponent {
                                             }}
                                         >
                                             <FastImagePro
+                                                loadingType={2}
                                                 style={{height: 100, width: 80, marginTop: 10, marginRight: 5}}
                                                 source={{uri: url}}
                                             />
@@ -329,9 +331,10 @@ class TaskRejectDetailsPage extends PureComponent {
     giveUpTask = () => {
         this.toastS.hide();
         userGiveUpTask({SendFormTaskId: this.params.sendFormId}, this.props.userinfo.token).then((result) => {
-            // NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
+            EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs:[2]});//刷新审核页面
             this.toast.show('成功放弃');
             NavigationUtils.goBack(this.props.navigation);
+
         }).catch(msg => {
             this.toast.show(msg);
         });
@@ -356,6 +359,7 @@ class TaskRejectDetailsPage extends PureComponent {
                 }}
             >
                 <FastImagePro
+                    loadingType={2}
                     style={{height: height, width: width}}
                     source={{uri: url}}
                     // resizeMode={Image_.resizeMode.contain}

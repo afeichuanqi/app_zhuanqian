@@ -7,12 +7,12 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, Image, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal, Image,View, Dimensions, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
 
 const {width, height} = Dimensions.get('window');
-const {timing, spring, SpringUtils} = Animated;
+const {spring, SpringUtils} = Animated;
 
 class MyModalBox extends PureComponent {
     constructor(props) {
@@ -106,22 +106,25 @@ class MyModalBox extends PureComponent {
 
                             }}
                         />
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            onPress={() => {
-                                this.hide();
-                                NavigationUtils.goPage({}, 'FriendPromotionPage');
-                            }}
-                            style={{marginTop: 20, alignItems: 'center'}}>
-                            <Image
-                                resizeMode={'contain'}
-                                source={require('../res/img/toastImg/yaoqinghaoyouBtn.png')}
-                                style={{
-                                    width: width / 2,
-                                    height: 70,
+                        <View style={{marginTop: 20,width, alignItems:'center'}}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={() => {
+                                    this.hide();
+                                    NavigationUtils.goPage({}, 'FriendPromotionPage');
                                 }}
-                            />
-                        </TouchableOpacity>
+                                style={{ }}>
+                                <Image
+                                    resizeMode={'contain'}
+                                    source={require('../res/img/toastImg/yaoqinghaoyouBtn.png')}
+                                    style={{
+                                        width: width / 2,
+                                        height: 70,
+                                    }}
+                                />
+                            </TouchableOpacity>
+                        </View>
+
                         <TouchableOpacity
                             activeOpacity={0.7}
                             onPress={() => {

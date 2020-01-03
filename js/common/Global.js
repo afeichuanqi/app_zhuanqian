@@ -12,5 +12,11 @@ const Global = {
     connectionstatus:false,
 
     imageViewModal:null,
+    //用户服务费
+    user_service_fee: 1.05,
+    //每小时推荐数
+    user_recommend_fee: 10,
+    //每小时置顶数
+    user_top_fee: 10,
 };
 module.exports = Global;

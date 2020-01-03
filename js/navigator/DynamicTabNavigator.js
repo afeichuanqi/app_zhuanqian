@@ -6,7 +6,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, BackHandler} from 'react-native';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image} from 'react-native';
 import Animated from 'react-native-reanimated';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
@@ -24,7 +24,7 @@ import {equalsObj} from '../util/CommonUtils';
 import ImageViewerModal from '../common/ImageViewerModal';
 import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
-
+import {NavigationActions} from "react-navigation";
 const {SpringUtils, spring} = Animated;
 type Props = {};
 
@@ -116,13 +116,14 @@ class BottomBar extends Component {
         const {nav} = this.props;
         if (nav.routes[0].index === 0) {
             if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-                console.log('exitApp');
-                BackHandler.exitApp();
-                return false;
+                // console.log('exitApp');
+                // BackHandler.exitApp();
+                return true;
             }
             this.lastBackPressed = Date.now();
             return true;//默认行为
         }
+        this.props.dispatch(NavigationActions.back());
         return true;//默认行为
     };
 
@@ -246,6 +247,7 @@ class BottomBar extends Component {
             borderTopWidth: 0.8,
             borderTopColor: '#c0c0c0',
         }}>
+
             <BottomBarItem
                 source={navigationIndex === 0 ? require('../res/img/bottomBarIcon/homeC.png') : require('../res/img/bottomBarIcon/home.png')}
                 onPress={this._BottomBarClick}
@@ -274,7 +276,7 @@ class BottomBar extends Component {
                 index={3}
                 isActive={navigationIndex === 3 ? true : false}
                 unReadLength={0}
-                isOtherUnReaxd={(notice_arr[1] > 0 || notice_arr[2] > 0)}
+                isOtherUnRead={(notice_arr[1] > 0 || notice_arr[2] > 0)}
             />
         </View>;
     }
@@ -294,7 +296,7 @@ class BottomBarItem extends Component {
 
     onPress = () => {
         const {onPress, index} = this.props;
-        this.props.onPress(index);
+        onPress(index);
     };
     animations = {
         scale: new Animated.Value(1),
@@ -329,7 +331,6 @@ class BottomBarItem extends Component {
             activeOpacity={1}
             onPress={this.onPress}
             onPressIn={this.onPressIn}
-            // onPressOut={this.onPressOut}
             style={{
                 width: width / 4,
                 height: 45,
@@ -381,8 +382,10 @@ const mapStateToProps = state => ({
     nav: state.nav,
     userinfo: state.userinfo,
 
+
 });
 const mapDispatchToProps = dispatch => ({
+    dispatch: dispatch,
     onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
 });
 const BottomBarRedux = connect(mapStateToProps, mapDispatchToProps)(BottomBar);

@@ -587,6 +587,23 @@ export function getBestNewTask() {
         }
     });
 }
+/**
+ * 获取app配置
+ */
+export function getAppSetting() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            const ret = await http.get('user/getAppSetting', {});
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 设置用户任务的置顶

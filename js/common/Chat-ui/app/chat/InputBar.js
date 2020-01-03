@@ -133,41 +133,31 @@ export default class InputBar extends PureComponent {
             borderColor: '#ccc',
 
             flex: 1,
-            borderBottomWidth: 0.5,
+            // borderBottomWidth: 0.5,
             paddingVertical: 0.8
           }}
           >
-            {showVoice
-              ? <View
-                style={{ borderRadius: 18, backgroundColor: isVoiceEnd ? '#bbb' : '#f5f5f5' }}
-                {...this.panResponder.panHandlers}
-              >
-                <View style={[{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', height: 35 + inputHeightFix, borderRadius: 18 }]}>
-                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#555' }}>{isVoiceEnd ? `${pressOutText}` : `${pressInText}`}</Text>
-                </View>
-              </View>
-              : <TouchableOpacity
+            <TouchableOpacity
                 disabled={!enabled}
                 activeOpacity={1}
                 onPress={() => {
                   onFocus()
                 }}
-              >
-                <TextInput
+            >
+              <TextInput
                   ref={e => (this.input = e)}
                   multiline
                   blurOnSubmit={false}
                   editable={!enabled}
                   placeholder={placeholder}
-                  placeholderTextColor={'#5f5d70'}
+                  placeholderTextColor={'rgba(0,0,0,0.5)'}
                   onContentSizeChange={onContentSizeChange}
                   underlineColorAndroid='transparent'
                   onChangeText={textChange}
                   value={messageContent}
                   style={[ styles.commentBar__input, inputStyle ]}
-                />
-              </TouchableOpacity>
-            }
+              />
+            </TouchableOpacity>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {
@@ -211,7 +201,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
     justifyContent: 'center',
     // borderColor: '#ccc',
-    borderTopWidth: StyleSheet.hairlineWidth
+    // borderTopWidth: StyleSheet.hairlineWidth
   },
   commentBar__input: {
     // borderRadius: 18,

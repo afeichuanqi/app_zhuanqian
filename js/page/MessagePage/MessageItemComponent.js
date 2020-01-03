@@ -8,7 +8,8 @@ const {timing} = Animated;
 import FastImage from 'react-native-fast-image';
 import {getCurrentTime} from '../../common/Chat-ui/app/chat/utils';
 import Global from '../../common/Global';
-import {equalsObj} from '../../util/CommonUtils';
+
+import FastImagePro from '../../common/FastImagePro';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const width = Dimensions.get('window').width;
@@ -47,11 +48,12 @@ export default class MessageItemComponent extends Component {
     };
     _onPressOut = () => {
         //隐藏box
-        this._anim = timing(this.animations.scale, {
-            duration: 100,
-            toValue: 1,
-            easing: Easing.inOut(Easing.ease),
-        }).start();
+        // this._anim = timing(this.animations.scale, {
+        //     duration: 500,
+        //     toValue: 1,
+        //     easing: Easing.inOut(Easing.ease),
+        // }).start();
+        this.animations.scale.setValue(1)
     };
     _onPress = () => {
 
@@ -106,7 +108,10 @@ export default class MessageItemComponent extends Component {
             <View>
                 <View style={{flexDirection: 'row'}}>
                     <View>
-                        <FastImage
+                        <FastImagePro
+                            loadingType={1}
+                            loadingWidth={45}
+                            loadingHeight={45}
                             style={[styles.imgStyle]}
                             source={{uri: avatar_url}}
                             resizeMode={FastImage.resizeMode.stretch}
@@ -188,7 +193,9 @@ export default class MessageItemComponent extends Component {
                     Global.imageViewModal.show([{url: taskUri}]);
                 }}
             >
-                <FastImage
+                <FastImagePro
+                    loadingWidth={55}
+                    loadingHeight={55}
                     style={{
                         backgroundColor: '#9d9d9d',
                         // 设置宽度

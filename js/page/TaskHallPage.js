@@ -32,6 +32,8 @@ import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import Image from 'react-native-fast-image';
+import {getEmojis} from '../util/CommonUtils';
+import Emoji from 'react-native-emoji';
 
 let FilterComponent = null;
 
@@ -228,13 +230,13 @@ class FristListComponent extends PureComponent {
 
     _onScroll = (e) => {
         const y = e.nativeEvent.contentOffset.y;
-        const Y_ = this.nowY - y;
-        if (Y_ < 20
-            && Y_ > -20
-        ) {
-
-            return;
-        }
+        // const Y_ = this.nowY - y;
+        // if (Y_ < 20
+        //     && Y_ > -20
+        // ) {
+        //
+        //     return;
+        // }
 
         if (Platform.OS === 'android') {
             if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
@@ -446,7 +448,7 @@ class HeadlineComponent extends PureComponent {
         this.timer = setInterval(() => {
             if (Global.TaskHallPage_Index == this.props.index &&
                 Global.activeRouteName == 'TaskHallPage' &&
-                this.state.HeadlineArrays.length !== 0) {//只有在当前页面才进行跑马灯
+                this.state.HeadlineArrays.length > 1) {//只有在当前页面才进行跑马灯
                 this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
                 this.flatList.scrollToIndex({animated: true, index: this.index});
             }
@@ -476,7 +478,7 @@ class HeadlineComponent extends PureComponent {
                 resizeMode={'stretch'}
                 source={require('../res/img/index_hot.png')} style={{
                 width: 42, height: 16, marginLeft: 20,
-                marginBottom:4,
+                marginBottom: 4,
             }}/>
             <View style={{
                 flex: 1,
@@ -507,6 +509,13 @@ class HeadlineComponent extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
+        let taskTitle = item.taskTitle;
+        let emojiArr = [];
+        const json = getEmojis(taskTitle);
+        if (json) {
+            taskTitle = json.content;
+            emojiArr = json.emojiArr;
+        }
         return <View
             key={item.taskId}
             style={{
@@ -522,9 +531,15 @@ class HeadlineComponent extends PureComponent {
                     width: width - 140,
                     marginLeft: 5, opacity: 0.8,
                     // marginTop:1,
-                    fontSize: 16,
+                    fontSize: 15,
 
-                }}>{item.taskTitle}</Text>
+                }}>
+
+
+                {taskTitle} {emojiArr.map((item, index) => {
+                return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
+            })}
+            </Text>
 
             <View style={{flexDirection: 'row', alignItems: 'center', height: 25}}>
                 <Text style={{

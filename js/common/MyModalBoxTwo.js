@@ -10,7 +10,7 @@ import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, Text, TouchableOpacity, ImageBackground} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 
-const {timing} = Animated;
+const {timing,} = Animated;
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
@@ -59,6 +59,12 @@ class MyModalBox extends PureComponent {
         this.setState({
             visible: true,
         }, () => {
+            // spring(this.animations.translateY, SpringUtils.makeConfigFromBouncinessAndSpeed({
+            //     ...SpringUtils.makeDefaultConfig(),
+            //     bounciness: 12,
+            //     speed: 20,
+            //     toValue:1
+            // })).start();
             this._anim = timing(this.animations.translateY, {
                 // useNativeDriver: true,
                 duration: 200,

@@ -30,6 +30,7 @@ import PickerImage from '../../common/PickerImage';
 import ImageViewerModal from '../../common/ImageViewerModal';
 import {equalsObj} from '../../util/CommonUtils';
 import FastImagePro from '../../common/FastImagePro';
+import {saveImg} from '../../util/ImageUtil';
 
 const {width, height} = Dimensions.get('window');
 
@@ -271,7 +272,12 @@ class TaskStepColumn extends Component {
                         <TouchableOpacity
                             activeOpacity={0.6}
                             onPress={() => {
-                                Linking.openURL(typeData.inputValue);
+                                if (this.props.isEdit) {
+                                    Linking.openURL(typeData.inputValue);
+                                } else {
+                                    this.props.toast.show('请先报名');
+                                }
+
                             }}
                             style={{
                                 backgroundColor: bottomTheme, height: 40, width: 100, justifyContent: 'center',
@@ -282,7 +288,12 @@ class TaskStepColumn extends Component {
                         <TouchableOpacity
                             activeOpacity={0.6}
                             onPress={() => {
-                                Clipboard.setString(typeData.inputValue);
+                                if (this.props.isEdit) {
+                                    Clipboard.setString(typeData.inputValue);
+                                } else {
+                                    this.props.toast.show('请先报名');
+                                }
+
                             }}
                             style={{
                                 backgroundColor: bottomTheme, height: 40, width: 100, justifyContent: 'center',
@@ -315,6 +326,7 @@ class TaskStepColumn extends Component {
                             }}
                             style={styles.imgBox}>
                             <FastImagePro
+                                loadingType={2}
                                 source={{uri: typeData.uri}}
                                 style={{width: 120, height: 120, backgroundColor: '#F0F0F0', borderRadius: 3}}
                                 resizeMode={'contain'}/>
@@ -350,7 +362,7 @@ class TaskStepColumn extends Component {
                                     </View> : uploadStatus == 1 ?
                                         <Image
                                             resizeMode={'contain'}
-                                            source={require('../../res/img/yanzhengbiaozhu/yanzhengtu.png')}
+                                            source={require('../../res/img/yanzhengbiaozhu/erweima.png')}
                                             style={{
                                                 position: 'absolute',
                                                 left: 0,
@@ -362,12 +374,23 @@ class TaskStepColumn extends Component {
                         </TouchableOpacity>
 
                         <View style={styles.imgBox}>
-                            <View style={{
-                                backgroundColor: bottomTheme, height: 40, width: 100, justifyContent: 'center',
-                                alignItems: 'center', borderRadius: 3,
-                            }}>
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                onPress={() => {
+                                    if (this.props.isEdit) {
+                                        saveImg(typeData.uri, (msg) => {
+                                            this.props.toast.show(msg);
+                                        });
+                                    } else {
+                                        this.props.toast.show('请先报名哦');
+                                    }
+                                }}
+                                style={{
+                                    backgroundColor: bottomTheme, height: 40, width: 100, justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: 3,
+                                }}>
                                 <Text style={{color: 'white', fontWeight: 'bold'}}>保存二维码</Text>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </StepBox>;
@@ -408,7 +431,12 @@ class TaskStepColumn extends Component {
                         <TouchableOpacity
                             activeOpacity={0.7}
                             onPress={() => {
-                                Clipboard.setString(typeData.inputValue);
+                                if (this.props.isEdit) {
+                                    Clipboard.setString(typeData.inputValue);
+                                } else {
+                                    this.props.toast.show('请先报名');
+                                }
+
                                 // this.toast.show('复制成功 ~ ~');
                             }}
                             style={{
@@ -445,6 +473,7 @@ class TaskStepColumn extends Component {
                         }}>
                         <View>
                             <FastImagePro
+                                loadingType={2}
                                 source={{uri: typeData.uri}}
                                 style={{
                                     width: width / 2,
@@ -525,6 +554,7 @@ class TaskStepColumn extends Component {
                             }}
                             style={{marginRight: 15}}>
                             <FastImagePro
+                                loadingType={2}
                                 source={{uri: typeData.uri}}
                                 style={{
                                     width: (width - 80) / 2,
@@ -630,6 +660,7 @@ class TaskStepColumn extends Component {
                                 >
 
                                     <FastImagePro
+                                        loadingType={2}
                                         source={{uri: typeData.uri1}}
                                         style={{
                                             width: (width - 80) / 2,
@@ -728,7 +759,6 @@ class TaskStepColumn extends Component {
                                     const index = tmpArr.findIndex((n) => timestamp == n.timestamp);
                                     tmpArr[index].typeData.collectInfoContent = text;
                                 }}
-                                // value={}
                                 style={{
                                     padding: 0,
                                     width: width - 42,
@@ -741,24 +771,29 @@ class TaskStepColumn extends Component {
                                     marginTop: 10,
                                 }}/>
                             :
-
-                            <TextInput
-                                editable={false}
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                onPress={()=>{
+                                    this.props.toast.show('请先报名');
+                                }}
                                 style={{
-                                    padding: 0,
-                                    width: width - 42,
-                                    height: 40,
-                                    border: 0,
-                                    borderRadius: 3,
-                                    borderWidth: 1,
-                                    borderColor: bottomTheme,
-                                    paddingHorizontal: 5,
-                                    marginTop: 10,
-                                    textAlign: 'auto',
+                                padding: 0,
+                                width: width - 42,
+                                height: 40,
+                                border: 0,
+                                borderRadius: 3,
+                                borderWidth: 1,
+                                borderColor: bottomTheme,
+                                paddingHorizontal: 5,
+                                marginTop: 10,
+                                justifyContent:'center',
+                                // alignItems:'center',
+                            }}>
+                                <Text style={{color:'rgba(0,0,0,0.5)'}}>请按照要求输入文字内容</Text>
 
-                                }}>
-                                {typeData.collectInfoContent}
-                            </TextInput>
+
+                            </TouchableOpacity>
+
                         }
 
                     </View>

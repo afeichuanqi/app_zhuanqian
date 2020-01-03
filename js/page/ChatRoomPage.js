@@ -142,6 +142,34 @@ class ChatRoomPage extends React.Component {
                         }
                     }
                 }
+                const fromId = item.fromUserid;
+                let chatInfo = {
+                    avatar: this.fromUserinfo.avatar_url,
+                    id: this.fromUserinfo.id,
+                    nickName: this.fromUserinfo.username,
+                };
+                let isAdmin = false;
+                if (fromId.toString().startsWith('admin|')) {
+
+                    const userinfos = fromId.split('|');
+                    if (userinfos.length == 0) {
+                        return {
+                            id: id,
+                            username: id.startsWith('admin:') ? `管理员${id}` : '未知',
+                            avatar_url: 'http://wenjian.5irenqi.com/admin_ava',
+                            isSelf: false,
+                        };
+                    }
+                    const userId = userinfos[1];
+                    const username = userinfos[2];
+                    const avatar_url = userinfos[3];
+                    chatInfo = {
+                        avatar: avatar_url,
+                        id: userId,
+                        nickName: username,
+                    };
+                    isAdmin = true;
+                }
                 tmpArr.push({
                     id: item.msgId ? item.msgId : item.uuid,
                     type: item.msg_type,
@@ -152,13 +180,9 @@ class ChatRoomPage extends React.Component {
                             height: 80,
                         }
                         : item.content,
-                    targetId: parseInt(item.fromUserid),
-                    chatInfo: {
-                        avatar: this.fromUserinfo.avatar_url,
-                        id: parseInt(this.fromUserinfo.id),
-                        nickName: this.fromUserinfo.username,
-                    },
-
+                    targetId: item.fromUserid,
+                    chatInfo: chatInfo,
+                    isAdmin: isAdmin,
                     renderTime: renTime,
                     sendStatus: parseInt(item.sendStatus),
                     time: item.sendDate,
@@ -170,9 +194,8 @@ class ChatRoomPage extends React.Component {
                         tmpArr.push({
                             id: -1,
                             type: 'system',
-                            content: '为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付',
-                            title: '安全交易规范',
-                            btnTitle: '了解更多安全交易规范',
+                            content: '安全交易规范|为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付|了解更多安全交易规范',
+
                             chatInfo: {
                                 avatar: this.fromUserinfo.avatar_url,
                                 id: parseInt(this.fromUserinfo.id),
@@ -186,9 +209,8 @@ class ChatRoomPage extends React.Component {
                         tmpArr.push({
                             id: -2,
                             type: 'system',
-                            content: `为了确保【${this.columnType == 2 ? '申诉' : '投诉'}】正常进行，请双方诉求前先仔细沟通，诉求中请素质交流`,
-                            title: `确保${this.columnType == 2 ? '申诉' : '投诉'}正常进行`,
-                            btnTitle: '了解诉求须知',
+                            content: `确保${this.columnType == 2 ? '申诉' : '投诉'}正常进行|为了确保【${this.columnType == 2 ? '申诉' : '投诉'}】正常进行，请双方诉求前先仔细沟通，诉求中请素质交流|了解诉求须知`,
+
                             chatInfo: {
                                 avatar: this.fromUserinfo.avatar_url,
                                 id: parseInt(this.fromUserinfo.id),
@@ -202,9 +224,7 @@ class ChatRoomPage extends React.Component {
                         tmpArr.push({
                             id: -3,
                             type: 'system',
-                            content: `当提交任务被驳回时,您可以在此页面仔细询问雇主是否达到要求,善于理解、沟通、素质交流`,
-                            title: `驳回沟通注意事项`,
-                            btnTitle: '',
+                            content: '驳回沟通注意事项|当提交任务被驳回时,您可以在此页面仔细询问雇主是否达到要求,善于理解、沟通、素质交流|',
                             chatInfo: {
                                 avatar: this.fromUserinfo.avatar_url,
                                 id: parseInt(this.fromUserinfo.id),
@@ -272,13 +292,16 @@ class ChatRoomPage extends React.Component {
                     />}
 
                     <ChatScreen
+                        rightMessageTextStyle={{color: 'black'}}
+                        leftMessageTextStyle={{color: 'black'}}
                         renderErrorMessage={(messageStatus) => {
+                            // console.log(messageStatus,"messageStatus");
                             let statusText = '';
                             if (messageStatus === -1) {
                                 statusText = '您被对方屏蔽,关系异常';
                             } else if (messageStatus === -2) {
                                 statusText = '您与对方并无好友关系';
-                            } else if (messageStatus === -2) {
+                            } else if (messageStatus === -3) {
                                 statusText = '此好友会话状态被关闭';
                             } else {
                                 return null;
@@ -301,18 +324,16 @@ class ChatRoomPage extends React.Component {
                         loadHistory={this.onRefresh}
                         inverted={true}
                         inputOutContainerStyle={{
-                            borderColor: 'rgba(0,0,0,1)',
-                            borderTopWidth: Platform.OS == 'android' ? 0.2 : 0.1,
-                            shadowColor: '#cdcdcd',
-                            shadowRadius: 1,
-                            shadowOpacity: 1,
-                            shadowOffset: {w: 1, h: 1},
-                            elevation: 1,//安卓的阴影
+                            backgroundColor: 'white',
                         }}
                         renderLoadEarlier={() => {
                             return <View style={{height: 80}}/>;
                         }}
-                        userProfile={{id: userinfo.userid, avatar: userinfo.avatar_url, username: userinfo.username}}
+                        userProfile={{
+                            id: userinfo.userid,
+                            avatar: userinfo.avatar_url,
+                            username: userinfo.username,
+                        }}
                         placeholder={'想咨询TA点什么呢'}
                         useVoice={false}
                         ref={(e) => this.chat = e}
@@ -335,7 +356,7 @@ class ChatRoomPage extends React.Component {
                                     // console.log(image)
                                     this._imgSelect(image);
                                 }).catch(err => {
-                                    console.log(err);
+                                    // console.log(err);
                                 });
                             },
                         },
@@ -410,8 +431,17 @@ class ChatRoomPage extends React.Component {
         }
 
     };
-    _pressAvatar = () => {
-        NavigationUtils.goPage({userid: this.fromUserinfo.id}, 'ShopInfoPage');
+    _pressAvatar = (isSelf, targetId, isAdmin) => {
+        // console.log(isSelf, targetId,isAdmin, 'isSelf, targetId,isAdmin');
+        if (!isAdmin) {
+            NavigationUtils.goPage({userid: targetId}, 'ShopInfoPage');
+        } else {
+            const userinfos = targetId.split('|');
+
+            const userId = userinfos[1];
+            this.toast.show(`客服编号:${userId}`);
+        }
+
     };
 
 }
@@ -513,11 +543,11 @@ class TaskInfo extends React.Component {
                     source={{uri: taskInfo.task_uri}}
                     resizeMode={Image.resizeMode.stretch}
                 />
-                <View style={{marginLeft: 10, justifyContent: 'space-between',height: 60,}}>
+                <View style={{marginLeft: 10, justifyContent: 'space-between', height: 60}}>
                     <Text style={{fontSize: 18, color: 'black'}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
                     <Text style={{fontSize: 13, opacity: 0.5, color: 'black'}}>
 
-                        {taskTitle} {emojiArr.map((item,index) => {
+                        {taskTitle} {emojiArr.map((item, index) => {
                         return <Emoji key={index} name={item} style={{fontSize: 13, opacity: 0.5, color: 'black'}}/>;
                     })}
                     </Text>

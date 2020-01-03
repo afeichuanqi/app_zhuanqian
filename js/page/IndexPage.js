@@ -36,6 +36,7 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
+import FastImagePro from '../common/FastImagePro';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -264,24 +265,24 @@ class HomePage extends PureComponent {
             case 'first':
                 return <FristListComponent
                     position={this.position}
-                    onLoad={this._onLoad}
+                    // onLoad={this._onLoad}
                     translateY={this.translateY}
                     showAnimated={this.showAnimated}
                 />;
             case 'second':
                 return <SecondListComponent
                     position={this.position}
-                    onLoad={this._onLoad}
+                    // onLoad={this._onLoad}
                     translateY={this.translateY}
                     showAnimated={this.showAnimated}
                 />;
 
         }
     };
-    flatListLoad = false;
-    _onLoad = (refresh) => {
-        this.flatListLoad = refresh;
-    };
+    // flatListLoad = false;
+    // _onLoad = (refresh) => {
+    //     this.flatListLoad = refresh;
+    // };
     AnimatedIsshow = false;
     showAnimated = (show) => {
         if (show) {
@@ -310,6 +311,7 @@ class HomePage extends PureComponent {
         // this.toast.show('text');
         NavigationUtils.goPage({}, 'SearchPage');
         // NavigationUtils.goPage({}, 'ImageExample');
+        // this.test();
     };
 }
 
@@ -318,13 +320,13 @@ class FristListComponent extends PureComponent {
     scrollY = new Animated.Value(0);
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
-        const Y_ = this.nowY - y;
-        if (Y_ < 20
-            && Y_ > -20
-        ) {
-
-            return;
-        }
+        // const Y_ = this.nowY - y;
+        // if (Y_ < 20
+        //     && Y_ > -20
+        // ) {
+        //
+        //     return;
+        // }
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -375,8 +377,8 @@ class FristListComponent extends PureComponent {
     render() {
 
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, lunboHeight - 20],
-            outputRange: [lunboHeight + 220, lunboHeight, 20],
+            inputRange: [-220, 0, lunboHeight - 40],
+            outputRange: [lunboHeight + 210, lunboHeight - 10, 30],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -396,13 +398,13 @@ class FristListComponent extends PureComponent {
                         },
                     },
                 ])}
-                onLoading={(load) => {
-                    this.props.onLoad(load);
+                onRefresh={() => {
+                    this.lunboComponent.updatePage();
                 }}
-                ListHeaderComponent={<LunBoComponent/>}
+                ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -5,
+                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -10,
                 backgroundColor: 'white', transform: [{translateY: columnTop}],
             }}>
                 <Text
@@ -426,7 +428,11 @@ class FristListComponent extends PureComponent {
 
 class LunBoComponent extends React.Component {
     updatePage = () => {
-
+        getLunboList().then(result => {
+            this.setState({
+                lunboData: result,
+            });
+        });
     };
     state = {
         lunboData: [],
@@ -437,11 +443,7 @@ class LunBoComponent extends React.Component {
     }
 
     componentDidMount() {
-        getLunboList().then(result => {
-            this.setState({
-                lunboData: result,
-            });
-        });
+        this.updatePage();
     }
 
     _renderItem = ({item, index}) => {
@@ -465,7 +467,10 @@ class LunBoComponent extends React.Component {
                 }
             }}
         >
-            <FastImage
+            <FastImagePro
+                loadingType={1}
+                loadingWidth={100}
+                loadingHeight={100}
                 style={[styles.imgStyle, {height: '100%', width: '100%'}]}
                 source={{uri: `${item.image_url}`}}
                 resizeMode={FastImage.resizeMode.stretch}

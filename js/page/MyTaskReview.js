@@ -13,7 +13,6 @@ import {theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
 import {StatusBar} from 'react-native';
 import ViewUtil from '../util/ViewUtil';
-import jiaoliu from '../res/svg/jiaoliu.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
 import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
@@ -108,6 +107,7 @@ class MyTaskReview extends PureComponent {
 
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
+        EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {index: 0});//刷新审核页面
     }
 
 
@@ -217,6 +217,7 @@ class MyTaskReview extends PureComponent {
                                                 }}
                                             >
                                                 <FastImagePro
+                                                    loadingType={2}
                                                     style={{height: 80, width: 80, marginTop: 10}}
                                                     source={{uri: url}}
                                                     // resizeMode={Image_.resizeMode.contain}
@@ -483,6 +484,7 @@ class MyTaskReview extends PureComponent {
                 }}
             >
                 <FastImagePro
+                    loadingType={2}
                     style={{height: height, width: width}}
                     source={{uri: url}}
                     // resizeMode={Image_.resizeMode.contain}

@@ -14,7 +14,7 @@ import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
 
 const {width} = Dimensions.get('window');
-const {SpringUtils,spring} = Animated;
+const {SpringUtils, spring} = Animated;
 
 class MyModalBox extends PureComponent {
     constructor(props) {
@@ -46,7 +46,7 @@ class MyModalBox extends PureComponent {
             ...SpringUtils.makeDefaultConfig(),
             bounciness: 0,
             speed: 20,
-            toValue:0
+            toValue: 0,
         })).start(() => {
 
 
@@ -66,7 +66,7 @@ class MyModalBox extends PureComponent {
                 ...SpringUtils.makeDefaultConfig(),
                 bounciness: 13,
                 speed: 8,
-                toValue:1
+                toValue: 1,
             })).start();
 
         });
@@ -78,6 +78,11 @@ class MyModalBox extends PureComponent {
     render() {
         const {visible} = this.state;
         const {rightTitle} = this.props;
+        const opacity = Animated.interpolate(this.animations.scale, {
+            inputRange: [0, 0.3, 1],
+            outputRange: [0, 1, 1],
+            extrapolate: 'clamp',
+        });
         return (
 
             <Modal
@@ -98,7 +103,7 @@ class MyModalBox extends PureComponent {
                                   }}
                 >
                     <Animated.View style={[this.props.style, {
-                        transform: [{scale: this.animations.scale}], opacity:this.animations.scale,
+                        transform: [{scale: this.animations.scale}], opacity:opacity,
                     }]}>
 
                         <ImageBackground
