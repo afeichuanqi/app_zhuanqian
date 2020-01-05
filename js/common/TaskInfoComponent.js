@@ -131,7 +131,10 @@ class TaskInfoComponent extends PureComponent {
                         flexDirection: 'row',
                         alignItems: 'center',
                     }}>
-                        <Text style={{
+                        <Text
+                            numberOfLines={2}
+                            style={{
+                            width: width - 150,
                             fontSize: titleFontSize,
                             color: 'black',
 

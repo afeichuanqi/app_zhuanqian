@@ -37,6 +37,7 @@ import EventTypes from '../util/EventTypes';
 import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 import FastImagePro from '../common/FastImagePro';
+import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -378,7 +379,7 @@ class FristListComponent extends PureComponent {
 
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-220, 0, lunboHeight - 40],
-            outputRange: [lunboHeight + 210, lunboHeight - 10, 30],
+            outputRange: [lunboHeight + 220, lunboHeight + 10, 40],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -404,7 +405,7 @@ class FristListComponent extends PureComponent {
                 ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -10,
+                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -25,
                 backgroundColor: 'white', transform: [{translateY: columnTop}],
             }}>
                 <Text
@@ -454,8 +455,7 @@ class LunBoComponent extends React.Component {
             onPress={() => {
                 console.log(item);
                 if (item.type == 1) {
-                    console.log(item.page_name, item.params);
-                    NavigationUtils.goPage(item.params, item.page_name);
+                    NavigationUtils.goPage(JSON.parse(item.params), item.page_name);
 
                 } else {
                     Linking.canOpenURL(item.page_name).then(supported => {
@@ -489,11 +489,22 @@ class LunBoComponent extends React.Component {
             paddingTop: 10,
             backgroundColor: theme,
             width: width,
-            // zIndex: 1,
+
 
         }}>
             {/*轮播图*/}
-            <Carousel
+            {lunboData.length === 0 ? <SkeletonPlaceholder minOpacity={0.4}>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: lunboHeight - 60,
+                    width: containerWidth,
+                    borderRadius: 10,
+                }}>
+
+                </View>
+            </SkeletonPlaceholder> : <Carousel
                 style={styles.carousel}
                 timeout={3000}
                 data={lunboData}
@@ -504,7 +515,9 @@ class LunBoComponent extends React.Component {
                 pagingEnable={true}
                 paginationDefaultColor={'rgba(255,255,255,1)'}
                 paginationActiveColor={bottomTheme}
-            />
+            />}
+
+
             <View style={{height: 40}}/>
 
         </View>;

@@ -62,6 +62,7 @@ class TaskDetails extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
+        console.log(this.params,"this.params");
         const {test, task_id} = this.params;
         this.test = test;
         this.task_id = task_id;
@@ -194,7 +195,6 @@ class TaskDetails extends PureComponent {
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
-        console.log(taskData);
         let taskTitle = '';
         let emojiArr = [];
         if (taskData) {
@@ -243,8 +243,8 @@ class TaskDetails extends PureComponent {
                             zIndex: 2,
                             opacity: NameOpacity,
                         }}>
-                        <Text style={{color: 'white', fontSize: 16}}>{taskTitle} {emojiArr.map((item) => {
-                            return <Emoji name={item} style={{fontSize: 15}}/>;
+                        <Text numberOfLines={1} style={{color: 'white', fontSize: 16,width:width-90}}>{taskTitle} {emojiArr.map((item,index) => {
+                            return <Emoji index={index} name={item} style={{fontSize: 15}}/>;
                         })}</Text>
                     </Animated.View>
                     <Animated.View
@@ -284,10 +284,11 @@ class TaskDetails extends PureComponent {
                                     alignItems: 'center',
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
+                                    marginTop:5
                                 }}>
 
                                     <View>
-                                        <Text style={{fontSize: 16, opacity: 0.9, color: 'black'}}>
+                                        <Text numberOfLines={2} style={{fontSize: 16, opacity: 0.9, color: 'black',width:width-90}}>
                                             {taskTitle} {emojiArr.map((item) => {
                                             return <Emoji name={item} style={{fontSize: 15}}/>;
                                         })}

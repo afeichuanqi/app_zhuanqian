@@ -16,23 +16,35 @@ import HTML from 'react-native-render-html';
 import {order_rule, release_rule} from '../../res/text/rule';
 import BackPressComponent from '../../common/BackPressComponent';
 import NavigationUtils from '../../navigator/NavigationUtils';
+import {getAppSoftText} from '../../util/AppService';
 
-const {width} = Dimensions.get('window');
 
 class UserProtocol extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        this.state = {
+            html: this.params.type === 1 ? release_rule : order_rule,
+        };
     }
 
-    state = {};
+
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentDidMount() {
         this.backPress.componentDidMount();
+        getAppSoftText({ziduan: this.params.type === 1 ? 'release_rule' : 'order_rule'}).then(result => {
+            if (result) {
+                this.setState({
+                    html: result[this.params.type === 1 ? 'release_rule' : 'order_rule'],
+                });
+            }
+
+        });
 
     }
 
@@ -52,7 +64,9 @@ class UserProtocol extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.params.type === 1 ? '《简单赚发单规则》' : '《简单赚接单规则》', null, theme, 'black', 16,null,false);
+        const {html} = this.state;
+
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.params.type === 1 ? '《简单赚发单规则》' : '《简单赚接单规则》', null, theme, 'black', 16, null, false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -82,7 +96,7 @@ class UserProtocol extends PureComponent {
                     }}>{this.params.type === 1 ? '发单规则如下' : '接单规则如下'}</Text>
                     <HTML onLinkPress={this.onLinkPress}
                           imagesMaxWidth={Dimensions.get('window').width / 1.2}
-                          html={this.params.type === 1 ? release_rule : order_rule}
+                          html={html}
                     />
 
                 </ScrollView>

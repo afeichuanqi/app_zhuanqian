@@ -419,6 +419,27 @@ export function insertReportList(data, token) {
         }
     });
 }
+/**
+ * 举报用户
+ * @param data
+ * @param token
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function getAppSoftText(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/getAppSoftText', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 /**
  * 查询用户发单

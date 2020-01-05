@@ -48,7 +48,8 @@ class LabelBigComponent extends PureComponent {
                 // borderColor:'#f5f5f5',
 
             },this.props.contaiStyle]}>
-            <Text style={[{
+            <Text numberOfLines={1} style={[{
+                maxWidth:150,
                 fontSize,
                 opacity: 0.5,
                 color:'black'

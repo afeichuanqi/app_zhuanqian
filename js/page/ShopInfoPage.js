@@ -367,6 +367,12 @@ class ShopList extends Component {
 
 class ShopData extends Component {
     getTaskDataColumn = (title, value) => {
+        if (!value || value=='NaN%') {
+            return <SkeletonPlaceholder minOpacity={0.2}>
+                <View style={{width: width / 3-10, marginHorizontal: 5, marginVertical:5,height:70}}></View>
+            </SkeletonPlaceholder>;
+
+        }
         return <View style={{width: width / 3, justifyContent: 'center', alignItems: 'center', height: 70}}>
             <Text style={{fontSize: 15, color: 'black'}}>{value}</Text>
             <Text style={{fontSize: 12, opacity: 0.7, marginTop: 5, color: 'black'}}>{title}</Text>

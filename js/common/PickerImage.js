@@ -241,14 +241,14 @@ class PickerImage extends PureComponent {
         const FlatListItemHeight = 130;
         const size = FlatListItemHeight / height;
         const imgWidth = width * size;
-        console.log(item);
+
         return <TouchableOpacity
             onPress={() => {
                 ImagePicker.openCropper({
                     ...ImgOption,
                     path: uri,
-                    width: (Platform.OS === 'ios') ? width * 2 : width,
-                    height: (Platform.OS === 'ios') ? height * 2 : height,
+                    width: (Platform.OS === 'ios') ? 1800 : width,
+                    height: (Platform.OS === 'ios') ? 1200 : height,
                 }).then(image => {
 
                     this.props.select(image, this.timestamp);
