@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
-
 import Animated from 'react-native-reanimated';
 import NavigationUtils from '../navigator/NavigationUtils';
 import EmptyComponent from '../common/EmptyComponent';
@@ -281,7 +280,6 @@ class MessageColumn extends Component {
         }}>
             <MessageColumnItem type={0} onSetNoticeMsgIsAllRead={onSetNoticeMsgIsAllRead}
                                unReadNum={noticeIsNew ? 1 : 0}
-
                                title={'通知消息'}/>
             <MessageColumnItem setMsgAllRead={setAppeal_2IsRead} type={1} columnType={2}
                                unReadNum={appeal_2}

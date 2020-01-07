@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Animated, Text, TouchableOpacity,ScrollView} from 'react-native';
+import {Modal, View, Dimensions, Animated, Text, TouchableOpacity, ScrollView} from 'react-native';
 import Image from 'react-native-fast-image';
 
 
@@ -40,11 +40,11 @@ class ToastShare extends PureComponent {
 
 
         });
-        setTimeout(()=>{
+        setTimeout(() => {
             this.setState({
                 visible: false,
             });
-        },150)
+        }, 150);
     };
     show = () => {
 
@@ -97,7 +97,7 @@ class ToastShare extends PureComponent {
                             <ScrollView
                                 showsHorizontalScrollIndicator={false}
                                 horizontal={true}
-                                style={{ paddingHorizontal: 20, marginTop: 5}}>
+                                style={{paddingHorizontal: 20, marginTop: 5}}>
 
                                 {this.getMenu('QQ', require('../res/img/share/qq.png'), null)}
                                 {this.getMenu('QQ空间', require('../res/img/share/qqZone.png'), null)}
@@ -124,7 +124,7 @@ class ToastShare extends PureComponent {
                 this.hide();
                 click && click();
             }}
-            style={{alignItems: 'center', marginRight: 15}}>
+            style={{alignItems: 'center', width: (width - 50) / 6}}>
             <Image
                 style={{height: 25, width: 25, marginHorizontal: 8}}
                 source={source}

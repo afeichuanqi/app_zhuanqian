@@ -1,8 +1,7 @@
 import {Platform} from 'react-native';
 import axios from 'axios';
 import qs from 'qs';
-// import Toast from "../../common/RootToast";
-
+import Global from '../../common/Global';
 let defaultConfig = {
         // baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
         baseUrl: 'http://test.xiaofaka.com',//测试
@@ -45,9 +44,11 @@ class Axios {
             return response.data;
         }, (error) => {
             if (error.toString().indexOf('Network Error') !== -1) {
+                Global.toast.show('Network Error');
                 // Toast.show('无网络,请连接网络后重试')
             }
             if (error.toString().indexOf('15000') !== -1) {
+                Global.toast.show(error.toString());
                 // Toast.show('网络超时,请确认当前网络是否可用')
             }
             // console.log(error.toString());

@@ -18,6 +18,7 @@ import guanzhu2 from '../res/svg/mysvg/guanzhu2.svg';
 import bill from '../res/svg/mysvg/bill.svg';
 import yaoqing1 from '../res/svg/mysvg/yaoqing1.svg';
 import pingbi3 from '../res/svg/mysvg/pingbi3.svg';
+import feedback from '../res/svg/mysvg/feedback.svg';
 import viewHistory from '../res/svg/mysvg/viewHistory.svg';
 import favorite2 from '../res/svg/mysvg/favorite2.svg';
 import my_fabu from '../res/svg/my_fabu.svg';
@@ -202,6 +203,10 @@ class BottomInfoColumn extends Component {
 
         const {onSetNoticeMsgIsRead, friend, userinfo} = this.props;
         const {notice_arr} = friend;
+        // const tmpNoticeArr = [...notice_arr];
+
+        const releaseIsNewMsg = notice_arr.slice(1, 4).find(item => item > 0);
+        const orderIsNewMsg = notice_arr.slice(4, 8).find(item => item > 0);
         return <View style={{}}>
             <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
                 <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
@@ -211,7 +216,6 @@ class BottomInfoColumn extends Component {
             <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-
                 style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
             >
                 <ToolsItemComponent
@@ -220,9 +224,9 @@ class BottomInfoColumn extends Component {
                     source={require('../res/img/my/fabu_mana.png')}
                     onPress={() => {
                         MenuClick('TaskReleaseMana');
-                        notice_arr[1] > 0 && onSetNoticeMsgIsRead(1) && updateNoticeIsReadForType({type:1}, userinfo.token);
+                        // fabuNewMsg && onSetNoticeMsgIsRead(1) && updateNoticeIsReadForType({type: 1}, userinfo.token);
                     }}
-                    isOtherMsg={notice_arr[1] > 0}
+                    isOtherMsg={releaseIsNewMsg}
 
                 />
                 <ToolsItemComponent
@@ -231,9 +235,9 @@ class BottomInfoColumn extends Component {
                     info={'有任务、赚赏金'}
                     onPress={() => {
                         MenuClick('TaskOrdersMana');
-                        notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
+                        // notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
                     }}
-                    isOtherMsg={notice_arr[2] > 0}
+                    isOtherMsg={orderIsNewMsg}
                 />
                 <ToolsItemComponent
                     title={'充值管理'}
@@ -287,6 +291,9 @@ class BottomInfoColumn extends Component {
             {ViewUtil.getSettingItem(viewHistory, '浏览历史', '浏览历史', () => {
                 MenuClick('MyViewHistoryPage');
             })}
+            {ViewUtil.getSettingItem(feedback, '意见反馈', '我们需要您的意见', () => {
+                MenuClick('UserFeedbackPage');
+            })}
             {ViewUtil.getMenuLine()}
 
 
@@ -299,7 +306,7 @@ const mapStateToProps_ = state => ({
     friend: state.friend,
 });
 const mapDispatchToProps_ = dispatch => ({
-    onSetNoticeMsgIsRead: (type) => dispatch(actions.onSetNoticeMsgIsRead(type)),
+    // onSetNoticeMsgIsRead: (type) => dispatch(actions.onSetNoticeMsgIsRead(type)),
     // onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
     // onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
 });
@@ -339,7 +346,7 @@ class ToolsItemComponent extends PureComponent {
                 marginTop: 10,
             }}>
             <View>
-                <Text style={{fontSize: 15,color:'black'}}>{title}</Text>
+                <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
                 <Text style={{fontSize: 11, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
             <FastImage source={source} style={{width: 35, height: 35}}/>
@@ -389,8 +396,8 @@ class TopInfoColumn extends PureComponent {
         // });
         const {userinfo} = this.props;
         const opacity = Animated.interpolate(this.props.scrollY, {
-            inputRange: [0, 30,120],
-            outputRange: [1, 0.1,0.1],
+            inputRange: [0, 30, 120],
+            outputRange: [1, 0.1, 0.1],
             extrapolate: 'clamp',
         });
         // console.log('');

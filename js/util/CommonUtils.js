@@ -10,7 +10,22 @@ export const isPoneAvailable = (str) => {
         return true;
     }
 };
-
+export const  formatData = (data, insertData,ziduan) => {
+    const oldData = [...data];
+    for (let i = 0; i < insertData.length; i++) {
+        const lastItem = oldData.length > 0 ? oldData[oldData.length - 1] : {[ziduan]: '0000-00-00'};
+        const lastViewDate1 = lastItem[ziduan];
+        const newitem = insertData[i];
+        const newViewDate1 = newitem[ziduan];
+        if (lastViewDate1.substring(0, 10) == newViewDate1.substring(0, 10)) {
+            oldData.push(newitem);
+        } else {
+            oldData.push({time: newViewDate1.substring(0, 10)});
+            oldData.push(newitem);
+        }
+    }
+    return oldData;
+};
 export const getCurrentTime = (time = 0) => {
     const nowTime = new Date(); // 当前日前对象
     const myyear = nowTime.getFullYear(); // 当前年份

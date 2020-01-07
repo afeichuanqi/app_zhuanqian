@@ -21,11 +21,12 @@ import {
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import {connect} from 'react-redux';
-import {getAllViewHistorys} from '../util/AppService';
+import {getAllViewHistorys, deleteViewHistory} from '../util/AppService';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import TaskInfoComponent from '../common/TaskInfoComponent';
-
+import Toast from '../common/Toast';
+import {formatData} from '../util/CommonUtils';
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -66,16 +67,21 @@ class MyViewHistoryPage extends PureComponent {
             pageIndex: this.page.pageIndex,
         }, userinfo.token).then(result => {
             if (isRefresh) {
+                const newData = formatData([], result,'viewDate1');
+                console.log(newData);
                 this.setState({
-                    taskData: result,
+                    taskData: newData,
                     isLoading: false,
-                    hideLoaded: result.length >= 10 ? false : true,
+                    hideLoaded: result.length < 10,
                 });
             } else {
-                const tmpArr = [...this.state.taskData];
+
+                // const tmpArr = [...this.state.taskData];
+                const newData = formatData(this.state.taskData, result,'viewDate1');
+                console.log(newData);
                 this.setState({
-                    taskData: tmpArr.concat(result),
-                    hideLoaded: result.length >= 10 ? false : true,
+                    taskData: newData,
+                    hideLoaded: result.length < 10,
                 });
             }
 
@@ -87,6 +93,22 @@ class MyViewHistoryPage extends PureComponent {
         });
 
     };
+    // formatData = (data, insertData) => {
+    //     const oldData = [...data];
+    //     for (let i = 0; i < insertData.length; i++) {
+    //         const lastItem = oldData.length > 0 ? oldData[oldData.length - 1] : {viewDate1: '0000-00-00'};
+    //         const lastViewDate1 = lastItem.viewDate1;
+    //         const newitem = insertData[i];
+    //         const newViewDate1 = newitem.viewDate1;
+    //         if (lastViewDate1.substring(0, 10) == newViewDate1.substring(0, 10)) {
+    //             oldData.push(newitem);
+    //         } else {
+    //             oldData.push({time: newViewDate1.substring(0, 10)});
+    //             oldData.push(newitem);
+    //         }
+    //     }
+    //     return oldData;
+    // };
 
     componentWillUnmount() {
         this.backPress.componentWillUnmount();
@@ -105,7 +127,12 @@ class MyViewHistoryPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '我的浏览历史', null, 'white', 'black', 16, null, false, false, '清空', 'black');
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '我的浏览历史', null, 'white', 'black', 16, () => {
+            deleteViewHistory({}, this.props.userinfo.token).then(result => {
+                this._updatePage(true);
+                this.toast.show('清空浏览历史成功');
+            });
+        }, false, true, '清空', 'black');
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <SafeAreaViewPlus
@@ -113,7 +140,9 @@ class MyViewHistoryPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5', paddingTop: 3}}
@@ -125,7 +154,7 @@ class MyViewHistoryPage extends PureComponent {
                         keyExtractor={(item, index) => index + ''}
                         refreshControl={
                             <RefreshControl
-                                title={'更新中'}
+                                title={'加载中'}
                                 refreshing={isLoading}
                                 onRefresh={this.onRefresh}
                             />
@@ -162,9 +191,23 @@ class MyViewHistoryPage extends PureComponent {
         // task_uri
         item.avatarUrl = item.task_uri;
         return <TaskInfoComponent
-            avatarStyle={{borderRadius: 3}}
-
-            key={item.taskId}
+            showTime={true}
+            avatarStyle={{
+                borderRadius: 5, width: 45,
+                height: 45,
+            }}
+            touchStyle={{
+                height: 70,
+                paddingTop: 15,
+                paddingBottom: 25,
+                borderBottomWidth: 0,
+            }}
+            numberOfLines={1}
+            viewStyle={{
+                height: 45,
+            }}
+            fontSize={12}
+            key={index}
             item={item}/>;
 
     };

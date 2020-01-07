@@ -20,12 +20,8 @@ class SecondListComponent extends PureComponent {
     };
 
     componentDidMount(): void {
+        this.updateBestNewList();
 
-        getBestNewTask().then(data => {
-            this.setState({
-                bestNewData: data,
-            });
-        });
         //跳转到顶部处理事件
         EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
             const {pageName} = data;
@@ -35,6 +31,14 @@ class SecondListComponent extends PureComponent {
             }
         });
     }
+
+    updateBestNewList = () => {
+        getBestNewTask().then(data => {
+            this.setState({
+                bestNewData: data,
+            });
+        });
+    };
 
     componentWillUnmount(): void {
         EventBus.getInstance().removeListener(this.listener);
@@ -99,6 +103,7 @@ class SecondListComponent extends PureComponent {
                 onLoading={(load) => {
                     this.props.onLoad(load);
                 }}
+                onRefresh={this.updateBestNewList}
                 ListHeaderComponent={
                     <View style={{height: 230, backgroundColor: 'white'}}>
                         <View style={{marginTop: 20, paddingLeft: 10}}>

@@ -29,6 +29,7 @@ export default function onAction(state = defaultContent, action) {
                 platform: data.platform,
                 phone: data.phone,
                 sex: data.sex,
+                invite_code:data.invite_code,
                 login: true,
             };
         case Types.LOGIN_FAIL://登录失败
@@ -53,6 +54,7 @@ export default function onAction(state = defaultContent, action) {
                 platform: data.platform,
                 phone: data.phone,
                 sex: data.sex,
+                invite_code:data.invite_code,
                 login: true,
             };
         case Types.GET_USER_INFO_FAIL:

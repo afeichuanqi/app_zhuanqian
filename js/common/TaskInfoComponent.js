@@ -37,6 +37,8 @@ class TaskInfoComponent extends PureComponent {
             taskSignUpNum: 5,
             taskPassNum: 2,
         },
+        showTime: false,
+        numberOfLines:2
     };
 
     constructor(props) {
@@ -73,12 +75,13 @@ class TaskInfoComponent extends PureComponent {
     // };
 
     render() {
-        // const scale = this.animations.scale.interpolate( {
-        //     inputRange: [0, 1],
-        //     outputRange: [0.95, 1],
-        //     extrapolate: 'clamp',
-        // });
-        const {titleFontSize, marginHorizontal, item} = this.props;
+
+        const {titleFontSize, marginHorizontal, item, showTime} = this.props;
+        if (item.time && showTime) {
+            return <View style={{height: 40, backgroundColor: 'rgba(245,245,245,0.6)'}}>
+                <Text style={{position: 'absolute', bottom: 3, left: 10, color: 'rgba(0,0,0,0.6)'}}>{item.time}</Text>
+            </View>;
+        }
         let taskTitle = item.taskTitle;
         let emojiArr = [];
         const json = getEmojis(taskTitle);
@@ -86,14 +89,7 @@ class TaskInfoComponent extends PureComponent {
             taskTitle = json.content;
             emojiArr = json.emojiArr;
         }
-        // let castArr = taskTitle.match(emoji);
 
-        // if(castArr){
-        //     castArr.forEach((item) => {
-        //         emojiArr.push(item);
-        //         taskTitle = taskTitle.replace(item, '');
-        //     });
-        // }
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
@@ -101,7 +97,7 @@ class TaskInfoComponent extends PureComponent {
                 this.props.onPress && this.props.onPress(item.taskId);
             }}
             key={item.taskId}
-            style={{
+            style={[{
                 flex: 1,
                 flexDirection: 'row',
                 paddingHorizontal: marginHorizontal,
@@ -109,22 +105,19 @@ class TaskInfoComponent extends PureComponent {
                 paddingBottom: 25,
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
-                // transform: [{scale}],
-                backgroundColor:'white',
+                backgroundColor: 'white',
                 height: 85,
-            }}
-            // onPressIn={this._onPressIn}
-            // onPressOut={this._onPressOut}
+            },this.props.touchStyle]}
         >
             <FastImage
-                style={[styles.imgStyle,this.props.avatarStyle]}
+                style={[styles.imgStyle, this.props.avatarStyle]}
                 source={{uri: item.avatarUrl}}
                 resizeMode={FastImage.resizeMode.stretch}
             />
-            <View style={{
+            <View style={[{
                 height: 50, width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
 
-            }}>
+            },this.props.viewStyle]}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     {/*标题*/}
                     <View style={{
@@ -132,13 +125,13 @@ class TaskInfoComponent extends PureComponent {
                         alignItems: 'center',
                     }}>
                         <Text
-                            numberOfLines={2}
+                            numberOfLines={this.props.numberOfLines}
                             style={{
-                            width: width - 150,
-                            fontSize: titleFontSize,
-                            color: 'black',
+                                width: width - 150,
+                                fontSize: titleFontSize,
+                                color: 'black',
 
-                        }}>{taskTitle} {emojiArr.map((item) => {
+                            }}>{taskTitle} {emojiArr.map((item) => {
                             return <Emoji name={item} style={{fontSize: 15}}/>;
                         })}</Text>
                         {item.recommendIsExp == 1 && <View style={{
@@ -171,8 +164,8 @@ class TaskInfoComponent extends PureComponent {
                     <View style={{
                         flexDirection: 'row',
                     }}>
-                        <LabelBigComponent title={item.typeTitle}/>
-                        <LabelBigComponent title={item.taskName}/>
+                        <LabelBigComponent contaiStyle={{backgroundColor: '#fafafa',}} fontSize={this.props.fontSize} title={item.typeTitle}/>
+                        <LabelBigComponent contaiStyle={{backgroundColor: '#fafafa',}} fontSize={this.props.fontSize} title={item.taskName}/>
                     </View>
                     {/*剩余数*/}
                     <View style={{

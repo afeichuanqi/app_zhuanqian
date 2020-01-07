@@ -36,11 +36,34 @@ class ChatSocket {
                 case types.MESSAGE_FROMOF_USERID://收到消息
                     Global.dispatch(Message.onMessageFrom(data.fromUserid, data.msg_type,
                         data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.FriendId));//发送给消息列表
+                    let content1 = '';
+                    if (data.msg_type == 'text') {
+                        content1 = data.content;
+                    } else if (data.msg_type == 'image') {
+                        content1 = '[图片]';
+                    } else if (data.msg_type == 'system') {
+                        content1 = '[系统消息]';
+                    }
+                    Global.onNewMessage && Global.onNewMessage(
+                        1,
+                        data.FriendId,
+                        data.username,
+                        content1,
+                        data.columnType,
+                        data.taskId,
+                        {
+                            avatar_url: data.avatar_url,
+                            id: data.fromUserid,
+                            username: data.username,
+                            taskTitle: '',
 
+                        },
+                        data.taskUri,
+                        data.sendFormId,
+                    );
                     Global.dispatch(Message.onSetNewMsgForRromUserid(data.fromUserid, data.msg_type, data.content, data.msgId, data.sendDate, data.ToUserId, data.sendStatus, data.username, data.avatar_url, data.FriendId, data.columnType, data.taskUri, data.taskId, true, data.sendFormId));//发送给好友列表
                     break;
                 case types.MESSAGE_SENDTO_USERID_STATUS://消息回调
-
                     const {
                         msgId,
                         sendStatus,
@@ -77,6 +100,17 @@ class ChatSocket {
                     Global.token = '';
                     break;
                 case types.NOTICE_USER_MESSAGE://收到系统消息
+
+                    let userName = '', content = '';
+                    if (data.type > 0 && data.type <= 3) {
+                        userName = '发布消息';
+                        content = '您收到一条发布消息';
+
+                    } else if (data.type > 3 && data.type <= 8) {
+                        userName = '接单消息';
+                        content = '您收到一条接单消息';
+                    }
+                    Global.onNewMessage && Global.onNewMessage(2, data.type, userName, content);
                     Global.dispatch(Message.onSetNoticeMsg(data.type));
                     break;
 
@@ -117,7 +151,7 @@ class ChatSocket {
         };
         const msgStr = JSON.stringify(msgData);
         try {
-            if (Global.connectionstatus) {
+            if (Global.connectionstatus && Global.ws.readyState == 1) {
                 Global.ws.send(msgStr);
             }
         } catch (e) {
@@ -196,7 +230,8 @@ class ChatSocket {
 
         const msgStr = JSON.stringify(msgData);
         try {
-            if (Global.connectionstatus) {
+            console.log(Global.ws, 'Global.ws');
+            if (Global.connectionstatus && Global.ws.readyState == 1) {
                 Global.ws.send(msgStr);
             }
         } catch (e) {

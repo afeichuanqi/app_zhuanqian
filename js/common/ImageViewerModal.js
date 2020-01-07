@@ -15,6 +15,7 @@ export default class ImageViewerModal extends React.Component {
     show = (images, activeUrl = '') => {
         let activeIndex = 0;
         const tmpImages = [...images];
+        console.log(images, activeUrl);
         for (let i = 0; i < tmpImages.length; i++) {
             const index = i;
             const images = tmpImages[index];
@@ -26,6 +27,7 @@ export default class ImageViewerModal extends React.Component {
 
             if (i === tmpImages.length - 1) {
                 if (activeUrl != '') {
+                    console.log(tmpImages, activeUrl);
                     activeIndex = tmpImages.findIndex(item => item.url == activeUrl);
                     console.log(activeIndex, 'activeIndex');
                 }

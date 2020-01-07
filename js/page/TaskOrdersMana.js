@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React, {PureComponent, Component} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
@@ -25,21 +25,22 @@ import {
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {cancelUserSignUp, selectOrderTasks, userRedoTask} from '../util/AppService';
+import {cancelUserSignUp, selectOrderTasks, updateNoticeIsReadForType, userRedoTask} from '../util/AppService';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import {getEmojis} from '../util/CommonUtils';
+import {equalsObj, getEmojis} from '../util/CommonUtils';
 import Emoji from 'react-native-emoji';
+import actions from '../action';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-class TaskOrdersMana extends PureComponent {
+class TaskOrdersMana extends Component {
     constructor(props) {
         super(props);
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
@@ -47,13 +48,38 @@ class TaskOrdersMana extends PureComponent {
         this.state = {
             navigationIndex: this.params.navigationIndex || 0,
             navigationRoutes: [
-                // {key: 'first', title: '全部'},
-                {key: 'second', title: '未提交'},
-                {key: 'second1', title: '审核中'},
-                {key: 'second2', title: '未通过'},
-                {key: 'second3', title: '已通过'},
+                {key: 'second', title: '未提交', isMsg: props.notice_arr[4]},
+                {key: 'second1', title: '审核中', isMsg: props.notice_arr[5]},
+                {key: 'second2', title: '未通过', isMsg: props.notice_arr[6]},
+                {key: 'second3', title: '已通过', isMsg: props.notice_arr[7]},
             ],
         };
+        const type = (this.params.navigationIndex || 0) + 4;
+
+        const {onSetNoticeMsgIsRead, userinfo} = this.props;
+        onSetNoticeMsgIsRead(type) && updateNoticeIsReadForType({type: type}, userinfo.token);
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.state.navigationIndex !== nextState.navigationIndex
+            || !equalsObj(this.props.notice_arr, nextProps.notice_arr)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!equalsObj(this.props.notice_arr, nextProps.notice_arr)) {
+            this.setState({
+                navigationRoutes: [
+                    {key: 'second', title: '未提交', isMsg: nextProps.notice_arr[4]},
+                    {key: 'second1', title: '审核中', isMsg: nextProps.notice_arr[5]},
+                    {key: 'second2', title: '未通过', isMsg: nextProps.notice_arr[6]},
+                    {key: 'second3', title: '已通过', isMsg: nextProps.notice_arr[7]},
+                ],
+            });
+        }
     }
 
     onBackPress = () => {
@@ -124,7 +150,10 @@ class TaskOrdersMana extends PureComponent {
                     position={this.position}
                     renderTabBar={() => null}
                     onIndexChange={index => {
-
+                        const noticeType = index + 4;
+                        console.log(noticeType, 'onIndexChange');
+                        const {onSetNoticeMsgIsRead, userinfo} = this.props;
+                        onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
                         this.setState({
                             navigationIndex: index,
                         });
@@ -149,16 +178,16 @@ class TaskOrdersMana extends PureComponent {
             //     return <FristListComponent status={0}
             //                                userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent toast={this.toast} status={1}
+                return <FristListComponent source={require('../res/img/ReleseMana/o1.png')} toast={this.toast} status={1}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent toast={this.toast} status={2}
+                return <FristListComponent source={require('../res/img/ReleseMana/o2.png')} toast={this.toast} status={2}
                                            userinfo={this.props.userinfo}/>;
             case 'second2':
-                return <FristListComponent toast={this.toast} status={3}
+                return <FristListComponent source={require('../res/img/ReleseMana/o3.png')} toast={this.toast} status={3}
                                            userinfo={this.props.userinfo}/>;
             case 'second3':
-                return <FristListComponent toast={this.toast} status={4}
+                return <FristListComponent source={require('../res/img/ReleseMana/o4.png')} toast={this.toast} status={4}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -166,8 +195,11 @@ class TaskOrdersMana extends PureComponent {
 
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
+    notice_arr: state.friend.notice_arr,
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    onSetNoticeMsgIsRead: (type) => dispatch(actions.onSetNoticeMsgIsRead(type)),
+});
 const TaskOrdersManaRedux = connect(mapStateToProps, mapDispatchToProps)(TaskOrdersMana);
 
 class FristListComponent extends PureComponent {
@@ -187,6 +219,7 @@ class FristListComponent extends PureComponent {
     }
 
     componentDidMount() {
+
         setTimeout(() => {
             this._updateList(true);
         }, 500);
@@ -329,7 +362,7 @@ class FristListComponent extends PureComponent {
             />
             <AnimatedFlatList
                 style={{backgroundColor: '#e8e8e8'}}
-                ListEmptyComponent={<EmptyComponent height={height - 100} message={'您还没有相关任务'}/>}
+                ListEmptyComponent={<EmptyComponent source={this.props.source} height={height - 100} message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}
@@ -382,9 +415,11 @@ class OrdersItem extends React.Component {
             emojiArr = json.emojiArr;
         }
         const TextTitle = <Text
+            numberOfLines={2}
             style={{
                 fontWeight: 'bold',
                 color: 'black',
+                width: width - 150,
             }}>{item && item.taskId} - {taskTitle} {emojiArr.map((item, index) => {
             return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
         })}</Text>;
@@ -413,11 +448,21 @@ class OrdersItem extends React.Component {
                     />
                     {status == 1 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
-                        <Text style={{fontSize: 13,color:'black', opacity: 0.7, marginTop: 5}}>到期时间:{item.orderExpTime}</Text>
+                        <Text style={{
+                            fontSize: 13,
+                            color: 'black',
+                            opacity: 0.7,
+                            marginTop: 5,
+                        }}>到期时间:{item.orderExpTime}</Text>
                         <Text style={{color: 'red', fontSize: 13, marginTop: 5}}>请在{item.orderTimeTitle}内完成</Text>
                     </View> : status == 2 ? <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold',color:'black'}}>{item.taskId} - {item.task_title}</Text>
-                        <Text style={{fontSize: 13,color:'black', opacity: 0.7, marginTop: 5}}>审核期限:{item.reviewExpTime}</Text>
+                        {TextTitle}
+                        <Text style={{
+                            fontSize: 13,
+                            color: 'black',
+                            opacity: 0.7,
+                            marginTop: 5,
+                        }}>审核期限:{item.reviewExpTime}</Text>
                         <Text style={{
                             color: 'red',
                             fontSize: 13,
@@ -446,16 +491,18 @@ class OrdersItem extends React.Component {
                                 width: width - 130,
 
                             }}>驳回理由:
-                            {/*{JSON.parse(item.rejectionContent).image.length > 0 && JSON.parse(item.rejectionContent).image.map((item, index) => {*/}
-                            {/*    return '</图片点击查看详细>';*/}
-                            {/*})}*/}
                             {item.rejectionContent && JSON.parse(item.rejectionContent).turnDownInfo}
                         </Text>
 
 
                     </View> : status == 4 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
-                        <Text style={{fontSize: 13, opacity: 0.7, marginTop: 5,color:'black'}}>审核时间:{item.review_time1}</Text>
+                        <Text style={{
+                            fontSize: 13,
+                            opacity: 0.7,
+                            marginTop: 5,
+                            color: 'black',
+                        }}>审核时间:{item.review_time1}</Text>
                         <Text
                             ellipsizeMode={'tail'}
                             numberOfLines={2}

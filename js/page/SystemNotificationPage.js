@@ -203,29 +203,24 @@ class NoticeItem extends Component {
     render() {
         const {item} = this.props;
         const {is_read} = this.state;
-        console.log(is_read, 'is_read');
+        // console.log(is_read, 'is_read');
         return <TouchableOpacity
             key={item.id}
             onPress={() => {
                 this.setState({
                     is_read: 1,
                 });
-                if (item.title.indexOf('发布任务') !== -1) {
-                    if (item.title.indexOf('审核成功') !== -1) {
-                        NavigationUtils.goPage({navigationIndex: 0}, 'TaskReleaseMana');
-                    }
-                    if (item.title.indexOf('审核失败') !== -1) {
-                        NavigationUtils.goPage({navigationIndex: 2}, 'TaskReleaseMana');
-                    }
+                let pageName = '', navigationIndex = 0, type = item.type;
+                if (type > 0 && type <= 3) {
+                    pageName = 'TaskReleaseMana';
+                    navigationIndex = type;
+
+                } else if (type > 3 && type <= 8) {
+                    pageName = 'TaskOrdersMana';
+                    navigationIndex = type - 4;
                 }
-                if (item.title.indexOf('任务审核') !== -1) {
-                    NavigationUtils.goPage({navigationIndex: 0}, 'TaskReleaseMana');
-                }
-                if (item.title.indexOf('任务被驳回') !== -1) {
-                    NavigationUtils.goPage({navigationIndex: 2}, 'TaskOrdersMana');
-                }
-                if (item.title.indexOf('通过') !== -1) {
-                    NavigationUtils.goPage({navigationIndex: 3}, 'TaskOrdersMana');
+                if (pageName.length > 0) {
+                    NavigationUtils.goPage({navigationIndex}, pageName);
                 }
 
             }}

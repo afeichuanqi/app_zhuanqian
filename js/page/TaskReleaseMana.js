@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React, {Component, PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
@@ -27,7 +27,7 @@ import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {
     deleteTaskRelease,
-    selectTaskReleaseList,
+    selectTaskReleaseList, updateNoticeIsReadForType,
     updateTaskUpdateTime,
     userSetTaskRecommend,
     userSetTaskTop,
@@ -40,12 +40,15 @@ import ToastTaskTopRecommend from './TaskReleaseMana/ToastTaskTopRecommend';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
+import message from '../reducer/message';
+import actions from '../action';
+import {equalsObj} from '../util/CommonUtils';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-class TaskReleaseMana extends PureComponent {
+class TaskReleaseMana extends Component {
     constructor(props) {
         super(props);
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
@@ -53,11 +56,35 @@ class TaskReleaseMana extends PureComponent {
         this.state = {
             navigationIndex: this.params.navigationIndex || 0,
             navigationRoutes: [
-                {key: 'first', title: '进行中'},
-                {key: 'second', title: '已暂停'},
-                {key: 'second1', title: '待上架'},
+                {key: 'first', title: '进行中', isMsg: props.notice_arr[1]},
+                {key: 'second', title: '已暂停', isMsg: props.notice_arr[2]},
+                {key: 'second1', title: '待上架', isMsg: props.notice_arr[3]},
             ],
         };
+        const type = (this.params.navigationIndex || 0) + 1;
+        const {onSetNoticeMsgIsRead, userinfo} = this.props;
+        onSetNoticeMsgIsRead(type) && updateNoticeIsReadForType({type: type}, userinfo.token);
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.state.navigationIndex !== nextState.navigationIndex
+            || !equalsObj(this.props.notice_arr, nextProps.notice_arr)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!equalsObj(this.props.notice_arr, nextProps.notice_arr)) {
+            this.setState({
+                navigationRoutes: [
+                    {key: 'first', title: '进行中', isMsg: nextProps.notice_arr[1]},
+                    {key: 'second', title: '已暂停', isMsg: nextProps.notice_arr[2]},
+                    {key: 'second1', title: '待上架', isMsg: nextProps.notice_arr[3]},
+                ],
+            });
+        }
     }
 
     onBackPress = () => {
@@ -104,7 +131,6 @@ class TaskReleaseMana extends PureComponent {
                             height: 35,
                             backgroundColor: bottomTheme,
                             paddingLeft: 10,
-
                         }}
                         position={this.position}
                         contentContainerStyle={{paddingTop: 10}}
@@ -137,6 +163,9 @@ class TaskReleaseMana extends PureComponent {
                     position={this.position}
                     renderTabBar={() => null}
                     onIndexChange={index => {
+                        const noticeType = index + 1;
+                        const {onSetNoticeMsgIsRead, userinfo} = this.props;
+                        onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
                         this.setState({
                             navigationIndex: index,
                         });
@@ -158,16 +187,18 @@ class TaskReleaseMana extends PureComponent {
         this.jumpTo(navigationRoutes[index].key);
     };
     renderScene = ({route, jumpTo}) => {
+        const {navigationIndex} = this.state;
+
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent toast={this.toast} task_status={[0]}
+                return <FristListComponent toast={this.toast} source={require('../res/img/ReleseMana/r1.png')} task_status={[0]}
                                            userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent toast={this.toast} task_status={[2]}
+                return <FristListComponent toast={this.toast} source={require('../res/img/ReleseMana/r2.png')} task_status={[2]}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent toast={this.toast} task_status={[1, 3]}
+                return <FristListComponent toast={this.toast} source={require('../res/img/ReleseMana/r3.png')} task_status={[1, 3]}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -175,8 +206,12 @@ class TaskReleaseMana extends PureComponent {
 
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
+    notice_arr: state.friend.notice_arr,
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+
+    onSetNoticeMsgIsRead: (type) => dispatch(actions.onSetNoticeMsgIsRead(type)),
+});
 const TaskReleaseManaRedux = connect(mapStateToProps, mapDispatchToProps)(TaskReleaseMana);
 
 class FristListComponent extends PureComponent {
@@ -196,14 +231,18 @@ class FristListComponent extends PureComponent {
     }
 
     componentDidMount() {
+        // const {noticeType , onSetNoticeMsgIsRead , userinfo,task_status} = this.props;
+        // onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type:noticeType}, userinfo.token);
         setTimeout(() => {
             this._updateList(true);
         }, 500);
+
         //收到消息刷新任务
         EventBus.getInstance().addListener(EventTypes.update_task_release_mana, this.listener = data => {
-            const findIndex = this.props.task_status.findIndex(item => item == data.index);
+            const {userinfo, task_status} = this.props;
+            const findIndex = task_status.findIndex(item => item == data.index);
             if (findIndex !== -1) {
-                const {userinfo, task_status} = this.props;
+
                 selectTaskReleaseList({
                     task_status: task_status.join(','),
                     pageIndex: this.page.pageIndex,
@@ -333,11 +372,12 @@ class FristListComponent extends PureComponent {
 
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
+
         return <View style={{flex: 1}}>
 
             <AnimatedFlatList
                 style={{backgroundColor: '#f5f5f5'}}
-                ListEmptyComponent={<EmptyComponent height={height - 100} message={'您还没有相关任务'}/>}
+                ListEmptyComponent={<EmptyComponent source={this.props.source}  height={height - 100} message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}

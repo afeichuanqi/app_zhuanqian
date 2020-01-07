@@ -53,7 +53,7 @@ export default class MessageItemComponent extends Component {
         //     toValue: 1,
         //     easing: Easing.inOut(Easing.ease),
         // }).start();
-        this.animations.scale.setValue(1)
+        this.animations.scale.setValue(1);
     };
     _onPress = () => {
 
@@ -169,7 +169,7 @@ export default class MessageItemComponent extends Component {
                                 opacity: 0.6,
                                 marginLeft: 10,
                                 width: (width - 100) / 2,
-                            }}>{msg_type == 'text' ? msg : '[图片]'}
+                            }}>{msg_type == 'text' ? msg : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
                         </Text>
                     </View>
 

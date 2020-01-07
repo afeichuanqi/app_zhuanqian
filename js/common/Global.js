@@ -7,16 +7,19 @@ const Global = {
 
     //socket方面
     token: '',
-    dispatch:{},
-    ws:null,
-    connectionstatus:false,
+    dispatch: {},
+    ws: null,
+    connectionstatus: false,
 
-    imageViewModal:null,
+    imageViewModal: null,
     //用户服务费
     user_service_fee: 1.05,
     //每小时推荐数
     user_recommend_fee: 10,
     //每小时置顶数
     user_top_fee: 10,
+    onNewMessage: null,
+    //全局弹窗
+    toast: null,
 };
 module.exports = Global;

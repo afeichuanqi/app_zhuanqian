@@ -24,7 +24,8 @@ import {equalsObj} from '../util/CommonUtils';
 import ImageViewerModal from '../common/ImageViewerModal';
 import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
-import {NavigationActions} from "react-navigation";
+import {NavigationActions} from 'react-navigation';
+
 const {SpringUtils, spring} = Animated;
 type Props = {};
 
@@ -240,6 +241,8 @@ class BottomBar extends Component {
     render() {
         const {navigationIndex} = this.props;
         const {unMessageLength, appeal_2, appeal_3, notice_arr} = this.props.friend;
+        const isOtherUnRead = notice_arr.find(item => item > 0);
+        // console.log(notice_arr,"notice_arr");
         return <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -253,30 +256,30 @@ class BottomBar extends Component {
                 onPress={this._BottomBarClick}
                 index={0}
                 navigationIndex={navigationIndex}
-                isActive={navigationIndex === 0 ? true : false}
+                isActive={navigationIndex === 0}
             />
             <BottomBarItem
                 source={navigationIndex === 1 ? require('../res/img/bottomBarIcon/hallC.png') : require('../res/img/bottomBarIcon/hall.png')}
                 onPress={this._BottomBarClick}
                 index={1}
                 navigationIndex={navigationIndex}
-                isActive={navigationIndex === 1 ? true : false}
+                isActive={navigationIndex === 1}
             />
             <BottomBarItem
                 source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
                 onPress={this._BottomBarClick}
                 index={2}
-                isActive={navigationIndex === 2 ? true : false}
+                isActive={navigationIndex === 2}
                 unReadLength={unMessageLength > 0 ? unMessageLength : 0}
-                isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || notice_arr[1] > 0 || notice_arr[2] > 0)}
+                isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || isOtherUnRead)}
             />
             <BottomBarItem
                 source={navigationIndex === 3 ? require('../res/img/bottomBarIcon/myC.png') : require('../res/img/bottomBarIcon/my.png')}
                 onPress={this._BottomBarClick}
                 index={3}
-                isActive={navigationIndex === 3 ? true : false}
+                isActive={navigationIndex === 3}
                 unReadLength={0}
-                isOtherUnRead={(notice_arr[1] > 0 || notice_arr[2] > 0)}
+                isOtherUnRead={isOtherUnRead}
             />
         </View>;
     }
@@ -302,25 +305,25 @@ class BottomBarItem extends Component {
         scale: new Animated.Value(1),
     };
     onPressIn = () => {
-        if(!this.props.isActive){
+        if (!this.props.isActive) {
             this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                 ...SpringUtils.makeDefaultConfig(),
                 bounciness: 13,
                 speed: 20,
-                toValue:0.7,
+                toValue: 0.7,
             })).start(() => {
 
             });
-            setTimeout(()=>{
+            setTimeout(() => {
                 this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                     ...SpringUtils.makeDefaultConfig(),
                     bounciness: 30,
                     speed: 10,
-                    toValue:1,
+                    toValue: 1,
                 })).start(() => {
 
                 });
-            },100)
+            }, 100);
         }
 
     };

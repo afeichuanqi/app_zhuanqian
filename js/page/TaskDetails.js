@@ -620,7 +620,7 @@ class TaskDetailsPop extends Component {
                         justifyContent: 'center',
                     }}>
                     {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
-                    <Text style={{fontSize: 15, opacity: 0.7, color: 'black'}}>接单说明</Text>
+                    <Text style={{fontSize: 15, opacity: 0.7, color: 'black'}}>接单规则</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     // key={index}

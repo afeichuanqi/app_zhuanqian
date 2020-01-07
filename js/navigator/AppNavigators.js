@@ -42,6 +42,7 @@ import RechargePage from '../page/RechargePage';
 import WithDrawPage from '../page/WithDrawPage';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
+import UserFeedbackPage from '../page/UserFeedbackPage';
 
 export const rootCom = 'Init';//设置根路由
 const InitNavigator = createStackNavigator({
@@ -278,6 +279,12 @@ const MainNavigator = createStackNavigator({
         },
         WithDrawPage: {
             screen: WithDrawPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        UserFeedbackPage: {
+            screen: UserFeedbackPage,
             navigationOptions: {
                 header: null,
             },

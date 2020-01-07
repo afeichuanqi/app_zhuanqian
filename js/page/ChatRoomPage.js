@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StatusBar, Dimensions, Platform, TouchableOpacity} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
-import {theme} from '../appSet';
+import {theme, bottomTheme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
@@ -9,7 +9,6 @@ import message_more from '../res/svg/message_more.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {equalsObj, getEmojis, getUUID} from '../util/CommonUtils';
 import {connect} from 'react-redux';
-import message from '../reducer/message';
 import ChatSocket from '../util/ChatSocket';
 import Image from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -23,6 +22,7 @@ import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 import {ImgOption} from '../common/PickerImage';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
 import Emoji from 'react-native-emoji';
+import Global from '../common/Global';
 
 const {width} = Dimensions.get('window');
 
@@ -37,6 +37,43 @@ class ChatRoomPage extends React.Component {
         this.fromUserinfo = fromUserinfo;
         this.taskUri = taskUri;
         this.sendFormId = sendFormId;
+        Global.onNewMessage = (msgType, FriendId, username, content, columnType, taskId, fromUserinfo, taskUri, sendFormId) => {
+            if (this.FriendId !== FriendId) {
+                this.newMessage.show(username, content, () => {
+                    if (msgType == 1) {
+
+
+                        this.columnType = columnType;
+                        this.task_id = taskId;
+                        this.fromUserinfo = fromUserinfo;
+                        this.taskUri = taskUri;
+                        this.sendFormId = sendFormId;
+                        if (fromUserinfo.id.indexOf('admin') !== -1) {
+                            this.toast.show('管理员消息');
+                        } else {
+                            this._updatePage();
+                        }
+
+
+                    } else if (msgType == 2) {
+                        let pageName = '', navigationIndex = 0, type = FriendId;
+                        if (type > 0 && type <= 3) {
+                            pageName = 'TaskReleaseMana';
+                            navigationIndex = type - 1;
+
+                        } else if (type > 3 && type <= 8) {
+                            pageName = 'TaskOrdersMana';
+                            navigationIndex = type - 4;
+                        }
+                        if (pageName.length > 0) {
+                            NavigationUtils.goPage({navigationIndex}, pageName);
+                        }
+                    }
+                });
+            }
+
+
+        };
     }
 
     pageCount = 10;
@@ -48,14 +85,11 @@ class ChatRoomPage extends React.Component {
     componentDidMount(): void {
         this.backPress.componentDidMount();
         this._updatePage();
-
-
     }
 
     _updatePage = () => {
         //初始化申诉或者投诉信息
         if (this.columnType == 2 || this.columnType == 3) { //诉求信息
-
             createAppealInfo({
                 columnType: this.columnType,
                 taskid: this.task_id,
@@ -72,11 +106,12 @@ class ChatRoomPage extends React.Component {
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+                    ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+                    this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
                 }
 
             }).catch(msg => {
                 this.toast.show(msg);
-
             });
 
         } else { //咨询信息
@@ -95,6 +130,8 @@ class ChatRoomPage extends React.Component {
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+                    ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+                    this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
                 }
 
             }).catch(msg => {
@@ -110,13 +147,14 @@ class ChatRoomPage extends React.Component {
 
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
-        ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+
         if (this.columnType == 1 || this.columnType == 5) {
-            this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
+
         } else if (this.columnType == 2 || this.columnType == 3) { //诉求信息
             EventBus.getInstance().fireEvent(`update_message_appeal_${this.columnType}_page`, {//刷新列表
             });
         }
+        Global.onNewMessage = null;
     }
 
 
@@ -290,7 +328,9 @@ class ChatRoomPage extends React.Component {
                         sendFormId={this.sendFormId}
                         guzhuUserId={this.guzhuUserId}
                     />}
-
+                    <NewMessage
+                        ref={ref => this.newMessage = ref}
+                    />
                     <ChatScreen
                         rightMessageTextStyle={{color: 'black'}}
                         leftMessageTextStyle={{color: 'black'}}
@@ -604,6 +644,48 @@ class TaskInfo extends React.Component {
     }
 }
 
+class NewMessage extends React.Component {
+    state = {
+        userName: '',
+        msg: '',
+        isShow: false,
+    };
+    show = (userName, msg, callBack) => {
+        this.callBack = callBack;
+        this.setState({userName, msg, isShow: true}, () => {
+            setTimeout(() => {
+                this.setState({
+                    isShow: false,
+                });
+            }, 3000);
+
+        });
+    };
+
+
+    render() {
+        const {isShow, userName, msg} = this.state;
+        if (!isShow) {
+            return null;
+        }
+        return <TouchableOpacity
+            onPress={this.callBack}
+            style={{
+                position: 'absolute',
+                top: 80,
+                left: 0,
+                height: 30,
+                width: width,
+                backgroundColor: 'white',
+                zIndex: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+
+            }}>
+            <Text style={{color: bottomTheme, fontSize: 13}}>{userName}:{msg}</Text>
+        </TouchableOpacity>;
+    }
+}
 
 const mapStateToProps = state => ({
     userinfo: state.userinfo,

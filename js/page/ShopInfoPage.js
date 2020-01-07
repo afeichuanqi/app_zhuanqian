@@ -276,46 +276,6 @@ class ShopList extends Component {
                     />
                     <ShopData shopInfo={shopInfo}/>
                 </View>
-                // !isLoading ?  : <View><SkeletonPlaceholder minOpacity={0.2}>
-                //     <View style={{
-                //         flexDirection: 'row',
-                //         justifyContent: 'space-between',
-                //         alignItems: 'center',
-                //         height: 80,
-                //         marginTop: 15,
-                //     }}>
-                //         <View style={{flexDirection: 'row'}}>
-                //             <View
-                //                 style={{height: 60, width: 60, backgroundColor: 5, borderRadius: 30, marginLeft: 10}}/>
-                //             <View style={{justifyContent: 'space-around', marginLeft: 10}}>
-                //                 <View style={{height: 11, width: 30}}/>
-                //                 <View style={{height: 11, width: 60}}/>
-                //                 <View style={{height: 11, width: 60}}/>
-                //             </View>
-                //
-                //         </View>
-                //
-                //         <View style={{height: 60, justifyContent: 'flex-end', marginRight: 10}}>
-                //             <View style={{
-                //                 height: 20,
-                //                 width: 60,
-                //                 borderRadius: 3,
-                //             }}/>
-                //         </View>
-                //     </View>
-                //     <View style={{height: 20, width: 60, marginLeft: 10}}/>
-                //     <View style={{
-                //         flexDirection: 'row', flexWrap: 'wrap', marginTop: 30, paddingHorizontal: 20,
-                //         justifyContent: 'center',
-                //     }}>
-                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
-                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
-                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
-                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
-                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
-                //         <View style={{height: 60, width: 100, marginLeft: 20, marginTop: 20}}/>
-                //     </View>
-                // </SkeletonPlaceholder></View>
 
 
             }
@@ -366,15 +326,17 @@ class ShopList extends Component {
 }
 
 class ShopData extends Component {
-    getTaskDataColumn = (title, value) => {
-        if (!value || value=='NaN%') {
-            return <SkeletonPlaceholder minOpacity={0.2}>
-                <View style={{width: width / 3-10, marginHorizontal: 5, marginVertical:5,height:70}}></View>
-            </SkeletonPlaceholder>;
+    getTaskDataColumn = (title, value, value1 = '') => {
 
+        if ((isNaN(value))) {
+            console.log(value);
+            return <SkeletonPlaceholder minOpacity={0.2}>
+                <View style={{width: width / 3 - 10, marginHorizontal: 5, marginVertical: 5, height: 70}}/>
+            </SkeletonPlaceholder>;
         }
+
         return <View style={{width: width / 3, justifyContent: 'center', alignItems: 'center', height: 70}}>
-            <Text style={{fontSize: 15, color: 'black'}}>{value}</Text>
+            <Text style={{fontSize: 15, color: 'black'}}>{value}{value1}</Text>
             <Text style={{fontSize: 12, opacity: 0.7, marginTop: 5, color: 'black'}}>{title}</Text>
         </View>;
     };
@@ -398,7 +360,7 @@ class ShopData extends Component {
                 {this.getTaskDataColumn('成功派单数', this.props.shopInfo.success_hair_order_num)}
                 {this.getTaskDataColumn('总接单数', this.props.shopInfo.total_join_order_num)}
                 {this.getTaskDataColumn('成功接单数', this.props.shopInfo.success_join_order_num)}
-                {this.getTaskDataColumn('接单转化比', (parseInt(this.props.shopInfo.success_join_order_num) / parseInt(this.props.shopInfo.total_join_order_num) * 100).toFixed(2) + '%')}
+                {this.getTaskDataColumn('接单转化比', (parseInt(this.props.shopInfo.success_join_order_num) / parseInt(this.props.shopInfo.total_join_order_num) * 100).toFixed(2), '%')}
             </View>
 
         </View>;

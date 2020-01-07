@@ -33,11 +33,12 @@ class HomePage extends PureComponent {
 
     async componentDidMount() {
         getAppSetting().then(result => {
-            console.log(result,"result");
+            console.log(result, 'result');
             Global.user_top_fee = result.user_top_fee;
             Global.user_service_fee = result.user_service_fee;
             Global.user_recommend_fee = result.user_recommend_fee;
         });
+        Global.toast = this.toast;
     }
 
     componentWillUnmount() {

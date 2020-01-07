@@ -83,11 +83,11 @@ class TaskReleaseMana extends PureComponent {
                             <Text style={{alignSelf: 'center', fontWeight: 'bold'}}>我的邀请码</Text>
                             <TouchableOpacity
                                 onPress={() => {
-                                    Clipboard.setString('abshkes');
+                                    Clipboard.setString(this.props.userinfo.invite_code);
                                     this.toast.show('复制成功');
                                 }}
                                 style={{marginTop: 15, flexDirection: 'row', alignSelf: 'center'}}>
-                                <Text style={{fontWeight: 'bold'}}>abshkes</Text>
+                                <Text style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code}</Text>
                                 <SvgUri style={{
                                     marginLeft: 20,
                                 }} width={19} height={19} svgXmlData={copy}/>

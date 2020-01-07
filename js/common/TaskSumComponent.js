@@ -193,12 +193,13 @@ class TaskSumComponent extends Component {
                         flexDirection: 'row',
                     }}>
                         <LabelBigComponent
-                            // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
+                            contaiStyle={{backgroundColor:'#fafafa'}}
                             // textStyle={{color: '#2196F3'}}
                             paddingHorizontal={8}
                             fontSize={11}
                             title={item.typeTitle}/>
                         <LabelBigComponent
+                            contaiStyle={{backgroundColor:'#fafafa'}}
                             // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
                             // textStyle={{color: '#2196F3'}}
                             paddingHorizontal={8}

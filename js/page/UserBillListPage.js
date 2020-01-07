@@ -27,6 +27,7 @@ import TabBar from '../common/TabBar';
 import {TabView} from 'react-native-tab-view';
 import SvgUri from 'react-native-svg-uri';
 import goback from '../res/svg/goback.svg';
+import {formatData} from '../util/CommonUtils';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -85,7 +86,7 @@ class UserBillListPage extends PureComponent {
             >
                 {navigationBar}
                 {/*{TopColumn}*/}
-                <View style={{paddingBottom:10,marginTop:5}}>
+                <View style={{paddingBottom: 10, marginTop: 5}}>
                     <TabBar
                         style={{
                             height: 35,
@@ -101,7 +102,7 @@ class UserBillListPage extends PureComponent {
                         // indicatorStyle={styles.indicator}
                         bounces={true}
                         titleMarginHorizontal={30}
-                        activeStyle={{fontSize: 14, color: [0, 0, 0], fontWeight:'bold'}}
+                        activeStyle={{fontSize: 14, color: [0, 0, 0], fontWeight: 'bold'}}
                         inactiveStyle={{fontSize: 14, color: [150, 150, 150], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                     />
@@ -111,7 +112,7 @@ class UserBillListPage extends PureComponent {
                         }}
                         style={{
                             position: 'absolute',
-                            top: 15, left: 10
+                            top: 15, left: 10,
                         }}>
                         <SvgUri width={20} height={20} svgXmlData={goback}/>
                     </TouchableOpacity>
@@ -194,16 +195,19 @@ class UserBillList extends PureComponent {
         }, userinfo.token).then(result => {
             // console.log(result);
             if (isRefresh) {
+                const newData = formatData([], result,'bill_date1');
                 this.setState({
-                    taskData: result,
+                    taskData: newData,
                     isLoading: false,
-                    hideLoaded: result.length >= 10 ? false : true,
+                    hideLoaded: result.length < 10,
                 });
             } else {
-                const tmpArr = [...this.state.taskData];
+
+                // const tmpArr = [...this.state.taskData];
+                const newData = formatData(this.state.taskData, result,'bill_date1');
                 this.setState({
-                    taskData: tmpArr.concat(result),
-                    hideLoaded: result.length >= 10 ? false : true,
+                    taskData: newData,
+                    hideLoaded: result.length < 10,
                 });
             }
 
@@ -222,6 +226,7 @@ class UserBillList extends PureComponent {
 
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
+
         return (
             <AnimatedFlatList
                 style={{backgroundColor: '#f5f5f5', paddingTop: 1}}
@@ -266,6 +271,11 @@ class UserBillList extends PureComponent {
         this._updatePage(true);
     };
     _renderIndexPath = ({item, index}) => {
+        if (item.time) {
+            return <View style={{height: 40, backgroundColor: 'rgba(245,245,245,0.6)'}}>
+                <Text style={{position: 'absolute', bottom: 3, left: 10, color: 'rgba(0,0,0,0.6)'}}>{item.time}</Text>
+            </View>;
+        }
         return <TouchableOpacity
             onPress={() => {
                 if (item.bill_task_id) {
@@ -284,9 +294,9 @@ class UserBillList extends PureComponent {
                 borderBottomColor: 'rgba(0,0,0,0.1)',
             }}>
             <View>
-                <Text style={{fontSize: 14,color:'black'}}>{item.bill_title}</Text>
-                <Text style={{marginTop: 8, opacity: 0.7, fontSize: 13,color:'black'}}>余额:{item.bill_balance}</Text>
-                <Text style={{marginTop: 8, opacity: 0.5, fontSize: 12,color:'black'}}>{item.bill_date1}</Text>
+                <Text style={{fontSize: 14, color: 'black'}}>{item.bill_title}</Text>
+                <Text style={{marginTop: 8, opacity: 0.7, fontSize: 13, color: 'black'}}>余额:{item.bill_balance}</Text>
+                <Text style={{marginTop: 8, opacity: 0.5, fontSize: 12, color: 'black'}}>{item.bill_date1}</Text>
             </View>
             <View style={{alignSelf: 'flex-start', marginTop: 20}}>
                 <Text style={{
@@ -297,7 +307,7 @@ class UserBillList extends PureComponent {
                 <Text style={{
                     opacity: 0.5,
                     marginTop: 10,
-                    textAlign: 'right',color:'black'
+                    textAlign: 'right', color: 'black',
 
                 }}>{item.bill_status == 1 ? '支付成功' : '处理中'}</Text>
             </View>

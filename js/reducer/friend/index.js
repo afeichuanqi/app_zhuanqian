@@ -3,10 +3,9 @@ import Types from '../../action/Types';
 const defaultContent = {
     friendArr: [],
     unMessageLength: 0,
-    columnUnreadLength: [0, 0, 0, 0],
     appeal_2: 0,
     appeal_3: 0,
-    notice_arr: [0, 0, 0, 0],
+    notice_arr: [0, 0, 0, 0, 0, 0, 0,0],
 };
 
 export default function onAction(state = defaultContent, action) {
@@ -56,8 +55,8 @@ export default function onAction(state = defaultContent, action) {
             };
         case Types.NEW_NOTICE_MSG:
             const tmp = [...state.notice_arr];
-            //console.log(data.type);
-            tmp[data.type] = 1;
+            tmp[data.type] += 1;
+
             return {
                 ...state,
                 notice_arr: tmp,
@@ -73,7 +72,7 @@ export default function onAction(state = defaultContent, action) {
         case Types.SET_NEW_NOTICE_MSG_IS_ALL_READ:
             return {
                 ...state,
-                notice_arr: [0, 0, 0, 0],
+                notice_arr: [0, 0, 0, 0, 0, 0, 0,0],
             };
         case Types.FRIEND_SET_APPEAL_2_MSG_UN_READ:
             return {
@@ -141,7 +140,6 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 friendArr: [],
                 unMessageLength: 0,
-                columnUnreadLength: [0, 0, 0, 0],
             };
         default:
             return state;

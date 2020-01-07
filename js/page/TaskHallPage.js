@@ -34,6 +34,7 @@ import EventTypes from '../util/EventTypes';
 import Image from 'react-native-fast-image';
 import {getEmojis} from '../util/CommonUtils';
 import Emoji from 'react-native-emoji';
+import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 
 let FilterComponent = null;
 
@@ -485,7 +486,7 @@ class HeadlineComponent extends PureComponent {
                 overflow: 'hidden',
 
             }}>
-                <FlatList
+                {HeadlineArrays.length > 0 ? <><FlatList
                     showsVerticalScrollIndicator={false}
                     ref={ref => this.flatList = ref}
                     data={HeadlineArrays}
@@ -494,16 +495,28 @@ class HeadlineComponent extends PureComponent {
                     keyExtractor={(item, index) => index + ''}
                     // onEndReachedThreshold={0.01}
                 />
-                {/*禁止触摸*/}
-                <TouchableOpacity
-                    onPress={() => {
-                        NavigationUtils.goPage({
-                            test: false,
-                            task_id: this.state.HeadlineArrays[this.index].taskId,
-                        }, 'TaskDetails');
-                    }}
-                    activeOpacity={1}
-                    style={{position: 'absolute', width: 300, height: 40, opacity: 1, zIndex: 3}}/>
+                    {/*禁止触摸*/}
+                    <TouchableOpacity
+                        onPress={() => {
+                            NavigationUtils.goPage({
+                                test: false,
+                                task_id: this.state.HeadlineArrays[this.index].taskId,
+                            }, 'TaskDetails');
+                        }}
+                        activeOpacity={1}
+                        style={{position: 'absolute', width: 300, height: 40, opacity: 1, zIndex: 3}}/>
+                </> : <>
+                    <SkeletonPlaceholder minOpacity={0.2}>
+                        <View style={{width: width - 140, marginHorizontal: 5, marginVertical: 5, height: 20}}></View>
+                    </SkeletonPlaceholder>
+                    <View style={{position: 'absolute', right: 10}}>
+                        <SkeletonPlaceholder minOpacity={0.2}>
+                            <View style={{width: 40, marginHorizontal: 5, marginVertical: 5, height: 20}}></View>
+                        </SkeletonPlaceholder>
+                    </View>
+                </>}
+
+
             </View>
         </View>;
     }

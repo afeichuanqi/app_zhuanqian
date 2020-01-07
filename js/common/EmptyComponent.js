@@ -38,16 +38,21 @@ class EmptyComponent extends PureComponent {
 
     render() {
         let source = null;
-        const type = this.props.type;
-        if (type === 1) {
-            source = require('../res/img/empty/task_empty.png');
-        } else if (type === 2) {
-            source = require('../res/img/empty/message_empty.png');
-        }else if (type === 3) {
-            source = require('../res/img/empty/favirite_empty.png');
-        }else if (type === 4) {
-            source = require('../res/img/empty/write_empty.png');
+        if (this.props.source) {
+            source=this.props.source;
+        }else{
+            const type = this.props.type;
+            if (type === 1) {
+                source = require('../res/img/empty/task_empty.png');
+            } else if (type === 2) {
+                source = require('../res/img/empty/message_empty.png');
+            } else if (type === 3) {
+                source = require('../res/img/empty/favirite_empty.png');
+            } else if (type === 4) {
+                source = require('../res/img/empty/write_empty.png');
+            }
         }
+
         return (
             <View style={{
                 height: this.props.height, justifyContent: 'center', alignItems: 'center',
@@ -56,7 +61,7 @@ class EmptyComponent extends PureComponent {
             }}>
                 <View style={{
                     marginTop: this.props.marginTop,
-                    alignItems:'center',
+                    alignItems: 'center',
                 }}>
                     <Image resizeMode={'contain'} source={source} style={{width: 120, height: 120}}/>
                     <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.6)', marginTop: 10}}>{this.props.message} ~

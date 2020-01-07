@@ -183,14 +183,14 @@ class TaskRejectDetailsPage extends PureComponent {
                                 paddingVertical: 10,
                             }}>
                                 <View style={{alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap'}}>
-                                    <Text style={{color: 'red'}}>驳回理由:</Text>
+                                    <Text style={{color: 'rgba(0,0,0,0.8)'}}>驳回理由:</Text>
                                     <Text
                                         // numberOfLines={5}
                                         // ellipsizeMode={'tail'}
                                         style={{
                                             width: screenWidth - 120,
                                             fontSize: 14,
-                                            color: 'red',
+                                            color: 'rgba(0,0,0,0.8)',
                                             marginLeft: 10,
                                         }}>{JSON.parse(reason_for_rejection).turnDownInfo}</Text>
                                 </View>
