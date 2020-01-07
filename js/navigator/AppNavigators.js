@@ -40,6 +40,8 @@ import MyViewHistoryPage from '../page/MyViewHistoryPage';
 import SystemNotificationPage from '../page/SystemNotificationPage';
 import RechargePage from '../page/RechargePage';
 import WithDrawPage from '../page/WithDrawPage';
+import UserUpdateOrderPage from '../page/UserUpdateOrderPage';
+import UserFeedbackListPage from '../page/UserFeedbackListPage';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 import UserFeedbackPage from '../page/UserFeedbackPage';
@@ -285,6 +287,18 @@ const MainNavigator = createStackNavigator({
         },
         UserFeedbackPage: {
             screen: UserFeedbackPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        UserUpdateOrderPage: {
+            screen: UserUpdateOrderPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        UserFeedbackListPage: {
+            screen: UserFeedbackListPage,
             navigationOptions: {
                 header: null,
             },

@@ -13,17 +13,17 @@ import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions,
-    FlatList, StyleSheet, Text,
-    View, TouchableOpacity, StatusBar, Clipboard, ScrollView, TextInput,
+    StyleSheet, Text,
+    View, TouchableOpacity, StatusBar,  ScrollView, TextInput,
 } from 'react-native';
 import {connect} from 'react-redux';
 import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-import add_image from '../res/svg/add_image.svg';
-import SvgUri from 'react-native-svg-uri';
-import PickerImage from '../common/PickerImage';
-import {saveFeedBack, uploadQiniuImage} from '../util/AppService';
+// import add_image from '../res/svg/add_image.svg';
+// import SvgUri from 'react-native-svg-uri';
+// import PickerImage from '../common/PickerImage';
+import {saveFeedBack} from '../util/AppService';
 import UploadImgsComponent from '../common/UploadImgsComponent';
 
 const width = Dimensions.get('window').width;
@@ -64,7 +64,9 @@ class UserFeedbackPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提意见送大礼', null, 'white', 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提意见送大礼', null, 'white', 'black', 16, ()=>{
+            NavigationUtils.goPage({},'UserFeedbackListPage')
+        }, false,true,'历史反馈');
 
         return (
             <SafeAreaViewPlus

@@ -18,6 +18,7 @@ import guanzhu2 from '../res/svg/mysvg/guanzhu2.svg';
 import bill from '../res/svg/mysvg/bill.svg';
 import yaoqing1 from '../res/svg/mysvg/yaoqing1.svg';
 import pingbi3 from '../res/svg/mysvg/pingbi3.svg';
+import updateOrder from '../res/svg/mysvg/updateOrder.svg';
 import feedback from '../res/svg/mysvg/feedback.svg';
 import viewHistory from '../res/svg/mysvg/viewHistory.svg';
 import favorite2 from '../res/svg/mysvg/favorite2.svg';
@@ -293,6 +294,9 @@ class BottomInfoColumn extends Component {
             })}
             {ViewUtil.getSettingItem(feedback, '意见反馈', '我们需要您的意见', () => {
                 MenuClick('UserFeedbackPage');
+            })}
+            {ViewUtil.getSettingItem(updateOrder, '刷新购买', '实时刷新', () => {
+                MenuClick('UserUpdateOrderPage');
             })}
             {ViewUtil.getMenuLine()}
 

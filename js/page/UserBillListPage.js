@@ -195,7 +195,7 @@ class UserBillList extends PureComponent {
         }, userinfo.token).then(result => {
             // console.log(result);
             if (isRefresh) {
-                const newData = formatData([], result,'bill_date1');
+                const newData = formatData([], result, 'bill_date1');
                 this.setState({
                     taskData: newData,
                     isLoading: false,
@@ -204,7 +204,7 @@ class UserBillList extends PureComponent {
             } else {
 
                 // const tmpArr = [...this.state.taskData];
-                const newData = formatData(this.state.taskData, result,'bill_date1');
+                const newData = formatData(this.state.taskData, result, 'bill_date1');
                 this.setState({
                     taskData: newData,
                     hideLoaded: result.length < 10,
@@ -278,7 +278,7 @@ class UserBillList extends PureComponent {
         }
         return <TouchableOpacity
             onPress={() => {
-                if (item.bill_task_id) {
+                if (!isNaN(item.bill_task_id) && item.bill_task_id > 0) {
                     NavigationUtils.goPage({test: false, task_id: item.bill_task_id}, 'TaskDetails');
                 }
             }}

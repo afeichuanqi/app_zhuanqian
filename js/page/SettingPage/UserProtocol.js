@@ -88,6 +88,7 @@ class UserProtocol extends PureComponent {
                 <ScrollView style={{
                     paddingHorizontal: 10,
                     color: '#303030',
+                    // flexDirection:,
                 }}>
                     <Text style={{
                         fontSize: 15,
