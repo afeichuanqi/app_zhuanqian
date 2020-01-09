@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Animated, Dimensions, StyleSheet, View, Text, StatusBar} from 'react-native';
+import {Dimensions, StyleSheet, View, Text, StatusBar} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
@@ -17,15 +17,19 @@ import PromotionToast from '../common/PromotionToast';
 import Toast from '../common/Toast';
 import Global from '../common/Global';
 import {getAppSetting} from '../util/AppService';
+import Animated from 'react-native-reanimated';
+
+const {spring} = Animated;
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
+
 
 class HomePage extends PureComponent {
     constructor(props) {
         super(props);
     }
 
-    opacity = new Animated.Value(1);
+    // opacity = new Animated.Value(1);
     translateY = new Animated.Value(0);
     state = {
         showAnimated: true,
@@ -33,12 +37,13 @@ class HomePage extends PureComponent {
 
     async componentDidMount() {
         getAppSetting().then(result => {
-            console.log(result, 'result');
+
             Global.user_top_fee = result.user_top_fee;
             Global.user_service_fee = result.user_service_fee;
             Global.user_recommend_fee = result.user_recommend_fee;
         });
         Global.toast = this.toast;
+
     }
 
     componentWillUnmount() {
@@ -48,41 +53,51 @@ class HomePage extends PureComponent {
     startAnimated = () => {
 
         RNBootSplash.hide();
-        let useNativeDriver = true;
-        Animated.stagger(250, [
-            Animated.spring(this.translateY, {useNativeDriver, toValue: -50}),
-            Animated.spring(this.translateY, {
-                useNativeDriver,
-                toValue: Dimensions.get('window').height,
-            }),
-        ]).start();
-        Animated.timing(this.opacity, {
-            useNativeDriver,
-            toValue: 0,
-            duration: 700,
-            delay: 250,
+        spring(this.translateY, {
+            toValue: -50,
+            damping: 100,
+            mass: 0.1,
+            stiffness: 50,
+            overshootClamping: false,
+            restSpeedThreshold: 20,
+            restDisplacementThreshold: 20,
         }).start(() => {
-            NavigationUtils.navigation = this.props.navigation;
-            StatusBar.setBarStyle('dark-content', false);
-            StatusBar.setBackgroundColor(theme, false);
-            this.setState({
-                showAnimated: false,
-            }, () => {
-                this.promotionToast.show();
+            spring(this.translateY, {
+                toValue: 500,
+                damping: 55,
+                mass: 1,
+                stiffness: 400,
+                overshootClamping: false,
+                restSpeedThreshold: 1,
+                restDisplacementThreshold: 1,
+            }).start(() => {
+                NavigationUtils.navigation = this.props.navigation;
+                StatusBar.setBarStyle('dark-content', false);
+                StatusBar.setBackgroundColor(theme, false);
+                this.setState({
+                    showAnimated: false,
+                }, () => {
+                    this.promotionToast.show();
+                });
             });
-
         });
+
+
     };
 
     render() {
         const {showAnimated} = this.state;
-
+        const opacity = Animated.interpolate(this.translateY, {
+            inputRange: [400, 500],
+            outputRange: [1, 0],
+            extrapolate: 'clamp',
+        });
         return (
             <View style={{flex: 1}}>
                 <Toast
                     ref={ref => this.toast = ref}
                 />
-                {showAnimated && <Animated.View style={[styles.container, {opacity: this.opacity}]}>
+                {showAnimated && <Animated.View style={[styles.container, {opacity: opacity}]}>
                     <Animated.View
                         style={[
                             StyleSheet.absoluteFill,
@@ -94,6 +109,7 @@ class HomePage extends PureComponent {
                             source={bootSplashLogo}
                             fadeDuration={0}
                             onLoadEnd={this.startAnimated}
+                            // resizeMode={''}
                             style={[
                                 styles.logo,
                                 {transform: [{translateY: this.translateY}]},
@@ -148,6 +164,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 100,
         width: 100,
+        marginTop: -2,
     },
 });
 export default HomePage;

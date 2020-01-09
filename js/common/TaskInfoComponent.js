@@ -77,11 +77,7 @@ class TaskInfoComponent extends PureComponent {
     render() {
 
         const {titleFontSize, marginHorizontal, item, showTime} = this.props;
-        if (item.time && showTime) {
-            return <View style={{height: 40, backgroundColor: 'rgba(245,245,245,0.6)'}}>
-                <Text style={{position: 'absolute', bottom: 3, left: 10, color: 'rgba(0,0,0,0.6)'}}>{item.time}</Text>
-            </View>;
-        }
+
         let taskTitle = item.taskTitle;
         let emojiArr = [];
         const json = getEmojis(taskTitle);

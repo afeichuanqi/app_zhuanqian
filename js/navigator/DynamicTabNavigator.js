@@ -6,7 +6,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image} from 'react-native';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image,BackHandler} from 'react-native';
 import Animated from 'react-native-reanimated';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
@@ -25,7 +25,7 @@ import ImageViewerModal from '../common/ImageViewerModal';
 import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
 import {NavigationActions} from 'react-navigation';
-
+import RNExitApp from 'react-native-exit-app';
 const {SpringUtils, spring} = Animated;
 type Props = {};
 
@@ -73,15 +73,12 @@ class DynamicTabNavigator extends Component<Props> {
 
                     }}
                     initialLayout={{width}}
-                    lazy={false}
+                    lazy={true}
                     timingConfig={{duration: 1}}
                     // swipeEnabled={false}
                 />
                 <BottomBarRedux onPress={(index) => {
-                    // console.log(index);
-                    // console.log('BottomBarRedux',index);
                     this.jumpTo(navigationRoutes[index].key);
-                    // this.setState({navigationIndex: index});
                 }} navigationIndex={navigationIndex}/>
             </SafeAreaViewPlus>
 
@@ -118,8 +115,8 @@ class BottomBar extends Component {
         if (nav.routes[0].index === 0) {
             if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
                 // console.log('exitApp');
-                // BackHandler.exitApp();
-                return true;
+                RNExitApp.exitApp();
+                return false;
             }
             this.lastBackPressed = Date.now();
             return true;//默认行为
@@ -246,9 +243,10 @@ class BottomBar extends Component {
         return <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            backgroundColor: '#ffffff',
+            // backgroundColor: '#ffffff',
             borderTopWidth: 0.8,
             borderTopColor: '#c0c0c0',
+
         }}>
 
             <BottomBarItem
@@ -317,7 +315,7 @@ class BottomBarItem extends Component {
             setTimeout(() => {
                 this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                     ...SpringUtils.makeDefaultConfig(),
-                    bounciness: 30,
+                    bounciness: 20,
                     speed: 10,
                     toValue: 1,
                 })).start(() => {

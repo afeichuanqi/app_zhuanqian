@@ -1,4 +1,6 @@
 rootProject.name = 'AwesomeProject'
+include ':react-native-exit-app'
+project(':react-native-exit-app').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-exit-app/android')
 include ':janalytics-react-native'
 project(':janalytics-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/janalytics-react-native/android')
 include ':jcore-react-native'

@@ -76,8 +76,8 @@ class MyPage extends PureComponent {
             extrapolate: 'clamp',
         });
         const RefreshHeight = Animated.interpolate(this.scrollY, {
-            inputRange: [0, 1, 2],
-            outputRange: [230, 50, 50],
+            inputRange: [-500, 0, 1, 2],
+            outputRange: [730, 230, 50, 50],
             extrapolate: 'clamp',
         });
         let navigationBar = <NavigationBar
@@ -156,7 +156,8 @@ class MyPage extends PureComponent {
                         } : this._nameClick}
                         style={{
                             position: 'absolute',
-                            top: titleTop,
+                            top: 0,
+                            transform: [{translateY: titleTop}],
                             left: 10,
                             zIndex: 2,
                             elevation: 0.3,
@@ -260,10 +261,8 @@ class BottomInfoColumn extends Component {
                     isOtherMsg={notice_arr[2] > 0}
                 />
             </ScrollView>
-
-            {ViewUtil.getSettingItem(guanzhu2, '我的关注', '关注列表', () => {
-                MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
-                // NavigationUtils.goPage();
+            {ViewUtil.getSettingItem(updateOrder, '刷新购买', '实时刷新', () => {
+                MenuClick('UserUpdateOrderPage');
             })}
             <View>
                 {ViewUtil.getSettingItem(bill, '帐单展示', '支出、收入', () => {
@@ -279,26 +278,31 @@ class BottomInfoColumn extends Component {
                     backgroundColor: 'red',
                 }}/>}
             </View>
-
-            {ViewUtil.getSettingItem(yaoqing1, '邀请好友', '好友邀请得奖励', () => {
-                MenuClick('FriendPromotionPage');
+            {ViewUtil.getMenuLine()}
+            {ViewUtil.getSettingItem(guanzhu2, '我的关注', '关注列表', () => {
+                MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
+                // NavigationUtils.goPage();
             })}
             {ViewUtil.getSettingItem(favorite2, '我的收藏', '收藏精品任务', () => {
                 MenuClick('MyFavoritePage');
             })}
+            {ViewUtil.getSettingItem(viewHistory, '浏览历史', '浏览历史', () => {
+                MenuClick('MyViewHistoryPage');
+            })}
             {ViewUtil.getSettingItem(pingbi3, '屏蔽用户', '屏蔽用户列表', () => {
                 MenuClick('MyShieldPage');
             })}
-            {ViewUtil.getSettingItem(viewHistory, '浏览历史', '浏览历史', () => {
-                MenuClick('MyViewHistoryPage');
+            {ViewUtil.getMenuLine()}
+            {ViewUtil.getSettingItem(yaoqing1, '邀请好友', '好友邀请得奖励', () => {
+                MenuClick('FriendPromotionPage');
             })}
             {ViewUtil.getSettingItem(feedback, '意见反馈', '我们需要您的意见', () => {
                 MenuClick('UserFeedbackPage');
             })}
-            {ViewUtil.getSettingItem(updateOrder, '刷新购买', '实时刷新', () => {
-                MenuClick('UserUpdateOrderPage');
-            })}
             {ViewUtil.getMenuLine()}
+            <View style={{paddingVertical: 20, paddingBottom: 30, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>工作时间:9-30-18:30</Text>
+            </View>
 
 
         </View>;
@@ -353,7 +357,7 @@ class ToolsItemComponent extends PureComponent {
                 <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
                 <Text style={{fontSize: 11, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
-            <FastImage source={source} style={{width: 35, height: 35}}/>
+            <FastImage source={source} style={{width: 35, height: 35, borderRadius: 12}}/>
             {isOtherMsg && <View style={{
                 height: 8,
                 width: 8,

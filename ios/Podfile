@@ -69,6 +69,8 @@ target 'AwesomeProject' do
   pod 'JCore', :path => '../node_modules/jcore-react-native'
   
   pod 'JAnalytics', :path => '../node_modules/janalytics-react-native'
+  pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
+
   target 'AwesomeProjectTests' do
     inherit! :search_paths
     # Pods for testing

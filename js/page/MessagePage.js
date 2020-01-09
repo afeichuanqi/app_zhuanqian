@@ -50,12 +50,8 @@ class MessagePage extends PureComponent {
 
         let statusBar = {
             hidden: false,
-            // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
-            // barStyle: 'dark-content',
-            // translucent:true
         };
         let navigationBar = <NavigationBar
-            // showStatusBarHeight={true}
             hide={true}
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
@@ -124,7 +120,7 @@ class MsgList extends Component {
     componentDidMount(): void {
         this.timer = setTimeout(() => {
             this.onRefresh();
-        }, 5000);
+        }, 1000);
 
 
         EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
@@ -134,7 +130,6 @@ class MsgList extends Component {
             }
         });
         EventBus.getInstance().addListener(EventTypes.update_message_page, this.listener1 = data => {
-            console.log("update_message_page111");
             this.onRefresh();
         });
     }

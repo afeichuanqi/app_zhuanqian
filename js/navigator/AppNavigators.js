@@ -16,7 +16,7 @@ import LoginPage from '../page/LoginPage';
 import EnterCodePage from '../page/EnterCodePage';
 import TaskReleaseMana from '../page/TaskReleaseMana';
 import TaskRelease from '../page/TaskRelease';
-import {Testing} from '../page/Testing';
+// import {Testing} from '../page/Testing';
 import TaskDetails from '../page/TaskDetails';
 import SettingPage from '../page/SettingPage';
 import ChatSettings from '../page/ChatRoomPage/ChatSettings';
@@ -141,12 +141,12 @@ const MainNavigator = createStackNavigator({
                 header: null,
             },
         },
-        Testing: {
-            screen: Testing,
-            navigationOptions: {
-                header: null,
-            },
-        },
+        // Testing: {
+        //     screen: Testing,
+        //     navigationOptions: {
+        //         header: null,
+        //     },
+        // },
         SettingPage: {
             screen: SettingPage,
             navigationOptions: {

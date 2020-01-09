@@ -321,13 +321,7 @@ class FristListComponent extends PureComponent {
     scrollY = new Animated.Value(0);
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
-        // const Y_ = this.nowY - y;
-        // if (Y_ < 20
-        //     && Y_ > -20
-        // ) {
-        //
-        //     return;
-        // }
+
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -378,7 +372,7 @@ class FristListComponent extends PureComponent {
     render() {
 
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, lunboHeight - 40],
+            inputRange: [-220, 0, lunboHeight - 30],
             outputRange: [lunboHeight + 220, lunboHeight + 10, 40],
             extrapolate: 'clamp',
         });
@@ -405,7 +399,7 @@ class FristListComponent extends PureComponent {
                 ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -25,
+                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -20,
                 backgroundColor: 'white', transform: [{translateY: columnTop}],
             }}>
                 <Text
@@ -436,7 +430,12 @@ class LunBoComponent extends React.Component {
         });
     };
     state = {
-        lunboData: [],
+        lunboData: [{
+            id: -1,
+            page_name: '',
+            params: {},
+            image_url: '',
+        }],
     };
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -449,6 +448,7 @@ class LunBoComponent extends React.Component {
 
     _renderItem = ({item, index}) => {
 
+        const source = item.image_url.startsWith('http') ? {uri: `${item.image_url}`} : require('../res/img/yaoqing/yaoqinghaoyou.png');
         return <TouchableOpacity
             key={item.id}
             activeOpacity={0.8}
@@ -457,7 +457,7 @@ class LunBoComponent extends React.Component {
                 if (item.type == 1) {
                     NavigationUtils.goPage(JSON.parse(item.params), item.page_name);
 
-                } else {
+                } else if (item.type == 2) {
                     Linking.canOpenURL(item.page_name).then(supported => {
                         if (!supported) {
                         } else {
@@ -472,7 +472,7 @@ class LunBoComponent extends React.Component {
                 loadingWidth={100}
                 loadingHeight={100}
                 style={[styles.imgStyle, {height: '100%', width: '100%'}]}
-                source={{uri: `${item.image_url}`}}
+                source={source}
                 resizeMode={FastImage.resizeMode.stretch}
                 key={index}
             />
@@ -493,18 +493,7 @@ class LunBoComponent extends React.Component {
 
         }}>
             {/*轮播图*/}
-            {lunboData.length === 0 ? <SkeletonPlaceholder minOpacity={0.4}>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    height: lunboHeight - 60,
-                    width: containerWidth,
-                    borderRadius: 10,
-                }}>
-
-                </View>
-            </SkeletonPlaceholder> : <Carousel
+            <Carousel
                 style={styles.carousel}
                 timeout={3000}
                 data={lunboData}
@@ -515,7 +504,7 @@ class LunBoComponent extends React.Component {
                 pagingEnable={true}
                 paginationDefaultColor={'rgba(255,255,255,1)'}
                 paginationActiveColor={bottomTheme}
-            />}
+            />
 
 
             <View style={{height: 40}}/>

@@ -235,15 +235,15 @@ class NoticeItem extends Component {
 
             }}>
             <View>
-                <Text style={{fontSize: 12, opacity: 0.5, marginVertical: 10}}>{item.send_date1}</Text>
+                <Text style={{fontSize: 12, opacity: 0.5, marginVertical: 10,color:'black'}}>{item.send_date1}</Text>
             </View>
             <View style={{
                 width: width - 20, backgroundColor: 'white',
                 paddingHorizontal: 10, borderRadius: 10, paddingVertical: 10,
             }}>
-                <Text style={{marginVertical: 10, fontSize: 16}}>{item.title}</Text>
+                <Text style={{marginVertical: 10, fontSize: 16,color:'black'}}>{item.title}</Text>
                 <View style={{height: 1, width: width - 40, backgroundColor: '#e8e8e8'}}/>
-                <Text style={{marginVertical: 15, fontSize: 13, opacity: 0.5, width: width - 40}}>{item.content}</Text>
+                <Text style={{marginVertical: 15, fontSize: 13, opacity: 0.5, width: width - 40,color:'black'}}>{item.content}</Text>
                 {is_read == 0 && <View style={{
                     position: 'absolute',
                     right: 10,

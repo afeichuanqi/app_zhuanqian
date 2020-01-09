@@ -230,7 +230,7 @@ class ChatSocket {
 
         const msgStr = JSON.stringify(msgData);
         try {
-            console.log(Global.ws, 'Global.ws');
+            // console.log(Global.ws, 'Global.ws');
             if (Global.connectionstatus && Global.ws.readyState == 1) {
                 Global.ws.send(msgStr);
             }

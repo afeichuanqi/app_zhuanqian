@@ -16,17 +16,16 @@ import {
     Dimensions,
     FlatList,
     RefreshControl, StyleSheet, Text,
-    View, TouchableOpacity, StatusBar,
+    View, StatusBar,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import {connect} from 'react-redux';
 import {selectFavoriteForUserId} from '../util/AppService';
-import FastImage from 'react-native-fast-image';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
+import TaskEasyInfoComponent from '../common/TaskEasyInfoComponent';
 
-const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -160,41 +159,23 @@ class MyFavoritePage extends PureComponent {
         this._updatePage(false);
     };
     _renderIndexPath = ({item, index}) => {
-        return <TouchableOpacity
-            onPress={() => {
-                NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
 
-            }}
+
+        const tmpItem = {
+
+            taskTitle: item.task_title,
+            imageUrl: item.task_uri,
+            rewardPrice: item.rewardPrice,
+            leftTopText: `剩余数:${item.rewardNum - item.signUpNum}`,
+            leftBottomText: `编号:${item.taskId}`,
+            taskId:item.taskId,
+        };
+        return <TaskEasyInfoComponent
+            item={tmpItem}
             key={index}
-            style={{
-                height: 60, width,
-                paddingHorizontal: 10,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection: 'row',
-                backgroundColor: 'white',
-            }}>
+            showTime={false}
+        />;
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
-                    <FastImage
-                        style={[styles.imgStyle]}
-                        source={{uri: item.task_uri}}
-                        resizeMode={FastImage.resizeMode.stretch}
-                    />
-                    <View style={{justifyContent: 'space-around', marginLeft: 12}}>
-                        <Text style={{fontSize: 14,color:'black'}}>{item.task_title}</Text>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{fontSize: 12, opacity: 0.5,color:'black'}}>剩余数:{item.rewardNum - item.signUpNum}</Text>
-                            <Text style={{fontSize: 12, opacity: 0.5, marginLeft: 10,color:'black'}}>编号:{item.taskId}</Text>
-                        </View>
-                    </View>
-
-                </View>
-
-            </View>
-            <Text style={{alignSelf: 'center', fontSize: 17, color: 'red'}}>{item.rewardPrice}元</Text>
-        </TouchableOpacity>;
     };
     page = {
         pageIndex: 0,

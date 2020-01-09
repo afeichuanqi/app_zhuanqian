@@ -14,7 +14,7 @@ import add_image from '../res/svg/add_image.svg';
 import {uploadQiniuImage} from '../util/AppService';
 import PickerImage from './PickerImage';
 import ImageViewerModal from './ImageViewerModal';
-
+import Global from './Global';
 
 class UploadImgsComponent extends PureComponent {
     constructor(props) {
@@ -42,13 +42,19 @@ class UploadImgsComponent extends PureComponent {
                             key={index}
                             ref={ref => this.btn = ref}
                             onPress={() => {
+                                // console.log(this.props.userinfo.login,"this.props.userinfo");
+                                if (!this.props.userinfo.login) {
+                                    // console.log(Global.toast,"Global.toast");
+                                    Global.toast.show('Network Error');
+                                    return;
+                                }
                                 const {uri} = this.state.data[index];
                                 if (uri && (uri.indexOf('file://') !== -1 || uri.indexOf('http') !== -1)) {
                                     let uris = [];
                                     for (let i = 0; i < this.state.data.length; i++) {
                                         const item = this.state.data[i];
                                         if (item.uploadStatus == 1) {
-                                            uris.push({url:item.uri});
+                                            uris.push({url: item.uri});
                                         }
                                         if (i === this.state.data.length - 1) {
                                             this.imageView.show(uris, uri);
@@ -96,6 +102,7 @@ class UploadImgsComponent extends PureComponent {
                             <TouchableOpacity
                                 onPress={() => {
                                     const {userinfo} = this.props;
+
                                     const tmpArr = [...this.state.data];
                                     const item = tmpArr[index];
                                     const uri = item.uri;

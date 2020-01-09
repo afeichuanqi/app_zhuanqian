@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AwesomeProject</string>
+    <string name="app_name">简易赚</string>
 <!--    Production-->
     <string moduleConfig="true" name="CodePushDeploymentKey">h5JjrtICVw3C9ZgTfOzHhjhGScEQCWYuYnVtd</string>
 </resources>

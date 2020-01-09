@@ -283,7 +283,7 @@ class MyTaskReview extends PureComponent {
                                     ImageIndex += 1;
                                     return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 500, typeData.uri1ImgWidth || screenWidth - 40, ImageIndex);
                                 } else if (type === 6 && typeData.collectInfoContent) {
-                                    return this.getTextView(typeData.collectInfoContent);
+                                    return this.getTextView(typeData.collectInfoContent, index);
                                 } else {
                                     return null;
                                 }
@@ -441,8 +441,8 @@ class MyTaskReview extends PureComponent {
         }
 
     };
-    getTextView = (text) => {
-        return <View style={{
+    getTextView = (text, index) => {
+        return <View key={index} style={{
             marginTop: 10,
             backgroundColor: 'white',
             paddingVertical: 15, paddingHorizontal: 10,
@@ -464,7 +464,8 @@ class MyTaskReview extends PureComponent {
         </View>;
     };
     getImageView = (url, height, width, ImageIndex) => {
-        return <View style={{marginTop: 10, backgroundColor: 'white', alignItems: 'center', paddingBottom: 20}}>
+        return <View key={ImageIndex}
+                     style={{marginTop: 10, backgroundColor: 'white', alignItems: 'center', paddingBottom: 20}}>
             <View style={{
                 width: screenWidth, paddingVertical: 10, justifyContent: 'center', alignItems: 'center',
                 flexDirection: 'row',

@@ -270,7 +270,7 @@ class ChatWindow extends PureComponent {
                 paddingHorizontal: 8,
                 borderRadius: 16,
             }}>
-                <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 12}}>{getCurrentTime(parseInt(time))}</Text>
+                <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 13}}>{getCurrentTime(parseInt(time))}</Text>
             </View>,
         placeholder: '请输入...',
         pressInText: '按住 说话',
@@ -365,7 +365,7 @@ class ChatWindow extends PureComponent {
         voiceLeftLoadingColor: '#ccc',
         voiceRightLoadingColor: '#628b42',
         inputHeightFix: 0,
-        containerBackgroundColor: '#f5f5f5',
+        containerBackgroundColor: '#f3f4f8',
         showsVerticalScrollIndicator: false,
         showIsRead: false,
     };
@@ -375,7 +375,7 @@ class ChatWindow extends PureComponent {
         const {androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding} = props;
         this.time = null;
         this._userHasBeenInputed = false;
-        this.iosHeaderHeight = 64;
+        this.iosHeaderHeight = 144;
         this.isIphoneX = isIPhoneX();
         this.visibleHeight = new Animated.Value(0);
         this.panelHeight = new Animated.Value(0);

@@ -9,8 +9,6 @@ import {
 import Image from 'react-native-fast-image';
 import TextMessage from './TextMessage';
 import ImageMessage from './ImageMessage';
-// import VideoMessage from './VideoMessage'
-// import VoiceMessage from './VoiceMessage'
 import {EMOJIS_DATA} from '../source/emojis';
 import Emoji_ from 'react-native-emoji';
 
@@ -51,22 +49,11 @@ export default class ChatItem extends PureComponent {
         }
     }
 
-    _select = () => {
-        this.setState({isSelect: !this.state.isSelect});
-    };
-
-    changeLoading = (status) => {
-        this.setState({loading: status});
-    };
 
     _matchContentString = (textContent, views, isSelf) => {
         // 匹配得到index并放入数组中
-        // textContent =
         let emojiArrs = textContent.match(PATTERNS.localEmoji);
-        // emojiArrs.forEach((item) => {
-        //     textContent = textContent.replace(item, <Emoji_ name={item} style={{fontSize: 15}}/>);
-        // });
-        const emojiArr = [];
+
         if (emojiArrs) {
             emojiArrs.forEach((item, index) => {
                 views.push(<Emoji_ key={index} name={item} style={{fontSize: 15}}/>);
@@ -176,61 +163,7 @@ export default class ChatItem extends PureComponent {
                 } else {
                     return this.props.renderImageMessage({isOpen, isSelf, message, index: parseInt(rowId)});
                 }
-            // case 'voice':
-            //   if (this.props.renderVoiceMessage === undefined) {
-            //     return (
-            //       <VoiceMessage
-            //         reSendMessage={reSendMessage}
-            //         loading={loading}
-            //         rightMessageBackground={this.props.rightMessageBackground}
-            //         leftMessageBackground={this.props.leftMessageBackground}
-            //         isOpen={isOpen}
-            //         isSelf={isSelf}
-            //         messageErrorIcon={messageErrorIcon}
-            //         message={message}
-            //         onMessageLongPress={this.props.onMessageLongPress}
-            //         onMessagePress={this.props.onMessagePress}
-            //         rowId={this.props.rowId}
-            //         voiceLeftIcon={this.props.voiceLeftIcon}
-            //         voiceRightIcon={this.props.voiceRightIcon}
-            //         voiceLoading={this.props.voiceLoading}
-            //         voicePlaying={this.props.voicePlaying}
-            //         savePressIndex={this.props.savePressIndex}
-            //         pressIndex={this.props.pressIndex}
-            //         voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
-            //         voiceRightLoadingColor={this.props.voiceRightLoadingColor}
-            //         lastReadAt={this.props.lastReadAt}
-            //         chatType={this.props.chatType}
-            //         showIsRead={this.props.showIsRead}
-            //         isReadStyle={this.props.isReadStyle}
-            //       />
-            //     )
-            //   } else {
-            //     return this.props.renderVoiceMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
-            //   }
-            // case 'video' :
-            //   if (this.props.renderVideoMessage === undefined) {
-            //     return (
-            //       <VideoMessage
-            //         rightMessageBackground={this.props.rightMessageBackground}
-            //         leftMessageBackground={this.props.leftMessageBackground}
-            //         reSendMessage={reSendMessage}
-            //         isOpen={isOpen}
-            //         isSelf={isSelf}
-            //         messageErrorIcon={messageErrorIcon}
-            //         message={message}
-            //         onMessageLongPress={this.props.onMessageLongPress}
-            //         onMessagePress={this.props.onMessagePress}
-            //         rowId={this.props.rowId}
-            //         lastReadAt={this.props.lastReadAt}
-            //         chatType={this.props.chatType}
-            //         showIsRead={this.props.showIsRead}
-            //         isReadStyle={this.props.isReadStyle}
-            //       />
-            //     )
-            //   } else {
-            //     return this.props.renderVideoMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
-            //   }
+
             case 'location':
                 if (this.props.renderLocationMessage === undefined) {
                     return null;
@@ -400,7 +333,7 @@ export default class ChatItem extends PureComponent {
                                             flexDirection: 'row', justifyContent: isSelf ? 'flex-end' : 'flex-start',
                                         }}>
                                             <View style={{
-                                                backgroundColor: message.isAdmin ? 'red' : message.targetId == guzhuInfo.guzhuUserId ? 'red' : '#2196F3',
+                                                backgroundColor: message.isAdmin ? '#eaa121' : message.targetId == guzhuInfo.guzhuUserId ? 'red' : '#2196F3',
                                                 paddingHorizontal: 7,
                                                 paddingVertical: Platform.OS == 'android' ? 1 : 2,
                                                 borderRadius: 4,
@@ -409,7 +342,7 @@ export default class ChatItem extends PureComponent {
                                                 <Text style={{
                                                     fontSize: 12,
                                                     color: 'white',
-                                                }}>{message.isAdmin ? '客服' : message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单人'}</Text>
+                                                }}>{message.isAdmin ? '客服' : message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单'}</Text>
                                             </View>
                                             <Text style={{
                                                 fontSize: 12,

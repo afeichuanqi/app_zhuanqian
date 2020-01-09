@@ -135,8 +135,7 @@ class ChatRoomPage extends React.Component {
                 }
 
             }).catch(msg => {
-                this.toast.show(msg);
-
+                msg.length > 0 && this.toast.show(msg);
             });
         }
 
@@ -301,8 +300,13 @@ class ChatRoomPage extends React.Component {
             hide={true}
             statusBar={statusBar}
         />;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+        if(Platform.OS==='android'){
+            setTimeout(()=>{
+                StatusBar.setBarStyle('dark-content', true);
+                StatusBar.setBackgroundColor(theme, true);
+            },500)
+        }
+
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
         });
@@ -366,9 +370,7 @@ class ChatRoomPage extends React.Component {
                         inputOutContainerStyle={{
                             backgroundColor: 'white',
                         }}
-                        renderLoadEarlier={() => {
-                            return <View style={{height: 80}}/>;
-                        }}
+
                         userProfile={{
                             id: userinfo.userid,
                             avatar: userinfo.avatar_url,
@@ -573,7 +575,7 @@ class TaskInfo extends React.Component {
                 NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
             }}
             style={{
-                height: 80, width, backgroundColor: 'white', position: 'absolute', zIndex: 1,
+                height: 80, width, backgroundColor: 'white',zIndex: 1,
                 paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', flexDirection: 'row',
                 borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0',
             }}>

@@ -57,7 +57,7 @@ class TabBarItem extends PureComponent<Props> {
             outputRange: isFirst ? [scaleActive, 1] : isLast ? [1, scaleActive] : [1, scaleActive, 1],
             extrapolate: 'clamp',
         }) : scaleActive;
-        console.log(item.isMsg, 'item.isMsg');
+        //console.log(item.isMsg, 'item.isMsg');
         return (
             <View style={{flexDirection: 'row'}}>
 

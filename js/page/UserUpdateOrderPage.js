@@ -78,7 +78,7 @@ class UserUpdateOrderPage extends PureComponent {
                         <Text style={{
                             color: 'rgba(0,0,0,0.5)',
                             paddingTop: 15,
-                            paddingHorizontal: 5,
+                            paddingHorizontal: 10,
                             marginBottom: 10,
                             fontSize: 16,
                         }}>购买须知：刷新包使用期限不限，不支持退订，请确认后购买</Text>

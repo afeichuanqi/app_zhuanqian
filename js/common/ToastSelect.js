@@ -10,6 +10,7 @@ import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions,  Text, TouchableOpacity} from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
+import {bottomTheme} from '../appSet';
 const {width} = Dimensions.get('window');
 import Animated from 'react-native-reanimated';
 const {SpringUtils,spring} = Animated;
@@ -87,7 +88,7 @@ class ToastSelect extends PureComponent {
 
             >
                 <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center',
+                    flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center',
                     alignItems: 'center', zIndex: 10
                 }}
                                   activeOpacity={1}
@@ -113,7 +114,7 @@ class ToastSelect extends PureComponent {
 
                         }}>
                             <View style={{flexDirection:'row', alignItems:'flex-end'}}>
-                                <Text style={{fontSize: 16,color:'red'}}>{this.props.title}</Text>
+                                <Text style={{fontSize: 16,color: bottomTheme}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -147,7 +148,7 @@ class ToastSelect extends PureComponent {
                                     alignItems: 'center',
                                     height: 50,
                                 }}>
-                                <Text style={{color: 'red'}}>{rightTitle}</Text>
+                                <Text style={{color:'#2196F3'}}>{rightTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </Animated.View>
