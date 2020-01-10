@@ -4,7 +4,7 @@ import FastImage from 'react-native-fast-image';
 import NavigationUtils from '../navigator/NavigationUtils';
 import Emoji from 'react-native-emoji';
 import {getEmojis} from '../util/CommonUtils';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 
 class TaskEasyInfoComponent extends PureComponent {
@@ -61,7 +61,7 @@ class TaskEasyInfoComponent extends PureComponent {
             }}
 
             style={{
-                height: 60, width,
+                height: hp(9.7), width,
                 paddingHorizontal: 10,
                 paddingRight: 15,
                 justifyContent: 'space-between',
@@ -81,21 +81,21 @@ class TaskEasyInfoComponent extends PureComponent {
                         <Text
                             numberOfLines={1}
                             style={{
-                                width: width - 150,
-                                fontSize: 14,
+                                width: wp(68),
+                                fontSize: wp(3.6),
                                 color: 'black',
 
-                            }}>{taskTitle} {emojiArr.map((item) => {
-                            return <Emoji name={item} style={{fontSize: 15}}/>;
+                            }}>{taskTitle} {emojiArr.map((item,index) => {
+                            return <Emoji name={item} key={index} style={{fontSize: wp(3.6)}}/>;
                         })}</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style={{
-                                fontSize: 12,
+                                fontSize: wp(3),
                                 opacity: 0.5,
                                 color: 'black',
                             }}>{item.leftTopText}</Text>
                             <Text style={{
-                                fontSize: 12,
+                                fontSize: wp(3),
                                 opacity: 0.5,
                                 marginLeft: 10,
                                 color: 'black',
@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 40,
-        height: 40,
+        width: wp(10),
+        height: wp(10),
         borderRadius: 3,
         // 设置高度
         // height:150

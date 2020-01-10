@@ -5,6 +5,7 @@ import SvgUri from 'react-native-svg-uri';
 import goback from '../res/svg/goback.svg';
 import message_more from '../res/svg/message_more.svg';
 import menu_right from '../res/svg/menu_right.svg';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
@@ -15,6 +16,7 @@ export default class ViewUtil {
                 justifyContent: 'space-between', backgroundColor: ColumnBgcColor, width: Dimensions.get('window').width,
 
             }}>
+
                 <TouchableOpacity
                     activeOpacity={0.6}
                     onPress={goBackClick}
@@ -54,21 +56,26 @@ export default class ViewUtil {
         return (
             <TouchableOpacity
                 onPress={click}
-                style={styles.setting_item_container}>
+                style={{
+                    backgroundColor: 'white',
+                    height: hp(6),
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
 
-                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingLeft: 20}}>
-                    <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.9)'} svgXmlData={menuSvg}/>
-                    <Text style={{marginLeft: 10, fontSize: 15, opacity: 1, color: 'black'}}>{title}</Text>
+                }}>
 
+                <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingLeft: wp(5)}}>
+                    <SvgUri width={wp(5)} height={wp(5)} fill={'rgba(0,0,0,0.9)'} svgXmlData={menuSvg}/>
+                    <Text style={{marginLeft: wp(2.5), fontSize: wp(3.9), opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center', height: 45, paddingRight: 10}}>
-
-                    <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
-                    <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>
-
+                <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingRight: wp(2)}}>
+                    <Text style={{marginLeft:  wp(2.5), fontSize:  wp(3.2), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
+                    <SvgUri width={wp(3)} style={{marginLeft: wp(1)}} height={wp(3)} svgXmlData={menu_right}/>
                 </View>
 
             </TouchableOpacity>
+
         );
     };
 
@@ -113,12 +120,12 @@ export default class ViewUtil {
     static getReReviewIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: 13, width: 13}}
+                style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/task_chongxinfabu.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
+            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
 
         </TouchableOpacity>;
     };
@@ -131,12 +138,12 @@ export default class ViewUtil {
     static getReReviewIngIco = (click) => {
         return <View
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: 13, width: 13}}
+                style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/reviewing.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核中</Text>
+            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核中</Text>
 
         </View>;
     };
@@ -150,36 +157,36 @@ export default class ViewUtil {
     static getDeleteIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height:  wp(3.5)}}>
             <Image
-                style={{height: 13, width: 13}}
+                style={{height:  wp(3.3), width:  wp(3.3)}}
                 source={require('../res/img/taskReView/task_delete.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
+            <Text style={{fontSize:  wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
 
         </TouchableOpacity>;
     };
     static getReviewIco = (reviewNum, click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: 13, width: 11}}
+                style={{height: wp(3.3), width: wp(3)}}
                 source={require('../res/img/taskReView/review.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
+            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
 
         </TouchableOpacity>;
     };
     static getzhidingIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: 13, width: 11}}
+                style={{height: wp(3.3), width: wp(3)}}
                 source={require('../res/img/taskReView/zhiding.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
+            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
 
         </TouchableOpacity>;
     };
@@ -187,25 +194,25 @@ export default class ViewUtil {
         return <TouchableOpacity
 
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: 13, width: 13}}
+                style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/tuijian.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+            <Text style={{fontSize:  wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
     };
     static getUpdateIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height: 13}}>
+            style={{flexDirection: 'row', alignItems: 'center', height:  wp(3.5)}}>
 
             <Image
-                style={{height: 13, width: 13}}
+                style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/update.png')}
             />
-            <Text style={{fontSize: 12, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+            <Text style={{fontSize:  wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
     };

@@ -41,6 +41,8 @@ class SearchPage extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
 
     }
@@ -61,8 +63,7 @@ class SearchPage extends PureComponent {
             backgroundColor: theme,//安卓手机状态栏背景颜色
             barStyle: 'dark-content',
         };
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}

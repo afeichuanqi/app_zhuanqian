@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {bottomTheme, theme} from '../appSet';
 import Animated, {Easing} from 'react-native-reanimated';
+
 const {timing} = Animated;
 import NavigationBar from '../common/NavigationBar';
 import TabBar from '../common/TabBar';
@@ -33,7 +34,7 @@ import EventTypes from '../util/EventTypes';
 import Image from 'react-native-fast-image';
 import {getEmojis} from '../util/CommonUtils';
 import Emoji from 'react-native-emoji';
-// import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 let FilterComponent = null;
 
@@ -65,11 +66,10 @@ class TaskHallPage extends PureComponent {
     }
 
     render() {
+
         const {navigationIndex, navigationRoutes} = this.state;
 
         let statusBar = {
-            // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
-            // barStyle: 'light-content',
             hidden: false,
         };
         let navigationBar = <NavigationBar
@@ -86,7 +86,7 @@ class TaskHallPage extends PureComponent {
                 {/*顶部样式*/}
                 <View style={{
                     backgroundColor: bottomTheme,
-                    height: 60,
+                    height: hp(9.7),
                     width,
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -95,37 +95,43 @@ class TaskHallPage extends PureComponent {
                 }}>
                     <TabBar
                         style={{
-                            height: 50,
-                            width: 200,
+                            height: hp(7.9),
+                            width: wp(50),
+
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 20}}
+                        contentContainerStyle={{paddingTop: hp(3.7)}}
                         routes={navigationRoutes}
                         index={navigationIndex}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
-                        titleMarginHorizontal={15}
-                        activeStyle={{fontSize: 19, color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: 16, color: [255, 255, 255], height: 10}}
-                        indicatorStyle={{height: 3, backgroundColor: 'white', borderRadius: 3, top: -5}}
+                        titleMarginHorizontal={wp(4)}
+                        activeStyle={{fontSize: wp(5), color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: wp(4), color: [255, 255, 255], height: 10}}
+                        indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.6)}}
                     />
-                    <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', marginTop: hp(1.5), alignItems: 'center'}}>
                         {/*加图标*/}
                         <TouchableOpacity
                             onPress={() => {
                                 NavigationUtils.goPage({}, 'TaskRelease');
                             }}
                         >
-                            <SvgUri width={21} height={21} fill={'white'} svgXmlData={jia}/>
+                            <SvgUri width={wp(5.8)} height={hp(5.8)} fill={'white'} svgXmlData={jia}/>
                         </TouchableOpacity>
-                        <View style={{height: 13, width: 0.4, backgroundColor: 'white', marginHorizontal: 12}}/>
+                        <View style={{
+                            height: hp(2.3),
+                            width: wp(0.05),
+                            backgroundColor: 'white',
+                            marginHorizontal: wp(3.5),
+                        }}/>
                         {/*搜索图标*/}
                         <TouchableOpacity
                             onPress={() => {
                                 NavigationUtils.goPage({}, 'SearchPage');
                             }}
                         >
-                            <SvgUri width={21} height={21} fill={'white'} svgXmlData={search}/>
+                            <SvgUri width={wp(5.5)} height={hp(5.5)} fill={'white'} svgXmlData={search}/>
                         </TouchableOpacity>
 
 
@@ -230,13 +236,6 @@ class FristListComponent extends PureComponent {
 
     _onScroll = (e) => {
         const y = e.nativeEvent.contentOffset.y;
-        // const Y_ = this.nowY - y;
-        // if (Y_ < 20
-        //     && Y_ > -20
-        // ) {
-        //
-        //     return;
-        // }
 
         if (Platform.OS === 'android') {
             if ((this.nowY <= 0 || y <= 0) && this.AnimatedIsshow) {
@@ -299,7 +298,7 @@ class FristListComponent extends PureComponent {
         });
         const translateY = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [80, 0],
+            outputRange: [ hp(11.8), 0],
             extrapolate: 'clamp',
         });
         const {show, showFilterComponent} = this.state;
@@ -324,10 +323,10 @@ class FristListComponent extends PureComponent {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    borderBottomWidth: 0.3,
-                    borderBottomColor: 'rgba(0,0,0,0.3)',
+                    borderBottomWidth: wp(0.1),
+                    borderBottomColor: 'rgba(0,0,0,0.2)',
                     zIndex: 3,
-                    height: 40,
+                    height: hp(5.9),
                     width,
 
                     backgroundColor: theme,
@@ -336,11 +335,11 @@ class FristListComponent extends PureComponent {
                                             ref={ref => this.topLeftFilterComponent = ref}/>
                     <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>
                 </View>
-                {/*筛选器*/}
+
                 <HeadlineComponent index={this.props.index} ref={ref => this.headlineComponent = ref}/>
 
             </Animated.View>
-
+            {/*筛选器*/}
             {showFilterComponent ?
                 <FilterComponent cancelClick={() => {
                     this.hide();
@@ -393,30 +392,31 @@ class TypeItem extends PureComponent {
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={onPress}
-            style={{height: 40, justifyContent: 'center', marginRight: 8}}>
+            style={{height: hp(5.9), justifyContent: 'center', marginRight: wp(2)}}>
             <View
                 // activeOpacity={0.6}
                 onPress={this.onPress}
                 style={{
-                    paddingHorizontal: 8,
-                    paddingVertical: 4,
+                    paddingHorizontal: wp(3),
+                    paddingVertical: hp(0.6),
                     flexDirection: 'row',
                     justifyContent: 'center',
                     backgroundColor: title.length > 2 ? 'rgba(33,152,245,0.1)' : '#f5f5f5',
-                    borderRadius: 3,
+                    borderRadius: wp(1),
 
                 }}>
                 <Text style={[{
-                    fontSize: 15, marginRight: 3,
+                    fontSize: wp(3.9), marginRight: wp(0.5),
                 }, title.length > 2 ? {color: bottomTheme} : !show ? {
                     color: 'black',
                     opacity: 0.6,
                 } : {color: bottomTheme}]}>{title}</Text>
                 {
-                    !show ? <SvgUri style={{marginTop: 6}} fill={title.length > 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
-                                    width={7} height={7}
-                                    svgXmlData={zhankai}/> :
-                        <SvgUri style={{marginTop: 6}} fill={bottomTheme} width={7} height={7}
+                    !show ?
+                        <SvgUri style={{marginTop: hp(0.6)}} fill={title.length > 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
+                                width={wp(2)} height={wp(2)}
+                                svgXmlData={zhankai}/> :
+                        <SvgUri style={{marginTop: hp(0.6)}} fill={bottomTheme} width={wp(2)} height={wp(2)}
                                 svgXmlData={yincang}/>
                 }
 
@@ -469,19 +469,19 @@ class HeadlineComponent extends PureComponent {
             return null;
         }
         return <View style={{
-            height: 40,
+            height: hp(5.9),
             width,
             backgroundColor: 'white',
             flexDirection: 'row',
             alignItems: 'center',
             borderBottomWidth: 0.3,
-            borderBottomColor: 'rgba(0,0,0,0.3)',
+            borderBottomColor: 'rgba(0,0,0,0.2)',
         }}>
             <Image
                 resizeMode={'stretch'}
                 source={require('../res/img/index_hot.png')} style={{
-                width: 42, height: 16, marginLeft: 20,
-                marginBottom: 4,
+                width:wp(12), height:hp(2.5), marginLeft: wp(5),
+                marginBottom: hp(0.8),
             }}/>
             <View style={{
                 flex: 1,
@@ -497,28 +497,6 @@ class HeadlineComponent extends PureComponent {
                     keyExtractor={(item, index) => index + ''}
                     // onEndReachedThreshold={0.01}
                 />
-                {/*{HeadlineArrays.length > 0 ? <>*/}
-                {/*    /!*禁止触摸*!/*/}
-                {/*    <TouchableOpacity*/}
-                {/*        onPress={() => {*/}
-                {/*            NavigationUtils.goPage({*/}
-                {/*                test: false,*/}
-                {/*                task_id: this.state.HeadlineArrays[this.index].taskId,*/}
-                {/*            }, 'TaskDetails');*/}
-                {/*        }}*/}
-                {/*        activeOpacity={1}*/}
-                {/*        style={{position: 'absolute', width: 300, height: 40, opacity: 1, zIndex: 3}}/>*/}
-                {/*</> : <>*/}
-                {/*    <SkeletonPlaceholder minOpacity={0.2}>*/}
-                {/*        <View style={{width: width - 140, marginHorizontal: 5, marginVertical: 5, height: 20}}></View>*/}
-                {/*    </SkeletonPlaceholder>*/}
-                {/*    <View style={{position: 'absolute', right: 10}}>*/}
-                {/*        <SkeletonPlaceholder minOpacity={0.2}>*/}
-                {/*            <View style={{width: 40, marginHorizontal: 5, marginVertical: 5, height: 20}}></View>*/}
-                {/*        </SkeletonPlaceholder>*/}
-                {/*    </View>*/}
-                {/*</>}*/}
-
 
             </View>
         </View>;
@@ -535,37 +513,37 @@ class HeadlineComponent extends PureComponent {
         return <View
             key={item.taskId}
             style={{
-                height: 40,
+                height: hp(5.9),
                 flexDirection: 'row',
                 alignItems: 'center', justifyContent: 'space-between',
-                paddingRight: 10,
+                paddingRight: wp(2.3),
             }}>
             <Text
                 numberOfLines={1}
                 style={{
                     color: 'black',
-                    width: width - 140,
-                    marginLeft: 5, opacity: 0.8,
-                    // marginTop:1,
-                    fontSize: 15,
+                    width: wp(60),
+                    marginLeft: wp(1), opacity: 0.8,
+                    marginTop:-wp(0.5),
+                    fontSize: wp(4),
 
                 }}>
 
 
                 {taskTitle} {emojiArr.map((item, index) => {
-                return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
+                return <Emoji key={index} name={item} style={{fontSize:  wp(60)}}/>;
             })}
             </Text>
 
             <View style={{flexDirection: 'row', alignItems: 'center', height: 25}}>
                 <Text style={{
-                    color: 'red', fontSize: 18,
-                    marginRight: 1,
+                    color: 'red', fontSize: wp(4.6),
+                    marginRight: wp(0.2),
                 }}>
                     {item.rewardPrice}
                 </Text>
-                <Text style={{fontSize: 14, color: 'red', top: 1, marginRight: 5}}>元</Text>
-                <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')} style={{width: 8, height: 8}}/>
+                <Text style={{fontSize: 14, color: 'red', top: hp(0.07), marginRight: 5}}>元</Text>
+                <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')} style={{width: wp(2), height: wp(2)}}/>
             </View>
 
 
@@ -607,8 +585,8 @@ class TopLeftFilterComponent extends Component {
         const {index} = this.state;
         const {filterArray} = this.props;
         return <View style={{
-            paddingHorizontal: 12, flexDirection: 'row',
-            justifyContent: 'space-between', height: 40, alignItems: 'center', width: 200,
+            paddingHorizontal: wp(3), flexDirection: 'row',
+            justifyContent: 'space-between', height: hp(5.9), alignItems: 'center', width: wp(60),
 
         }}>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
@@ -616,11 +594,11 @@ class TopLeftFilterComponent extends Component {
                     return <TouchableOpacity
                         key={Lindex}
                         activeOpacity={0.6}
-                        style={{marginLeft: 8, alignItems: 'center', justifyContent: 'center'}}
+                        style={{marginLeft: wp(2.1), alignItems: 'center', justifyContent: 'center'}}
                         onPress={() => this._onPress(Lindex)}
                     >
                         <Text style={[{
-                            fontSize: 16,
+                            fontSize: wp(4.2),
                             fontWeight: '400',
                         }, Lindex === index ? {
                             color: 'black',

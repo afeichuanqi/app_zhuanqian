@@ -25,7 +25,7 @@ import {getNoticeList} from '../util/AppService';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {equalsObj} from '../util/CommonUtils';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -48,7 +48,7 @@ class SystemNotificationPage extends PureComponent {
     };
 
     componentDidMount() {
-        console.log('_updatePage');
+        StatusBar.setBarStyle('dark-content', true);
         this.backPress.componentDidMount();
         this._updatePage(true);
     }
@@ -102,7 +102,7 @@ class SystemNotificationPage extends PureComponent {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
         };
-        StatusBar.setBarStyle('dark-content', true);
+
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
@@ -210,10 +210,12 @@ class NoticeItem extends Component {
                 this.setState({
                     is_read: 1,
                 });
+
                 let pageName = '', navigationIndex = 0, type = item.type;
+                // console.log(type, 'type');
                 if (type > 0 && type <= 3) {
                     pageName = 'TaskReleaseMana';
-                    navigationIndex = type;
+                    navigationIndex = type - 1;
 
                 } else if (type > 3 && type <= 8) {
                     pageName = 'TaskOrdersMana';
@@ -225,7 +227,7 @@ class NoticeItem extends Component {
 
             }}
             style={{
-                width: width - 40,
+                width: wp(95),
 
                 paddingHorizontal: 10,
                 justifyContent: 'space-between',
@@ -235,15 +237,21 @@ class NoticeItem extends Component {
 
             }}>
             <View>
-                <Text style={{fontSize: 12, opacity: 0.5, marginVertical: 10,color:'black'}}>{item.send_date1}</Text>
+                <Text style={{fontSize: wp(3), opacity: 0.5, marginVertical: 10, color: 'black'}}>{item.send_date1}</Text>
             </View>
             <View style={{
-                width: width - 20, backgroundColor: 'white',
+                width: wp(95), backgroundColor: 'white',
                 paddingHorizontal: 10, borderRadius: 10, paddingVertical: 10,
             }}>
-                <Text style={{marginVertical: 10, fontSize: 16,color:'black'}}>{item.title}</Text>
-                <View style={{height: 1, width: width - 40, backgroundColor: '#e8e8e8'}}/>
-                <Text style={{marginVertical: 15, fontSize: 13, opacity: 0.5, width: width - 40,color:'black'}}>{item.content}</Text>
+                <Text style={{marginVertical: 10, fontSize: wp(3.8), color: 'black'}}>{item.title}</Text>
+                <View style={{height: 1, width: wp(90), backgroundColor: '#e8e8e8'}}/>
+                <Text style={{
+                    marginVertical: hp(2),
+                    fontSize: wp(3.25),
+                    opacity: 0.5,
+                    width: wp(90),
+                    color: 'black',
+                }}>{item.content}</Text>
                 {is_read == 0 && <View style={{
                     position: 'absolute',
                     right: 10,

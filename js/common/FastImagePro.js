@@ -149,6 +149,7 @@ class FastImagePro extends Component {
                 onLoadStart={this.onLoadStart}
                 onLoadEnd={this.onLoadEnd}
                 onLoad={this.onLoad}
+                resizeMode={FastImage.resizeMode.stretch}
             />
             {!isSuccess && ComponentView}
         </View>;

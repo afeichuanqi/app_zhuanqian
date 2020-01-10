@@ -29,6 +29,8 @@ class SettingPage extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
         ClearCache.getAppCacheSize(data => {
             this.setState({
@@ -47,13 +49,9 @@ class SettingPage extends PureComponent {
         this.backPress.componentWillUnmount();
     }
 
-    _goBackClick = () => {
-        this.props.navigation.goBack();
-    };
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色

@@ -35,7 +35,9 @@ import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import FastImagePro from '../common/FastImagePro';
 import {equalsObj} from '../util/CommonUtils';
-import {updateNoticeIsReadForType} from '../util/AppService';
+
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -66,8 +68,8 @@ class MyPage extends PureComponent {
             // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
         const titleTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-400, 0, 100],
-            outputRange: [450, 55, 18],
+            inputRange: [-800, 0, 100],
+            outputRange: [850, 55, 18],
             extrapolate: 'clamp',
         });
         const titleFontSize = Animated.interpolate(this.scrollY, {
@@ -75,9 +77,9 @@ class MyPage extends PureComponent {
             outputRange: [22, 16],
             extrapolate: 'clamp',
         });
-        const RefreshHeight = Animated.interpolate(this.scrollY, {
-            inputRange: [-500, 0, 1, 2],
-            outputRange: [730, 230, 50, 50],
+        const translateY = Animated.interpolate(this.scrollY, {
+            inputRange: [-height, 0, height],
+            outputRange: [height, 0, -height],
             extrapolate: 'clamp',
         });
         let navigationBar = <NavigationBar
@@ -118,10 +120,11 @@ class MyPage extends PureComponent {
                     <Animated.View
                         style={{
                             backgroundColor: bottomTheme,
-                            height: RefreshHeight,
+                            height,
                             width,
                             position: 'absolute',
-                            top: 50,
+                            top: (-height) + 50,
+                            transform: [{translateY: translateY}],
                         }}>
                     </Animated.View>
                     <AnimatedScrollView
@@ -218,7 +221,7 @@ class BottomInfoColumn extends Component {
             <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
+                style={{paddingLeft: +5, backgroundColor: '#fafafa'}}
             >
                 <ToolsItemComponent
                     title={'发布管理'}
@@ -261,6 +264,7 @@ class BottomInfoColumn extends Component {
                     isOtherMsg={notice_arr[2] > 0}
                 />
             </ScrollView>
+
             {ViewUtil.getSettingItem(updateOrder, '刷新购买', '实时刷新', () => {
                 MenuClick('UserUpdateOrderPage');
             })}
@@ -336,28 +340,26 @@ class ToolsItemComponent extends PureComponent {
             onPress={this.props.onPress}
             activeOpacity={0.6}
             style={{
-                width: 140, height: 65,
+                width: wp(36), height: hp(9),
                 borderRadius: 10,
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexDirection: 'row',
-                paddingHorizontal: 10,
+                paddingHorizontal: wp(2.35),
                 shadowColor: '#e8e8e8',
                 shadowRadius: 5,
                 shadowOpacity: 3,
                 shadowOffset: {w: 1, h: 1},
                 elevation: 3,//安卓的阴影
                 backgroundColor: 'white',
-                marginRight: 5,
-                marginBottom: 10,
-                marginLeft: 5,
-                marginTop: 10,
+                marginHorizontal: wp(1),
+                marginVertical: hp(1.5),
             }}>
             <View>
-                <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
-                <Text style={{fontSize: 11, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
+                <Text style={{fontSize: wp(4.1), color: 'black'}}>{title}</Text>
+                <Text style={{fontSize: wp(3), color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
-            <FastImage source={source} style={{width: 35, height: 35, borderRadius: 12}}/>
+            <FastImage source={source} style={{width: wp(8.7), height: wp(8.7), borderRadius: 12}}/>
             {isOtherMsg && <View style={{
                 height: 8,
                 width: 8,

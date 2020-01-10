@@ -42,6 +42,8 @@ class MessageAppealPage extends PureComponent {
     }
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
     }
 
@@ -67,10 +69,9 @@ class MessageAppealPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         const {type} = this.params;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, type == 2 ? '申诉消息' : type == 3 ? '投诉消息' : type == 4 ? '聊天消息' : '', jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, type == 2 ? '申诉消息' : type == 3 ? '投诉消息' : type == 4 ? '聊天消息' : '', null, null, 'black', 14, () => {
 
         }, false);
 

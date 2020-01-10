@@ -50,7 +50,8 @@ class TaskRejectDetailsPage extends PureComponent {
     };
 
     componentDidMount() {
-        // console.log('11111');
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         selectOrderTaskInfo({sendFormId: this.params.sendFormId}, this.props.userinfo.token).then(result => {
             console.log(result.length > 0, 'result.length > 0');
             if (result.length > 0) {
@@ -70,8 +71,7 @@ class TaskRejectDetailsPage extends PureComponent {
     position = new Animated.Value(0);
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色

@@ -46,6 +46,8 @@ class MyOrderManaPage extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
         this._updatePage();
 
@@ -108,8 +110,8 @@ class MyOrderManaPage extends PureComponent {
         >
             <FastImage
                 style={{
-                    height: 45,
-                    width: 43,
+                    height: 50,
+                    width: 48,
                     backgroundColor: bottomTheme,
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -121,21 +123,25 @@ class MyOrderManaPage extends PureComponent {
             {/*左上*/}
             <View style={{
                 position: 'absolute',
-                top: 17,
-                left: 60,
-                flexDirection: 'row',
+                top: (taskTitle && taskTitle.length) > 15 ? 15 : 20,
+                left: 65,
+
             }}>
-                <Text style={{
-                    fontSize: 15,
-                    color: 'black',
-                }}>{taskInfo.id} - {taskTitle} {emojiArr.map((item) => {
+                <Text
+                    numberOfLines={2}
+                    style={{
+                        fontSize: 15,
+                        color: 'black',
+                        width: width - 140,
+
+                    }}>{taskInfo.id} - {taskTitle} {emojiArr.map((item) => {
                     return <Emoji name={item} style={{fontSize: 15}}/>;
                 })}</Text>
             </View>
             {/*左下*/}
             <View style={{
                 position: 'absolute',
-                bottom: 15,
+                bottom: (taskTitle && taskTitle.length) > 13 ? 10 : 15,
                 left: 60,
                 flexDirection: 'row',
             }}>
@@ -186,8 +192,7 @@ class MyOrderManaPage extends PureComponent {
             hide={true}
             statusBar={statusBar}
         />;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '任务管理', jiaoliu, null, null, null, () => {
         }, false);
         const {taskInfo, isLoading} = this.state;

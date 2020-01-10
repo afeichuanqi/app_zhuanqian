@@ -1,26 +1,15 @@
-package com.awesomeproject;
+package com.yiertong.easyz;
 
 import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.github.wumke.RNExitApp.RNExitAppPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.microsoft.codepush.react.CodePush;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import com.reactnativecommunity.cameraroll.CameraRollPackage;
-import com.rnfs.RNFSPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.theweflex.react.WeChatPackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
-import com.dylanvann.fastimage.FastImageViewPackage;
-import com.horcrux.svg.SvgPackage;
-import com.swmansion.reanimated.ReanimatedPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.yiertong.BuildConfig;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

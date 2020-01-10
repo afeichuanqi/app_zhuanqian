@@ -47,6 +47,8 @@ class MyTaskReview extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
         this._updatePage();
 
@@ -120,8 +122,7 @@ class MyTaskReview extends PureComponent {
             hide={true}
             statusBar={statusBar}
         />;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `任务审核 (${this.taskDatas && (this.pageIndex + 1) > this.taskDatas.length ? this.taskDatas.length : this.pageIndex + 1}/${this.taskDatas && this.taskDatas.length}) `, null, null, null, null, () => {
             const data = this.taskDatas[this.pageIndex];
             const {task_id, taskUri} = this.params;

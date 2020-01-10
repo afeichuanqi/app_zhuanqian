@@ -33,6 +33,8 @@ class LoginPage extends PureComponent {
     phone = '';
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
         this.loginBtn.setNativeProps({
             style: {
@@ -83,8 +85,7 @@ class LoginPage extends PureComponent {
 
     render() {
         // const {phone} = this.state;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色

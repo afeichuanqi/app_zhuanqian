@@ -6,22 +6,10 @@ import {bottomTheme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
 import Emoji from 'react-native-emoji';
 import {getEmojis} from '../util/CommonUtils';
-// import Animated, {Easing} from 'react-native-reanimated';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-// const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-// const {timing} = Animated;
-
-
-const {width} = Dimensions.get('window');
 
 class TaskInfoComponent extends PureComponent {
-
-    // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-    //     if (this.state.value !== nextState.value) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
 
     static defaultProps = {
         titleFontSize: 15,
@@ -54,26 +42,6 @@ class TaskInfoComponent extends PureComponent {
 
     }
 
-    // animations = {
-    //     scale: new Animated.Value(1),
-    // };
-    // _onPressIn = () => {
-    //     //隐藏box
-    //     this._anim = Animated.timing(this.animations.scale, {
-    //         duration: 200,
-    //         toValue: 0,
-    //         // easing: Easing.inOut(Easing.ease),
-    //     }).start();
-    // };
-    // _onPressOut = () => {
-    //     //隐藏box
-    //     this._anim = Animated.timing(this.animations.scale, {
-    //         duration: 200,
-    //         toValue: 1,
-    //         // easing: Easing.inOut(Easing.ease),
-    //     }).start();
-    // };
-
     render() {
 
         const {titleFontSize, marginHorizontal, item, showTime} = this.props;
@@ -97,12 +65,12 @@ class TaskInfoComponent extends PureComponent {
                 flex: 1,
                 flexDirection: 'row',
                 paddingHorizontal: marginHorizontal,
-                paddingTop: 15,
-                paddingBottom: 25,
+                paddingTop: hp(1.6),
+                paddingBottom: hp(1.6),
                 borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8',
                 backgroundColor: 'white',
-                height: 85,
+
             },this.props.touchStyle]}
         >
             <FastImage
@@ -111,7 +79,7 @@ class TaskInfoComponent extends PureComponent {
                 resizeMode={FastImage.resizeMode.stretch}
             />
             <View style={[{
-                height: 50, width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
+                 width: wp(80), paddingLeft: 10, justifyContent: 'space-between',
 
             },this.props.viewStyle]}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -119,16 +87,17 @@ class TaskInfoComponent extends PureComponent {
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
+                        width:wp(50),
                     }}>
                         <Text
                             numberOfLines={this.props.numberOfLines}
                             style={{
-                                width: width - 150,
-                                fontSize: titleFontSize,
+                                // width: width - 150,
+                                fontSize: wp(3.6),
                                 color: 'black',
 
                             }}>{taskTitle} {emojiArr.map((item) => {
-                            return <Emoji name={item} style={{fontSize: 15}}/>;
+                            return <Emoji name={item} style={{fontSize: wp(3.6)}}/>;
                         })}</Text>
                         {item.recommendIsExp == 1 && <View style={{
                             height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
@@ -159,6 +128,7 @@ class TaskInfoComponent extends PureComponent {
                     {/*标签*/}
                     <View style={{
                         flexDirection: 'row',
+                        marginTop: wp(1)
                     }}>
                         <LabelBigComponent contaiStyle={{backgroundColor: '#fafafa',}} fontSize={this.props.fontSize} title={item.typeTitle}/>
                         <LabelBigComponent contaiStyle={{backgroundColor: '#fafafa',}} fontSize={this.props.fontSize} title={item.taskName}/>
@@ -169,14 +139,14 @@ class TaskInfoComponent extends PureComponent {
                         alignItems: 'center',
                     }}>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: wp(3),
                             opacity: 0.5,
                             color: 'black',
                         }}>{parseInt(item.taskPassNum)}人已完成</Text>
                         <View
                             style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize:  wp(3),
                             opacity: 0.5,
                             color: 'black',
                         }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
@@ -200,9 +170,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: wp(12.5),
+        height: wp(12.5),
+        borderRadius: wp(12.5)/2,
         // 设置高度
         // height:150
     },

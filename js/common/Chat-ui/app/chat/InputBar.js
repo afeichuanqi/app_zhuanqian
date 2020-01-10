@@ -9,7 +9,7 @@ import {
   TextInput,
   Text, Dimensions
 } from 'react-native'
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const { width, height } = Dimensions.get('window')
 
 export default class InputBar extends PureComponent {
@@ -119,7 +119,7 @@ export default class InputBar extends PureComponent {
                      onLayout={(e) => this.inputHeight = e.nativeEvent.layout.height}
       >
         <View style={[{
-          flexDirection: 'row', alignItems: 'center', marginVertical: 8, paddingHorizontal: 10
+          flexDirection: 'row', alignItems: 'center', marginVertical: hp(1.5), paddingHorizontal: wp(3)
         }, inputContainerStyle]}>
           {/*{*/}
           {/*  useVoice ? <View style={{ height: 35 + inputHeightFix, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.7}>*/}
@@ -128,7 +128,7 @@ export default class InputBar extends PureComponent {
           {/*    </TouchableOpacity>*/}
           {/*  </View> : null*/}
           {/*}*/}
-          <View style={{ marginHorizontal: 8,
+          <View style={{ marginHorizontal:  wp(0.5),
             borderRadius: 5,
             borderColor: '#ccc',
 
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   },
   commentBar__input: {
     // borderRadius: 18,
-    height: 26,
+    height: hp(3.5),
     padding:0,
     // width: '100%',
     paddingLeft: 5,

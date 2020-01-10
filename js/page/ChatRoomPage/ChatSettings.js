@@ -39,6 +39,8 @@ class ChatSetting extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
         const {userinfo} = this.props;
         const {token} = userinfo;
@@ -58,8 +60,7 @@ class ChatSetting extends PureComponent {
 
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色

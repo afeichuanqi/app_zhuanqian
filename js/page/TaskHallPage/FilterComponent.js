@@ -2,6 +2,7 @@ import React, {PureComponent, Component} from 'react';
 
 import Animated, {Easing} from 'react-native-reanimated';
 import {Dimensions, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {bottomTheme} from '../../appSet';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
@@ -68,17 +69,19 @@ export default class FilterComponent extends PureComponent {
         const translateY = Animated.interpolate(this.animations.translateY, {
             inputRange: [0, 1],
             outputRange: [-250, 40],
+            // outputRange: [40, 40],
             extrapolate: 'clamp',
         });
         const opacity = Animated.interpolate(this.animations.translateY, {
             inputRange: [0, 1],
             outputRange: [0.1, 1],
+            // outputRange: [1, 1],
             extrapolate: 'clamp',
         });
         const {typeArray} = this.props;
         return <View ref={ref => this.containerBox = ref} style={{
             position: 'absolute',
-            top: 40,
+            top: hp(5.9),
             height: 0,
             width,
             zIndex: 1,
@@ -96,33 +99,35 @@ export default class FilterComponent extends PureComponent {
                 }}/>
             {/*box*/}
             <Animated.View style={{
-                position: 'absolute', transform: [{translateY}],opacity:opacity
+                position: 'absolute', transform: [{translateY}], opacity: opacity,
 
             }}>
                 <ScrollView style={{
-                    height: 180,
+                    height: hp(27),
                     width,
                     // top: ,
                     zIndex: 2,
                     backgroundColor: 'white',
                 }}>
                     {/*栏目二*/}
-                    <View style={{flexDirection: 'row', marginTop: 15, marginBottom: 5}}>
+                    <View style={{flexDirection: 'row', marginTop: hp(3.1), marginBottom: hp(0.8)}}>
                         <View style={{
-                            height: 10, width: 3, backgroundColor: bottomTheme,
+                            height: hp(1.5), width: wp(0.8), backgroundColor: bottomTheme,
 
                         }}/>
-                        <View style={{marginLeft: 15}}>
+                        <View style={{marginLeft: wp(3.7)}}>
                             <Text style={{
                                 // color: 'red',
                                 opacity: 0.7,
+                                color: 'black',
+                                fontSize: wp(3.8),
                             }}>简单</Text>
                         </View>
                     </View>
 
                     <View style={{
                         flexDirection: 'row',
-                        flexWrap: 'wrap', marginBottom: 20,
+                        flexWrap: 'wrap', marginBottom: hp(3.5),
                     }}>
 
                         {typeArray.map((item, index, arr) => {
@@ -135,21 +140,23 @@ export default class FilterComponent extends PureComponent {
                         })}
                     </View>
                     {/*栏目一*/}
-                    <View style={{flexDirection: 'row', marginTop: 15, marginBottom: 5}}>
+                    <View style={{flexDirection: 'row', marginTop: hp(1.7), marginBottom: hp(1)}}>
                         <View style={{
-                            height: 10, width: 3, backgroundColor: bottomTheme,
+                            height: hp(1.5), width: wp(0.8), backgroundColor: bottomTheme,
+
                         }}/>
-                        <View style={{marginLeft: 15}}>
+                        <View style={{marginLeft: wp(3.7)}}>
                             <Text style={{
                                 // color: 'red',
                                 opacity: 0.7,
+                                color: 'black',
+                                fontSize: wp(3.8),
                             }}>收益高</Text>
                         </View>
                     </View>
                     <View style={{
                         flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        marginBottom: 20,
+                        flexWrap: 'wrap', marginBottom: hp(3.5),
                     }}>
 
                         {typeArray.map((item, index, arr) => {
@@ -164,7 +171,7 @@ export default class FilterComponent extends PureComponent {
                 </ScrollView>
                 <View
                     style={{
-                        height: 80, width, backgroundColor: 'white', zIndex: 2, flexDirection: 'row',
+                        height: hp(12), width, backgroundColor: 'white', zIndex: 2, flexDirection: 'row',
                         alignItems: 'center', justifyContent: 'space-around', borderBottomLeftRadius: 10,
                         borderBottomRightRadius: 10,
                     }}>
@@ -172,10 +179,10 @@ export default class FilterComponent extends PureComponent {
                         activeOpacity={0.6}
                         onPress={this._ResetClick}
                         style={{
-                            width: width / 2 - 60, height: 30, borderWidth: 1, borderColor: '#e8e8e8',
+                            width: width / 2 - 60, height: hp(4.7), borderWidth: wp(0.3), borderColor: '#e8e8e8',
                             justifyContent: 'center', borderRadius: 5,
                         }}>
-                        <Text style={{alignSelf: 'center', color: 'black', opacity: 0.7}}>
+                        <Text style={{alignSelf: 'center', color: 'black', opacity: 0.7, fontSize: wp(3.8)}}>
                             重置
                         </Text>
                     </TouchableOpacity>
@@ -183,10 +190,10 @@ export default class FilterComponent extends PureComponent {
                         onPress={this._sureClick}
                         activeOpacity={0.6}
                         style={{
-                            width: width / 2, height: 30, borderWidth: 1, borderColor: '#e8e8e8',
+                            width: width / 2, height: hp(4.7), borderWidth: wp(0.3), borderColor: '#e8e8e8',
                             justifyContent: 'center', backgroundColor: bottomTheme, borderRadius: 5,
                         }}>
-                        <Text style={{alignSelf: 'center', color: 'white'}}>
+                        <Text style={{alignSelf: 'center', color: 'white', fontSize: wp(3.8)}}>
                             确定
                         </Text>
                     </TouchableOpacity>
@@ -270,21 +277,21 @@ class TypeComponent extends Component {
             onPress={this._onPress}
             style={[{
                 width: width / 4 - 20,
-                height: 25,
-                marginTop: 10,
+                height: hp(3.7),
+                marginTop: hp(1.6),
                 backgroundColor: '#f1f1f1',
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginHorizontal: 10,
+                marginHorizontal: wp(2.4),
                 borderRadius: 3,
                 borderWidth: 0.3,
                 borderColor: 'rgba(0,0,0,0.2)',
             }, !checked ? {backgroundColor: '#f6f6f6'} : {
                 backgroundColor: 'rgba(33,150,243,0.1)',
-                borderWidth: 0.3, borderColor: bottomTheme,
+                borderWidth: wp(0.2), borderColor: bottomTheme,
             }]}>
             <Text style={[{
-                fontSize: 13,
+                fontSize: wp(3.5),
                 color: 'rgba(255,255,255,0.5)',
                 opacity: 0.8,
             }, !checked ? {

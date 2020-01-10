@@ -54,6 +54,8 @@ class MyAttention extends PureComponent {
 
     }
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
     }
 
@@ -77,8 +79,7 @@ class MyAttention extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, 'TA的关注粉丝', null, theme, 'black', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
@@ -154,7 +155,8 @@ class MyAttentionList extends PureComponent {
     };
 
     componentDidMount() {
-
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this._updatePage(true);
     }
 
@@ -203,8 +205,7 @@ class MyAttentionList extends PureComponent {
     position = new Animated.Value(0);
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <View style={{flex: 1}}>

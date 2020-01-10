@@ -46,8 +46,9 @@ class UserFeedbackListPage extends PureComponent {
     page = {pageIndex: 0};
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
-        // this._updatePage(true);
         this._updateList(true);
     }
 
@@ -138,8 +139,7 @@ class UserFeedbackListPage extends PureComponent {
     };
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色

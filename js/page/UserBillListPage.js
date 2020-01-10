@@ -56,6 +56,8 @@ class UserBillListPage extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
     }
 
@@ -76,8 +78,7 @@ class UserBillListPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         // let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '帐单', null, theme, 'black', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
@@ -92,6 +93,7 @@ class UserBillListPage extends PureComponent {
                             height: 35,
                             width: 200,
                             alignSelf: 'center',
+                            marginLeft:40,
                         }}
                         position={this.position}
                         contentContainerStyle={{paddingTop: 13}}

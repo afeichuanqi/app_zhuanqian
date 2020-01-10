@@ -43,6 +43,7 @@ class WithDrawPage extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
         this.backPress.componentDidMount();
     }
 
@@ -58,7 +59,7 @@ class WithDrawPage extends PureComponent {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
         };
-        StatusBar.setBarStyle('dark-content', true);
+
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}

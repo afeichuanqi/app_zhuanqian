@@ -37,7 +37,7 @@ import EventTypes from '../util/EventTypes';
 import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 import FastImagePro from '../common/FastImagePro';
-import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -381,6 +381,7 @@ class FristListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+                pageSize={30}
                 ref={ref => this.flatList = ref}
                 style={{zIndex: -100, elevation: -100}}
                 onScrollBeginDrag={this._onScroll}
@@ -404,17 +405,17 @@ class FristListComponent extends PureComponent {
             }}>
                 <Text
                     style={{
-                        fontSize: 12,
+                        fontSize: wp(3.2),
                         color: bottomTheme,
-                        marginLeft: 15,
-                        marginTop: 20,
+                        marginLeft: wp(3.2),
+                        marginTop: hp(2.4),
                     }}>为您推荐</Text>
 
                 <View style={{
-                    width: 50,
+                    width: wp(3.2) * 4 * 0.93,
                     backgroundColor: bottomTheme,
                     height: 2,
-                    marginLeft: 15,
+                    marginLeft: wp(3.6),
                 }}/>
             </Animated.View>
         </Animated.View>;

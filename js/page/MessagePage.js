@@ -30,7 +30,7 @@ import {selectAppealNum} from '../util/AppService';
 import actions from '../action';
 import MessageItemComponent from './MessagePage/MessageItemComponent';
 import {equalsObj} from '../util/CommonUtils';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -42,12 +42,11 @@ class MessagePage extends PureComponent {
 
 
     render() {
-        const RefreshHeight = Animated.interpolate(this.animations.val, {
-            inputRange: [-200, -0.1, 0],
-            outputRange: [300, 30, 0],
+        const translateY = Animated.interpolate(this.animations.val, {
+            inputRange: [-height, 0, height],
+            outputRange: [height, 0, -height],
             extrapolate: 'clamp',
         });
-
         let statusBar = {
             hidden: false,
         };
@@ -65,10 +64,11 @@ class MessagePage extends PureComponent {
                     // ref={ref => this.zhedangRef = ref}
                     style={{
                         backgroundColor: bottomTheme,
-                        height: RefreshHeight,
+                        height,
                         width,
                         position: 'absolute',
-                        top: 50,
+                        top: -height + 100,
+                        transform: [{translateY: translateY}],
                         // zIndex:1,
                     }}>
                 </Animated.View>
@@ -361,7 +361,7 @@ class MessageColumnItem extends Component {
                        resizeMode={'stretch'}
                        style={{
 
-                           width: 45, height: 45,
+                           width: wp(13), height: wp(13),
 
                            backgroundColor: 'white',
 
@@ -381,7 +381,7 @@ class MessageColumnItem extends Component {
             </View>
 
             <Text style={{
-                fontSize: 13,
+                fontSize: wp(3.5),
                 color: 'black',
                 opacity: 0.8,
                 marginTop: 7,

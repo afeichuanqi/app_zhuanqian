@@ -9,7 +9,7 @@
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
 
@@ -114,7 +114,7 @@ class PopButtomMenu extends PureComponent {
                             borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
 
                         }}>
-                            <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>{this.props.popTitle}</Text>
+                            <Text style={{color: 'black', opacity: 0.7, fontSize:wp(3.8)}}>{this.props.popTitle}</Text>
                         </View>
                         <ScrollView style={{height: height / 3}}>
                             {menuArr.map((item, index, arr) => {
@@ -149,7 +149,7 @@ class PopButtomMenu extends PureComponent {
             }}
             style={{
                 width, alignItems: 'center', paddingVertical: 14,
-                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
+                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8', fontSize:wp(4)
 
             }}>
             <Text >{item.title}</Text>

@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { changeEmojiText } from './utils'
 const { width } = Dimensions.get('window')
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const PATTERNS = {
   url: /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i,
   phone: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,7}/,
@@ -87,9 +87,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    maxWidth: width - 160,
+    paddingHorizontal: wp(2),
+    paddingVertical:  wp(2.7),
+    maxWidth: wp(60),
     minHeight: 20,
   },
 

@@ -21,12 +21,18 @@ export default class FlatListCommonUtil extends PureComponent {
         super(props);
         this.page = {
             pageIndex: 0,
+            pageSize: props.pageSize || 10,
         };
+
     }
 
     componentDidMount(): void {
         if (this.props.type === 1) {
-            selectAllRecommendTask({pageIndex: this.page.pageIndex, type: this.props.type}).then(result => {
+            selectAllRecommendTask({
+                pageSize: this.page.pageSize,
+                pageIndex: this.page.pageIndex,
+                type: this.props.type,
+            }).then(result => {
                 this.setState({
                     taskData: result,
                     isLoading: false,
@@ -63,26 +69,33 @@ export default class FlatListCommonUtil extends PureComponent {
     _updateList = (refresh) => {
         if (refresh) {
 
-            this.page = {pageIndex: 0};
+            this.page.pageIndex=0;
             this.setState({
                 isLoading: true,
             });
 
         } else {
-            this.page = {pageIndex: this.page.pageIndex + 1};
+            this.page.pageIndex =this.page.pageIndex + 1;
         }
-        selectAllRecommendTask({pageIndex: this.page.pageIndex, type: this.props.type}).then(result => {
+        //console.log({pageSize: this.page.pageSize,
+
+        selectAllRecommendTask({
+            pageSize: this.page.pageSize,
+            pageIndex: this.page.pageIndex,
+            type: this.props.type,
+        }).then(result => {
             if (refresh) {
                 this.setState({
                     taskData: result,
                     isLoading: false,
-                    hideLoaded: result.length >= 30 ? false : true,
+                    hideLoaded: result.length >= this.page.pageSize ? false : true,
                 });
             } else {
                 const tmpArr = [...this.state.taskData];
+
                 this.setState({
                     taskData: tmpArr.concat(result),
-                    hideLoaded: result.length >= 30 ? false : true,
+                    hideLoaded: result.length >= this.page.pageSize ? false : true,
                 });
             }
         }).catch(() => {
@@ -109,6 +122,7 @@ export default class FlatListCommonUtil extends PureComponent {
             keyExtractor={(item, index) => index + ''}
             style={{
                 backgroundColor: '#f1f1f1',
+                height:'100%'
             }}
             refreshControl={
                 <RefreshControl
@@ -154,6 +168,7 @@ export default class FlatListCommonUtil extends PureComponent {
 
 
     genIndicator(hideLoaded) {
+        console.log(!hideLoaded, '!hideLoaded');
         return !hideLoaded ?
             <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator

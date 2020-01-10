@@ -55,7 +55,7 @@ import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import Global from '../common/Global';
 import ToastSelect from '../common/ToastSelect';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 let PopButtomMenu = null;
 const {width} = Dimensions.get('window');
 
@@ -78,7 +78,7 @@ class TextInputPro extends PureComponent {
         return <TextInput
             value={this.state.defaultValue}
             editable={rightComponentData.editable}
-            style={{flex: 1, color: 'black', padding: 0, fontSize: 14}}
+            style={{flex: 1, color: 'black', padding: 0, fontSize: wp(3.8)}}
             placeholder={rightComponentData.info}
             placeholderTextColor={'#7b798d'}
             onChangeText={this._onChangeText}
@@ -133,10 +133,10 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
             break;
     }
     return <View style={{
-        width, flexDirection: 'row', height: 45, paddingHorizontal: 10, paddingVertical: 10,
+        width, flexDirection: 'row', height: hp(6.2), paddingHorizontal: 10, paddingVertical: 10,
         alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
     }}>
-        <Text style={{width: width / 4.2, color: 'black', fontSize: 15}}>{title}</Text>
+        <Text style={{width: width / 4.2, color: 'black', fontSize: wp(3.8)}}>{title}</Text>
         {rightComponent}
         {rightComponentSvg}
     </View>;
@@ -673,15 +673,15 @@ class BottomInfoForm extends Component {
 
         //悬赏单价
         const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{color: 'rgba(0,0,0,0.5)'}}>最低</Text>
-            <Text style={{color: 'black', marginHorizontal: 5}}>0.5</Text>
-            <Text style={{color: 'rgba(0,0,0,0.5)'}}>元</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>最低</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize:wp(3.8)}}>0.5</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>元</Text>
         </View>;
         //悬赏数量
         const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{color: 'rgba(0,0,0,0.5)'}}>最少</Text>
-            <Text style={{color: 'black', marginHorizontal: 5}}>10</Text>
-            <Text style={{color: 'rgba(0,0,0,0.5)'}}>单</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>最少</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize:wp(3.8)}}>10</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>单</Text>
         </View>;
         const {userinfo} = this.props;
         return <View>
@@ -859,7 +859,7 @@ class InputSelect extends Component {
 
                 }}
             >
-                <Text style={{fontSize: 14, color: 'black'}}>{title}</Text>
+                <Text style={{fontSize: wp(3.8), color: 'black'}}>{title}</Text>
             </TouchableOpacity>
             {this.state.showPopBtn ?
                 <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
@@ -911,7 +911,7 @@ class InputTextPro extends Component {
                 onFocus={this.hidePlaceholder}
                 onBlur={this._onBlur}
                 onChangeText={this._onChangeText}
-                ref={ref => this.ipt = ref} style={{flex: 1, color: 'black', padding: 0}}/>}
+                ref={ref => this.ipt = ref} style={{flex: 1, color: 'black', padding: 0, fontSize:wp(3.8)}}/>}
 
         </View>;
     }
@@ -1012,7 +1012,7 @@ class RadioInfoComponent extends Component {
                     borderRadius: 8,
                 }}/>}
             </View>
-            <Text style={{fontSize: 14, marginLeft: 5, color: 'black'}}>{item.title}</Text>
+            <Text style={{fontSize: wp(3.8), marginLeft: 5, color: 'black'}}>{item.title}</Text>
         </TouchableOpacity>;
     };
 
@@ -1042,10 +1042,10 @@ class InputSetting extends Component {
             width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
             alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
-            <Text style={{width: width / 4.2, fontSize: 13, color: 'black'}}>{title}</Text>
+            <Text style={{width: width / 4.2, fontSize: wp(3.8), color: 'black'}}>{title}</Text>
             <TextInput
                 editable={rightComponentData.editable}
-                style={{flex: 1, color: 'red', padding: 0, fontSize: 13}}
+                style={{flex: 1, color: 'red', padding: 0, fontSize: wp(3.8)}}
                 placeholder={rightComponentData.info}
                 placeholderTextColor={'#7b798d'}
                 onChangeText={this._onChangeText}
@@ -1324,7 +1324,7 @@ class TypeComponent extends Component {
             onPress={this._onPress}
             style={[{
                 width: width / 4 - 20,
-                height: 25,
+                height: hp(4.3),
                 marginTop: 10,
                 backgroundColor: '#f1f1f1',
                 justifyContent: 'center',
@@ -1338,7 +1338,7 @@ class TypeComponent extends Component {
                 borderWidth: 0.3, borderColor: bottomTheme,
             }]}>
             <Text style={[{
-                fontSize: 14,
+                fontSize: wp(3.8),
                 color: 'rgba(255,255,255,0.5)',
                 opacity: 0.8,
             }, !checked ? {

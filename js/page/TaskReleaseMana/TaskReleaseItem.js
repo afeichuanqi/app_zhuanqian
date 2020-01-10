@@ -7,7 +7,7 @@ import NavigationUtils from '../../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
 import {getEmojis} from '../../util/CommonUtils';
 import Emoji from 'react-native-emoji';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
     render() {
@@ -41,7 +41,7 @@ export default class TaskReleaseItem extends PureComponent {
                     resizeMode={FastImage.resizeMode.stretch}
                 />
                 <View style={{
-                    height: 50, width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
+                    height: wp(13), width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
 
                 }}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -49,19 +49,23 @@ export default class TaskReleaseItem extends PureComponent {
                         <View style={{
                             flexDirection: 'row',
                             alignItems: 'center',
+                            width:wp(50),
                         }}>
                             <Text style={{
-                                fontSize: 15,
+                                fontSize: wp(3.8),
                                 color: 'black',
 
-                            }}>
+
+                            }}
+                            numberOfLines={1}
+                            >
                                 {item.id} - {taskTitle} {emojiArr.map((item,index) => {
-                                return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
+                                return <Emoji key={index} name={item} style={{fontSize: wp(3.8)}}/>;
                             })}
 
                             </Text>
                             {item.recommendIsExp == 1 && <View style={{
-                                height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                                height: wp(3.7), width: wp(3.7), borderRadius: 3, backgroundColor: bottomTheme,
                                 alignItems: 'center',
                                 justifyContent: 'center', marginLeft: 5,
                             }}>
@@ -79,7 +83,7 @@ export default class TaskReleaseItem extends PureComponent {
                         {/*价格*/}
                         <View style={{}}>
                             <Text style={{
-                                fontSize: 16,
+                                fontSize: wp(4),
                                 color: 'red',
                             }}>+{item.reward_price} 元</Text>
                         </View>
@@ -92,7 +96,7 @@ export default class TaskReleaseItem extends PureComponent {
                         }}>
                             <LabelBigComponent
 
-                                paddingVertical={1} fontSize={12} title={item.task_name}/>
+                                paddingVertical={1} fontSize={wp(2.8)} title={item.task_name}/>
                             {/*<LabelBigComponent title={item.taskName}/>*/}
                         </View>
                         {/*剩余数*/}
@@ -101,7 +105,7 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems: 'center',
                         }}>
                             <Text style={{
-                                fontSize: 13,
+                                fontSize: wp(3.1),
                                 opacity: 0.7,
                                 color: 'black',
                             }}>进行中:{item.task_ing_num}</Text>
@@ -113,7 +117,7 @@ export default class TaskReleaseItem extends PureComponent {
                                     marginHorizontal: 5,
                                 }}/>
                             <Text style={{
-                                fontSize: 13,
+                                fontSize: wp(3.1),
                                 opacity: 0.7,
                                 color: 'black',
                             }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>
@@ -190,8 +194,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: bottomTheme,
         // 设置宽度
-        width: 49,
-        height: 52,
+        width: wp(13),
+        height: wp(13),
         borderRadius: 5,
         // 设置高度
         // height:150

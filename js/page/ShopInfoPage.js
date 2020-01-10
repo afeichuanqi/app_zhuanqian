@@ -56,6 +56,8 @@ class ShopInfoPage extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(bottomTheme, true);
         this.backPress.componentDidMount();
         this.updateShopInfo(this.params.userid);
         EventBus.getInstance().addListener(EventTypes.update_shopInfo_page, this.listener = data => {
@@ -86,11 +88,10 @@ class ShopInfoPage extends PureComponent {
     };
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(bottomTheme, true);
-        const RefreshHeight = Animated.interpolate(this.animations.val, {
-            inputRange: [-200, -0.1, 0],
-            outputRange: [250, 50, 0],
+
+        const translateY = Animated.interpolate(this.animations.val, {
+            inputRange: [-height, 0, height],
+            outputRange: [height, 0, -height],
             extrapolate: 'clamp',
         });
         let statusBar = {
@@ -118,10 +119,11 @@ class ShopInfoPage extends PureComponent {
                     <Animated.View
                         style={{
                             backgroundColor: bottomTheme,
-                            height: RefreshHeight,
+                            height,
                             width,
                             position: 'absolute',
-                            top: 0,
+                            top: (-height),
+                            transform: [{translateY: translateY}],
                         }}>
 
 

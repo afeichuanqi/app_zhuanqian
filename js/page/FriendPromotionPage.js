@@ -41,6 +41,8 @@ class TaskReleaseMana extends PureComponent {
         return true;
     };
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
         // this._updatePage(true);
     }
@@ -51,8 +53,7 @@ class TaskReleaseMana extends PureComponent {
     }
 
     render() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色

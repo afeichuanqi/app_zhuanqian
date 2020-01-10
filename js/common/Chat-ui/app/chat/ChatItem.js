@@ -11,7 +11,7 @@ import TextMessage from './TextMessage';
 import ImageMessage from './ImageMessage';
 import {EMOJIS_DATA} from '../source/emojis';
 import Emoji_ from 'react-native-emoji';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 
 const PATTERNS = {
@@ -215,28 +215,28 @@ export default class ChatItem extends PureComponent {
                             activeOpacity={0.8}
                             onPress={message.onClick}
                             style={{
-                                width: width - 20, backgroundColor: 'white', paddingTop: 15, paddingHorizontal: 15,
-                                borderRadius: 3,
+                                width: wp(95), backgroundColor: 'white', paddingTop: hp(2.5), paddingHorizontal: wp(3.5),
+                                borderRadius: 3, paddingBottom: hp(1.25),
                             }}>
-                            <Text style={{fontSize: 15, fontWeight: 'bold', color: 'black'}}>{title}</Text>
+                            <Text style={{fontSize: wp(3.8), fontWeight: 'bold', color: 'black'}}>{title}</Text>
                             <Text
                                 style={{
-                                    fontSize: 12,
+                                    fontSize: wp(3.3),
                                     color: 'rgba(0,0,0,0.5)',
                                     marginTop: 10,
                                     marginBottom: 10,
                                 }}>{content}</Text>
 
                             {(btnTitle && btnTitle.length > 0) ? <View style={{
-                                paddingVertical: 10,
-                                width: width - 60,
+                                paddingVertical: wp(2),
+                                width: wp(95),
                                 alignItems: 'flex-start',
                                 justifyContent: 'center',
                                 borderTopWidth: 0.3,
                                 borderTopColor: 'rgba(0,0,0,0.1)',
 
                             }}>
-                                <Text style={{color: '#2196F3'}}>{btnTitle}</Text>
+                                <Text style={{color: '#2196F3', fontSize:wp(3.5)}}>{btnTitle}</Text>
                             </View> : null}
 
 
@@ -273,8 +273,6 @@ export default class ChatItem extends PureComponent {
         const avatarSource = typeof (avatar) === 'number' ? avatar : {uri: avatar};
         const Element = isOpen ? TouchableWithoutFeedback : View;
         const showName = showUserName && type !== 'system';
-        // const
-        // console.log(nickName,"nickName",showUserName);
         return (
             <View>
                 <Element
@@ -328,8 +326,8 @@ export default class ChatItem extends PureComponent {
                                     showName ?
                                         <View style={{
                                             marginBottom: 10,
-                                            marginLeft: !isSelf ? 14 : 0, alignItems: 'center',
-                                            marginRight: isSelf ? 14 : 0,
+                                            marginLeft: !isSelf ? wp(2) : 0, alignItems: 'center',
+                                            marginRight: isSelf ? wp(2) : 0,
                                             flexDirection: 'row', justifyContent: isSelf ? 'flex-end' : 'flex-start',
                                         }}>
                                             <View style={{
@@ -340,12 +338,12 @@ export default class ChatItem extends PureComponent {
                                                 marginRight: 5,
                                             }}>
                                                 <Text style={{
-                                                    fontSize: 12,
+                                                    fontSize: wp(2.9),
                                                     color: 'white',
                                                 }}>{message.isAdmin ? '客服' : message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单'}</Text>
                                             </View>
                                             <Text style={{
-                                                fontSize: 12,
+                                                fontSize: wp(3.4),
                                                 color: '#888888',
                                             }}>{isSelf ? user.username : nickName}</Text>
                                         </View>
@@ -423,9 +421,9 @@ const styles = StyleSheet.create({
     },
     avatar: {
         marginLeft: 8,
-        borderRadius: 24,
-        width: 48,
-        height: 48,
+        borderRadius: wp(13)/2,
+        width: wp(13),
+        height: wp(13),
     },
     check: {
         width: 20,

@@ -31,7 +31,7 @@ import ImageViewerModal from '../../common/ImageViewerModal';
 import {equalsObj} from '../../util/CommonUtils';
 import FastImagePro from '../../common/FastImagePro';
 import {saveImg} from '../../util/ImageUtil';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width, height} = Dimensions.get('window');
 
 class StepBox extends PureComponent {
@@ -50,7 +50,7 @@ class StepBox extends PureComponent {
                 <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
                     {this.getNumNo(this.props.no)}
                     <Text
-                        style={{fontSize: 15, marginLeft: 5, letterSpacing: 3, color: 'black'}}>第{this.props.no}步</Text>
+                        style={{fontSize: wp(4), marginLeft: 5, letterSpacing: 3, color: 'black'}}>第{this.props.no}步</Text>
                 </View>
                 {this.props.children}
                 {/*<View style={{height:40}}/>*/}
@@ -90,7 +90,7 @@ class StepBox extends PureComponent {
             activeOpacity={0.6}
             style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10}}>
             <SvgUri width={size} height={size} fill={'rgba(0,0,0,0.5)'} svgXmlData={svgXmlData}/>
-            <Text style={{marginLeft: 5, color: 'black'}}>{title}</Text>
+            <Text style={{marginLeft: 5, color: 'black', fontSize:wp(3.8)}}>{title}</Text>
         </TouchableOpacity>;
     };
     getNumNo = (num) => {

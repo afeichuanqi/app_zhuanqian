@@ -57,12 +57,13 @@ const {
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 let toast = null;
+const {height} = Dimensions.get('window');
 
 class TaskDetails extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
-        console.log(this.params,"this.params");
+        console.log(this.params, 'this.params');
         const {test, task_id} = this.params;
         this.test = test;
         this.task_id = task_id;
@@ -174,6 +175,11 @@ class TaskDetails extends PureComponent {
             outputRange: [20, 5],
             extrapolate: 'clamp',
         });
+        const translateY = Animated.interpolate(this.animations.value, {
+            inputRange: [-height, 0, height],
+            outputRange: [height, 0, -height],
+            extrapolate: 'clamp',
+        });
         let statusBar = {
             barStyle: 'light-content',
             // hidden: false,
@@ -186,11 +192,7 @@ class TaskDetails extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        const RefreshHeight = Animated.interpolate(this.animations.value, {
-            inputRange: [-400, -0.01, 0],
-            outputRange: [450, 20, 0],
-            extrapolate: 'clamp',
-        });
+
         const {fromUserinfo, taskData, stepData} = this.state.totalData;
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
@@ -243,17 +245,22 @@ class TaskDetails extends PureComponent {
                             zIndex: 2,
                             opacity: NameOpacity,
                         }}>
-                        <Text numberOfLines={1} style={{color: 'white', fontSize: 16,width:width-90}}>{taskTitle} {emojiArr.map((item,index) => {
+                        <Text numberOfLines={1} style={{
+                            color: 'white',
+                            fontSize: 16,
+                            width: width - 90,
+                        }}>{taskTitle} {emojiArr.map((item, index) => {
                             return <Emoji index={index} name={item} style={{fontSize: 15}}/>;
                         })}</Text>
                     </Animated.View>
                     <Animated.View
                         style={{
                             backgroundColor: bottomTheme,
-                            height: RefreshHeight,
+                            height,
                             width,
                             position: 'absolute',
-                            top: 35,
+                            top: (-height) + 35,
+                            transform: [{translateY: translateY}],
                         }}>
                     </Animated.View>
                     <Animated.ScrollView
@@ -284,11 +291,12 @@ class TaskDetails extends PureComponent {
                                     alignItems: 'center',
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
-                                    marginTop:5
+                                    marginTop: 5,
                                 }}>
 
                                     <View>
-                                        <Text numberOfLines={2} style={{fontSize: 16, opacity: 0.9, color: 'black',width:width-90}}>
+                                        <Text numberOfLines={2}
+                                              style={{fontSize: 16, opacity: 0.9, color: 'black', width: width - 90}}>
                                             {taskTitle} {emojiArr.map((item) => {
                                             return <Emoji name={item} style={{fontSize: 15}}/>;
                                         })}
@@ -461,7 +469,14 @@ class TaskDetails extends PureComponent {
                     <AnimatedTouchableOpacity
                         activeOpacity={0.6}
                         onPress={this.onBackPress}
-                        style={{position: 'absolute', top: goBackTop, left: 10, zIndex: 10, width: 50}}>
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            transform: [{translateY: goBackTop}],
+                            left: 10,
+                            zIndex: 10,
+                            width: 50,
+                        }}>
                         <SvgUri width={24} height={24} fill={'white'} svgXmlData={goback}/>
                     </AnimatedTouchableOpacity>
                     <AnimatedTouchableOpacity

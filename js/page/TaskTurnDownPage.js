@@ -48,6 +48,8 @@ class MyTaskReview extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
         this.backPress.componentDidMount();
     }
 
@@ -65,8 +67,7 @@ class MyTaskReview extends PureComponent {
             hide={true}
             statusBar={statusBar}
         />;
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(theme, true);
+
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '驳回', message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.params.fromUserinfo}, 'ChatSettings');
         }, false);

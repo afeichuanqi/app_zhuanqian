@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationUtils from '../../navigator/NavigationUtils';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {timing} = Animated;
 
@@ -110,8 +111,8 @@ export default class MessageItemComponent extends Component {
                     <View>
                         <FastImagePro
                             loadingType={1}
-                            loadingWidth={45}
-                            loadingHeight={45}
+                            loadingWidth={wp(11.5)}
+                            loadingHeight={wp(11.5)}
                             style={[styles.imgStyle]}
                             source={{uri: avatar_url}}
                             resizeMode={FastImage.resizeMode.stretch}
@@ -136,21 +137,18 @@ export default class MessageItemComponent extends Component {
                     <View style={{justifyContent: 'space-around'}}>
                         {/*左上*/}
                         <View style={{
-                            // position: 'absolute',
-                            // top: 10,
-                            // left: 40,
                             flexDirection: 'row',
                             alignItems: 'center',
                         }}>
                             <Text style={{
-                                fontSize: 14,
+                                fontSize: wp(3.5),
                                 color: 'black',
                                 opacity: 0.9,
                                 marginLeft: 10,
                             }}>{username}</Text>
                             <Text style={{
                                 marginLeft: 10,
-                                fontSize: 12,
+                                fontSize: wp(2.8),
                                 color: (columnType == 2 || columnType == 3) ? 'red' : 'black',
                                 opacity: 0.5,
                             }}>{
@@ -164,7 +162,7 @@ export default class MessageItemComponent extends Component {
                             numberOfLines={1}
                             ellipsizeMode={'tail'}
                             style={{
-                                fontSize: 13,
+                                fontSize: wp(3.3),
                                 color: 'black',
                                 opacity: 0.6,
                                 marginLeft: 10,
@@ -181,7 +179,7 @@ export default class MessageItemComponent extends Component {
                     marginTop: 5,
                 }}>
                     <Text style={{
-                        fontSize: 11,
+                        fontSize: wp(2.9),
                         color: 'black',
                         opacity: 0.5,
 
@@ -194,13 +192,13 @@ export default class MessageItemComponent extends Component {
                 }}
             >
                 <FastImagePro
-                    loadingWidth={55}
-                    loadingHeight={55}
+                    loadingWidth={wp(13.8)}
+                    loadingHeight={wp(13.8)}
                     style={{
                         backgroundColor: '#9d9d9d',
                         // 设置宽度
-                        width: 55,
-                        height: 55,
+                        width: wp(13.8),
+                        height: wp(13.8),
                         borderRadius: 2,
                     }}
                     source={{uri: taskUri}}
@@ -221,8 +219,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 45,
-        height: 45,
+        width: wp(11.5),
+        height: wp(11.5),
         borderRadius: 3,
         // 设置高度
         // height:150

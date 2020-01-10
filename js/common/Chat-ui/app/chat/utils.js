@@ -30,7 +30,7 @@ const getCurrentTime = (time = 0) => {
     let oldt = '';
     if (oldh > 0 && oldh < 6) {
         oldt += '凌晨';
-    } else if (oldh >= 6 && oldh < 0) {
+    } else if (oldh >= 6 && oldh < 12) {
         oldt += '上午';
     } else if (oldh >= 12 && oldh < 18) {
         oldt += '下午';

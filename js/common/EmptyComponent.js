@@ -10,7 +10,7 @@ import React, {PureComponent} from 'react';
 
 import {Dimensions, Text, View} from 'react-native';
 import Image from 'react-native-fast-image';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
@@ -56,15 +56,15 @@ class EmptyComponent extends PureComponent {
         return (
             <View style={{
                 height: this.props.height, justifyContent: 'center', alignItems: 'center',
-                backgroundColor: '#fafafa', width,
+                backgroundColor: '#ffffff', width,
 
             }}>
                 <View style={{
                     marginTop: this.props.marginTop,
                     alignItems: 'center',
                 }}>
-                    <Image resizeMode={'contain'} source={source} style={{width: 120, height: 120}}/>
-                    <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.6)', marginTop: 10}}>{this.props.message} ~
+                    <Image resizeMode={'contain'} source={source} style={{width: wp(30), height:  wp(30)}}/>
+                    <Text style={{fontSize:  wp(3.6), color: 'rgba(0,0,0,0.6)', marginTop: hp(0.5)}}>{this.props.message} ~
                         ~</Text>
                 </View>
             </View>

@@ -23,6 +23,7 @@ import {ImgOption} from '../common/PickerImage';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
 import Emoji from 'react-native-emoji';
 import Global from '../common/Global';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {width} = Dimensions.get('window');
 
@@ -83,6 +84,9 @@ class ChatRoomPage extends React.Component {
     };
 
     componentDidMount(): void {
+        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBackgroundColor(theme, true);
+
         this.backPress.componentDidMount();
         this._updatePage();
     }
@@ -300,12 +304,7 @@ class ChatRoomPage extends React.Component {
             hide={true}
             statusBar={statusBar}
         />;
-        if(Platform.OS==='android'){
-            setTimeout(()=>{
-                StatusBar.setBarStyle('dark-content', true);
-                StatusBar.setBackgroundColor(theme, true);
-            },500)
-        }
+
 
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, null, null, () => {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
@@ -391,7 +390,7 @@ class ChatRoomPage extends React.Component {
                             }
                         }}
                         panelSource={[{
-                            icon: <Image source={require('../res/img/photo.png')} style={{width: 30, height: 30}}/>,
+                            icon: <Image source={require('../res/img/photo.png')} style={{width: wp(8), height: wp(8)}}/>,
                             title: '照片',
                             onPress: () => {
                                 ImagePicker.openPicker(ImgOption).then(image => {
@@ -404,7 +403,7 @@ class ChatRoomPage extends React.Component {
                         },
                             {
                                 icon: <Image source={require('../res/img/take_phone.png')}
-                                             style={{width: 30, height: 30}}/>,
+                                             style={{width: wp(8), height: wp(8)}}/>,
                                 title: '拍照',
                                 onPress: () => {
                                     ImagePicker.openCamera(ImgOption).then(image => {
@@ -575,20 +574,22 @@ class TaskInfo extends React.Component {
                 NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
             }}
             style={{
-                height: 80, width, backgroundColor: 'white',zIndex: 1,
+                height: 80, width, backgroundColor: 'white', zIndex: 1,
                 paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', flexDirection: 'row',
                 borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0',
             }}>
             <View style={{flexDirection: 'row'}}>
                 <Image
-                    style={{height: 60, width: 60, backgroundColor: 5, borderRadius: 3}}
+                    style={{height: wp(15), width: wp(15), borderRadius: 3}}
                     source={{uri: taskInfo.task_uri}}
                     resizeMode={Image.resizeMode.stretch}
                 />
-                <View style={{marginLeft: 10, justifyContent: 'space-between', height: 60}}>
-                    <Text style={{fontSize: 18, color: 'black'}}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text style={{fontSize: 13, opacity: 0.5, color: 'black'}}>
-
+                <View style={{marginLeft: 10, justifyContent: 'space-between', height: wp(15), width: wp(57)}}>
+                    <Text style={{
+                        fontSize: wp(3.8),
+                        color: 'black',
+                    }}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
+                    <Text numberOfLines={2} style={{fontSize: wp(3.5), opacity: 0.5, color: 'black'}}>
                         {taskTitle} {emojiArr.map((item, index) => {
                         return <Emoji key={index} name={item} style={{fontSize: 13, opacity: 0.5, color: 'black'}}/>;
                     })}
@@ -597,8 +598,8 @@ class TaskInfo extends React.Component {
 
                         <AnimatedFadeIn>
                             <Text style={{
-                                fontSize: 13, opacity: 0.5, color: 'black',
-                                marginTop: 3,
+                                fontSize: wp(3.2), opacity: 0.5, color: 'black',
+
                             }}>
                                 {statusText}
                             </Text>
@@ -608,7 +609,7 @@ class TaskInfo extends React.Component {
 
                 </View>
             </View>
-            <View style={{height: 60, justifyContent: 'flex-end'}}>
+            <View style={{height: wp(15), justifyContent: 'flex-end'}}>
                 <TouchableOpacity
                     onPress={() => {
                         if (columnType == 2 || columnType == 3) {
@@ -626,8 +627,8 @@ class TaskInfo extends React.Component {
                     }
                     }
                     style={{
-                        height: 25,
-                        width: 70,
+                        height: hp(3.4),
+                        width: wp(17),
                         backgroundColor: 'red',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -636,7 +637,7 @@ class TaskInfo extends React.Component {
                     }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: 13,
+                        fontSize: wp(3.4),
                     }}>{(columnType == 2 || columnType == 3 || columnType == 5) ? '任务来往' : '查看详情'}</Text>
                 </TouchableOpacity>
 
@@ -684,7 +685,7 @@ class NewMessage extends React.Component {
                 alignItems: 'center',
 
             }}>
-            <Text style={{color: bottomTheme, fontSize: 13}}>{userName}:{msg}</Text>
+            <Text style={{color: bottomTheme, fontSize: wp(3.4)}}>{userName}:{msg}</Text>
         </TouchableOpacity>;
     }
 }

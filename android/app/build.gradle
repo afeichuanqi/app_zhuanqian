@@ -132,7 +132,7 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
 
-        applicationId "com.awesomeproject"
+        applicationId "com.yiertong.easyz"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

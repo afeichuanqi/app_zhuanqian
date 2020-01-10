@@ -49,6 +49,7 @@ class MyViewHistoryPage extends PureComponent {
     };
 
     componentDidMount() {
+        StatusBar.setBarStyle('dark-content', true);
         this.backPress.componentDidMount();
         this._updatePage(true);
     }
@@ -107,7 +108,7 @@ class MyViewHistoryPage extends PureComponent {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
         };
-        StatusBar.setBarStyle('dark-content', true);
+
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
@@ -132,7 +133,7 @@ class MyViewHistoryPage extends PureComponent {
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5', paddingTop: 3}}
-                        ListEmptyComponent={<EmptyComponent type={3} height={height - 80} message={'您还没有收藏'}/>}
+                        ListEmptyComponent={<EmptyComponent type={1} height={height - 80} message={'您还没有浏览过任何任务'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
                         scrollEventThrottle={1}
