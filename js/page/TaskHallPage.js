@@ -11,12 +11,11 @@ import {
     View,
     Text,
     Dimensions,
-    FlatList, TouchableOpacity, Platform,
+    TouchableOpacity,
+    Platform, FlatList,
 } from 'react-native';
 import {bottomTheme, theme} from '../appSet';
 import Animated, {Easing} from 'react-native-reanimated';
-
-const {timing} = Animated;
 import NavigationBar from '../common/NavigationBar';
 import TabBar from '../common/TabBar';
 import search from '../res/svg/search.svg';
@@ -35,7 +34,8 @@ import Image from 'react-native-fast-image';
 import {getEmojis} from '../util/CommonUtils';
 import Emoji from 'react-native-emoji';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import AnimatedFadeIn from '../common/AnimatedFadeIn';
+const {timing} = Animated;
 let FilterComponent = null;
 
 const width = Dimensions.get('window').width;
@@ -50,7 +50,6 @@ class TaskHallPage extends PureComponent {
         navigationRoutes: [
             {key: 'first', title: '全部'},
             {key: 'second', title: Platform.OS === 'android' ? '安卓手机' : '苹果手机'},
-            // {key: 'second1', title: '简单'},
         ],
     };
 
@@ -95,9 +94,8 @@ class TaskHallPage extends PureComponent {
                 }}>
                     <TabBar
                         style={{
-                            height: hp(7.9),
+                            height: hp(7.5),
                             width: wp(50),
-
                         }}
                         position={this.position}
                         contentContainerStyle={{paddingTop: hp(3.7)}}
@@ -108,7 +106,7 @@ class TaskHallPage extends PureComponent {
                         titleMarginHorizontal={wp(4)}
                         activeStyle={{fontSize: wp(5), color: [255, 255, 255]}}
                         inactiveStyle={{fontSize: wp(4), color: [255, 255, 255], height: 10}}
-                        indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.6)}}
+                        indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.1)}}
                     />
                     <View style={{flexDirection: 'row', marginTop: hp(1.5), alignItems: 'center'}}>
                         {/*加图标*/}
@@ -133,12 +131,9 @@ class TaskHallPage extends PureComponent {
                         >
                             <SvgUri width={wp(5.5)} height={hp(5.5)} fill={'white'} svgXmlData={search}/>
                         </TouchableOpacity>
-
-
                     </View>
                 </View>
                 <TabView
-                    // ref={ref => this.tabView = ref}
                     indicatorStyle={{backgroundColor: 'white'}}
                     navigationState={{index: navigationIndex, routes: navigationRoutes}}
                     renderScene={this.renderScene}
@@ -196,6 +191,7 @@ class FristListComponent extends PureComponent {
     state = {
         show: false,
         showFilterComponent: false,
+        tOutputRange: hp(5.9),
     };
     params = {
         pageIndex: 0,
@@ -291,14 +287,14 @@ class FristListComponent extends PureComponent {
     };
 
     render() {
-        const marginTop = Animated.interpolate(this.animations.val, {
+        const headlineTranslateY = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [0, -40],
+            outputRange: [0, -hp(5.9)],
             extrapolate: 'clamp',
         });
         const translateY = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [ hp(11.8), 0],
+            outputRange: [this.state.tOutputRange, 0],
             extrapolate: 'clamp',
         });
         const {show, showFilterComponent} = this.state;
@@ -308,6 +304,7 @@ class FristListComponent extends PureComponent {
 
             <Animated.View style={{transform: [{translateY}]}}>
                 <FlatListCommonUtil
+                    statusBarType={'light'}
                     device={this.props.device}
                     ref={ref => this.flatList = ref}
                     onScrollBeginDrag={this._onScroll}
@@ -319,7 +316,12 @@ class FristListComponent extends PureComponent {
                 />
             </Animated.View>
             {/*工具条*/}
-            <Animated.View style={{position: 'absolute', top: marginTop, zIndex: 4, elevation: 0.2}}>
+            <Animated.View style={{
+                position: 'absolute',
+                transform: [{translateY: headlineTranslateY}],
+                zIndex: 4,
+                elevation: 0.2,
+            }}>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -336,7 +338,12 @@ class FristListComponent extends PureComponent {
                     <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>
                 </View>
 
-                <HeadlineComponent index={this.props.index} ref={ref => this.headlineComponent = ref}/>
+                <HeadlineComponent
+                    onSuccess={this.onSuccess}
+                    onError={this.onError}
+                    index={this.props.index}
+                    ref={ref => this.headlineComponent = ref}
+                />
 
             </Animated.View>
             {/*筛选器*/}
@@ -347,6 +354,20 @@ class FristListComponent extends PureComponent {
         </View>;
     }
 
+    onError = () => {
+        if (this.state.tOutputRange === hp(11.8)) {
+            this.setState({
+                tOutputRange: hp(5.9),
+            });
+        }
+    };
+    onSuccess = () => {
+        if (this.state.tOutputRange === hp(5.9)) {
+            this.setState({
+                tOutputRange: hp(11.8),
+            });
+        }
+    };
     _onPress = () => {
         if (FilterComponent !== null && !this.state.showFilterComponent) {
             this.setState({
@@ -438,6 +459,8 @@ class HeadlineComponent extends PureComponent {
     updatePage = () => {
 
         getHotTasks().then(result => {
+            result.length > 0 && this.props.onSuccess();
+            result.length === 0 && this.props.onError();
             this.setState({
                 HeadlineArrays: result,
             });
@@ -468,38 +491,42 @@ class HeadlineComponent extends PureComponent {
         if (HeadlineArrays.length === 0) {
             return null;
         }
-        return <View style={{
-            height: hp(5.9),
-            width,
-            backgroundColor: 'white',
-            flexDirection: 'row',
-            alignItems: 'center',
-            borderBottomWidth: 0.3,
-            borderBottomColor: 'rgba(0,0,0,0.2)',
-        }}>
-            <Image
-                resizeMode={'stretch'}
-                source={require('../res/img/index_hot.png')} style={{
-                width:wp(12), height:hp(2.5), marginLeft: wp(5),
-                marginBottom: hp(0.8),
-            }}/>
+        return <AnimatedFadeIn
+            duration={1000}
+        >
             <View style={{
-                flex: 1,
-                overflow: 'hidden',
-
+                height: hp(5.9),
+                width,
+                backgroundColor: 'white',
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderBottomWidth: 0.3,
+                borderBottomColor: 'rgba(0,0,0,0.2)',
             }}>
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    ref={ref => this.flatList = ref}
-                    data={HeadlineArrays}
-                    scrollEventThrottle={1}
-                    renderItem={data => this._renderIndexPath(data)}
-                    keyExtractor={(item, index) => index + ''}
-                    // onEndReachedThreshold={0.01}
-                />
+                <Image
+                    resizeMode={'stretch'}
+                    source={require('../res/img/index_hot.png')} style={{
+                    width: wp(12), height: hp(2.5), marginLeft: wp(5),
+                    marginBottom: hp(0.8),
+                }}/>
+                <View style={{
+                    flex: 1,
+                    overflow: 'hidden',
 
+                }}>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        ref={ref => this.flatList = ref}
+                        data={HeadlineArrays}
+                        scrollEventThrottle={1}
+                        renderItem={data => this._renderIndexPath(data)}
+                        keyExtractor={(item, index) => index + ''}
+                        // onEndReachedThreshold={0.01}
+                    />
+
+                </View>
             </View>
-        </View>;
+        </AnimatedFadeIn>;
     }
 
     _renderIndexPath = ({item, index}) => {
@@ -524,14 +551,14 @@ class HeadlineComponent extends PureComponent {
                     color: 'black',
                     width: wp(60),
                     marginLeft: wp(1), opacity: 0.8,
-                    marginTop:-wp(0.5),
+                    marginTop: -wp(0.5),
                     fontSize: wp(4),
 
                 }}>
 
 
                 {taskTitle} {emojiArr.map((item, index) => {
-                return <Emoji key={index} name={item} style={{fontSize:  wp(60)}}/>;
+                return <Emoji key={index} name={item} style={{fontSize: wp(60)}}/>;
             })}
             </Text>
 
@@ -543,7 +570,8 @@ class HeadlineComponent extends PureComponent {
                     {item.rewardPrice}
                 </Text>
                 <Text style={{fontSize: 14, color: 'red', top: hp(0.07), marginRight: 5}}>元</Text>
-                <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')} style={{width: wp(2), height: wp(2)}}/>
+                <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')}
+                       style={{width: wp(2), height: wp(2)}}/>
             </View>
 
 

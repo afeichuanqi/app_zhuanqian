@@ -147,6 +147,67 @@
 				<true/>
 			</dict>
 		</dict>
+		<!-- 集成新浪微博对应的 HTTP 白名单-->
+               <key>sina.com.cn</key>
+               <dict>
+                   <key>NSIncludesSubdomains</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                   <false/>
+               </dict>
+               <key>sinaimg.cn</key>
+               <dict>
+                   <key>NSIncludesSubdomains</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                   <false/>
+               </dict>
+               <key>sinajs.cn</key>
+               <dict>
+                   <key>NSIncludesSubdomains</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                   <false/>
+               </dict>
+               <key>sina.cn</key>
+               <dict>
+                   <!-- 适配 iOS10 -->
+                   <key>NSExceptionMinimumTLSVersion</key>
+                   <string>TLSv1.0</string>
+                   <key>NSIncludesSubdomains</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                   <false/>
+               </dict>
+               <key>weibo.cn</key>
+               <dict>
+                   <!-- 适配 iOS10 -->
+                   <key>NSExceptionMinimumTLSVersion</key>
+                   <string>TLSv1.0</string>
+                   <key>NSIncludesSubdomains</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                   <false/>
+               </dict>
+               <key>weibo.com</key>
+               <dict>
+                   <!-- 适配 iOS10 -->
+                   <key>NSExceptionMinimumTLSVersion</key>
+                   <string>TLSv1.0</string>
+                   <key>NSIncludesSubdomains</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+                   <true/>
+                   <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                   <false/>
+               </dict>
+               <!-- 新浪微博-->
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>是否允许此App使用你的相机进行拍照？</string>

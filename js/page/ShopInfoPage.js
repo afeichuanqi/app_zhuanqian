@@ -16,16 +16,15 @@ import {
     RefreshControl,
     ActivityIndicator,
     TouchableOpacity, StatusBar,
+    Platform,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme} from '../appSet';
-import NavigationBar from '../common/NavigationBar';
-import ViewUtil from '../util/ViewUtil';
 import NavigationUtils from '../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../common/TaskInfoComponent';
-import {attentionUserId, selectShopInfoForUserId, selectTaskListForUserId} from '../util/AppService';
+import {attentionUserId, selectShopInfoForUserId, selectTaskListForUserId, uploadQiniuImage} from '../util/AppService';
 import {connect} from 'react-redux';
 import EmptyComponent from '../common/EmptyComponent';
 import Toast from '../common/Toast';
@@ -34,9 +33,15 @@ import EventTypes from '../util/EventTypes';
 import BackPressComponent from '../common/BackPressComponent';
 import ImageViewerModal from '../common/ImageViewerModal';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
+import SvgUri from 'react-native-svg-uri';
+import goback from '../res/svg/goback.svg';
+import PickerImage from '../common/PickerImage';
+import actions from '../action';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
+const backgroundHeight = 90;
+const {call, block, set} = Animated;
 
 class ShopInfoPage extends PureComponent {
     constructor(props) {
@@ -47,7 +52,14 @@ class ShopInfoPage extends PureComponent {
             attentionStatus: 0,
             userId: this.params.userid,
         };
+        this.animations = {
+            val: new Animated.Value(1),
+        };
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        StatusBar.setBarStyle('light-content', true);
+        StatusBar.setTranslucent(true);
+        StatusBar.setBackgroundColor('rgba(0,0,0,0)', true);
+
     }
 
     onBackPress = () => {
@@ -56,13 +68,12 @@ class ShopInfoPage extends PureComponent {
     };
 
     componentDidMount() {
-        StatusBar.setBarStyle('dark-content', true);
-        StatusBar.setBackgroundColor(bottomTheme, true);
         this.backPress.componentDidMount();
         this.updateShopInfo(this.params.userid);
         EventBus.getInstance().addListener(EventTypes.update_shopInfo_page, this.listener = data => {
             this.updateShopInfo(data.userId);
         });
+
     }
 
     componentWillUnmount() {
@@ -71,11 +82,8 @@ class ShopInfoPage extends PureComponent {
     }
 
     updateShopInfo = (user_id) => {
-        // this.userId = user_id;
         selectShopInfoForUserId({user_id: user_id}, this.props.userinfo.token).then(shopInfoArr => {
-            // console.log(shopInfoArr,"shopInfoArr");
             const {shopInfo, attentionStatus} = shopInfoArr;
-
             this.setState({
                 shopInfo,
                 attentionStatus,
@@ -83,52 +91,123 @@ class ShopInfoPage extends PureComponent {
             });
         });
     };
-    animations = {
-        val: new Animated.Value(1),
+
+    changeShopBackImg = () => {
+        if (this.state.userId === this.props.userinfo.userid) {
+            this.pickerImage.show();
+        }
+
     };
 
     render() {
 
         const translateY = Animated.interpolate(this.animations.val, {
             inputRange: [-height, 0, height],
-            outputRange: [height, 0, -height],
+            outputRange: [height + backgroundHeight + 140, backgroundHeight + 140, -height + backgroundHeight + 140],
             extrapolate: 'clamp',
         });
-        let statusBar = {
-            hidden: false,
-            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
-        };
-        let navigationBar = <NavigationBar
-            hide={true}
-            statusBar={statusBar}
-            style={{backgroundColor: bottomTheme}} // 背景颜色
-        />;
-
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, `${this.state.shopInfo.username ? this.state.shopInfo.username + '的店铺' : ''}`, null, bottomTheme, 'white', 16, () => {
-        }, false);
+        const whiteOpacity = Animated.interpolate(this.animations.val, {
+            inputRange: [0, 100, 130],
+            outputRange: [1, 1, 0],
+            extrapolate: 'clamp',
+        });
+        const blackOpacity = Animated.interpolate(this.animations.val, {
+            inputRange: [0, 130, 160],
+            outputRange: [0, 0, 1],
+            extrapolate: 'clamp',
+        });
+        //console.log(this.state.shopInfo);
         return (
             <SafeAreaViewPlus
                 topColor={bottomTheme}
             >
-                {navigationBar}
-                {TopColumn}
                 <Toast
                     ref={ref => this.toast = ref}
                 />
                 <View style={{flex: 1}}>
                     <Animated.View
                         style={{
-                            backgroundColor: bottomTheme,
+                            backgroundColor: 'rgba(0,0,0,0.8)',
                             height,
                             width,
                             position: 'absolute',
                             top: (-height),
                             transform: [{translateY: translateY}],
-                        }}>
 
+                        }}>
+                        <View style={{
+                            width,
+                            height: 30,
+                            position: 'absolute',
+                            bottom: backgroundHeight + 180 + backgroundHeight + 30,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <Text style={{color: 'rgba(255,255,255,0.5)', fontSize: 14}}>简易赚 - 人人都能赚钱</Text>
+                        </View>
+                        <FastImage
+                            source={{uri: this.state.userId === this.props.userinfo.userid ? this.props.userinfo.shopinfo_url : this.state.shopInfo.shopinfoUrl}}
+                            style={{
+                                height: Platform.OS === 'ios' ? backgroundHeight + 180 + backgroundHeight : backgroundHeight + 180,
+                                width,
+                                position: 'absolute',
+                                bottom: 0,
+                            }}
+                            resizeMode={FastImage.resizeMode.stretch}
+                        />
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={this.changeShopBackImg}
+                            style={{
+                                height: Platform.OS === 'ios' ? backgroundHeight + 180 + backgroundHeight : backgroundHeight + 180,
+                                width,
+                                position: 'absolute',
+                                bottom: 0,
+                                backgroundColor: 'rgba(0,0,0,0.3)',
+                            }}
+                        />
 
                     </Animated.View>
+                    <View
+                        style={{
+                            position: 'absolute', top: 0, width, zIndex: 100,
+                        }}
+                    >
+                        <Animated.View style={{backgroundColor: '#eeecee', width, height: 60, opacity: blackOpacity}}>
+                            <View style={{
+                                position: 'absolute', marginTop: 10, width, flexDirection: 'row', alignItems: 'center',
+                                justifyContent: 'space-between', height: 60,
+                            }}>
+                                <TouchableOpacity
+                                    activeOpacity={0.6}
+                                    onPress={this.onBackPress}
+                                    style={{justifyContent: 'center', marginLeft: 10}}>
+                                    <SvgUri width={24} height={24} fill={'rgba(0,0,0,0.8)'} svgXmlData={goback}/>
+                                </TouchableOpacity>
+                                <Text style={{color: 'rgba(0,0,0,0.8)', fontSize: 16}}>
+                                    {this.state.shopInfo.username ? this.state.shopInfo.username + '的店铺' : ''}
+                                </Text>
+                                <View style={{width:30}}/>
+                            </View>
+
+                        </Animated.View>
+                        <Animated.View style={{
+                            position: 'absolute', top: 30, width, flexDirection: 'row', alignItems: 'center',
+                            justifyContent: 'space-between', opacity: whiteOpacity,
+                        }}>
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                onPress={this.onBackPress}
+                                style={{justifyContent: 'center', marginLeft: 10}}>
+                                <SvgUri width={24} height={24} fill={'rgba(255,255,255,0.8)'} svgXmlData={goback}/>
+                            </TouchableOpacity>
+                            <Text style={{color: 'white', fontSize: 16}}/>
+                            <View/>
+                        </Animated.View>
+
+                    </View>
                     <ShopList
+                        changeShopBackImg={this.changeShopBackImg}
                         attentionStatus={this.state.attentionStatus}
                         attentionUserId={this._attentionUserId}
                         updateShopInfo={this.updateShopInfo}
@@ -136,12 +215,30 @@ class ShopInfoPage extends PureComponent {
                         userid={this.state.userId}
                         userinfo={this.props.userinfo}
                         RefreshHeight={this.animations.val}/>
+                    {/*set*/}
                 </View>
+                <PickerImage
 
+                    showMorePhotos={true}
+                    cropping={true}
+                    includeBase64={true}
+                    select={this.selectImage}
+                    popTitle={'请选择背景墙图片'} ref={ref => this.pickerImage = ref}/>
             </SafeAreaViewPlus>
         );
     }
 
+    selectImage = (image) => {
+        const {userinfo, onSetShopInfoBgImg} = this.props;//我的用户信息
+        const token = userinfo.token;
+        let mime = image.mime;
+        const mimeIndex = mime.indexOf('/');
+        mime = mime.substring(mimeIndex + 1, mime.length);
+        const path = `file://${image.path}`;
+        onSetShopInfoBgImg(token, mime, path, (isTrue, data) => {
+            isTrue && this.toast.show('更换成功');
+        });
+    };
     _attentionUserId = () => {
         let attention_type = this.state.attentionStatus == 0 ? 1 : 0;
         attentionUserId({
@@ -151,7 +248,6 @@ class ShopInfoPage extends PureComponent {
             this.setState({
                 attentionStatus: attention_type,
             });
-            // this.updateShopInfo();
             this.toast.show(`${attention_type == 0 ? '取消关注' : '关注'}成功`);
         }).catch(msg => {
             this.toast.show(msg);
@@ -260,28 +356,37 @@ class ShopList extends Component {
         this.props.updateShopInfo(this.userid);
         this._updatePage(true);
     };
+    BarStyle = 'light';
 
     render() {
         const {shopInfo} = this.props;
 
         const {commodityData, hideLoaded, isLoading} = this.state;
-        // console.log(shopInfo,"shopInfo");
         return <AnimatedFlatList
             ListHeaderComponent={
-                <View style={{backgroundColor: '#e8e8e8'}}>
-                    <AvatarColumn
-                        attentionStatus={this.props.attentionStatus}
-                        attentionUserId={this.props.attentionUserId}
-                        shopInfo={shopInfo}
-                        userinfo={this.props.userinfo}
+                <View style={{}}>
+                    <TouchableOpacity
+                        onPress={this.props.changeShopBackImg}
+                        activeOpacity={1}
 
-                    />
+                    >
+                        <View style={{height: backgroundHeight}}/>
+                        <AvatarColumn
+                            attentionStatus={this.props.attentionStatus}
+                            attentionUserId={this.props.attentionUserId}
+                            shopInfo={shopInfo}
+                            userinfo={this.props.userinfo}
+                        />
+                    </TouchableOpacity>
+
+
                     <ShopData shopInfo={shopInfo}/>
                 </View>
 
 
             }
             style={{
+                height: '100%',
                 // backgroundColor: 'white',
             }}
             ref={ref => this.flatList = ref}
@@ -293,8 +398,8 @@ class ShopList extends Component {
             keyExtractor={(item, index) => index + ''}
             refreshControl={
                 <RefreshControl
-                    // title={'更新任务中'}
-                    color={'black'}
+                    tintColor={'white'}
+                    color={'white'}
                     refreshing={isLoading}
                     onRefresh={() => this.onRefresh()}
                 />
@@ -302,7 +407,27 @@ class ShopList extends Component {
             onScroll={Animated.event([
                 {
                     nativeEvent: {
-                        contentOffset: {y: this.props.RefreshHeight},
+                        contentOffset: {
+                            y: y =>
+                                block([
+                                    set(this.props.RefreshHeight, y),
+                                    call(
+                                        [y],
+                                        ([offsetY]) => {
+                                            if (offsetY > 130 && this.BarStyle !== 'dark') {
+                                                this.BarStyle = 'dark';
+                                                StatusBar.setBarStyle('dark-content', false);
+
+                                            }
+
+                                            if (offsetY <= 130 && this.BarStyle !== 'light') {
+                                                this.BarStyle = 'light';
+                                                StatusBar.setBarStyle('light-content', true);
+                                            }
+                                        },
+                                    ),
+                                ]),
+                        },
                     },
                 },
             ])}
@@ -331,7 +456,6 @@ class ShopData extends Component {
     getTaskDataColumn = (title, value, value1 = '') => {
 
         if ((isNaN(value))) {
-            console.log(value);
             return <SkeletonPlaceholder minOpacity={0.2}>
                 <View style={{width: width / 3 - 10, marginHorizontal: 5, marginVertical: 5, height: 70}}/>
             </SkeletonPlaceholder>;
@@ -344,18 +468,23 @@ class ShopData extends Component {
     };
 
     render() {
-        return <View style={{marginTop: 10, backgroundColor: 'white', marginBottom: 10}}>
+        return <View style={{
+
+            backgroundColor: 'white',
+            borderBottomWidth: 10,
+            borderBottomColor: '#e2e2e2',
+        }}>
             <View style={{
                 width,
                 height: 40,
                 paddingHorizontal: 20,
                 paddingVertical: 10,
                 justifyContent: 'center',
-                borderBottomWidth: 0.3,
-                borderBottomColor: 'rgba(0,0,0,0.1)',
+
             }}>
                 <Text>店铺数据一览</Text>
             </View>
+            <View style={{height: 0.3, width: width, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.3)'}}/>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                 {this.getTaskDataColumn('总发任务数', this.props.shopInfo.total_hair_tasks_num)}
                 {this.getTaskDataColumn('总发单数', this.props.shopInfo.total_hair_order_num)}
@@ -372,10 +501,14 @@ class ShopData extends Component {
 
 class AvatarColumn extends Component {
     render() {
-        return <View style={{backgroundColor: bottomTheme, width, paddingVertical: 10, paddingBottom: 50}}>
+        return <View style={{width, paddingVertical: 10, paddingBottom: 50}}>
             <View style={{marginTop: 5, marginLeft: 10}}>
                 <TouchableOpacity
                     activeOpacity={0.6}
+                    style={{
+                        width: 50,
+                        height: 50,
+                    }}
                     onPress={() => {
                         this.imageViewer.show([{url: this.props.shopInfo.avatar_url}]);
                     }}
@@ -443,10 +576,6 @@ class AvatarColumn extends Component {
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
-                    // EventBus.getInstance().fireEvent(EventTypes.update_attention_page, {
-                    //     // isDelTitle: false
-                    //     user_id: this.props.shopInfo.userId
-                    // });
                     NavigationUtils.goPage({user_id: this.props.shopInfo.userId}, this.props.userinfo.userid == this.props.shopInfo.userId ? 'MyAttentionList' : 'HisAttentionList');
                 }}
                 style={{
@@ -469,7 +598,7 @@ class AvatarColumn extends Component {
                     letterSpacing: 1,
                 }}>{this.props.shopInfo.fan_num}粉丝</Text>
             </TouchableOpacity>
-            <ImageViewerModal ref={ref => this.imageViewer = ref}/>
+            <ImageViewerModal statusBarType={'translucent'} ref={ref => this.imageViewer = ref}/>
         </View>;
     }
 
@@ -479,7 +608,7 @@ const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
 const mapDispatchToProps = dispatch => ({
-    // onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
+    onSetShopInfoBgImg: (token, mime, path, callback) => dispatch(actions.onSetShopInfoBgImg(token, mime, path, callback)),
 });
 const ShopInfoPageRedux = connect(mapStateToProps, mapDispatchToProps)(ShopInfoPage);
 export default ShopInfoPageRedux;

@@ -8,6 +8,7 @@ import FastImage from 'react-native-fast-image';
 import {getEmojis} from '../../util/CommonUtils';
 import Emoji from 'react-native-emoji';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const {width} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
     render() {
@@ -19,6 +20,7 @@ export default class TaskReleaseItem extends PureComponent {
             taskTitle = json.content;
             emojiArr = json.emojiArr;
         }
+        console.log(item,"item")
         return <View style={{borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)'}}>
 
 
@@ -49,7 +51,7 @@ export default class TaskReleaseItem extends PureComponent {
                         <View style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            width:wp(50),
+                            width: wp(50),
                         }}>
                             <Text style={{
                                 fontSize: wp(3.8),
@@ -57,9 +59,9 @@ export default class TaskReleaseItem extends PureComponent {
 
 
                             }}
-                            numberOfLines={1}
+                                  numberOfLines={1}
                             >
-                                {item.id} - {taskTitle} {emojiArr.map((item,index) => {
+                                {item.id} - {taskTitle} {emojiArr.map((item, index) => {
                                 return <Emoji key={index} name={item} style={{fontSize: wp(3.8)}}/>;
                             })}
 
@@ -93,11 +95,12 @@ export default class TaskReleaseItem extends PureComponent {
                         {/*标签*/}
                         <View style={{
                             flexDirection: 'row',
+                            alignItems:'center',
+                            justifyContent:'center',
                         }}>
-                            <LabelBigComponent
-
-                                paddingVertical={1} fontSize={wp(2.8)} title={item.task_name}/>
-                            {/*<LabelBigComponent title={item.taskName}/>*/}
+                            <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
+                            <View style={{height:10,width:0.3, backgroundColor:'rgba(0,0,0,0.3)', marginHorizontal:7}}/>
+                            <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
                         </View>
                         {/*剩余数*/}
                         <View style={{

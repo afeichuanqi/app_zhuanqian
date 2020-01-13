@@ -8,26 +8,24 @@
 
 import React, {PureComponent} from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions, Text,
     View, StatusBar,
-    TextInput, TouchableOpacity,Image
+    TouchableOpacity, ImageBackground,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
-import {bottomTheme} from '../appSet';
-import menu_right from '../res/svg/menu_right.svg';
-import SvgUri from 'react-native-svg-uri';
+import {bottomTheme, theme} from '../appSet';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
-class WithDrawPage extends PureComponent {
+class WithDrawPage extends React.Component {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
@@ -38,12 +36,9 @@ class WithDrawPage extends PureComponent {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
-    state = {
-        taskData: {},
-    };
 
     componentDidMount() {
-        StatusBar.setBarStyle('dark-content', true);
+        StatusBar.setBarStyle('light-content', true);
         this.backPress.componentDidMount();
     }
 
@@ -57,100 +52,134 @@ class WithDrawPage extends PureComponent {
     render() {
         let statusBar = {
             hidden: false,
-            backgroundColor: theme,//安卓手机状态栏背景颜色
+            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
 
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
-            style={{backgroundColor: theme}} // 背景颜色
+            style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提现管理', null, 'white', 'black', 16, null, false, false, '清空', 'black');
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提现管理', null, bottomTheme, 'white', 16, () => {
+            NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
+        }, false, true, '明细', 'white');
+        let {tota_withdrawal, task_currency, income_dividend, share_dividend, game_dividend, login} = this.props.userinfo;
+        if (!login) {
+            tota_withdrawal = 0;
+            task_currency = 0;
+            income_dividend = 0;
+            share_dividend = 0;
+            game_dividend = 0;
+        }
         return (
             <SafeAreaViewPlus
-                topColor={theme}
+                topColor={bottomTheme}
             >
                 {navigationBar}
                 {TopColumn}
 
                 <View style={{flex: 1, backgroundColor: '#f0f0f0'}}>
-                    <TouchableOpacity
-                        activeOpacity={0.6}
+                    <ImageBackground
                         style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        padding: 10,
-                        paddingLeft: 15,
-                        backgroundColor: 'white',
-                        marginTop:3,
-                        alignItems:'center',
-                    }}>
-
-                        <View style={{flexDirection:'row', alignItems:'center'}}>
-                            <Image
-                                style={{width:50,height:50, borderRadius:25}}
-                                source={require('../res/img/payType/alipay.png')}
-                            />
-                            <View style={{marginLeft:10}}>
-                                <Text style={{color:'rgba(0,0,0,1)'}}>支付宝:15061142750</Text>
-                                <Text style={{
-                                    fontWeight: 'bold',
-                                    fontSize: 12,
-                                    opacity: 0.5,
-                                    color: 'black',
-                                    marginTop: 8,
-                                }}>点击可修改提现账户</Text>
-                            </View>
-
-                        </View>
-                        <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
-
-                    </TouchableOpacity>
-
-                    <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                        <Text style={{fontSize: 15,color:'rgba(0,0,0,0.8)'}}>请输入提现金额:</Text>
-                        <View style={{marginVertical: 15, marginLeft: 5, flexDirection: 'row'}}>
-                            <Text style={{fontSize: 25, color:'black',fontWeight: 'bold', position: 'absolute', left: 0}}>¥</Text>
-                            <TextInput
+                            width, height: hp(25), backgroundColor: bottomTheme,
+                            alignItems: 'center', justifyContent: 'center', flexDirection: 'row',
+                        }}
+                        source={require('../res/img/WithDrawBgImg.png')}
+                    >
+                        {/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
+                        <View style={{alignItems: 'center', width: width / 2, justifyContent: 'center'}}>
+                            <Text
                                 style={{
-                                    fontWeight: 'bold', fontSize: 25, width: width - 40, borderBottomWidth: 1,
-                                    borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 5,
-                                }}
-                            />
+                                    fontSize: 25,
+                                    fontWeight: 'bold',
+                                    color: 'white',
+                                }}>{tota_withdrawal}</Text>
+                            <Text style={{color: 'white', marginTop: 5}}>累计提现(元)</Text>
                         </View>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
-                            <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.5)'}}>可提现金额1.00元</Text>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold'}}>全部提现</Text>
+
+                        <View style={{
+                            height: hp(7),
+                            width: 0.5,
+                            marginHorizontal: 0, backgroundColor: 'white',
+                        }}/>
+                        <View style={{alignItems: 'center', width: width / 2, justifyContent: 'center'}}>
+                            <Text style={{
+                                fontSize: 25,
+                                fontWeight: 'bold',
+                                color: 'white',
+                            }}>{task_currency}</Text>
+                            <Text style={{color: 'white', marginTop: 5}}>余额(元)</Text>
                         </View>
+
+
+                        {/*</View>*/}
+                    </ImageBackground>
+
+                    <View style={{
+                        width: wp(90),
+                        height: hp(13),
+                        top: -hp(5),
+                        backgroundColor: 'white',
+                        alignSelf: 'center',
+                        borderRadius: 10,
+                        shadowColor: '#f1f1f1',
+                        shadowRadius: 3,
+                        shadowOpacity: 0.7,
+                        shadowOffset: {w: 1, h: 1},
+                        elevation: 3,//安卓的阴影
+                        flexDirection: 'row',
+
+                    }}>
+                        <View style={{
+                            width: 0,
+                            height: 0,
+                            borderStyle: 'solid',
+                            borderWidth: 10,
+                            borderTopColor: '#3a7bc5',//下箭头颜色
+                            borderLeftColor: '#3a7bc5',//右箭头颜色
+                            borderBottomColor: '#fff',//上箭头颜色
+                            borderRightColor: '#3a7bc5',//左箭头颜色
+                            position: 'absolute',
+                            left: (wp(90) / 2) - 10,
+                            top: -20,
+                        }}/>
+
+                        {this.renderInfoItem('悬赏收入', income_dividend, bottomTheme)}
+                        {this.renderInfoItem('分享收入', share_dividend, '#514ff3')}
+                        {this.renderInfoItem('游戏试玩', game_dividend, '#c822f3')}
+
                     </View>
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={{
-                            marginTop: 50,
-                            width: width - 80, height: 60, alignItems: 'center', backgroundColor: bottomTheme,
-                            justifyContent: 'center', alignSelf: 'center', borderRadius: 8,
-                        }}>
-                        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>确认提现</Text>
-                    </TouchableOpacity>
-                    {/*<View style={{marginTop: 30, alignSelf: 'center'}}>*/}
-                    {/*    <Text style={{color: bottomTheme, opacity: 0.5, fontSize: 12}}>每天可提现一次,最小提现金额3元</Text>*/}
-                    {/*    <Text style={{*/}
-                    {/*        color: bottomTheme,*/}
-                    {/*        opacity: 0.5,*/}
-                    {/*        fontSize: 12,*/}
-                    {/*        marginTop: 10,*/}
-                    {/*        alignSelf: 'center',*/}
-                    {/*    }}>超过10元提现手续费2%</Text>*/}
-                    {/*</View>*/}
-                    <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold', fontSize:15}}>提现须知
-                        </Text>
-                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:10}}>1、目前支持支付宝和微信支付提现、后续其他提现方式及时公告通知大家
-                        </Text>
-                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>2、提现金额需大于1 小于1000元之间的证书，提现时间为工作日9:00 -- 17:00
-                        </Text>
-                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>3、每天只能提现一次,请知晓
-                        </Text>
+                    <View style={{width, height: wp(15), flexDirection: 'row', justifyContent: 'space-around'}}>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={() => {
+                                NavigationUtils.goPage({type: 1}, 'WithDrawPayPage');
+                            }}
+                            style={{
+                                width: wp(40),
+                                height: wp(12),
+                                backgroundColor: bottomTheme,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 8,
+                            }}>
+                            <Text style={{fontSize: 19, color: 'white'}}>支付宝提现</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={() => {
+                                NavigationUtils.goPage({type: 2}, 'WithDrawPayPage');
+                            }}
+                            style={{
+                                width: wp(40),
+                                height: wp(12),
+                                backgroundColor: '#52b831',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 8,
+                            }}>
+                            <Text style={{fontSize: 19, color: 'white'}}>微信提现</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -158,6 +187,25 @@ class WithDrawPage extends PureComponent {
         );
     }
 
+    renderInfoItem = (title = '', num = '', color = bottomTheme) => {
+        return <View
+            style={{
+                height: hp(13), width: wp(90) / 3,
+                alignItems: 'center', justifyContent: 'center',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 10,
+                    borderWidth: 3,
+                    borderColor: color,
+                }}/>
+                <Text style={{color: 'rgba(0,0,0,0.3)', marginLeft: 5, fontSize: 13}}>{title}</Text>
+            </View>
+            <Text style={{color: 'red', fontSize: 20, fontWeight: 'bold', marginTop: 6}}>{num}</Text>
+        </View>;
+    };
     page = {
         pageIndex: 0,
     };

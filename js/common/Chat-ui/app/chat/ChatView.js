@@ -166,10 +166,10 @@ class ChatWindow extends PureComponent {
         showUserName: true,
         panelContainerStyle: {},
         sendMessage: (type, content, isInverted) => {
-            console.log(type, content, isInverted, 'send');
+            //console.log(type, content, isInverted, 'send');
         },
         reSendMessage: (message) => {
-            console.log(message, 'reSend');
+            //console.log(message, 'reSend');
         },
         leftMessageBackground: '#fff',
         rightMessageBackground: '#a0e75a',
@@ -194,13 +194,13 @@ class ChatWindow extends PureComponent {
                 icon: <Image source={require('../source/image/photo.png')} style={{width: 30, height: 30}}/>,
                 title: '照片',
                 onPress: () => {
-                    console.log('takePhoto');
+                    //console.log('takePhoto');
                 },
             }, {
                 icon: <Image source={require('../source/image/camera.png')} style={{width: 30, height: 30}}/>,
                 title: '拍照',
                 onPress: () => {
-                    console.log('takePhoto');
+                    //console.log('takePhoto');
                 },
             },
         ],
@@ -253,13 +253,13 @@ class ChatWindow extends PureComponent {
         },
         allPanelHeight: 200,
         loadHistory: () => {
-            console.log('loadMore');
+            //console.log('loadMore');
         },
         onMessagePress: (type, index, content, message) => {
-            console.log(type, index, content, message);
+            //console.log(type, index, content, message);
         },
         onMessageLongPress: (type, index, content, message) => {
-            console.log('longPress', type, index, content, message);
+            //console.log('longPress', type, index, content, message);
         },
         renderMessageTime: (time) =>
             <View style={{
@@ -305,7 +305,7 @@ class ChatWindow extends PureComponent {
         },
         androidHeaderHeight: 66,
         pressAvatar: (isSelf, targetId) => {
-            console.log(isSelf, targetId);
+            //console.log(isSelf, targetId);
         },
         emojiIcon: <Image source={require('../source/image/emoji.png')} style={{width: 25, height: 25}}/>,
         messageSelectIcon: <Image source={require('../source/image/check.png')} style={{width: 14, height: 14}}/>,
@@ -331,7 +331,7 @@ class ChatWindow extends PureComponent {
         // ],
         voiceVolume: 10,
         delMessage: (content, isInverted) => {
-            console.log(content, isInverted);
+            //console.log(content, isInverted);
         },
         audioPath: '',
         audioOnProgress: () => {

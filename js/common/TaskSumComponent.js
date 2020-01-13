@@ -39,6 +39,7 @@ class TaskSumComponent extends Component {
             taskSignUpNum: 5,
             taskPassNum: 2,
         },
+        statusBarType: 'dark',
     };
 
     constructor(props) {
@@ -210,7 +211,7 @@ class TaskSumComponent extends Component {
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => {
-                        Global.imageViewModal.show([{url: item.taskUri}]);
+                        Global.imageViewModal.show([{url: item.taskUri}], '', this.props.statusBarType);
                     }}
                     style={{
                         position: 'absolute',

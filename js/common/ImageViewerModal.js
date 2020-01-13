@@ -1,10 +1,11 @@
 import React from 'react';
-import {ActivityIndicator, Modal, PermissionsAndroid} from 'react-native';
+import {ActivityIndicator, Modal, PermissionsAndroid, StatusBar} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import FastImage from 'react-native-fast-image';
 import Global from './Global';
 import {saveImg} from '../util/ImageUtil';
 import Toast from './Toast';
+import {bottomTheme, theme} from '../appSet';
 
 export default class ImageViewerModal extends React.Component {
     state = {
@@ -12,10 +13,47 @@ export default class ImageViewerModal extends React.Component {
         index: 0,
         images: [{}],
     };
-    show = (images, activeUrl = '') => {
+    static defaultProps = {
+        statusBarType: 'light',
+    };
+
+    constructor(props) {
+        super(props);
+        this.type = props.statusBarType;
+    }
+
+    setStatusBar = (type) => {
+        if (type === 'dark') {
+            StatusBar.setBarStyle('dark-content', false);
+            StatusBar.setBackgroundColor(theme, false);
+        }
+        if (type === 'light') {
+            StatusBar.setBarStyle('light-content', false);
+            StatusBar.setBackgroundColor(bottomTheme, false);
+        }
+
+        if (type === 'translucent') {
+            StatusBar.setTranslucent(true);
+            StatusBar.setBackgroundColor('rgba(0,0,0,0)', true);
+        }
+
+        if (type === 'no-translucent') {
+            StatusBar.setTranslucent(false);
+            StatusBar.setBackgroundColor(bottomTheme, true);
+        }
+        if (type === 'self') {
+            StatusBar.setBarStyle('light-content', false);
+            StatusBar.setBackgroundColor('black', false);
+        }
+    };
+    show = (images, activeUrl = '', statusBarStyle = '') => {
+
+        this.setStatusBar('self');
+        if (statusBarStyle.length > 0) {
+            this.type = statusBarStyle;
+        }
         let activeIndex = 0;
         const tmpImages = [...images];
-        console.log(images, activeUrl);
         for (let i = 0; i < tmpImages.length; i++) {
             const index = i;
             const images = tmpImages[index];
@@ -27,9 +65,7 @@ export default class ImageViewerModal extends React.Component {
 
             if (i === tmpImages.length - 1) {
                 if (activeUrl != '') {
-                    console.log(tmpImages, activeUrl);
                     activeIndex = tmpImages.findIndex(item => item.url == activeUrl);
-                    console.log(activeIndex, 'activeIndex');
                 }
                 this.setState({
                     index: activeIndex,
@@ -42,21 +78,14 @@ export default class ImageViewerModal extends React.Component {
 
     };
     hide = () => {
+        this.setStatusBar(this.type);
         this.setState({visible: false});
     };
-    onCancel = () => {
-        this.setState({
-            visible: false,
-        });
-    };
+
     renderImage = (props) => {
         return <FastImage {...props}/>;
     };
-    onClick = () => {
-        this.setState({
-            visible: false,
-        });
-    };
+
     onLoadSuccess = (url, width, height) => {
         const index = Global.imageSizeArr.findIndex(item => item.url == url);
         if (index === -1) {
@@ -76,6 +105,7 @@ export default class ImageViewerModal extends React.Component {
         const bool = await this.checkPermission();
         if (bool) {
             saveImg(url, (msg) => {
+                // Global.toast.show(msg);
                 this.toast.show(msg);
             });
         }
@@ -130,24 +160,12 @@ export default class ImageViewerModal extends React.Component {
                 ref={ref => this.toast = ref}
             />
             <ImageViewer
-                // renderHeader={() => <TouchableOpacity style={{
-                //     position: 'absolute',
-                //     // left: 0,
-                //     right: 20,
-                //     top: 33,
-                //     zIndex: 13,
-                //     justifyContent: 'center',
-                //     alignItems: 'center',
-                //     backgroundColor: 'transparent'
-                // }}>
-                //     <SvgUri width={25} height={25} fill={'white'} svgXmlData={message_more}/>
-                // </TouchableOpacity>}
                 loadingRender={this.loadingRender}
-                onCancel={this.onCancel}
+                onCancel={this.hide}
                 renderImage={this.renderImage}
                 onDoubleClick={this.onDoubleClick}
                 onSave={this.onSave}
-                onClick={this.onClick}
+                onClick={this.hide}
                 onLoadSuccess={this.onLoadSuccess}
                 imageUrls={images}
                 index={index}

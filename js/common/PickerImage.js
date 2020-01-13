@@ -33,6 +33,7 @@ export const ImgOption = Platform.OS === 'android' ? {
     cropperChooseText: '确认',
     cropperCancelText: '取消',
     cropperToolbarTitle: '剪裁图片',
+
 } : {
     width: 1800,
     height: 1200,

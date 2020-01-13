@@ -78,7 +78,7 @@ class RechargePage extends PureComponent {
                     ref={ref => this.toast = ref}
                 />
                 <ScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
-                    <View
+                    {this.props.userinfo.login&&<View
                         // activeOpacity={0.6}
                         style={{
                             flexDirection: 'row',
@@ -99,7 +99,7 @@ class RechargePage extends PureComponent {
                                     color: 'black',
                                     opacity: 0.5,
                                     marginLeft: 10,
-                                }}>{this.props.userinfo.userid}</Text>
+                                }}>ID:{this.props.userinfo.userid}</Text>
                             </View>
                             <View style={{flexDirection:'row', alignItems:'center'}}>
                                 <Text style={{
@@ -116,7 +116,8 @@ class RechargePage extends PureComponent {
                             </View>
                         </View>
 
-                    </View>
+                    </View>}
+
                     <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
                         <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.8)'}}>请输入充值金额:</Text>
                         <View style={{marginVertical: 20, marginLeft: 5, flexDirection: 'row'}}>
@@ -126,6 +127,7 @@ class RechargePage extends PureComponent {
                                 color: 'black',
                                 position: 'absolute',
                                 left: 0,
+                                top:5
                             }}>¥</Text>
                             <TextInput
                                 keyboardType={'number-pad'}
@@ -133,7 +135,7 @@ class RechargePage extends PureComponent {
                                     this.rechargeVal = text;
                                 }}
                                 style={{
-                                    fontWeight: 'bold', fontSize: 25, width: width - 40, borderBottomWidth: 1,
+                                    fontWeight: 'bold', fontSize: 30, width: width - 40, borderBottomWidth: 1,
                                     borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 10,
                                 }}
                             />
@@ -186,10 +188,15 @@ class RechargePage extends PureComponent {
     sureRecharGe = () => {
         const item = this.items[this.state.activeIndex];
         const rechargeVal = this.rechargeVal;
+        if(!this.props.userinfo.login){
+            this.toast.show('请登录');
+            return
+        }
         if (!rechargeVal || parseFloat(rechargeVal) <= 0) {
             this.toast.show('请输入正确的金额哦 ～ ～');
+            return
         }
-        console.log(item, rechargeVal);
+        //console.log(item, rechargeVal);
 
     };
     _radioClick = (item) => {

@@ -381,6 +381,7 @@ class FristListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+                statusBarType={'dark'}
                 pageSize={30}
                 ref={ref => this.flatList = ref}
                 style={{zIndex: -100, elevation: -100}}
@@ -454,7 +455,7 @@ class LunBoComponent extends React.Component {
             key={item.id}
             activeOpacity={0.8}
             onPress={() => {
-                console.log(item);
+                //console.log(item);
                 if (item.type == 1) {
                     NavigationUtils.goPage(JSON.parse(item.params), item.page_name);
 

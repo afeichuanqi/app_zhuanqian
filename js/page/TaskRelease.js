@@ -491,8 +491,8 @@ class TaskRelease extends PureComponent {
                         onPress={this._goReleaseTest}
                         activeOpacity={0.6}
                         style={{
-                            height: 60,
-                            width: width / 3,
+                            height: hp(8),
+                            width: wp(40),
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexDirection: 'row',
@@ -508,8 +508,8 @@ class TaskRelease extends PureComponent {
                             this.toastS.show();
                         }}
                         style={{
-                            height: 60,
-                            width: (width / 3) * 2,
+                            height: hp(8),
+                            width: wp(60),
                             justifyContent: 'center',
                             alignItems: 'center',
                             flexDirection: 'row',
@@ -672,13 +672,13 @@ class BottomInfoForm extends Component {
         // const {showHistory, stepData} = this.state;
 
         //悬赏单价
-        const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center',width:wp(60)}}>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>最低</Text>
             <Text style={{color: 'black', marginHorizontal: 5, fontSize:wp(3.8)}}>0.5</Text>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>元</Text>
         </View>;
         //悬赏数量
-        const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center',width:wp(60)}}>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>最少</Text>
             <Text style={{color: 'black', marginHorizontal: 5, fontSize:wp(3.8)}}>10</Text>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:wp(3.8)}}>单</Text>

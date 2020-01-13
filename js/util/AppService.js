@@ -295,16 +295,16 @@ export function uploadAvatar(data, token) {
     return new Promise(async function (resolve, reject) {
         try {
             http.setPostHeader('token', token);
-            let body = new FormData();
-            const key = `${new Date().getTime()}.${data.mime}`;
-            body.append('key', key);
-            body.append('file', {
-                type: `image/${data.mime}`,
-                uri: data.uri,
-                name: key,
-            });
+            // let body = new FormData();
+            // const key = `${new Date().getTime()}.${data.mime}`;
+            // body.append('key', key);
+            // body.append('file', {
+            //     type: `image/${data.mime}`,
+            //     uri: data.uri,
+            //     name: key,
+            // });
 
-            const ret = await http.post_('user/uploadAvatar', body, true);
+            const ret = await http.post('user/uploadAvatar', data, true);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -315,7 +315,22 @@ export function uploadAvatar(data, token) {
         }
     });
 }
+export function uploadUserinfoBgImg(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
 
+            const ret = await http.post('user/uploadUserinfoBgImg', data, true);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 // export function uploadMsgImage(data, token) {
 //     return new Promise(async function (resolve, reject) {
 //         try {
@@ -479,6 +494,24 @@ export function selectBillForUserId(data, token) {
     });
 }
 /**
+ * 查询用户提现信息
+ */
+export function getUserWithDrawInfo(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/getUserWithDrawInfo', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
  * 查询用户帐单
  */
 export function selectFavoriteForUserId(data, token) {
@@ -486,6 +519,42 @@ export function selectFavoriteForUserId(data, token) {
         try {
             http.setPostHeader('token', token);
             const ret = await http.post('user/selectFavoriteForUserId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 提现用户帐单
+ */
+export function userWithDrawMoney(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/userWithDrawMoney', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 查询用户帐单
+ */
+export function setUserWithDrawInfo(data, token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/setUserWithDrawInfo', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {

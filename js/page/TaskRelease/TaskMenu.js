@@ -78,7 +78,6 @@ class TaskMenu extends PureComponent {
     };
     animations = {
         top: new Animated.Value(height + 250),
-        // left: new Animated.Value(0),
     };
 
     render() {

@@ -151,7 +151,7 @@ class TaskOrdersMana extends Component {
                     renderTabBar={() => null}
                     onIndexChange={index => {
                         const noticeType = index + 4;
-                        console.log(noticeType, 'onIndexChange');
+                        //console.log(noticeType, 'onIndexChange');
                         const {onSetNoticeMsgIsRead, userinfo} = this.props;
                         onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
                         this.setState({
@@ -389,7 +389,7 @@ class FristListComponent extends PureComponent {
                 windowSize={300}
                 onEndReachedThreshold={0.01}
                 onMomentumScrollBegin={() => {
-                    console.log('onMomentumScrollBegin');
+                    //console.log('onMomentumScrollBegin');
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />

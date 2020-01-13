@@ -77,7 +77,7 @@ export default class FlatListCommonUtil extends PureComponent {
         }).catch(() => {
             this.setState({
                 isLoading: false,
-                hideLoaded: false,
+                hideLoaded: true,
             });
         });
 
@@ -88,7 +88,7 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-                ListEmptyComponent={<EmptyComponent type={4} message={'暂时没有符合任务'} height={height - 200}/>}
+                ListEmptyComponent={<EmptyComponent type={4} message={'暂时没有符合任务'} height={height - 180}/>}
                 ListHeaderComponent={ListHeaderComponent}
                 ref={ref => this.flatList = ref}
                 data={taskData}
@@ -156,7 +156,7 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent imageViewModal={this.imageViewModal} item={item} key={index}/>;
+        return <TaskSumComponent statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal} item={item} key={index}/>;
     };
 
 }

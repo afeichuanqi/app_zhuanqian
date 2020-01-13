@@ -32,6 +32,7 @@ import {equalsObj} from '../../util/CommonUtils';
 import FastImagePro from '../../common/FastImagePro';
 import {saveImg} from '../../util/ImageUtil';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const {width, height} = Dimensions.get('window');
 
 class StepBox extends PureComponent {
@@ -42,24 +43,29 @@ class StepBox extends PureComponent {
                 backgroundColor: 'white',
                 marginHorizontal: this.props.showUtilColumn ? 5 : 10,
                 paddingHorizontal: 5,
-                paddingVertical: 15,
+                paddingVertical: hp(3),
                 borderWidth: 1,
                 borderColor: bottomTheme,
                 borderRadius: 5,
             }}>
-                <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                <View style={{flexDirection: 'row', paddingHorizontal: wp(2)}}>
                     {this.getNumNo(this.props.no)}
                     <Text
-                        style={{fontSize: wp(4), marginLeft: 5, letterSpacing: 3, color: 'black'}}>第{this.props.no}步</Text>
+                        style={{
+                            fontSize: wp(4),
+                            marginLeft: 5,
+                            letterSpacing: 3,
+                            color: 'black',
+                        }}>第{this.props.no}步</Text>
                 </View>
                 {this.props.children}
                 {/*<View style={{height:40}}/>*/}
                 {this.props.showUtilColumn &&
                 <View style={{paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-                    {this.getColumnBtn(task_delete, '删除', 20, this._deleteColumn)}
-                    {this.getColumnBtn(task_shangyi, '上移', 21, this._moveUpColumn)}
-                    {this.getColumnBtn(task_xiayi, '下移', 19, this._moveDownColumn)}
-                    {this.getColumnBtn(task_edit, '编辑', 17, this._editColumn)}
+                    {this.getColumnBtn(task_delete, '删除', wp(5.5), this._deleteColumn)}
+                    {this.getColumnBtn(task_shangyi, '上移', wp(5.5), this._moveUpColumn)}
+                    {this.getColumnBtn(task_xiayi, '下移', wp(5.5), this._moveDownColumn)}
+                    {this.getColumnBtn(task_edit, '编辑', wp(5.5), this._editColumn)}
                 </View>}
 
 
@@ -90,7 +96,7 @@ class StepBox extends PureComponent {
             activeOpacity={0.6}
             style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10}}>
             <SvgUri width={size} height={size} fill={'rgba(0,0,0,0.5)'} svgXmlData={svgXmlData}/>
-            <Text style={{marginLeft: 5, color: 'black', fontSize:wp(3.8)}}>{title}</Text>
+            <Text style={{marginLeft: 5, color: 'black', fontSize: wp(3.8)}}>{title}</Text>
         </TouchableOpacity>;
     };
     getNumNo = (num) => {
@@ -328,11 +334,15 @@ class TaskStepColumn extends Component {
                             <FastImagePro
                                 loadingType={2}
                                 source={{uri: typeData.uri}}
-                                style={{width: 120, height: 120, backgroundColor: '#F0F0F0', borderRadius: 3}}
+                                style={{
+                                    width: wp(33),
+                                    height: wp(33), backgroundColor: '#F0F0F0', borderRadius: 3,
+                                }}
                                 resizeMode={'contain'}/>
                             {uploadStatus == 0 ?//正在上传
                                 <View style={{
-                                    position: 'absolute', top: 0, left: 0, width: 120, height: 120,
+                                    position: 'absolute', top: 0, left: 0, width: wp(33),
+                                    height: wp(33),
                                     backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
                                 }}>
                                     <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
@@ -342,8 +352,8 @@ class TaskStepColumn extends Component {
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
-                                        width: 120,
-                                        height: 120,
+                                        width: wp(33),
+                                        height: wp(33),
                                         backgroundColor: 'rgba(0,0,0,0.4)',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -407,7 +417,6 @@ class TaskStepColumn extends Component {
 
                         <View style={{
                             width: ((width - 62) / 4) * 3,
-                            // height: 80,
                             justifyContent: 'center',
                             alignItems: 'center',
 
@@ -476,9 +485,8 @@ class TaskStepColumn extends Component {
                                 loadingType={2}
                                 source={{uri: typeData.uri}}
                                 style={{
-                                    width: width / 2,
-                                    // marginBottom: 10,
-                                    height: width / 1.5,
+                                    width: wp(45),
+                                    height: wp(55),
                                     backgroundColor: '#F0F0F0',
                                     borderRadius: 3,
                                 }}
@@ -488,7 +496,8 @@ class TaskStepColumn extends Component {
                             {/*    />*/}
                             {uploadStatus == 0 ?//正在上传
                                 <View style={{
-                                    position: 'absolute', top: 0, left: 0, width: width / 2, height: width / 1.5,
+                                    position: 'absolute', top: 0, left: 0, width: wp(45),
+                                    height: wp(55),
                                     backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
                                 }}>
                                     <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
@@ -498,8 +507,8 @@ class TaskStepColumn extends Component {
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
-                                        width: width / 2,
-                                        height: width / 1.5,
+                                        width: wp(45),
+                                        height: wp(55),
                                         backgroundColor: 'rgba(0,0,0,0.4)',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -557,9 +566,8 @@ class TaskStepColumn extends Component {
                                 loadingType={2}
                                 source={{uri: typeData.uri}}
                                 style={{
-                                    width: (width - 80) / 2,
-                                    // marginBottom: 10,
-                                    height: (width - 80) / 1.5,
+                                    width: wp(45),
+                                    height: wp(55),
                                     backgroundColor: '#F0F0F0',
                                     borderRadius: 3,
                                 }}
@@ -570,8 +578,8 @@ class TaskStepColumn extends Component {
                                     position: 'absolute',
                                     top: 0,
                                     left: 0,
-                                    width: (width - 80) / 2,
-                                    height: (width - 80) / 1.5,
+                                    width: wp(45),
+                                    height: wp(55),
                                     backgroundColor: 'rgba(0,0,0,0.4)',
                                     justifyContent: 'center',
                                     alignItems: 'center',
@@ -773,23 +781,23 @@ class TaskStepColumn extends Component {
                             :
                             <TouchableOpacity
                                 activeOpacity={1}
-                                onPress={()=>{
+                                onPress={() => {
                                     this.props.toast.show('请先报名');
                                 }}
                                 style={{
-                                padding: 0,
-                                width: width - 42,
-                                height: 40,
-                                border: 0,
-                                borderRadius: 3,
-                                borderWidth: 1,
-                                borderColor: bottomTheme,
-                                paddingHorizontal: 5,
-                                marginTop: 10,
-                                justifyContent:'center',
-                                // alignItems:'center',
-                            }}>
-                                <Text style={{color:'rgba(0,0,0,0.5)'}}>请按照要求输入文字内容</Text>
+                                    padding: 0,
+                                    width: width - 42,
+                                    height: 40,
+                                    border: 0,
+                                    borderRadius: 3,
+                                    borderWidth: 1,
+                                    borderColor: bottomTheme,
+                                    paddingHorizontal: 5,
+                                    marginTop: 10,
+                                    justifyContent: 'center',
+                                    // alignItems:'center',
+                                }}>
+                                <Text style={{color: 'rgba(0,0,0,0.5)'}}>请按照要求输入文字内容</Text>
 
 
                             </TouchableOpacity>

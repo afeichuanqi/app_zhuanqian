@@ -6,12 +6,14 @@ import com.zoontek.rnbootsplash.RNBootSplash; // <- add necessary import
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+import cn.jiguang.share.android.api.JShareInterface;     // <--  Import JShareInterface
 
 public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        JShareInterface.setDebugMode(true);
+        JShareInterface.init(this);             //   <-- Init here
         RNBootSplash.show(R.drawable.bootsplash, MainActivity.this); // <- display the "bootsplash" xml view over our MainActivity
     }
     /**

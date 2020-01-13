@@ -1,4 +1,4 @@
-import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken} from './userinfo';
+import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken,onSetShopInfoBgImg,onAddPayAccount} from './userinfo';
 import {verifyIdentIdy,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus,onMessageInitialiZation} from './message';
 import {onSetNoticeMsgIsAllRead,onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onFriendInitialiZation,onSetOtherTypeUnread,setAppeal_2IsRead,setAppeal_3IsRead,onSetNoticeMsg,onSetNoticeMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
@@ -12,6 +12,8 @@ export default {
     onSetUserName,
     onClearUserinfoAll,
     onGetUserInFoForToken,
+    onSetShopInfoBgImg,
+    onAddPayAccount,
     //消息列表
     verifyIdentIdy,
 

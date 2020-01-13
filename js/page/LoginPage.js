@@ -17,7 +17,7 @@ import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../res/svg/phone_input_clear.svg';
 import gantanhao from '../res/svg/gantanhao.svg';
 import {isPoneAvailable} from '../util/CommonUtils';
-import *as wechat from 'react-native-wechat';
+// import *as wechat from 'react-native-wechat';
 import {sendSms} from '../util/AppService';
 import BackPressComponent from '../common/BackPressComponent';
 

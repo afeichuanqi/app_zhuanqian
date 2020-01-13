@@ -7,14 +7,13 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, Text, TouchableOpacity,Image} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
-import sex_nan from '../res/svg/sex_nan.svg';
-import sex_nv from '../res/svg/sex_nv.svg';
+
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import sex_nan_ from '../res/svg/sex_nan_.svg';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
 
@@ -71,6 +70,7 @@ class PopMenu extends PureComponent {
     };
     animations = {
         bottom: new Animated.Value(-(200 + (width / 3))),
+        // bottom: new Animated.Value(0),
     };
 
     render() {
@@ -86,7 +86,7 @@ class PopMenu extends PureComponent {
                 onRequestClose={this.hide}
 
             >
-                <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}
+                <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'}}
                                   activeOpacity={1}
                                   onPress={() => {
                                       this.hide(null);
@@ -94,21 +94,22 @@ class PopMenu extends PureComponent {
                 >
                     <Animated.View style={{
                         width, position: 'absolute', bottom: this.animations.bottom, backgroundColor: 'white',
-                        borderTopLeftRadius: 10, borderTopRightRadius: 10,
+                        borderTopLeftRadius: 5, borderTopRightRadius: 5,
                     }}>
                         <View style={{
-                            width, alignItems: 'center', height: 50, justifyContent: 'center',
+                            width, alignItems: 'center', height: hp(7), justifyContent: 'center',
                             borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
                         }}>
-                            <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>{this.props.popTitle}</Text>
+                            <Text style={{color: 'black', opacity: 0.9, fontSize: 15}}>{this.props.popTitle}</Text>
                         </View>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <TouchableOpacity
                                 onPress={() => {
                                     this.props.select(0);
                                 }}
-                                style={{width: width / 2, height: 200, justifyContent: 'center', alignItems: 'center'}}>
-                                <SvgUri width={70} height={70} svgXmlData={sex_nan}/>
+                                style={{width: width / 2, height: hp(35), justifyContent: 'center', alignItems: 'center'}}>
+                                {/*<SvgUri width={wp(20)} height={wp(20)} svgXmlData={sex_nan1}/>*/}
+                                <Image source={require('../res/img/sex_nan.png')} style={{width:wp(20),height:wp(20)}}/>
                                 <SvgUri style={{marginTop: 10}} width={15} height={15} svgXmlData={sex_nan_}/>
 
                             </TouchableOpacity>
@@ -117,7 +118,7 @@ class PopMenu extends PureComponent {
                                     this.props.select(1);
                                 }}
                                 style={{width: width / 2, height: 200, justifyContent: 'center', alignItems: 'center'}}>
-                                <SvgUri width={70} height={70} svgXmlData={sex_nv}/>
+                                <Image source={require('../res/img/sex_nv.png')} style={{width:wp(20),height:wp(20)}}/>
                                 <SvgUri style={{marginTop: 10}} width={15} height={15} svgXmlData={sex_nv_}/>
 
                             </TouchableOpacity>

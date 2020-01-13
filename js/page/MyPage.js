@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent, Component} from 'react';
-import {ActivityIndicator, ImageBackground} from 'react-native';
+import {ActivityIndicator, ImageBackground, RefreshControl} from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView} from 'react-native';
@@ -37,6 +37,7 @@ import FastImagePro from '../common/FastImagePro';
 import {equalsObj} from '../util/CommonUtils';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {uploadQiniuImage} from '../util/AppService';
 
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
@@ -51,7 +52,7 @@ class MyPage extends PureComponent {
         super(props);
     }
 
-    state = {};
+    state = {isLoading: false};
 
     componentDidMount() {
 
@@ -88,6 +89,7 @@ class MyPage extends PureComponent {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const {userinfo, onUploadAvatar, onGetUserInFoForToken} = this.props;
+        const {isLoading} = this.state;
         return (
             <View
                 style={{flex: 1}}
@@ -136,16 +138,23 @@ class MyPage extends PureComponent {
                                 },
                             },
                         ])}
-                        // refreshControl={
-                        //     <RefreshControl
-                        //         refreshing={false}
-                        //         enabled={false}
-                        //         onRefresh={() => {
-                        //             onGetUserInFoForToken(userinfo.token, () => {
-                        //             });
-                        //         }}
-                        //     />
-                        // }
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={isLoading}
+                                onRefresh={() => {
+                                    this.setState({
+                                        isLoading: true,
+
+                                    });
+                                    onGetUserInFoForToken(userinfo.token, (loginStatus, msg) => {
+                                        this.setState({
+                                            isLoading: false,
+
+                                        });
+                                    });
+                                }}
+                            />
+                        }
                         scrollEventThrottle={1}
                     >
                         <TopInfoColumn onUploadAvatar={onUploadAvatar} userinfo={userinfo} scrollY={this.scrollY}/>
@@ -188,7 +197,7 @@ const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
 const mapDispatchToProps = dispatch => ({
-    onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
+    onUploadAvatar: (token, mime, path, callback) => dispatch(actions.onUploadAvatar(token, mime, path, callback)),
     onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
 });
 const MyPageRedux = connect(mapStateToProps, mapDispatchToProps)(MyPage);
@@ -317,11 +326,7 @@ const mapStateToProps_ = state => ({
     userinfo: state.userinfo,
     friend: state.friend,
 });
-const mapDispatchToProps_ = dispatch => ({
-    // onSetNoticeMsgIsRead: (type) => dispatch(actions.onSetNoticeMsgIsRead(type)),
-    // onUploadAvatar: (token, data, callback) => dispatch(actions.onUploadAvatar(token, data, callback)),
-    // onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
-});
+const mapDispatchToProps_ = dispatch => ({});
 
 
 class ToolsItemComponent extends PureComponent {
@@ -421,9 +426,15 @@ class TopInfoColumn extends PureComponent {
                 style={{height: 130, opacity, position: 'absolute', top: 0}}>
                 {/*头像*/}
                 <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row'}}>
+                    {/*{ ? }*/}
                     <TouchableOpacity
                         onPress={() => {
-                            NavigationUtils.goPage({userid: userinfo.userid}, 'ShopInfoPage');
+                            if(userinfo.login){
+                                NavigationUtils.goPage({userid: userinfo.userid}, 'ShopInfoPage');
+                            }else{
+                                NavigationUtils.goPage({}, 'LoginPage');
+                            }
+
 
                         }}
                         style={{marginTop: 40, flexDirection: 'row', alignItems: 'center'}}>
@@ -484,14 +495,33 @@ class TopInfoColumn extends PureComponent {
         </ImageBackground>;
     }
 
-    _avatarSelect = (imageData) => {
-        const {userinfo} = this.props;
-        let mime = imageData.mime;
+    _avatarSelect = (image) => {
+        // const {userinfo} = this.props;
+        // let mime = imageData.mime;
+        // const mimeIndex = mime.indexOf('/');
+        // mime = mime.substring(mimeIndex + 1, mime.length);
+        // const uri = `file://${imageData.path}`;
+        // this.props.onUploadAvatar(userinfo.token, {mime, uri}, (isTrue, data) => {
+        //
+        //
+        // });
+        const {userinfo, onUploadAvatar} = this.props;//我的用户信息
+
+        const token = userinfo.token;
+        let mime = image.mime;
         const mimeIndex = mime.indexOf('/');
         mime = mime.substring(mimeIndex + 1, mime.length);
-        const uri = `file://${imageData.path}`;
-        this.props.onUploadAvatar(userinfo.token, {mime, uri}, (isTrue, data) => {
+        const path = `file://${image.path}`;
+        onUploadAvatar(userinfo.token, mime, path, () => {
+
         });
+        // uploadQiniuImage(token, 'userAvatar', mime, path).then(url => {
+        //     onUploadAvatar(userinfo.token, {mime, uri}, (isTrue, data) => {
+        //
+        //
+        //     });
+        //
+        // });
     };
 }
 

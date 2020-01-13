@@ -13,7 +13,8 @@ import com.yiertong.BuildConfig;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
+import cn.jiguang.share.android.api.JShareInterface;     // <--  Import JShareInterface
+import cn.jiguang.share.reactnative.JSharePackage;       // <--  Import JSharePackage
 public class MainApplication extends Application implements ReactApplication {
 
     private final ReactNativeHost mReactNativeHost =
@@ -27,6 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
                 protected List<ReactPackage> getPackages() {
                     @SuppressWarnings("UnnecessaryLocalVariable")
                     List<ReactPackage> packages = new PackageList(this).getPackages();
+
+
                     // Packages that cannot be autolinked yet can be added manually here, for example:
                     // packages.add(new MyReactNativePackage());
                     return packages;
@@ -52,6 +55,9 @@ public class MainApplication extends Application implements ReactApplication {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this); // Remove this line if you don't want Flipper enabled
+        JShareInterface.setDebugMode(true);
+        JShareInterface.init(this);             //   <-- jshareInit here
+
     }
 
     /**

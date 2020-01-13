@@ -10,6 +10,7 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 loading: true,
                 msgArr: [],
+
             };
         case Types.LOGIN_SUCCESS :
             return {
@@ -29,7 +30,11 @@ export default function onAction(state = defaultContent, action) {
                 platform: data.platform,
                 phone: data.phone,
                 sex: data.sex,
-                invite_code:data.invite_code,
+                invite_code: data.invite_code,
+                shopinfo_url: data.shopinfo_url,
+                game_dividend: data.game_dividend,
+                offer_reward_dividend: data.offer_reward_dividend,
+                share_dividend: data.share_dividend,
                 login: true,
             };
         case Types.LOGIN_FAIL://登录失败
@@ -54,7 +59,11 @@ export default function onAction(state = defaultContent, action) {
                 platform: data.platform,
                 phone: data.phone,
                 sex: data.sex,
-                invite_code:data.invite_code,
+                invite_code: data.invite_code,
+                shopinfo_url: data.shopinfo_url,
+                game_dividend: data.game_dividend,
+                offer_reward_dividend: data.offer_reward_dividend,
+                share_dividend: data.share_dividend,
                 login: true,
             };
         case Types.GET_USER_INFO_FAIL:
@@ -65,14 +74,22 @@ export default function onAction(state = defaultContent, action) {
         case Types.UPLOAD_AVATAR_LOADING:
             return {
                 ...state,
-                avatar_url: data.avatar_url,
+                avatar_url: data.avatar_url.length > 0 ? data.avatar_url : state.avatar_url,
                 upload_avatar_loading: true,
             };
         case Types.UPLOAD_AVATAR_SUCCESS:
+            // console.log(data.avatar_url);
+            // console.log(state,"state.avatar_url");
             return {
                 ...state,
-                avatar_url: data.avatar_url,
+                avatar_url: data.avatar_url.length > 0 ? data.avatar_url : state.avatar_url,
                 upload_avatar_loading: false,
+            };
+
+        case Types.CHANGE_SHOPINFO_IMG:
+            return {
+                ...state,
+                shopinfo_url: data.shopinfo_url.length > 0 ? data.shopinfo_url : state.shopinfo_url,
             };
         case Types.UPLOAD_USER_SEX_SUCCESS:
             return {
@@ -86,6 +103,18 @@ export default function onAction(state = defaultContent, action) {
             };
         case Types.CLEAR_USERINFO_ALL:
             return defaultContent;
+        case Types.ADD_ALIPAY_ACCOUNT:
+            return {
+                ...state,
+                alipay_name: data.name,
+                alipay_account: data.account,
+            };
+        case Types.ADD_WECHAT_ACCOUNT:
+            return {
+                ...state,
+                wechat_name: data.name,
+                wechat_account: data.account,
+            };
         default:
             return state;
     }

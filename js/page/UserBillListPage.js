@@ -38,8 +38,9 @@ class UserBillListPage extends PureComponent {
         super(props);
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+
         this.state = {
-            navigationIndex: 0,
+            navigationIndex: this.params.navigationIndex || 0,
             navigationRoutes: [
                 {key: 'first', title: '全部'},
                 {key: 'second', title: '支出'},
@@ -86,14 +87,13 @@ class UserBillListPage extends PureComponent {
                 topColor={theme}
             >
                 {navigationBar}
-                {/*{TopColumn}*/}
                 <View style={{paddingBottom: 10, marginTop: 5}}>
                     <TabBar
                         style={{
                             height: 35,
                             width: 200,
                             alignSelf: 'center',
-                            marginLeft:40,
+                            marginLeft:30,
                         }}
                         position={this.position}
                         contentContainerStyle={{paddingTop: 13}}
@@ -101,12 +101,11 @@ class UserBillListPage extends PureComponent {
                         index={0}
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
-                        // indicatorStyle={styles.indicator}
                         bounces={true}
                         titleMarginHorizontal={30}
-                        activeStyle={{fontSize: 14, color: [0, 0, 0], fontWeight: 'bold'}}
-                        inactiveStyle={{fontSize: 14, color: [150, 150, 150], height: 10}}
-                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
+                        activeStyle={{fontSize: 16, color: [0, 0, 0], fontWeight: 'bold'}}
+                        inactiveStyle={{fontSize: 16, color: [150, 150, 150], height: 10}}
+                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3,top:3}}
                     />
                     <TouchableOpacity
                         onPress={() => {

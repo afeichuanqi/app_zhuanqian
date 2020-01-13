@@ -39,9 +39,11 @@ import MyShieldPage from '../page/MyShieldPage';
 import MyViewHistoryPage from '../page/MyViewHistoryPage';
 import SystemNotificationPage from '../page/SystemNotificationPage';
 import RechargePage from '../page/RechargePage';
-import WithDrawPage from '../page/WithDrawPage';
 import UserUpdateOrderPage from '../page/UserUpdateOrderPage';
 import UserFeedbackListPage from '../page/UserFeedbackListPage';
+import WithDrawPage from '../page/WithDrawPage';
+import WithDrawPayPage from '../page/WithDrawPayPage';
+import WithDrawAccount from '../page/WithDrawAccount';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 import UserFeedbackPage from '../page/UserFeedbackPage';
@@ -141,12 +143,12 @@ const MainNavigator = createStackNavigator({
                 header: null,
             },
         },
-        // Testing: {
-        //     screen: Testing,
-        //     navigationOptions: {
-        //         header: null,
-        //     },
-        // },
+        WithDrawPayPage: {
+            screen: WithDrawPayPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
         SettingPage: {
             screen: SettingPage,
             navigationOptions: {
@@ -299,6 +301,12 @@ const MainNavigator = createStackNavigator({
         },
         UserFeedbackListPage: {
             screen: UserFeedbackListPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        WithDrawAccount: {
+            screen: WithDrawAccount,
             navigationOptions: {
                 header: null,
             },

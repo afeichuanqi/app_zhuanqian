@@ -70,7 +70,7 @@ class MyViewHistoryPage extends PureComponent {
         }, userinfo.token).then(result => {
             if (isRefresh) {
                 const newData = formatData([], result, 'viewDate1');
-                console.log(newData);
+                //console.log(newData);
                 this.setState({
                     taskData: newData,
                     isLoading: false,
@@ -80,7 +80,7 @@ class MyViewHistoryPage extends PureComponent {
 
                 // const tmpArr = [...this.state.taskData];
                 const newData = formatData(this.state.taskData, result, 'viewDate1');
-                console.log(newData);
+                //console.log(newData);
                 this.setState({
                     taskData: newData,
                     hideLoaded: result.length < 10,

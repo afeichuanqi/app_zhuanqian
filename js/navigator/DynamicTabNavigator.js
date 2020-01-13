@@ -6,7 +6,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image,BackHandler} from 'react-native';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, BackHandler} from 'react-native';
 import Animated from 'react-native-reanimated';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
@@ -26,6 +26,7 @@ import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
 import {NavigationActions} from 'react-navigation';
 import RNExitApp from 'react-native-exit-app';
+
 const {SpringUtils, spring} = Animated;
 type Props = {};
 
@@ -124,14 +125,21 @@ class BottomBar extends Component {
         this.props.dispatch(NavigationActions.back());
         return true;//默认行为
     };
+    backSetBarStylePages = ['ChatRoomPage', 'TaskSendFromUserList'];
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
 
         // -------------记录下当前的路由------------- //
         let {routes, type, key} = this.props.nav;
-
+        if (type !== 'Navigation/COMPLETE_TRANSITION' && type !== 'Navigation/BACK' && type !== 'Navigation/NAVIGATE') {
+            return;
+        }
         const activeRouterName = routes[0].routes[routes[0].routes.length - 1].routeName;
-
+        let RouterNameIndex = routes[0].index;
+        let preRouterName = '';
+        if (RouterNameIndex > 0) {
+            preRouterName = routes[0].routes[RouterNameIndex - 1].routeName;
+        }
         if (activeRouterName == 'HomePage') {
             if (nextProps.navigationIndex === 0) {
 
@@ -148,6 +156,22 @@ class BottomBar extends Component {
             }
         } else {
             Global.activeRouteName = activeRouterName;
+            //我的店铺只要进入状态栏透明
+            if ((type === 'Navigation/COMPLETE_TRANSITION' && activeRouterName === 'ShopInfoPage')
+            ) {
+                this.setStatusBar('translucent');
+            } else if (type === 'Navigation/BACK' && activeRouterName === 'ShopInfoPage') {
+                console.log(preRouterName);
+                const isFind = this.backSetBarStylePages.findIndex(item => preRouterName == item);
+                if (isFind !== -1) {
+                    this.setStatusBar('dark');
+                } else {
+                    this.setStatusBar('no-translucent');
+                }
+
+
+            }
+
         }
         // -------------End记录下当前的路由------------- //
 
@@ -155,8 +179,6 @@ class BottomBar extends Component {
             key = routes[0].routes[routes[0].index].key;
         }
         if (type === 'Navigation/BACK' && key === routes[0].routes[1].key) {//需要返回到主页面
-
-            // console.log(this.props.navigationIndex, 'this.props.navigationIndex');
             // -------------记录下当前的路由------------- //
             if (nextProps.navigationIndex === 0) {
                 Global.activeRouteName = 'IndexPage';
@@ -170,14 +192,13 @@ class BottomBar extends Component {
             if (nextProps.navigationIndex === 3) {
                 Global.activeRouteName = 'MyPage';
             }
-            // -------------End记录下当前的路由------------- //
-            if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
-                StatusBar.setBarStyle('dark-content', false);
-                StatusBar.setBackgroundColor(theme, false);
 
+            // -------------End记录下当前的路由------------- //
+            //console.log(key ,routes[0].routes[1].key,this.props.navigationIndex);
+            if (this.props.navigationIndex === 0) {//判断回到主页面的哪个栏目
+                this.setStatusBar('dark');
             } else {
-                StatusBar.setBarStyle('light-content', false);
-                StatusBar.setBackgroundColor(bottomTheme, false);
+                this.setStatusBar('light');
             }
             return;
         }
@@ -185,10 +206,36 @@ class BottomBar extends Component {
             ||
             (type === 'Navigation/BACK' && routes[0].routes[2] && key === routes[0].routes[2].key && routes[0].routes[1].routeName === 'TaskOrdersMana')
         ) {
+            this.setStatusBar('light');
+        }
+    }
+
+    setStatusBar = (type) => {
+        // console.log(type);
+        if (type === 'dark') {
+
+            StatusBar.setBarStyle('dark-content', false);
+            StatusBar.setBackgroundColor(theme, false);
+        }
+        if (type === 'light') {
             StatusBar.setBarStyle('light-content', false);
             StatusBar.setBackgroundColor(bottomTheme, false);
         }
-    }
+
+        if (type === 'translucent') {
+            StatusBar.setTranslucent(true);
+            StatusBar.setBackgroundColor('rgba(0,0,0,0)', true);
+        }
+
+        if (type === 'no-translucent') {
+            StatusBar.setTranslucent(false);
+            StatusBar.setBackgroundColor(bottomTheme, true);
+        }
+        if (type === 'self') {
+            StatusBar.setBarStyle('light-content', false);
+            StatusBar.setBackgroundColor('black', false);
+        }
+    };
 
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
         if (this.props.navigationIndex !== nextProps.navigationIndex

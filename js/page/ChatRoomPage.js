@@ -394,10 +394,8 @@ class ChatRoomPage extends React.Component {
                             title: '照片',
                             onPress: () => {
                                 ImagePicker.openPicker(ImgOption).then(image => {
-                                    // console.log(image)
                                     this._imgSelect(image);
                                 }).catch(err => {
-                                    // console.log(err);
                                 });
                             },
                         },
@@ -413,7 +411,7 @@ class ChatRoomPage extends React.Component {
                             },
                         ]}
                     />
-                    <ImageViewerModal ref={ref => this._imgViewModel = ref}/>
+                    <ImageViewerModal statusBarType={'dark'} ref={ref => this._imgViewModel = ref}/>
                 </View>
 
             </SafeAreaViewPlus>

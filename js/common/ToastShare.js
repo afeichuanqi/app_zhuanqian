@@ -9,7 +9,7 @@
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, Animated, Text, TouchableOpacity, ScrollView} from 'react-native';
 import Image from 'react-native-fast-image';
-
+import JShareModule from 'jshare-react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -99,11 +99,29 @@ class ToastShare extends PureComponent {
                                 horizontal={true}
                                 style={{paddingHorizontal: 20, marginTop: 5}}>
 
-                                {this.getMenu('QQ', require('../res/img/share/qq.png'), null)}
+                                {this.getMenu('QQ', require('../res/img/share/qq.png'), () => {
+                                    JShareModule.share({
+                                        type: 'text',
+                                        platform: 'qzone', // 分享到指定平台
+                                        text: '111asasasas',
+                                    }, () => {
+                                    }, (msg) => {
+                                        console.log(msg);
+                                    });
+                                })}
                                 {this.getMenu('QQ空间', require('../res/img/share/qqZone.png'), null)}
                                 {this.getMenu('微信', require('../res/img/share/wechat.png'), null)}
                                 {this.getMenu('朋友圈', require('../res/img/share/pengyouquan.png'), null)}
-                                {this.getMenu('微博', require('../res/img/share/xinlangweibo.png'), null)}
+                                {this.getMenu('微博', require('../res/img/share/xinlangweibo.png'), () => {
+                                    JShareModule.share({
+                                        type: 'text',
+                                        platform: 'sina_weibo', // 分享到指定平台
+                                        text: '111asasasas',
+                                    }, () => {
+                                    }, (msg) => {
+                                        console.log(msg);
+                                    });
+                                })}
                                 {this.getMenu('复制链接', require('../res/img/share/copyurl.png'), null)}
 
 
@@ -122,7 +140,10 @@ class ToastShare extends PureComponent {
         return <TouchableOpacity
             onPress={() => {
                 this.hide();
-                click && click();
+                setTimeout(() => {
+                    click && click();
+                }, 300);
+
             }}
             style={{alignItems: 'center', width: (width - 50) / 6}}>
             <Image

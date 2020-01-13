@@ -53,7 +53,7 @@ class TaskRejectDetailsPage extends PureComponent {
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
         selectOrderTaskInfo({sendFormId: this.params.sendFormId}, this.props.userinfo.token).then(result => {
-            console.log(result.length > 0, 'result.length > 0');
+            //console.log(result.length > 0, 'result.length > 0');
             if (result.length > 0) {
                 this.setState({
                     sendFormInfo: result[0],
@@ -256,7 +256,7 @@ class TaskRejectDetailsPage extends PureComponent {
                         <TouchableOpacity
                             onPress={() => {
 
-                                console.log(this.params.fromUserinfo, 'this.params.fromUserinfo');
+                                //console.log(this.params.fromUserinfo, 'this.params.fromUserinfo');
                                 NavigationUtils.goPage({
                                     task_id: this.params.taskId,
                                     sendFormId: this.params.sendFormId,
@@ -307,7 +307,7 @@ class TaskRejectDetailsPage extends PureComponent {
 
                     </View>}
                 </View>
-                <ImageViewerModal ref={ref => this.imgModal = ref}/>
+                <ImageViewerModal statusBarType={'dark'} ref={ref => this.imgModal = ref}/>
                 <ToastSelect
                     rightTitle={'放弃'}
                     sureClick={this.giveUpTask}

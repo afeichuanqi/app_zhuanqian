@@ -1,5 +1,12 @@
 import Types from '../Types';
-import {verifyCode, uploadAvatar, setUserData, getUserInfoForToken} from '../../util/AppService';
+import {
+    verifyCode,
+    uploadAvatar,
+    setUserData,
+    getUserInfoForToken,
+    uploadQiniuImage,
+    uploadUserinfoBgImg,
+} from '../../util/AppService';
 
 /**
  * 账户登录
@@ -24,7 +31,6 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
                 data: data,
             });
         }).catch(msg => {
-            console.log(msg);
             callback(false, {msg});
             dispatch({type: Types.LOGIN_FAIL});
         });
@@ -36,16 +42,24 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
  * 修改头像
  * @returns {{theme: *, type: string}}
  */
-export function onUploadAvatar(token, data, callback) {
+export function onUploadAvatar(token, mime, path, callback) {
     return dispatch => {
         dispatch({type: Types.UPLOAD_AVATAR_LOADING, data: {avatar_url: ''}});
-        uploadAvatar(data, token).then((data) => {
-            callback(true, data);
-            dispatch({
-                type: Types.UPLOAD_AVATAR_SUCCESS,
-                data: {avatar_url: data.imageUrl},
+        uploadQiniuImage(token, 'userAvatar', mime, path).then(url => {
+            uploadAvatar({imageUrl: url}, token).then((data) => {
+                callback(true, data);
+                dispatch({
+                    type: Types.UPLOAD_AVATAR_SUCCESS,
+                    data: {avatar_url: url},
+                });
+            }).catch((msg) => {
+                dispatch({
+                    type: Types.UPLOAD_AVATAR_SUCCESS,
+                    data: {avatar_url: ''},
+                });
+                callback(false, {msg});
             });
-        }).catch((msg) => {
+        }).catch(msg => {
             dispatch({
                 type: Types.UPLOAD_AVATAR_SUCCESS,
                 data: {avatar_url: ''},
@@ -53,7 +67,46 @@ export function onUploadAvatar(token, data, callback) {
             callback(false, {msg});
         });
 
+
     };
+}
+
+/**
+ * 修改商铺背景墙图片
+ * @returns {{theme: *, type: string}}
+ */
+export function onSetShopInfoBgImg(token, mime, path, callback) {
+    return dispatch => {
+        // console.log(path);
+        dispatch({
+            type: Types.CHANGE_SHOPINFO_IMG,
+            data: {shopinfo_url: path},
+        });
+        uploadQiniuImage(token, 'shopBackGroundImg', mime, path).then(url => {
+            uploadUserinfoBgImg({imageUrl: url}, token).then((data) => {
+                callback(true, data);
+                dispatch({
+                    type: Types.CHANGE_SHOPINFO_IMG,
+                    data: {shopinfo_url: url},
+                });
+            }).catch((msg) => {
+                dispatch({
+                    type: Types.CHANGE_SHOPINFO_IMG,
+                    data: {shopinfo_url: ''},
+                });
+                callback(false, {msg});
+            });
+        }).catch(msg => {
+            dispatch({
+                type: Types.CHANGE_SHOPINFO_IMG,
+                data: {shopinfo_url: ''},
+            });
+            callback(false, {msg});
+        });
+
+
+    };
+    // return {type: Types.CHANGE_SHOPINFO_IMG, data: {url}};
 }
 
 /**
@@ -105,6 +158,21 @@ export function onSetUserName(token, value, callback) {
 }
 
 /**
+ * 增加/更新支付宝帐户
+ * @returns {{theme: *, type: string}}
+ */
+export function onAddPayAccount(name, account, type) {
+    console.log(name, account, type);
+    if (type === 1) {
+        return {type: Types.ADD_ALIPAY_ACCOUNT, data: {name, account}};
+    }
+    if (type === 2) {
+        return {type: Types.ADD_WECHAT_ACCOUNT, data: {name, account}};
+    }
+
+}
+
+/**
  *  清空账号信息
  * @returns {{theme: *, type: string}}
  */
@@ -121,6 +189,7 @@ export function onGetUserInFoForToken(token, callback) {
     return dispatch => {
         dispatch({type: Types.GET_USER_INFO_LOADING});
         getUserInfoForToken(token).then((data) => {
+            console.log(data, 'data');
             callback(true, data);
             dispatch({
                 type: Types.GET_USER_INFO_SUCCESS,

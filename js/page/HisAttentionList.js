@@ -56,6 +56,7 @@ class MyAttention extends PureComponent {
     componentDidMount() {
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
+        StatusBar.setTranslucent(false);
         this.backPress.componentDidMount();
     }
 
@@ -177,7 +178,7 @@ class MyAttentionList extends PureComponent {
             pageIndex: this.page.pageIndex,
 
         }, '').then(result => {
-            console.log(result);
+            //console.log(result);
             if (isRefresh) {
                 this.setState({
                     taskData: result,
@@ -227,7 +228,7 @@ class MyAttentionList extends PureComponent {
                     // onScroll={this._onScroll}
                     ListFooterComponent={() => this.genIndicator(hideLoaded)}
                     onEndReached={() => {
-                        console.log('onEndReached.....');
+                        //console.log('onEndReached.....');
                         // 等待页面布局完成以后，在让加载更多
                         if (this.canLoadMore && taskData.length>=10) {
                             this.onLoading();
@@ -284,7 +285,7 @@ class AttentionItem extends PureComponent {
 
         return <TouchableOpacity
             onPress={() => {
-                console.log(item.userid, 'item.userId');
+                //console.log(item.userid, 'item.userId');
                 EventBus.getInstance().fireEvent(EventTypes.update_shopInfo_page, {
                     userId:item.userId
                 });

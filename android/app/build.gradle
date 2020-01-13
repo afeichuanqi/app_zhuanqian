@@ -139,9 +139,15 @@ android {
         versionName "1.0"
         manifestPlaceholders = [
                 JPUSH_APPKEY: "ee6b0ae7c80a1605fe528f83",         //在此替换你的APPKey
-                JPUSH_CHANNEL: "5fd2f3c0ceaee29dab4ab7ac"        //在此替换你的channel
+                JPUSH_CHANNEL: "5fd2f3c0ceaee29dab4ab7ac",        //在此替换你的channel
+                TENCENT_APPID:'1110214002',
         ]
         multiDexEnabled true
+    }
+    sourceSets {      // <--   必须添加 sourceSet 这段。因为 JGShareSDK.xml 放在 assets 下，不加上会报错。
+        main {
+            assets.srcDirs = ['assets']
+        }
     }
     splits {
         abi {
@@ -152,12 +158,12 @@ android {
         }
     }
     signingConfigs {
-//        debug {
-//            storeFile file('debug.keystore')
-//            storePassword 'android'
-//            keyAlias 'androiddebugkey'
-//            keyPassword 'android'
-//        }
+        debug {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
         release {
             if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
                 storeFile file(MYAPP_RELEASE_STORE_FILE)
@@ -203,7 +209,6 @@ dependencies {
     implementation project(':@react-native-community_cameraroll')
     implementation project(':react-native-fs')
     implementation project(':react-native-device-info')
-    implementation project(':react-native-wechat')
     implementation project(':@react-native-community_async-storage')
     implementation project(':@react-native-community_viewpager')
     implementation project(':react-native-fast-image')
@@ -214,7 +219,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     // 如果你需要支持GIF动图
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
-
+    implementation project(':jshare-react-native')     // <-- JShare 依赖
     implementation project(':janalytics-react-native')  // 添加 janalytics 依赖
     implementation project(':jcore-react-native')  			// 添加 jcore 依赖
     implementation 'com.android.support:multidex:1.0.3'

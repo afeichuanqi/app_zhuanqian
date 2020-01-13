@@ -50,6 +50,7 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import Emoji from 'react-native-emoji';
 import ToastSelect from '../common/ToastSelect';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {
     timing,
@@ -133,7 +134,7 @@ class TaskDetails extends PureComponent {
     componentDidMount() {
         this.backPress.componentDidMount();
         this.updatePage().then();
-
+        StatusBar.setTranslucent(false);
         //收到消息刷新任务
         EventBus.getInstance().addListener(EventTypes.update_task_page, this.listener = data => {
             const {test, task_id} = data;
@@ -183,6 +184,7 @@ class TaskDetails extends PureComponent {
         let statusBar = {
             barStyle: 'light-content',
             // hidden: false,
+
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
         // StatusBar.setBarStyle('light-content', true);
@@ -276,10 +278,13 @@ class TaskDetails extends PureComponent {
 
                     >
                         <View style={{backgroundColor: bottomTheme, height: 30}}/>
-                        <Animated.View style={{height: 120, opacity: opacity}}>
-                            <View style={{height: 60, backgroundColor: bottomTheme}}/>
+                        <Animated.View style={{height: hp(19), opacity: opacity}}>
                             <View style={{
-                                height: 120, backgroundColor: 'white',
+                                height: hp(9), backgroundColor: bottomTheme, borderBottomLeftRadius: 10,
+                                borderBottomRightRadius: 10,
+                            }}/>
+                            <View style={{
+                                height: hp(19), backgroundColor: 'white',
                                 position: 'absolute',
                                 top: 0, width: width - 20,
                                 left: 10,
@@ -287,11 +292,11 @@ class TaskDetails extends PureComponent {
                                 borderRadius: 5,
                             }}>
                                 <View style={{
-                                    height: 60,
+                                    height: hp(9),
                                     alignItems: 'center',
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
-                                    marginTop: 5,
+                                    marginTop: 8,
                                 }}>
 
                                     <View>
@@ -301,11 +306,11 @@ class TaskDetails extends PureComponent {
                                             return <Emoji name={item} style={{fontSize: 15}}/>;
                                         })}
                                         </Text>
-                                        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                                        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
                                             <Text
                                                 style={{
                                                     color: 'rgba(0,0,0,0.7)',
-                                                    fontSize: 12,
+                                                    fontSize: 14,
                                                 }}>{taskData && taskData.taskType.title}</Text>
                                             <View style={{
                                                 height: 10, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)',
@@ -313,18 +318,18 @@ class TaskDetails extends PureComponent {
                                             }}/>
                                             <Text style={{
                                                 color: 'rgba(0,0,0,0.7)',
-                                                fontSize: 12,
+                                                fontSize: 14,
                                             }}>{taskData && taskData.projectTitle}</Text>
                                         </View>
                                     </View>
 
                                     <Text style={{
-                                        fontSize: 18,
+                                        fontSize: 19,
                                         color: bottomTheme,
                                     }}>{taskData && taskData.rewardPrice}元</Text>
                                 </View>
                                 <View style={{
-                                    height: 60,
+                                    height: hp(8),
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
                                     // marginTop: 20,
@@ -335,7 +340,7 @@ class TaskDetails extends PureComponent {
                                             color: 'black',
                                             fontSize: 15,
                                         }}>{taskData && taskData.rewardNum - taskData.taskSignUpNum}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>剩余数量</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>剩余数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
@@ -343,7 +348,7 @@ class TaskDetails extends PureComponent {
                                             color: 'black',
                                             fontSize: 15,
                                         }}>{taskData && taskData.taskPassNum}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>完成数量</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>完成数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
@@ -351,7 +356,7 @@ class TaskDetails extends PureComponent {
                                             color: 'black',
                                             fontSize: 15,
                                         }}>{taskData && taskData.orderTimeLimit.title}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>做单时间</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>做单时间</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
@@ -360,7 +365,7 @@ class TaskDetails extends PureComponent {
                                                 color: 'black',
                                                 fontSize: 15,
                                             }}>{taskData && taskData.reviewTime.title}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13, marginTop: 5}}>审核时间</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>审核时间</Text>
                                     </View>
                                 </View>
                             </View>
@@ -376,7 +381,7 @@ class TaskDetails extends PureComponent {
                             activeOpacity={0.6}
                             style={{
                                 backgroundColor: 'white',
-                                height: 60,
+                                height: hp(11),
                                 marginTop: 10,
                                 marginHorizontal: 10,
                                 paddingVertical: 10,
@@ -393,8 +398,11 @@ class TaskDetails extends PureComponent {
                                     resizeMode={FastImage.stretch}
                                 />
                                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                                    <Text style={{color: 'black'}}>{fromUserinfo && fromUserinfo.username}</Text>
-                                    <Text style={{color: 'red', opacity: 0.8, fontSize: 12}}>{
+                                    <Text style={{
+                                        color: 'black',
+                                        fontSize: 15,
+                                    }}>{fromUserinfo && fromUserinfo.username}</Text>
+                                    <Text style={{color: 'red', opacity: 0.8, fontSize: 13}}>{
                                         taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
                                             :
                                             taskData.singOrder.type == 2 ? `此任务每人每天${taskData.singOrder.num}次`
@@ -420,13 +428,11 @@ class TaskDetails extends PureComponent {
                                 }}
                                 style={{marginRight: 10}}>
                                 <SvgUri width={25} fill={'#6d6d6d'} height={25} svgXmlData={liaotian}/>
-                                {/*<SvgUri width={15} style={{marginLeft: 5}} height={15} svgXmlData={menu_right}/>*/}
-
                             </TouchableOpacity>
                         </TouchableOpacity>
                         <View style={{
                             backgroundColor: 'white', marginTop: 10, paddingHorizontal: 10, marginHorizontal: 10,
-                            paddingVertical: 10, borderRadius: 5,
+                            paddingVertical: wp(4), borderRadius: 5
                         }}>
                             <Text style={{fontSize: 14, color: bottomTheme}}>
                                 任务说明
@@ -434,16 +440,16 @@ class TaskDetails extends PureComponent {
                             <Text style={{
                                 marginTop: 10,
                                 color: 'rgba(0,0,0,1)',
-                                fontSize: 13,
+                                fontSize: 14,
                                 lineHeight: 20,
                                 letterSpacing: 0.2,
                             }}>{taskData && taskData.TaskInfo}</Text>
                         </View>
                         <View style={{
                             marginTop: 10, paddingHorizontal: 10, backgroundColor: 'white', marginHorizontal: 10,
-                            paddingBottom: 10, borderRadius: 3,
+                             borderRadius: 3,height:hp(6), justifyContent:'center',
                         }}>
-                            <Text style={{fontSize: 14, color: bottomTheme, marginTop: 10}}>做单步骤（请仔细审阅任务步骤）</Text>
+                            <Text style={{fontSize: 15, color: bottomTheme}}>做单步骤（请仔细审阅任务步骤）</Text>
 
                         </View>
                         {/*做单步骤图*/}
@@ -620,64 +626,62 @@ class TaskDetailsPop extends Component {
     render() {
         const {isFavorite} = this.state;
         const {task_id, userinfo} = this.props;
-        return <View>
-            <TaskMenu opacity={0.2} animationType={'none'} ref={ref => this.taskMenu = ref}>
-                <TouchableOpacity
-                    key={1}
-                    activeOpacity={0.6}
-                    onPress={() => {
-                        this.taskMenu.hide(true);
-                        NavigationUtils.goPage({type: 2}, 'UserProtocol');
-                    }}
-                    style={{
-                        width: 100, height: 30,
-                        alignItems: 'center', flexDirection: 'row',
-                        justifyContent: 'center',
-                    }}>
-                    {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
-                    <Text style={{fontSize: 15, opacity: 0.7, color: 'black'}}>接单规则</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    // key={index}
-                    activeOpacity={0.6}
-                    onPress={() => {
-                        this.taskMenu.hide(false);
-                        this.props.shareClick();
-                    }}
-                    style={{
-                        width: 100, height: 35,
-                        alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
-                    }}>
-                    <SvgUri width={18} fill={'rgba(0,0,0,0.7)'} height={18} svgXmlData={fenxiang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>分享</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    activeOpacity={0.6}
-                    onPress={() => {
-                        const is_favorite = this.state.isFavorite == 1 ? 0 : 1;
-                        setUserFavoriteTask({
-                            task_id: task_id,
-                            favorite_status: is_favorite,
-                        }, userinfo.token).then(result => {
-                            this.props.toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`);
-                            this.setState({
-                                isFavorite: is_favorite,
-                            });
+        return <TaskMenu opacity={0.5} animationType={'none'} ref={ref => this.taskMenu = ref}>
+            <TouchableOpacity
+                key={1}
+                activeOpacity={0.6}
+                onPress={() => {
+                    this.taskMenu.hide(true);
+                    NavigationUtils.goPage({type: 2}, 'UserProtocol');
+                }}
+
+                style={{
+                    width: 100, height: 30,
+                    alignItems: 'center', flexDirection: 'row',
+                    justifyContent: 'center',
+                }}>
+                {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
+                <Text style={{fontSize: 15, opacity: 0.7, color: 'black'}}>接单规则</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                // key={index}
+                activeOpacity={0.6}
+                onPress={() => {
+                    this.taskMenu.hide(false);
+                    this.props.shareClick();
+                }}
+                style={{
+                    width: 100, height: 35,
+                    alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
+                }}>
+                <SvgUri width={18} fill={'rgba(0,0,0,0.7)'} height={18} svgXmlData={fenxiang}/>
+                <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>分享</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                    const is_favorite = this.state.isFavorite == 1 ? 0 : 1;
+                    setUserFavoriteTask({
+                        task_id: task_id,
+                        favorite_status: is_favorite,
+                    }, userinfo.token).then(result => {
+                        this.props.toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`);
+                        this.setState({
+                            isFavorite: is_favorite,
                         });
-                        this.taskMenu.hide(true);
-                    }}
-                    style={{
-                        width: 100, height: 35,
-                        alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
-                    }}>
-                    <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={18}
-                            svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
-                    <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>收藏</Text>
-                </TouchableOpacity>
+                    });
+                    this.taskMenu.hide(true);
+                }}
+                style={{
+                    width: 100, height: 35,
+                    alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
+                }}>
+                <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={18}
+                        svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
+                <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>收藏</Text>
+            </TouchableOpacity>
 
-            </TaskMenu>
-
-        </View>;
+        </TaskMenu>;
     }
 }
 
@@ -734,8 +738,8 @@ class BottomBtns extends PureComponent {
                     activeOpacity={(StatusForTask.status === 0 || StatusForTask.status === 4 || StatusForTask.status === 5) ? 0.5 : 1}
                     onPress={this.props.startSignUp}
                     style={{
-                        height: 60,
-                        width: (width / 3) * 2,
+                        height: hp(8),
+                        width: wp(60),
                         justifyContent: 'center',
                         alignItems: 'center',
                         flexDirection: 'row',
@@ -807,8 +811,8 @@ class ChangeTask extends Component {
             onPress={this._onPress}
             activeOpacity={0.6}
             style={{
-                height: 60,
-                width: width / 3,
+                height: hp(8),
+                width: wp(40),
                 justifyContent: 'center',
                 alignItems: 'center',
                 flexDirection: 'row',
@@ -837,9 +841,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 40,
-        height: 40,
-        borderRadius: 25,
+        width: hp(7),
+        height: hp(7),
+        borderRadius: hp(7) / 2,
         // 设置高度
         // height:150
     },

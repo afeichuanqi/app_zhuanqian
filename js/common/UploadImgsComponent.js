@@ -189,7 +189,7 @@ class UploadImgsComponent extends PureComponent {
                         return null;
                     }
                 })}
-                <ImageViewerModal ref={ref => this.imageView = ref}/>
+                <ImageViewerModal statusBarType={'dark'}  ref={ref => this.imageView = ref}/>
             </View>
         );
     }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DevInfor>
+
+    <!-- 如果不需要支持某平台，可缺省该平台的配置-->
+
+    <SinaWeibo
+        AppKey="1912593481"
+        AppSecret="addb2a629134f52b02de9cad184034a6"
+        RedirectUrl="http://www.baidu.com"/>
+
+    <QQ
+        AppId="1110213694"
+        AppKey="9fwqPGmeHP5K7Wpw"/>
+
+    <Wechat
+        AppId="微信的 AppId"
+        AppSecret="微信的 AppSectet"/>
+
+    <Facebook
+        AppId="facebook 的 appId"
+        AppName="facebook 后台填写的名称"
+    />
+
+    <Twitter
+        ConsumerKey="twitter 的 ConsumerKey"
+        ConsumerSecret="twitter 的 ConsumerSecret"
+    />
+
+    <!-- 趣聊平台appkey的申请， 请查看入门指南的第三方平台申请文档 -->
+    <JChatPro
+        auth="申请后的 appkey"
+    />
+
+</DevInfor>

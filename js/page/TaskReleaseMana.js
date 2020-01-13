@@ -393,7 +393,7 @@ class FristListComponent extends PureComponent {
                 // onScroll={this._onScroll}
                 ListFooterComponent={() => this.genIndicator(hideLoaded)}
                 onEndReached={() => {
-                    console.log('onEndReached.....');
+                    //console.log('onEndReached.....');
                     // 等待页面布局完成以后，在让加载更多
                     setTimeout(() => {
                         if (this.canLoadMore && taskData.length >= 10) {
@@ -416,7 +416,7 @@ class FristListComponent extends PureComponent {
                     deleteTaskRelease({task_id: this.deleteTaskId}, this.props.userinfo.token).then(result => {
                         this._updateList(true);
                     }).catch(msg => {
-                        console.log(msg);
+                        //console.log(msg);
                     });
                     this.toastSelect.hide();
                 }}

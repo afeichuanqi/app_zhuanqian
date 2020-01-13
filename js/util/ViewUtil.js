@@ -15,6 +15,7 @@ export default class ViewUtil {
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
                 justifyContent: 'space-between', backgroundColor: ColumnBgcColor, width: Dimensions.get('window').width,
 
+
             }}>
 
                 <TouchableOpacity

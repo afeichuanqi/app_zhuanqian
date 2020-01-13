@@ -113,7 +113,7 @@ class TaskReleaseMana extends PureComponent {
                 }
 
             }).catch(msg => {
-                console.log(msg);
+                //console.log(msg);
             });
         }
 

@@ -168,7 +168,6 @@ export default class FlatListCommonUtil extends PureComponent {
 
 
     genIndicator(hideLoaded) {
-        console.log(!hideLoaded, '!hideLoaded');
         return !hideLoaded ?
             <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
@@ -183,7 +182,7 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent imageViewModal={this.imageViewModal} item={item} key={index}/>;
+        return <TaskSumComponent statusBarType={this.props.statusBarType}  imageViewModal={this.imageViewModal} item={item} key={index}/>;
     };
 
 }

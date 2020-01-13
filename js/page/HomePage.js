@@ -18,7 +18,7 @@ import Toast from '../common/Toast';
 import Global from '../common/Global';
 import {getAppSetting} from '../util/AppService';
 import Animated from 'react-native-reanimated';
-
+import JShareModule from 'jshare-react-native';
 const {spring} = Animated;
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
@@ -43,6 +43,7 @@ class HomePage extends PureComponent {
             Global.user_recommend_fee = result.user_recommend_fee;
         });
         Global.toast = this.toast;
+        JShareModule.setup();
 
     }
 
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 100,
         width: 100,
-        marginTop: -2,
+
     },
 });
 export default HomePage;

@@ -49,13 +49,6 @@ class SecondListComponent extends PureComponent {
 
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
-        // const Y_ = this.nowY - y;
-        // if (Y_ < 20
-        //     && Y_ > -20
-        // ) {
-        //
-        //     return;
-        // }
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -72,7 +65,6 @@ class SecondListComponent extends PureComponent {
             if (y > this.nowY && y > 0) {
                 showAnimated(true);
             }
-            //
             if (y < this.nowY) {
                 showAnimated(false);
             }
@@ -97,6 +89,7 @@ class SecondListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+                statusBarType={'dark'}
                 pageSize={10}
                 ref={ref => this.flatList = ref}
                 type={2}
@@ -135,7 +128,7 @@ class SecondListComponent extends PureComponent {
 
             <Animated.View style={{
                 width, height: 30, justifyContent: 'space-between', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}], top: 5,
+                backgroundColor: 'white', transform: [{translateY: columnTop}], top: 10,
             }}>
                 <Text
                     style={{

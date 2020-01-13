@@ -48,7 +48,6 @@ target 'AwesomeProject' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
-  pod 'RCTWeChat', :path => '../node_modules/react-native-wechat'
 
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 

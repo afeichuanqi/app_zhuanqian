@@ -79,7 +79,7 @@ class TaskInfoComponent extends PureComponent {
                 resizeMode={FastImage.resizeMode.stretch}
             />
             <View style={[{
-                 width: wp(80), paddingLeft: 10, justifyContent: 'space-between',
+                 width: wp(80), paddingLeft: 11, justifyContent: 'space-between',
 
             },this.props.viewStyle]}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>

@@ -380,7 +380,7 @@ class MyTaskReview extends PureComponent {
                                 </TouchableOpacity>
                             </View>}
 
-                        <ImageViewerModal ref={ref => this.imageModal = ref}/>
+                        <ImageViewerModal statusBarType={'dark'} ref={ref => this.imageModal = ref}/>
                         <ToastSelect
                             rightTitle={'通过'}
                             sureClick={() => this.thisTaskPass(taskData.taskStepId)}

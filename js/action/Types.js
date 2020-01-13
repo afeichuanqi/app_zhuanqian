@@ -23,6 +23,12 @@ export default {
 
     //清空账号信息
     CLEAR_USERINFO_ALL:"CLEAR_USERINFO_ALL",
+    //增加支付宝账号信息
+    ADD_ALIPAY_ACCOUNT:"ADD_ALIPAY_ACCOUNT",
+    //增加微信账号信息
+    ADD_WECHAT_ACCOUNT:"ADD_WECHAT_ACCOUNT",
+    //清空账号信息
+    CHANGE_SHOPINFO_IMG:"CHANGE_SHOPINFO_IMG",
     //退出账号
     ACCOUNT_QUIT:'ACCOUNT_QUIT',
     // 验证身份
