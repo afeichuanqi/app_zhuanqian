@@ -106,7 +106,7 @@ class ToastShare extends PureComponent {
                                         text: '111asasasas',
                                     }, () => {
                                     }, (msg) => {
-                                        console.log(msg);
+                                        // console.log(msg);
                                     });
                                 })}
                                 {this.getMenu('QQ空间', require('../res/img/share/qqZone.png'), null)}
@@ -119,7 +119,7 @@ class ToastShare extends PureComponent {
                                         text: '111asasasas',
                                     }, () => {
                                     }, (msg) => {
-                                        console.log(msg);
+                                        // console.log(msg);
                                     });
                                 })}
                                 {this.getMenu('复制链接', require('../res/img/share/copyurl.png'), null)}

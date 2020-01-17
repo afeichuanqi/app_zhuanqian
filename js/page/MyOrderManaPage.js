@@ -82,7 +82,7 @@ class MyOrderManaPage extends PureComponent {
     }
 
     getTaskItem = (taskInfo) => {
-        console.log(taskInfo);
+        // console.log(taskInfo);
         let taskTitle = taskInfo.task_title;
         let emojiArr = [];
         if (taskTitle) {
@@ -374,7 +374,7 @@ class MyOrderManaPage extends PureComponent {
         }}>
             <TouchableOpacity
                 onPress={() => {
-                    console.log('111');
+                    // console.log('111');
                     NavigationUtils.goPage({
                         title: '已完成列表',
                         status: 1,

@@ -184,7 +184,7 @@ class MyModalBox extends PureComponent {
     };
 
     _sure = () => {
-        console.log('确认被单机');
+        // console.log('确认被单机');
         this.hide();
         this.props.sureClick();
     };

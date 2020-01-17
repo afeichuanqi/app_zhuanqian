@@ -26,6 +26,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {equalsObj} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -217,9 +218,12 @@ class NoticeItem extends Component {
                     pageName = 'TaskReleaseMana';
                     navigationIndex = type - 1;
 
-                } else if (type > 3 && type <= 8) {
+                } else if (type > 3 && type <= 7) {
                     pageName = 'TaskOrdersMana';
                     navigationIndex = type - 4;
+                } else if (type > 7 && type <= 10) {
+                    pageName = 'UserBillListPage';
+                    navigationIndex = type - 8;
                 }
                 if (pageName.length > 0) {
                     NavigationUtils.goPage({navigationIndex}, pageName);
@@ -237,7 +241,8 @@ class NoticeItem extends Component {
 
             }}>
             <View>
-                <Text style={{fontSize: wp(3), opacity: 0.5, marginVertical: 10, color: 'black'}}>{item.send_date1}</Text>
+                <Text
+                    style={{fontSize: wp(3), opacity: 0.5, marginVertical: 10, color: 'black'}}>{item.send_date1}</Text>
             </View>
             <View style={{
                 width: wp(95), backgroundColor: 'white',

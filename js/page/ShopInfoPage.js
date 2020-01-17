@@ -187,7 +187,7 @@ class ShopInfoPage extends PureComponent {
                                 <Text style={{color: 'rgba(0,0,0,0.8)', fontSize: 16}}>
                                     {this.state.shopInfo.username ? this.state.shopInfo.username + '的店铺' : ''}
                                 </Text>
-                                <View style={{width:30}}/>
+                                <View style={{width: 30}}/>
                             </View>
 
                         </Animated.View>
@@ -468,6 +468,8 @@ class ShopData extends Component {
     };
 
     render() {
+        const {total_hair_tasks_num, total_hair_order_num, success_hair_order_num, total_join_order_num, success_join_order_num} = this.props.shopInfo;
+        // console.log(parseInt(success_join_order_num) / parseInt(total_join_order_num),"(parseInt(success_join_order_num) / parseInt(total_join_order_num) * 100).toFixed(2)");
         return <View style={{
 
             backgroundColor: 'white',
@@ -486,12 +488,12 @@ class ShopData extends Component {
             </View>
             <View style={{height: 0.3, width: width, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.3)'}}/>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                {this.getTaskDataColumn('总发任务数', this.props.shopInfo.total_hair_tasks_num)}
-                {this.getTaskDataColumn('总发单数', this.props.shopInfo.total_hair_order_num)}
-                {this.getTaskDataColumn('成功派单数', this.props.shopInfo.success_hair_order_num)}
-                {this.getTaskDataColumn('总接单数', this.props.shopInfo.total_join_order_num)}
-                {this.getTaskDataColumn('成功接单数', this.props.shopInfo.success_join_order_num)}
-                {this.getTaskDataColumn('接单转化比', (parseInt(this.props.shopInfo.success_join_order_num) / parseInt(this.props.shopInfo.total_join_order_num) * 100).toFixed(2), '%')}
+                {this.getTaskDataColumn('总发任务数', total_hair_tasks_num)}
+                {this.getTaskDataColumn('总发单数', total_hair_order_num)}
+                {this.getTaskDataColumn('成功派单数', success_hair_order_num)}
+                {this.getTaskDataColumn('总接单数', total_join_order_num)}
+                {this.getTaskDataColumn('成功接单数', success_join_order_num)}
+                {this.getTaskDataColumn('接单转化比', (success_join_order_num == 0 && total_join_order_num == 0) ? 0 : (parseInt(success_join_order_num) / parseInt(total_join_order_num) * 100).toFixed(2), '%')}
             </View>
 
         </View>;

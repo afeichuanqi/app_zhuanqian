@@ -3,9 +3,9 @@ import axios from 'axios';
 import qs from 'qs';
 import Global from '../../common/Global';
 let defaultConfig = {
-        baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
-        // baseUrl: 'http://test.xiaofaka.com',//测试
-        // baseUrl: 'http://47.99.133.97:3000',//测试
+        // baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
+        baseUrl: 'http://test.xiaofaka.com',//测试
+        // baseUrl: 'http://39.99.145.203:3000',//测试
         timeout:
             15000,
         headers:

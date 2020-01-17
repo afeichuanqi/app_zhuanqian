@@ -14,7 +14,7 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions,
     StyleSheet, Text,
-    View, TouchableOpacity, StatusBar,  ScrollView, TextInput,
+    View, TouchableOpacity, StatusBar, ScrollView, TextInput,
 } from 'react-native';
 import {connect} from 'react-redux';
 import Toast from '../common/Toast';
@@ -64,9 +64,9 @@ class UserFeedbackPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提意见送大礼', null, 'white', 'black', 16, ()=>{
-            NavigationUtils.goPage({},'UserFeedbackListPage')
-        }, false,true,'历史反馈');
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提意见送大礼', null, 'white', 'black', 16, () => {
+            NavigationUtils.goPage({}, 'UserFeedbackListPage');
+        }, false, true, '历史反馈');
 
         return (
             <SafeAreaViewPlus
@@ -110,26 +110,7 @@ class UserFeedbackPage extends PureComponent {
                 </ScrollView>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => {
-                        const radioItem = this.radioCheck.getType();
-                        const images = this.inputTextImage.getImages();
-                        const text = this.inputTextImage.getText();
-                        const phone = this.inputPro.getPhone();
-                        const content = {
-                            images,
-                            info: text,
-                        };
-                        saveFeedBack({
-                            content: JSON.stringify(content),
-                            type: radioItem.id,
-                            phone,
-                        }, this.props.userinfo.token).then(result => {
-                            this.toast.show('反馈成功 ~ ~');
-                        }).catch(msg => {
-                            this.toast.show('反馈失败 ~ ~');
-                        });
-
-                    }}
+                    onPress={this.sendView}
                     style={{
                         position: 'absolute',
                         bottom: 0,
@@ -145,18 +126,65 @@ class UserFeedbackPage extends PureComponent {
         );
     }
 
+    sendView = () => {
+        const radioItem = this.radioCheck.getType();
+        const images = this.inputTextImage.getImages();
+        const text = this.inputTextImage.getText();
+        const phone = this.inputPro.getPhone();
+        if (text.length < 10) {
+            this.toast.show('请输入大于10个字节的建议哦');
+            return;
+        }
+        if (images.length === 0) {
+            this.toast.show('请至少上传一张图片哦');
+            return;
+        }
+        if (phone.length < 3) {
+            this.toast.show('请输入大于3个字节的联系方式哦');
+            return;
+        }
+        const content = {
+            images,
+            info: text,
+        };
+        saveFeedBack({
+            content: JSON.stringify(content),
+            type: radioItem.id,
+            phone,
+        }, this.props.userinfo.token).then(result => {
+            this.toast.show('反馈成功 ~ ~');
+            this.inputTextImage.reStart();
+            this.radioCheck.reStart();
+            this.inputPro.reStart();
+            NavigationUtils.goPage({}, 'UserFeedbackListPage');
+        }).catch(msg => {
+            this.toast.show('反馈失败 ~ ~');
+        });
+    };
+
 }
 
 class InputPro extends PureComponent {
     getPhone = () => {
-        return this.phone;
+        return this.state.phone;
+    };
+    state = {
+        phone: '',
+    };
+    reStart = () => {
+        this.setState({
+            phone: '',
+        });
     };
 
     render() {
         return <TextInput
             onChangeText={text => {
-                this.phone = text;
+                this.setState({
+                    phone: text,
+                });
             }}
+            value={this.state.phone}
             placeholder={'请留下您的联系方式，方便我们联系您'}
             placeholderTextColor={'rgba(0,0,0,0.4)'}
             style={{height: 40, width, backgroundColor: 'white', paddingLeft: 5}}
@@ -168,18 +196,29 @@ class InputTextImage extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            data: [{}],
+            changeText: '',
         };
     }
 
+    reStart = () => {
+        this.setState({
+            changeText: '',
+        });
+        this.uploadImgs.reStart();
+
+    };
+
     render() {
-        const {data} = this.state;
+
 
         return <View>
             <TextInput
                 onChangeText={text => {
-                    this.changeText = text;
+                    this.setState({
+                        changeText: text,
+                    });
                 }}
+                value={this.state.changeText}
                 style={{
                     height: height / 3,
                     width,
@@ -199,7 +238,6 @@ class InputTextImage extends PureComponent {
             />
             <View style={{position: 'absolute', bottom: 10, flexDirection: 'row'}}>
                 <UploadImgsComponent userinfo={this.props.userinfo} ref={ref => this.uploadImgs = ref}/>
-
             </View>
 
         </View>;
@@ -208,8 +246,6 @@ class InputTextImage extends PureComponent {
     getImages = () => {
         const imgs = this.uploadImgs.getImages();
         const imgsText = [];
-
-
         for (let i = 0; i < imgs.length; i++) {
             if (imgs[i].uploadStatus == 1) {
                 imgsText.push(imgs[i].uri);
@@ -222,7 +258,7 @@ class InputTextImage extends PureComponent {
 
     };
     getText = () => {
-        return this.changeText;
+        return this.state.changeText;
 
     };
 
@@ -245,6 +281,11 @@ class RadioCheck extends PureComponent {
         };
     }
 
+    reStart = () => {
+        this.setState({
+            checkIndex: 0,
+        });
+    };
     getType = () => {
         return this.state.data[this.state.checkIndex];
     };

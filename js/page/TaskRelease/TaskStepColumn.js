@@ -591,8 +591,8 @@ class TaskStepColumn extends Component {
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
-                                        width: (width - 80) / 2,
-                                        height: (width - 80) / 1.5,
+                                        width: wp(45),
+                                        height: wp(55),
                                         backgroundColor: 'rgba(0,0,0,0.4)',
                                         justifyContent: 'center',
                                         alignItems: 'center',
@@ -625,8 +625,8 @@ class TaskStepColumn extends Component {
                         {/*{}*/}
                         {this.props.showEditModel &&
                         <View style={{
-                            width: (width - 80) / 2,
-                            height: (width - 80) / 1.5,
+                            width: wp(45),
+                            height: wp(55),
                             justifyContent: 'center',
                             alignItems: 'center',
 
@@ -640,8 +640,8 @@ class TaskStepColumn extends Component {
                                     }}
                                     style={{
                                         borderRadius: 5,
-                                        width: (width - 80) / 2,
-                                        height: (width - 80) / 1.5,
+                                        width: wp(45),
+                                        height: wp(55),
                                         borderWidth: 0.3,
                                         borderColor: 'rgba(0,0,0,0.2)',
                                         justifyContent: 'center',
@@ -658,8 +658,8 @@ class TaskStepColumn extends Component {
                                     }}
                                     style={{
                                         borderRadius: 5,
-                                        width: (width - 80) / 2,
-                                        height: (width - 80) / 1.5,
+                                        width: wp(45),
+                                        height: wp(55),
                                         borderWidth: 0.3,
                                         borderColor: 'rgba(0,0,0,0.2)',
                                         justifyContent: 'center',
@@ -671,9 +671,8 @@ class TaskStepColumn extends Component {
                                         loadingType={2}
                                         source={{uri: typeData.uri1}}
                                         style={{
-                                            width: (width - 80) / 2,
-                                            // marginBottom: 10,
-                                            height: (width - 80) / 1.5,
+                                            width: wp(45),
+                                            height: wp(55),
                                             backgroundColor: '#F0F0F0',
                                             borderRadius: 3,
                                         }}
@@ -697,8 +696,8 @@ class TaskStepColumn extends Component {
                                     </TouchableOpacity> : null}
 
                                     {uploadStatus1 !== 1 && <View style={{ //状态管理
-                                        position: 'absolute', top: 0, left: 0, width: (width - 80) / 2,
-                                        height: (width - 80) / 1.5, borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.5)',
+                                        position: 'absolute', top: 0, left: 0, width: wp(45),
+                                        height: wp(55), borderRadius: 5, backgroundColor: 'rgba(0,0,0,0.5)',
                                         alignItems: 'center', justifyContent: 'center',
                                     }}>
                                         {uploadStatus1 === 0
@@ -711,8 +710,8 @@ class TaskStepColumn extends Component {
                                                     position: 'absolute',
                                                     top: 0,
                                                     left: 0,
-                                                    width: (width - 80) / 2,
-                                                    height: (width - 80) / 1.5,
+                                                    width: wp(45),
+                                                    height: wp(55),
                                                     backgroundColor: 'rgba(0,0,0,0.4)',
                                                     justifyContent: 'center',
                                                     alignItems: 'center',

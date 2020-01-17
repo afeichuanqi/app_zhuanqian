@@ -11,8 +11,9 @@ class ChatSocket {
         if (typeof Global.dispatch != 'function') {
             return;
         }
-        const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
-        // const URL = 'ws://localhost:433/';
+        // const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
+        const URL = 'ws://39.99.145.203:433/';
+
         Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
         Global.ws.onopen = () => {
             Global.dispatch(Message.onChangeSocketStatue(''));
@@ -126,7 +127,8 @@ class ChatSocket {
             Global.dispatch(Message.onChangeSocketStatue(''));
 
         };
-        Global.ws.onerror = () => {
+        Global.ws.onerror = (e) => {
+            // console.log(e);
             Global.connectionstatus = false;
             if (typeof Global.dispatch != 'function') {
                 return;

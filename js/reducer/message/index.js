@@ -47,7 +47,7 @@ export default function onAction(state = defaultContent, action) {
                 FriendId: data.FriendId,
 
             });
-            console.log(temArr1, 'temArr1');
+            // console.log(temArr1, 'temArr1');
             return {
                 ...state,
                 msgArr: temArr1,

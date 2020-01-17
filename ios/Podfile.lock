@@ -1,4 +1,5 @@
 PODS:
+  - AlipaySDK-iOS (15.5.9)
   - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
   - CodePush (6.0.0):
@@ -269,6 +270,9 @@ PODS:
     - React-RCTImage
     - RSKImageCropper
     - TOCropViewController
+  - RNPutiPay (1.4.0):
+    - AlipaySDK-iOS
+    - React
   - RNReanimated (1.4.0):
     - React
   - RNScreens (2.0.0-alpha.8):
@@ -329,6 +333,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNPutiPay (from `../node_modules/react-native-puti-pay/ios`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -336,6 +341,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AlipaySDK-iOS
     - Base64
     - boost-for-react-native
     - JWT
@@ -426,6 +432,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNPutiPay:
+    :path: "../node_modules/react-native-puti-pay/ios"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -436,6 +444,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AlipaySDK-iOS: 1c5283b30977a24acecc0114662697f7dc78f618
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CodePush: 67f488101c41e13e594e9c2714b95dd8bffa6cb4
@@ -480,6 +489,7 @@ SPEC CHECKSUMS:
   RNFS: 0d4191b1052bef9ce70deff00a5b4169c62bbd9b
   RNGestureHandler: a4ddde1ffc6e590c8127b8b7eabfdade45475c74
   RNImageCropPicker: e725e4fcfbb5c6b84051285eeaf59c97b8883edd
+  RNPutiPay: 9fb731bd4cfa4fe4187aeed08a0f1a12283d8cfd
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNScreens: bfa9143ca291bcf3804c932f77b9617ff324704f
   RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
@@ -490,6 +500,6 @@ SPEC CHECKSUMS:
   TOCropViewController: e9da34f484aedd4e5d5a8ab230ba217cfe16c729
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 97b1586837147fb472bb2ba549d95df1929c0c5e
+PODFILE CHECKSUM: b59c96c342d712274b00524a39ddc21ae26d0987
 
 COCOAPODS: 1.7.1

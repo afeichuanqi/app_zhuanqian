@@ -53,7 +53,7 @@ export default class ViewUtil {
      * @param isOtherMsg 菜单说明
      * @param click
      */
-    static getSettingItem = (menuSvg, title, menuinfo, click, isOtherMsg = true) => {
+    static getSettingItem = (menuSvg, title, menuinfo, click, isOtherMsg = false) => {
         return (
             <TouchableOpacity
                 onPress={click}
@@ -71,10 +71,15 @@ export default class ViewUtil {
                     <Text style={{marginLeft: wp(2.5), fontSize: wp(3.9), opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingRight: wp(2)}}>
-                    <Text style={{marginLeft:  wp(2.5), fontSize:  wp(3.2), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
+                    <Text
+                        style={{marginLeft: wp(2.5), fontSize: wp(3.2), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={wp(3)} style={{marginLeft: wp(1)}} height={wp(3)} svgXmlData={menu_right}/>
                 </View>
-
+                {isOtherMsg && <View style={{
+                    position: 'absolute',
+                    right: 10, top: 10, width: 5, height: 5, borderRadius: 8,
+                    backgroundColor: 'red',
+                }}/>}
             </TouchableOpacity>
 
         );
@@ -158,12 +163,12 @@ export default class ViewUtil {
     static getDeleteIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height:  wp(3.5)}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height:  wp(3.3), width:  wp(3.3)}}
+                style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/task_delete.png')}
             />
-            <Text style={{fontSize:  wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
+            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
 
         </TouchableOpacity>;
     };
@@ -200,20 +205,20 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/tuijian.png')}
             />
-            <Text style={{fontSize:  wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
     };
     static getUpdateIco = (click) => {
         return <TouchableOpacity
             onPress={click}
-            style={{flexDirection: 'row', alignItems: 'center', height:  wp(3.5)}}>
+            style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
 
             <Image
                 style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/update.png')}
             />
-            <Text style={{fontSize:  wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
     };

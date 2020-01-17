@@ -202,6 +202,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-puti-pay')
     implementation project(':react-native-exit-app')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-code-push')
@@ -214,9 +215,11 @@ dependencies {
     implementation project(':react-native-fast-image')
     implementation project(':react-native-svg')
     implementation project(':react-native-reanimated')
+    implementation project(':react-native-puti-pay')
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     // 如果你需要支持GIF动图
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
     implementation project(':jshare-react-native')     // <-- JShare 依赖

@@ -20,35 +20,59 @@ import {
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import {connect} from 'react-redux';
-import {selectBillForUserId} from '../util/AppService';
+import {selectBillForUserId, updateNoticeIsReadForType} from '../util/AppService';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import TabBar from '../common/TabBar';
 import {TabView} from 'react-native-tab-view';
 import SvgUri from 'react-native-svg-uri';
 import goback from '../res/svg/goback.svg';
-import {formatData} from '../util/CommonUtils';
+import {equalsObj, formatData} from '../util/CommonUtils';
+import actions from '../action';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-class UserBillListPage extends PureComponent {
+class UserBillListPage extends React.Component {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
-
         this.state = {
             navigationIndex: this.params.navigationIndex || 0,
             navigationRoutes: [
-                {key: 'first', title: '全部'},
-                {key: 'second', title: '支出'},
-                {key: 'second1', title: '收入'},
+                {key: 'first', title: '全部', isMsg: props.notice_arr[8]},
+                {key: 'second', title: '支出', isMsg: props.notice_arr[9]},
+                {key: 'second1', title: '收入', isMsg: props.notice_arr[10]},
             ],
 
         };
+        const type = (this.params.navigationIndex || 0) + 8;
+        const {onSetNoticeMsgIsRead, userinfo} = this.props;
+        onSetNoticeMsgIsRead(type) && updateNoticeIsReadForType({type: type}, userinfo.token);
 
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.state.navigationIndex !== nextState.navigationIndex
+            || !equalsObj(this.props.notice_arr, nextProps.notice_arr)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!equalsObj(this.props.notice_arr, nextProps.notice_arr)) {
+            this.setState({
+                navigationRoutes: [
+                    {key: 'first', title: '全部', isMsg: nextProps.notice_arr[8]},
+                    {key: 'second', title: '支出', isMsg: nextProps.notice_arr[9]},
+                    {key: 'second1', title: '收入', isMsg: nextProps.notice_arr[10]},
+                ],
+            });
+        }
     }
 
     onBackPress = () => {
@@ -93,7 +117,7 @@ class UserBillListPage extends PureComponent {
                             height: 35,
                             width: 200,
                             alignSelf: 'center',
-                            marginLeft:30,
+                            marginLeft: 30,
                         }}
                         position={this.position}
                         contentContainerStyle={{paddingTop: 13}}
@@ -105,7 +129,7 @@ class UserBillListPage extends PureComponent {
                         titleMarginHorizontal={30}
                         activeStyle={{fontSize: 16, color: [0, 0, 0], fontWeight: 'bold'}}
                         inactiveStyle={{fontSize: 16, color: [150, 150, 150], height: 10}}
-                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3,top:3}}
+                        indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3, top: 3}}
                     />
                     <TouchableOpacity
                         onPress={() => {
@@ -127,7 +151,10 @@ class UserBillListPage extends PureComponent {
                     position={this.position}
                     renderTabBar={() => null}
                     onIndexChange={index => {
-
+                        const noticeType = index + 8;
+                        //console.log(noticeType, 'onIndexChange');
+                        const {onSetNoticeMsgIsRead, userinfo} = this.props;
+                        onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
                         this.setState({
                             navigationIndex: index,
                         });
@@ -174,8 +201,10 @@ class UserBillList extends PureComponent {
     };
 
     componentDidMount() {
+        setTimeout(() => {
+            this._updatePage(true);
+        }, 800);
 
-        this._updatePage(true);
     }
 
     _updatePage = (isRefresh) => {
@@ -310,7 +339,7 @@ class UserBillList extends PureComponent {
                     marginTop: 10,
                     textAlign: 'right', color: 'black',
 
-                }}>{item.bill_status == 1 ? '支付成功' : '处理中'}</Text>
+                }}>{item.bill_status == 1 ? '成功' : item.bill_status == 0 ? '待审核' : item.bill_status == -1 ? '驳回' : ''}</Text>
             </View>
 
         </TouchableOpacity>;
@@ -336,9 +365,10 @@ class UserBillList extends PureComponent {
 
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
+    notice_arr: state.friend.notice_arr,
 });
 const mapDispatchToProps = dispatch => ({
-    // onSetTaskReleaseInfo: (data) => dispatch(actions.onSetTaskReleaseInfo(data)),
+    onSetNoticeMsgIsRead: (type) => dispatch(actions.onSetNoticeMsgIsRead(type)),
 });
 const UserBillListPageRedux = connect(mapStateToProps, mapDispatchToProps)(UserBillListPage);
 

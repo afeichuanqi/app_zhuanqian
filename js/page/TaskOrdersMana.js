@@ -55,7 +55,6 @@ class TaskOrdersMana extends Component {
             ],
         };
         const type = (this.params.navigationIndex || 0) + 4;
-
         const {onSetNoticeMsgIsRead, userinfo} = this.props;
         onSetNoticeMsgIsRead(type) && updateNoticeIsReadForType({type: type}, userinfo.token);
     }

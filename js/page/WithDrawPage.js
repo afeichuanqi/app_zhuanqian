@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
@@ -61,13 +61,13 @@ class WithDrawPage extends React.Component {
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提现管理', null, bottomTheme, 'white', 16, () => {
-            NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
+            NavigationUtils.goPage({navigationIndex:1}, 'UserBillListPage');
         }, false, true, '明细', 'white');
-        let {tota_withdrawal, task_currency, income_dividend, share_dividend, game_dividend, login} = this.props.userinfo;
+        let {tota_withdrawal, task_currency, offer_reward_dividend, share_dividend, game_dividend, login} = this.props.userinfo;
         if (!login) {
             tota_withdrawal = 0;
             task_currency = 0;
-            income_dividend = 0;
+            offer_reward_dividend = 0;
             share_dividend = 0;
             game_dividend = 0;
         }
@@ -144,7 +144,7 @@ class WithDrawPage extends React.Component {
                             top: -20,
                         }}/>
 
-                        {this.renderInfoItem('悬赏收入', income_dividend, bottomTheme)}
+                        {this.renderInfoItem('悬赏收入', offer_reward_dividend, bottomTheme)}
                         {this.renderInfoItem('分享收入', share_dividend, '#514ff3')}
                         {this.renderInfoItem('游戏试玩', game_dividend, '#c822f3')}
 

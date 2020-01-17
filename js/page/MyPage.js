@@ -221,6 +221,7 @@ class BottomInfoColumn extends Component {
 
         const releaseIsNewMsg = notice_arr.slice(1, 4).find(item => item > 0);
         const orderIsNewMsg = notice_arr.slice(4, 8).find(item => item > 0);
+        const billIsNewMsg = notice_arr.slice(8, 11).find(item => item > 0);
         return <View style={{}}>
             <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
                 <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
@@ -249,7 +250,6 @@ class BottomInfoColumn extends Component {
                     info={'有任务、赚赏金'}
                     onPress={() => {
                         MenuClick('TaskOrdersMana');
-                        // notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
                     }}
                     isOtherMsg={orderIsNewMsg}
                 />
@@ -260,7 +260,7 @@ class BottomInfoColumn extends Component {
                     onPress={() => {
                         MenuClick('RechargePage');
                     }}
-                    isOtherMsg={notice_arr[2] > 0}
+
                 />
                 <ToolsItemComponent
                     title={'提现管理'}
@@ -268,29 +268,20 @@ class BottomInfoColumn extends Component {
                     info={'赏金提现'}
                     onPress={() => {
                         MenuClick('WithDrawPage');
-                        // notice_arr[2] > 0 && onSetNoticeMsgIsRead(2) && updateNoticeIsReadForType({type: 2}, userinfo.token);
                     }}
-                    isOtherMsg={notice_arr[2] > 0}
+
                 />
             </ScrollView>
 
             {ViewUtil.getSettingItem(updateOrder, '刷新购买', '实时刷新', () => {
                 MenuClick('UserUpdateOrderPage');
             })}
-            <View>
-                {ViewUtil.getSettingItem(bill, '帐单展示', '支出、收入', () => {
-                    MenuClick('UserBillListPage');
-                    NavigationUtils.goPage({}, '');
+            {ViewUtil.getSettingItem(bill, '帐单详细', '支出、收入', () => {
+                MenuClick('UserBillListPage');
+                NavigationUtils.goPage({}, '');
+            }, billIsNewMsg)}
 
-                })}
 
-                {notice_arr[2] > 0 &&
-                <View style={{
-                    position: 'absolute',
-                    right: 10, top: 10, width: 5, height: 5, borderRadius: 8,
-                    backgroundColor: 'red',
-                }}/>}
-            </View>
             {ViewUtil.getMenuLine()}
             {ViewUtil.getSettingItem(guanzhu2, '我的关注', '关注列表', () => {
                 MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
@@ -429,9 +420,9 @@ class TopInfoColumn extends PureComponent {
                     {/*{ ? }*/}
                     <TouchableOpacity
                         onPress={() => {
-                            if(userinfo.login){
+                            if (userinfo.login) {
                                 NavigationUtils.goPage({userid: userinfo.userid}, 'ShopInfoPage');
-                            }else{
+                            } else {
                                 NavigationUtils.goPage({}, 'LoginPage');
                             }
 
@@ -484,7 +475,7 @@ class TopInfoColumn extends PureComponent {
 
                 }}>
                     {this.genDataInfo(userinfo.login ? userinfo.task_currency : 0, '任务币')}
-                    {this.genDataInfo(userinfo.login ? userinfo.income_dividend : 0, '收入分红')}
+                    {this.genDataInfo(userinfo.login ? userinfo.share_dividend : 0, '分享收入')}
                     {this.genDataInfo(userinfo.login ? userinfo.tota_withdrawal : 0, '提现总额')}
                     {this.genDataInfo(userinfo.login ? userinfo.guaranteed_amount : 0, '保证金')}
                 </View>
@@ -496,15 +487,6 @@ class TopInfoColumn extends PureComponent {
     }
 
     _avatarSelect = (image) => {
-        // const {userinfo} = this.props;
-        // let mime = imageData.mime;
-        // const mimeIndex = mime.indexOf('/');
-        // mime = mime.substring(mimeIndex + 1, mime.length);
-        // const uri = `file://${imageData.path}`;
-        // this.props.onUploadAvatar(userinfo.token, {mime, uri}, (isTrue, data) => {
-        //
-        //
-        // });
         const {userinfo, onUploadAvatar} = this.props;//我的用户信息
 
         const token = userinfo.token;
@@ -512,16 +494,9 @@ class TopInfoColumn extends PureComponent {
         const mimeIndex = mime.indexOf('/');
         mime = mime.substring(mimeIndex + 1, mime.length);
         const path = `file://${image.path}`;
-        onUploadAvatar(userinfo.token, mime, path, () => {
+        onUploadAvatar(token, mime, path, () => {
 
         });
-        // uploadQiniuImage(token, 'userAvatar', mime, path).then(url => {
-        //     onUploadAvatar(userinfo.token, {mime, uri}, (isTrue, data) => {
-        //
-        //
-        //     });
-        //
-        // });
     };
 }
 

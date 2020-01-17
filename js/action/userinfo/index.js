@@ -121,7 +121,7 @@ export function onSetUserSex(token, value, callback) {
         dispatch({type: Types.UPLOAD_USER_SEX_LOADING});
         setUserData(data, token).then((data) => {
             callback(true, data);
-            console.log('修改成功拉');
+            // console.log('修改成功拉');
             dispatch({
                 type: Types.UPLOAD_USER_SEX_SUCCESS,
                 data: {sex: value},
@@ -162,7 +162,7 @@ export function onSetUserName(token, value, callback) {
  * @returns {{theme: *, type: string}}
  */
 export function onAddPayAccount(name, account, type) {
-    console.log(name, account, type);
+    // console.log(name, account, type);
     if (type === 1) {
         return {type: Types.ADD_ALIPAY_ACCOUNT, data: {name, account}};
     }
@@ -189,7 +189,7 @@ export function onGetUserInFoForToken(token, callback) {
     return dispatch => {
         dispatch({type: Types.GET_USER_INFO_LOADING});
         getUserInfoForToken(token).then((data) => {
-            console.log(data, 'data');
+            // console.log(data, 'data');
             callback(true, data);
             dispatch({
                 type: Types.GET_USER_INFO_SUCCESS,

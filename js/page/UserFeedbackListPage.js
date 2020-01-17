@@ -23,7 +23,8 @@ import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {selectFeedbackList} from '../util/AppService';
 import EmptyComponent from '../common/EmptyComponent';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import FastImagePro from '../common/FastImagePro';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -93,16 +94,17 @@ class UserFeedbackListPage extends PureComponent {
         let source = '', title = '';
 
         if (item.type == 1) {
-            source = require('../res/img/feedback/gongneng.png');
+            // source = require('../res/img/feedback/gongneng.png');
             title = '功能建议';
         } else if (item.type == 2) {
-            source = require('../res/img/feedback/xingneng.png');
+            // source = require('../res/img/feedback/xingneng.png');
             title = '体验性能';
         } else if (item.type == 3) {
-            source = require('../res/img/feedback/bug.png');
+            // source = require('../res/img/feedback/bug.png');
             title = 'bug提交';
         }
-        return <TouchableOpacity
+        // console.log();
+        return <View
             key={index}
             activeOpacity={0.6}
 
@@ -116,10 +118,10 @@ class UserFeedbackListPage extends PureComponent {
                 flexDirection: 'row',
             }}
         >
-            <Image
+            <FastImagePro
                 resizeMode={'cover'}
-                source={source}
-                style={{width: 60, height: 60, borderRadius: 5, marginLeft: 10}}
+                source={{uri:JSON.parse(item.content).images&&JSON.parse(item.content).images[0]}}
+                style={{width: wp(12), height: wp(12), borderRadius: 5, marginLeft: 10}}
             />
             <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -129,13 +131,13 @@ class UserFeedbackListPage extends PureComponent {
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text numberOfLines={1} style={{color: 'rgba(0,0,0,0.5)'}}>{JSON.parse(item.content).info}</Text>
                     {/*<Text style={{*/}
-                    {/*    fontSize: 12,*/}
+                    {/*    fontSize: 11,*/}
                     {/*    color: 'rgba(0,0,0,0.7)',*/}
-                    {/*}}>{item.status == 0 ? '正常' : item.status == 1 ? '奖励' : ''}</Text>*/}
+                    {/*}}>{item.status == 0 ? '已发送' : item.status == 1 ? '奖励' : ''}</Text>*/}
                 </View>
 
             </View>
-        </TouchableOpacity>;
+        </View>;
     };
 
     render() {

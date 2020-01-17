@@ -1,7 +1,7 @@
 package com.yiertong.easyz;
 import android.os.Bundle; // <- add necessary import
 import com.facebook.react.ReactActivity;
-import com.yiertong.R;
+import com.yiertong.easyz.R;
 import com.zoontek.rnbootsplash.RNBootSplash; // <- add necessary import
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;

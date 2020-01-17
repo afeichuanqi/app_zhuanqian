@@ -21,7 +21,7 @@ export default function onAction(state = defaultContent, action) {
                 token: data.token,
                 avatar_url: data.avatar_url,
                 task_currency: data.task_currency,
-                income_dividend: data.income_dividend,
+
                 tota_withdrawal: data.tota_withdrawal,
                 guaranteed_amount: data.guaranteed_amount,
                 expire_date: data.expire_date,
@@ -50,7 +50,7 @@ export default function onAction(state = defaultContent, action) {
                 userid: data.id,
                 avatar_url: data.avatar_url,
                 task_currency: data.task_currency,
-                income_dividend: data.income_dividend,
+
                 tota_withdrawal: data.tota_withdrawal,
                 guaranteed_amount: data.guaranteed_amount,
                 expire_date: data.expire_date,

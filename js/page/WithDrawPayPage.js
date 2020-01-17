@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
@@ -28,7 +28,6 @@ import actions from '../action';
 import Toast from '../common/Toast';
 import ToastSelect from '../common/ToastSelect';
 
-const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 class WithDrawPayPage extends React.Component {
@@ -242,6 +241,9 @@ class WithDrawPayPage extends React.Component {
                             this.props.onGetUserInFoForToken(this.props.userinfo.token, () => {
                             });
                             this.toast.show('提现申请成功');
+                            setTimeout(() => {
+                                NavigationUtils.goPage({navigationIndex: 1}, 'UserBillListPage');
+                            }, 1000);
                         }).catch(msg => {
                             this.toast.show(msg);
                         });

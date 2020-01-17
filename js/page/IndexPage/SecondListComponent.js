@@ -7,7 +7,7 @@ import {getBestNewTask} from '../../util/AppService';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
-
+import FastImage from 'react-native-fast-image';
 import SkeletonPlaceholder from '../../common/SkeletonPlaceholder';
 import FastImagePro from '../../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -49,6 +49,13 @@ class SecondListComponent extends PureComponent {
 
     _onScroll = (event) => {
         const y = event.nativeEvent.contentOffset.y;
+        // const Y_ = this.nowY - y;
+        // if (Y_ < 20
+        //     && Y_ > -20
+        // ) {
+        //
+        //     return;
+        // }
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -65,6 +72,7 @@ class SecondListComponent extends PureComponent {
             if (y > this.nowY && y > 0) {
                 showAnimated(true);
             }
+            //
             if (y < this.nowY) {
                 showAnimated(false);
             }
@@ -89,8 +97,6 @@ class SecondListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
-                statusBarType={'dark'}
-                pageSize={10}
                 ref={ref => this.flatList = ref}
                 type={2}
                 style={{zIndex: -100, elevation: -100}}
@@ -99,8 +105,8 @@ class SecondListComponent extends PureComponent {
                 }}
                 onRefresh={this.updateBestNewList}
                 ListHeaderComponent={
-                    <View style={{height: 230, backgroundColor: 'white'}}>
-                        <View style={{marginTop: 20, paddingLeft: 10}}>
+                    <View style={{height: 225, backgroundColor: 'white'}}>
+                        <View style={{marginTop: 25, paddingLeft: 10}}>
                             <Text style={{fontSize: 17, opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
                         <View style={{paddingHorizontal: 10, marginTop: 10}}>
@@ -128,22 +134,22 @@ class SecondListComponent extends PureComponent {
 
             <Animated.View style={{
                 width, height: 30, justifyContent: 'space-between', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}], top: 10,
+                backgroundColor: 'white', transform: [{translateY: columnTop}], top: 5,
             }}>
                 <Text
                     style={{
-                        fontSize: wp(3.2),
+                        fontSize:  wp(3.2),
                         color: bottomTheme,
-                        marginLeft: wp(3.2),
-                        marginTop: hp(1),
+                        marginLeft: 15,
+                        marginTop: 10,
 
                     }}>最近刷新</Text>
 
                 <View style={{
-                    width:  wp(3.2) * 4 * 0.93,
+                    width: wp(3.2) * 4 * 0.93,
                     backgroundColor: bottomTheme,
                     height: 2,
-                    marginLeft: wp(3.6),
+                    marginLeft: 15,
                 }}/>
             </Animated.View>
         </Animated.View>;
@@ -176,27 +182,25 @@ class ScrollItem extends React.Component {
                 NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
             }}
             key={item.id}
-            style={{height: hp(20), width:  wp(35), paddingHorizontal: 5}}>
-            <View style={{width: wp(32)}}>
+            style={{height: 160, width: 140, paddingHorizontal: 5}}>
+            <View style={{width: 130}}>
                 <FastImagePro
                     loadingType={1}
-                    loadingWidth={wp(32)}
-                    loadingHeight={hp(13.5)}
+                    loadingWidth={130}
+                    loadingHeight={100}
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
-
-                        height: hp(13.5),
-                        width:wp(32),
+                        height: 100,
                         borderRadius: 5,
                     }}
                     // resizeMode={'stretch'}
                     source={{uri: item.task_uri}}
                 />
                 <Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}
-                       style={{position: 'absolute', right: 0, top: 0, width: hp(5), height:  hp(2.15)}}/>
+                       style={{position: 'absolute', right: 0, top: 0, width: 35, height: 15}}/>
             </View>
-            <View style={{flexDirection: 'row',width:wp(32), alignItems: 'center', marginTop: 3}}>
-                <Text numberOfLines={1} style={{fontSize: wp(3.1), color: 'black', opacity: 0.7}}>{item.title}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
+                <Text numberOfLines={1} style={{fontSize: wp(3.3), color: 'black', opacity: 0.7}}>{item.title}</Text>
                 <View style={{
                     width: 2,
                     height: 2,
@@ -206,11 +210,11 @@ class ScrollItem extends React.Component {
                     opacity: 0.7,
                 }}/>
                 <Text numberOfLines={1}
-                      style={{fontSize: wp(3.1), color: 'black', width: 65, opacity: 0.7}}>{item.task_name}</Text>
+                      style={{fontSize: wp(3.3), color: 'black', width: 65, opacity: 0.7}}>{item.task_name}</Text>
             </View>
             {item.reward_price && <View style={{
-                flexDirection: 'row', height: 25, alignItems: 'center',
-                zIndex: 10, elevation: 1,
+                flexDirection: 'row',alignItems: 'center',
+                zIndex: 10, elevation: 1,marginTop:1
             }}>
                 <Text style={{
                     fontSize: wp(4),
@@ -218,7 +222,7 @@ class ScrollItem extends React.Component {
                     marginRight: 1,
                 }}>{item.reward_price}</Text>
                 <Text style={{
-                    fontSize:  wp(3.1),
+                    fontSize: 13,
                     color: 'red',
                     fontWeight: '500',
                     top: 1,

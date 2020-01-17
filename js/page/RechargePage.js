@@ -14,14 +14,18 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions, Text,
     View, StatusBar,
-    TextInput, TouchableOpacity, Image,ScrollView
+    TextInput, TouchableOpacity, Image, ScrollView, Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {bottomTheme} from '../appSet';
 import Toast from '../common/Toast';
-import FastImage from 'react-native-fast-image';
+
+import XPay from 'react-native-puti-pay';
+import {alipaySignOrder} from '../util/AppService';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import FastImagePro from '../common/FastImagePro';
 
 const width = Dimensions.get('window').width;
 
@@ -78,7 +82,7 @@ class RechargePage extends PureComponent {
                     ref={ref => this.toast = ref}
                 />
                 <ScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
-                    {this.props.userinfo.login&&<View
+                    {this.props.userinfo.login && <View
                         // activeOpacity={0.6}
                         style={{
                             flexDirection: 'row',
@@ -88,11 +92,11 @@ class RechargePage extends PureComponent {
                             marginTop: 3,
                             alignItems: 'center',
                         }}>
-                        <FastImage
+                        <FastImagePro
                             source={{uri: this.props.userinfo.avatar_url}}
-                            style={{width: 50, height: 50, borderRadius: 25}}
+                            style={{width: wp(13), height: wp(13), borderRadius: wp(13) / 2}}
                         />
-                        <View style={{marginLeft: 10, justifyContent: 'space-around', height: 50, paddingVertical:5}}>
+                        <View style={{marginLeft: 10, justifyContent: 'space-around', height: wp(13), paddingVertical: 5}}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{fontSize: 16, color: 'black'}}>{this.props.userinfo.username}</Text>
                                 <Text style={{
@@ -101,7 +105,7 @@ class RechargePage extends PureComponent {
                                     marginLeft: 10,
                                 }}>ID:{this.props.userinfo.userid}</Text>
                             </View>
-                            <View style={{flexDirection:'row', alignItems:'center'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{
                                     color: 'black',
                                     opacity: 0.5,
@@ -111,7 +115,7 @@ class RechargePage extends PureComponent {
                                     color: 'black',
                                     opacity: 0.5,
                                     fontSize: 12,
-                                    marginLeft:5,
+                                    marginLeft: 5,
                                 }}>{this.props.userinfo.task_currency}</Text>
                             </View>
                         </View>
@@ -127,7 +131,7 @@ class RechargePage extends PureComponent {
                                 color: 'black',
                                 position: 'absolute',
                                 left: 0,
-                                top:5
+                                top: 10,
                             }}>¥</Text>
                             <TextInput
                                 keyboardType={'number-pad'}
@@ -135,7 +139,7 @@ class RechargePage extends PureComponent {
                                     this.rechargeVal = text;
                                 }}
                                 style={{
-                                    fontWeight: 'bold', fontSize: 30, width: width - 40, borderBottomWidth: 1,
+                                    fontWeight: 'bold', fontSize: 35, width: width - 40, borderBottomWidth: 1,
                                     borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 10,
                                 }}
                             />
@@ -154,7 +158,7 @@ class RechargePage extends PureComponent {
                         onPress={this.sureRecharGe}
                         style={{
                             marginTop: 50,
-                            width: width - 80, height: 60, alignItems: 'center', backgroundColor: bottomTheme,
+                            width: wp(80), height: hp(10), alignItems: 'center', backgroundColor: bottomTheme,
                             justifyContent: 'center', alignSelf: 'center', borderRadius: 8,
                         }}>
                         <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>确认充值</Text>
@@ -170,13 +174,13 @@ class RechargePage extends PureComponent {
                     {/*    }}>超过10元提现手续费2%</Text>*/}
                     {/*</View>*/}
                     <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold', fontSize:15}}>充值须知
+                        <Text style={{fontWeight: 'bold', fontSize: 15}}>充值须知
                         </Text>
-                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                         </Text>
-                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
+                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
                         </Text>
-                        <Text style={{fontSize:12,color:'rgba(0,0,0,0.5)', marginTop:5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                         </Text>
                     </View>
                 </ScrollView>
@@ -186,17 +190,62 @@ class RechargePage extends PureComponent {
     }
 
     sureRecharGe = () => {
-        const item = this.items[this.state.activeIndex];
+        // const item = this.items[this.state.activeIndex];
         const rechargeVal = this.rechargeVal;
-        if(!this.props.userinfo.login){
+        if (!this.props.userinfo.login) {
             this.toast.show('请登录');
-            return
+            return;
         }
         if (!rechargeVal || parseFloat(rechargeVal) <= 0) {
             this.toast.show('请输入正确的金额哦 ～ ～');
-            return
+            return;
         }
-        //console.log(item, rechargeVal);
+        //
+        if (this.state.activeIndex === 1) {
+            const params = {
+                subject: '任务币充值',
+                body: '任务币充值-RechargePage',
+                product_code: 'Recharge-Task-Money',
+                platform: Platform.OS,
+                total_amount: rechargeVal,
+            };
+            alipaySignOrder(params, this.props.userinfo.token).then(result => {
+                const orderInfo = result.orderInfo;
+                console.log(orderInfo);
+                //设置支付宝URL方案
+                XPay.setAlipayScheme('ap2021001108698283');
+                //支付宝开启沙箱模式仅限安卓
+                XPay.setAlipaySandbox(false);
+                XPay.alipay(orderInfo, (result) => {
+                    let msg = '支付未成功';
+                    console.log(result, 'result');
+                    if (result.resultStatus == 9000) {
+                        msg = '支付成功';
+                    } else if (result.resultStatus == 8000) {
+                        msg = '正在处理中';
+                    } else if (result.resultStatus == 4000) {
+                        msg = '订单支付失败';
+                    } else if (result.resultStatus == 5000) {
+                        msg = '重复请求';
+                    } else if (result.resultStatus == 6001) {
+                        msg = '用户中途取消';
+                    } else if (result.resultStatus == 6002) {
+                        msg = '网络连接出错';
+                    } else if (result.resultStatus == 6004) {
+                        msg = '支付结果未知（有可能已经支付成功）';
+                    }
+                    if (result.resultStatus == 9000) {
+                        this.toast.show(msg);
+                        setTimeout(() => {
+                            NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
+                        }, 1000);
+                    } else {
+                        this.toast.show(msg);
+
+                    }
+                });
+            });
+        }
 
     };
     _radioClick = (item) => {
@@ -220,12 +269,12 @@ class RechargePage extends PureComponent {
                 marginLeft: 10,
                 borderWidth: this.state.activeIndex == item.id ? 0.8 : 0.3,
                 borderColor: this.state.activeIndex == item.id ? bottomTheme : 'rgba(0,0,0,0.3)',
-                height: 47, width: 125, borderRadius: 5, paddingLeft: 10,
+                height: hp(7.5), width: wp(35), borderRadius: 5, paddingLeft: 10,
 
             }}>
             <Image
                 source={item.source}
-                style={{width: 30, height: 30, borderRadius: 3}}
+                style={{width:  wp(9), height: wp(9), borderRadius: 3}}
             />
             {/*<View>*/}
 

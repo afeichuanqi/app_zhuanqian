@@ -64,7 +64,7 @@ class TaskDetails extends PureComponent {
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
-        console.log(this.params, 'this.params');
+        // console.log(this.params, 'this.params');
         const {test, task_id} = this.params;
         this.test = test;
         this.task_id = task_id;
@@ -122,7 +122,7 @@ class TaskDetails extends PureComponent {
                 });
             } else {
                 const totalData = {fromUserinfo, taskData, stepData: JSON.parse(stepData)};
-                console.log(stepData, 'stepData');
+                // console.log(stepData, 'stepData');
                 this.setState({
                     totalData,
                     StatusForTask,

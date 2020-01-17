@@ -26,7 +26,11 @@ class UploadImgsComponent extends PureComponent {
         data: [{}],
     };
 
-
+    reStart=()=>{
+        this.setState({
+            data: [{}],
+        })
+    }
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
     }
@@ -42,9 +46,7 @@ class UploadImgsComponent extends PureComponent {
                             key={index}
                             ref={ref => this.btn = ref}
                             onPress={() => {
-                                // console.log(this.props.userinfo.login,"this.props.userinfo");
                                 if (!this.props.userinfo.login) {
-                                    // console.log(Global.toast,"Global.toast");
                                     Global.toast.show('Network Error');
                                     return;
                                 }

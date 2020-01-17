@@ -20,7 +20,7 @@ export default class TaskReleaseItem extends PureComponent {
             taskTitle = json.content;
             emojiArr = json.emojiArr;
         }
-        console.log(item,"item")
+        // console.log(item,"item")
         return <View style={{borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)'}}>
 
 

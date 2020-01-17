@@ -123,7 +123,7 @@ export default class VoiceView extends PureComponent {
       await this.props.audioPauseRecord()
       this.setState({ paused: true })
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
@@ -136,7 +136,7 @@ export default class VoiceView extends PureComponent {
       await this.props.audioResumeRecord()
       this.setState({ paused: false })
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
@@ -146,7 +146,7 @@ export default class VoiceView extends PureComponent {
     try {
       await this.props.audioStopRecord()
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
@@ -163,7 +163,7 @@ export default class VoiceView extends PureComponent {
     try {
       await this.props.audioRecord()
     } catch (e) {
-      console.log(e)
+      // console.log(e)
     }
   }
 

@@ -1,11 +1,12 @@
 import Types from '../../action/Types';
+const noticeArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const defaultContent = {
     friendArr: [],
     unMessageLength: 0,
     appeal_2: 0,
     appeal_3: 0,
-    notice_arr: [0, 0, 0, 0, 0, 0, 0,0],
+    notice_arr: noticeArr,
 };
 
 export default function onAction(state = defaultContent, action) {
@@ -72,7 +73,7 @@ export default function onAction(state = defaultContent, action) {
         case Types.SET_NEW_NOTICE_MSG_IS_ALL_READ:
             return {
                 ...state,
-                notice_arr: [0, 0, 0, 0, 0, 0, 0,0],
+                notice_arr: noticeArr,
             };
         case Types.FRIEND_SET_APPEAL_2_MSG_UN_READ:
             return {

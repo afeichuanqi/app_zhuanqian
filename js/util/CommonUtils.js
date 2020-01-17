@@ -196,7 +196,7 @@ export const judgeTaskData = (data, update) => {
 
 
     } catch (e) {
-        console.log(e.toString());
+        // console.log(e.toString());
         return '检查任务步骤';
     }
     return '';
@@ -219,7 +219,7 @@ export const judgeSendTaskData = (task_step_data) => {
                 if (uploadStatus1 !== 1) {
                     return `您步骤${index + 1}验证图未上传成功`;
                 }
-                console.log('typeData.uri1', typeData.uri1);
+                // console.log('typeData.uri1', typeData.uri1);
                 if (!typeData.uri1) {
                     return `您步骤${index + 1}验证图未上传`;
                 }
@@ -236,7 +236,7 @@ export const judgeSendTaskData = (task_step_data) => {
         }
 
     } catch (e) {
-        console.log(e.toString());
+        // console.log(e.toString());
         return '检查任务步骤是否正确填写完毕';
     }
     return '';

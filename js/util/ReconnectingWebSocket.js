@@ -91,6 +91,7 @@ class ReconnectingWebSocket extends WebSocket {
                 // if (ev.id !== this._socketId) {
                 //     return;
                 // }
+
                 let _timeout = this.reconnectInterval * Math.pow(this.reconnectDecay, this.reconnectAttempts);
                 if (timeout) {
                     clearTimeout(timeout);

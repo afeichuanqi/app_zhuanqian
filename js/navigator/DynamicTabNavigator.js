@@ -161,7 +161,7 @@ class BottomBar extends Component {
             ) {
                 this.setStatusBar('translucent');
             } else if (type === 'Navigation/BACK' && activeRouterName === 'ShopInfoPage') {
-                console.log(preRouterName);
+                // console.log(preRouterName);
                 const isFind = this.backSetBarStylePages.findIndex(item => preRouterName == item);
                 if (isFind !== -1) {
                     this.setStatusBar('dark');
