@@ -11,8 +11,8 @@ import Animated from 'react-native-reanimated';
 import {selectAllRecommendTask} from '../../util/AppService';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import EmptyComponent from '../../common/EmptyComponent';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-const {height} = Dimensions.get('window');
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
@@ -25,6 +25,10 @@ export default class FlatListCommonUtil extends PureComponent {
         };
 
     }
+
+    getItemLength = () => {
+        return this.state.taskData.length;
+    };
 
     componentDidMount(): void {
         if (this.props.type === 1) {
@@ -69,13 +73,13 @@ export default class FlatListCommonUtil extends PureComponent {
     _updateList = (refresh) => {
         if (refresh) {
 
-            this.page.pageIndex=0;
+            this.page.pageIndex = 0;
             this.setState({
                 isLoading: true,
             });
 
         } else {
-            this.page.pageIndex =this.page.pageIndex + 1;
+            this.page.pageIndex = this.page.pageIndex + 1;
         }
         //console.log({pageSize: this.page.pageSize,
 
@@ -112,7 +116,8 @@ export default class FlatListCommonUtil extends PureComponent {
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
 
-            ListEmptyComponent={<EmptyComponent type={4} message={'暂时没有符合任务'} height={height - 330}/>}
+            ListEmptyComponent={<EmptyComponent icoW={wp(28)} icoH={wp(25)} type={1} message={'暂时没有符合任务'}
+                                                height={this.props.EmptyHeight}/>}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}
@@ -122,7 +127,7 @@ export default class FlatListCommonUtil extends PureComponent {
             keyExtractor={(item, index) => index + ''}
             style={{
                 backgroundColor: '#f1f1f1',
-                height:'100%'
+                height: '100%',
             }}
             refreshControl={
                 <RefreshControl
@@ -182,7 +187,8 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent statusBarType={this.props.statusBarType}  imageViewModal={this.imageViewModal} item={item} key={index}/>;
+        return <TaskSumComponent statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
+                                 item={item} key={index}/>;
     };
 
 }

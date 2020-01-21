@@ -63,6 +63,8 @@ class HomePage extends PureComponent {
             restSpeedThreshold: 20,
             restDisplacementThreshold: 20,
         }).start(() => {
+            StatusBar.setBarStyle('dark-content', false);
+            StatusBar.setBackgroundColor(theme, false);
             spring(this.translateY, {
                 toValue: 500,
                 damping: 55,
@@ -73,8 +75,7 @@ class HomePage extends PureComponent {
                 restDisplacementThreshold: 1,
             }).start(() => {
                 NavigationUtils.navigation = this.props.navigation;
-                StatusBar.setBarStyle('dark-content', false);
-                StatusBar.setBackgroundColor(theme, false);
+
                 this.setState({
                     showAnimated: false,
                 }, () => {

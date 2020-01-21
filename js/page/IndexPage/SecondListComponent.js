@@ -7,11 +7,11 @@ import {getBestNewTask} from '../../util/AppService';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
-import FastImage from 'react-native-fast-image';
 import SkeletonPlaceholder from '../../common/SkeletonPlaceholder';
 import FastImagePro from '../../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-const width = Dimensions.get('window').width;
+
+const {width, height} = Dimensions.get('window');
 const lunboHeight = 220;
 
 class SecondListComponent extends PureComponent {
@@ -48,14 +48,12 @@ class SecondListComponent extends PureComponent {
     scrollY = new Animated.Value(0);
 
     _onScroll = (event) => {
+        const items = this.flatList.getItemLength();
+        if (items < 3) {
+            return;
+        }
         const y = event.nativeEvent.contentOffset.y;
-        // const Y_ = this.nowY - y;
-        // if (Y_ < 20
-        //     && Y_ > -20
-        // ) {
-        //
-        //     return;
-        // }
+
         const {showAnimated} = this.props;
         if (Platform.OS === 'android') {
 
@@ -97,6 +95,7 @@ class SecondListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+                EmptyHeight={height - 350}
                 ref={ref => this.flatList = ref}
                 type={2}
                 style={{zIndex: -100, elevation: -100}}
@@ -138,7 +137,7 @@ class SecondListComponent extends PureComponent {
             }}>
                 <Text
                     style={{
-                        fontSize:  wp(3.2),
+                        fontSize: wp(3.2),
                         color: bottomTheme,
                         marginLeft: 15,
                         marginTop: 10,
@@ -213,8 +212,8 @@ class ScrollItem extends React.Component {
                       style={{fontSize: wp(3.3), color: 'black', width: 65, opacity: 0.7}}>{item.task_name}</Text>
             </View>
             {item.reward_price && <View style={{
-                flexDirection: 'row',alignItems: 'center',
-                zIndex: 10, elevation: 1,marginTop:1
+                flexDirection: 'row', alignItems: 'center',
+                zIndex: 10, elevation: 1, marginTop: 1,
             }}>
                 <Text style={{
                     fontSize: wp(4),

@@ -11,6 +11,7 @@ import React, {PureComponent} from 'react';
 import {Dimensions, Text, View} from 'react-native';
 import Image from 'react-native-fast-image';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
@@ -39,8 +40,8 @@ class EmptyComponent extends PureComponent {
     render() {
         let source = null;
         if (this.props.source) {
-            source=this.props.source;
-        }else{
+            source = this.props.source;
+        } else {
             const type = this.props.type;
             if (type === 1) {
                 source = require('../res/img/empty/task_empty.png');
@@ -63,8 +64,12 @@ class EmptyComponent extends PureComponent {
                     marginTop: this.props.marginTop,
                     alignItems: 'center',
                 }}>
-                    <Image resizeMode={'contain'} source={source} style={{width: wp(30), height:  wp(30)}}/>
-                    <Text style={{fontSize:  wp(3.6), color: 'rgba(0,0,0,0.6)', marginTop: hp(0.5)}}>{this.props.message} ~
+                    <Image resizeMode={'contain'} source={source} style={{
+                        width: this.props.icoW ? this.props.icoW : wp(33),
+                        height: this.props.icoH ? this.props.icoH : wp(30),
+                    }}/>
+                    <Text
+                        style={{fontSize: wp(3.6), color: 'rgba(0,0,0,0.6)', marginTop: hp(0.5)}}>{this.props.message} ~
                         ~</Text>
                 </View>
             </View>

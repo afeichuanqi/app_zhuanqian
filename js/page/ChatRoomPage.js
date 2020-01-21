@@ -476,9 +476,9 @@ class ChatRoomPage extends React.Component {
             NavigationUtils.goPage({userid: targetId}, 'ShopInfoPage');
         } else {
             const userinfos = targetId.split('|');
-
-            const userId = userinfos[1];
-            this.toast.show(`客服编号:${userId}`);
+            // const userId = userinfos[1];
+            // this.toast.show(`客服编号:${userId}`);
+            NavigationUtils.goPage({customerInfo:userinfos},'CustomerServiceIndex')
         }
 
     };

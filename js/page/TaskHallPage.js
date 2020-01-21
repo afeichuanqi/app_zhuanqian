@@ -35,6 +35,7 @@ import {getEmojis} from '../util/CommonUtils';
 import Emoji from 'react-native-emoji';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
+
 const {timing} = Animated;
 let FilterComponent = null;
 
@@ -231,6 +232,10 @@ class FristListComponent extends PureComponent {
     };
 
     _onScroll = (e) => {
+        const items = this.flatList.getItemLength();
+        if (items < 3) {
+            return;
+        }
         const y = e.nativeEvent.contentOffset.y;
 
         if (Platform.OS === 'android') {

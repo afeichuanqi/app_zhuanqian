@@ -4,6 +4,8 @@ import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import {getAllTask} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const {height, width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
@@ -22,6 +24,9 @@ export default class FlatListCommonUtil extends PureComponent {
 
     }
 
+    getItemLength = () => {
+        return this.state.taskData.length;
+    };
     scrollToTop_ = () => {
         this.flatList.getNode().scrollToOffset({animated: true, viewPosition: 0, index: 0});
     };
@@ -88,45 +93,45 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-                ListEmptyComponent={<EmptyComponent type={4} message={'暂时没有符合任务'} height={height - 180}/>}
-                ListHeaderComponent={ListHeaderComponent}
-                ref={ref => this.flatList = ref}
-                data={taskData}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={1}
-                renderItem={data => this._renderIndexPath(data)}
-                keyExtractor={(item, index) => index + ''}
-                style={{
-                    backgroundColor: '#f5f5f5',
-                    height: '100%',
-                }}
-                refreshControl={
-                    <RefreshControl
-                        // title={'更新任务中'}
-                        refreshing={isLoading}
-                        onRefresh={() => this.onRefresh()}
-                    />
-                }
-                onScroll={onScroll}
-                ListFooterComponent={() => this.genIndicator(hideLoaded)}
-                onEndReached={() => {
-                    setTimeout(() => {
-                        // 等待页面布局完成以后，在让加载更多
-                        if (this.canLoadMore && taskData.length >= 10) {
-                            this.onLoading();
-                            this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                        }
-                    }, 100);
-                }}
-                windowSize={300}
-                onEndReachedThreshold={0.3}
-                onScrollEndDrag={onScrollEndDrag}
-                onScrollBeginDrag={onScrollBeginDrag}
-                onMomentumScrollBegin={() => {
-                    this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
-                }}
-                onMomentumScrollEnd={onMomentumScrollEnd}
-            />
+            ListEmptyComponent={<EmptyComponent icoW={wp(28)} icoH={wp(25)} type={1} message={'暂时没有符合任务'} height={height - hp(27)}/>}
+            ListHeaderComponent={ListHeaderComponent}
+            ref={ref => this.flatList = ref}
+            data={taskData}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={1}
+            renderItem={data => this._renderIndexPath(data)}
+            keyExtractor={(item, index) => index + ''}
+            style={{
+                backgroundColor: '#f5f5f5',
+                height: '100%',
+            }}
+            refreshControl={
+                <RefreshControl
+                    // title={'更新任务中'}
+                    refreshing={isLoading}
+                    onRefresh={() => this.onRefresh()}
+                />
+            }
+            onScroll={onScroll}
+            ListFooterComponent={() => this.genIndicator(hideLoaded)}
+            onEndReached={() => {
+                setTimeout(() => {
+                    // 等待页面布局完成以后，在让加载更多
+                    if (this.canLoadMore && taskData.length >= 10) {
+                        this.onLoading();
+                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                    }
+                }, 100);
+            }}
+            windowSize={300}
+            onEndReachedThreshold={0.3}
+            onScrollEndDrag={onScrollEndDrag}
+            onScrollBeginDrag={onScrollBeginDrag}
+            onMomentumScrollBegin={() => {
+                this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
+            }}
+            onMomentumScrollEnd={onMomentumScrollEnd}
+        />;
     }
 
     // _onMomentumScrollBegin=(3)=>{
@@ -156,7 +161,8 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        return <TaskSumComponent statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal} item={item} key={index}/>;
+        return <TaskSumComponent statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
+                                 item={item} key={index}/>;
     };
 
 }

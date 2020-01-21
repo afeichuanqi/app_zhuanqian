@@ -320,6 +320,12 @@ class FristListComponent extends PureComponent {
 
     scrollY = new Animated.Value(0);
     _onScroll = (event) => {
+        const items = this.flatList.getItemLength();
+        // console.log(items);
+        if (items < 3) {
+            return;
+        }
+
         const y = event.nativeEvent.contentOffset.y;
 
         const {showAnimated} = this.props;
@@ -381,6 +387,7 @@ class FristListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+                EmptyHeight={height - hp(43)}
                 statusBarType={'dark'}
                 pageSize={30}
                 ref={ref => this.flatList = ref}

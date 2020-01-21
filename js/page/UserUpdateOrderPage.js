@@ -168,7 +168,7 @@ class RadioCheck extends PureComponent {
         if (data.length === 0) {
             return <View
                 style={{flexDirection: 'row', flexWrap: 'wrap', paddingVertical: 20, backgroundColor: 'white'}}>
-                {[{}, {}, {}, {}, {}, {}, {}].map(() => {
+                {[{}, {}, {}, {}, {}, {}, {}, {}].map(() => {
                     return <SkeletonPlaceholder minOpacity={0.2}>
                         <View style={{
                             marginHorizontal: 10,
@@ -195,18 +195,18 @@ class RadioCheck extends PureComponent {
                     style={[{
                         paddingHorizontal: 8,
                         paddingVertical: 8,
-                        borderWidth: 1,
+                        borderWidth: 0.3,
                         borderColor: bottomTheme,
                         marginHorizontal: 10,
                         borderRadius: 4,
                         backgroundColor: 'rgb(252,252,252)',
-                        borderStyle: 'dashed',
+                        // borderStyle: 'dashed',
                         width: (width - 40) / 2,
                         justifyContent: 'center',
                         alignItems: 'center',
                         marginBottom: 15,
                         // borderWidth: 1,
-                    }, checkIndex === index ? {borderColor: bottomTheme} : {borderColor: 'rgba(0,0,0,0.7)'}]}>
+                    }, checkIndex === index ? {borderColor: bottomTheme} : {borderColor: 'rgba(0,0,0,0.3)'}]}>
                     <Text
                         style={[{
                             color: bottomTheme,

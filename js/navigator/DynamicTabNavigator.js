@@ -125,7 +125,7 @@ class BottomBar extends Component {
         this.props.dispatch(NavigationActions.back());
         return true;//默认行为
     };
-    backSetBarStylePages = ['ChatRoomPage', 'TaskSendFromUserList'];
+    backSetBarStylePages = ['ChatRoomPage', 'TaskSendFromUserList','RechargePage'];
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
 
@@ -346,9 +346,9 @@ class BottomBarItem extends Component {
         const {onPress, index} = this.props;
         onPress(index);
     };
-    animations = {
-        scale: new Animated.Value(1),
-    };
+    // animations = {
+    //     scale: new Animated.Value(1),
+    // };
     onPressIn = () => {
         if (!this.props.isActive) {
             this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
@@ -376,9 +376,9 @@ class BottomBarItem extends Component {
     render() {
         const {source, unReadLength = 0, isOtherUnRead = false} = this.props;
         return <TouchableOpacity
-            activeOpacity={1}
+            // activeOpacity={0.7}
             onPress={this.onPress}
-            onPressIn={this.onPressIn}
+            // onPressIn={this.onPressIn}
             style={{
                 width: width / 4,
                 height: 45,
@@ -386,8 +386,8 @@ class BottomBarItem extends Component {
                 alignItems: 'center',
 
             }}>
-            <Animated.View
-                style={{transform: [{scale: this.animations.scale}]}}
+            <View
+                // style={{transform: [{scale: this.animations.scale}]}}
             >
                 <Image
                     style={{height: 25, width: 25}}
@@ -418,7 +418,7 @@ class BottomBarItem extends Component {
                     <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
                 </View>}
 
-            </Animated.View>
+            </View>
 
 
         </TouchableOpacity>;

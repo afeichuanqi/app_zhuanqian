@@ -12,7 +12,7 @@ class ChatSocket {
             return;
         }
         // const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
-        const URL = 'ws://39.99.145.203:433/';
+        const URL = 'ws://chat.easy-z.cn/';
 
         Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
         Global.ws.onopen = () => {

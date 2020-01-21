@@ -26,6 +26,7 @@ import XPay from 'react-native-puti-pay';
 import {alipaySignOrder} from '../util/AppService';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FastImagePro from '../common/FastImagePro';
+import actions from '../action';
 
 const width = Dimensions.get('window').width;
 
@@ -82,8 +83,11 @@ class RechargePage extends PureComponent {
                     ref={ref => this.toast = ref}
                 />
                 <ScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
-                    {this.props.userinfo.login && <View
-                        // activeOpacity={0.6}
+                    {this.props.userinfo.login && <TouchableOpacity
+                        onPress={() => {
+                            NavigationUtils.goPage({userid: this.props.userinfo.userid}, 'ShopInfoPage');
+                        }}
+                        activeOpacity={0.6}
                         style={{
                             flexDirection: 'row',
                             padding: 10,
@@ -96,7 +100,12 @@ class RechargePage extends PureComponent {
                             source={{uri: this.props.userinfo.avatar_url}}
                             style={{width: wp(13), height: wp(13), borderRadius: wp(13) / 2}}
                         />
-                        <View style={{marginLeft: 10, justifyContent: 'space-around', height: wp(13), paddingVertical: 5}}>
+                        <View style={{
+                            marginLeft: 10,
+                            justifyContent: 'space-around',
+                            height: wp(13),
+                            paddingVertical: 5,
+                        }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{fontSize: 16, color: 'black'}}>{this.props.userinfo.username}</Text>
                                 <Text style={{
@@ -120,7 +129,7 @@ class RechargePage extends PureComponent {
                             </View>
                         </View>
 
-                    </View>}
+                    </TouchableOpacity>}
 
                     <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
                         <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.8)'}}>请输入充值金额:</Text>
@@ -238,6 +247,10 @@ class RechargePage extends PureComponent {
                         this.toast.show(msg);
                         setTimeout(() => {
                             NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
+                            const {userinfo, onGetUserInFoForToken} = this.props;
+                            onGetUserInFoForToken(userinfo.token, () => {
+                            });
+                            // this.props.onGetUserInFoForToken()
                         }, 1000);
                     } else {
                         this.toast.show(msg);
@@ -269,21 +282,24 @@ class RechargePage extends PureComponent {
                 marginLeft: 10,
                 borderWidth: this.state.activeIndex == item.id ? 0.8 : 0.3,
                 borderColor: this.state.activeIndex == item.id ? bottomTheme : 'rgba(0,0,0,0.3)',
-                height: hp(7.5), width: wp(35), borderRadius: 5, paddingLeft: 10,
+                height: hp(8), width: wp(37), borderRadius: 7, paddingLeft: 10,
 
             }}>
             <Image
                 source={item.source}
-                style={{width:  wp(9), height: wp(9), borderRadius: 3}}
+                style={{width: wp(10), height: wp(10), borderRadius: 5}}
             />
             {/*<View>*/}
 
             {this.state.activeIndex == item.id && <Image
                 source={require('../res/img/payType/active.png')}
-                style={{width: 20, height: 20, position: 'absolute', right: 0, bottom: 0}}
+                style={{
+                    width: 20, height: 20, position: 'absolute', right: 0, bottom: 0, borderRadius: 3,
+                    borderBottomRightRadius: 5,
+                }}
             />}
             {/*</View>*/}
-            <Text style={{fontSize: 14, marginLeft: 10, color: 'black'}}>{item.title}</Text>
+            <Text style={{fontSize: 15, marginLeft: 10, color: 'black'}}>{item.title}</Text>
         </TouchableOpacity>;
     };
     page = {
@@ -295,7 +311,9 @@ class RechargePage extends PureComponent {
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
+});
 const RechargePageRedux = connect(mapStateToProps, mapDispatchToProps)(RechargePage);
 
 
