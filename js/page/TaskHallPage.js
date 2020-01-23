@@ -39,7 +39,7 @@ import AnimatedFadeIn from '../common/AnimatedFadeIn';
 const {timing} = Animated;
 let FilterComponent = null;
 
-const width = Dimensions.get('window').width;
+const {width, height} = Dimensions.get('window');
 
 class TaskHallPage extends PureComponent {
     constructor(props) {
@@ -309,6 +309,7 @@ class FristListComponent extends PureComponent {
 
             <Animated.View style={{transform: [{translateY}]}}>
                 <FlatListCommonUtil
+                    EmptyH={height - hp(27) + (this.state.tOutputRange == hp(5.9) ? hp(5.9) : 0)}
                     statusBarType={'light'}
                     device={this.props.device}
                     ref={ref => this.flatList = ref}
@@ -496,6 +497,7 @@ class HeadlineComponent extends PureComponent {
         if (HeadlineArrays.length === 0) {
             return null;
         }
+        // return null;
         return <AnimatedFadeIn
             duration={1000}
         >

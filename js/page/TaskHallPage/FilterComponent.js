@@ -68,7 +68,7 @@ export default class FilterComponent extends PureComponent {
     render() {
         const translateY = Animated.interpolate(this.animations.translateY, {
             inputRange: [0, 1],
-            outputRange: [-250, hp(5.9)],
+            outputRange: [-300, hp(5.9)],
             // outputRange: [40, 40],
             extrapolate: 'clamp',
         });

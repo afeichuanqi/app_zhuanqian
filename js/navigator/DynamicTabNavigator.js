@@ -52,7 +52,7 @@ class DynamicTabNavigator extends Component<Props> {
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus
-                topColor={theme}
+                topColor={bottomTheme}
             >
                 <ImageViewerModal ref={ref => Global.imageViewModal = ref}/>
                 <TabView
@@ -125,7 +125,7 @@ class BottomBar extends Component {
         this.props.dispatch(NavigationActions.back());
         return true;//默认行为
     };
-    backSetBarStylePages = ['ChatRoomPage', 'TaskSendFromUserList','RechargePage'];
+    backSetBarStylePages = ['ChatRoomPage', 'ChatSettings', 'TaskSendFromUserList', 'RechargePage', 'MyAttentionList'];
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
 
@@ -211,13 +211,14 @@ class BottomBar extends Component {
     }
 
     setStatusBar = (type) => {
-        // console.log(type);
+        console.log(type, 'type');
         if (type === 'dark') {
-
+            StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('dark-content', false);
             StatusBar.setBackgroundColor(theme, false);
         }
         if (type === 'light') {
+            StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('light-content', false);
             StatusBar.setBackgroundColor(bottomTheme, false);
         }
@@ -232,6 +233,7 @@ class BottomBar extends Component {
             StatusBar.setBackgroundColor(bottomTheme, true);
         }
         if (type === 'self') {
+            StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('light-content', false);
             StatusBar.setBackgroundColor('black', false);
         }
@@ -286,12 +288,10 @@ class BottomBar extends Component {
         const {navigationIndex} = this.props;
         const {unMessageLength, appeal_2, appeal_3, notice_arr} = this.props.friend;
         const isOtherUnRead = notice_arr.find(item => item > 0);
-        // console.log(notice_arr,"notice_arr");
         return <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // backgroundColor: '#ffffff',
-            borderTopWidth: 0.8,
+            borderTopWidth: 0.6,
             borderTopColor: '#c0c0c0',
 
         }}>
@@ -302,6 +302,8 @@ class BottomBar extends Component {
                 index={0}
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 0}
+                title={'首页'}
+                titleColor={navigationIndex === 0 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
             />
             <BottomBarItem
                 source={navigationIndex === 1 ? require('../res/img/bottomBarIcon/hallC.png') : require('../res/img/bottomBarIcon/hall.png')}
@@ -309,6 +311,8 @@ class BottomBar extends Component {
                 index={1}
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 1}
+                title={'大厅'}
+                titleColor={navigationIndex === 1 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
             />
             <BottomBarItem
                 source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
@@ -317,6 +321,8 @@ class BottomBar extends Component {
                 isActive={navigationIndex === 2}
                 unReadLength={unMessageLength > 0 ? unMessageLength : 0}
                 isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || isOtherUnRead)}
+                title={'消息'}
+                titleColor={navigationIndex === 2 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
             />
             <BottomBarItem
                 source={navigationIndex === 3 ? require('../res/img/bottomBarIcon/myC.png') : require('../res/img/bottomBarIcon/my.png')}
@@ -325,6 +331,8 @@ class BottomBar extends Component {
                 isActive={navigationIndex === 3}
                 unReadLength={0}
                 isOtherUnRead={isOtherUnRead}
+                title={'我的'}
+                titleColor={navigationIndex === 3 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
             />
         </View>;
     }
@@ -346,9 +354,9 @@ class BottomBarItem extends Component {
         const {onPress, index} = this.props;
         onPress(index);
     };
-    // animations = {
-    //     scale: new Animated.Value(1),
-    // };
+    animations = {
+        scale: new Animated.Value(1),
+    };
     onPressIn = () => {
         if (!this.props.isActive) {
             this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
@@ -363,7 +371,7 @@ class BottomBarItem extends Component {
                 this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                     ...SpringUtils.makeDefaultConfig(),
                     bounciness: 20,
-                    speed: 10,
+                    speed: 20,
                     toValue: 1,
                 })).start(() => {
 
@@ -374,11 +382,11 @@ class BottomBarItem extends Component {
     };
 
     render() {
-        const {source, unReadLength = 0, isOtherUnRead = false} = this.props;
+        const {source, unReadLength = 0, isOtherUnRead = false, title = '首页', titleColor} = this.props;
         return <TouchableOpacity
-            // activeOpacity={0.7}
+            activeOpacity={1}
             onPress={this.onPress}
-            // onPressIn={this.onPressIn}
+            onPressIn={this.onPressIn}
             style={{
                 width: width / 4,
                 height: 45,
@@ -386,11 +394,9 @@ class BottomBarItem extends Component {
                 alignItems: 'center',
 
             }}>
-            <View
-                // style={{transform: [{scale: this.animations.scale}]}}
-            >
+            <Animated.View style={{marginTop: 2, transform: [{scale: this.animations.scale}]}}>
                 <Image
-                    style={{height: 25, width: 25}}
+                    style={{height: 20, width: 20}}
                     source={source}
                 />
                 {unReadLength == 0 && isOtherUnRead && <View style={{
@@ -418,8 +424,9 @@ class BottomBarItem extends Component {
                     <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
                 </View>}
 
-            </View>
 
+            </Animated.View>
+            <Text style={{fontSize: 11, color: titleColor, marginTop: 3}}>{title}</Text>
 
         </TouchableOpacity>;
     }

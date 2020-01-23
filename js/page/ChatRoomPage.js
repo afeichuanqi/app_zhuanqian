@@ -110,7 +110,7 @@ class ChatRoomPage extends React.Component {
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
-                    ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
                 }
 
@@ -150,7 +150,8 @@ class ChatRoomPage extends React.Component {
 
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
-
+        ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+        // console.log(this.FriendId, this.columnType);
         if (this.columnType == 1 || this.columnType == 5) {
 
         } else if (this.columnType == 2 || this.columnType == 3) { //诉求信息
@@ -306,7 +307,7 @@ class ChatRoomPage extends React.Component {
         />;
 
 
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, 'black', 16, () => {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
         });
         const msgList = this.getMessages();

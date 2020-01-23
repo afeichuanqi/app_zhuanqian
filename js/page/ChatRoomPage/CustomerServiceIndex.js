@@ -2,15 +2,15 @@ import React from 'react';
 import {View, Text,  Dimensions, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import ViewUtil from '../util/ViewUtil';
-import NavigationUtils from '../navigator/NavigationUtils';
-import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {theme} from '../appSet';
-import NavigationBar from '../common/NavigationBar';
-import Toast from '../common/Toast';
-import FastImagePro from '../common/FastImagePro';
+import ViewUtil from '../../util/ViewUtil';
+import NavigationUtils from '../../navigator/NavigationUtils';
+import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
+import {theme} from '../../appSet';
+import NavigationBar from '../../common/NavigationBar';
+import Toast from '../../common/Toast';
+import FastImagePro from '../../common/FastImagePro';
 import SvgUri from 'react-native-svg-uri';
-import kefu from '../res/svg/kefu.svg';
+import kefu from '../../res/svg/kefu.svg';
 
 const {width} = Dimensions.get('window');
 
@@ -39,7 +39,7 @@ class CustomerServiceIndex extends React.Component {
         />;
         const customerInfo = this.params.customerInfo;
         // const customerInfos = customerInfo.spi
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, customerInfo[2], null, null, null, 17, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, customerInfo[2], null, null, 'black', 16, null, false);
         return <SafeAreaViewPlus
             topColor={theme}
         >

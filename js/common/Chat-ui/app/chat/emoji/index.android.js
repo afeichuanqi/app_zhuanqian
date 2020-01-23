@@ -110,7 +110,7 @@ export default class EmojiPanel extends PureComponent {
                                                         }
                                                         }
                                                     >
-                                                        <Image source={list.value === '/{del}' ? null : EMOJIS_DATA[list.value]}
+                                                        <Image source={list.value === '/{del}' ? require('../../source/emojis/delete.png') : EMOJIS_DATA[list.value]}
                                                                resizeMode={'contain'} style={{width: 30, height: 30}}/>
                                                     </TouchableOpacity>,
                                                 )

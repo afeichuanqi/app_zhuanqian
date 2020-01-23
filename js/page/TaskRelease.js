@@ -505,7 +505,38 @@ class TaskRelease extends PureComponent {
                     <TouchableOpacity
                         activeOpacity={0.5}
                         onPress={() => {
-                            this.toastS.show();
+
+                            if (!this.taskInfo.update) {
+                                const data = this._getFormData();
+                                const error = judgeTaskData(data);
+                                if (error != '') {
+                                    this.toast.show(error);
+                                } else {
+                                    this.toastS.show();
+                                }
+                            } else {
+                                const isTrue = this.complyColumn.getIsTrue();
+                                if (!isTrue) {
+                                    this.toast.show('您未同意发布规则哦 ～ ～ ');
+                                    return;
+
+                                }
+                                const {userinfo} = this.props;
+                                const {token} = userinfo;
+                                if (!token || token.length === 0) {
+                                    this.toast.show('您未登录哦 ～ ～ ');
+                                    return;
+                                }
+                                const data = this._getFormData();
+                                data.task_id = this.taskInfo.taskId;
+                                const error = judgeTaskData(data, true);
+                                if (error != '') {
+                                    this.toast.show(error);
+                                } else {
+                                    this.toastS.show();
+                                }
+                            }
+
                         }}
                         style={{
                             height: hp(8),
@@ -530,7 +561,7 @@ class TaskRelease extends PureComponent {
                     }}
                     ref={ref => this.toastS = ref}>
                     <View style={{
-                        height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                        height: 30,  paddingHorizontal: 18, justifyContent: 'center',
                         paddingTop: 10,
                     }}>
                         <Text style={{fontSize: 14}}>{`是否确认此任务的${this.taskInfo.update ? '修改' : '发布'}？`}</Text>

@@ -13,7 +13,7 @@ export default class ViewUtil {
         return (
             <View style={{
                 flexDirection: 'row', paddingHorizontal: 10, height: 45, alignItems: 'center',
-                justifyContent: 'space-between', backgroundColor: ColumnBgcColor, width: Dimensions.get('window').width,
+                justifyContent: 'space-between', backgroundColor: ColumnBgcColor,
 
 
             }}>
@@ -21,21 +21,21 @@ export default class ViewUtil {
                 <TouchableOpacity
                     activeOpacity={0.6}
                     onPress={goBackClick}
-                    style={{justifyContent: 'center'}}>
+                    style={{alignItems: 'flex-start', width: 60}}
+                >
                     <SvgUri width={24} height={24} fill={fontColor} svgXmlData={goback}/>
-
-
                 </TouchableOpacity>
-                <View>
+                <View style={{justifyContent: 'center', alignItems: 'center', width: width - 140}}>
                     <Text style={{color: fontColor, fontSize}}>{title}</Text>
                 </View>
                 <TouchableOpacity
                     onPress={rightClick}
                     activeOpacity={0.6}
-                    style={{justifyContent: 'center'}}>
+                    style={{alignItems: 'flex-end', width: 60}}>
                     {isShowRightSvg &&
                     <SvgUri width={24} height={24} fill={fontColor} svgXmlData={rightSvg || message_more}/>}
-                    {isShowRightText && <Text style={{marginTop: 5, color: rightTextColor}}>{rightText}</Text>}
+                    {isShowRightText &&
+                    <Text style={{marginTop: 5, color: rightTextColor}}>{rightText}</Text>}
 
 
                 </TouchableOpacity>

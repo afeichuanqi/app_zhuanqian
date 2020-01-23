@@ -15,7 +15,7 @@ import {
     Platform,
     TouchableOpacity,
     StatusBar,
-    Linking,
+    Linking, DeviceInfo,
 } from 'react-native';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -45,7 +45,7 @@ const height = Dimensions.get('window').height;
 const lunboHeight = height / 4;
 const topIputHeight = (Platform.OS === 'ios') ? 35 : 35;
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-
+const STATUS_BAR_HEIGHT = DeviceInfo.isIPhoneX_deprecated ? 40 : 20;//状态栏的高度
 
 class HomePage extends PureComponent {
     constructor(props) {
@@ -71,8 +71,9 @@ class HomePage extends PureComponent {
         //
         //     }, 500);
         // } else {
-        //     StatusBar.setBarStyle('dark-content', false);
-        //     StatusBar.setBackgroundColor(theme, false);
+
+        // StatusBar.setBarStyle('dark-content', false);
+        // StatusBar.setBackgroundColor(theme, false);
         // }
 
 
@@ -100,15 +101,15 @@ class HomePage extends PureComponent {
     render() {
         const {navigationRoutes, navigationIndex} = this.state;
         let statusBar = {
-            // hidden: false,
-            // backgroundColor: theme,//安卓手机状态栏背景颜色
-            // barStyle: 'dark-content',
+            hidden: false,
+            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
+            barStyle: 'dark-content',
         };
 
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
-            style={{backgroundColor: theme}} // 背景颜色
+            // style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
         const searchWidth = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
@@ -131,7 +132,10 @@ class HomePage extends PureComponent {
             <View
                 style={{flex: 1}}
             >
-                {navigationBar}
+                <View style={{
+                    height:Platform.OS === 'ios' ? STATUS_BAR_HEIGHT : 0,
+                }}/>
+                {/*{navigationBar}*/}
                 {/*顶部搜索栏样式*/}
                 {/*<Toast*/}
                 {/*    position={'center'}*/}

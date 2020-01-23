@@ -98,6 +98,7 @@ class ToastSelect extends PureComponent {
                 >
                     <Animated.View style={[this.props.style, {
                         transform: [{scale: this.animations.scale}], opacity:this.animations.scale,
+                        backgroundColor:'white',
                         // transform: 1,
                     }]}>
 
@@ -107,7 +108,7 @@ class ToastSelect extends PureComponent {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
-                            backgroundColor:'white',
+
                             borderTopLeftRadius:5,
                             borderTopRightRadius:5,
                             paddingTop:15,

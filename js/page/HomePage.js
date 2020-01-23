@@ -9,7 +9,7 @@
 import React, {PureComponent} from 'react';
 import {Dimensions, StyleSheet, View, Text, StatusBar} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
-import {theme} from '../appSet';
+import {theme,bottomTheme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -63,6 +63,8 @@ class HomePage extends PureComponent {
             restSpeedThreshold: 20,
             restDisplacementThreshold: 20,
         }).start(() => {
+
+            StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('dark-content', false);
             StatusBar.setBackgroundColor(theme, false);
             spring(this.translateY, {
@@ -74,8 +76,8 @@ class HomePage extends PureComponent {
                 restSpeedThreshold: 1,
                 restDisplacementThreshold: 1,
             }).start(() => {
+                StatusBar.setHidden(false)
                 NavigationUtils.navigation = this.props.navigation;
-
                 this.setState({
                     showAnimated: false,
                 }, () => {
@@ -96,9 +98,7 @@ class HomePage extends PureComponent {
         });
         return (
             <View style={{flex: 1}}>
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
+
                 {showAnimated && <Animated.View style={[styles.container, {opacity: opacity}]}>
                     <Animated.View
                         style={[
@@ -129,14 +129,10 @@ class HomePage extends PureComponent {
                     </View>
 
                 </Animated.View>}
-
-                <SafeAreaViewPlus
-                    topColor={theme}
-                    bottomInset={false}
-                >
-                    <DynamicTabNavigator/>
-
-                </SafeAreaViewPlus>
+                <Toast
+                    ref={ref => this.toast = ref}
+                />
+                <DynamicTabNavigator/>
                 <PromotionToast ref={ref => this.promotionToast = ref}/>
             </View>
 

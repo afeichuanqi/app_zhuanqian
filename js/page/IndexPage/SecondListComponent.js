@@ -171,7 +171,7 @@ class ScrollItem extends React.Component {
 
         if (!item.task_name) {
             return <SkeletonPlaceholder minOpacity={0.2}>
-                <View style={{width: 140, height: 100, marginRight: 10}}/>
+                <View style={{width: 140, height: 100, marginRight: 10, borderRadius:5}}/>
                 <View style={{height: 15, width: 100, marginTop: 5}}/>
                 <View style={{height: 20, width: 50, marginTop: 2}}/>
             </SkeletonPlaceholder>;
@@ -196,7 +196,8 @@ class ScrollItem extends React.Component {
                     source={{uri: item.task_uri}}
                 />
                 <Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}
-                       style={{position: 'absolute', right: 0, top: 0, width: 35, height: 15}}/>
+                       style={{position: 'absolute', right: 0, top: 0, width: 35, height: 15,
+                           borderTopRightRadius:5}}/>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                 <Text numberOfLines={1} style={{fontSize: wp(3.3), color: 'black', opacity: 0.7}}>{item.title}</Text>

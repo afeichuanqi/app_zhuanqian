@@ -106,7 +106,7 @@ class TaskEasyInfoComponent extends PureComponent {
                 </View>
 
             </View>
-            <Text style={{alignSelf: 'center', fontSize: 17, color: 'red'}}>+{item.rewardPrice}元</Text>
+            <Text style={{alignSelf: 'center', fontSize: wp(4), color: 'red'}}>+{item.rewardPrice}元</Text>
         </TouchableOpacity>;
 
 

@@ -93,7 +93,7 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent icoW={wp(28)} icoH={wp(25)} type={1} message={'暂时没有符合任务'} height={height - hp(27)}/>}
+            ListEmptyComponent={<EmptyComponent icoW={wp(28)} icoH={wp(25)} type={1} message={'暂时没有符合任务'} height={this.props.EmptyH}/>}
             ListHeaderComponent={ListHeaderComponent}
             ref={ref => this.flatList = ref}
             data={taskData}

@@ -203,7 +203,7 @@ class UserBillList extends PureComponent {
     componentDidMount() {
         setTimeout(() => {
             this._updatePage(true);
-        }, 800);
+        }, 200);
 
     }
 

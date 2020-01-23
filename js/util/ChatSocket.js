@@ -82,7 +82,8 @@ class ChatSocket {
                     //收到回调进行未读消息数回调
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
-                    Global.dispatch(Message.onSetAllFriendUnRead(data.FriendId, data.columnType));
+                    // console.log(data.FriendId, data.columnType,'read -success')
+
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
                     if (data.msgArr && data.msgArr.length > 0) {
@@ -179,11 +180,12 @@ class ChatSocket {
     };
     //设置我和fromuserinf的消息为已经读区
     setFromUserIdMessageIsRead = (FriendId, columnType) => {
+        Global.dispatch(Message.onSetAllFriendUnRead(FriendId, columnType));
         this.sendToServer(types.MESSAGE_SET_USER_ID_IS_READ, {
             FriendId,
             columnType: columnType,
-            // columnType
         });
+
     };
     //发送消息给指定用户
     sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo, sendFormId) => {

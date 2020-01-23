@@ -42,7 +42,7 @@ import RechargePage from '../page/RechargePage';
 import UserUpdateOrderPage from '../page/UserUpdateOrderPage';
 import UserFeedbackListPage from '../page/UserFeedbackListPage';
 import WithDrawPage from '../page/WithDrawPage';
-import CustomerServiceIndex from '../page/CustomerServiceIndex';
+import CustomerServiceIndex from '../page/ChatRoomPage/CustomerServiceIndex';
 import WithDrawPayPage from '../page/WithDrawPayPage';
 import WithDrawAccount from '../page/WithDrawAccount';
 import ImageExample from '../common/ImageViewer/ImageViewer';

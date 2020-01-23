@@ -1,11 +1,23 @@
 import React from 'react';
-import {ActivityIndicator, Modal, PermissionsAndroid, StatusBar} from 'react-native';
+import {
+    ActivityIndicator,
+    Modal,
+    PermissionsAndroid,
+    StatusBar,
+    View,
+    Dimensions,
+    TouchableOpacity,
+    Text,
+    Platform,
+} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import FastImage from 'react-native-fast-image';
 import Global from './Global';
 import {saveImg} from '../util/ImageUtil';
 import Toast from './Toast';
 import {bottomTheme, theme} from '../appSet';
+
+const {width, height} = Dimensions.get('window');
 
 export default class ImageViewerModal extends React.Component {
     state = {
@@ -23,11 +35,14 @@ export default class ImageViewerModal extends React.Component {
     }
 
     setStatusBar = (type) => {
+        // console.log(type);
         if (type === 'dark') {
+            StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('dark-content', false);
             StatusBar.setBackgroundColor(theme, false);
         }
         if (type === 'light') {
+            StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('light-content', false);
             StatusBar.setBackgroundColor(bottomTheme, false);
         }
@@ -42,6 +57,7 @@ export default class ImageViewerModal extends React.Component {
             StatusBar.setBackgroundColor(bottomTheme, true);
         }
         if (type === 'self') {
+            StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('light-content', false);
             StatusBar.setBackgroundColor('black', false);
         }
@@ -169,7 +185,42 @@ export default class ImageViewerModal extends React.Component {
                 onLoadSuccess={this.onLoadSuccess}
                 imageUrls={images}
                 index={index}
+                menus={({cancel, saveToLocal}) => {
+                    return <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={cancel}
+                        style={{
+                            height,
+                            width,
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                        }}>
+                        <View style={{position: 'absolute', bottom: Platform.OS === 'android' ? 20 : 0, left: 0}}>
+                            <TouchableOpacity
+                                onPress={saveToLocal}
+                                activeOpacity={0.9}
+                                style={{
+                                    backgroundColor: 'white',
+                                    width, height: 40,
+                                    justifyContent: 'center', alignItems: 'center',
+                                }}
+                            >
+                                <Text style={{color: 'black'}}>保存</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={cancel}
+                                activeOpacity={0.9}
+                                style={{
+                                    backgroundColor: 'white',
+                                    width, height: 40,
+                                    justifyContent: 'center', alignItems: 'center',
+                                }}
+                            >
+                                <Text style={{color: 'black'}}>取消</Text>
+                            </TouchableOpacity>
+                        </View>
 
+                    </TouchableOpacity>;
+                }}
             />
         </Modal>;
 
