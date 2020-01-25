@@ -42,7 +42,7 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import actions from '../action';
 import {equalsObj} from '../util/CommonUtils';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -136,9 +136,9 @@ class TaskReleaseMana extends Component {
                         handleIndexChange={this.handleIndexChange}
                         // indicatorStyle={styles.indicator}
                         bounces={true}
-                        titleMarginHorizontal={25}
-                        activeStyle={{fontSize: 15, color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: 12, color: [255, 255, 255], height: 10}}
+                        titleMarginHorizontal={wp(4)}
+                        activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
                     />
                     <TouchableOpacity

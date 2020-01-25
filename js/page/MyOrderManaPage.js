@@ -24,12 +24,11 @@ import MyModalBoxTwo from '../common/MyModalBoxTwo';
 import ToastSelect from '../common/ToastSelect';
 import BackPressComponent from '../common/BackPressComponent';
 import FastImage from 'react-native-fast-image';
-import {getEmojis} from '../util/CommonUtils';
-import Emoji from 'react-native-emoji';
+import {renderEmoji} from '../util/CommonUtils';
 import ToastShare from '../common/ToastShare';
 import Toast from 'react-native-root-toast';
 const {width} = Dimensions.get('window');
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 class MyOrderManaPage extends PureComponent {
     constructor(props) {
         super(props);
@@ -81,17 +80,7 @@ class MyOrderManaPage extends PureComponent {
     }
 
     getTaskItem = (taskInfo) => {
-        // console.log(taskInfo);
         let taskTitle = taskInfo.task_title;
-        let emojiArr = [];
-        if (taskTitle) {
-
-            const json = getEmojis(taskTitle);
-            if (json) {
-                taskTitle = json.content;
-                emojiArr = json.emojiArr;
-            }
-        }
 
         return <TouchableOpacity
             onPress={() => {
@@ -129,51 +118,57 @@ class MyOrderManaPage extends PureComponent {
                 <Text
                     numberOfLines={2}
                     style={{
-                        fontSize: 15,
+                        fontSize: hp(2.3),
                         color: 'black',
                         width: width - 140,
 
-                    }}>{taskInfo.id} - {taskTitle} {emojiArr.map((item) => {
-                    return <Emoji name={item} style={{fontSize: 15}}/>;
-                })}</Text>
+                    }}>
+
+                    {taskInfo && renderEmoji(`${taskInfo.id} - ${taskInfo.task_title}`, [],  hp(2.3), 0, 'black').map((item, index) => {
+                        return item;
+                    })}
+
+                </Text>
+
+
             </View>
             {/*左下*/}
             <View style={{
                 position: 'absolute',
                 bottom: (taskTitle && taskTitle.length) > 13 ? 10 : 15,
-                left: 60,
+                left: 65,
                 flexDirection: 'row',
             }}>
-                <LabelBigComponent paddingVertical={3} paddingHorizontal={8} fontSize={11} title={taskInfo.task_info}/>
+                <LabelBigComponent paddingVertical={3} paddingHorizontal={6} fontSize={hp(1.7)} title={taskInfo.task_info}/>
             </View>
             {/*右上*/}
             <View style={{
                 position: 'absolute',
-                top: 25,
+                top: 20,
                 right: 30,
             }}>
                 <Text style={{
-                    fontSize: 16,
+                    fontSize: hp(2.5),
                     color: 'red',
                 }}>+{taskInfo.reward_price}元</Text>
             </View>
             {/*右下*/}
             <View style={{
                 position: 'absolute',
-                bottom: 15,
+                bottom: hp(2.5),
                 right: 30,
                 alignItems: 'center',
                 flexDirection: 'row',
             }}>
                 <Text style={{
-                    fontSize: 13,
+                    fontSize: hp(1.8),
                     opacity: 0.5,
                 }}>浏览次数:{taskInfo.browse_num}</Text>
 
             </View>
             <View style={{
                 position: 'absolute',
-                bottom: 20,
+                bottom: hp(3.5),
                 right: 5,
                 alignItems: 'center',
             }}>
@@ -231,8 +226,8 @@ class MyOrderManaPage extends PureComponent {
                             paddingRight: 10,
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 15, marginRight: 10}}>剩余数量:</Text>
-                                <Text>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: hp(2.0), marginRight: 10}}>剩余数量:</Text>
+                                <Text style={{fontSize:hp(2.0)}}>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -243,7 +238,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold'}}>加量</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:hp(2.05)}}>加量</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{
@@ -255,8 +250,8 @@ class MyOrderManaPage extends PureComponent {
                             paddingRight: 10,
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 15, marginRight: 10}}>佣金:</Text>
-                                <Text>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: hp(2.0), marginRight: 10}}>佣金:</Text>
+                                <Text style={{fontSize:hp(2.0)}}>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -267,7 +262,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold'}}>加价</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:hp(2.05)}}>加价</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

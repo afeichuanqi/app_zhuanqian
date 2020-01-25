@@ -32,9 +32,9 @@ import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import {equalsObj, getEmojis} from '../util/CommonUtils';
-import Emoji from 'react-native-emoji';
+import {equalsObj, renderEmoji} from '../util/CommonUtils';
 import actions from '../action';
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -174,16 +174,16 @@ class TaskOrdersMana extends Component {
             //     return <FristListComponent status={0}
             //                                userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent source={require('../res/img/ReleseMana/o1.png')}  status={1}
+                return <FristListComponent source={require('../res/img/ReleseMana/o1.png')} status={1}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent source={require('../res/img/ReleseMana/o2.png')}  status={2}
+                return <FristListComponent source={require('../res/img/ReleseMana/o2.png')} status={2}
                                            userinfo={this.props.userinfo}/>;
             case 'second2':
-                return <FristListComponent source={require('../res/img/ReleseMana/o3.png')}  status={3}
+                return <FristListComponent source={require('../res/img/ReleseMana/o3.png')} status={3}
                                            userinfo={this.props.userinfo}/>;
             case 'second3':
-                return <FristListComponent source={require('../res/img/ReleseMana/o4.png')}  status={4}
+                return <FristListComponent source={require('../res/img/ReleseMana/o4.png')} status={4}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -355,7 +355,8 @@ class FristListComponent extends PureComponent {
         return <View style={{flex: 1}}>
             <AnimatedFlatList
                 style={{backgroundColor: '#e8e8e8'}}
-                ListEmptyComponent={<EmptyComponent source={this.props.source} height={height - 100} message={'您还没有相关任务'}/>}
+                ListEmptyComponent={<EmptyComponent source={this.props.source} height={height - 100}
+                                                    message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}
@@ -400,22 +401,17 @@ class OrdersItem extends React.Component {
         if (!item.taskId) {
             return null;
         }
-        let taskTitle = item.task_title ? item.task_title : '';
-        let emojiArr = [];
-        const json = getEmojis(taskTitle);
-        if (json) {
-            taskTitle = json.content;
-            emojiArr = json.emojiArr;
-        }
         const TextTitle = <Text
             numberOfLines={2}
             style={{
                 fontWeight: 'bold',
                 color: 'black',
                 width: width - 150,
-            }}>{item && item.taskId} - {taskTitle} {emojiArr.map((item, index) => {
-            return <Emoji key={index} name={item} style={{fontSize: 15}}/>;
-        })}</Text>;
+            }}>
+            {item && renderEmoji(`${item.taskId} - ${item.task_title}`, [],  15, 0, 'black').map((item, index) => {
+                return item;
+            })}
+        </Text>;
         return <View
 
             style={{

@@ -4,22 +4,13 @@ import ViewUtil from '../../util/ViewUtil';
 import {bottomTheme} from '../../appSet';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
-import {getEmojis} from '../../util/CommonUtils';
-import Emoji from 'react-native-emoji';
+import { renderEmoji} from '../../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {width} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
     render() {
         const {item} = this.props;
-        let taskTitle = item.task_title;
-        let emojiArr = [];
-        const json = getEmojis(taskTitle);
-        if (json) {
-            taskTitle = json.content;
-            emojiArr = json.emojiArr;
-        }
-        // console.log(item,"item")
         return <View style={{borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)'}}>
 
 
@@ -54,24 +45,26 @@ export default class TaskReleaseItem extends PureComponent {
                             width: wp(50),
                         }}>
                             <Text style={{
-                                fontSize: wp(3.8),
+                                fontSize: hp(2.2),
                                 color: 'black',
 
 
                             }}
                                   numberOfLines={1}
                             >
-                                {item.id} - {taskTitle} {emojiArr.map((item, index) => {
-                                return <Emoji key={index} name={item} style={{fontSize: wp(3.8)}}/>;
-                            })}
-
+                            {/*    {item.id} - {taskTitle} {emojiArr.map((item, index) => {*/}
+                            {/*    return <Emoji key={index} name={item} style={{fontSize: hp(2.2)}}/>;*/}
+                            {/*})}*/}
+                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [],hp(2.2), 0,'black').map((item, index) => {
+                                    return item;
+                                })}
                             </Text>
                             {item.recommendIsExp == 1 && <View style={{
                                 height: wp(3.7), width: wp(3.7), borderRadius: 3, backgroundColor: bottomTheme,
                                 alignItems: 'center',
                                 justifyContent: 'center', marginLeft: 5,
                             }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>推</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.6)}}>推</Text>
                             </View>}
                             {item.topIsExp == 1 && <View style={{
                                 height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
@@ -79,13 +72,13 @@ export default class TaskReleaseItem extends PureComponent {
                                 justifyContent: 'center',
                                 marginLeft: 3,
                             }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>顶</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:  hp(1.6)}}>顶</Text>
                             </View>}
                         </View>
                         {/*价格*/}
                         <View style={{}}>
                             <Text style={{
-                                fontSize: wp(4),
+                                fontSize: hp(2.5),
                                 color: 'red',
                             }}>+{item.reward_price} 元</Text>
                         </View>
@@ -98,9 +91,9 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems:'center',
                             justifyContent:'center',
                         }}>
-                            <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
-                            <View style={{height:12,width:0.5, backgroundColor:'rgba(0,0,0,0.5)', marginHorizontal:7}}/>
-                            <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
+                            <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
+                            <View style={{height:hp(1.6),width:0.5, backgroundColor:'rgba(0,0,0,0.5)', marginHorizontal:7}}/>
+                            <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
                         </View>
                         {/*剩余数*/}
                         <View style={{
@@ -108,19 +101,19 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems: 'center',
                         }}>
                             <Text style={{
-                                fontSize: wp(3.1),
+                                fontSize: hp(1.7),
                                 opacity: 0.7,
                                 color: 'black',
                             }}>进行中:{item.task_ing_num}</Text>
                             <View
                                 style={{
                                     width: 0.7,
-                                    height: 13,
+                                    height: hp(1.7),
                                     backgroundColor: 'rgba(0,0,0,0.5)',
                                     marginHorizontal: 5,
                                 }}/>
                             <Text style={{
-                                fontSize: wp(3.1),
+                                fontSize: hp(1.7),
                                 opacity: 0.7,
                                 color: 'black',
                             }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>

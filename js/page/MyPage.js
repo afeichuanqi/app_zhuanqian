@@ -70,7 +70,7 @@ class MyPage extends PureComponent {
         };
         const titleTop = Animated.interpolate(this.scrollY, {
             inputRange: [-800, 0, 100],
-            outputRange: [850, 55, 18],
+            outputRange: [850, hp(7.9), 18],
             extrapolate: 'clamp',
         });
         const titleFontSize = Animated.interpolate(this.scrollY, {
@@ -265,7 +265,7 @@ class BottomInfoColumn extends Component {
                 <ToolsItemComponent
                     title={'提现管理'}
                     source={require('../res/img/my/tixian_mana.png')}
-                    info={'赏金提现'}
+                    info={'有赏金、来提现'}
                     onPress={() => {
                         MenuClick('WithDrawPage');
                     }}
@@ -305,7 +305,7 @@ class BottomInfoColumn extends Component {
             })}
             {ViewUtil.getMenuLine()}
             <View style={{paddingVertical: 20, paddingBottom: 30, alignItems: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>工作时间:9-30-18:30</Text>
+                <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.5)'}}>工作时间:9-30-18:30</Text>
             </View>
 
 
@@ -336,12 +336,12 @@ class ToolsItemComponent extends PureComponent {
             onPress={this.props.onPress}
             activeOpacity={0.6}
             style={{
-                width: wp(36), height: hp(9),
+                 paddingVertical:hp(1.6),
                 borderRadius: 10,
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexDirection: 'row',
-                paddingHorizontal: wp(2.35),
+                paddingHorizontal: wp(3),
                 shadowColor: '#e8e8e8',
                 shadowRadius: 5,
                 shadowOpacity: 3,
@@ -352,10 +352,10 @@ class ToolsItemComponent extends PureComponent {
                 marginVertical: hp(1.5),
             }}>
             <View>
-                <Text style={{fontSize: wp(4.1), color: 'black'}}>{title}</Text>
-                <Text style={{fontSize: wp(3), color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
+                <Text style={{fontSize: hp(2.3), color: 'black'}}>{title}</Text>
+                <Text style={{fontSize: hp(1.65), color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
-            <FastImage source={source} style={{width: wp(8.7), height: wp(8.7), borderRadius: 12}}/>
+            <FastImage source={source} style={{width: wp(8.7), height: wp(8.7), borderRadius: 12, marginLeft:wp(1.5)}}/>
             {isOtherMsg && <View style={{
                 height: 8,
                 width: 8,
@@ -381,8 +381,8 @@ class TopInfoColumn extends PureComponent {
             justifyContent: 'center',
             alignItems: 'center',
         }}>
-            <Text style={{color: 'white', fontSize: 16}}>{value}</Text>
-            <Text style={{color: 'white', fontSize: 12, opacity: 0.8, marginTop: 5}}>{title}</Text>
+            <Text style={{color: 'white', fontSize: hp(2.2)}}>{value}</Text>
+            <Text style={{color: 'white', fontSize: hp(1.8), opacity: 0.8, marginTop: 5}}>{title}</Text>
         </View>;
     };
     _avatarClick = () => {
@@ -395,26 +395,19 @@ class TopInfoColumn extends PureComponent {
     };
 
     render() {
-        // const translateY = Animated.interpolate(this.props.scrollY, {
-        //     inputRange: [0, 120],
-        //     outputRange: [-130, 70],
-        //     extrapolate: 'clamp',
-        // });
         const {userinfo} = this.props;
         const opacity = Animated.interpolate(this.props.scrollY, {
             inputRange: [0, 30, 120],
             outputRange: [1, 0.1, 0.1],
             extrapolate: 'clamp',
         });
-        // console.log('');
-        // console.log(userinfo);
         return <ImageBackground
             resizeMode={'stretch'}
             source={require('../res/img/my/my_background.png')}
             style={{backgroundColor: bottomTheme}}>
-            <View style={{marginTop: 130, height: 0}}/>
+            <View style={{marginTop: hp(19), height: 0}}/>
             <Animated.View
-                style={{height: 130, opacity, position: 'absolute', top: 0}}>
+                style={{height: hp(19), opacity, position: 'absolute', top: 0}}>
                 {/*头像*/}
                 <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row'}}>
                     {/*{ ? }*/}
@@ -428,10 +421,10 @@ class TopInfoColumn extends PureComponent {
 
 
                         }}
-                        style={{marginTop: 40, flexDirection: 'row', alignItems: 'center'}}>
+                        style={{marginTop: hp(6), flexDirection: 'row', alignItems: 'center'}}>
 
                         <SvgUri width={14} height={14} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
-                        <Text style={{fontSize: 12, color: 'white'}}>我的店铺 > </Text>
+                        <Text style={{fontSize: hp(1.7), color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -472,7 +465,7 @@ class TopInfoColumn extends PureComponent {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
-
+                    // marginTop:hp(0.3)
                 }}>
                     {this.genDataInfo(userinfo.login ? userinfo.task_currency : 0, '任务币')}
                     {this.genDataInfo(userinfo.login ? userinfo.share_dividend : 0, '分享收入')}

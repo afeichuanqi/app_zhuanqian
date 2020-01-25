@@ -97,9 +97,10 @@ class ChatSocket {
                     Global.dispatch(Message.onSetImageMsgStatus(data.uuid, data.msgId, data.sendDate, data.sendStatus, data.content));
                     break;
                 case types.ACCOUNT_QUIT_RESPONSE://收到退出账号消息
+                    Global.token = '';
                     Global.dispatch(Message.onMessageInitialiZation());
                     Global.dispatch(Message.onFriendInitialiZation());
-                    Global.token = '';
+
                     break;
                 case types.NOTICE_USER_MESSAGE://收到系统消息
 

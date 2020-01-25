@@ -4,15 +4,15 @@ import FastImage from 'react-native-fast-image';
 import LabelBigComponent from './LabelBigComponent';
 import {bottomTheme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
-import Emoji from 'react-native-emoji';
-import {getEmojis} from '../util/CommonUtils';
+import {renderEmoji} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
 class TaskInfoComponent extends PureComponent {
 
     static defaultProps = {
-        titleFontSize: 15,
+        titleFontSize: hp(1.7),
+        fontSize: hp(1.7),
         marginHorizontal: 10,
         item: {
             avatarUrl: '',
@@ -45,14 +45,6 @@ class TaskInfoComponent extends PureComponent {
     render() {
 
         const {titleFontSize, marginHorizontal, item, showTime} = this.props;
-
-        let taskTitle = item.taskTitle;
-        let emojiArr = [];
-        const json = getEmojis(taskTitle);
-        if (json) {
-            taskTitle = json.content;
-            emojiArr = json.emojiArr;
-        }
 
         return <TouchableOpacity
             activeOpacity={0.6}
@@ -93,12 +85,16 @@ class TaskInfoComponent extends PureComponent {
                             numberOfLines={this.props.numberOfLines}
                             style={{
                                 // width: width - 150,
-                                fontSize: wp(3.6),
+                                fontSize: hp(2.12),
                                 color: 'black',
 
-                            }}>{taskTitle} {emojiArr.map((item) => {
-                            return <Emoji name={item} style={{fontSize: wp(3.6)}}/>;
-                        })}</Text>
+                            }}>
+                            {item && renderEmoji(`${item.taskTitle}`, [], hp(2.12), 0, 'black').map((item, index) => {
+                                return item;
+                            })}
+                            </Text>
+
+
                         {item.recommendIsExp == 1 && <View style={{
                             height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
                             alignItems: 'center',
@@ -118,7 +114,7 @@ class TaskInfoComponent extends PureComponent {
                     {/*价格*/}
                     <View style={{}}>
                         <Text style={{
-                            fontSize: 16,
+                            fontSize: hp(2.2),
                             color: 'red',
                         }}>+{item.rewardPrice} 元</Text>
                     </View>
@@ -139,14 +135,14 @@ class TaskInfoComponent extends PureComponent {
                         alignItems: 'center',
                     }}>
                         <Text style={{
-                            fontSize: wp(3),
+                            fontSize: hp(1.7),
                             opacity: 0.5,
                             color: 'black',
                         }}>{parseInt(item.taskPassNum)}人已完成</Text>
                         <View
                             style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
                         <Text style={{
-                            fontSize:  wp(3),
+                            fontSize: hp(1.7),
                             opacity: 0.5,
                             color: 'black',
                         }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>

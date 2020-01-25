@@ -68,11 +68,11 @@ export default class ViewUtil {
 
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingLeft: wp(5)}}>
                     <SvgUri width={wp(5)} height={wp(5)} fill={'rgba(0,0,0,0.9)'} svgXmlData={menuSvg}/>
-                    <Text style={{marginLeft: wp(2.5), fontSize: wp(3.9), opacity: 1, color: 'black'}}>{title}</Text>
+                    <Text style={{marginLeft: wp(2.5), fontSize: hp(2.2), opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingRight: wp(2)}}>
                     <Text
-                        style={{marginLeft: wp(2.5), fontSize: wp(3.2), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
+                        style={{marginLeft: wp(2.5), fontSize:hp(1.8), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={wp(3)} style={{marginLeft: wp(1)}} height={wp(3)} svgXmlData={menu_right}/>
                 </View>
                 {isOtherMsg && <View style={{
@@ -180,7 +180,7 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3)}}
                 source={require('../res/img/taskReView/review.png')}
             />
-            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
+            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
 
         </TouchableOpacity>;
     };
@@ -192,7 +192,7 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3)}}
                 source={require('../res/img/taskReView/zhiding.png')}
             />
-            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
+            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
 
         </TouchableOpacity>;
     };
@@ -205,7 +205,7 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/tuijian.png')}
             />
-            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
     };
@@ -218,7 +218,7 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/update.png')}
             />
-            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
     };

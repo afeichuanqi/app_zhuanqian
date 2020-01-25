@@ -106,7 +106,6 @@ class AccountSetting extends PureComponent {
     }
 
     _clearAccountInfo = () => {
-
         ChatSocket.quitAccount();
         this.props.onClearUserinfoAll();
         NavigationUtils.goBack(this.props.navigation);

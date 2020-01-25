@@ -416,13 +416,13 @@ class BottomBarItem extends Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                     position: 'absolute',
-                    top: -8, right: -11,
+                    top: -8, right: (unReadLength.toString().length > 1 ? -16 : -10),
                     backgroundColor: 'red',
                     paddingHorizontal: 5,
                     borderWidth: 2,
                     borderColor: 'white',
                 }}>
-                    <Text style={{color: 'white', fontSize: 12}}>{unReadLength}</Text>
+                    <Text style={{color: 'white', fontSize: 11}}>{unReadLength}</Text>
                 </View>}
 
 

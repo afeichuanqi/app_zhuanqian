@@ -141,14 +141,14 @@ export default class MessageItemComponent extends Component {
                             alignItems: 'center',
                         }}>
                             <Text style={{
-                                fontSize: wp(3.5),
+                                fontSize: hp(2.1),
                                 color: 'black',
                                 opacity: 0.9,
                                 marginLeft: 10,
                             }}>{username}</Text>
                             <Text style={{
                                 marginLeft: 10,
-                                fontSize: wp(2.8),
+                                fontSize: hp(1.6),
                                 color: (columnType == 2 || columnType == 3) ? 'red' : 'black',
                                 opacity: 0.5,
                             }}>{
@@ -162,7 +162,7 @@ export default class MessageItemComponent extends Component {
                             numberOfLines={1}
                             ellipsizeMode={'tail'}
                             style={{
-                                fontSize: wp(3.3),
+                                fontSize: hp(1.8),
                                 color: 'black',
                                 opacity: 0.6,
                                 marginLeft: 10,
@@ -179,7 +179,7 @@ export default class MessageItemComponent extends Component {
                     marginTop: 5,
                 }}>
                     <Text style={{
-                        fontSize: wp(2.9),
+                        fontSize: hp(1.65),
                         color: 'black',
                         opacity: 0.5,
 

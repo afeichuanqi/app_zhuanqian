@@ -2,9 +2,9 @@ import React, {PureComponent} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text, Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import NavigationUtils from '../navigator/NavigationUtils';
-import Emoji from 'react-native-emoji';
-import {getEmojis} from '../util/CommonUtils';
+import {renderEmoji} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const {width} = Dimensions.get('window');
 
 class TaskEasyInfoComponent extends PureComponent {
@@ -45,14 +45,14 @@ class TaskEasyInfoComponent extends PureComponent {
                 <Text style={{position: 'absolute', bottom: 3, left: 10, color: 'rgba(0,0,0,0.6)'}}>{item.time}</Text>
             </View>;
         }
-        let taskTitle = item.taskTitle;
-        let emojiArr = [];
-
-        const json = getEmojis(taskTitle);
-        if (json) {
-            taskTitle = json.content;
-            emojiArr = json.emojiArr;
-        }
+        // let taskTitle = item.taskTitle;
+        // let emojiArr = [];
+        //
+        // const json = getEmojis(taskTitle);
+        // if (json) {
+        //     taskTitle = json.content;
+        //     emojiArr = json.emojiArr;
+        // }
 
         return <TouchableOpacity
             onPress={() => {
@@ -77,25 +77,27 @@ class TaskEasyInfoComponent extends PureComponent {
                         source={{uri: item.imageUrl}}
                         resizeMode={FastImage.resizeMode.stretch}
                     />
-                    <View style={{justifyContent: 'space-around', marginLeft: 12}}>
+                    <View style={{justifyContent: 'space-between', marginLeft: 12}}>
                         <Text
                             numberOfLines={1}
                             style={{
                                 width: wp(68),
-                                fontSize: wp(3.6),
+                                fontSize: hp(2.18),
                                 color: 'black',
 
-                            }}>{taskTitle} {emojiArr.map((item,index) => {
-                            return <Emoji name={item} key={index} style={{fontSize: wp(3.6)}}/>;
-                        })}</Text>
+                            }}>
+                            {item && renderEmoji(`${item.taskTitle}`, [], hp(2.25), 0, 'black').map((item, index) => {
+                                return item;
+                            })}
+                        </Text>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style={{
-                                fontSize: wp(3),
+                                fontSize: hp(1.8),
                                 opacity: 0.5,
                                 color: 'black',
                             }}>{item.leftTopText}</Text>
                             <Text style={{
-                                fontSize: wp(3),
+                                fontSize: hp(1.8),
                                 opacity: 0.5,
                                 marginLeft: 10,
                                 color: 'black',
@@ -106,7 +108,7 @@ class TaskEasyInfoComponent extends PureComponent {
                 </View>
 
             </View>
-            <Text style={{alignSelf: 'center', fontSize: wp(4), color: 'red'}}>+{item.rewardPrice}元</Text>
+            <Text style={{alignSelf: 'center', fontSize: hp(2.3), color: 'red'}}>+{item.rewardPrice}元</Text>
         </TouchableOpacity>;
 
 

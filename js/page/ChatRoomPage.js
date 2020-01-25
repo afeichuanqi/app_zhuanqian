@@ -7,7 +7,7 @@ import NavigationBar from '../common/NavigationBar';
 import ViewUtil from '../util/ViewUtil';
 import message_more from '../res/svg/message_more.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {equalsObj, getEmojis, getUUID} from '../util/CommonUtils';
+import {equalsObj, getUUID, renderEmoji} from '../util/CommonUtils';
 import {connect} from 'react-redux';
 import ChatSocket from '../util/ChatSocket';
 import Image from 'react-native-fast-image';
@@ -21,7 +21,6 @@ import EventBus from '../common/EventBus';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 import {ImgOption} from '../common/PickerImage';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
-import Emoji from 'react-native-emoji';
 import Global from '../common/Global';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -554,13 +553,6 @@ class TaskInfo extends React.Component {
                 statusText += '已成立,会话状态已关闭';
             }
         }
-        let taskTitle = taskInfo.task_title;
-        let emojiArr = [];
-        const json = getEmojis(taskTitle);
-        if (json) {
-            taskTitle = json.content;
-            emojiArr = json.emojiArr;
-        }
 
         return <TouchableOpacity
             activeOpacity={1}
@@ -580,19 +572,19 @@ class TaskInfo extends React.Component {
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-between', height: wp(15), width: wp(57)}}>
                     <Text style={{
-                        fontSize: wp(3.8),
+                        fontSize: hp(2.3),
                         color: 'black',
                     }}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text numberOfLines={2} style={{fontSize: wp(3.5), opacity: 0.5, color: 'black'}}>
-                        {taskTitle} {emojiArr.map((item, index) => {
-                        return <Emoji key={index} name={item} style={{fontSize: 13, opacity: 0.5, color: 'black'}}/>;
-                    })}
+                    <Text numberOfLines={2} style={{fontSize: hp(2.0), opacity: 0.5, color: 'black'}}>
+                        {taskInfo && renderEmoji(`${taskInfo.task_title}`, [],  hp(2.0), 0, 'black').map((item, index) => {
+                            return item;
+                        })}
                     </Text>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
 
                         <AnimatedFadeIn>
                             <Text style={{
-                                fontSize: wp(3.2), opacity: 0.5, color: 'black',
+                                fontSize: hp(1.9), opacity: 0.5, color: 'black',
 
                             }}>
                                 {statusText}
@@ -631,7 +623,7 @@ class TaskInfo extends React.Component {
                     }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: wp(3.4),
+                        fontSize: hp(1.9),
                     }}>{(columnType == 2 || columnType == 3 || columnType == 5) ? '任务来往' : '查看详情'}</Text>
                 </TouchableOpacity>
 

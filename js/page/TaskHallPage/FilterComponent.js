@@ -120,7 +120,7 @@ export default class FilterComponent extends PureComponent {
                                 // color: 'red',
                                 opacity: 0.7,
                                 color: 'black',
-                                fontSize: wp(3.8),
+                                fontSize: hp(2.1),
                             }}>简单</Text>
                         </View>
                     </View>
@@ -150,7 +150,7 @@ export default class FilterComponent extends PureComponent {
                                 // color: 'red',
                                 opacity: 0.7,
                                 color: 'black',
-                                fontSize: wp(3.8),
+                                fontSize: hp(2.1),
                             }}>收益高</Text>
                         </View>
                     </View>
@@ -182,7 +182,7 @@ export default class FilterComponent extends PureComponent {
                             width: width / 2 - 60, height: hp(4.7), borderWidth: wp(0.3), borderColor: '#e8e8e8',
                             justifyContent: 'center', borderRadius: 5,
                         }}>
-                        <Text style={{alignSelf: 'center', color: 'black', opacity: 0.7, fontSize: wp(3.8)}}>
+                        <Text style={{alignSelf: 'center', color: 'black', opacity: 0.7, fontSize:hp(2.1)}}>
                             重置
                         </Text>
                     </TouchableOpacity>
@@ -193,7 +193,7 @@ export default class FilterComponent extends PureComponent {
                             width: width / 2, height: hp(4.7), borderWidth: wp(0.3), borderColor: '#e8e8e8',
                             justifyContent: 'center', backgroundColor: bottomTheme, borderRadius: 5,
                         }}>
-                        <Text style={{alignSelf: 'center', color: 'white', fontSize: wp(3.8)}}>
+                        <Text style={{alignSelf: 'center', color: 'white', fontSize: hp(2.1)}}>
                             确定
                         </Text>
                     </TouchableOpacity>
@@ -291,7 +291,7 @@ class TypeComponent extends Component {
                 borderWidth: wp(0.2), borderColor: bottomTheme,
             }]}>
             <Text style={[{
-                fontSize: wp(3.5),
+                fontSize: hp(2.0),
                 color: 'rgba(255,255,255,0.5)',
                 opacity: 0.8,
             }, !checked ? {

@@ -12,7 +12,7 @@ import Animated from 'react-native-reanimated';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 const {SpringUtils, spring} = Animated;
 
@@ -95,7 +95,7 @@ class MyModalBox extends PureComponent {
             >
                 <TouchableOpacity style={{
                     flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center',
-                    alignItems: 'center', zIndex: 10,
+                    alignItems: 'center', zIndex: 10,borderRadius:5,
                 }}
                                   activeOpacity={1}
                                   onPress={() => {
@@ -104,25 +104,26 @@ class MyModalBox extends PureComponent {
                 >
                     <Animated.View style={[this.props.style, {
                         transform: [{scale: this.animations.scale}], opacity:opacity,
+                        borderRadius:5,
                     }]}>
 
                         <ImageBackground
                             source={require('../res/img/backgroundtoast.png')}
                             style={{
-                                paddingVertical: 10,
                                 width: width - 40,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
                                 paddingHorizontal: 15,
                                 backgroundColor: bottomTheme,
-                                borderTopLeftRadius: 5,
-                                borderTopRightRadius: 5,
+
                                 paddingTop: 20,
                                 paddingBottom: 15,
+                                borderTopLeftRadius: 5,
+                                borderTopRightRadius: 5,
 
                             }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: 16, color: 'white'}}>{this.props.title}</Text>
+                                <Text style={{fontSize: hp(2.2), color: 'white'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -144,7 +145,7 @@ class MyModalBox extends PureComponent {
                                     top: 1,
                                     // backgroundColor:'red',
                                 }}>
-                                <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.8)',fontSize:hp(2.15)}}>取消</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 activeOpacity={0.6}
@@ -153,11 +154,11 @@ class MyModalBox extends PureComponent {
                                 <ImageBackground
                                     style={{
                                         width: (width - 40) / 2, height: 50, top: 1, justifyContent: 'center',
-                                        alignItems: 'center', backgroundColor: bottomTheme,
+                                        alignItems: 'center', backgroundColor: bottomTheme, borderBottomRightRadius:5,
                                     }}
                                     source={require('../res/img/buttombackground.png')}>
 
-                                    <Text style={{color: 'white'}}>{rightTitle}</Text>
+                                    <Text  style={{color: 'white', fontSize:hp(2.15)}}>{rightTitle}</Text>
 
                                 </ImageBackground>
                             </TouchableOpacity>

@@ -31,8 +31,7 @@ import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import Image from 'react-native-fast-image';
-import {getEmojis} from '../util/CommonUtils';
-import Emoji from 'react-native-emoji';
+import {renderEmoji} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
 
@@ -105,8 +104,8 @@ class TaskHallPage extends PureComponent {
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={wp(4)}
-                        activeStyle={{fontSize: wp(5), color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: wp(4), color: [255, 255, 255], height: 10}}
+                        activeStyle={{fontSize: hp(2.7), color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: hp(2.2), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.1)}}
                     />
                     <View style={{flexDirection: 'row', marginTop: hp(1.5), alignItems: 'center'}}>
@@ -433,7 +432,7 @@ class TypeItem extends PureComponent {
 
                 }}>
                 <Text style={[{
-                    fontSize: wp(3.9), marginRight: wp(0.5),
+                    fontSize: hp(2.15), marginRight: wp(0.5),
                 }, title.length > 2 ? {color: bottomTheme} : !show ? {
                     color: 'black',
                     opacity: 0.6,
@@ -537,13 +536,6 @@ class HeadlineComponent extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        let taskTitle = item.taskTitle;
-        let emojiArr = [];
-        const json = getEmojis(taskTitle);
-        if (json) {
-            taskTitle = json.content;
-            emojiArr = json.emojiArr;
-        }
         return <View
             key={item.taskId}
             style={{
@@ -559,24 +551,24 @@ class HeadlineComponent extends PureComponent {
                     width: wp(60),
                     marginLeft: wp(1), opacity: 0.8,
                     marginTop: -wp(0.5),
-                    fontSize: wp(4),
+                    fontSize: hp(2.25),
 
                 }}>
 
 
-                {taskTitle} {emojiArr.map((item, index) => {
-                return <Emoji key={index} name={item} style={{fontSize: wp(60)}}/>;
-            })}
+                {item && renderEmoji(`${item.taskTitle}`, [],  hp(2.25), 0, 'black').map((item, index) => {
+                    return item;
+                })}
             </Text>
 
             <View style={{flexDirection: 'row', alignItems: 'center', height: 25}}>
                 <Text style={{
-                    color: 'red', fontSize: wp(4.6),
+                    color: 'red', fontSize: hp(2.6),
                     marginRight: wp(0.2),
                 }}>
                     {item.rewardPrice}
                 </Text>
-                <Text style={{fontSize: 14, color: 'red', top: hp(0.07), marginRight: 5}}>元</Text>
+                <Text style={{fontSize:  hp(1.8), color: 'red', top: hp(0.07), marginRight: 5}}>元</Text>
                 <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')}
                        style={{width: wp(2), height: wp(2)}}/>
             </View>
@@ -633,7 +625,7 @@ class TopLeftFilterComponent extends Component {
                         onPress={() => this._onPress(Lindex)}
                     >
                         <Text style={[{
-                            fontSize: wp(4.2),
+                            fontSize: hp(2.3),
                             fontWeight: '400',
                         }, Lindex === index ? {
                             color: 'black',

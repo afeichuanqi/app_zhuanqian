@@ -210,19 +210,19 @@ class ScrollItem extends React.Component {
                     opacity: 0.7,
                 }}/>
                 <Text numberOfLines={1}
-                      style={{fontSize: wp(3.3), color: 'black', width: 65, opacity: 0.7}}>{item.task_name}</Text>
+                      style={{fontSize: hp(1.9), color: 'black', width: 65, opacity: 0.7}}>{item.task_name}</Text>
             </View>
             {item.reward_price && <View style={{
                 flexDirection: 'row', alignItems: 'center',
                 zIndex: 10, elevation: 1, marginTop: 1,
             }}>
                 <Text style={{
-                    fontSize: wp(4),
+                    fontSize: hp(2.2),
                     color: 'red',
                     marginRight: 1,
                 }}>{item.reward_price}</Text>
                 <Text style={{
-                    fontSize: 13,
+                    fontSize: hp(1.7),
                     color: 'red',
                     fontWeight: '500',
                     top: 1,

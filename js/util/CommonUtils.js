@@ -1,4 +1,8 @@
 import moment from 'moment';
+import React from 'react';
+import {Text} from 'react-native';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Emoji from 'react-native-emoji';
 
 export const isPoneAvailable = (str) => {
     let myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
@@ -10,7 +14,7 @@ export const isPoneAvailable = (str) => {
         return true;
     }
 };
-export const  formatData = (data, insertData,ziduan) => {
+export const formatData = (data, insertData, ziduan) => {
     const oldData = [...data];
     for (let i = 0; i < insertData.length; i++) {
         const lastItem = oldData.length > 0 ? oldData[oldData.length - 1] : {[ziduan]: '0000-00-00'};
@@ -253,7 +257,7 @@ export const equalsObj = (oldData, newData) => {
         for (const key in oldData) {
             if (oldData.hasOwnProperty(key)) {
                 if (!equalsObj(oldData[key], newData[key]))
-                // 对象中具有不相同属性 返回false
+                    // 对象中具有不相同属性 返回false
                 {
                     return false;
                 }
@@ -264,7 +268,7 @@ export const equalsObj = (oldData, newData) => {
 
         for (let i = 0, length = oldData.length; i < length; i++) {
             if (!equalsObj(oldData[i], newData[i]))
-            // 如果数组元素中具有不相同元素,返回false
+                // 如果数组元素中具有不相同元素,返回false
             {
                 return false;
             }
@@ -277,26 +281,72 @@ export const equalsObj = (oldData, newData) => {
     // 走到这里,说明数组或者对象中所有元素都相同,返回true
     return true;
 };
-export const getEmojis = (content) => {
-    let contentTmp = content;
+export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black',style_) => {
+    // console.log("renderEmojirenderEmoji");
 
-    const emoji = new RegExp(/:([a-zA-Z0-9_\-\+]+):/g);
-    let castArr = contentTmp.match(emoji);
-    const emojiArr = [];
-    if (castArr) {
-        castArr.forEach((item) => {
-            emojiArr.push(item);
-            contentTmp = contentTmp.replace(item, '');
-        });
-        return {
-            content:contentTmp,
-            emojiArr
+    // index += 1;
+    const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
+    const endIndex = content.indexOf(':', startIndex + 1) + 1;
+    const contentText = content.substring(0, startIndex);
+    if (contentText.length > 0) {
+        Views.push(<Text  key={`startText${Math.random() * 100}`} style={{fontSize, color,...style_}}>{contentText}</Text>);
+    }
+    if (startIndex !== -1) {
+        Views.push(<Emoji key={`Emoji${Math.random() * 100}`} name={content.substring(startIndex, endIndex)} style={{fontSize}}/>);
+
+    } else {
+        if (endIndex !== content.length) {
+            Views.push(<Text key={`endText${Math.random() * 100}`}
+                             style={{fontSize, color,...style_}}>{content.substring(endIndex, content.length)}</Text>);
         }
-    }else{
-        return null
+
+        return Views;
     }
 
+    return renderEmoji(content.substring(endIndex), Views);
 };
+export const _renderEmoji = (content, Views, fontSize, index = 0, color = 'black') => {
+    index += 1;
+    const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
+    const endIndex = content.indexOf(':', startIndex + 1) + 1;
+    const contentText = content.substring(0, startIndex);
+    if (contentText.length > 0) {
+        Views.push(<Text key={`startText${index}`} style={{fontSize, color}}>{contentText}</Text>);
+    }
+    if (startIndex !== -1) {
+        Views.push(<Emoji key={`Emoji${index}`} name={content.substring(startIndex, endIndex)} style={{fontSize}}/>);
+
+    } else {
+        if (endIndex !== content.length) {
+            Views.push(<Text key={`endText${index}`}
+                             style={{fontSize, color}}>{content.substring(endIndex, content.length)}</Text>);
+        }
+
+        return Views;
+    }
+
+    return renderEmoji(content.substring(endIndex), Views);
+};
+// export const getEmojis = (content) => {
+//     let contentTmp = content;
+//
+//     const emoji = new RegExp(/:([a-zA-Z0-9_\-\+]+):/g);
+//     let castArr = contentTmp.match(emoji);
+//     const emojiArr = [];
+//     if (castArr) {
+//         castArr.forEach((item) => {
+//             emojiArr.push(item);
+//             contentTmp = contentTmp.replace(item, '');
+//         });
+//         return {
+//             content: contentTmp,
+//             emojiArr,
+//         };
+//     } else {
+//         return null;
+//     }
+//
+// };
 
 /**
  * 判断此对象是否是Object类型

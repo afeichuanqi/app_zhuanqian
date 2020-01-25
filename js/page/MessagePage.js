@@ -35,7 +35,7 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 
-class MessagePage extends PureComponent {
+class MessagePage extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -383,7 +383,7 @@ class MessageColumnItem extends Component {
             </View>
 
             <Text style={{
-                fontSize: wp(3.5),
+                fontSize:hp(2),
                 color: 'black',
                 opacity: 0.8,
                 marginTop: 7,

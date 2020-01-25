@@ -36,7 +36,7 @@ import {
 import taskHallNext from '../res/svg/taskHallNext.svg';
 import goback from '../res/svg/goback.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {getEmojis, judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
+import {judgeSendTaskData, judgeTaskData, renderEmoji} from '../util/CommonUtils';
 import Toast from 'react-native-root-toast';
 import liaotian from '../res/svg/liaotian.svg';
 import BackPressComponent from '../common/BackPressComponent';
@@ -198,17 +198,6 @@ class TaskDetails extends PureComponent {
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
-        let taskTitle = '';
-        let emojiArr = [];
-        if (taskData) {
-            taskTitle = taskData.title;
-
-            const json = getEmojis(taskTitle);
-            if (json) {
-                taskTitle = json.content;
-                emojiArr = json.emojiArr;
-            }
-        }
 
         return (
             <SafeAreaViewPlus
@@ -247,8 +236,8 @@ class TaskDetails extends PureComponent {
                             color: 'white',
                             fontSize: 16,
                             width: width - 90,
-                        }}>{taskTitle} {emojiArr.map((item, index) => {
-                            return <Emoji index={index} name={item} style={{fontSize: 15}}/>;
+                        }}>{taskData && renderEmoji(taskData.title, [], 16, 0,'white').map((item, index) => {
+                            return item;
                         })}</Text>
                     </Animated.View>
                     <Animated.View
@@ -297,16 +286,21 @@ class TaskDetails extends PureComponent {
 
                                     <View>
                                         <Text numberOfLines={2}
-                                              style={{fontSize: 16, opacity: 0.9, color: 'black', width: width - 90}}>
-                                            {taskTitle} {emojiArr.map((item) => {
-                                            return <Emoji name={item} style={{fontSize: 15}}/>;
-                                        })}
+                                              style={{
+                                                  fontSize: hp(2.3),
+                                                  opacity: 0.9,
+                                                  color: 'black',
+                                                  width: width - 90,
+                                              }}>
+                                            {taskData && renderEmoji(taskData.title, [], hp(2.4), 0).map((item, index) => {
+                                                return item;
+                                            })}
                                         </Text>
                                         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
                                             <Text
                                                 style={{
                                                     color: 'rgba(0,0,0,0.7)',
-                                                    fontSize: 14,
+                                                    fontSize: hp(1.8),
                                                 }}>{taskData && taskData.taskType.title}</Text>
                                             <View style={{
                                                 height: 10, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)',
@@ -314,13 +308,13 @@ class TaskDetails extends PureComponent {
                                             }}/>
                                             <Text style={{
                                                 color: 'rgba(0,0,0,0.7)',
-                                                fontSize: 14,
+                                                fontSize: hp(1.8),
                                             }}>{taskData && taskData.projectTitle}</Text>
                                         </View>
                                     </View>
 
                                     <Text style={{
-                                        fontSize: 19,
+                                        fontSize:  hp(2.7),
                                         color: bottomTheme,
                                     }}>{taskData && taskData.rewardPrice}元</Text>
                                 </View>
@@ -334,34 +328,34 @@ class TaskDetails extends PureComponent {
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: 15,
+                                            fontSize:  hp(2.28),
                                         }}>{taskData && taskData.rewardNum - taskData.taskSignUpNum}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>剩余数量</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: hp(2.05), marginTop: 5}}>剩余数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: 15,
+                                            fontSize:  hp(2.28),
                                         }}>{taskData && taskData.taskPassNum}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>完成数量</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: hp(2.05), marginTop: 5}}>完成数量</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: 15,
+                                            fontSize:  hp(2.28),
                                         }}>{taskData && taskData.orderTimeLimit.title}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>做单时间</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: hp(2.05), marginTop: 5}}>做单时间</Text>
                                     </View>
                                     <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
                                         <Text
                                             style={{
                                                 color: 'black',
-                                                fontSize: 15,
+                                                fontSize: hp(2.28),
                                             }}>{taskData && taskData.reviewTime.title}</Text>
-                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 14, marginTop: 5}}>审核时间</Text>
+                                        <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: hp(2.05), marginTop: 5}}>审核时间</Text>
                                     </View>
                                 </View>
                             </View>
@@ -396,9 +390,9 @@ class TaskDetails extends PureComponent {
                                 <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
                                     <Text style={{
                                         color: 'black',
-                                        fontSize: 15,
+                                        fontSize: hp(2.2),
                                     }}>{fromUserinfo && fromUserinfo.username}</Text>
-                                    <Text style={{color: 'red', opacity: 0.8, fontSize: 13}}>{
+                                    <Text style={{color: 'red', opacity: 0.8, fontSize:  hp(2.0)}}>{
                                         taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
                                             :
                                             taskData.singOrder.type == 2 ? `此任务每人每天${taskData.singOrder.num}次`
@@ -428,24 +422,24 @@ class TaskDetails extends PureComponent {
                         </TouchableOpacity>
                         <View style={{
                             backgroundColor: 'white', marginTop: 10, paddingHorizontal: 10, marginHorizontal: 10,
-                            paddingVertical: wp(4), borderRadius: 5
+                            paddingVertical: wp(4), borderRadius: 5,
                         }}>
-                            <Text style={{fontSize: 14, color: bottomTheme}}>
+                            <Text style={{fontSize: hp(2.3), color: bottomTheme}}>
                                 任务说明
                             </Text>
                             <Text style={{
                                 marginTop: 10,
                                 color: 'rgba(0,0,0,1)',
-                                fontSize: 14,
+                                fontSize: hp(2.15),
                                 lineHeight: 20,
-                                letterSpacing: 0.2,
+                                // letterSpacing: 0.1,
                             }}>{taskData && taskData.TaskInfo}</Text>
                         </View>
                         <View style={{
                             marginTop: 10, paddingHorizontal: 10, backgroundColor: 'white', marginHorizontal: 10,
-                             borderRadius: 3,height:hp(6), justifyContent:'center',
+                            borderRadius: 3, height: hp(6), justifyContent: 'center',
                         }}>
-                            <Text style={{fontSize: 15, color: bottomTheme}}>做单步骤（请仔细审阅任务步骤）</Text>
+                            <Text style={{fontSize: hp(2.3), color: bottomTheme}}>做单步骤（请仔细审阅任务步骤）</Text>
 
                         </View>
                         {/*做单步骤图*/}
@@ -522,11 +516,11 @@ class TaskDetails extends PureComponent {
                 this.setState({
                     signUp: true,
                 }, () => {
-                    Toast.show('报名成功',{position:Toast.positions.CENTER});
+                    Toast.show('报名成功', {position: Toast.positions.CENTER});
                 });
                 this._updateTaskStatus().then();
             }).catch((msg) => {
-                Toast.show(msg,{position:Toast.positions.CENTER});
+                Toast.show(msg, {position: Toast.positions.CENTER});
             });
 
         }
@@ -536,13 +530,13 @@ class TaskDetails extends PureComponent {
             const taskText = JSON.stringify(task_step_data);
             const error = judgeSendTaskData(taskText);
             if (error != '') {//任务步骤正确是否正确填写完毕
-                Toast.show(error,{position:Toast.positions.CENTER});
+                Toast.show(error, {position: Toast.positions.CENTER});
             } else {
                 sendTaskStepForm({task_id: this.task_id, task_step_data: taskText}, userinfo.token).then(result => {
-                    Toast.show('提交成功,等待审核',{position:Toast.positions.CENTER});
+                    Toast.show('提交成功,等待审核', {position: Toast.positions.CENTER});
                     this._updateTaskStatus().then();
                 }).catch((msg) => {
-                    Toast.show(msg,{position:Toast.positions.CENTER});
+                    Toast.show(msg, {position: Toast.positions.CENTER});
                 });
             }
 
@@ -552,7 +546,7 @@ class TaskDetails extends PureComponent {
     _sendStepData = () => {
         const {userinfo} = this.props;
         if (!userinfo.token || userinfo.token.length === 0) {
-            Toast.show('您未登录哦 ～ ～ ',{position:Toast.positions.CENTER});
+            Toast.show('您未登录哦 ～ ～ ', {position: Toast.positions.CENTER});
             return;
         }
         if (!this.params.update) {
@@ -560,13 +554,13 @@ class TaskDetails extends PureComponent {
             const {token} = userinfo;
             const error = judgeTaskData(FormData);
             if (error != '') {
-                Toast.show(error,{position:Toast.positions.CENTER});
+                Toast.show(error, {position: Toast.positions.CENTER});
                 return;
             }
             addTaskReleaseData(FormData, token).then(result => {
-                Toast.show('发布成功 ~ ~ ',{position:Toast.positions.CENTER});
+                Toast.show('发布成功 ~ ~ ', {position: Toast.positions.CENTER});
             }).catch(err => {
-                Toast.show(err,{position:Toast.positions.CENTER});
+                Toast.show(err, {position: Toast.positions.CENTER});
             });
         } else {
             const {FormData} = this.params;
@@ -577,9 +571,9 @@ class TaskDetails extends PureComponent {
                 return;
             }
             updateTaskReleaseData(FormData, token).then(result => {
-                Toast.show('修改成功 ~ ~ ',{position:Toast.positions.CENTER});
+                Toast.show('修改成功 ~ ~ ', {position: Toast.positions.CENTER});
             }).catch(err => {
-                Toast.show(err,{position:Toast.positions.CENTER});
+                Toast.show(err, {position: Toast.positions.CENTER});
             });
         }
     };
@@ -635,7 +629,7 @@ class TaskDetailsPop extends Component {
                     justifyContent: 'center',
                 }}>
                 {/*<SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>*/}
-                <Text style={{fontSize: 15, opacity: 0.7, color: 'black'}}>接单规则</Text>
+                <Text style={{fontSize: hp(2.2), opacity: 0.7, color: 'black'}}>接单规则</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 // key={index}
@@ -649,7 +643,8 @@ class TaskDetailsPop extends Component {
                     alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                 }}>
                 <SvgUri width={18} fill={'rgba(0,0,0,0.7)'} height={18} svgXmlData={fenxiang}/>
-                <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>分享</Text>
+                <Text
+                    style={{fontSize: hp(2.2), width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>分享</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 activeOpacity={0.6}
@@ -659,7 +654,7 @@ class TaskDetailsPop extends Component {
                         task_id: task_id,
                         favorite_status: is_favorite,
                     }, userinfo.token).then(result => {
-                        Toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`,{position:Toast.positions.CENTER});
+                        Toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`, {position: Toast.positions.CENTER});
                         this.setState({
                             isFavorite: is_favorite,
                         });
@@ -672,7 +667,8 @@ class TaskDetailsPop extends Component {
                 }}>
                 <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={18}
                         svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
-                <Text style={{fontSize: 15, width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>收藏</Text>
+                <Text
+                    style={{fontSize: hp(2.2), width: 50, textAlign: 'center', opacity: 0.7, color: 'black'}}>收藏</Text>
             </TouchableOpacity>
 
         </TaskMenu>;
@@ -773,7 +769,7 @@ class ChangeTask extends Component {
     };
     _onPress = () => {
         //隐藏box
-        Toast.show('已切换',{position:Toast.positions.CENTER});
+        Toast.show('已切换', {position: Toast.positions.CENTER});
         getNewTaskId().then(result => {
             const taskId = result.task_id;
             EventBus.getInstance().fireEvent(EventTypes.update_task_page, {

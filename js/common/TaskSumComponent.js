@@ -7,11 +7,10 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import SvgUri from 'react-native-svg-uri';
-import {equalsObj, getEmojis} from '../util/CommonUtils';
+import {equalsObj, renderEmoji} from '../util/CommonUtils';
 import Global from './Global';
 import FastImagePro from './FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import Emoji from 'react-native-emoji';
 
 const {width} = Dimensions.get('window');
 
@@ -69,13 +68,6 @@ class TaskSumComponent extends Component {
         if (item.topIsExp == 1) {
             maxWidth -= 40;
         }
-        let taskTitle = item.taskTitle;
-        let emojiArr = [];
-        const json = getEmojis(taskTitle);
-        if (json) {
-            taskTitle = json.content;
-            emojiArr = json.emojiArr;
-        }
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
@@ -101,39 +93,37 @@ class TaskSumComponent extends Component {
                         flexDirection: 'row',
                         alignItems: 'center',
                     }}>
-                        {/*<HTML />*/}
-
                         <Text
                             numberOfLines={1}
                             style={{
-                                fontSize: wp(3.9),
+                                fontSize: hp(2.25),
                                 color: 'black',
                                 maxWidth: maxWidth,
                                 marginRight: wp(2.7),
                             }}>
-                            {taskTitle} {emojiArr.map((item, index) => {
-                            return <Emoji key={index} name={item} style={{fontSize: wp(4.2)}}/>;
-                        })}
+                            {item && renderEmoji(item.taskTitle, [], hp(2.25), 0,'black').map((item, index) => {
+                                return item;
+                            })}
                         </Text>
 
                         {item.recommendIsExp == 1 && <View style={styles.labelStyle}>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: wp(2.9)}}>推荐</Text>
+                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: hp(1.6)}}>推荐</Text>
                         </View>}
 
 
                         {item.topIsExp == 1 && <View style={styles.labelStyle}>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: wp(2.9)}}>置顶</Text>
+                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: hp(1.6)}}>置顶</Text>
                         </View>}
                     </View>
                     {/*价格*/}
                     <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
                         <Text style={{
-                            fontSize: wp(4.8),
+                            fontSize: hp(2.6),
                             color: 'red',
                             marginRight: wp(0.3),
                         }}>{item.rewardPrice}</Text>
                         <Text style={{
-                            fontSize: wp(3.3),
+                            fontSize:  hp(1.8),
                             color: 'red',
                             fontWeight: '500',
                             top: wp(0.5),
@@ -149,12 +139,12 @@ class TaskSumComponent extends Component {
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={{
-                            fontSize: wp(4),
+                            fontSize: hp(2.3),
                             color: bottomTheme,
                             bottom: hp(0.2),
                         }}>{parseInt(item.taskPassNum)}</Text>
                         <Text style={{
-                            fontSize: wp(3),
+                            fontSize: hp(1.75),
                             color: 'rgba(0,0,0,0.7)',
                         }}>人已完成</Text>
                     </View>
@@ -168,16 +158,16 @@ class TaskSumComponent extends Component {
                         }}/>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={{
-                            fontSize: wp(3),
+                            fontSize: hp(1.75),
                             color: 'rgba(0,0,0,0.7)',
                         }}>剩余</Text>
                         <Text style={{
-                            fontSize: wp(4),
+                            fontSize: hp(2.3),
                             color: 'red',
                             bottom: hp(0.2),
                         }}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
                         <Text style={{
-                            fontSize: wp(3),
+                            fontSize: hp(1.75),
                             color: 'rgba(0,0,0,0.7)',
                         }}>个名额</Text>
                     </View>
@@ -198,14 +188,14 @@ class TaskSumComponent extends Component {
                             contaiStyle={{backgroundColor: '#fafafa'}}
                             // textStyle={{color: '#2196F3'}}
                             paddingHorizontal={wp(2)}
-                            fontSize={wp(2.7)}
+                            fontSize={hp(1.70)}
                             title={item.typeTitle}/>
                         <LabelBigComponent
                             contaiStyle={{backgroundColor: '#fafafa'}}
                             // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
                             // textStyle={{color: '#2196F3'}}
                             paddingHorizontal={wp(2)}
-                            fontSize={wp(2.7)} title={item.taskName}/>
+                            fontSize={hp(1.70)} title={item.taskName}/>
                     </View>
                 </View>
                 <TouchableOpacity
@@ -263,7 +253,7 @@ class TaskSumComponent extends Component {
                                     svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                         </View>
                         <Text style={{
-                            fontSize: wp(3.2),
+                            fontSize: hp(1.8),
                             marginLeft: wp(3.2),
                             color: 'rgba(0,0,0,0.8)',
                         }}>{item.userName}</Text>

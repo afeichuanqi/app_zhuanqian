@@ -223,8 +223,8 @@ class HomePage extends PureComponent {
                             handleIndexChange={this.handleIndexChange}
                             bounces={true}
                             titleMarginHorizontal={15}
-                            activeStyle={{fontSize: 18, color: [0, 0, 0]}}
-                            inactiveStyle={{fontSize: 14, color: [95, 95, 95], height: 10}}
+                            activeStyle={{fontSize: hp(2.4), color: [0, 0, 0]}}
+                            inactiveStyle={{fontSize: hp(2.0), color: [95, 95, 95], height: 10}}
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
                     </Animated.View>

@@ -11,6 +11,7 @@ import TextMessage from './TextMessage';
 import ImageMessage from './ImageMessage';
 import {EMOJIS_DATA} from '../source/emojis';
 import Emoji_ from 'react-native-emoji';
+import {renderEmoji} from '../../../../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 
@@ -52,15 +53,15 @@ export default class ChatItem extends PureComponent {
 
     _matchContentString = (textContent, views, isSelf) => {
         // 匹配得到index并放入数组中
-        let emojiArrs = textContent.match(PATTERNS.localEmoji);
-
-        if (emojiArrs) {
-            emojiArrs.forEach((item, index) => {
-                views.push(<Emoji_ key={index} name={item} style={{fontSize: 15}}/>);
-                // emojiArr.push(item);
-                textContent = textContent.replace(item, '');
-            });
-        }
+        // let emojiArrs = textContent.match(PATTERNS.localEmoji);
+        //
+        // if (emojiArrs) {
+        //     emojiArrs.forEach((item, index) => {
+        //         views.push(<Emoji_ key={index} name={item} style={{fontSize: 15}}/>);
+        //         // emojiArr.push(item);
+        //         textContent = textContent.replace(item, '');
+        //     });
+        // }
         const {leftMessageTextStyle, rightMessageTextStyle} = this.props;
         if (textContent.length === 0) {
             return;
@@ -70,17 +71,16 @@ export default class ChatItem extends PureComponent {
 
         // 若匹配不到，则直接返回一个全文本
         if (emojiIndex === -1) {
-            views.push(<Text style={isSelf ? rightMessageTextStyle : leftMessageTextStyle}
-                             key={'emptyTextView' + (Math.random() * 100)}>{textContent}</Text>);
+            views = renderEmoji(textContent,views,hp(2.1));//匹配系统表情控
         } else {
-            if (emojiIndex !== -1) {
-                checkIndexArray.push(emojiIndex);
-            }
+            checkIndexArray.push(emojiIndex);
             // 取index最小者
             let minIndex = Math.min(...checkIndexArray);
             // 将0-index部分返回文本
-            views.push(<Text style={isSelf ? rightMessageTextStyle : leftMessageTextStyle}
-                             key={'firstTextView' + (Math.random() * 100)}>{textContent.substring(0, minIndex)}</Text>);
+            const ContentText = textContent.substring(0, minIndex);
+            renderEmoji(ContentText,views,hp(2.1),0,'black',isSelf ? rightMessageTextStyle : leftMessageTextStyle);//匹配系统表情控
+            // views.push(<Text style={isSelf ? rightMessageTextStyle : leftMessageTextStyle}
+            //                  key={'firstTextView' + (Math.random() * 100)}>{ContentText}</Text>);
 
             // 将index部分作分别处理
             this._matchEmojiString(textContent.substring(minIndex), views);
@@ -218,25 +218,25 @@ export default class ChatItem extends PureComponent {
                                 width: wp(95), backgroundColor: 'white', paddingTop: hp(2.5), paddingHorizontal: wp(3.5),
                                 borderRadius: 3, paddingBottom: hp(1.25),
                             }}>
-                            <Text style={{fontSize: wp(3.8), fontWeight: 'bold', color: 'black'}}>{title}</Text>
+                            <Text style={{fontSize: hp(2.2), fontWeight: 'bold', color: 'black'}}>{title}</Text>
                             <Text
                                 style={{
-                                    fontSize: wp(3.3),
+                                    fontSize:hp(1.9),
                                     color: 'rgba(0,0,0,0.5)',
                                     marginTop: 10,
                                     marginBottom: 10,
                                 }}>{content}</Text>
 
                             {(btnTitle && btnTitle.length > 0) ? <View style={{
-                                paddingVertical: wp(2),
+                                paddingVertical: hp(0.5),
                                 width: wp(95),
                                 alignItems: 'flex-start',
                                 justifyContent: 'center',
                                 borderTopWidth: 0.3,
                                 borderTopColor: 'rgba(0,0,0,0.1)',
-
+                                paddingTop:hp(1)
                             }}>
-                                <Text style={{color: '#2196F3', fontSize:wp(3.5)}}>{btnTitle}</Text>
+                                <Text style={{color: '#2196F3', fontSize:hp(2.0)}}>{btnTitle}</Text>
                             </View> : null}
 
 
@@ -338,12 +338,12 @@ export default class ChatItem extends PureComponent {
                                                 marginRight: 5,
                                             }}>
                                                 <Text style={{
-                                                    fontSize: wp(2.9),
+                                                    fontSize: hp(1.6),
                                                     color: 'white',
                                                 }}>{message.isAdmin ? '客服' : message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单'}</Text>
                                             </View>
                                             <Text style={{
-                                                fontSize: wp(3.4),
+                                                fontSize: hp(1.8),
                                                 color: '#888888',
                                             }}>{isSelf ? user.username : nickName}</Text>
                                         </View>
@@ -383,6 +383,7 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         marginRight: 3,
+        marginTop:3,
 
     },
     commentBar__input: {
