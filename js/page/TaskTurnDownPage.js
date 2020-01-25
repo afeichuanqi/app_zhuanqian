@@ -16,8 +16,8 @@ import message_more from '../res/svg/message_more.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
 import Image from 'react-native-fast-image';
 import {connect} from 'react-redux';
-import Toast from '../common/Toast';
-import {TaskTurnDownTaskFrom, uploadQiniuImage} from '../util/AppService';
+import Toast from 'react-native-root-toast';
+import {TaskTurnDownTaskFrom} from '../util/AppService';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
@@ -75,9 +75,6 @@ class MyTaskReview extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <ScrollView style={{backgroundColor: '#ececec'}}>
 
                     <TouchableOpacity
@@ -193,7 +190,7 @@ class MyTaskReview extends PureComponent {
         const {taskData, updatePage} = this.params;
         for (let i = 0; i < data.length; i++) {
             if (data[i].uri && data[i].uri.indexOf('file://') !== -1) {
-                this.toast.show('等待图片上传完毕');
+                Toast.show('等待图片上传完毕');
                 return;
             }
             if (data[i].uri) {
@@ -206,7 +203,7 @@ class MyTaskReview extends PureComponent {
                     turnDownInfo: JSON.stringify(imageData),
                 }, userinfo.token).then(err => {
                     EventBus.getInstance().fireEvent(EventTypes.update_task_release_mana, {index: 0});//刷新审核页面
-                    this.toast.show('驳回成功');
+                    Toast.show('驳回成功');
                     NavigationUtils.goBack(this.props.navigation);
 
                     updatePage();

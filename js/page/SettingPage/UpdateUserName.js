@@ -16,7 +16,7 @@ import NavigationUtils from '../../navigator/NavigationUtils';
 import actions from '../../action';
 import {connect} from 'react-redux';
 import BackPressComponent from '../../common/BackPressComponent';
-import Toast from '../../common/Toast';
+import Toast from 'react-native-root-toast';
 import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../../res/svg/phone_input_clear.svg';
 
@@ -62,9 +62,9 @@ class UpdateUserName extends PureComponent {
             const {onSetUserName, userinfo} = this.props;
             onSetUserName(userinfo.token, this.state.text, (bool, msg) => {
                 if (bool) {
-                    this.toast.show('修改成功');
+                    Toast.show('修改成功');
                 } else {
-                    this.toast.show(msg);
+                    Toast.show(msg);
                 }
 
 
@@ -76,9 +76,6 @@ class UpdateUserName extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{
                     paddingVertical: 10,
                     paddingHorizontal: 15,

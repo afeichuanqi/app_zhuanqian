@@ -32,13 +32,12 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import BackPressComponent from '../common/BackPressComponent';
 import goback from '../res/svg/goback.svg';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-let toast = null;
 
 class MyAttention extends PureComponent {
     constructor(props) {
@@ -93,10 +92,6 @@ class MyAttention extends PureComponent {
                 topColor={theme}
             >
                 {navigationBar}
-                {/*{TopColumn}*/}
-                <Toast
-                    ref={ref => toast = ref}
-                />
                 <View style={{paddingBottom: 10, marginTop: 10}}>
                     <TabBar
                         style={{
@@ -370,7 +365,7 @@ class AttentionItem extends PureComponent {
                         this.setState({
                             attentionStatus: attention_type,
                         });
-                        toast.show(`${attention_type == 0 ? '取消关注成功' : '关注成功'}`);
+                        Toast.show(`${attention_type == 0 ? '取消关注成功' : '关注成功'}`);
                     }).catch(msg => {
                     });
                 }}

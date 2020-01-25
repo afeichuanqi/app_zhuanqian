@@ -1,11 +1,12 @@
 import {Platform} from 'react-native';
 import axios from 'axios';
 import qs from 'qs';
-import Global from '../../common/Global';
+import Toast from 'react-native-root-toast';
+
 let defaultConfig = {
-        // baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
+        baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
         // baseUrl: 'http://test.xiaofaka.com',//测试
-        baseUrl: 'http://www.easy-z.cn',//测试
+        // baseUrl: 'http://www.easy-z.cn',//测试
         // baseUrl: 'http://39.99.145.203:3000',//测试
         timeout:
             15000,
@@ -18,6 +19,7 @@ let defaultConfig = {
 
 let instance = axios;
 let baseUrl = defaultConfig.baseUrl + '/';
+
 // const urlWriteList = ['user/sendSms','user/verifyCode'];
 
 class Axios {
@@ -45,16 +47,11 @@ class Axios {
             return response.data;
         }, (error) => {
             if (error.toString().indexOf('Network Error') !== -1) {
-                Global.toast.show('Network Error');
-                // Toast.show('无网络,请连接网络后重试')
+                Toast.show('无网络,请连接网络后重试');
             }
             if (error.toString().indexOf('15000') !== -1) {
-                Global.toast.show(error.toString());
-                // Toast.show('网络超时,请确认当前网络是否可用')
+                Toast.show('网络超时,请确认当前网络是否可用');
             }
-            // console.log(error.toString());
-            // Toast.show(error.toString())
-            // console.log(error);
             return Promise.reject(error);
         });
     }

@@ -7,7 +7,6 @@ import NavigationUtils from '../../navigator/NavigationUtils';
 import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 import {theme} from '../../appSet';
 import NavigationBar from '../../common/NavigationBar';
-import Toast from '../../common/Toast';
 import FastImagePro from '../../common/FastImagePro';
 import SvgUri from 'react-native-svg-uri';
 import kefu from '../../res/svg/kefu.svg';
@@ -45,9 +44,6 @@ class CustomerServiceIndex extends React.Component {
         >
             {navigationBar}
             {TopColumn}
-            <Toast
-                ref={ref => this.toast = ref}
-            />
             <ScrollView style={{flex: 1, backgroundColor: '#e8e8e8'}}>
                 <View style={{width, alignItems: 'center', backgroundColor: 'white', paddingBottom: 30}}>
                     <FastImagePro

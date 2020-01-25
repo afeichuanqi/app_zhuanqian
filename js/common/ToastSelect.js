@@ -100,6 +100,7 @@ class ToastSelect extends PureComponent {
                         transform: [{scale: this.animations.scale}], opacity:this.animations.scale,
                         backgroundColor:'white',
                         // transform: 1,
+                        borderRadius:4,
                     }]}>
 
                         <View style={{
@@ -108,9 +109,6 @@ class ToastSelect extends PureComponent {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
-
-                            borderTopLeftRadius:5,
-                            borderTopRightRadius:5,
                             paddingTop:15,
 
                         }}>

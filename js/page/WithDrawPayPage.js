@@ -25,7 +25,7 @@ import menu_right from '../res/svg/menu_right.svg';
 import SvgUri from 'react-native-svg-uri';
 import {getUserWithDrawInfo, userWithDrawMoney} from '../util/AppService';
 import actions from '../action';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import ToastSelect from '../common/ToastSelect';
 
 const width = Dimensions.get('window').width;
@@ -99,9 +99,7 @@ class WithDrawPayPage extends React.Component {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
+
                 <View style={{flex: 1, backgroundColor: '#f0f0f0'}}>
                     <TouchableOpacity
                         onPress={() => {
@@ -199,7 +197,7 @@ class WithDrawPayPage extends React.Component {
                         onPress={() => {
                             if (pay_name) {
                                 if (parseFloat(this.inputPro.getPrice()) <= 0) {
-                                    this.toast.show('请输入正确的提现金额');
+                                    Toast.show('请输入正确的提现金额',{position:Toast.positions.CENTER});
                                     return;
                                 }
                                 this.toastS.show();
@@ -240,12 +238,12 @@ class WithDrawPayPage extends React.Component {
                         }, this.props.userinfo.token).then(result => {
                             this.props.onGetUserInFoForToken(this.props.userinfo.token, () => {
                             });
-                            this.toast.show('提现申请成功');
+                            Toast.show('提现申请成功',{position:Toast.positions.CENTER});
                             setTimeout(() => {
                                 NavigationUtils.goPage({navigationIndex: 1}, 'UserBillListPage');
                             }, 1000);
                         }).catch(msg => {
-                            this.toast.show(msg);
+                            Toast.show(msg,{position:Toast.positions.CENTER});
                         });
                     }}
                     ref={ref => this.toastS = ref}>

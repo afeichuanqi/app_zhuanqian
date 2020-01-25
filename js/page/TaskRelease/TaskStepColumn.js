@@ -32,7 +32,7 @@ import {equalsObj} from '../../util/CommonUtils';
 import FastImagePro from '../../common/FastImagePro';
 import {saveImg} from '../../util/ImageUtil';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import Toast from 'react-native-root-toast';
 const {width, height} = Dimensions.get('window');
 
 class StepBox extends PureComponent {
@@ -281,7 +281,7 @@ class TaskStepColumn extends Component {
                                 if (this.props.isEdit) {
                                     Linking.openURL(typeData.inputValue);
                                 } else {
-                                    this.props.toast.show('请先报名');
+                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
                                 }
 
                             }}
@@ -297,7 +297,7 @@ class TaskStepColumn extends Component {
                                 if (this.props.isEdit) {
                                     Clipboard.setString(typeData.inputValue);
                                 } else {
-                                    this.props.toast.show('请先报名');
+                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
                                 }
 
                             }}
@@ -389,10 +389,10 @@ class TaskStepColumn extends Component {
                                 onPress={() => {
                                     if (this.props.isEdit) {
                                         saveImg(typeData.uri, (msg) => {
-                                            this.props.toast.show(msg);
+                                            Toast.show(msg);
                                         });
                                     } else {
-                                        this.props.toast.show('请先报名哦');
+                                        Toast.show('请先报名哦',{position:Toast.positions.CENTER});
                                     }
                                 }}
                                 style={{
@@ -443,10 +443,9 @@ class TaskStepColumn extends Component {
                                 if (this.props.isEdit) {
                                     Clipboard.setString(typeData.inputValue);
                                 } else {
-                                    this.props.toast.show('请先报名');
+                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
                                 }
 
-                                // this.toast.show('复制成功 ~ ~');
                             }}
                             style={{
                                 width: ((width - 62) / 4),
@@ -781,7 +780,7 @@ class TaskStepColumn extends Component {
                             <TouchableOpacity
                                 activeOpacity={1}
                                 onPress={() => {
-                                    this.props.toast.show('请先报名');
+                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
                                 }}
                                 style={{
                                     padding: 0,

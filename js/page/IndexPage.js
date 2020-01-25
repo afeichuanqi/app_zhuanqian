@@ -38,6 +38,7 @@ import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 import FastImagePro from '../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Toast from "react-native-root-toast";
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -66,15 +67,6 @@ class HomePage extends PureComponent {
         Global.token = this.props.userinfo.token;
         Global.dispatch = this.props.dispatch;
         ChatSocket.connctionServer();
-        // if (Platform.OS === 'android') {
-        //     setTimeout(() => {
-        //
-        //     }, 500);
-        // } else {
-
-        // StatusBar.setBarStyle('dark-content', false);
-        // StatusBar.setBackgroundColor(theme, false);
-        // }
 
 
     }
@@ -313,7 +305,9 @@ class HomePage extends PureComponent {
     };
 
     SearchOnFocus = () => {
+        // Toast.show('无网络,请连接网络后重试');
         // this.toast.show('text');
+
         NavigationUtils.goPage({}, 'SearchPage');
         // NavigationUtils.goPage({}, 'ImageExample');
         // this.test();

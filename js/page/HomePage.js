@@ -8,13 +8,12 @@
 
 import React, {PureComponent} from 'react';
 import {Dimensions, StyleSheet, View, Text, StatusBar} from 'react-native';
-import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme,bottomTheme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationUtils from '../navigator/NavigationUtils';
 import PromotionToast from '../common/PromotionToast';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import Global from '../common/Global';
 import {getAppSetting} from '../util/AppService';
 import Animated from 'react-native-reanimated';
@@ -42,7 +41,7 @@ class HomePage extends PureComponent {
             Global.user_service_fee = result.user_service_fee;
             Global.user_recommend_fee = result.user_recommend_fee;
         });
-        Global.toast = this.toast;
+        Global.toast = Toast;
         JShareModule.setup();
 
     }
@@ -129,9 +128,6 @@ class HomePage extends PureComponent {
                     </View>
 
                 </Animated.View>}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <DynamicTabNavigator/>
                 <PromotionToast ref={ref => this.promotionToast = ref}/>
             </View>

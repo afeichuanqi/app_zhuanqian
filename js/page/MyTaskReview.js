@@ -19,7 +19,7 @@ import menu_right from '../res/svg/menu_right.svg';
 import {bottomTheme} from '../appSet';
 import {passTaskForSendFormTaskId, selectSendFormForTaskId} from '../util/AppService';
 import {connect} from 'react-redux';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import ImageViewerModal from '../common/ImageViewerModal';
 import ToastSelect from '../common/ToastSelect';
 import EmptyComponent from '../common/EmptyComponent';
@@ -102,7 +102,7 @@ class MyTaskReview extends PureComponent {
 
 
         } catch (e) {
-            this.toast.show(`error>${e.toString()}`);
+            Toast.show(`error>${e.toString()}`);
 
         }
     };
@@ -150,9 +150,6 @@ class MyTaskReview extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 {isEmpty ? <EmptyComponent height={screenHeight - 100} message={'没有更多的任务需要审核啦 ～ ～'}/> :
                     <View style={{flex: 1}}>
                         <ScrollView style={{backgroundColor: '#e8e8e8', marginBottom: 50}}>
@@ -407,7 +404,7 @@ class MyTaskReview extends PureComponent {
                 unReviewCount: this.state.unReviewCount - 1,
                 haveReviewCount: this.state.haveReviewCount + 1,
             });
-            this.toast.show('已经通过');
+            Toast.show('已经通过',{position:Toast.positions.CENTER});
             if (this.pageIndex == this.taskDatas.length - 1) {
                 this._updatePage();//直接刷新本页面
             } else {
@@ -416,7 +413,7 @@ class MyTaskReview extends PureComponent {
 
 
         }).catch(error => {
-            this.toast.show(error);
+            Toast.show(error,{position:Toast.positions.CENTER});
         });
         this.toastS.hide();
     };
@@ -425,7 +422,7 @@ class MyTaskReview extends PureComponent {
         this.pageIndex -= 1;
         if (this.pageIndex < 0) {
             this.pageIndex += 1;
-            this.toast.show('没有更多了');
+            Toast.show('没有更多了',{position:Toast.positions.CENTER});
         } else {
             this._setTaskData(this.pageIndex);
         }
@@ -436,7 +433,7 @@ class MyTaskReview extends PureComponent {
         this.pageIndex += 1;
         if (this.pageIndex >= this.taskDatas.length) {
             this.pageIndex -= 1;
-            this.toast.show('没有更多了');
+            Toast.show('没有更多了',{position:Toast.positions.CENTER});
         } else {
             this._setTaskData(this.pageIndex);
         }

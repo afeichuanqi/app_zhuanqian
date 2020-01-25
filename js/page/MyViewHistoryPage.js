@@ -24,7 +24,7 @@ import {connect} from 'react-redux';
 import {getAllViewHistorys, deleteViewHistory} from '../util/AppService';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import {formatData} from '../util/CommonUtils';
 import TaskEasyInfoComponent from '../common/TaskEasyInfoComponent';
 
@@ -117,7 +117,7 @@ class MyViewHistoryPage extends PureComponent {
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '我的浏览历史', null, 'white', 'black', 16, () => {
             deleteViewHistory({}, this.props.userinfo.token).then(result => {
                 this._updatePage(true);
-                this.toast.show('清空浏览历史成功');
+                Toast.show('清空浏览历史成功');
             });
         }, false, true, '清空', 'black');
         const {taskData, isLoading, hideLoaded} = this.state;
@@ -127,9 +127,6 @@ class MyViewHistoryPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5', paddingTop: 3}}

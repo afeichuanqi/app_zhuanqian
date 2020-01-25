@@ -150,6 +150,7 @@ class MsgList extends Component {
         const friendData = this.props.friend.friendArr;
         const {isLoading} = this.state;
         return <AnimatedFlatList
+
             ListEmptyComponent={<EmptyComponent type={2} height={height - 210}/>}
             ListHeaderComponent={
                 <View style={{
@@ -183,6 +184,7 @@ class MsgList extends Component {
             keyExtractor={(item, index) => index + ''}
             refreshControl={
                 <RefreshControl
+                    progressViewOffset={hp(8)}
                     refreshing={isLoading}
                     onRefresh={this.onRefresh}
                 />

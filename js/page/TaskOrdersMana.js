@@ -28,7 +28,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import {cancelUserSignUp, selectOrderTasks, updateNoticeIsReadForType, userRedoTask} from '../util/AppService';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
@@ -116,9 +116,6 @@ class TaskOrdersMana extends Component {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View>
                     <TabBar
                         style={{
@@ -177,16 +174,16 @@ class TaskOrdersMana extends Component {
             //     return <FristListComponent status={0}
             //                                userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent source={require('../res/img/ReleseMana/o1.png')} toast={this.toast} status={1}
+                return <FristListComponent source={require('../res/img/ReleseMana/o1.png')}  status={1}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent source={require('../res/img/ReleseMana/o2.png')} toast={this.toast} status={2}
+                return <FristListComponent source={require('../res/img/ReleseMana/o2.png')}  status={2}
                                            userinfo={this.props.userinfo}/>;
             case 'second2':
-                return <FristListComponent source={require('../res/img/ReleseMana/o3.png')} toast={this.toast} status={3}
+                return <FristListComponent source={require('../res/img/ReleseMana/o3.png')}  status={3}
                                            userinfo={this.props.userinfo}/>;
             case 'second3':
-                return <FristListComponent source={require('../res/img/ReleseMana/o4.png')} toast={this.toast} status={4}
+                return <FristListComponent source={require('../res/img/ReleseMana/o4.png')}  status={4}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -312,7 +309,7 @@ class FristListComponent extends PureComponent {
                     NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
                     EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0, 2]});
                 }).catch(msg => {
-                    this.toast.show(msg);
+                    Toast.show(msg);
                 });
             }}
         />;
@@ -323,7 +320,7 @@ class FristListComponent extends PureComponent {
         cancelUserSignUp({sign_up_id: item.signUpId}, userinfo.token).then(result => {
             EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0]});
         }).catch(msg => {
-            this.props.toast.show(msg);
+            Toast.show(msg);
         });
     };
 
@@ -356,9 +353,6 @@ class FristListComponent extends PureComponent {
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
         return <View style={{flex: 1}}>
-            <Toast
-                ref={ref => this.toast = ref}
-            />
             <AnimatedFlatList
                 style={{backgroundColor: '#e8e8e8'}}
                 ListEmptyComponent={<EmptyComponent source={this.props.source} height={height - 100} message={'您还没有相关任务'}/>}

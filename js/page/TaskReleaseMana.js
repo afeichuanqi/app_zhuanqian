@@ -35,12 +35,11 @@ import {
 import {connect} from 'react-redux';
 import TaskReleaseItem from './TaskReleaseMana/TaskReleaseItem';
 import ToastSelect from '../common/ToastSelect';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import ToastTaskTopRecommend from './TaskReleaseMana/ToastTaskTopRecommend';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import message from '../reducer/message';
 import actions from '../action';
 import {equalsObj} from '../util/CommonUtils';
 
@@ -122,9 +121,6 @@ class TaskReleaseMana extends Component {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View>
                     <TabBar
                         style={{
@@ -192,13 +188,13 @@ class TaskReleaseMana extends Component {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent toast={this.toast} source={require('../res/img/ReleseMana/r1.png')} task_status={[0]}
+                return <FristListComponent  source={require('../res/img/ReleseMana/r1.png')} task_status={[0]}
                                            userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent toast={this.toast} source={require('../res/img/ReleseMana/r2.png')} task_status={[2]}
+                return <FristListComponent  source={require('../res/img/ReleseMana/r2.png')} task_status={[2]}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent toast={this.toast} source={require('../res/img/ReleseMana/r3.png')} task_status={[1, 3]}
+                return <FristListComponent  source={require('../res/img/ReleseMana/r3.png')} task_status={[1, 3]}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -335,9 +331,9 @@ class FristListComponent extends PureComponent {
     };
     _updateTaskUpdateTime = (item) => {
         updateTaskUpdateTime({task_id: item.id}, this.props.userinfo.token).then(result => {
-            this.props.toast.show('刷新成功');
+            Toast.show('刷新成功');
         }).catch(msg => {
-            this.props.toast.show(msg);
+            Toast.show(msg);
         });
     };
     _itemClick = (item) => {
@@ -436,13 +432,13 @@ class FristListComponent extends PureComponent {
                         task_id: item.id,
                     }, this.props.userinfo.token).then(data => {
                         setTimeout(() => {
-                            this.props.toast.show(`置顶到期时间:` + data.expTime, 2000);
+                            Toast.show(`置顶到期时间:` + data.expTime, 2000);
                             // this._updateList(true);
                         }, 300);
 
                     }).catch(msg => {
                         setTimeout(() => {
-                            this.props.toast.show(msg);
+                            Toast.show(msg);
                         }, 300);
                     });
                 }}
@@ -455,14 +451,14 @@ class FristListComponent extends PureComponent {
                         task_id: item.id,
                     }, this.props.userinfo.token).then(data => {
                         setTimeout(() => {
-                            this.props.toast.show(`推荐到期时间:` + data.expTime, 2000);
+                            Toast.show(`推荐到期时间:` + data.expTime, 2000);
                             // this._updateList(true);
                         }, 300);
 
 
                     }).catch(msg => {
                         setTimeout(() => {
-                            this.props.toast.show(msg);
+                            Toast.show(msg);
                         }, 300);
                     });
                 }}

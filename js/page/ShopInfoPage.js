@@ -27,7 +27,7 @@ import TaskSumComponent from '../common/TaskInfoComponent';
 import {attentionUserId, selectShopInfoForUserId, selectTaskListForUserId, uploadQiniuImage} from '../util/AppService';
 import {connect} from 'react-redux';
 import EmptyComponent from '../common/EmptyComponent';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import BackPressComponent from '../common/BackPressComponent';
@@ -40,7 +40,8 @@ import actions from '../action';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
-const backgroundHeight = 90;
+const backgroundHeight = 100;
+const topHeight = 140;
 const {call, block, set} = Animated;
 
 class ShopInfoPage extends PureComponent {
@@ -103,7 +104,7 @@ class ShopInfoPage extends PureComponent {
 
         const translateY = Animated.interpolate(this.animations.val, {
             inputRange: [-height, 0, height],
-            outputRange: [height + backgroundHeight + 140, backgroundHeight + 140, -height + backgroundHeight + 140],
+            outputRange: [height + backgroundHeight + topHeight, backgroundHeight + topHeight, -height + backgroundHeight + topHeight],
             extrapolate: 'clamp',
         });
         const whiteOpacity = Animated.interpolate(this.animations.val, {
@@ -121,9 +122,6 @@ class ShopInfoPage extends PureComponent {
             <SafeAreaViewPlus
                 topColor={bottomTheme}
             >
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1}}>
                     <Animated.View
                         style={{
@@ -139,7 +137,7 @@ class ShopInfoPage extends PureComponent {
                             width,
                             height: 30,
                             position: 'absolute',
-                            bottom: backgroundHeight + 180 + backgroundHeight + 30,
+                            bottom: backgroundHeight + topHeight + backgroundHeight + 30,
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
@@ -148,7 +146,7 @@ class ShopInfoPage extends PureComponent {
                         <FastImage
                             source={{uri: this.state.userId === this.props.userinfo.userid ? this.props.userinfo.shopinfo_url : this.state.shopInfo.shopinfoUrl}}
                             style={{
-                                height: Platform.OS === 'ios' ? backgroundHeight + 180 + backgroundHeight : backgroundHeight + 180,
+                                height: Platform.OS === 'ios' ? backgroundHeight + topHeight + backgroundHeight : backgroundHeight + topHeight,
                                 width,
                                 position: 'absolute',
                                 bottom: 0,
@@ -159,7 +157,7 @@ class ShopInfoPage extends PureComponent {
                             activeOpacity={0.6}
                             onPress={this.changeShopBackImg}
                             style={{
-                                height: Platform.OS === 'ios' ? backgroundHeight + 180 + backgroundHeight : backgroundHeight + 180,
+                                height: Platform.OS === 'ios' ? backgroundHeight + topHeight + backgroundHeight : backgroundHeight + topHeight,
                                 width,
                                 position: 'absolute',
                                 bottom: 0,
@@ -236,7 +234,7 @@ class ShopInfoPage extends PureComponent {
         mime = mime.substring(mimeIndex + 1, mime.length);
         const path = `file://${image.path}`;
         onSetShopInfoBgImg(token, mime, path, (isTrue, data) => {
-            isTrue && this.toast.show('更换成功');
+            isTrue && Toast.show('更换成功');
         });
     };
     _attentionUserId = () => {
@@ -248,9 +246,9 @@ class ShopInfoPage extends PureComponent {
             this.setState({
                 attentionStatus: attention_type,
             });
-            this.toast.show(`${attention_type == 0 ? '取消关注' : '关注'}成功`);
+            Toast.show(`${attention_type == 0 ? '取消关注' : '关注'}成功`);
         }).catch(msg => {
-            this.toast.show(msg);
+            Toast.show(msg);
         });
     };
 }

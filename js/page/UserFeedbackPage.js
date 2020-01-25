@@ -17,12 +17,9 @@ import {
     View, TouchableOpacity, StatusBar, ScrollView, TextInput,
 } from 'react-native';
 import {connect} from 'react-redux';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-// import add_image from '../res/svg/add_image.svg';
-// import SvgUri from 'react-native-svg-uri';
-// import PickerImage from '../common/PickerImage';
 import {saveFeedBack} from '../util/AppService';
 import UploadImgsComponent from '../common/UploadImgsComponent';
 
@@ -74,9 +71,6 @@ class UserFeedbackPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <ScrollView style={{flex: 1, backgroundColor: '#efefef'}}>
                     <View>
                         <Text style={{
@@ -132,15 +126,15 @@ class UserFeedbackPage extends PureComponent {
         const text = this.inputTextImage.getText();
         const phone = this.inputPro.getPhone();
         if (text.length < 10) {
-            this.toast.show('请输入大于10个字节的建议哦');
+            Toast.show('请输入大于10个字节的建议哦');
             return;
         }
         if (images.length === 0) {
-            this.toast.show('请至少上传一张图片哦');
+            Toast.show('请至少上传一张图片哦');
             return;
         }
         if (phone.length < 3) {
-            this.toast.show('请输入大于3个字节的联系方式哦');
+            Toast.show('请输入大于3个字节的联系方式哦');
             return;
         }
         const content = {
@@ -152,13 +146,13 @@ class UserFeedbackPage extends PureComponent {
             type: radioItem.id,
             phone,
         }, this.props.userinfo.token).then(result => {
-            this.toast.show('反馈成功 ~ ~');
+            Toast.show('反馈成功 ~ ~');
             this.inputTextImage.reStart();
             this.radioCheck.reStart();
             this.inputPro.reStart();
             NavigationUtils.goPage({}, 'UserFeedbackListPage');
         }).catch(msg => {
-            this.toast.show('反馈失败 ~ ~');
+            Toast.show('反馈失败 ~ ~');
         });
     };
 

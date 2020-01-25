@@ -21,7 +21,7 @@ import {connect} from 'react-redux';
 import {insertReportList, selectIsBeBlackList, setToBlackList} from '../../util/AppService';
 import MyModalBox from '../../common/MyModalBox';
 import BackPressComponent from '../../common/BackPressComponent';
-import Toast from '../../common/Toast';
+import Toast from 'react-native-root-toast';
 
 const {width, height} = Dimensions.get('window');
 
@@ -79,9 +79,6 @@ class ChatSetting extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1}}>
                     <View style={{
                         height: 20,
@@ -213,7 +210,7 @@ class ChatSetting extends PureComponent {
             }, token).then(() => {
                 this.myModalBox.hide();
                 this.reportText = '';
-                this.toast.show('举报成功');
+                Toast.show('举报成功',{position:Toast.positions.CENTER});
             });
         }
 

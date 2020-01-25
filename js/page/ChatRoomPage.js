@@ -15,7 +15,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {createAppealInfo, isFriendChat, selectSimpleTaskInfo, uploadQiniuImage} from '../util/AppService';
 import actions from '../action';
 import ImageViewerModal from '../common/ImageViewerModal';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
@@ -50,7 +50,7 @@ class ChatRoomPage extends React.Component {
                         this.taskUri = taskUri;
                         this.sendFormId = sendFormId;
                         if (fromUserinfo.id.indexOf('admin') !== -1) {
-                            this.toast.show('管理员消息');
+                            Toast.show('管理员消息',{position:Toast.positions.CENTER});
                         } else {
                             this._updatePage();
                         }
@@ -102,7 +102,7 @@ class ChatRoomPage extends React.Component {
             }, this.props.userinfo.token).then(result => {
                 this.appealInfo = result.appealInfo;
                 if (result.haveToDo == 0 || !result.guzhuUserId) {
-                    this.toast.show('您与雇主并无任务来往,会话创建失败');
+                    Toast.show('您与雇主并无任务来往,会话创建失败',{position:Toast.positions.CENTER});
                     return;
                 }
                 if (result.id) {
@@ -115,7 +115,7 @@ class ChatRoomPage extends React.Component {
                 }
 
             }).catch(msg => {
-                this.toast.show(msg);
+                Toast.show(msg,{position:Toast.positions.CENTER});
             });
 
         } else { //咨询信息
@@ -126,7 +126,7 @@ class ChatRoomPage extends React.Component {
                 sendFormId: this.sendFormId,
             }, this.props.userinfo.token).then(result => {
                 if (result.haveToDo == 0 || !result.guzhuUserId) {
-                    this.toast.show('您与雇主并无任务来往,会话创建失败');
+                    Toast.show('您与雇主并无任务来往,会话创建失败',{position:Toast.positions.CENTER});
                     return;
                 }
                 if (result.id) {
@@ -139,7 +139,7 @@ class ChatRoomPage extends React.Component {
                 }
 
             }).catch(msg => {
-                msg.length > 0 && this.toast.show(msg);
+                msg.length > 0 && Toast.show(msg,{position:Toast.positions.CENTER});
             });
         }
 
@@ -318,9 +318,6 @@ class ChatRoomPage extends React.Component {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1}}>
                     {this.task_id && <TaskInfo
 
@@ -444,7 +441,7 @@ class ChatRoomPage extends React.Component {
             });
         } else {
             if (!this.FriendId) {
-                this.toast.show('重新打开会话试试 ～ ～');
+                Toast.show('重新打开会话试试 ～ ～',{position:Toast.positions.CENTER});
                 return;
             }
         }
@@ -466,7 +463,7 @@ class ChatRoomPage extends React.Component {
             ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
         } else {
             if (!this.FriendId) {
-                this.toast.show('重新打开会话试试 ～ ～');
+                Toast.show('重新打开会话试试 ～ ～',{position:Toast.positions.CENTER});
             }
         }
 
@@ -477,8 +474,6 @@ class ChatRoomPage extends React.Component {
             NavigationUtils.goPage({userid: targetId}, 'ShopInfoPage');
         } else {
             const userinfos = targetId.split('|');
-            // const userId = userinfos[1];
-            // this.toast.show(`客服编号:${userId}`);
             NavigationUtils.goPage({customerInfo:userinfos},'CustomerServiceIndex')
         }
 

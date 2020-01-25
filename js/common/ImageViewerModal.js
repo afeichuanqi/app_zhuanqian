@@ -14,7 +14,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import FastImage from 'react-native-fast-image';
 import Global from './Global';
 import {saveImg} from '../util/ImageUtil';
-import Toast from './Toast';
+import Toast from 'react-native-root-toast';
 import {bottomTheme, theme} from '../appSet';
 
 const {width, height} = Dimensions.get('window');
@@ -122,7 +122,7 @@ export default class ImageViewerModal extends React.Component {
         if (bool) {
             saveImg(url, (msg) => {
                 // Global.toast.show(msg);
-                this.toast.show(msg);
+                Toast.show(msg);
             });
         }
 
@@ -172,9 +172,6 @@ export default class ImageViewerModal extends React.Component {
             transparent
             onRequestClose={this.hide}
         >
-            <Toast
-                ref={ref => this.toast = ref}
-            />
             <ImageViewer
                 loadingRender={this.loadingRender}
                 onCancel={this.hide}

@@ -22,7 +22,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {setUserWithDrawInfo} from '../util/AppService';
 import actions from '../action';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 
 const width = Dimensions.get('window').width;
 
@@ -83,9 +83,6 @@ class WithDrawAccount extends React.Component {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1, backgroundColor: '#f0f0f0'}}>
                     <InputItem
                         ref={ref => this.payUserName = ref}
@@ -101,18 +98,18 @@ class WithDrawAccount extends React.Component {
                         activeOpacity={0.6}
                         onPress={() => {
                             if (!this.props.userinfo.login) {
-                                this.toast.show('请登录');
+                                Toast.show('请登录');
                                 return;
                             }
                             const pay_username = this.payUserName.getValue();
                             const pay_account = this.payAccount.getValue();
                             const pay_type = this.params.type;
                             if (pay_username.length === 0) {
-                                this.toast.show('您并没有输入姓名');
+                                Toast.show('您并没有输入姓名');
                                 return;
                             }
                             if (pay_account.length === 0) {
-                                this.toast.show('您并没有输入帐户');
+                                Toast.show('您并没有输入帐户');
                                 return;
                             }
 
@@ -125,7 +122,7 @@ class WithDrawAccount extends React.Component {
                                 this.props.onAddPayAccount(pay_username, pay_account, pay_type);
                                 NavigationUtils.goBack(this.props.navigation);
                             }).catch(msg => {
-                                this.toast.show(msg);
+                                Toast.show(msg);
                             });
                         }}
                         style={{

@@ -20,7 +20,7 @@ import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {bottomTheme} from '../appSet';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 
 import XPay from 'react-native-puti-pay';
 import {alipaySignOrder} from '../util/AppService';
@@ -79,9 +79,6 @@ class RechargePage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <ScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
                     {this.props.userinfo.login && <TouchableOpacity
                         onPress={() => {
@@ -202,11 +199,11 @@ class RechargePage extends PureComponent {
         // const item = this.items[this.state.activeIndex];
         const rechargeVal = this.rechargeVal;
         if (!this.props.userinfo.login) {
-            this.toast.show('请登录');
+            Toast.show('请登录');
             return;
         }
         if (!rechargeVal || parseFloat(rechargeVal) <= 0) {
-            this.toast.show('请输入正确的金额哦 ～ ～');
+            Toast.show('请输入正确的金额哦 ～ ～');
             return;
         }
         //
@@ -244,7 +241,7 @@ class RechargePage extends PureComponent {
                         msg = '支付结果未知（有可能已经支付成功）';
                     }
                     if (result.resultStatus == 9000) {
-                        this.toast.show(msg);
+                        Toast.show(msg);
                         setTimeout(() => {
                             NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
                             const {userinfo, onGetUserInFoForToken} = this.props;
@@ -253,7 +250,7 @@ class RechargePage extends PureComponent {
                             // this.props.onGetUserInFoForToken()
                         }, 1000);
                     } else {
-                        this.toast.show(msg);
+                        Toast.show(msg);
 
                     }
                 });

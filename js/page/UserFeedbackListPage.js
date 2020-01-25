@@ -18,12 +18,11 @@ import {
     View, TouchableOpacity, StatusBar, RefreshControl, ActivityIndicator, Image,
 } from 'react-native';
 import {connect} from 'react-redux';
-import Toast from '../common/Toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {selectFeedbackList} from '../util/AppService';
 import EmptyComponent from '../common/EmptyComponent';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import FastImagePro from '../common/FastImagePro';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -160,9 +159,6 @@ class UserFeedbackListPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1}}>
 
                     <FlatList

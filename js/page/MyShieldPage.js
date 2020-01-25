@@ -26,7 +26,7 @@ import FastImage from 'react-native-fast-image';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import RadioComponent from '../common/RadioComponent';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -117,9 +117,6 @@ class MyShieldPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5', paddingTop: 3}}
@@ -165,7 +162,7 @@ class MyShieldPage extends PureComponent {
         this._updatePage(false);
     };
     _renderIndexPath = ({item, index}) => {
-        return <ShiedItem toast={this.toast} token={this.props.userinfo.token} item={item}/>;
+        return <ShiedItem token={this.props.userinfo.token} item={item}/>;
     };
     page = {
         pageIndex: 0,
@@ -197,7 +194,7 @@ class ShiedItem extends PureComponent {
             beUserid: id,
             is_black: isCheck ? 1 : 0,
         }, this.props.token).then(() => {
-            this.props.toast.show(`${username}${isCheck ? '屏蔽' : '取消屏蔽'}成功`);
+            Toast.show(`${username}${isCheck ? '屏蔽' : '取消屏蔽'}成功`);
         }).catch(e => {
             this.radioComponent.setChecked(!isCheck);
 

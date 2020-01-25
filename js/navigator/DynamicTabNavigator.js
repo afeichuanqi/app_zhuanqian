@@ -26,6 +26,7 @@ import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
 import {NavigationActions} from 'react-navigation';
 import RNExitApp from 'react-native-exit-app';
+import Toast from 'react-native-root-toast';
 
 const {SpringUtils, spring} = Animated;
 type Props = {};
@@ -115,17 +116,17 @@ class BottomBar extends Component {
         const {nav} = this.props;
         if (nav.routes[0].index === 0) {
             if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-                // console.log('exitApp');
                 RNExitApp.exitApp();
                 return false;
             }
             this.lastBackPressed = Date.now();
+            Toast.show('再按一次退出程序');
             return true;//默认行为
         }
         this.props.dispatch(NavigationActions.back());
         return true;//默认行为
     };
-    backSetBarStylePages = ['ChatRoomPage', 'ChatSettings', 'TaskSendFromUserList', 'RechargePage', 'MyAttentionList'];
+    backSetBarStylePages = ['ChatRoomPage', 'ChatSettings', 'TaskSendFromUserList', 'RechargePage', 'MyAttentionList', 'TaskTurnDownPage'];
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
 
@@ -394,7 +395,7 @@ class BottomBarItem extends Component {
                 alignItems: 'center',
 
             }}>
-            <Animated.View style={{marginTop: 2, transform: [{scale: this.animations.scale}]}}>
+            <Animated.View style={{marginTop: 3, transform: [{scale: this.animations.scale}]}}>
                 <Image
                     style={{height: 20, width: 20}}
                     source={source}

@@ -15,7 +15,6 @@ import {StatusBar} from 'react-native';
 import ViewUtil from '../util/ViewUtil';
 import jiaoliu from '../res/svg/jiaoliu.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import Toast from '../common/Toast';
 import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
 import LabelBigComponent from '../common/LabelBigComponent';
@@ -28,7 +27,7 @@ import FastImage from 'react-native-fast-image';
 import {getEmojis} from '../util/CommonUtils';
 import Emoji from 'react-native-emoji';
 import ToastShare from '../common/ToastShare';
-
+import Toast from 'react-native-root-toast';
 const {width} = Dimensions.get('window');
 
 class MyOrderManaPage extends PureComponent {
@@ -203,9 +202,6 @@ class MyOrderManaPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -313,18 +309,17 @@ class MyOrderManaPage extends PureComponent {
                 <ToastSelect
                     rightTitle={'确认'}
                     sureClick={() => {
-                        // const {task_status} = this.state.taskInfo;
                         const {userinfo} = this.props;
                         const {taskid} = this.params;
+                        this.toastSelect.hide();
                         stopUserTask({
                             task_id: taskid,
                             task_status: 1,
                         }, userinfo.token).then(result => {
-                            this.toastSelect.hide();
                             NavigationUtils.goBack(this.props.navigation);
                             this.params.updateReleasePage && this.params.updateReleasePage(true);
                         }).catch(msg => {
-                            this.toast.show(msg);
+                            Toast.show(msg,{position:Toast.positions.CENTER});
                         });
                     }}
                     ref={ref => this.toastSelect = ref}>
@@ -346,7 +341,7 @@ class MyOrderManaPage extends PureComponent {
 
         const {taskInfo} = this.state;
         if (this.updateTaskPrice.getError()) {
-            this.toast.show('佣金必须大于原有佣金哦 ～ ～');
+            Toast.show('佣金必须大于原有佣金哦 ～ ～');
             return;
         }
         const new_price = this.updateTaskPrice.getNewPrice();
@@ -357,10 +352,10 @@ class MyOrderManaPage extends PureComponent {
         }, userinfo.token).then(result => {
             setTimeout(() => {
                 this._updatePage();
-                this.toast.show('加价成功');
+                Toast.show('加价成功');
             }, 200);
         }).catch(msg => {
-            this.toast.show(msg);
+            Toast.show(msg);
         });
     };
     getBottomColumn = (taskInfo) => {
@@ -471,7 +466,7 @@ class MyOrderManaPage extends PureComponent {
                 onPress={() => {
 
                     if (this.state.taskInfo.task_status == 0) {
-                        this.toast.show('请先暂停任务');
+                        Toast.show('请先暂停任务');
                     } else {
                         const {taskid} = this.params;
                         NavigationUtils.goPage({
@@ -501,7 +496,7 @@ class MyOrderManaPage extends PureComponent {
                     const {userinfo} = this.props;
                     const {taskid} = this.params;
                     if (task_status != 0 && task_status != 2) {
-                        this.toast.show('数据错误');
+                        Toast.show('数据错误');
                         return;
                     }
                     const updateStatus = task_status == 0 ? 2 : task_status == 2 ? 0 : null;
@@ -512,7 +507,7 @@ class MyOrderManaPage extends PureComponent {
                     }, userinfo.token).then(result => {
                         this._updatePage();
                     }).catch(msg => {
-                        this.toast.show(msg);
+                        Toast.show(msg);
                     });
                 }}
 
@@ -534,7 +529,7 @@ class MyOrderManaPage extends PureComponent {
                 onPress={() => {
                     const {task_status} = this.state.taskInfo;
                     if (task_status == 1) {
-                        this.toast.show('已经是下架状态');
+                        Toast.show('已经是下架状态');
                         return;
                     }
                     this.toastSelect.show();
@@ -571,7 +566,7 @@ class MyOrderManaPage extends PureComponent {
         const {userinfo} = this.props;
         const {taskInfo} = this.state;
         if (this.updateTaskNum.getError()) {
-            this.toast.show('加量必须大于1哦 ～ ～');
+            Toast.show('加量必须大于1哦 ～ ～');
             return;
         }
         const nowTaskNum = this.updateTaskNum.getNewTaskNum();
@@ -582,11 +577,11 @@ class MyOrderManaPage extends PureComponent {
         }, userinfo.token).then(result => {
             setTimeout(() => {
                 this._updatePage();
-                this.toast.show('加量成功');
+                Toast.show('加量成功');
             }, 200);
 
         }).catch(msg => {
-            this.toast.show(msg);
+            Toast.show(msg);
         });
     };
 }

@@ -37,7 +37,7 @@ import taskHallNext from '../res/svg/taskHallNext.svg';
 import goback from '../res/svg/goback.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {getEmojis, judgeSendTaskData, judgeTaskData} from '../util/CommonUtils';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import liaotian from '../res/svg/liaotian.svg';
 import BackPressComponent from '../common/BackPressComponent';
 import message_more from '../res/svg/message_more.svg';
@@ -57,7 +57,6 @@ const {
 } = Animated;
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-let toast = null;
 const {height} = Dimensions.get('window');
 
 class TaskDetails extends PureComponent {
@@ -216,9 +215,6 @@ class TaskDetails extends PureComponent {
                 topColor={bottomTheme}
             >
                 {navigationBar}
-                <Toast
-                    ref={ref => toast = ref}
-                />
                 <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
 
                     <View style={{
@@ -459,7 +455,6 @@ class TaskDetails extends PureComponent {
                             userinfo={userinfo}
                             isEdit={(StatusForTask.status === 4) ? true : false}
                             stepArr={stepData || []}
-                            toast={toast}
                             showUtilColumn={false}/>
                     </Animated.ScrollView>
                     {/*底部按钮*/}
@@ -506,7 +501,6 @@ class TaskDetails extends PureComponent {
                     shareClick={() => {
                         this.toastShare.show();
                     }}
-                    toast={toast}
                 />
                 {/*分享弹窗*/}
                 <ToastShare ref={ref => this.toastShare = ref}/>
@@ -528,11 +522,11 @@ class TaskDetails extends PureComponent {
                 this.setState({
                     signUp: true,
                 }, () => {
-                    toast.show('报名成功');
+                    Toast.show('报名成功',{position:Toast.positions.CENTER});
                 });
                 this._updateTaskStatus().then();
             }).catch((msg) => {
-                toast.show(msg);
+                Toast.show(msg,{position:Toast.positions.CENTER});
             });
 
         }
@@ -542,13 +536,13 @@ class TaskDetails extends PureComponent {
             const taskText = JSON.stringify(task_step_data);
             const error = judgeSendTaskData(taskText);
             if (error != '') {//任务步骤正确是否正确填写完毕
-                toast.show(error);
+                Toast.show(error,{position:Toast.positions.CENTER});
             } else {
                 sendTaskStepForm({task_id: this.task_id, task_step_data: taskText}, userinfo.token).then(result => {
-                    toast.show('提交成功,等待审核');
+                    Toast.show('提交成功,等待审核',{position:Toast.positions.CENTER});
                     this._updateTaskStatus().then();
                 }).catch((msg) => {
-                    toast.show(msg);
+                    Toast.show(msg,{position:Toast.positions.CENTER});
                 });
             }
 
@@ -558,7 +552,7 @@ class TaskDetails extends PureComponent {
     _sendStepData = () => {
         const {userinfo} = this.props;
         if (!userinfo.token || userinfo.token.length === 0) {
-            toast.show('您未登录哦 ～ ～ ');
+            Toast.show('您未登录哦 ～ ～ ',{position:Toast.positions.CENTER});
             return;
         }
         if (!this.params.update) {
@@ -566,26 +560,26 @@ class TaskDetails extends PureComponent {
             const {token} = userinfo;
             const error = judgeTaskData(FormData);
             if (error != '') {
-                toast.show(error);
+                Toast.show(error,{position:Toast.positions.CENTER});
                 return;
             }
             addTaskReleaseData(FormData, token).then(result => {
-                toast.show('发布成功 ~ ~ ');
+                Toast.show('发布成功 ~ ~ ',{position:Toast.positions.CENTER});
             }).catch(err => {
-                toast.show(err);
+                Toast.show(err,{position:Toast.positions.CENTER});
             });
         } else {
             const {FormData} = this.params;
             const {token} = userinfo;
             const error = judgeTaskData(FormData, true);
             if (error != '') {
-                toast.show(error);
+                Toast.show(error);
                 return;
             }
             updateTaskReleaseData(FormData, token).then(result => {
-                toast.show('修改成功 ~ ~ ');
+                Toast.show('修改成功 ~ ~ ',{position:Toast.positions.CENTER});
             }).catch(err => {
-                toast.show(err);
+                Toast.show(err,{position:Toast.positions.CENTER});
             });
         }
     };
@@ -665,7 +659,7 @@ class TaskDetailsPop extends Component {
                         task_id: task_id,
                         favorite_status: is_favorite,
                     }, userinfo.token).then(result => {
-                        this.props.toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`);
+                        Toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`,{position:Toast.positions.CENTER});
                         this.setState({
                             isFavorite: is_favorite,
                         });
@@ -779,7 +773,7 @@ class ChangeTask extends Component {
     };
     _onPress = () => {
         //隐藏box
-        toast.show('已切换');
+        Toast.show('已切换',{position:Toast.positions.CENTER});
         getNewTaskId().then(result => {
             const taskId = result.task_id;
             EventBus.getInstance().fireEvent(EventTypes.update_task_page, {

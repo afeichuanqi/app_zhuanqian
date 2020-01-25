@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import LabelBigComponent from '../../common/LabelBigComponent';
 import ViewUtil from '../../util/ViewUtil';
 import {bottomTheme} from '../../appSet';
 import NavigationUtils from '../../navigator/NavigationUtils';
@@ -31,6 +30,7 @@ export default class TaskReleaseItem extends PureComponent {
                     flex: 1,
                     flexDirection: 'row',
                     paddingHorizontal: 10,
+                    // paddingRight:15,
                     paddingTop: 25,
                     paddingBottom: 25,
                     height: 90,
@@ -43,7 +43,7 @@ export default class TaskReleaseItem extends PureComponent {
                     resizeMode={FastImage.resizeMode.stretch}
                 />
                 <View style={{
-                    height: wp(13), width: width - 70, paddingLeft: 10, justifyContent: 'space-between',
+                    height: wp(13), width: width - 70, paddingLeft: 10, paddingRight:5, justifyContent: 'space-between',
 
                 }}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -98,9 +98,9 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems:'center',
                             justifyContent:'center',
                         }}>
-                            <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
-                            <View style={{height:10,width:0.3, backgroundColor:'rgba(0,0,0,0.3)', marginHorizontal:7}}/>
-                            <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
+                            <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
+                            <View style={{height:12,width:0.5, backgroundColor:'rgba(0,0,0,0.5)', marginHorizontal:7}}/>
+                            <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
                         </View>
                         {/*剩余数*/}
                         <View style={{

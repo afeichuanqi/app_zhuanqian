@@ -27,7 +27,7 @@ import FastImagePro from '../common/FastImagePro';
 import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
 import ToastSelect from '../common/ToastSelect';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 
@@ -125,9 +125,6 @@ class TaskRejectDetailsPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <View style={{flex: 1}}>
                     <ScrollView style={{
                         backgroundColor: '#f0f0f0',
@@ -293,7 +290,7 @@ class TaskRejectDetailsPage extends PureComponent {
                                     indexs: [0, 2],
                                 });//页面跳转到顶部
                             }).catch(msg => {
-                                this.toast.show(msg);
+                                Toast.show(msg);
                             });
 
                         }} style={{
@@ -332,11 +329,11 @@ class TaskRejectDetailsPage extends PureComponent {
         this.toastS.hide();
         userGiveUpTask({SendFormTaskId: this.params.sendFormId}, this.props.userinfo.token).then((result) => {
             EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs:[2]});//刷新审核页面
-            this.toast.show('成功放弃');
+            Toast.show('成功放弃');
             NavigationUtils.goBack(this.props.navigation);
 
         }).catch(msg => {
-            this.toast.show(msg);
+            Toast.show(msg);
         });
     };
     getImageView = (url, height, width, ImageIndex, title, index) => {

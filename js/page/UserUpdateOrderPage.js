@@ -13,19 +13,17 @@ import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions,
-    FlatList, StyleSheet, Text,
-    View, TouchableOpacity, StatusBar, Clipboard, ScrollView, TextInput, RefreshControl, ActivityIndicator,
+StyleSheet, Text,
+    View, TouchableOpacity, StatusBar, ScrollView,
 } from 'react-native';
 import {connect} from 'react-redux';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {getAllOrderForType, saveFeedBack, uploadQiniuImage, userBuyOrder} from '../util/AppService';
-import EmptyComponent from '../common/EmptyComponent';
+import {getAllOrderForType,  userBuyOrder} from '../util/AppService';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 
 class UserUpdateOrderPage extends PureComponent {
     constructor(props) {
@@ -70,9 +68,6 @@ class UserUpdateOrderPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <ScrollView style={{flex: 1, backgroundColor: '#efefef'}}>
                     <View>
                         <Text style={{
@@ -115,9 +110,9 @@ class UserUpdateOrderPage extends PureComponent {
                         onPress={() => {
                             const orderId = this.radioCheck.getItem().id;
                             userBuyOrder({id: orderId}, this.props.userinfo.token).then(result => {
-                                this.toast.show('购买成功');
+                                Toast.show('购买成功');
                             }).catch(msg => {
-                                this.toast.show(msg);
+                                Toast.show(msg);
                             });
                         }}
                         style={{

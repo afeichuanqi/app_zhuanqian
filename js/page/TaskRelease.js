@@ -51,7 +51,7 @@ import {connect} from 'react-redux';
 import AppTskDefaultData from './TaskRelease/AppTskDefaultData';
 import actions from '../action';
 import {judgeTaskData} from '../util/CommonUtils';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import Global from '../common/Global';
 import ToastSelect from '../common/ToastSelect';
@@ -309,7 +309,7 @@ class TaskRelease extends PureComponent {
             const data = this._getFormData();
             const error = judgeTaskData(data);
             if (error != '') {
-                this.toast.show(error);
+                Toast.show(error,{position:Toast.positions.CENTER});
             } else {
                 const {userinfo} = this.props;
                 const {token} = userinfo;
@@ -321,33 +321,33 @@ class TaskRelease extends PureComponent {
                     }, 'TaskDetails');
 
                 }).catch(err => {
-                    this.toast.show(err);
+                    Toast.show(err,{position:Toast.positions.CENTER});
                 });
             }
         } else {
             const isTrue = this.complyColumn.getIsTrue();
             if (!isTrue) {
-                this.toast.show('您未同意发布规则哦 ～ ～ ');
+                Toast.show('您未同意发布规则哦 ～ ～ ',{position:Toast.positions.CENTER});
                 return;
 
             }
             const {userinfo} = this.props;
             const {token} = userinfo;
             if (!token || token.length === 0) {
-                this.toast.show('您未登录哦 ～ ～ ');
+                Toast.show('您未登录哦 ～ ～ ',{position:Toast.positions.CENTER});
                 return;
             }
             const data = this._getFormData();
             data.task_id = this.taskInfo.taskId;
             const error = judgeTaskData(data, true);
             if (error != '') {
-                this.toast.show(error);
+                Toast.show(error,{position:Toast.positions.CENTER});
             } else {
                 updateTaskReleaseData(data, token).then(result => {
                     NavigationUtils.goBack(this.props.navigation);
                     this.params.updatePage && this.params.updatePage();
                 }).catch(err => {
-                    this.toast.show(err);
+                    Toast.show(err,{position:Toast.positions.CENTER});
                 });
             }
         }
@@ -458,9 +458,6 @@ class TaskRelease extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 {showColumn ? <ScrollView
                     // keyboardShouldPersistTaps={'always'}
                     ref={ref => this.scrollView = ref}
@@ -510,28 +507,28 @@ class TaskRelease extends PureComponent {
                                 const data = this._getFormData();
                                 const error = judgeTaskData(data);
                                 if (error != '') {
-                                    this.toast.show(error);
+                                    Toast.show(error,{position:Toast.positions.CENTER});
                                 } else {
                                     this.toastS.show();
                                 }
                             } else {
                                 const isTrue = this.complyColumn.getIsTrue();
                                 if (!isTrue) {
-                                    this.toast.show('您未同意发布规则哦 ～ ～ ');
+                                    Toast.show('您未同意发布规则哦 ～ ～ ',{position:Toast.positions.CENTER});
                                     return;
 
                                 }
                                 const {userinfo} = this.props;
                                 const {token} = userinfo;
                                 if (!token || token.length === 0) {
-                                    this.toast.show('您未登录哦 ～ ～ ');
+                                    Toast.show('您未登录哦 ～ ～ ',{position:Toast.positions.CENTER});
                                     return;
                                 }
                                 const data = this._getFormData();
                                 data.task_id = this.taskInfo.taskId;
                                 const error = judgeTaskData(data, true);
                                 if (error != '') {
-                                    this.toast.show(error);
+                                    Toast.show(error,{position:Toast.positions.CENTER});
                                 } else {
                                     this.toastS.show();
                                 }

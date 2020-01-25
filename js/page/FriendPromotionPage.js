@@ -12,16 +12,14 @@ import {bottomTheme, theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
-    Dimensions,
-    FlatList,StyleSheet, Text,
+    Dimensions,StyleSheet, Text,
     View, TouchableOpacity, StatusBar, Clipboard, ScrollView,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import copy from '../res/svg/yaoqing/copy.svg';
 import SvgUri from 'react-native-svg-uri';
-import Toast from '../common/Toast';
+import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 
@@ -71,9 +69,6 @@ class TaskReleaseMana extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <Toast
-                    ref={ref => this.toast = ref}
-                />
                 <ScrollView style={{flex: 1, backgroundColor: '#efefef'}}>
                     <View>
                         <FastImage source={require('../res/img/yaoqing/yaoqinghaoyou.png')}
@@ -85,7 +80,7 @@ class TaskReleaseMana extends PureComponent {
                             <TouchableOpacity
                                 onPress={() => {
                                     Clipboard.setString(this.props.userinfo.invite_code);
-                                    this.toast.show('复制成功');
+                                    Toast.show('复制成功',{position:Toast.positions.CENTER});
                                 }}
                                 style={{marginTop: 15, flexDirection: 'row', alignSelf: 'center'}}>
                                 <Text style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code}</Text>

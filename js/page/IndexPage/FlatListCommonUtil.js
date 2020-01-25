@@ -131,6 +131,7 @@ export default class FlatListCommonUtil extends PureComponent {
             }}
             refreshControl={
                 <RefreshControl
+                    progressViewOffset={hp(8)}
                     refreshing={isLoading}
                     onRefresh={() => this.onRefresh()}
                 />

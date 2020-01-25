@@ -14,8 +14,7 @@ import add_image from '../res/svg/add_image.svg';
 import {uploadQiniuImage} from '../util/AppService';
 import PickerImage from './PickerImage';
 import ImageViewerModal from './ImageViewerModal';
-import Global from './Global';
-
+import Toast from 'react-native-root-toast';
 class UploadImgsComponent extends PureComponent {
     constructor(props) {
         super(props);
@@ -47,7 +46,7 @@ class UploadImgsComponent extends PureComponent {
                             ref={ref => this.btn = ref}
                             onPress={() => {
                                 if (!this.props.userinfo.login) {
-                                    Global.toast.show('Network Error');
+                                    Toast.show('Network Error');
                                     return;
                                 }
                                 const {uri} = this.state.data[index];
