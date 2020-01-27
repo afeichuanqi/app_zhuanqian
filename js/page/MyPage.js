@@ -17,6 +17,7 @@ import shop from '../res/svg/shop.svg';
 import guanzhu2 from '../res/svg/mysvg/guanzhu2.svg';
 import bill from '../res/svg/mysvg/bill.svg';
 import yaoqing1 from '../res/svg/mysvg/yaoqing1.svg';
+import yaoqingipt from '../res/svg/mysvg/yaoqingipt.svg';
 import pingbi3 from '../res/svg/mysvg/pingbi3.svg';
 import updateOrder from '../res/svg/mysvg/updateOrder.svg';
 import feedback from '../res/svg/mysvg/feedback.svg';
@@ -35,9 +36,7 @@ import sex_nan_ from '../res/svg/sex_nan_.svg';
 import sex_nv_ from '../res/svg/sex_nv_.svg';
 import FastImagePro from '../common/FastImagePro';
 import {equalsObj} from '../util/CommonUtils';
-
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {uploadQiniuImage} from '../util/AppService';
 
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
@@ -174,6 +173,7 @@ class MyPage extends PureComponent {
                             zIndex: 2,
                             elevation: 0.3,
 
+
                         }}>
                         <Animated.Text
                             style={{fontSize: titleFontSize, color: 'white', fontWeight: 'bold'}}>
@@ -299,6 +299,9 @@ class BottomInfoColumn extends Component {
             {ViewUtil.getMenuLine()}
             {ViewUtil.getSettingItem(yaoqing1, '邀请好友', '好友邀请得奖励', () => {
                 MenuClick('FriendPromotionPage');
+            })}
+            {ViewUtil.getSettingItem(yaoqingipt, '输入邀请码', '输入邀请码', () => {
+                MenuClick('InvitationCodePage');
             })}
             {ViewUtil.getSettingItem(feedback, '意见反馈', '我们需要您的意见', () => {
                 MenuClick('UserFeedbackPage');

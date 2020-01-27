@@ -12,17 +12,49 @@ class ChatSocket {
             return;
         }
         // const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
-        const URL = 'ws://chat.easy-z.cn/';
+        // const URL = 'ws://chat.easy-z.cn/';
+        const URL = 'ws://localhost:433/';
 
         Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
         Global.ws.onopen = () => {
             Global.dispatch(Message.onChangeSocketStatue(''));
             Global.connectionstatus = true;
             this.verifyIdentidy();//重新被链接时再次验证身份
+            Global.ws.send('ping');
+            heartCheck.reset().start();
         };
-
+        //心跳包
+        const heartCheck = {
+            timeout: 10000,//default 10s
+            timeoutObj: null,
+            serverTimeoutObj: null,
+            reset: function () {
+                clearTimeout(this.timeoutObj);
+                clearTimeout(this.serverTimeoutObj);
+                return this;
+            },
+            start: function () {
+                let self = this;
+                this.timeoutObj = setTimeout(function () {
+                    Global.ws.send('ping');
+                    self.serverTimeoutObj = setTimeout(function () {
+                        Global.ws.close();
+                        Global.connectionstatus = false;
+                        if (typeof Global.dispatch != 'function') {
+                            return;
+                        }
+                        Global.dispatch(Message.onChangeSocketStatue('刷新重连...'));
+                    }, self.timeout);
+                }, this.timeout);
+            },
+        };
         Global.ws.onmessage = (evt) => {
-            const msgData = JSON.parse(evt.data);
+            const msgText = evt.data;
+            if (msgText === 'pong') {
+                heartCheck.reset().start();
+                return;
+            }
+            const msgData = JSON.parse(msgText);
             const {type, data} = msgData;
             switch (type) {
                 case types.VERIFY_IDENTIDY:
@@ -86,6 +118,7 @@ class ChatSocket {
 
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
+                    Global.dispatch(Message.onSetMessageLoad(false));
                     if (data.msgArr && data.msgArr.length > 0) {
                         Global.dispatch(Message.onGetMegForUserid(data.msgArr));
                     }
@@ -122,6 +155,7 @@ class ChatSocket {
         };
         //连接关闭的时候触发
         Global.ws.onclose = (e) => {
+            console.log(e);
             Global.connectionstatus = false;
             if (typeof Global.dispatch != 'function') {
                 return;
@@ -130,6 +164,7 @@ class ChatSocket {
 
         };
         Global.ws.onerror = (e) => {
+            console.log('onerror', e);
             // console.log(e);
             Global.connectionstatus = false;
             if (typeof Global.dispatch != 'function') {
@@ -178,6 +213,7 @@ class ChatSocket {
     selectAllMsgForFromUserid = (friendId, pageCount) => {
 
         this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {friendId, pageCount});
+
     };
     //设置我和fromuserinf的消息为已经读区
     setFromUserIdMessageIsRead = (FriendId, columnType) => {
@@ -190,8 +226,8 @@ class ChatSocket {
     };
     //发送消息给指定用户
     sendMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, fromUserinfo, sendFormId) => {
-        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime(), fromUserid, 0, fromUserinfo.username, fromUserinfo.avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));
-        Global.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime(), FriendId));
+        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserinfo.id, msg_type, content, '', new Date().getTime().toString(), fromUserid, 0, fromUserinfo.username, fromUserinfo.avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));
+        Global.dispatch(Message.onAddMesage(fromUserid, msg_type, content, toUserid, uuid, new Date().getTime().toString(), FriendId));
         this.sendToServer(types.MESSAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId,
         });
@@ -200,7 +236,7 @@ class ChatSocket {
 
     //发送图片消息给指定用户
     sendImageMsgToUserId = (fromUserid, toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId) => {
-        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));//发送一个消息给好友列表 提示有新消息
+        Global.dispatch(Message.onSetNewMsgForRromUserid(fromUserid, msg_type, content, '', new Date().getTime().toString(), fromUserid, 0, username, avatar_url, FriendId, columnType, taskUri, taskId, false, sendFormId));//发送一个消息给好友列表 提示有新消息
         this.sendToServer(types.MESSAGE_FORIMAGE_SENDTO_USERID, {
             toUserid, msg_type, content, uuid, username, avatar_url, FriendId, columnType, taskUri, taskId, sendFormId,
         });

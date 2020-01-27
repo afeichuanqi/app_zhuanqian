@@ -43,6 +43,7 @@ import EventTypes from '../util/EventTypes';
 import actions from '../action';
 import {equalsObj} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -136,7 +137,7 @@ class TaskReleaseMana extends Component {
                         handleIndexChange={this.handleIndexChange}
                         // indicatorStyle={styles.indicator}
                         bounces={true}
-                        titleMarginHorizontal={wp(4)}
+                        titleMarginHorizontal={wp(5)}
                         activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
                         inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
@@ -159,9 +160,6 @@ class TaskReleaseMana extends Component {
                     position={this.position}
                     renderTabBar={() => null}
                     onIndexChange={index => {
-                        const noticeType = index + 1;
-                        const {onSetNoticeMsgIsRead, userinfo} = this.props;
-                        onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
                         this.setState({
                             navigationIndex: index,
                         });
@@ -175,6 +173,10 @@ class TaskReleaseMana extends Component {
         );
     }
 
+    clearNotice = (noticeType) => {
+        const {onSetNoticeMsgIsRead, userinfo, notice_arr} = this.props;
+        notice_arr[noticeType] && onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
+    };
     _releaseClick = () => {
         NavigationUtils.goPage({}, 'TaskRelease');
     };
@@ -183,18 +185,24 @@ class TaskReleaseMana extends Component {
         this.jumpTo(navigationRoutes[index].key);
     };
     renderScene = ({route, jumpTo}) => {
-        const {navigationIndex} = this.state;
+
 
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent  source={require('../res/img/ReleseMana/r1.png')} task_status={[0]}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={1}
+                                           source={require('../res/img/ReleseMana/r1.png')}
+                                           task_status={[0]}
                                            userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent  source={require('../res/img/ReleseMana/r2.png')} task_status={[2]}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={2}
+                                           source={require('../res/img/ReleseMana/r2.png')}
+                                           task_status={[2]}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent  source={require('../res/img/ReleseMana/r3.png')} task_status={[1, 3]}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={3}
+                                           source={require('../res/img/ReleseMana/r3.png')}
+                                           task_status={[1, 3]}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -227,8 +235,6 @@ class FristListComponent extends PureComponent {
     }
 
     componentDidMount() {
-        // const {noticeType , onSetNoticeMsgIsRead , userinfo,task_status} = this.props;
-        // onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type:noticeType}, userinfo.token);
         setTimeout(() => {
             this._updateList(true);
         }, 500);
@@ -238,7 +244,8 @@ class FristListComponent extends PureComponent {
             const {userinfo, task_status} = this.props;
             const findIndex = task_status.findIndex(item => item == data.index);
             if (findIndex !== -1) {
-
+                const {noticeType, clearNotice} = this.props;
+                clearNotice(noticeType);
                 selectTaskReleaseList({
                     task_status: task_status.join(','),
                     pageIndex: this.page.pageIndex,
@@ -250,7 +257,6 @@ class FristListComponent extends PureComponent {
                     });
                 });
             }
-            // this._updateList(true);
         });
     }
 
@@ -259,6 +265,8 @@ class FristListComponent extends PureComponent {
     }
 
     _updateList = (refreshing) => {
+        const {noticeType, clearNotice} = this.props;
+        clearNotice(noticeType);
         const {userinfo, task_status} = this.props;
         if (refreshing) {
             this.page = {pageIndex: 0};
@@ -373,7 +381,8 @@ class FristListComponent extends PureComponent {
 
             <AnimatedFlatList
                 style={{backgroundColor: '#f5f5f5'}}
-                ListEmptyComponent={<EmptyComponent source={this.props.source}  height={height - 100} message={'您还没有相关任务'}/>}
+                ListEmptyComponent={<EmptyComponent source={this.props.source} height={height - 100}
+                                                    message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}

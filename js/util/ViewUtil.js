@@ -131,7 +131,7 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/task_chongxinfabu.png')}
             />
-            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
+            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
 
         </TouchableOpacity>;
     };
@@ -149,7 +149,7 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/reviewing.png')}
             />
-            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核中</Text>
+            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核中</Text>
 
         </View>;
     };
@@ -168,7 +168,7 @@ export default class ViewUtil {
                 style={{height: wp(3.3), width: wp(3.3)}}
                 source={require('../res/img/taskReView/task_delete.png')}
             />
-            <Text style={{fontSize: wp(3.1), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
+            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
 
         </TouchableOpacity>;
     };

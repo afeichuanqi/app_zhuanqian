@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StatusBar, Dimensions, Platform, TouchableOpacity} from 'react-native';
+import {View, Text, StatusBar, Dimensions, Platform, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {ChatScreen} from '../common/Chat-ui';
 import {theme, bottomTheme} from '../appSet';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
@@ -49,7 +49,7 @@ class ChatRoomPage extends React.Component {
                         this.taskUri = taskUri;
                         this.sendFormId = sendFormId;
                         if (fromUserinfo.id.indexOf('admin') !== -1) {
-                            Toast.show('管理员消息',{position:Toast.positions.CENTER});
+                            Toast.show('管理员消息', {position: Toast.positions.CENTER});
                         } else {
                             this._updatePage();
                         }
@@ -83,9 +83,10 @@ class ChatRoomPage extends React.Component {
     };
 
     componentDidMount(): void {
+        this.props.onSetMessageLoad(true);
+
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
-
         this.backPress.componentDidMount();
         this._updatePage();
     }
@@ -101,7 +102,8 @@ class ChatRoomPage extends React.Component {
             }, this.props.userinfo.token).then(result => {
                 this.appealInfo = result.appealInfo;
                 if (result.haveToDo == 0 || !result.guzhuUserId) {
-                    Toast.show('您与雇主并无任务来往,会话创建失败',{position:Toast.positions.CENTER});
+                    Toast.show('您与雇主并无任务来往,会话创建失败', {position: Toast.positions.CENTER});
+                    this.props.onSetMessageLoad(false);
                     return;
                 }
                 if (result.id) {
@@ -109,12 +111,14 @@ class ChatRoomPage extends React.Component {
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
-
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
+                }else{
+                    this.props.onSetMessageLoad(false);
                 }
 
             }).catch(msg => {
-                Toast.show(msg,{position:Toast.positions.CENTER});
+                this.props.onSetMessageLoad(false);
+                Toast.show(msg, {position: Toast.positions.CENTER});
             });
 
         } else { //咨询信息
@@ -125,7 +129,8 @@ class ChatRoomPage extends React.Component {
                 sendFormId: this.sendFormId,
             }, this.props.userinfo.token).then(result => {
                 if (result.haveToDo == 0 || !result.guzhuUserId) {
-                    Toast.show('您与雇主并无任务来往,会话创建失败',{position:Toast.positions.CENTER});
+                    Toast.show('您与雇主并无任务来往,会话创建失败', {position: Toast.positions.CENTER});
+                    this.props.onSetMessageLoad(false);
                     return;
                 }
                 if (result.id) {
@@ -135,10 +140,13 @@ class ChatRoomPage extends React.Component {
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
                     ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
+                }else{
+                    this.props.onSetMessageLoad(false);
                 }
 
             }).catch(msg => {
-                msg.length > 0 && Toast.show(msg,{position:Toast.positions.CENTER});
+                this.props.onSetMessageLoad(false);
+                msg.length > 0 && Toast.show(msg, {position: Toast.positions.CENTER});
             });
         }
 
@@ -150,7 +158,6 @@ class ChatRoomPage extends React.Component {
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
         ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
-        // console.log(this.FriendId, this.columnType);
         if (this.columnType == 1 || this.columnType == 5) {
 
         } else if (this.columnType == 2 || this.columnType == 3) { //诉求信息
@@ -285,6 +292,7 @@ class ChatRoomPage extends React.Component {
     onRefresh = () => {
         if (this.getMessages().length >= 10) {
             this.pageCount += 10;
+            this.props.onSetMessageLoad(true);
             ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
         }
 
@@ -295,7 +303,7 @@ class ChatRoomPage extends React.Component {
     };
 
     render() {
-        const {userinfo} = this.props;
+        const {userinfo,message} = this.props;
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
@@ -310,7 +318,7 @@ class ChatRoomPage extends React.Component {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
         });
         const msgList = this.getMessages();
-
+        console.log(this.props.message.msgIsLoad,"message.msgIsLoad");
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -328,6 +336,7 @@ class ChatRoomPage extends React.Component {
                         sendFormId={this.sendFormId}
                         guzhuUserId={this.guzhuUserId}
                     />}
+                    <ActivityIndicator style={{zIndex: 1000,position: 'absolute', top: 100, left: 0, right: 0}} size="small" animating={message.msgIsLoad} color={'black'}/>
                     <NewMessage
                         ref={ref => this.newMessage = ref}
                     />
@@ -387,7 +396,8 @@ class ChatRoomPage extends React.Component {
                             }
                         }}
                         panelSource={[{
-                            icon: <Image source={require('../res/img/photo.png')} style={{width: wp(8), height: wp(8)}}/>,
+                            icon: <Image source={require('../res/img/photo.png')}
+                                         style={{width: wp(8), height: wp(8)}}/>,
                             title: '照片',
                             onPress: () => {
                                 ImagePicker.openPicker(ImgOption).then(image => {
@@ -434,13 +444,13 @@ class ChatRoomPage extends React.Component {
             const mimeIndex = mime.indexOf('/');
             mime = mime.substring(mimeIndex + 1, mime.length);
             const path = `file://${image.path}`;
-            onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime(), FriendId);//插入一条临时图片数据
+            onAddMesage(userId, 'image', path, toUserid, uuid, new Date().getTime().toString(), FriendId);//插入一条临时图片数据
             uploadQiniuImage(token, 'chatImage', mime, path).then(url => {
                 ChatSocket.sendImageMsgToUserId(userId, toUserid, 'image', url, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
             });
         } else {
             if (!this.FriendId) {
-                Toast.show('重新打开会话试试 ～ ～',{position:Toast.positions.CENTER});
+                Toast.show('重新打开会话试试 ～ ～', {position: Toast.positions.CENTER});
                 return;
             }
         }
@@ -462,7 +472,7 @@ class ChatRoomPage extends React.Component {
             ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
         } else {
             if (!this.FriendId) {
-                Toast.show('重新打开会话试试 ～ ～',{position:Toast.positions.CENTER});
+                Toast.show('重新打开会话试试 ～ ～', {position: Toast.positions.CENTER});
             }
         }
 
@@ -473,7 +483,7 @@ class ChatRoomPage extends React.Component {
             NavigationUtils.goPage({userid: targetId}, 'ShopInfoPage');
         } else {
             const userinfos = targetId.split('|');
-            NavigationUtils.goPage({customerInfo:userinfos},'CustomerServiceIndex')
+            NavigationUtils.goPage({customerInfo: userinfos}, 'CustomerServiceIndex');
         }
 
     };
@@ -572,11 +582,11 @@ class TaskInfo extends React.Component {
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-between', height: wp(15), width: wp(57)}}>
                     <Text style={{
-                        fontSize: hp(2.3),
+                        fontSize: hp(2.2),
                         color: 'black',
                     }}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
                     <Text numberOfLines={2} style={{fontSize: hp(2.0), opacity: 0.5, color: 'black'}}>
-                        {taskInfo && renderEmoji(`${taskInfo.task_title}`, [],  hp(2.0), 0, 'black').map((item, index) => {
+                        {taskInfo && renderEmoji(`${taskInfo.task_title}`, [], hp(1.7), 0, 'black').map((item, index) => {
                             return item;
                         })}
                     </Text>
@@ -584,7 +594,7 @@ class TaskInfo extends React.Component {
 
                         <AnimatedFadeIn>
                             <Text style={{
-                                fontSize: hp(1.9), opacity: 0.5, color: 'black',
+                                fontSize: hp(1.8), opacity: 0.5, color: 'black',
 
                             }}>
                                 {statusText}
@@ -684,6 +694,7 @@ const mapDispatchToProps = dispatch => ({
 
     onAddMesage: (fromUserid, msg_type, content, ToUserId, uuid, sendDate, FriendId) => dispatch(actions.onAddMesage(fromUserid, msg_type, content, ToUserId, uuid, sendDate, FriendId)),
     onSetAllFriendUnRead: (FriendId, columnType) => dispatch(actions.onSetAllFriendUnRead(FriendId, columnType)),
+    onSetMessageLoad: (loading) => dispatch(actions.onSetMessageLoad(loading)),
 });
 const ChatRoomPageRedux = connect(mapStateToProps, mapDispatchToProps)(ChatRoomPage);
 export default ChatRoomPageRedux;

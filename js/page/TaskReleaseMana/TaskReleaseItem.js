@@ -23,7 +23,7 @@ export default class TaskReleaseItem extends PureComponent {
                     paddingHorizontal: 10,
                     // paddingRight:15,
                     paddingTop: 25,
-                    paddingBottom: 25,
+                    // paddingBottom: 25,
                     height: 90,
                     backgroundColor: 'white',
                 }}
@@ -52,10 +52,7 @@ export default class TaskReleaseItem extends PureComponent {
                             }}
                                   numberOfLines={1}
                             >
-                            {/*    {item.id} - {taskTitle} {emojiArr.map((item, index) => {*/}
-                            {/*    return <Emoji key={index} name={item} style={{fontSize: hp(2.2)}}/>;*/}
-                            {/*})}*/}
-                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [],hp(2.2), 0,'black').map((item, index) => {
+                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [],hp(2.3), 0,'black').map((item, index) => {
                                     return item;
                                 })}
                             </Text>
@@ -190,8 +187,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: bottomTheme,
         // 设置宽度
-        width: wp(13),
-        height: wp(13),
+        width: 55,
+        height: 55,
         borderRadius: 5,
         // 设置高度
         // height:150

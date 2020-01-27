@@ -496,7 +496,6 @@ class HeadlineComponent extends PureComponent {
         if (HeadlineArrays.length === 0) {
             return null;
         }
-        // return null;
         return <AnimatedFadeIn
             duration={1000}
         >
@@ -515,7 +514,12 @@ class HeadlineComponent extends PureComponent {
                     width: wp(12), height: hp(2.5), marginLeft: wp(5),
                     marginBottom: hp(0.8),
                 }}/>
-                <View style={{
+                <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={()=>{
+                        NavigationUtils.goPage({test:false,task_id:HeadlineArrays[this.index].taskId},'TaskDetails')
+                    }}
+                    style={{
                     flex: 1,
                     overflow: 'hidden',
 
@@ -527,10 +531,9 @@ class HeadlineComponent extends PureComponent {
                         scrollEventThrottle={1}
                         renderItem={data => this._renderIndexPath(data)}
                         keyExtractor={(item, index) => index + ''}
-                        // onEndReachedThreshold={0.01}
                     />
 
-                </View>
+                </TouchableOpacity>
             </View>
         </AnimatedFadeIn>;
     }

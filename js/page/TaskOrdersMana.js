@@ -34,7 +34,7 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {equalsObj, renderEmoji} from '../util/CommonUtils';
 import actions from '../action';
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -131,9 +131,9 @@ class TaskOrdersMana extends Component {
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
-                        titleMarginHorizontal={25}
-                        activeStyle={{fontSize: 15, color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: 12, color: [255, 255, 255], height: 10}}
+                        titleMarginHorizontal={wp(5)}
+                        activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
                     />
 
@@ -146,10 +146,9 @@ class TaskOrdersMana extends Component {
                     position={this.position}
                     renderTabBar={() => null}
                     onIndexChange={index => {
-                        const noticeType = index + 4;
-                        //console.log(noticeType, 'onIndexChange');
-                        const {onSetNoticeMsgIsRead, userinfo} = this.props;
-                        onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
+                        // const noticeType = index + 4;
+                        // const {onSetNoticeMsgIsRead, userinfo} = this.props;
+                        // onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
                         this.setState({
                             navigationIndex: index,
                         });
@@ -162,7 +161,10 @@ class TaskOrdersMana extends Component {
             </SafeAreaViewPlus>
         );
     }
-
+    clearNotice = (noticeType) => {
+        const {onSetNoticeMsgIsRead, userinfo, notice_arr} = this.props;
+        notice_arr[noticeType] && onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
+    };
     handleIndexChange = (index) => {
         const {navigationRoutes} = this.state;
         this.jumpTo(navigationRoutes[index].key);
@@ -170,20 +172,17 @@ class TaskOrdersMana extends Component {
     renderScene = ({route, jumpTo}) => {
         this.jumpTo = jumpTo;
         switch (route.key) {
-            // case 'first':
-            //     return <FristListComponent status={0}
-            //                                userinfo={this.props.userinfo}/>;
             case 'second':
-                return <FristListComponent source={require('../res/img/ReleseMana/o1.png')} status={1}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={4} source={require('../res/img/ReleseMana/o1.png')} status={1}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent source={require('../res/img/ReleseMana/o2.png')} status={2}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={5} source={require('../res/img/ReleseMana/o2.png')} status={2}
                                            userinfo={this.props.userinfo}/>;
             case 'second2':
-                return <FristListComponent source={require('../res/img/ReleseMana/o3.png')} status={3}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={6} source={require('../res/img/ReleseMana/o3.png')} status={3}
                                            userinfo={this.props.userinfo}/>;
             case 'second3':
-                return <FristListComponent source={require('../res/img/ReleseMana/o4.png')} status={4}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={7} source={require('../res/img/ReleseMana/o4.png')} status={4}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -223,6 +222,8 @@ class FristListComponent extends PureComponent {
             const index = data.indexs.findIndex(item => item == (this.props.status - 1));
             if (index != -1) {
                 const {userinfo, status} = this.props;
+                const {noticeType, clearNotice} = this.props;
+                clearNotice(noticeType);
                 selectOrderTasks({
                     status,
                     pageIndex: this.page.pageIndex,
@@ -242,6 +243,8 @@ class FristListComponent extends PureComponent {
     }
 
     _updateList = (refreshing) => {
+        const {noticeType, clearNotice} = this.props;
+        clearNotice(noticeType);
         const {userinfo, status} = this.props;
         if (refreshing) {
             this.page = {pageIndex: 0};

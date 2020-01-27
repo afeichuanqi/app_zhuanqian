@@ -108,6 +108,7 @@ class AccountSetting extends PureComponent {
     _clearAccountInfo = () => {
         ChatSocket.quitAccount();
         this.props.onClearUserinfoAll();
+        this.props.onSetNoticeMsgIsAllRead();
         NavigationUtils.goBack(this.props.navigation);
     };
     username = '';
@@ -128,6 +129,7 @@ const mapDispatchToProps = dispatch => ({
     onSetUserSex: (token, value, callback) => dispatch(actions.onSetUserSex(token, value, callback)),
     // onSetUserName: (token, value, callback) => dispatch(actions.onSetUserName(token, value, callback)),
     onClearUserinfoAll: () => dispatch(actions.onClearUserinfoAll()),
+    onSetNoticeMsgIsAllRead: () => dispatch(actions.onSetNoticeMsgIsAllRead()),
 });
 const AccountSettingRedux = connect(mapStateToProps, mapDispatchToProps)(AccountSetting);
 export default AccountSettingRedux;

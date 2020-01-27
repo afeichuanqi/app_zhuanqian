@@ -16,7 +16,6 @@ import LoginPage from '../page/LoginPage';
 import EnterCodePage from '../page/EnterCodePage';
 import TaskReleaseMana from '../page/TaskReleaseMana';
 import TaskRelease from '../page/TaskRelease';
-// import {Testing} from '../page/Testing';
 import TaskDetails from '../page/TaskDetails';
 import SettingPage from '../page/SettingPage';
 import ChatSettings from '../page/ChatRoomPage/ChatSettings';
@@ -33,6 +32,7 @@ import HisAttentionList from '../page/HisAttentionList';
 import UserBillListPage from '../page/UserBillListPage';
 import FriendPromotionPage from '../page/FriendPromotionPage';
 import UpdateUserName from '../page/SettingPage/UpdateUserName';
+import InvitationCodePage from '../page/InvitationCodePage';
 import TaskRejectDetailsPage from '../page/TaskRejectDetailsPage';
 import MyFavoritePage from '../page/MyFavoritePage';
 import MyShieldPage from '../page/MyShieldPage';
@@ -97,6 +97,13 @@ const MainNavigator = createStackNavigator({
         },
         SearchPage: {
             screen: SearchPage,
+            navigationOptions: {
+                header: null,
+            },
+
+        },
+        InvitationCodePage: {
+            screen: InvitationCodePage,
             navigationOptions: {
                 header: null,
             },

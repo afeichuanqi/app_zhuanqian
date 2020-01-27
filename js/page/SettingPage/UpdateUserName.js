@@ -88,6 +88,8 @@ class UpdateUserName extends PureComponent {
                                 text,
                             });
                         }}
+                        placeholderTextColor={'rgba(0,0,0,0.6)'}
+                        placeholder={'输入昵称 ~ ~'}
                         maxLength={12}
                         style={{
                             fontSize: 14,

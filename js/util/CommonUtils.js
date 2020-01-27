@@ -190,6 +190,9 @@ export const judgeTaskData = (data, update) => {
             if (type === 6 && typeData.collectInfo.length === 0) {
                 return `您步骤${index + 1}说明是不是太短了呀`;
             }
+            if (type === 1 && !typeData.inputValue.startsWith('http') ) {
+                return `您网址是不是没有输入正确呀`;
+            }
             if (type === 5) {
                 yanzhengtuNum += 1;
             }
@@ -282,9 +285,6 @@ export const equalsObj = (oldData, newData) => {
     return true;
 };
 export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black',style_) => {
-    // console.log("renderEmojirenderEmoji");
-
-    // index += 1;
     const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
     const endIndex = content.indexOf(':', startIndex + 1) + 1;
     const contentText = content.substring(0, startIndex);
@@ -303,7 +303,7 @@ export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black'
         return Views;
     }
 
-    return renderEmoji(content.substring(endIndex), Views);
+    return renderEmoji(content.substring(endIndex), Views,fontSize,0,color,style_);
 };
 export const _renderEmoji = (content, Views, fontSize, index = 0, color = 'black') => {
     index += 1;

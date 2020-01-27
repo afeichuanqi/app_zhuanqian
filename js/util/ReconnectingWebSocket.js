@@ -57,9 +57,9 @@ class ReconnectingWebSocket extends WebSocket {
             /** @Override onopen **/
             this._eventEmitter.addListener('websocketOpen', ev => {
                 // console.log(ev.id, 'websocketOpen', this._socketId);
-                // if (ev.id !== this._socketId) {
-                //     return;
-                // }
+                if (ev.id !== this._socketId) {
+                    return;
+                }
 
                 clearTimeout(timeout);
                 this.reconnectAttempts = 0;
@@ -69,9 +69,9 @@ class ReconnectingWebSocket extends WebSocket {
             this._eventEmitter.addListener('websocketClosed', ev => {
                 // console.log(ev.id, 'websocketClosed', this._socketId);
                 // console.log(ev.id ,'websocketClosed', this._socketId);
-                // if (ev.id !== this._socketId) {
-                //     return;
-                // }
+                if (ev.id !== this._socketId) {
+                    return;
+                }
 
                 let _timeout = this.reconnectInterval * Math.pow(this.reconnectDecay, this.reconnectAttempts);
                 if (timeout) {
@@ -88,9 +88,9 @@ class ReconnectingWebSocket extends WebSocket {
             /** @Override onerror **/
             this._eventEmitter.addListener('websocketFailed', ev => {
                 // console.log(ev.id, 'websocketFailed', this._socketId);
-                // if (ev.id !== this._socketId) {
-                //     return;
-                // }
+                if (ev.id !== this._socketId) {
+                    return;
+                }
 
                 let _timeout = this.reconnectInterval * Math.pow(this.reconnectDecay, this.reconnectAttempts);
                 if (timeout) {
@@ -111,7 +111,7 @@ class ReconnectingWebSocket extends WebSocket {
             return;
         }
         setTimeout(() => {
-
+            // o
             WebSocketModule.connect(
                 this.url,
                 this.protocols,

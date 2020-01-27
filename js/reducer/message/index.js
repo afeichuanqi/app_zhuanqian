@@ -3,17 +3,21 @@ import Types from '../../action/Types';
 const defaultContent = {
     identIdy: false,
     msgArr: [],
-
+    msgIsLoad: false,
 };
 
 export default function onAction(state = defaultContent, action) {
     const {data, type} = action;
-    // console.log(action, 'actionaction');
     switch (type) {
         case Types.VERIFY_IDENTIDY :
             return {
                 ...state,
                 identIdy: data.identIdy,
+            };
+        case Types.MESSAGE_SET_IS_LOAD :
+            return {
+                ...state,
+                msgIsLoad: data.msgIsLoad,
             };
         case Types.MESSAGE_FROMOF_USERID://来自好友消息
             const temArr = [...state.msgArr];
@@ -35,7 +39,6 @@ export default function onAction(state = defaultContent, action) {
             };
         case Types.MESSAGE_ADD_NEW://我发送的消息加入列表
             const temArr1 = [...state.msgArr];
-            // console.log(data.sendDate,"sendDate")
             temArr1.push({
                 fromUserid: data.fromUserid,
                 msg_type: data.msg_type,
@@ -47,7 +50,7 @@ export default function onAction(state = defaultContent, action) {
                 FriendId: data.FriendId,
 
             });
-            // console.log(temArr1, 'temArr1');
+            // console.log(temArr1);
             return {
                 ...state,
                 msgArr: temArr1,

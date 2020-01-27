@@ -35,6 +35,24 @@ export function verifyCode(data) {
 
 
 }
+export function setInvitationCode(data,token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/setInvitationCode', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+
+
+}
 
 /**
  * 用户报名
@@ -66,6 +84,25 @@ export function getNewTaskId() {
             // const params = `userName=${username}&passWord=${password}&email=${email}`;
 
             const ret = await http.get('user/getNewTaskId');
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
+ * 用户报名
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function getInvitationCode(token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            http.setGetHeader('token',token)
+            const ret = await http.get('user/getInvitationCode');
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {

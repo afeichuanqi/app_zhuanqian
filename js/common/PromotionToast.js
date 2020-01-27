@@ -43,7 +43,7 @@ class MyModalBox extends PureComponent {
         this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
             ...SpringUtils.makeDefaultConfig(),
             bounciness: 0,
-            speed: 20,
+            speed: 15,
             toValue: 0,
         })).start(() => {
 
@@ -62,7 +62,7 @@ class MyModalBox extends PureComponent {
         }, () => {
             this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                 ...SpringUtils.makeDefaultConfig(),
-                bounciness: 13,
+                bounciness: 10,
                 speed: 8,
                 toValue: 1,
             })).start();

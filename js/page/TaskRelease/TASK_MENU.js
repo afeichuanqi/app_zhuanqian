@@ -13,7 +13,7 @@ export const MORE_MENU = {
             {
                 type: 2, typeData: {
                     title: '输入网址',
-                    placeholder: '示例:http://www.jiandanzhuang.com',
+                    placeholder: '示例:http://www.easy-z.cn',
                     onChangeText: () => {
                     },
                 },

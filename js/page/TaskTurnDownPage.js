@@ -22,6 +22,8 @@ import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import UploadImgsComponent from '../common/UploadImgsComponent';
+import {renderEmoji} from '../util/CommonUtils';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {width, height} = Dimensions.get('window');
 const screenWidth = Dimensions.get('window').width;
@@ -64,7 +66,7 @@ class MyTaskReview extends PureComponent {
             statusBar={statusBar}
         />;
 
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '驳回', message_more, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '驳回', message_more, null, null, 16, () => {
             NavigationUtils.goPage({fromUserinfo: this.params.fromUserinfo}, 'ChatSettings');
         }, false);
         const {taskData} = this.params;
@@ -89,25 +91,26 @@ class MyTaskReview extends PureComponent {
                             paddingHorizontal: 10,
                             backgroundColor: 'white',
                             marginTop: 10,
-                            paddingBottom: 40,
+                            paddingVertical:15,
+
                         }}>
                         <Image
                             source={{uri: taskData.avatar_url}}
                             style={{
                                 width: 40, height: 40,
-                                borderRadius: 5,
+                                borderRadius: 5, alignSelf:'flex-start',
                             }}/>
-                        <View style={{marginLeft: 15, height: 60, marginTop: 20}}>
-                            <Text style={{fontSize: 15, color: 'black'}}>{taskData.username}</Text>
+                        <View style={{marginLeft: 15, }}>
+                            <Text style={{fontSize: hp(2.2), color: 'black'}}>{taskData.username}</Text>
                             <Text
                                 style={{
-                                    fontSize: 13,
+                                    fontSize: hp(1.8),
                                     marginTop: 5,
                                     color: 'rgba(0,0,0,0.6)',
                                 }}>ID:{taskData.userid}</Text>
 
                             <Text style={{
-                                fontSize: 12,
+                                fontSize: hp(1.7),
                                 marginTop: 5,
                                 color: 'rgba(0,0,0,0.6)',
                             }}>提交时间:{taskData.send_date}</Text>
@@ -118,8 +121,15 @@ class MyTaskReview extends PureComponent {
                                 justifyContent: 'space-between',
                                 width: screenWidth - 80,
                             }}>
-                                <Text style={{fontSize: 14, color: 'rgba(0,0,0,1)'}}>{taskData.task_title}</Text>
-                                <Text style={{fontSize: 14, color: 'red'}}>+{taskData.reward_price}</Text>
+                                <Text style={{fontSize: hp(2.0), color: 'rgba(0,0,0,1)',width:wp(70)}}>
+
+                                    {taskData && renderEmoji(`${taskData.task_title}`, [], hp(2.0), 0, 'black').map((item, index) => {
+                                        return item;
+                                    })}
+
+
+                                </Text>
+                                <Text style={{fontSize: hp(2.7), color: 'red'}}>+{taskData.reward_price}</Text>
                             </View>
 
                         </View>
@@ -165,15 +175,15 @@ class MyTaskReview extends PureComponent {
                     style={{
                         position: 'absolute',
                         bottom: 5,
-                        width: screenWidth - 20,
+                        width: wp(95),
                         justifyContent: 'center',
                         backgroundColor: bottomTheme,
                         alignItems: 'center',
-                        height: 35,
-                        marginHorizontal: 10,
+                        height: hp(7),
+                        marginHorizontal: wp(2.5),
                         borderRadius: 5,
                     }}>
-                    <Text style={{color: 'white'}}>确认驳回</Text>
+                    <Text style={{color: 'white', fontSize:hp(2.2)}}>确认驳回</Text>
                 </TouchableOpacity>
 
             </SafeAreaViewPlus>

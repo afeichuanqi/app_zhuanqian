@@ -222,6 +222,7 @@ class TaskRelease extends PureComponent {
         const data = this._getTaskReleaseData();
         this.props.onSetTaskReleaseInfo(data);
         this.timer && clearTimeout(this.timer);
+        // Toast.show('自动保存任务详情成功');
     }
 
 
@@ -314,6 +315,7 @@ class TaskRelease extends PureComponent {
                 const {userinfo} = this.props;
                 const {token} = userinfo;
                 addTaskReleaseData(data, token).then(result => {
+                    Toast.show('恭喜您,发布任务成功,等待审核');
                     const {task_id} = result;
                     NavigationUtils.goPage({
                         task_id: task_id,
@@ -715,19 +717,19 @@ class BottomInfoForm extends Component {
         return <View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('项目名称', 1, {
-                    info: '请输入项目名', onChangeText: this._changeProjectTitle,
+                    info: '如:微信/58同城(2-7字)', onChangeText: this._changeProjectTitle,
                     editable: true, defaultValue: this.columnData.projectTitle,
                 })}
                 {genFormItem('标题', 1,
                     {
-                        info: '关键字',
+                        info: '如:注册账号 秒审(支持emoji表情 3-30字)',
                         onChangeText: this._changeTitle,
                         editable: true,
                         defaultValue: this.columnData.title,
                     })}
                 {genFormItem('任务说明', 1,
                     {
-                        info: '需求备注',
+                        info: '如:辅助注册(2-7字)',
                         onChangeText: this._changeTaskInfo,
                         editable: true,
 

@@ -30,6 +30,7 @@ import goback from '../res/svg/goback.svg';
 import {equalsObj, formatData} from '../util/CommonUtils';
 import actions from '../action';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -169,6 +170,10 @@ class UserBillListPage extends React.Component {
         );
     }
 
+    clearNotice = (noticeType) => {
+        const {onSetNoticeMsgIsRead, userinfo, notice_arr} = this.props;
+        notice_arr[noticeType] && onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
+    };
     handleIndexChange = (index) => {
         // console.log(index);
         const {navigationRoutes} = this.state;
@@ -178,11 +183,20 @@ class UserBillListPage extends React.Component {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <UserBillList type={0} userinfo={this.props.userinfo}/>;
+                return <UserBillList type={0}
+                                     clearNotice={this.clearNotice}
+                                     noticeType={8}
+                                     userinfo={this.props.userinfo}/>;
             case 'second':
-                return <UserBillList type={1} userinfo={this.props.userinfo}/>;
+                return <UserBillList type={1}
+                                     clearNotice={this.clearNotice}
+                                     noticeType={9}
+                                     userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <UserBillList type={2} userinfo={this.props.userinfo}/>;
+                return <UserBillList type={2}
+                                     clearNotice={this.clearNotice}
+                                     noticeType={10}
+                                     userinfo={this.props.userinfo}/>;
         }
     };
 }
@@ -203,12 +217,13 @@ class UserBillList extends PureComponent {
     componentDidMount() {
         setTimeout(() => {
             this._updatePage(true);
-        }, 200);
+        }, 400);
 
     }
 
     _updatePage = (isRefresh) => {
-        // const {status, taskid} = this.params;
+        const {noticeType, clearNotice} = this.props;
+        clearNotice(noticeType);
         const {userinfo} = this.props;
         if (isRefresh) {
             this.page.pageIndex = 0;
@@ -223,7 +238,6 @@ class UserBillList extends PureComponent {
             type: this.props.type,
             pageIndex: this.page.pageIndex,
         }, userinfo.token).then(result => {
-            // console.log(result);
             if (isRefresh) {
                 const newData = formatData([], result, 'bill_date1');
                 this.setState({
@@ -232,8 +246,6 @@ class UserBillList extends PureComponent {
                     hideLoaded: result.length < 10,
                 });
             } else {
-
-                // const tmpArr = [...this.state.taskData];
                 const newData = formatData(this.state.taskData, result, 'bill_date1');
                 this.setState({
                     taskData: newData,
@@ -325,7 +337,12 @@ class UserBillList extends PureComponent {
             }}>
             <View>
                 <Text style={{fontSize: hp(2.2), color: 'black'}}>{item.bill_title}</Text>
-                <Text style={{marginTop: 8, opacity: 0.7, fontSize: hp(1.9), color: 'black'}}>余额:{item.bill_balance}</Text>
+                <Text style={{
+                    marginTop: 8,
+                    opacity: 0.7,
+                    fontSize: hp(1.9),
+                    color: 'black',
+                }}>余额:{item.bill_balance}</Text>
                 <Text style={{marginTop: 8, opacity: 0.5, fontSize: hp(1.8), color: 'black'}}>{item.bill_date1}</Text>
             </View>
             <View style={{alignSelf: 'flex-start', marginTop: 20}}>

@@ -135,7 +135,7 @@ class MyOrderManaPage extends PureComponent {
             {/*左下*/}
             <View style={{
                 position: 'absolute',
-                bottom: (taskTitle && taskTitle.length) > 13 ? 10 : 15,
+                bottom: (taskTitle && taskTitle.length) > 13 ? 3 : 15,
                 left: 65,
                 flexDirection: 'row',
             }}>
@@ -187,7 +187,7 @@ class MyOrderManaPage extends PureComponent {
             statusBar={statusBar}
         />;
 
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '任务管理', jiaoliu, null, null, null, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '任务管理', jiaoliu, null, 'black', 17, () => {
         }, false);
         const {taskInfo, isLoading} = this.state;
         return (

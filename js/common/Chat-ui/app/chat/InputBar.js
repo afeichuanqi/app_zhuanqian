@@ -165,6 +165,7 @@ export default class InputBar extends PureComponent {
                 ? <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => this.props.showEmoji()}
+                  // style={{height:50}}
                 >
                   {this.props.isEmojiShow ? this.props.keyboardIcon : this.props.emojiIcon}
                 </TouchableOpacity>
@@ -209,6 +210,7 @@ const styles = StyleSheet.create({
     padding:0,
     // width: '100%',
     paddingLeft: 5,
+    color:'black'
     // paddingHorizontal: 5
     // backgroundColor: '#f9f9f9'
   }

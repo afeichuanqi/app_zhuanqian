@@ -120,6 +120,7 @@ class BottomBar extends Component {
                 return false;
             }
             this.lastBackPressed = Date.now();
+            Global.ws.close();
             Toast.show('再按一次退出程序');
             return true;//默认行为
         }
@@ -304,7 +305,7 @@ class BottomBar extends Component {
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 0}
                 title={'首页'}
-                titleColor={navigationIndex === 0 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
+                titleColor={navigationIndex === 0 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
             />
             <BottomBarItem
                 source={navigationIndex === 1 ? require('../res/img/bottomBarIcon/hallC.png') : require('../res/img/bottomBarIcon/hall.png')}
@@ -313,7 +314,7 @@ class BottomBar extends Component {
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 1}
                 title={'大厅'}
-                titleColor={navigationIndex === 1 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
+                titleColor={navigationIndex === 1 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
             />
             <BottomBarItem
                 source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
@@ -323,7 +324,7 @@ class BottomBar extends Component {
                 unReadLength={unMessageLength > 0 ? unMessageLength : 0}
                 isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || isOtherUnRead)}
                 title={'消息'}
-                titleColor={navigationIndex === 2 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
+                titleColor={navigationIndex === 2 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
             />
             <BottomBarItem
                 source={navigationIndex === 3 ? require('../res/img/bottomBarIcon/myC.png') : require('../res/img/bottomBarIcon/my.png')}
@@ -333,7 +334,7 @@ class BottomBar extends Component {
                 unReadLength={0}
                 isOtherUnRead={isOtherUnRead}
                 title={'我的'}
-                titleColor={navigationIndex === 3 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.7)'}
+                titleColor={navigationIndex === 3 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
             />
         </View>;
     }
@@ -391,6 +392,7 @@ class BottomBarItem extends Component {
             style={{
                 width: width / 4,
                 height: 45,
+                backgroundColor:'#f5f5f5',
                 justifyContent: 'center',
                 alignItems: 'center',
 

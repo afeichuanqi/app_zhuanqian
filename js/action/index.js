@@ -1,5 +1,5 @@
 import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken,onSetShopInfoBgImg,onAddPayAccount} from './userinfo';
-import {verifyIdentIdy,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus,onMessageInitialiZation} from './message';
+import {onSetMessageLoad,verifyIdentIdy,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus,onMessageInitialiZation} from './message';
 import {onSetNoticeMsgIsAllRead,onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onFriendInitialiZation,onSetOtherTypeUnread,setAppeal_2IsRead,setAppeal_3IsRead,onSetNoticeMsg,onSetNoticeMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
 import {onSetTaskReleaseInfo} from './taskInfo';
@@ -16,7 +16,7 @@ export default {
     onAddPayAccount,
     //消息列表
     verifyIdentIdy,
-
+    onSetMessageLoad,
     onMessageFrom,
     onAddMesage,
     onSetMsgStatus,

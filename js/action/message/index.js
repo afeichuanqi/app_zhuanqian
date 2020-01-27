@@ -60,3 +60,10 @@ export function onGetMegForUserid(msgArr) {
         data: {msgArr},
     };
 }
+//设置消息正在获取
+export function onSetMessageLoad(loading) {
+    return {
+        type: Types.MESSAGE_SET_IS_LOAD,
+        data: {msgIsLoad:loading},
+    };
+}
