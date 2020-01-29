@@ -112,7 +112,7 @@ class ChatRoomPage extends React.Component {
                     this.FriendId = result.id;
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
-                }else{
+                } else {
                     this.props.onSetMessageLoad(false);
                 }
 
@@ -140,7 +140,7 @@ class ChatRoomPage extends React.Component {
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
                     ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
-                }else{
+                } else {
                     this.props.onSetMessageLoad(false);
                 }
 
@@ -303,7 +303,7 @@ class ChatRoomPage extends React.Component {
     };
 
     render() {
-        const {userinfo,message} = this.props;
+        const {userinfo, message} = this.props;
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
@@ -318,7 +318,6 @@ class ChatRoomPage extends React.Component {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
         });
         const msgList = this.getMessages();
-        console.log(this.props.message.msgIsLoad,"message.msgIsLoad");
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -336,7 +335,13 @@ class ChatRoomPage extends React.Component {
                         sendFormId={this.sendFormId}
                         guzhuUserId={this.guzhuUserId}
                     />}
-                    <ActivityIndicator style={{zIndex: 1000,position: 'absolute', top: 100, left: 0, right: 0}} size="small" animating={message.msgIsLoad} color={'black'}/>
+                    {message.msgIsLoad && <View style={{flexDirection:'row',zIndex: 1000, position: 'absolute', top: 90, alignItems:'center',
+                        justifyContent:'center',width,
+                    }}>
+                        <ActivityIndicator
+                            size="small"  color={'black'}/>
+                        <Text style={{color:'rgba(0,0,0,0.5)', marginLeft:5}}>加载中...</Text>
+                    </View>}
                     <NewMessage
                         ref={ref => this.newMessage = ref}
                     />

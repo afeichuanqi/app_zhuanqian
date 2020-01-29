@@ -179,7 +179,7 @@ class InputItem extends React.PureComponent {
                 paddingHorizontal: 15,
                 alignItems: 'center',
             }}>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>{title}</Text>
+                <Text style={{fontSize: 16,}}>{title}</Text>
                 <TextInput
                     value={value}
                     style={{

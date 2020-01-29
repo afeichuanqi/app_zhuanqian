@@ -54,7 +54,7 @@ import {judgeTaskData} from '../util/CommonUtils';
 import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import Global from '../common/Global';
-import ToastSelect from '../common/ToastSelect';
+import ToastSelect from '../common/ToastSelectTwo';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 let PopButtomMenu = null;
 const {width} = Dimensions.get('window');

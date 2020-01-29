@@ -120,7 +120,7 @@ class InvitationCodePage extends React.Component {
                         placeholder={'输入好友邀请码（向介绍人索取）'}
                         style={{
                             fontSize: hp(2.1),
-                            width: width - 20,
+                            width: width - 60,
                             borderBottomWidth: 0.3,
                             borderBottomColor: '#d7d7d7',
                             padding: 0,

@@ -10,7 +10,6 @@ import Image from 'react-native-fast-image';
 import TextMessage from './TextMessage';
 import ImageMessage from './ImageMessage';
 import {EMOJIS_DATA} from '../source/emojis';
-import Emoji_ from 'react-native-emoji';
 import {renderEmoji} from '../../../../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
@@ -71,14 +70,14 @@ export default class ChatItem extends PureComponent {
 
         // 若匹配不到，则直接返回一个全文本
         if (emojiIndex === -1) {
-            views = renderEmoji(textContent,views,hp(2.1));//匹配系统表情控
+            views = renderEmoji(textContent,views,hp(2.1),0,'black',isSelf ? rightMessageTextStyle : leftMessageTextStyle,23);//匹配系统表情控
         } else {
             checkIndexArray.push(emojiIndex);
             // 取index最小者
             let minIndex = Math.min(...checkIndexArray);
             // 将0-index部分返回文本
             const ContentText = textContent.substring(0, minIndex);
-            renderEmoji(ContentText,views,hp(2.1),0,'black',isSelf ? rightMessageTextStyle : leftMessageTextStyle);//匹配系统表情控
+            renderEmoji(ContentText,views,hp(2.1),0,'black',isSelf ? rightMessageTextStyle : leftMessageTextStyle,23);//匹配系统表情控
             // views.push(<Text style={isSelf ? rightMessageTextStyle : leftMessageTextStyle}
             //                  key={'firstTextView' + (Math.random() * 100)}>{ContentText}</Text>);
 
@@ -380,8 +379,8 @@ const styles = StyleSheet.create({
         borderTopWidth: StyleSheet.hairlineWidth,
     },
     subEmojiStyle: {
-        width: 25,
-        height: 25,
+        width: 23,
+        height: 23,
         marginRight: 3,
         marginTop:3,
 

@@ -9,11 +9,11 @@
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, Text, TouchableOpacity, ImageBackground} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
-
-const {timing,} = Animated;
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
+const {timing} = Animated;
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -106,7 +106,10 @@ class MyModalBox extends PureComponent {
 
                         <ImageBackground
                             source={require('../res/img/backgroundtoast.png')}
-
+                            imageStyle={{
+                                borderTopLeftRadius: 5,
+                                borderTopRightRadius: 5,
+                            }}
                             style={{
                                 paddingVertical: 10,
                                 width: width - 40,
@@ -157,8 +160,12 @@ class MyModalBox extends PureComponent {
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={this._sure}
+
                             >
                                 <ImageBackground
+                                    imageStyle={{
+                                        borderBottomRightRadius: 5,
+                                    }}
                                     style={{
                                         width: (width - 40) / 2, height: 50, top: 1, justifyContent: 'center',
                                         alignItems: 'center', backgroundColor: bottomTheme,

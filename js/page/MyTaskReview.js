@@ -21,7 +21,7 @@ import {passTaskForSendFormTaskId, selectSendFormForTaskId} from '../util/AppSer
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
 import ImageViewerModal from '../common/ImageViewerModal';
-import ToastSelect from '../common/ToastSelect';
+import ToastSelect from '../common/ToastSelectTwo';
 import EmptyComponent from '../common/EmptyComponent';
 import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';

@@ -190,7 +190,7 @@ export const judgeTaskData = (data, update) => {
             if (type === 6 && typeData.collectInfo.length === 0) {
                 return `您步骤${index + 1}说明是不是太短了呀`;
             }
-            if (type === 1 && !typeData.inputValue.startsWith('http') ) {
+            if (type === 1 && !typeData.inputValue.startsWith('http')) {
                 return `您网址是不是没有输入正确呀`;
             }
             if (type === 5) {
@@ -284,49 +284,51 @@ export const equalsObj = (oldData, newData) => {
     // 走到这里,说明数组或者对象中所有元素都相同,返回true
     return true;
 };
-export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black',style_) => {
+export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black', style_, fontSize2) => {
     const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
     const endIndex = content.indexOf(':', startIndex + 1) + 1;
     const contentText = content.substring(0, startIndex);
     if (contentText.length > 0) {
-        Views.push(<Text  key={`startText${Math.random() * 100}`} style={{fontSize, color,...style_}}>{contentText}</Text>);
+        Views.push(<Text key={`startText${Math.random() * 100}`}
+                         style={{fontSize, color, ...style_}}>{contentText}</Text>);
     }
     if (startIndex !== -1) {
-        Views.push(<Emoji key={`Emoji${Math.random() * 100}`} name={content.substring(startIndex, endIndex)} style={{fontSize}}/>);
+        Views.push(<Emoji key={`Emoji${Math.random() * 100}`} name={content.substring(startIndex, endIndex)}
+                          style={{fontSize: fontSize2 ? fontSize2 : fontSize}}/>);
 
     } else {
         if (endIndex !== content.length) {
             Views.push(<Text key={`endText${Math.random() * 100}`}
-                             style={{fontSize, color,...style_}}>{content.substring(endIndex, content.length)}</Text>);
+                             style={{fontSize, color, ...style_}}>{content.substring(endIndex, content.length)}</Text>);
         }
 
         return Views;
     }
 
-    return renderEmoji(content.substring(endIndex), Views,fontSize,0,color,style_);
+    return renderEmoji(content.substring(endIndex), Views, fontSize, 0, color, style_,fontSize2);
 };
-export const _renderEmoji = (content, Views, fontSize, index = 0, color = 'black') => {
-    index += 1;
-    const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
-    const endIndex = content.indexOf(':', startIndex + 1) + 1;
-    const contentText = content.substring(0, startIndex);
-    if (contentText.length > 0) {
-        Views.push(<Text key={`startText${index}`} style={{fontSize, color}}>{contentText}</Text>);
-    }
-    if (startIndex !== -1) {
-        Views.push(<Emoji key={`Emoji${index}`} name={content.substring(startIndex, endIndex)} style={{fontSize}}/>);
-
-    } else {
-        if (endIndex !== content.length) {
-            Views.push(<Text key={`endText${index}`}
-                             style={{fontSize, color}}>{content.substring(endIndex, content.length)}</Text>);
-        }
-
-        return Views;
-    }
-
-    return renderEmoji(content.substring(endIndex), Views);
-};
+// export const _renderEmoji = (content, Views, fontSize, index = 0, color = 'black') => {
+//     index += 1;
+//     const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
+//     const endIndex = content.indexOf(':', startIndex + 1) + 1;
+//     const contentText = content.substring(0, startIndex);
+//     if (contentText.length > 0) {
+//         Views.push(<Text key={`startText${index}`} style={{fontSize, color}}>{contentText}</Text>);
+//     }
+//     if (startIndex !== -1) {
+//         Views.push(<Emoji key={`Emoji${index}`} name={content.substring(startIndex, endIndex)} style={{fontSize}}/>);
+//
+//     } else {
+//         if (endIndex !== content.length) {
+//             Views.push(<Text key={`endText${index}`}
+//                              style={{fontSize, color}}>{content.substring(endIndex, content.length)}</Text>);
+//         }
+//
+//         return Views;
+//     }
+//
+//     return renderEmoji(content.substring(endIndex), Views);
+// };
 // export const getEmojis = (content) => {
 //     let contentTmp = content;
 //

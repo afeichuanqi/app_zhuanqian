@@ -43,7 +43,10 @@ class RechargePage extends PureComponent {
     };
     state = {
         taskData: {},
-        activeIndex: 0,
+        rechargeVal: 0,
+        moneyBoxIndex: 0,
+
+
     };
 
     componentDidMount() {
@@ -56,9 +59,14 @@ class RechargePage extends PureComponent {
         this.backPress.componentWillUnmount();
     }
 
-    items = [
-        {title: '微信', id: 0, source: require('../res/img/payType/wechat.png')},
-        {title: '支付宝', id: 1, source: require('../res/img/payType/alipay.png')},
+    nums = [
+        {id: 1, num: 10, info: '10元'},
+        {id: 2, num: 50, info: '50元'},
+        {id: 3, num: 100, info: '100元'},
+        {id: 4, num: 300, info: '300元'},
+        {id: 5, num: 500, info: '500元'},
+        {id: 6, num: 800, info: '800元'},
+
     ];
 
     render() {
@@ -92,112 +100,166 @@ class RechargePage extends PureComponent {
                             backgroundColor: 'white',
                             marginTop: 3,
                             alignItems: 'center',
+                            paddingVertical: hp(2),
                         }}>
                         <FastImagePro
                             source={{uri: this.props.userinfo.avatar_url}}
-                            style={{width: wp(13), height: wp(13), borderRadius: wp(13) / 2}}
+                            style={{width: hp(9), height: hp(9), borderRadius: hp(10) / 2}}
                         />
                         <View style={{
                             marginLeft: 10,
                             justifyContent: 'space-around',
-                            height: wp(13),
+                            height: hp(10),
                             paddingVertical: 5,
                         }}>
+                            <Text style={{fontSize: hp(2.7), color: 'black'}}>{this.props.userinfo.username}</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text style={{fontSize: 16, color: 'black'}}>{this.props.userinfo.username}</Text>
-                                <Text style={{
-                                    color: 'black',
-                                    opacity: 0.5,
-                                    marginLeft: 10,
-                                }}>ID:{this.props.userinfo.userid}</Text>
-                            </View>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text style={{
-                                    color: 'black',
-                                    opacity: 0.5,
-                                    fontSize: 12,
-                                }}>余额:</Text>
-                                <Text style={{
-                                    color: 'black',
-                                    opacity: 0.5,
-                                    fontSize: 12,
-                                    marginLeft: 5,
-                                }}>{this.props.userinfo.task_currency}</Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Image
+                                        resizeMode={'stretch'}
+                                        style={{height: hp(1.6), width: hp(1.6)}}
+                                        source={require('.././res/img/recharge/recharge_id.png')}/>
+                                    <Text style={{
+                                        fontSize: hp(1.7),
+                                        marginLeft: 4,
+                                        color: 'rgba(0,0,0,0.7)',
+                                    }}>{this.props.userinfo.userid}</Text>
+                                </View>
+                                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
+                                    <Image
+                                        resizeMode={'stretch'}
+                                        style={{height: hp(1.6), width: hp(1.6)}}
+                                        source={require('.././res/img/recharge/recharge_money.png')}/>
+                                    <Text style={{
+                                        fontSize: hp(1.7),
+                                        marginLeft: 4,
+                                        color: 'rgba(0,0,0,0.7)',
+                                    }}>{this.props.userinfo.task_currency}</Text>
+                                </View>
                             </View>
                         </View>
 
                     </TouchableOpacity>}
 
                     <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                        <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.8)'}}>请输入充值金额:</Text>
-                        <View style={{marginVertical: 20, marginLeft: 5, flexDirection: 'row'}}>
-                            <Text style={{
-                                fontSize: 25,
-                                fontWeight: 'bold',
-                                color: 'black',
-                                position: 'absolute',
-                                left: 0,
-                                top: 10,
-                            }}>¥</Text>
-                            <TextInput
-                                keyboardType={'number-pad'}
-                                onChangeText={(text) => {
-                                    this.rechargeVal = text;
-                                }}
-                                style={{
-                                    fontWeight: 'bold', fontSize: 35, width: width - 40, borderBottomWidth: 1,
-                                    borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 10,
-                                }}
-                            />
-                        </View>
-                        <View style={{paddingVertical: 10}}>
-                            <View style={{alignSelf: 'center', flexDirection: 'row'}}>
-                                {this.items.map((item, index) => {
-                                    return this.genRadio(item, index);
-                                })}
-                            </View>
-                        </View>
-
-                    </View>
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={this.sureRecharGe}
-                        style={{
-                            marginTop: 50,
-                            width: wp(80), height: hp(10), alignItems: 'center', backgroundColor: bottomTheme,
-                            justifyContent: 'center', alignSelf: 'center', borderRadius: 8,
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>选择数量:</Text>
+                        <View style={{
+                            width: width - 20,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            justifyContent:'space-around',
                         }}>
-                        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>确认充值</Text>
-                    </TouchableOpacity>
-                    {/*<View style={{marginTop: 30, alignSelf: 'center'}}>*/}
-                    {/*    <Text style={{color: bottomTheme, opacity: 0.5, fontSize: 12}}>每天可提现一次,最小提现金额3元</Text>*/}
-                    {/*    <Text style={{*/}
-                    {/*        color: bottomTheme,*/}
-                    {/*        opacity: 0.5,*/}
-                    {/*        fontSize: 12,*/}
-                    {/*        marginTop: 10,*/}
-                    {/*        alignSelf: 'center',*/}
-                    {/*    }}>超过10元提现手续费2%</Text>*/}
-                    {/*</View>*/}
+                            {this.nums.map((item, index, arr) => {
+                                return this.renderMoneyBox(index, item);
+                            })}
+                        </View>
+                        <InputPro onChangeText={(text) => {
+                            this.setState({
+                                rechargeVal: parseFloat(text),
+                            });
+                        }}/>
+                        {/*<View style={{marginVertical: 20, marginLeft: 5, flexDirection: 'row'}}>*/}
+                        {/*    <Text style={{*/}
+                        {/*        fontSize: 25,*/}
+                        {/*        fontWeight: 'bold',*/}
+                        {/*        color: 'black',*/}
+                        {/*        position: 'absolute',*/}
+                        {/*        left: 0,*/}
+                        {/*        top: 10,*/}
+                        {/*    }}>¥</Text>*/}
+                        {/*    <TextInput*/}
+                        {/*        keyboardType={'number-pad'}*/}
+                        {/*        onChangeText={(text) => {*/}
+                        {/*            this.rechargeVal = text;*/}
+                        {/*        }}*/}
+                        {/*        style={{*/}
+                        {/*            fontWeight: 'bold', fontSize: 35, width: width - 40, borderBottomWidth: 1,*/}
+                        {/*            borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 10,*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</View>*/}
+                        {/*<View style={{paddingVertical: 10}}>*/}
+                        {/*    <View style={{alignSelf: 'center', flexDirection: 'row'}}>*/}
+                        {/*        {this.items.map((item, index) => {*/}
+                        {/*            return this.genRadio(item, index);*/}
+                        {/*        })}*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
+
+                    </View>
+                    <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
+                        <PayType ref={ref => this.payType = ref}/>
+                    </View>
+                    <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 10}}>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>应付:</Text>
+                        <Text style={{
+                            fontSize: hp(3),
+                            color: bottomTheme,
+                            marginHorizontal: 5,
+                        }}>{this.state.rechargeVal}</Text>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>元</Text>
+                    </View>
                     <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold', fontSize: 15}}>充值须知
+                        <Text style={{fontWeight: 'bold', fontSize: hp(2)}}>充值须知
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                         </Text>
                     </View>
+                    <View style={{height: hp(7)}}/>
                 </ScrollView>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={this.sureRecharGe}
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
 
+                        width: wp(100), height: hp(7), alignItems: 'center', backgroundColor: bottomTheme,
+                        justifyContent: 'center', alignSelf: 'center',
+                    }}>
+                    <Text style={{fontSize: hp(2.5), fontWeight: 'bold', color: 'white'}}>确认充值</Text>
+                </TouchableOpacity>
             </SafeAreaViewPlus>
         );
     }
 
+    renderMoneyBox = (index, item) => {
+        return <TouchableOpacity
+            onPress={() => {
+                this.setState({
+                    rechargeVal: parseFloat(item.num),
+                    moneyBoxIndex: item.id,
+                });
+            }}
+            key={index}
+            style={{
+                marginTop: 15,
+                width: wp(30),
+                height: hp(10),
+                borderWidth: 0.5,
+                borderColor: this.state.moneyBoxIndex == item.id ? bottomTheme : 'rgba(0,0,0,0.2)',
+                borderRadius: 5,
+
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={{color: 'black', fontSize: hp(2.3)}}>{item.num}</Text>
+                <Image
+                    resizeMode={'stretch'}
+                    style={{height: hp(2), width: hp(2), marginLeft: 3}}
+                    source={require('.././res/img/recharge/recharge_money.png')}/>
+            </View>
+            <Text style={{marginTop: 3, fontSize: hp(1.99), color: 'rgba(0,0,0,0.5)'}}>{item.info}</Text>
+        </TouchableOpacity>;
+    };
     sureRecharGe = () => {
-        // const item = this.items[this.state.activeIndex];
-        const rechargeVal = this.rechargeVal;
+        const rechargeVal = this.state.rechargeVal;
         if (!this.props.userinfo.login) {
             Toast.show('请登录');
             return;
@@ -207,7 +269,7 @@ class RechargePage extends PureComponent {
             return;
         }
         //
-        if (this.state.activeIndex === 1) {
+        if (this.payType.getActiveIndex() === 1) {
             const params = {
                 subject: '任务币充值',
                 body: '任务币充值-RechargePage',
@@ -258,14 +320,35 @@ class RechargePage extends PureComponent {
         }
 
     };
-    _radioClick = (item) => {
-        if (this.state.activeIndex !== item.id) {
-            this.setState({
-                activeIndex: item.id,
-            });
-        }
+
+    page = {
+        pageIndex: 0,
+    };
+
+}
+
+class PayType extends React.Component {
+    state = {
+        activeIndex: 0,
+    };
+
+    items = [
+        {title: '微信支付', id: 0, source: require('../res/img/payType/wechat.png'), info: '亿万用户的选择，更快更安全'},
+        {title: '支付宝', id: 1, source: require('../res/img/payType/alipay.png'), info: '用户量最大的支付公司'},
+    ];
+    getActiveIndex = () => {
+        return this.state.activeIndex;
 
     };
+
+    render() {
+        return <View style={{alignItems: 'center', marginTop: 10}}>
+            {this.items.map((item, index, arr) => {
+                return this.genRadio(item);
+            })}
+        </View>;
+    }
+
     genRadio = (item) => {
         return <TouchableOpacity
             key={item.id}
@@ -276,32 +359,96 @@ class RechargePage extends PureComponent {
             style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                marginLeft: 10,
-                borderWidth: this.state.activeIndex == item.id ? 0.8 : 0.3,
-                borderColor: this.state.activeIndex == item.id ? bottomTheme : 'rgba(0,0,0,0.3)',
-                height: hp(8), width: wp(37), borderRadius: 7, paddingLeft: 10,
+                justifyContent: 'space-between',
+                paddingHorizontal: 10,
+
+                height: hp(8), width: width - 20, borderRadius: 7,
 
             }}>
-            <Image
-                source={item.source}
-                style={{width: wp(10), height: wp(10), borderRadius: 5}}
-            />
-            {/*<View>*/}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                    source={item.source}
+                    resizeMode={'contain'}
+                    style={{width: wp(6), height: wp(5), borderRadius: 5}}
+                />
+                <View>
+                    <Text style={{fontSize: hp(2), marginLeft: 10, color: 'black'}}>{item.title}</Text>
+                    <Text style={{
+                        fontSize: hp(1.6),
+                        marginLeft: 10,
+                        color: 'rgba(0,0,0,0.5)',
+                        marginTop: 5,
+                    }}>{item.info}</Text>
+                </View>
+            </View>
 
-            {this.state.activeIndex == item.id && <Image
-                source={require('../res/img/payType/active.png')}
+
+            {this.state.activeIndex === item.id ? <Image
+                source={require('../res/img/ok.png')}
                 style={{
-                    width: 20, height: 20, position: 'absolute', right: 0, bottom: 0, borderRadius: 3,
+                    width: 16, height: 16, borderRadius: 10,
                     borderBottomRightRadius: 5,
                 }}
-            />}
-            {/*</View>*/}
-            <Text style={{fontSize: 15, marginLeft: 10, color: 'black'}}>{item.title}</Text>
+            /> : <View
+                style={{width: 16, height: 16, borderRadius: 10, borderColor: 'rgba(0,0,0,0.5)', borderWidth: 1}}/>}
+
+
         </TouchableOpacity>;
     };
-    page = {
-        pageIndex: 0,
+    _radioClick = (item) => {
+        if (this.state.activeIndex !== item.id) {
+            this.setState({
+                activeIndex: item.id,
+            });
+        }
+
     };
+}
+
+class InputPro extends React.PureComponent {
+    state = {
+        isFocused: false,
+        text: '',
+    };
+
+    render() {
+        const {isFocused} = this.state;
+        return <TextInput
+            onFocus={() => {
+                this.setState({isFocused: true});
+                if (this.state.text.length > 0) {
+                    this.props.onChangeText(this.state.text);
+                }
+
+            }}
+            onBlur={() => {
+                this.setState({
+                    isFocused: false,
+                });
+            }}
+            onChangeText={(text) => {
+                this.setState({
+                    text,
+                });
+                this.props.onChangeText(text);
+            }}
+            maxLength={4}
+            value={this.state.text}
+            style={{
+                width: width - 20 - wp(1.6),
+                height: hp(10),
+                borderWidth: 0.5,
+                backgroundColor: isFocused ? 'rgba(33,150,243,0.1)' : 'rgba(255,255,255,0.1)',
+                borderColor: isFocused ? bottomTheme : 'rgba(0,0,0,0.3)',
+                marginTop: 15,
+                alignSelf: 'center',
+                borderRadius: 5,
+                paddingLeft: 15,
+                fontSize: hp(2.5),
+            }}>
+
+        </TextInput>;
+    }
 
 }
 

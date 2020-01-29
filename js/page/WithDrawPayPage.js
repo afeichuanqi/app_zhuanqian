@@ -85,13 +85,13 @@ class WithDrawPayPage extends React.Component {
             pay = '支付宝';
             pay_name = this.props.userinfo.alipay_name;
             pay_account = this.props.userinfo.alipay_account;
-            pay_source = require('../res/img/payType/alipay.png');
+            pay_source = require('../res/img/payType/alipay-1.png');
 
         } else {
             pay = '微信';
             pay_name = this.props.userinfo.wechat_name;
             pay_account = this.props.userinfo.wechat_account;
-            pay_source = require('../res/img/payType/wechat.png');
+            pay_source = require('../res/img/payType/wechat-1.png');
         }
         return (
             <SafeAreaViewPlus

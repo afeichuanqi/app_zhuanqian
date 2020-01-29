@@ -48,7 +48,6 @@ import shoucang_ from '../res/svg/shoucang_.svg';
 import ToastShare from '../common/ToastShare';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import Emoji from 'react-native-emoji';
 import ToastSelect from '../common/ToastSelect';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 

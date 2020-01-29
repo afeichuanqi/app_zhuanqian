@@ -108,6 +108,10 @@ class MyModalBox extends PureComponent {
                     }]}>
 
                         <ImageBackground
+                            imageStyle={{
+                                borderTopLeftRadius: 5,
+                                borderTopRightRadius: 5,
+                            }}
                             source={require('../res/img/backgroundtoast.png')}
                             style={{
                                 width: width - 40,
@@ -133,7 +137,7 @@ class MyModalBox extends PureComponent {
                             </TouchableOpacity>
                         </ImageBackground>
                         {this.props.children}
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{flexDirection: 'row',borderBottomRightRadius:5,}}>
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={this._cancel}
@@ -152,6 +156,9 @@ class MyModalBox extends PureComponent {
                                 onPress={this._sure}
                             >
                                 <ImageBackground
+                                    imageStyle={{
+                                        borderBottomRightRadius:5,
+                                    }}
                                     style={{
                                         width: (width - 40) / 2, height: 50, top: 1, justifyContent: 'center',
                                         alignItems: 'center', backgroundColor: bottomTheme, borderBottomRightRadius:5,
