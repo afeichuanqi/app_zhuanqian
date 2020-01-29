@@ -70,7 +70,7 @@ export default class ChatItem extends PureComponent {
 
         // 若匹配不到，则直接返回一个全文本
         if (emojiIndex === -1) {
-            views = renderEmoji(textContent,views,hp(2.1),0,'black',isSelf ? rightMessageTextStyle : leftMessageTextStyle,23);//匹配系统表情控
+            return  renderEmoji(textContent,views,hp(2.1),0,'black',isSelf ? rightMessageTextStyle : leftMessageTextStyle,23);//匹配系统表情控
         } else {
             checkIndexArray.push(emojiIndex);
             // 取index最小者
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     subEmojiStyle: {
         width: 23,
         height: 23,
-        marginRight: 3,
+        marginHorizontal: 1.5,
         marginTop:3,
 
     },

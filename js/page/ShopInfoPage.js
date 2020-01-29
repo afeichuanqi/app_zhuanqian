@@ -37,6 +37,7 @@ import SvgUri from 'react-native-svg-uri';
 import goback from '../res/svg/goback.svg';
 import PickerImage from '../common/PickerImage';
 import actions from '../action';
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
@@ -396,6 +397,7 @@ class ShopList extends Component {
             keyExtractor={(item, index) => index + ''}
             refreshControl={
                 <RefreshControl
+                    progressViewOffset={hp(7)}
                     tintColor={'white'}
                     color={'white'}
                     refreshing={isLoading}

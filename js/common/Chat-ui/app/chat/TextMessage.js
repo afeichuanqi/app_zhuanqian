@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     borderRadius: 8,
-    paddingHorizontal: wp(2),
+    paddingHorizontal: 10,
     paddingVertical:  wp(2.7),
     maxWidth: wp(60),
     minHeight: 20,

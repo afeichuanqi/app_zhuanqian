@@ -11,19 +11,17 @@ import {
     Clipboard,
     Dimensions,
     FlatList,
-    ViewPropTypes as RNViewPropTypes, RefreshControl,
+    ViewPropTypes as RNViewPropTypes
 } from 'react-native';
 import Image from 'react-native-fast-image';
 import PropTypes from 'prop-types';
 import {getCurrentTime, changeEmojiText, isIPhoneX} from './utils';
-// import Voice from './VoiceView';
 import PopView from './components/pop-view';
 import ChatItem from './ChatItem';
 import {EMOJIS_ZH} from '../source/emojis';
 import EmojiPanel from './emoji';
 import InputBar from './InputBar';
 import PlusPanel from './plus';
-// import DelPanel from './del';
 
 const {height, width} = Dimensions.get('window');
 const ViewPropTypes = RNViewPropTypes || View.propTypes;
@@ -156,6 +154,7 @@ class ChatWindow extends PureComponent {
     };
 
     static defaultProps = {
+        ListHeaderComponent:<View></View>,
         renderLoadEarlier: () => (null),
         extraData: null,
         chatType: 'friend',
@@ -509,11 +508,12 @@ class ChatWindow extends PureComponent {
         const {inverted} = this.props;
         this._userHasBeenInputed = true;
         if (type === 'text' && messageContent.trim().length !== 0) {
-            messageContent = changeEmojiText(this.state.messageContent).join('');
+            messageContent = changeEmojiText(messageContent).join('');
         }
         this.props.sendMessage(type, messageContent, this.isInverted);
         this.InputBar.input && this.InputBar.input.clear();
-        this.setState({messageContent: ''});
+
+        // this.setState({messageContent: ''});
         if (!inverted) {
             this.time && clearTimeout(this.time);
             // this.time = setTimeout(() => { this.chatList && this.chatList.scrollToEnd({ animated: true }) }, 200)
@@ -547,9 +547,9 @@ class ChatWindow extends PureComponent {
         }
     }
 
-    _changeText(e) {
-        this.setState({messageContent: e});
-    }
+    // _changeText(e) {
+    //     this.setState({messageContent: e});
+    // }
 
     _onContentSizeChange(e) {
         const {inverted} = this.props;
@@ -866,7 +866,7 @@ class ChatWindow extends PureComponent {
         }
         await this.props.loadHistory();
     };
-
+    cursorIndex=0;
     _onEmojiSelected(code, index) {
         if (index === 0) {
             let emojiReg = new RegExp('\\[[^\\]]+\\]', 'g');
@@ -875,104 +875,58 @@ class ChatWindow extends PureComponent {
             }
 
             let lastText = '';
-            let currentTextLength = this.state.messageContent.length;
+            const messageContent = this.InputBar.getMessageContent();
+
+            let currentTextLength = messageContent.length;
 
             if (code === '/{del}') { // 删除键
                 if (currentTextLength === 0) {
                     return;
                 }
 
-                if (this.state.cursorIndex < currentTextLength) { // 光标在字符串中间
-                    let emojiIndex = this.state.messageContent.search(emojiReg); // 匹配到的第一个表情符位置
-
+                if (this.cursorIndex < currentTextLength) { // 光标在字符串中间
+                    let emojiIndex = messageContent.search(emojiReg); // 匹配到的第一个表情符位置
+                    let preStr = messageContent.substring(0, this.cursorIndex);
+                    let nextStr = messageContent.substring(this.cursorIndex);
                     if (emojiIndex === -1) { // 没有匹配到表情符
-                        let preStr = this.state.messageContent.substring(0, this.state.cursorIndex);
-                        let nextStr = this.state.messageContent.substring(this.state.cursorIndex);
                         lastText = preStr.substring(0, preStr.length - 1) + nextStr;
-
-                        this.setState({
-                            cursorIndex: preStr.length - 1,
-                        });
                     } else {
-                        let preStr = this.state.messageContent.substring(0, this.state.cursorIndex);
-                        let nextStr = this.state.messageContent.substring(this.state.cursorIndex);
-
-                        let lastChar = preStr.charAt(preStr.length - 1);
-                        if (lastChar === ']') {
-                            let castArray = preStr.match(emojiReg);
-
-                            if (!castArray) {
-                                let cast = castArray[castArray.length - 1];
-
-                                lastText = preStr.substring(0, preStr.length - cast.length) + nextStr;
-
-                                this.setState({
-                                    cursorIndex: preStr.length - cast.length,
-                                });
-                            } else {
-                                lastText = preStr.substring(0, preStr.length - 1) + nextStr;
-
-                                this.setState({
-                                    cursorIndex: preStr.length - 1,
-                                });
-                            }
-                        } else {
-                            lastText = preStr.substring(0, preStr.length - 1) + nextStr;
-                            this.setState({
-                                cursorIndex: preStr.length - 1,
-                            });
-                        }
+                        lastText = preStr.substring(0, preStr.length - 1) + nextStr;
                     }
+                    this.cursorIndex=preStr.length - 1;
                 } else { // 光标在字符串最后
-                    let lastChar = this.state.messageContent.charAt(currentTextLength - 1);
+                    let lastChar = messageContent.charAt(currentTextLength - 1);
                     if (lastChar === ']') {
-                        let castArray = this.state.messageContent.match(emojiReg);
+                        let castArray = messageContent.match(emojiReg);
 
                         if (castArray) {
                             let cast = castArray[castArray.length - 1];
-                            lastText = this.state.messageContent.substring(0, this.state.messageContent.length - cast.length);
-
-                            this.setState({
-                                cursorIndex: this.state.messageContent.length - cast.length,
-                            });
+                            lastText = messageContent.substring(0, messageContent.length - cast.length);
+                            this.cursorIndex=messageContent.length - cast.length;
                         } else {
-                            lastText = this.state.messageContent.substring(0, this.state.messageContent.length - 1);
-
-                            this.setState({
-                                cursorIndex: this.state.messageContent.length - 1,
-                            });
+                            lastText = messageContent.substring(0, messageContent.length - 1);
+                            this.cursorIndex=messageContent.length - 1;
                         }
                     } else {
-                        lastText = this.state.messageContent.substring(0, currentTextLength - 1);
-                        this.setState({
-                            cursorIndex: currentTextLength - 1,
-                        });
+                        lastText = messageContent.substring(0, currentTextLength - 1);
+                        this.cursorIndex=currentTextLength - 1;
                     }
                 }
             } else {
-                if (currentTextLength >= this.state.cursorIndex) {
-                    lastText = this.state.messageContent + EMOJIS_ZH[code];
-
-                    this.setState({
-                        cursorIndex: lastText.length,
-                    });
+                if (currentTextLength >= this.cursorIndex) {
+                    lastText = messageContent + EMOJIS_ZH[code];
+                    this.cursorIndex=lastText.length;
                 } else {
-                    let preTemp = this.state.messageContent.substring(0, this.state.cursorIndex);
-                    let nextTemp = this.state.messageContent.substring(this.state.cursorIndex, currentTextLength);
+                    let preTemp = messageContent.substring(0, this.cursorIndex);
+                    let nextTemp = messageContent.substring(this.cursorIndex, currentTextLength);
                     lastText = preTemp + EMOJIS_ZH[code] + nextTemp;
-
-                    this.setState({
-                        cursorIndex: this.state.cursorIndex + EMOJIS_ZH[code].length,
-                    });
+                    this.cursorIndex=this.cursorIndex + EMOJIS_ZH[code].length;
                 }
             }
-            this.setState({
-                messageContent: lastText,
-            });
+            this.InputBar.setMessageContent(lastText)
         } else {
-            this.setState({
-                messageContent: this.state.messageContent + code,
-            });
+            const messageContent = this.InputBar.getMessageContent();
+            this.InputBar.setMessageContent(messageContent + code)
         }
 
 
@@ -1039,7 +993,7 @@ class ChatWindow extends PureComponent {
                             //         onRefresh={this.props.onRefresh}
                             //     />
                             // }
-                            // ListHeaderComponent={}
+                            // ListHeaderComponent={this.props.ListHeaderComponent}
                             ListFooterComponent={this.props.renderLoadEarlier}
                             extraData={this.props.extraData}
                             automaticallyAdjustContentInsets={false}
@@ -1141,8 +1095,8 @@ class ChatWindow extends PureComponent {
                         onMethodChange={this._changeMethod.bind(this)}
                         showVoice={this.state.showVoice}
                         onSubmitEditing={(type, content) => this._sendMessage(type, content)}
-                        messageContent={messageContent}
-                        textChange={this._changeText.bind(this)}
+                        // messageContent={messageContent}
+                        // textChange={this._changeText.bind(this)}
                         onContentSizeChange={this._onContentSizeChange.bind(this)}
                         xHeight={xHeight}
                         onFocus={this._onFocus}

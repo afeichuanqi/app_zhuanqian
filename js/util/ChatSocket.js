@@ -25,7 +25,7 @@ class ChatSocket {
         };
         //心跳包
         const heartCheck = {
-            timeout: 10000,//default 10s
+            timeout: 5000,//default 10s
             timeoutObj: null,
             serverTimeoutObj: null,
             reset: function () {

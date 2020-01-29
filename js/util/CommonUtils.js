@@ -1,7 +1,6 @@
 import moment from 'moment';
 import React from 'react';
 import {Text} from 'react-native';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Emoji from 'react-native-emoji';
 
 export const isPoneAvailable = (str) => {
@@ -294,7 +293,7 @@ export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black'
     }
     if (startIndex !== -1) {
         Views.push(<Emoji key={`Emoji${Math.random() * 100}`} name={content.substring(startIndex, endIndex)}
-                          style={{fontSize: fontSize2 ? fontSize2 : fontSize}}/>);
+                          style={{...style_,fontSize: fontSize2 ? fontSize2 : fontSize}}/>);
 
     } else {
         if (endIndex !== content.length) {

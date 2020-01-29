@@ -23,6 +23,7 @@ import {ImgOption} from '../common/PickerImage';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
 import Global from '../common/Global';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import nodeEmoji from 'node-emoji';
 
 const {width} = Dimensions.get('window');
 
@@ -40,9 +41,10 @@ class ChatRoomPage extends React.Component {
         Global.onNewMessage = (msgType, FriendId, username, content, columnType, taskId, fromUserinfo, taskUri, sendFormId) => {
             if (this.FriendId !== FriendId) {
                 this.newMessage.show(username, content, () => {
+                    ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+
+
                     if (msgType == 1) {
-
-
                         this.columnType = columnType;
                         this.task_id = taskId;
                         this.fromUserinfo = fromUserinfo;
@@ -335,12 +337,13 @@ class ChatRoomPage extends React.Component {
                         sendFormId={this.sendFormId}
                         guzhuUserId={this.guzhuUserId}
                     />}
-                    {message.msgIsLoad && <View style={{flexDirection:'row',zIndex: 1000, position: 'absolute', top: 90, alignItems:'center',
-                        justifyContent:'center',width,
+                    {message.msgIsLoad && <View style={{
+                        flexDirection: 'row', zIndex: 1000, position: 'absolute', top: 80, alignItems: 'center',
+                        justifyContent: 'center', width, height: 30,
                     }}>
                         <ActivityIndicator
-                            size="small"  color={'black'}/>
-                        <Text style={{color:'rgba(0,0,0,0.5)', marginLeft:5}}>加载中...</Text>
+                            size="small" color={'black'}/>
+                        <Text style={{color: 'rgba(0,0,0,0.5)', marginLeft: 5}}>加载中...</Text>
                     </View>}
                     <NewMessage
                         ref={ref => this.newMessage = ref}
@@ -348,8 +351,10 @@ class ChatRoomPage extends React.Component {
                     <ChatScreen
                         rightMessageTextStyle={{color: 'black'}}
                         leftMessageTextStyle={{color: 'black'}}
+                        // renderLoadEarlier={() => {
+                        //     return <View style={{height: message.msgIsLoad ? 30 : 0, backgroundColor:'red'}}/>;
+                        // }}
                         renderErrorMessage={(messageStatus) => {
-                            // console.log(messageStatus,"messageStatus");
                             let statusText = '';
                             if (messageStatus === -1) {
                                 statusText = '您被对方屏蔽,关系异常';
@@ -463,7 +468,6 @@ class ChatRoomPage extends React.Component {
     };
     sendMessage = (type, content) => {
 
-        // console.log(this.haveToDo);
         if (this.haveToDo == 1) {
             const FriendId = this.FriendId;
             const {userinfo} = this.props;
@@ -474,7 +478,12 @@ class ChatRoomPage extends React.Component {
                 return;
             }
             const uuid = getUUID();
-            ChatSocket.sendMsgToUserId(userId, toUserid, type, content, uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
+            // let content_=content;
+            // console.log(nodeEmoji.hasEmoji(content));
+            // if(nodeEmoji.hasEmoji(content)){
+            //     content_=nodeEmoji.unemojify(content)
+            // }
+            ChatSocket.sendMsgToUserId(userId, toUserid, type, nodeEmoji.unemojify(content), uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
         } else {
             if (!this.FriendId) {
                 Toast.show('重新打开会话试试 ～ ～', {position: Toast.positions.CENTER});
@@ -673,7 +682,13 @@ class NewMessage extends React.Component {
             return null;
         }
         return <TouchableOpacity
-            onPress={this.callBack}
+            activeOpacity={0.8}
+            onPress={() => {
+                this.setState({
+                    isShow: false,
+                });
+                this.callBack();
+            }}
             style={{
                 position: 'absolute',
                 top: 80,
