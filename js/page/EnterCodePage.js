@@ -24,7 +24,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 export default class EnterCodePage extends PureComponent {
     constructor(props) {
         super(props);
@@ -71,13 +71,13 @@ export default class EnterCodePage extends PureComponent {
                     <Text style={{
                         marginTop: 40,
                         marginLeft: 40,
-                        fontSize: 20,
+                        fontSize: hp(2.7),
                         color: 'black',
                     }}>输入验证码</Text>
                     {/*<View></View>*/}
                     <Text style={{
                         marginLeft: 40,
-                        fontSize: 12,
+                        fontSize: hp(1.6),
                         marginTop: 10,
                         opacity: 0.6,
                         color: 'black',
@@ -170,14 +170,14 @@ class AgainSend extends PureComponent {
             </View> : <View/>}
 
             {isSend ? <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                <Text style={{color: bottomTheme, fontSize: 13}}>{interVal}S</Text>
-                <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: 13}}>后重发</Text>
+                <Text style={{color: bottomTheme, fontSize: hp(1.7)}}>{interVal}S</Text>
+                <Text style={{color: 'rgba(0,0,0,0.6)', fontSize: hp(1.7)}}>后重发</Text>
             </View> : <TouchableOpacity
                 activeOpacity={0.5}
                 onPress={this._againSendSms}
 
             >
-                <Text style={{color: bottomTheme, fontSize: 13}}>重新发送</Text>
+                <Text style={{color: bottomTheme, fontSize: hp(1.7)}}>重新发送</Text>
             </TouchableOpacity>}
         </View>;
     }

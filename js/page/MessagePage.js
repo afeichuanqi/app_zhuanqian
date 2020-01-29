@@ -67,7 +67,7 @@ class MessagePage extends React.Component {
                         height,
                         width,
                         position: 'absolute',
-                        top: -height + 100,
+                        top: -height + 70,
                         transform: [{translateY: translateY}],
                         // zIndex:1,
                     }}>
@@ -218,6 +218,7 @@ class MsgList extends Component {
         selectAppealNum(this.props.userinfo.token).then(result => {
             this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength, result.noticeArr);
         });
+        ChatSocket.verifyIdentidy();
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
     };
     _renderIndexPath = ({item, index}) => {

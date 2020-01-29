@@ -22,7 +22,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, {Easing} from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {cancelUserSignUp, selectOrderTasks, updateNoticeIsReadForType, userRedoTask} from '../util/AppService';
@@ -39,6 +39,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const {timing} = Animated;
 
 class TaskOrdersMana extends Component {
     constructor(props) {
@@ -161,6 +162,7 @@ class TaskOrdersMana extends Component {
             </SafeAreaViewPlus>
         );
     }
+
     clearNotice = (noticeType) => {
         const {onSetNoticeMsgIsRead, userinfo, notice_arr} = this.props;
         notice_arr[noticeType] && onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
@@ -173,16 +175,20 @@ class TaskOrdersMana extends Component {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'second':
-                return <FristListComponent clearNotice={this.clearNotice} noticeType={4} source={require('../res/img/ReleseMana/o1.png')} status={1}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={4}
+                                           source={require('../res/img/ReleseMana/o1.png')} status={1}
                                            userinfo={this.props.userinfo}/>;
             case 'second1':
-                return <FristListComponent clearNotice={this.clearNotice} noticeType={5} source={require('../res/img/ReleseMana/o2.png')} status={2}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={5}
+                                           source={require('../res/img/ReleseMana/o2.png')} status={2}
                                            userinfo={this.props.userinfo}/>;
             case 'second2':
-                return <FristListComponent clearNotice={this.clearNotice} noticeType={6} source={require('../res/img/ReleseMana/o3.png')} status={3}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={6}
+                                           source={require('../res/img/ReleseMana/o3.png')} status={3}
                                            userinfo={this.props.userinfo}/>;
             case 'second3':
-                return <FristListComponent clearNotice={this.clearNotice} noticeType={7} source={require('../res/img/ReleseMana/o4.png')} status={4}
+                return <FristListComponent clearNotice={this.clearNotice} noticeType={7}
+                                           source={require('../res/img/ReleseMana/o4.png')} status={4}
                                            userinfo={this.props.userinfo}/>;
         }
     };
@@ -241,7 +247,7 @@ class FristListComponent extends PureComponent {
     componentWillUnmount() {
         EventBus.getInstance().removeListener(this.listener);
     }
-
+    hideItemLength = 0;
     _updateList = (refreshing) => {
         const {noticeType, clearNotice} = this.props;
         clearNotice(noticeType);
@@ -281,51 +287,60 @@ class FristListComponent extends PureComponent {
             });
         });
     };
+    _itemPress = () => {
+        if (this.props.status == 3) {
+            NavigationUtils.goPage({
+                sendFormId: item.sendFormId,
+                taskId: item.taskId,
+                fromUserinfo: {
+                    avatar_url: item.avatar_url,
+                    id: item.userid,
+                    username: item.username,
+                },
+                task_uri: item.task_uri,
+            }, 'TaskRejectDetailsPage');
+        } else {
+            NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
+        }
+    };
+    _itemRedoTask = () => {
+        userRedoTask({SendFormTaskId: item.sendFormId}, this.props.userinfo.token).then((result) => {
 
+            EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0, 2]});
+            NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
+        }).catch(msg => {
+            Toast.show(msg);
+        });
+    };
+    _cancelSignUp = (item, callback) => {
+        const {userinfo} = this.props;
+        cancelUserSignUp({sign_up_id: item.signUpId}, userinfo.token).then(result => {
+            callback(true);
+            this.hideItemLength += 1;
+            if (this.hideItemLength >= this.state.taskData.length) {
+                setTimeout(() => {
+                    EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0]});
+                }, 300);
+
+            }
+        }).catch(msg => {
+            callback(false);
+            Toast.show(msg);
+        });
+    };
     _renderIndexPath = ({item, index}) => {
         return <OrdersItem
             status={this.props.status}
             key={item.signUpId}
             item={item}
-            cancelSignUp={() => {
-                this._cancelSignUp(item);
+            cancelSignUp={(callback) => {
+                this._cancelSignUp(item, callback);
             }}
-            onPress={() => {
-                if (this.props.status == 3) {
-                    NavigationUtils.goPage({
-                        sendFormId: item.sendFormId,
-                        taskId: item.taskId,
-                        fromUserinfo: {
-                            avatar_url: item.avatar_url,
-                            id: item.userid,
-                            username: item.username,
-                        },
-                        task_uri: item.task_uri,
-                    }, 'TaskRejectDetailsPage');
-                } else {
-                    NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
-                }
-
-            }}
-            redoTask={() => {
-                userRedoTask({SendFormTaskId: item.sendFormId}, this.props.userinfo.token).then((result) => {
-                    NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
-                    EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0, 2]});
-                }).catch(msg => {
-                    Toast.show(msg);
-                });
-            }}
+            onPress={this._itemPress}
+            redoTask={this._itemRedoTask}
         />;
     };
-    _cancelSignUp = (item) => {
-        const {userinfo} = this.props;
 
-        cancelUserSignUp({sign_up_id: item.signUpId}, userinfo.token).then(result => {
-            EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0]});
-        }).catch(msg => {
-            Toast.show(msg);
-        });
-    };
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
@@ -397,10 +412,30 @@ class FristListComponent extends PureComponent {
 }
 
 class OrdersItem extends React.Component {
-
+    state = {
+        hide: false,
+    };
+    hideAnimated = () => {
+        timing(this.animations.scale, {
+            duration: 500,
+            toValue: 0,
+            easing: Easing.inOut(Easing.ease),
+        }).start(() => {
+            this.setState({
+                hide: true,
+            });
+        });
+    };
+    animations = {
+        scale: new Animated.Value(1),
+    };
 
     render() {
         const {item, status} = this.props;
+        const {hide} = this.state;
+        if (hide) {
+            return null;
+        }
         if (!item.taskId) {
             return null;
         }
@@ -411,15 +446,16 @@ class OrdersItem extends React.Component {
                 color: 'black',
                 width: width - 150,
             }}>
-            {item && renderEmoji(`${item.taskId} - ${item.task_title}`, [],  15, 0, 'black').map((item, index) => {
+            {item && renderEmoji(`${item.taskId} - ${item.task_title}`, [], 15, 0, 'black').map((item, index) => {
                 return item;
             })}
         </Text>;
-        return <View
+        return <Animated.View
 
             style={{
                 backgroundColor: 'white', borderBottomWidth: 0.3,
                 borderBottomColor: '#e8e8e8',
+                transform: [{scale: this.animations.scale}],
             }}>
             <TouchableOpacity
                 onPress={this.props.onPress}
@@ -519,7 +555,12 @@ class OrdersItem extends React.Component {
             <View style={{alignItems: 'flex-end', paddingHorizontal: 10, paddingBottom: 10}}>
                 {status == 1 ?
                     <TouchableOpacity
-                        onPress={this.props.cancelSignUp}
+                        onPress={() => {
+                            this.props.cancelSignUp((bool) => {
+                                bool && this.hideAnimated();
+                                // console.log(bool);
+                            });
+                        }}
                         style={{
                             width: 60, height: 25, justifyContent: 'center',
                             alignItems: 'center', borderRadius: 5,
@@ -544,7 +585,7 @@ class OrdersItem extends React.Component {
                         : null}
             </View>
 
-        </View>;
+        </Animated.View>;
     }
 }
 

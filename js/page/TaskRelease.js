@@ -499,7 +499,7 @@ class TaskRelease extends PureComponent {
                         }}>
                         <SvgUri width={20} fill={'rgba(0,0,0,0.9)'} style={{marginLeft: 5}} height={20}
                                 svgXmlData={task_yulan}/>
-                        <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>预览</Text>
+                        <Text style={{fontSize: hp(2.1), color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>预览</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.5}
@@ -546,7 +546,7 @@ class TaskRelease extends PureComponent {
                             backgroundColor: bottomTheme,
                         }}>
                         <Text style={{
-                            fontSize: 15,
+                            fontSize: hp(2.1),
                             color: 'white',
                             marginLeft: 5,
                         }}>{this.taskInfo.update ? '确认修改' : '申请发布'}</Text>
@@ -563,7 +563,7 @@ class TaskRelease extends PureComponent {
                         height: 30,  paddingHorizontal: 18, justifyContent: 'center',
                         paddingTop: 10,
                     }}>
-                        <Text style={{fontSize: 14}}>{`是否确认此任务的${this.taskInfo.update ? '修改' : '发布'}？`}</Text>
+                        <Text style={{fontSize: hp(2.0),color:'black'}}>{`是否确认此任务的${this.taskInfo.update ? '修改' : '发布'}？`}</Text>
                     </View>
                 </ToastSelect>
             </SafeAreaViewPlus>

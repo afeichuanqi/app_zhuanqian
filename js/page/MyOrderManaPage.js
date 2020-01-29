@@ -319,7 +319,7 @@ class MyOrderManaPage extends PureComponent {
                     }}
                     ref={ref => this.toastSelect = ref}>
                     <View style={{
-                        height: 60, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                        height: 50, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
                         paddingTop: 10,
 
                     }}>

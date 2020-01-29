@@ -4,14 +4,31 @@ import ViewUtil from '../../util/ViewUtil';
 import {bottomTheme} from '../../appSet';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
-import { renderEmoji} from '../../util/CommonUtils';
+import {renderEmoji} from '../../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Animated, {Easing} from 'react-native-reanimated';
 
+const {timing} = Animated;
 const {width} = Dimensions.get('window');
 export default class TaskReleaseItem extends PureComponent {
+    animations = {
+        scale: new Animated.Value(1),
+    };
+    state = {
+        hide: false,
+    };
+
     render() {
         const {item} = this.props;
-        return <View style={{borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)'}}>
+        const {hide} = this.state;
+        if (hide) {
+            return null;
+        }
+        return <Animated.View style={{
+            borderBottomWidth: 0.3,
+            borderBottomColor: 'rgba(0,0,0,0.1)',
+            transform: [{scale: this.animations.scale}],
+        }}>
 
 
             <TouchableOpacity
@@ -34,7 +51,11 @@ export default class TaskReleaseItem extends PureComponent {
                     resizeMode={FastImage.resizeMode.stretch}
                 />
                 <View style={{
-                    height: wp(13), width: width - 70, paddingLeft: 10, paddingRight:5, justifyContent: 'space-between',
+                    height: wp(13),
+                    width: width - 70,
+                    paddingLeft: 10,
+                    paddingRight: 5,
+                    justifyContent: 'space-between',
 
                 }}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -52,7 +73,7 @@ export default class TaskReleaseItem extends PureComponent {
                             }}
                                   numberOfLines={1}
                             >
-                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [],hp(2.3), 0,'black').map((item, index) => {
+                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [], hp(2.3), 0, 'black').map((item, index) => {
                                     return item;
                                 })}
                             </Text>
@@ -69,7 +90,7 @@ export default class TaskReleaseItem extends PureComponent {
                                 justifyContent: 'center',
                                 marginLeft: 3,
                             }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:  hp(1.6)}}>顶</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.6)}}>顶</Text>
                             </View>}
                         </View>
                         {/*价格*/}
@@ -85,11 +106,16 @@ export default class TaskReleaseItem extends PureComponent {
                         {/*标签*/}
                         <View style={{
                             flexDirection: 'row',
-                            alignItems:'center',
-                            justifyContent:'center',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                         }}>
                             <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
-                            <View style={{height:hp(1.6),width:0.5, backgroundColor:'rgba(0,0,0,0.5)', marginHorizontal:7}}/>
+                            <View style={{
+                                height: hp(1.6),
+                                width: 0.5,
+                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                marginHorizontal: 7,
+                            }}/>
                             <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
                         </View>
                         {/*剩余数*/}
@@ -153,7 +179,12 @@ export default class TaskReleaseItem extends PureComponent {
                     }, 'TaskRelease');
                 })}
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                {ViewUtil.getDeleteIco(this.props.deleteTask)}
+                {ViewUtil.getDeleteIco(() => {
+                    this.props.deleteTask((bool) => {
+                        bool && this.hideItem();
+                        // console.log(bool);
+                    });
+                })}
             </View> : item.task_status == 3 ? <View style={{
                 height: 25,
                 paddingVertical: 6,
@@ -174,9 +205,20 @@ export default class TaskReleaseItem extends PureComponent {
                 <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getDeleteIco(this.props.deleteTask)}
             </View> : null}
-        </View>;
+        </Animated.View>;
     }
 
+    hideItem = () => {
+        timing(this.animations.scale, {
+            duration: 500,
+            toValue: 0,
+            easing: Easing.inOut(Easing.ease),
+        }).start(() => {
+            this.setState({
+                hide: true,
+            });
+        });
+    };
     _reViewClick = () => {
         const {item} = this.props;
         this.props.reViewClick(item);

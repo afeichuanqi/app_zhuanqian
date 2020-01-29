@@ -7,13 +7,16 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions,  Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
+
 const {width} = Dimensions.get('window');
 import Animated from 'react-native-reanimated';
-const {SpringUtils,spring} = Animated;
+
+const {SpringUtils, spring} = Animated;
+
 class ToastSelect extends PureComponent {
     constructor(props) {
         super(props);
@@ -23,8 +26,8 @@ class ToastSelect extends PureComponent {
         width: 200,
         height: 500,
         rightTitle: '添加',
-        titleComponent:null,
-        title:'温馨提示'
+        titleComponent: null,
+        title: '温馨提示',
     };
     state = {
         visible: false,
@@ -45,7 +48,7 @@ class ToastSelect extends PureComponent {
             ...SpringUtils.makeDefaultConfig(),
             bounciness: 0,
             speed: 20,
-            toValue:0
+            toValue: 0,
         })).start(() => {
 
 
@@ -58,6 +61,8 @@ class ToastSelect extends PureComponent {
 
     };
     show = () => {
+
+
         this.setState({
             visible: true,
         }, () => {
@@ -65,7 +70,7 @@ class ToastSelect extends PureComponent {
                 ...SpringUtils.makeDefaultConfig(),
                 bounciness: 13,
                 speed: 8,
-                toValue:1
+                toValue: 1,
             })).start();
 
         });
@@ -89,7 +94,7 @@ class ToastSelect extends PureComponent {
             >
                 <TouchableOpacity style={{
                     flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center',
-                    alignItems: 'center', zIndex: 10
+                    alignItems: 'center', zIndex: 10,
                 }}
                                   activeOpacity={1}
                                   onPress={() => {
@@ -97,10 +102,10 @@ class ToastSelect extends PureComponent {
                                   }}
                 >
                     <Animated.View style={[this.props.style, {
-                        transform: [{scale: this.animations.scale}], opacity:this.animations.scale,
-                        backgroundColor:'white',
+                        transform: [{scale: this.animations.scale}], opacity: this.animations.scale,
+                        backgroundColor: 'white',
                         // transform: 1,
-                        borderRadius:4,
+                        borderRadius: 4,
                     }]}>
 
                         <View style={{
@@ -109,11 +114,11 @@ class ToastSelect extends PureComponent {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             paddingHorizontal: 15,
-                            paddingTop:15,
+                            paddingTop: 15,
 
                         }}>
-                            <View style={{flexDirection:'row', alignItems:'flex-end'}}>
-                                <Text style={{fontSize: 16,color: bottomTheme}}>{this.props.title}</Text>
+                            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                                <Text style={{fontSize: 16, color: bottomTheme}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -123,8 +128,9 @@ class ToastSelect extends PureComponent {
                             </TouchableOpacity>
                         </View>
                         {this.props.children}
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between', backgroundColor:'white',
-                            borderBottomLeftRadius:4, borderBottomRightRadius:4,
+                        <View style={{
+                            flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',
+                            borderBottomLeftRadius: 4, borderBottomRightRadius: 4,
                         }}>
                             <TouchableOpacity
                                 activeOpacity={0.6}
@@ -147,7 +153,7 @@ class ToastSelect extends PureComponent {
                                     alignItems: 'center',
                                     height: 50,
                                 }}>
-                                <Text style={{color:'#2196F3'}}>{rightTitle}</Text>
+                                <Text style={{color: '#2196F3'}}>{rightTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </Animated.View>

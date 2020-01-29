@@ -180,6 +180,7 @@ export default class InputBar extends PureComponent {
                                 onContentSizeChange={onContentSizeChange}
                                 underlineColorAndroid='transparent'
                                 onChangeText={(messageContent) => {
+                                    console.log(this.input);
                                     this.setState({
                                         messageContent,
                                     });

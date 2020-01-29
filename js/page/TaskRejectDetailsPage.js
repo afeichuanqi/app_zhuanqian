@@ -104,6 +104,9 @@ class TaskRejectDetailsPage extends PureComponent {
         if (task_status == -3) {
             title += `(已过期)`;
         }
+        if (task_status == -4) {
+            title += `(终审驳回)`;
+        }
 
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, title, null, 'white', 'black', 16, () => {
             NavigationUtils.goPage({

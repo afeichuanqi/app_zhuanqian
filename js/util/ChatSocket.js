@@ -245,7 +245,8 @@ class ChatSocket {
         return true;
     };
     sendToServer = (type, data) => {
-        if (!Global.connectionstatus) {
+        console.log(Global.ws.readyState);
+        if (!Global.connectionstatus && Global.ws.readyState == 3) {
             Global.dispatch(Message.onChangeSocketStatue('正在连接...'));
             Global.ws.reconnect();
             return;

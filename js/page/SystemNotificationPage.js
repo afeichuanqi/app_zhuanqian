@@ -26,6 +26,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {equalsObj, renderEmoji} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -66,7 +67,7 @@ class SystemNotificationPage extends PureComponent {
             pageIndex: this.page.pageIndex,
         }, userinfo.token).then(result => {
             if (isRefresh) {
-                console.log('我被触发isRefresh');
+                // console.log('我被触发isRefresh');
                 this.setState({
                     taskData: result,
                     isLoading: false,
@@ -74,7 +75,7 @@ class SystemNotificationPage extends PureComponent {
                 });
             } else {
                 const tmpArr = [...this.state.taskData];
-                console.log('我被触发onload');
+                // console.log('我被触发onload');
                 this.setState({
                     taskData: tmpArr.concat(result),
                     hideLoaded: result.length >= 10 ? false : true,
@@ -184,7 +185,6 @@ class SystemNotificationPage extends PureComponent {
 
 class NoticeItem extends Component {
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-        console.log(this.state.is_read, 'this.state.is_read != nextState.is_read', nextState.is_read, this.state.is_read != nextState.is_read);
         if (!equalsObj(this.props.item, nextProps.item) || this.state.is_read != nextState.is_read) {
             console.log('被执行');
             return true;
@@ -209,6 +209,11 @@ class NoticeItem extends Component {
                     is_read: 1,
                 });
                 let pageName = '', navigationIndex = 0, type = item.type;
+                if (item.title.indexOf('驳回')!==-1 && item.title.indexOf('终审')!==-1) {
+                    // console.log(item);
+                    NavigationUtils.goPage({sendFormId: item.task_form_id}, 'TaskRejectDetailsPage');
+                    return
+                }
                 if (type > 0 && type <= 3) {
                     pageName = 'TaskReleaseMana';
                     navigationIndex = type - 1;
@@ -237,7 +242,12 @@ class NoticeItem extends Component {
             }}>
             <View>
                 <Text
-                    style={{fontSize: hp(1.6), opacity: 0.5, marginVertical: 10, color: 'black'}}>{item.send_date1}</Text>
+                    style={{
+                        fontSize: hp(1.6),
+                        opacity: 0.5,
+                        marginVertical: 10,
+                        color: 'black',
+                    }}>{item.send_date1}</Text>
             </View>
             <View style={{
                 width: wp(95), backgroundColor: 'white',
@@ -251,7 +261,7 @@ class NoticeItem extends Component {
                     opacity: 0.5,
                     width: wp(90),
                     color: 'black',
-                }}>{renderEmoji(item.content,[],hp(2.0),0).map((item, index) => {
+                }}>{renderEmoji(item.content, [], hp(2.0), 0).map((item, index) => {
                     return item;
                 })}</Text>
                 {is_read == 0 && <View style={{

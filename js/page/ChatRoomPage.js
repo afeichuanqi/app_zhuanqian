@@ -140,7 +140,7 @@ class ChatRoomPage extends React.Component {
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
                     ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
-                    ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+                    // ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
                 } else {
                     this.props.onSetMessageLoad(false);
@@ -338,8 +338,8 @@ class ChatRoomPage extends React.Component {
                         guzhuUserId={this.guzhuUserId}
                     />}
                     {message.msgIsLoad && <View style={{
-                        flexDirection: 'row', zIndex: 1000, position: 'absolute', top: 80, alignItems: 'center',
-                        justifyContent: 'center', width, height: 30,
+                        flexDirection: 'row', zIndex: 1000, position: 'absolute', top: 90, alignItems: 'center',
+                        justifyContent: 'center', width,
                     }}>
                         <ActivityIndicator
                             size="small" color={'black'}/>
@@ -622,16 +622,13 @@ class TaskInfo extends React.Component {
             <View style={{height: wp(15), justifyContent: 'flex-end'}}>
                 <TouchableOpacity
                     onPress={() => {
-                        if (columnType == 2 || columnType == 3) {
+                        if (columnType == 2 || columnType == 3 || columnType == 5) {
                             NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
                         }
 
                         if (columnType == 1) {
 
                             NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
-                        }
-                        if (columnType == 5) {
-                            NavigationUtils.goPage({sendFormId: this.props.sendFormId}, 'TaskRejectDetailsPage');
                         }
 
                     }

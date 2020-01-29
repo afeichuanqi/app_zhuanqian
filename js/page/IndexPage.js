@@ -38,7 +38,6 @@ import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 import FastImagePro from '../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import Toast from "react-native-root-toast";
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;

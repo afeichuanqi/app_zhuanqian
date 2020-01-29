@@ -17,9 +17,9 @@ import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../res/svg/phone_input_clear.svg';
 import gantanhao from '../res/svg/gantanhao.svg';
 import {isPoneAvailable} from '../util/CommonUtils';
-// import *as wechat from 'react-native-wechat';
 import {sendSms} from '../util/AppService';
 import BackPressComponent from '../common/BackPressComponent';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {width, height} = Dimensions.get('window');
 
@@ -106,7 +106,7 @@ class LoginPage extends PureComponent {
                     <Text style={{
                         marginTop: 40,
                         marginLeft: 40,
-                        fontSize: 20,
+                        fontSize: hp(2.7),
                         color: 'black',
                     }}>账号登录</Text>
                     <View style={{width, justifyContent: 'center', alignItems: 'center', marginTop: 80}}>
@@ -132,7 +132,7 @@ class LoginPage extends PureComponent {
                                 borderRadius: 30,
                                 // opacity: 0.3,
                             }]}>
-                            <Text style={{color: 'white', fontSize: 17}}>获取验证码</Text>
+                            <Text style={{color: 'white', fontSize: hp(2.3)}}>获取验证码</Text>
                         </TouchableOpacity>
                         {/*遮挡物*/}
                         <View
@@ -155,39 +155,22 @@ class LoginPage extends PureComponent {
                         alignItems: 'center',
                         flexDirection: 'row',
                     }}>
-                        <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.5)'}}>登录即代表已阅读并同意</Text>
-                        <Text style={{fontSize: 11, color: bottomTheme}}>用户服务协议</Text>
-                        <Text style={{fontSize: 11, color: 'rgba(0,0,0,0.5)'}}>即</Text>
-                        <Text style={{fontSize: 11, color: bottomTheme}}>隐私协议</Text>
+                        <Text style={{fontSize: hp(1.5), color: 'rgba(0,0,0,0.5)'}}>登录即代表已阅读并同意</Text>
+                        <TouchableOpacity
+                            onPress={()=>{
+                                NavigationUtils.goPage({type: 3}, 'UserProtocol');
+                            }}
+                        >
+                            <Text style={{fontSize:  hp(1.5), color: bottomTheme}}>用户服务协议</Text>
+                        </TouchableOpacity>
+                        <Text style={{fontSize:  hp(1.5), color: 'rgba(0,0,0,0.5)'}}>即</Text>
+                        <Text style={{fontSize:  hp(1.5), color: bottomTheme}}>隐私协议</Text>
                     </View>
                 </View>
 
             </SafeAreaViewPlus>
         );
     }
-
-    // WXLogin = () => {
-    //     let scope = 'snsapi_userinfo';
-    //     let state = 'wechat_sdk_demo';
-    //     //判断微信是否安装
-    //     wechat.isWXAppInstalled()
-    //         .then((isInstalled) => {
-    //             if (isInstalled) {
-    //                 //发送授权请求
-    //                 wechat.sendAuthRequest(scope, state)
-    //                     .then(responseCode => {
-    //                         //返回code码，通过code获取access_token
-    //                         // this.getAccessToken(responseCode.code);
-    //                         alert('111');
-    //                     })
-    //                     .catch(err => {
-    //                         alert('登录授权发生错误：');
-    //                     });
-    //             } else {
-    //                 alert('没有安装微信')
-    //             }
-    //         });
-    // };
     _getCode = () => {
         this.phoneInput.onBlur();
         // this.WXLogin();
@@ -268,7 +251,7 @@ class PhoneInput extends PureComponent {
                 // multiline = {false}
                 style={{
                     width: width - 80,
-                    fontSize: 15,
+                    fontSize: hp(2),
                     color: 'rgba(0,0,0,0.8)',
                     padding: 0,
                     height: 30,

@@ -888,11 +888,7 @@ class ChatWindow extends PureComponent {
                     let emojiIndex = messageContent.search(emojiReg); // 匹配到的第一个表情符位置
                     let preStr = messageContent.substring(0, this.cursorIndex);
                     let nextStr = messageContent.substring(this.cursorIndex);
-                    if (emojiIndex === -1) { // 没有匹配到表情符
-                        lastText = preStr.substring(0, preStr.length - 1) + nextStr;
-                    } else {
-                        lastText = preStr.substring(0, preStr.length - 1) + nextStr;
-                    }
+                    lastText = preStr.substring(0, preStr.length - 1) + nextStr
                     this.cursorIndex=preStr.length - 1;
                 } else { // 光标在字符串最后
                     let lastChar = messageContent.charAt(currentTextLength - 1);

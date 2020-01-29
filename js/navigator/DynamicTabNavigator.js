@@ -116,11 +116,12 @@ class BottomBar extends Component {
         const {nav} = this.props;
         if (nav.routes[0].index === 0) {
             if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+                Global.ws.close();
                 RNExitApp.exitApp();
                 return false;
             }
             this.lastBackPressed = Date.now();
-            Global.ws.close();
+
             Toast.show('再按一次退出程序');
             return true;//默认行为
         }
@@ -163,7 +164,6 @@ class BottomBar extends Component {
             ) {
                 this.setStatusBar('translucent');
             } else if (type === 'Navigation/BACK' && activeRouterName === 'ShopInfoPage') {
-                // console.log(preRouterName);
                 const isFind = this.backSetBarStylePages.findIndex(item => preRouterName == item);
                 if (isFind !== -1) {
                     this.setStatusBar('dark');

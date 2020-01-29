@@ -47,6 +47,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const {timing} = Animated;
 
 class TaskReleaseMana extends Component {
     constructor(props) {
@@ -304,7 +305,7 @@ class FristListComponent extends PureComponent {
             });
         });
     };
-
+    deleteTaskCallback = null;
     _renderIndexPath = ({item, index}) => {
         return <TaskReleaseItem
             setTopClick={() => {
@@ -313,29 +314,34 @@ class FristListComponent extends PureComponent {
             setRecommendClick={() => {
                 this.taskRecommend.show(item);
             }}
-            deleteTask={() => {
+            deleteTask={(callback) => {
                 this.deleteTaskId = item.id;
+                this.deleteTaskCallback = callback;
                 this.toastSelect.show();
             }}
-            onPress={() => {
-                if (item.task_status == 1) {
-                    NavigationUtils.goPage({
-                        task_id: item.id,
-                        updateReleasePage: this._updateList,
-                        test: false,
-                    }, 'TaskDetails');
-                } else {
-                    NavigationUtils.goPage({taskid: item.id, updateReleasePage: this._updateList}, 'MyOrderManaPage');
-
-                }
+            onPress={()=>{
+                this._itemPress(item)
             }}
             updateTaskUpdateTime={() => {
                 this._updateTaskUpdateTime(item);
             }}
             task_status={this.props.task_status}
-            reViewClick={this._itemClick}
+            reViewClick={this._reViewItemClick}
             item={item}
             key={item.id}/>;
+    };
+    hideItemLength = 0;
+    _itemPress = (item) => {
+        if (item.task_status == 1) {
+            NavigationUtils.goPage({
+                task_id: item.id,
+                updateReleasePage: this._updateList,
+                test: false,
+            }, 'TaskDetails');
+        } else {
+            NavigationUtils.goPage({taskid: item.id, updateReleasePage: this._updateList}, 'MyOrderManaPage');
+
+        }
     };
     _updateTaskUpdateTime = (item) => {
         updateTaskUpdateTime({task_id: item.id}, this.props.userinfo.token).then(result => {
@@ -344,8 +350,24 @@ class FristListComponent extends PureComponent {
             Toast.show(msg);
         });
     };
-    _itemClick = (item) => {
+    _reViewItemClick = (item) => {
         NavigationUtils.goPage({task_id: item.id, status: 0, taskUri: item.task_uri}, 'MyTaskReview');
+    };
+    _sureDelTask = () => {
+        const callback = this.deleteTaskCallback;
+        deleteTaskRelease({task_id: this.deleteTaskId}, this.props.userinfo.token).then(result => {
+            callback(true);
+            this.hideItemLength += 1;
+            if (this.hideItemLength >= this.state.taskData.length) {
+                setTimeout(() => {
+                    this._updateList(true);
+                }, 300);
+            }
+
+        }).catch(msg => {
+            callback(false);
+        });
+        this.toastSelect.hide();
     };
 
     genIndicator(hideLoaded) {
@@ -372,8 +394,39 @@ class FristListComponent extends PureComponent {
     params = {
         pageIndex: 0,
     };
+    _sureTopClick = (item, topNum) => {
+        userSetTaskTop({
+            top_num: topNum,
+            task_id: item.id,
+        }, this.props.userinfo.token).then(data => {
+            setTimeout(() => {
+                Toast.show(`置顶到期时间:` + data.expTime, 2000);
+                // this._updateList(true);
+            }, 300);
+
+        }).catch(msg => {
+            setTimeout(() => {
+                Toast.show(msg);
+            }, 300);
+        });
+    };
+    _sureRecommendClick = (item, topNum) => {
+        userSetTaskRecommend({
+            recommend_num: topNum,
+            task_id: item.id,
+        }, this.props.userinfo.token).then(data => {
+            setTimeout(() => {
+                Toast.show(`推荐到期时间:` + data.expTime, 2000);
+                // this._updateList(true);
+            }, 300);
 
 
+        }).catch(msg => {
+            setTimeout(() => {
+                Toast.show(msg);
+            }, 300);
+        });
+    };
     render() {
         const {taskData, isLoading, hideLoaded} = this.state;
 
@@ -414,17 +467,10 @@ class FristListComponent extends PureComponent {
                     this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                 }}
             />
+            {/*删除任务确定*/}
             <ToastSelect
                 rightTitle={'确认'}
-                sureClick={() => {
-                    // console.log(this.deleteTaskId);
-                    deleteTaskRelease({task_id: this.deleteTaskId}, this.props.userinfo.token).then(result => {
-                        this._updateList(true);
-                    }).catch(msg => {
-                        //console.log(msg);
-                    });
-                    this.toastSelect.hide();
-                }}
+                sureClick={this._sureDelTask}
                 ref={ref => this.toastSelect = ref}>
                 <View style={{
                     height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
@@ -436,44 +482,20 @@ class FristListComponent extends PureComponent {
             </ToastSelect>
             <ToastTaskTopRecommend
                 sureTopClick={(item, topNum) => {
-                    userSetTaskTop({
-                        top_num: topNum,
-                        task_id: item.id,
-                    }, this.props.userinfo.token).then(data => {
-                        setTimeout(() => {
-                            Toast.show(`置顶到期时间:` + data.expTime, 2000);
-                            // this._updateList(true);
-                        }, 300);
-
-                    }).catch(msg => {
-                        setTimeout(() => {
-                            Toast.show(msg);
-                        }, 300);
-                    });
+                    this.this.sureTopClick(item, topNum);
                 }}
                 title={'置顶任务'} ref={ref => this.taskTop = ref}/>
             <ToastTaskTopRecommend
                 type={2}
                 sureTopClick={(item, topNum) => {
-                    userSetTaskRecommend({
-                        recommend_num: topNum,
-                        task_id: item.id,
-                    }, this.props.userinfo.token).then(data => {
-                        setTimeout(() => {
-                            Toast.show(`推荐到期时间:` + data.expTime, 2000);
-                            // this._updateList(true);
-                        }, 300);
-
-
-                    }).catch(msg => {
-                        setTimeout(() => {
-                            Toast.show(msg);
-                        }, 300);
-                    });
+                    this._sureRecommendClick(item, topNum);
                 }}
                 title={'推荐任务'} ref={ref => this.taskRecommend = ref}/>
         </View>;
     }
+
+
+
 }
 
 export default TaskReleaseManaRedux;
