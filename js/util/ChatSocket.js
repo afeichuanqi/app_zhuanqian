@@ -2,11 +2,11 @@ import types from '../action/Types';
 import Message from '../action';
 import ReconnectingWebSocket from './ReconnectingWebSocket';
 import Global from '../common/Global';
-
+import Toast from 'react-native-root-toast';
 class ChatSocket {
 
     isVerifyIdentIdy = false;
-
+    historyMegLen = 0;
     connctionServer = () => {
         if (typeof Global.dispatch != 'function') {
             return;
@@ -44,6 +44,7 @@ class ChatSocket {
                             return;
                         }
                         Global.dispatch(Message.onChangeSocketStatue('刷新重连...'));
+                        Toast.show('聊天连接已经断开了哦 ~ ~');
                     }, self.timeout);
                 }, this.timeout);
             },
@@ -114,12 +115,15 @@ class ChatSocket {
                     //收到回调进行未读消息数回调
                     break;
                 case types.MESSAGE_SET_USER_ID_IS_READ_SUCCESS:
-                    // console.log(data.FriendId, data.columnType,'read -success')
 
                     break;
                 case types.MESSAGE_GET_FRIENDUSERID_ALL_MES_SUCCESS:
-                    Global.dispatch(Message.onSetMessageLoad(false));
+                    if (this.historyMegLen + 10 > data.msgArr.length
+                    ) {
+                        Global.dispatch(Message.onSetMessageLoad(false));
+                    }
                     if (data.msgArr && data.msgArr.length > 0) {
+                        this.historyMegLen = data.msgArr.length;
                         Global.dispatch(Message.onGetMegForUserid(data.msgArr));
                     }
                     break;
@@ -156,6 +160,7 @@ class ChatSocket {
         //连接关闭的时候触发
         Global.ws.onclose = (e) => {
             console.log(e);
+            Toast.show('聊天连接已经断开了哦 ~ ~');
             Global.connectionstatus = false;
             if (typeof Global.dispatch != 'function') {
                 return;
@@ -165,6 +170,7 @@ class ChatSocket {
         };
         Global.ws.onerror = (e) => {
             console.log('onerror', e);
+            Toast.show('聊天连接发生错误 ~ ~');
             // console.log(e);
             Global.connectionstatus = false;
             if (typeof Global.dispatch != 'function') {
@@ -176,6 +182,9 @@ class ChatSocket {
 
     //验证身份
     verifyIdentidy = () => {
+        if (Global.ws.readyState === 2 || Global.ws.readyState === 3) {
+            Global.ws.reconnect();
+        }
         if (!Global.connectionstatus) {
             return;
         }
@@ -215,6 +224,9 @@ class ChatSocket {
         this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {friendId, pageCount});
 
     };
+    setMsgLength = (historyMegLen) => {
+        this.historyMegLen = historyMegLen;
+    };
     //设置我和fromuserinf的消息为已经读区
     setFromUserIdMessageIsRead = (FriendId, columnType) => {
         Global.dispatch(Message.onSetAllFriendUnRead(FriendId, columnType));
@@ -245,7 +257,7 @@ class ChatSocket {
         return true;
     };
     sendToServer = (type, data) => {
-        console.log(Global.ws.readyState);
+        // console.log(Global.ws.readyState);
         if (!Global.connectionstatus && Global.ws.readyState == 3) {
             Global.dispatch(Message.onChangeSocketStatue('正在连接...'));
             Global.ws.reconnect();

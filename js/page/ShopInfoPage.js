@@ -58,9 +58,9 @@ class ShopInfoPage extends PureComponent {
             val: new Animated.Value(1),
         };
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
-        StatusBar.setBarStyle('light-content', true);
-        StatusBar.setTranslucent(true);
-        StatusBar.setBackgroundColor('rgba(0,0,0,0)', true);
+        // StatusBar.setBarStyle('light-content', true);
+        // StatusBar.setTranslucent(true);
+        // StatusBar.setBackgroundColor('rgba(0,0,0,0)', true);
 
     }
 
@@ -72,6 +72,10 @@ class ShopInfoPage extends PureComponent {
     componentDidMount() {
         this.backPress.componentDidMount();
         this.updateShopInfo(this.params.userid);
+        StatusBar.setBarStyle('light-content', true);
+        StatusBar.setTranslucent(true);
+        StatusBar.setBackgroundColor('rgba(0,0,0,0)', true);
+
         EventBus.getInstance().addListener(EventTypes.update_shopInfo_page, this.listener = data => {
             this.updateShopInfo(data.userId);
         });

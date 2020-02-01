@@ -76,6 +76,7 @@ class ChatRoomPage extends React.Component {
 
 
         };
+        ChatSocket.setMsgLength(0);
     }
 
     pageCount = 10;
@@ -159,7 +160,10 @@ class ChatRoomPage extends React.Component {
 
     componentWillUnmount(): void {
         this.backPress.componentWillUnmount();
-        ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+        if (this.FriendId) {
+            ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
+        }
+
         if (this.columnType == 1 || this.columnType == 5) {
 
         } else if (this.columnType == 2 || this.columnType == 3) { //诉求信息
@@ -202,13 +206,10 @@ class ChatRoomPage extends React.Component {
                 if (fromId.toString().startsWith('admin|')) {
 
                     const userinfos = fromId.split('|');
-                    if (userinfos.length == 0) {
-                        return {
-                            id: id,
-                            username: id.startsWith('admin:') ? `管理员${id}` : '未知',
-                            avatar_url: 'http://wenjian.5irenqi.com/admin_ava',
-                            isSelf: false,
-                        };
+                    if (userinfos.length == 1) {
+                        userinfos.push('18'); //userId
+                        userinfos.push('客服');//username
+                        userinfos.push('http://wenjian.5irenqi.com/admin_ava');//avatar_url
                     }
                     const userId = userinfos[1];
                     const username = userinfos[2];
@@ -292,7 +293,8 @@ class ChatRoomPage extends React.Component {
     };
 
     onRefresh = () => {
-        if (this.getMessages().length >= 10) {
+        //当消息等于10条 和还有新得消息的时候 才让加载更多
+        if (this.getMessages().length >= 10 && this.props.message.msgIsLoad) {
             this.pageCount += 10;
             this.props.onSetMessageLoad(true);
             ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
@@ -303,8 +305,22 @@ class ChatRoomPage extends React.Component {
         this.columnType = 2;
         this._updatePage(this.columnType, this.task_id, this.fromUserinfo.id);
     };
+    msgArr = [];
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.props.message.msgIsLoad !== nextProps.message.msgIsLoad ||
+            this.msgArr != nextProps.message.msgArr
+        ) {
+            if (!equalsObj(this.msgArr, nextProps.message.msgArr)) {
+                this.msgArr = nextProps.message.msgArr;
+            }
+            return true;
+        }
+        return false;
+    }
 
     render() {
+        // console.log('render');
         const {userinfo, message} = this.props;
         let statusBar = {
             hidden: false,
@@ -337,23 +353,27 @@ class ChatRoomPage extends React.Component {
                         sendFormId={this.sendFormId}
                         guzhuUserId={this.guzhuUserId}
                     />}
-                    {message.msgIsLoad && <View style={{
-                        flexDirection: 'row', zIndex: 1000, position: 'absolute', top: 90, alignItems: 'center',
-                        justifyContent: 'center', width,
-                    }}>
-                        <ActivityIndicator
-                            size="small" color={'black'}/>
-                        <Text style={{color: 'rgba(0,0,0,0.5)', marginLeft: 5}}>加载中...</Text>
-                    </View>}
+                    {/*//当首次显示的时候 顶部的显示*/}
+                    {(message.msgIsLoad && msgList.length === 0) && <LoadIng isAbsolute={true}/>}
                     <NewMessage
                         ref={ref => this.newMessage = ref}
                     />
                     <ChatScreen
                         rightMessageTextStyle={{color: 'black'}}
                         leftMessageTextStyle={{color: 'black'}}
-                        // renderLoadEarlier={() => {
-                        //     return <View style={{height: message.msgIsLoad ? 30 : 0, backgroundColor:'red'}}/>;
-                        // }}
+                        renderLoadEarlier={() => {
+                            // console.log(msgList.length);
+                            if (msgList.length === 0) { //当首次显示的时候 下面的不显示
+                                return null;
+                            }
+                            // console.log(message.msgIsLoad, 'message.msgIsLoad');
+                            if (message.msgIsLoad) {
+                                return <LoadIng/>;
+                            } else {
+                                return <LoadIng showNoMore={true}/>;
+                            }
+
+                        }}
                         renderErrorMessage={(messageStatus) => {
                             let statusText = '';
                             if (messageStatus === -1) {
@@ -502,6 +522,45 @@ class ChatRoomPage extends React.Component {
 
     };
 
+}
+
+class LoadIng extends React.Component {
+    static defaultProps = {
+        isAbsolute: false,
+        showNoMore: false,
+    };
+
+    constructor(props) {
+        super(props);
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        if (this.props.isAbsolute !== nextProps.isAbsolute
+            || this.props.showNoMore !== nextProps.showNoMore
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    render() {
+        const {isAbsolute, showNoMore} = this.props;
+        console.log('render');
+        return <View style={[{
+            zIndex: 1000, alignItems: 'center',
+            justifyContent: 'center', width,
+            marginVertical: 10,
+        }, isAbsolute && {position: 'absolute', top: 90}]}>
+            {showNoMore ? <Text style={{color: 'rgba(0,0,0,0.5)', marginLeft: 5, fontSize: hp(1.6)}}>没有更多了
+                (¬､¬) </Text> : <View style={{flexDirection: 'row'}}>
+                <ActivityIndicator
+                    size="small" color={'black'}/>
+                <Text style={{color: 'rgba(0,0,0,0.5)', marginLeft: 5}}>加载中...</Text>
+            </View>}
+
+        </View>;
+    }
 }
 
 class TaskInfo extends React.Component {

@@ -16,14 +16,6 @@ const {width} = Dimensions.get('window');
 
 class TaskSumComponent extends Component {
 
-
-    // isZuijinTime = (date) => {
-    //     const newDate = new Date(date);
-    //     const str = newDate.getTime();
-    //     const now = Date.now();
-    //     return str > (now - 5 * 60 * 1000);
-    //
-    // };
     static defaultProps = {
         titleFontSize: 15,
         marginHorizontal: 10,
@@ -59,15 +51,42 @@ class TaskSumComponent extends Component {
         return false;
     }
 
-    render() {
-        const {item} = this.props;
-        let maxWidth = width - 100;
+    getItemTextColor = (item) => {
+        let textArr = [];
+        let color = '';
         if (item.recommendIsExp == 1) {
-            maxWidth -= 40;
+            textArr.push('推荐');
+            color = '#73bc9e';
         }
         if (item.topIsExp == 1) {
-            maxWidth -= 40;
+            textArr.push('置顶');
+            color = '#bf4759';
         }
+        if (item.hotIsExp == 1) {
+            textArr.push('热门');
+            color = '#cc689a';
+        }
+        if (item.bestNew == 1) {
+            textArr.push('最新');
+            color = '#53a6d9';
+        }
+        return {
+            text: textArr.join('/'),
+            color,
+        };
+    };
+
+    render() {
+        const {item} = this.props;
+        console.log(item);
+        const labelBoxStyle = this.getItemTextColor(item);
+        // let maxWidth = width - 100;
+        // if (item.recommendIsExp == 1) {
+        //     maxWidth -= 40;
+        // }
+        // if (item.topIsExp == 1) {
+        //     maxWidth -= 40;
+        // }
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
@@ -75,191 +94,185 @@ class TaskSumComponent extends Component {
                 this.props.onPress && this.props.onPress(item.taskId);
             }}
             style={{
-                alignItems: 'center',
-                backgroundColor: 'white',
-                borderBottomWidth: wp(0.2),
-                borderBottomColor: '#e2e2e2',
+
+                backgroundColor: '#fbfbfb',
+                borderRadius: 10,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 10,
+                paddingVertical: 10,
+                width: width - 10,
+                alignSelf: 'center',
+                paddingHorizontal: 10,
+                // borderRadius:10,
+
             }}
         >
-
-            <View style={{
-                width: wp(96), paddingLeft: wp(2.7), justifyContent: 'space-between', overflow: 'hidden',
-                paddingVertical: hp(1.7), paddingBottom: hp(2.4),
-
-            }}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                    {/*标题*/}
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}>
-                        <Text
-                            numberOfLines={1}
-                            style={{
-                                fontSize: hp(2.25),
-                                color: 'black',
-                                maxWidth: maxWidth,
-                                marginRight: wp(2.7),
-                            }}>
-                            {item && renderEmoji(item.taskTitle, [], hp(2.25), 0,'black').map((item, index) => {
-                                return item;
-                            })}
-                        </Text>
-
-                        {item.recommendIsExp == 1 && <View style={styles.labelStyle}>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: hp(1.6)}}>推荐</Text>
-                        </View>}
-
-
-                        {item.topIsExp == 1 && <View style={styles.labelStyle}>
-                            <Text style={{color: bottomTheme, fontWeight: 'bold', fontSize: hp(1.6)}}>置顶</Text>
-                        </View>}
-                    </View>
-                    {/*价格*/}
-                    <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
-                        <Text style={{
-                            fontSize: hp(2.6),
-                            color: 'red',
-                            marginRight: wp(0.3),
-                        }}>{item.rewardPrice}</Text>
-                        <Text style={{
-                            fontSize:  hp(1.8),
-                            color: 'red',
-                            fontWeight: '500',
-                            top: wp(0.5),
-                        }}>元</Text>
-                    </View>
-                </View>
-                {/*剩余数*/}
-
-                <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: wp(2),
-                }}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={{
-                            fontSize: hp(2.3),
-                            color: bottomTheme,
-                            bottom: hp(0.2),
-                        }}>{parseInt(item.taskPassNum)}</Text>
-                        <Text style={{
-                            fontSize: hp(1.75),
-                            color: 'rgba(0,0,0,0.7)',
-                        }}>人已完成</Text>
-                    </View>
-
-                    <View
-                        style={{
-                            width: 0.5,
-                            height: hp(1.8),
-                            backgroundColor: 'rgba(0,0,0,0.5)',
-                            marginHorizontal: wp(2),
-                        }}/>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={{
-                            fontSize: hp(1.75),
-                            color: 'rgba(0,0,0,0.7)',
-                        }}>剩余</Text>
-                        <Text style={{
-                            fontSize: hp(2.3),
-                            color: 'red',
-                            bottom: hp(0.2),
-                        }}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
-                        <Text style={{
-                            fontSize: hp(1.75),
-                            color: 'rgba(0,0,0,0.7)',
-                        }}>个名额</Text>
-                    </View>
-
-                </View>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginTop: hp(1),
-                    }}>
-                    {/*标签*/}
-                    <View style={{
-                        flexDirection: 'row',
-                    }}>
-                        <LabelBigComponent
-                            contaiStyle={{backgroundColor: '#fafafa'}}
-                            // textStyle={{color: '#2196F3'}}
-                            paddingHorizontal={wp(2)}
-                            fontSize={hp(1.70)}
-                            title={item.typeTitle}/>
-                        <LabelBigComponent
-                            contaiStyle={{backgroundColor: '#fafafa'}}
-                            // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}
-                            // textStyle={{color: '#2196F3'}}
-                            paddingHorizontal={wp(2)}
-                            fontSize={hp(1.70)} title={item.taskName}/>
-                    </View>
-                </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => {
                         Global.imageViewModal.show([{url: item.taskUri}], '', this.props.statusBarType);
                     }}
-                    style={{
-                        position: 'absolute',
-                        top: hp(6.5),
-                        right: wp(1),
-                    }}
+                    style={{}}
                 >
                     <FastImagePro
                         style={{
                             backgroundColor: '#E8E8E8',
-                            width: wp(15),
-                            height: wp(15),
-                            borderRadius: 2,
+                            width: hp(11),
+                            height: hp(11),
+                            borderRadius: 5,
 
                         }}
-                        loadingWidth={wp(15)}
-                        loadingHeight={wp(15)}
+                        loadingWidth={hp(10)}
+                        loadingHeight={hp(10)}
                         source={{uri: item.taskUri}}
-                        // resizeMode={FastImage.resizeMode.stretch}
                     />
                 </TouchableOpacity>
+                <View style={{
+                    width: wp(55), paddingLeft: wp(2.7), overflow: 'hidden',
+                }}>
+                    <Text
+                        numberOfLines={1}
+                        style={{
+                            fontSize: hp(2.25),
+                            color: 'black',
+                            maxWidth: wp(55),
 
-                <TouchableOpacity
-                    onPress={() => {
-                        NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
-                    }}
-                    style={{
-                        marginTop: wp(2),
+                        }}>
+                        {item && renderEmoji(item.taskTitle, [], hp(2.2), 0, 'black', {}).map((item, index) => {
+                            return item;
+                        })}
+                    </Text>
+                    {/*剩余数*/}
+
+                    <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
+                        marginTop: hp(0.5),
                     }}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View>
-                            <FastImagePro
-                                loadingHeight={wp(4.5)}
-                                loadingWidth={wp(4.5)}
-                                style={[styles.imgStyle]}
-                                source={{uri: item.avatarUrl}}
-                            />
-                            <SvgUri style={{
-                                position: 'absolute',
-                                right: -wp(0.5),
-                                bottom: -wp(0.5),
-                                backgroundColor: item.sex == 0 ? '#3b8ae8' : '#e893d8',
-                                borderRadius: 20,
-
-                            }} fill={'white'} width={wp(2.8)} height={wp(2.8)}
-                                    svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={styles.bigFontStyle}>{parseInt(item.taskPassNum)}</Text>
+                            <Text style={styles.smallFontStyle}>人已完成</Text>
                         </View>
-                        <Text style={{
-                            fontSize: hp(1.8),
-                            marginLeft: wp(3.2),
-                            color: 'rgba(0,0,0,0.8)',
-                        }}>{item.userName}</Text>
+
+                        <View
+                            style={styles.fengefu}/>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={styles.smallFontStyle}>剩余</Text>
+                            <Text
+                                style={[styles.bigFontStyle, {color: 'red'}]}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
+                            <Text style={styles.smallFontStyle}>个名额</Text>
+                        </View>
+
                     </View>
-                </TouchableOpacity>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginTop:hp(0.5)
+                        }}>
+                        {/*标签*/}
+                        <View style={{
+                            flexDirection: 'row',
+                        }}>
+                            <View style={styles.boxStyle}>
+                                <Text style={{fontSize: hp(1.3), color: 'rgba(0,0,0,0.5)'}}>{item.typeTitle}</Text>
+                            </View>
+                            <View style={[styles.boxStyle, {marginLeft: 5}]}>
+                                <Text style={{fontSize: hp(1.3), color: 'rgba(0,0,0,0.5)'}}>{item.taskName}</Text>
+                            </View>
+                            {/*<LabelBigComponent*/}
+                            {/*    contaiStyle={styles.contaiStyle}*/}
+                            {/*    textStyle={{fontWeight:'500',color:'black'}}*/}
+                            {/*    paddingHorizontal={wp(1.5)}*/}
+                            {/*    fontSize={hp(1.3)}*/}
+                            {/*    title={item.typeTitle}/>*/}
+                            {/*<LabelBigComponent*/}
+                            {/*    contaiStyle={styles.contaiStyle}*/}
+                            {/*    textStyle={{fontWeight:'500',color:'black'}}*/}
+                            {/*    // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}*/}
+                            {/*    // textStyle={{color: '#2196F3'}}*/}
+                            {/*    paddingHorizontal={wp(1.5)}*/}
+                            {/*    fontSize={hp(1.3)}*/}
+                            {/*    title={item.taskName}/>*/}
+                        </View>
+                    </View>
+
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
+                        }}
+                        style={{
+                            marginTop: hp(1),
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <View>
+                                <FastImagePro
+                                    loadingHeight={hp(1.5)}
+                                    loadingWidth={hp(1.5)}
+                                    style={[styles.imgStyle]}
+                                    source={{uri: item.avatarUrl}}
+                                />
+                                <SvgUri style={{
+                                    position: 'absolute',
+                                    right: -wp(0.5),
+                                    bottom: -wp(0.5),
+                                    backgroundColor: item.sex == 0 ? '#3b8ae8' : '#e893d8',
+                                    borderRadius: 20,
+
+                                }} fill={'white'} width={wp(2.8)} height={wp(2.8)}
+                                        svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
+                            </View>
+                            <Text style={{
+                                fontSize: hp(1.65),
+                                marginLeft: wp(2),
+
+                                color: 'rgba(0,0,0,0.8)',
+                                letterSpacing:0.5,
+                            }}>{item.userName}</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
+            {/*价格*/}
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={{
+                    fontSize: hp(2.1),
+                    color: '#e6493b',
+                    fontWeight: '700',
+                    top: hp(0.5),
+                }}>￥</Text>
+                <Text style={{
+                    fontSize: hp(4.3),
+                    color: '#e6493b',
+                    fontWeight: '700',
+                    // marginRight: wp(0.3),
+                }}>{item.rewardPrice}</Text>
+
+            </View>
+            {labelBoxStyle.text.length>0 && <View style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                backgroundColor: labelBoxStyle.color,
+                paddingHorizontal: 5,
+                paddingVertical: 3,
+                borderTopRightRadius: 10,
+                borderBottomLeftRadius: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                maxWidth:wp(35),
+                minWidth:wp(18),
+
+            }}>
+                <Text style={{fontSize: hp(1.8), color: 'white',letterSpacing:0.5,}}>{labelBoxStyle.text}</Text>
+            </View>}
 
         </TouchableOpacity>;
 
@@ -273,8 +286,8 @@ export default TaskSumComponent;
 const styles = StyleSheet.create({
     imgStyle: {
         backgroundColor: '#E8E8E8',
-        width: wp(5.3),
-        height: wp(5.3),
+        width: hp(2.5),
+        height: hp(2.5),
         borderRadius: wp(5.3) / 2,
     },
     labelStyle: {
@@ -286,5 +299,36 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 5,
+    },
+    smallFontStyle: {
+        letterSpacing:0.5,
+        fontSize: hp(1.4),
+        color: 'rgba(0,0,0,0.8)',
+    },
+    bigFontStyle: {
+        fontSize: hp(2.1),
+        color: bottomTheme,
+        bottom: hp(0.2),
+        // fontWeight: '500',
+    },
+    fengefu: {
+        width: 0.5,
+        fontWeight: '500',
+        height: hp(1.3),
+        backgroundColor: 'rgba(0,0,0,1)',
+        marginHorizontal: wp(1),
+    },
+    contaiStyle: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#cecccd',
+    },
+    boxStyle: {
+        paddingHorizontal: 5,
+        paddingVertical: 1,
+        borderWidth: 0.5,
+        borderColor: 'rgba(0,0,0,0.5)',
+        borderRadius: 10,
     },
 });

@@ -175,8 +175,8 @@ class HomePage extends PureComponent {
                             handleIndexChange={this.handleIndexChange}
                             bounces={true}
                             titleMarginHorizontal={8}
-                            activeStyle={{fontSize: 14, color: [0, 0, 0]}}
-                            inactiveStyle={{fontSize: 12, color: [95, 95, 95], height: 10}}
+                            activeStyle={{fontSize: hp(2), color: [0, 0, 0]}}
+                            inactiveStyle={{fontSize: hp(1.8), color: [95, 95, 95], height: 10}}
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
 
@@ -375,8 +375,8 @@ class FristListComponent extends PureComponent {
     render() {
 
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, lunboHeight - 30],
-            outputRange: [lunboHeight + 220, lunboHeight + 10, 40],
+            inputRange: [-220, 0, lunboHeight - 35],
+            outputRange: [lunboHeight + 230, lunboHeight + 10, 45],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -384,6 +384,7 @@ class FristListComponent extends PureComponent {
         }}>
             <View style={{height: 30}}/>
             <FlatListCommonUtil
+
                 EmptyHeight={height - hp(43)}
                 statusBarType={'dark'}
                 pageSize={30}
@@ -405,23 +406,20 @@ class FristListComponent extends PureComponent {
                 ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 40, justifyContent: 'space-between', position: 'absolute', top: -20,
-                backgroundColor: 'white', transform: [{translateY: columnTop}],
+                width, height: 45,  position: 'absolute', top: -20, alignItems:'flex-start', justifyContent:'center',
+                backgroundColor: 'white', transform: [{translateY: columnTop}],left:10
             }}>
-                <Text
-                    style={{
-                        fontSize: wp(3.2),
-                        color: bottomTheme,
-                        marginLeft: wp(3.2),
-                        marginTop: hp(2.4),
-                    }}>为您推荐</Text>
+                <View style={{  alignItems:'center',
+                    paddingHorizontal:5, paddingVertical:4
 
-                <View style={{
-                    width: wp(3.2) * 4 * 0.93,
-                    backgroundColor: bottomTheme,
-                    height: 2,
-                    marginLeft: wp(3.6),
-                }}/>
+                }}>
+                    <Text
+                        style={{
+                            fontSize: hp(2.15),
+                            color: bottomTheme,
+                        }}>为您推荐</Text>
+                    <View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>
+                </View>
             </Animated.View>
         </Animated.View>;
     }
@@ -491,7 +489,7 @@ class LunBoComponent extends React.Component {
         const {lunboData} = this.state;
         return <View style={{
             alignItems: 'center',
-            height: lunboHeight,
+            height: lunboHeight+10,
             paddingTop: 10,
             backgroundColor: theme,
             width: width,

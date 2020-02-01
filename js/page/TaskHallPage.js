@@ -306,7 +306,7 @@ class FristListComponent extends PureComponent {
         return <View style={{flex: 1, zIndex: 3}}>
 
 
-            <Animated.View style={{transform: [{translateY}]}}>
+            <Animated.View style={{transform: [{translateY}], marginTop: 10}}>
                 <FlatListCommonUtil
                     EmptyH={height - hp(27) + (this.state.tOutputRange == hp(5.9) ? hp(5.9) : 0)}
                     statusBarType={'light'}
@@ -330,8 +330,8 @@ class FristListComponent extends PureComponent {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    borderBottomWidth: wp(0.1),
-                    borderBottomColor: 'rgba(0,0,0,0.2)',
+                    // borderBottomWidth: wp(0.1),
+                    // borderBottomColor: 'rgba(0,0,0,0.2)',
                     zIndex: 3,
                     height: hp(5.9),
                     width,
@@ -342,7 +342,9 @@ class FristListComponent extends PureComponent {
                                             ref={ref => this.topLeftFilterComponent = ref}/>
                     <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>
                 </View>
-
+                {/*分割线*/}
+                <View
+                    style={{height: 0.3, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
                 <HeadlineComponent
                     onSuccess={this.onSuccess}
                     onError={this.onError}
@@ -353,9 +355,15 @@ class FristListComponent extends PureComponent {
             </Animated.View>
             {/*筛选器*/}
             {showFilterComponent ?
-                <FilterComponent cancelClick={() => {
-                    this.hide();
-                }} sureClick={this._sureClick} ref={ref => this.filterComponent = ref}/> : null}
+                <FilterComponent
+                    top={(this.state.tOutputRange == hp(5.9) ? 0 : hp(5.9))}
+                    cancelClick={() => {
+                        this.hide();
+                    }}
+                    sureClick={this._sureClick}
+                    ref={ref => this.filterComponent = ref}/>
+                :
+                null}
         </View>;
     }
 
@@ -432,7 +440,7 @@ class TypeItem extends PureComponent {
 
                 }}>
                 <Text style={[{
-                    fontSize: hp(2.15), marginRight: wp(0.5),
+                    fontSize: hp(2.05), marginRight: wp(0.5),
                 }, title.length > 2 ? {color: bottomTheme} : !show ? {
                     color: 'black',
                     opacity: 0.6,
@@ -466,6 +474,7 @@ class HeadlineComponent extends PureComponent {
         getHotTasks().then(result => {
             result.length > 0 && this.props.onSuccess();
             result.length === 0 && this.props.onError();
+            console.log(result);
             this.setState({
                 HeadlineArrays: result,
             });
@@ -474,14 +483,13 @@ class HeadlineComponent extends PureComponent {
     startLunbo = () => {
         this.index = 0;
         this.timer = setInterval(() => {
+            // console.log(Global.TaskHallPage_Index,Global.TaskHallPage_Index );
             if (Global.TaskHallPage_Index == this.props.index &&
                 Global.activeRouteName == 'TaskHallPage' &&
                 this.state.HeadlineArrays.length > 1) {//只有在当前页面才进行跑马灯
                 this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
                 this.flatList.scrollToIndex({animated: true, index: this.index});
             }
-
-
         }, 2500);
     };
 
@@ -505,8 +513,8 @@ class HeadlineComponent extends PureComponent {
                 backgroundColor: 'white',
                 flexDirection: 'row',
                 alignItems: 'center',
-                borderBottomWidth: 0.3,
-                borderBottomColor: 'rgba(0,0,0,0.2)',
+                // borderBottomWidth: 0.3,
+                // borderBottomColor: 'rgba(0,0,0,0.2)',
             }}>
                 <Image
                     resizeMode={'stretch'}
@@ -516,14 +524,17 @@ class HeadlineComponent extends PureComponent {
                 }}/>
                 <TouchableOpacity
                     activeOpacity={1}
-                    onPress={()=>{
-                        NavigationUtils.goPage({test:false,task_id:HeadlineArrays[this.index].taskId},'TaskDetails')
+                    onPress={() => {
+                        NavigationUtils.goPage({
+                            test: false,
+                            task_id: HeadlineArrays[this.index].taskId,
+                        }, 'TaskDetails');
                     }}
                     style={{
-                    flex: 1,
-                    overflow: 'hidden',
+                        flex: 1,
+                        overflow: 'hidden',
 
-                }}>
+                    }}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         ref={ref => this.flatList = ref}
@@ -535,6 +546,8 @@ class HeadlineComponent extends PureComponent {
 
                 </TouchableOpacity>
             </View>
+            {/*分割线*/}
+            <View style={{height: 0.3, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
         </AnimatedFadeIn>;
     }
 
@@ -559,19 +572,22 @@ class HeadlineComponent extends PureComponent {
                 }}>
 
 
-                {item && renderEmoji(`${item.taskTitle}`, [],  hp(2.25), 0, 'black').map((item, index) => {
+                {item && renderEmoji(`${item.taskTitle}`, [], hp(2.25), 0, 'black').map((item, index) => {
                     return item;
                 })}
             </Text>
 
             <View style={{flexDirection: 'row', alignItems: 'center', height: 25}}>
+                <Text
+                    style={{fontSize: hp(1.8), color: 'red', top: hp(0.07),  fontWeight: '800'}}>￥</Text>
                 <Text style={{
                     color: 'red', fontSize: hp(2.6),
-                    marginRight: wp(0.2),
+                     fontWeight: '700',
+                    marginRight: 5,
                 }}>
                     {item.rewardPrice}
                 </Text>
-                <Text style={{fontSize:  hp(1.8), color: 'red', top: hp(0.07), marginRight: 5}}>元</Text>
+
                 <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')}
                        style={{width: wp(2), height: wp(2)}}/>
             </View>

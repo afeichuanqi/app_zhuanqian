@@ -86,8 +86,8 @@ class SecondListComponent extends PureComponent {
 
     render() {
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-210, 0, 205],
-            outputRange: [lunboHeight + 215, lunboHeight, 20],
+            inputRange: [-220, 0, lunboHeight - 30],
+            outputRange: [lunboHeight + 220 + 3, lunboHeight + 3, 30 + 0],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -104,9 +104,9 @@ class SecondListComponent extends PureComponent {
                 }}
                 onRefresh={this.updateBestNewList}
                 ListHeaderComponent={
-                    <View style={{height: 225, backgroundColor: 'white'}}>
-                        <View style={{marginTop: 25, paddingLeft: 10}}>
-                            <Text style={{fontSize: 17, opacity: 0.9, color: 'black'}}>最新发布</Text>
+                    <View style={{height: 235, backgroundColor: 'white', zIndex: 10}}>
+                        <View style={{marginTop: 15, paddingLeft: 15}}>
+                            <Text style={{fontSize: hp(2.5), opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
                         <View style={{paddingHorizontal: 10, marginTop: 10}}>
                             <FlatList
@@ -132,24 +132,24 @@ class SecondListComponent extends PureComponent {
             />
 
             <Animated.View style={{
-                width, height: 30, justifyContent: 'space-between', position: 'absolute',
-                backgroundColor: 'white', transform: [{translateY: columnTop}], top: 5,
+                width, height: 40, position: 'absolute', justifyContent: 'center',
+                backgroundColor: 'white', transform: [{translateY: columnTop}], alignItems: 'flex-start',
+                marginLeft: 10,
+
             }}>
-                <Text
-                    style={{
-                        fontSize: wp(3.2),
-                        color: bottomTheme,
-                        marginLeft: 15,
-                        marginTop: 10,
-
-                    }}>最近刷新</Text>
-
                 <View style={{
-                    width: wp(3.2) * 4 * 0.93,
-                    backgroundColor: bottomTheme,
-                    height: 2,
-                    marginLeft: 15,
-                }}/>
+                    alignItems: 'center',
+                    paddingHorizontal: 5, paddingVertical: 4,
+
+                }}>
+                    <Text
+                        style={{
+                            fontSize: hp(2.15),
+                            color: bottomTheme,
+                        }}>最近刷新</Text>
+                    <View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>
+                </View>
+
             </Animated.View>
         </Animated.View>;
     }
@@ -171,7 +171,7 @@ class ScrollItem extends React.Component {
 
         if (!item.task_name) {
             return <SkeletonPlaceholder minOpacity={0.2}>
-                <View style={{width: 140, height: 100, marginRight: 10, borderRadius:5}}/>
+                <View style={{width: 140, height: 100, marginRight: 10, borderRadius: 5}}/>
                 <View style={{height: 15, width: 100, marginTop: 5}}/>
                 <View style={{height: 20, width: 50, marginTop: 2}}/>
             </SkeletonPlaceholder>;
@@ -196,8 +196,10 @@ class ScrollItem extends React.Component {
                     source={{uri: item.task_uri}}
                 />
                 <Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}
-                       style={{position: 'absolute', right: 0, top: 0, width: 35, height: 15,
-                           borderTopRightRadius:5}}/>
+                       style={{
+                           position: 'absolute', right: 0, top: 0, width: 35, height: 15,
+                           borderTopRightRadius: 5,
+                       }}/>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                 <Text numberOfLines={1} style={{fontSize: wp(3.3), color: 'black', opacity: 0.7}}>{item.title}</Text>
@@ -214,18 +216,20 @@ class ScrollItem extends React.Component {
             </View>
             {item.reward_price && <View style={{
                 flexDirection: 'row', alignItems: 'center',
-                zIndex: 10, elevation: 1, marginTop: 1,
+                elevation: 1, marginTop: 1,
             }}>
                 <Text style={{
                     fontSize: hp(2.2),
                     color: 'red',
                     marginRight: 1,
+
                 }}>{item.reward_price}</Text>
                 <Text style={{
                     fontSize: hp(1.7),
                     color: 'red',
                     fontWeight: '500',
                     top: 1,
+
                 }}>元</Text>
             </View>}
 

@@ -434,7 +434,7 @@ class FristListComponent extends PureComponent {
 
             <AnimatedFlatList
                 style={{backgroundColor: '#f5f5f5'}}
-                ListEmptyComponent={<EmptyComponent source={this.props.source} height={height - 100}
+                ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} source={this.props.source} height={height - 100}
                                                     message={'您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}

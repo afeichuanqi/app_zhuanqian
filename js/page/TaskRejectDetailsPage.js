@@ -53,7 +53,7 @@ class TaskRejectDetailsPage extends PureComponent {
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
         selectOrderTaskInfo({sendFormId: this.params.sendFormId}, this.props.userinfo.token).then(result => {
-            //console.log(result.length > 0, 'result.length > 0');
+            // console.log(result[0]);
             if (result.length > 0) {
                 this.setState({
                     sendFormInfo: result[0],
@@ -109,16 +109,21 @@ class TaskRejectDetailsPage extends PureComponent {
         }
 
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, title, null, 'white', 'black', 16, () => {
-            NavigationUtils.goPage({
-                task_id: this.params.taskId,
-                sendFormId: this.params.sendFormId,
-                fromUserinfo: this.params.fromUserinfo,
-                columnType: 2,
-                taskUri: this.params.task_uri,
-            }, 'ChatRoomPage');
-        }, false, (task_status == -1 && userid == this.props.userinfo.userid) ? true : false, '申诉');
+            if((task_status == -1 && userid == this.props.userinfo.userid)){
+                NavigationUtils.goPage({
+                    task_id: this.params.taskId,
+                    sendFormId: this.params.sendFormId,
+                    fromUserinfo: this.params.fromUserinfo,
+                    columnType: 2,
+                    taskUri: this.params.task_uri,
+                }, 'ChatRoomPage');
+            }else{
+                NavigationUtils.goPage({test:false,task_id:sendFormInfo.taskId},'TaskDetails')
+            }
+
+        }, false, true, (task_status == -1 && userid == this.props.userinfo.userid) ? '申诉' : '任务详情');
         if (!sendFormInfo.task_step_data) {
-            return <EmptyComponent height={height - 50}/>;
+            return <EmptyComponent message={'暂无表单信息'} height={height - 50}/>;
         }
         let ImageIndex = 0;
         this.reviewPic = [];

@@ -21,6 +21,7 @@ export default function onAction(state = defaultContent, action) {
             };
         case Types.MESSAGE_FROMOF_USERID://来自好友消息
             const temArr = [...state.msgArr];
+            // console.log('MESSAGE_FROMOF_USERID');
             temArr.push({
                     fromUserid: data.fromUserid,
                     msg_type: data.msg_type,
@@ -50,7 +51,6 @@ export default function onAction(state = defaultContent, action) {
                 FriendId: data.FriendId,
 
             });
-            // console.log(temArr1);
             return {
                 ...state,
                 msgArr: temArr1,
@@ -62,7 +62,7 @@ export default function onAction(state = defaultContent, action) {
             temJson.msgId = data.msgId;
             temJson.sendDate = data.sendDate;
             temJson.sendStatus = data.sendStatus;
-            temArr__[index] = temJson;
+            // temArr__[index] = temJson;
             return {
                 ...state,
                 msgArr: temArr__,
@@ -76,7 +76,7 @@ export default function onAction(state = defaultContent, action) {
             temJson2.sendDate = data.sendDate;
             temJson2.sendStatus = data.sendStatus;
             temJson2.content = data.content;
-            temArr2[index] = temJson2;
+            temArr2[index2] = temJson2;
             return {
                 ...state,
                 msgArr: temArr2,

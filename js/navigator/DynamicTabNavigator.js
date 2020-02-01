@@ -134,15 +134,7 @@ class BottomBar extends Component {
 
         // -------------记录下当前的路由------------- //
         let {routes, type, key} = this.props.nav;
-        if (type !== 'Navigation/COMPLETE_TRANSITION' && type !== 'Navigation/BACK' && type !== 'Navigation/NAVIGATE') {
-            return;
-        }
         const activeRouterName = routes[0].routes[routes[0].routes.length - 1].routeName;
-        let RouterNameIndex = routes[0].index;
-        let preRouterName = '';
-        if (RouterNameIndex > 0) {
-            preRouterName = routes[0].routes[RouterNameIndex - 1].routeName;
-        }
         if (activeRouterName == 'HomePage') {
             if (nextProps.navigationIndex === 0) {
 
@@ -157,13 +149,31 @@ class BottomBar extends Component {
             if (nextProps.navigationIndex === 3) {
                 Global.activeRouteName = 'MyPage';
             }
-        } else {
+        }
+        // console.log(Global.activeRouteName);
+        if (type !== 'Navigation/COMPLETE_TRANSITION' && type !== 'Navigation/BACK' && type !== 'Navigation/NAVIGATE') {
+            return;
+        }
+
+        let RouterNameIndex = routes[0].index;
+        let preRouterName = '';
+        if (RouterNameIndex > 0) {
+            preRouterName = routes[0].routes[RouterNameIndex - 1].routeName;
+        }
+        // -------------End记录下当前的路由------------- //
+
+        if (!key || key.length === 0) {
+            key = routes[0].routes[routes[0].index].key;
+        }
+
+        // console.log("componentWillReceiveProps",activeRouterName,nextProps.navigationIndex);
+        if (activeRouterName != 'HomePage') {
             Global.activeRouteName = activeRouterName;
             //我的店铺只要进入状态栏透明
             if ((type === 'Navigation/COMPLETE_TRANSITION' && activeRouterName === 'ShopInfoPage')
             ) {
                 this.setStatusBar('translucent');
-            } else if (type === 'Navigation/BACK' && activeRouterName === 'ShopInfoPage') {
+            } else if (type === 'Navigation/BACK' && activeRouterName === 'ShopInfoPage' && key !== routes[0].routes[1].key) {
                 const isFind = this.backSetBarStylePages.findIndex(item => preRouterName == item);
                 if (isFind !== -1) {
                     this.setStatusBar('dark');
@@ -175,11 +185,7 @@ class BottomBar extends Component {
             }
 
         }
-        // -------------End记录下当前的路由------------- //
 
-        if (!key || key.length === 0) {
-            key = routes[0].routes[routes[0].index].key;
-        }
         if (type === 'Navigation/BACK' && key === routes[0].routes[1].key) {//需要返回到主页面
             // -------------记录下当前的路由------------- //
             if (nextProps.navigationIndex === 0) {
@@ -242,6 +248,12 @@ class BottomBar extends Component {
     };
 
     shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+        // console.log(nextProps.navigationIndex,"navigationIndex",this.props.navigationIndex,this.props.navigationIndex !== nextProps.navigationIndex
+        //     || (this.props.friend && (this.props.friend.unMessageLength !== nextProps.friend.unMessageLength))
+        //     || (this.props.friend && (this.props.friend.appeal_3 !== nextProps.friend.appeal_3))
+        //     || (this.props.friend && (this.props.friend.appeal_2 !== nextProps.friend.appeal_2))
+        //     || !equalsObj(this.props.friend.notice_arr, nextProps.friend.notice_arr)
+        // );
         if (this.props.navigationIndex !== nextProps.navigationIndex
             || (this.props.friend && (this.props.friend.unMessageLength !== nextProps.friend.unMessageLength))
             || (this.props.friend && (this.props.friend.appeal_3 !== nextProps.friend.appeal_3))
@@ -255,6 +267,7 @@ class BottomBar extends Component {
     }
 
     _BottomBarClick = (index) => {
+        // console.log(index);
         const {onPress, onGetUserInFoForToken, userinfo, navigationIndex} = this.props;
 
         onPress(index);
@@ -264,10 +277,10 @@ class BottomBar extends Component {
             });
         }
         if (index === 2) { //消息栏目被单击
-            if (this.props.userinfo.token && this.props.userinfo.token.length > 0 && !ChatSocket.isVerifyIdentIdy) {
-                Global.token = this.props.userinfo.token;
-                ChatSocket.verifyIdentidy();
-            }
+            // if (this.props.userinfo.token && this.props.userinfo.token.length > 0 && !ChatSocket.isVerifyIdentIdy) {
+            //     Global.token = this.props.userinfo.token;
+            //     ChatSocket.verifyIdentidy();
+            // }
         }
         if (index === navigationIndex) { //按下了相同的底部导航
             let pageName = '';
@@ -294,7 +307,7 @@ class BottomBar extends Component {
             flexDirection: 'row',
             justifyContent: 'space-between',
             borderTopWidth: 0.6,
-            borderTopColor: '#c0c0c0',
+            borderTopColor: '#d7d7d7',
 
         }}>
 
@@ -392,7 +405,7 @@ class BottomBarItem extends Component {
             style={{
                 width: width / 4,
                 height: 45,
-                backgroundColor:'#f5f5f5',
+                backgroundColor:'#fbfbfb',
                 justifyContent: 'center',
                 alignItems: 'center',
 

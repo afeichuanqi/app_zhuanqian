@@ -79,7 +79,7 @@ class TaskInfoComponent extends PureComponent {
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        width:wp(50),
+                        width:wp(65),
                     }}>
                         <Text
                             numberOfLines={this.props.numberOfLines}
@@ -89,7 +89,7 @@ class TaskInfoComponent extends PureComponent {
                                 color: 'black',
 
                             }}>
-                            {item && renderEmoji(`${item.taskTitle}`, [], hp(2.12), 0, 'black').map((item, index) => {
+                            {item && renderEmoji(`${item.taskTitle}`, [], hp(2.2), 0, 'black').map((item, index) => {
                                 return item;
                             })}
                             </Text>
@@ -114,7 +114,7 @@ class TaskInfoComponent extends PureComponent {
                     {/*价格*/}
                     <View style={{}}>
                         <Text style={{
-                            fontSize: hp(2.2),
+                            fontSize: hp(2.4),
                             color: 'red',
                         }}>+{item.rewardPrice} 元</Text>
                     </View>
@@ -126,8 +126,8 @@ class TaskInfoComponent extends PureComponent {
                         flexDirection: 'row',
                         marginTop: wp(1)
                     }}>
-                        <LabelBigComponent contaiStyle={{backgroundColor: '#fafafa',}} fontSize={this.props.fontSize} title={item.typeTitle}/>
-                        <LabelBigComponent contaiStyle={{backgroundColor: '#fafafa',}} fontSize={this.props.fontSize} title={item.taskName}/>
+                        <LabelBigComponent contaiStyle={{backgroundColor: '#ebebeb',}} fontSize={this.props.fontSize} title={item.typeTitle}/>
+                        <LabelBigComponent contaiStyle={{backgroundColor: '#ebebeb',}} fontSize={this.props.fontSize} title={item.taskName}/>
                     </View>
                     {/*剩余数*/}
                     <View style={{

@@ -81,7 +81,7 @@ export default class FilterComponent extends PureComponent {
         const {typeArray} = this.props;
         return <View ref={ref => this.containerBox = ref} style={{
             position: 'absolute',
-            top: hp(5.9),
+            top: this.props.top,
             height: 0,
             width,
             zIndex: 1,
