@@ -161,15 +161,15 @@ class TaskHallPage extends PureComponent {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'first':
-                return <FristListComponent index={0} device={1}/>;
+                return <FirstListComponent index={0} device={1}/>;
             case 'second':
-                return <FristListComponent index={1} device={Platform.OS == 'android' ? 2 : 3}/>;
+                return <FirstListComponent index={1} device={Platform.OS == 'android' ? 2 : 3}/>;
         }
     };
 
 }
 
-class FristListComponent extends PureComponent {
+class FirstListComponent extends PureComponent {
     componentDidMount() {
         EventBus.getInstance().addListener(EventTypes.scroll_top_for_page, this.listener = data => {
             const {pageName} = data;
@@ -306,7 +306,7 @@ class FristListComponent extends PureComponent {
         return <View style={{flex: 1, zIndex: 3}}>
 
 
-            <Animated.View style={{transform: [{translateY}], marginTop: 10}}>
+            <Animated.View style={{transform: [{translateY}]}}>
                 <FlatListCommonUtil
                     EmptyH={height - hp(27) + (this.state.tOutputRange == hp(5.9) ? hp(5.9) : 0)}
                     statusBarType={'light'}
@@ -435,22 +435,24 @@ class TypeItem extends PureComponent {
                     paddingVertical: hp(0.6),
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    backgroundColor: title.length > 2 ? 'rgba(33,152,245,0.1)' : '#f5f5f5',
+                    backgroundColor: bottomTheme,
                     borderRadius: wp(1),
 
                 }}>
                 <Text style={[{
-                    fontSize: hp(2.05), marginRight: wp(0.5),
-                }, title.length > 2 ? {color: bottomTheme} : !show ? {
-                    color: 'black',
-                    opacity: 0.6,
-                } : {color: bottomTheme}]}>{title}</Text>
+                    fontSize: hp(2.05), marginRight: wp(0.5), color: 'white',
+                }]}>{title}</Text>
                 {
                     !show ?
-                        <SvgUri style={{marginTop: hp(0.6)}} fill={title.length > 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
-                                width={wp(2)} height={wp(2)}
+                        <SvgUri style={{marginTop: hp(0.7)}}
+                                fill={'white'}
+                                width={hp(1.3)}
+                                height={hp(1)}
                                 svgXmlData={zhankai}/> :
-                        <SvgUri style={{marginTop: hp(0.6)}} fill={bottomTheme} width={wp(2)} height={wp(2)}
+                        <SvgUri style={{marginTop: hp(0.7)}}
+                                fill={'white'}
+                                width={hp(1.3)}
+                                height={hp(1)}
                                 svgXmlData={yincang}/>
                 }
 
@@ -513,15 +515,29 @@ class HeadlineComponent extends PureComponent {
                 backgroundColor: 'white',
                 flexDirection: 'row',
                 alignItems: 'center',
-                // borderBottomWidth: 0.3,
-                // borderBottomColor: 'rgba(0,0,0,0.2)',
+                paddingLeft:20,
             }}>
                 <Image
-                    resizeMode={'stretch'}
-                    source={require('../res/img/index_hot.png')} style={{
-                    width: wp(12), height: hp(2.5), marginLeft: wp(5),
-                    marginBottom: hp(0.8),
-                }}/>
+                    style={{width:hp(3.3),height:hp(2.8)}}
+                    source={require('../res/img/laba.png')}
+                />
+                <View style={{
+                    width: hp(5.5),
+                    height: hp(3.2),
+                    backgroundColor: '#ef3e5a',
+                    marginLeft:10,
+                    borderBottomLeftRadius:10,
+                    borderTopRightRadius:10,
+                    justifyContent:'center',
+                    alignItems:'center',
+                    borderWidth:0.5,
+                    borderColor:'black',
+
+                }}
+                >
+                    <Text style={{fontSize:hp(2.2),color:'white'}}>Hot</Text>
+                </View>
+                <Text style={{fontSize:hp(3),color:'#ef3e5a', fontWeight:'700', marginLeft:hp(0.5)}}>:</Text>
                 <TouchableOpacity
                     activeOpacity={1}
                     onPress={() => {
@@ -558,36 +574,36 @@ class HeadlineComponent extends PureComponent {
                 height: hp(5.9),
                 flexDirection: 'row',
                 alignItems: 'center', justifyContent: 'space-between',
-                paddingRight: wp(2.3),
+                paddingRight: 15,
             }}>
             <Text
                 numberOfLines={1}
                 style={{
                     color: 'black',
-                    width: wp(60),
+                    width: wp(50),
                     marginLeft: wp(1), opacity: 0.8,
-                    marginTop: -wp(0.5),
-                    fontSize: hp(2.25),
+                    marginTop: hp(0.5),
+
 
                 }}>
 
-
-                {item && renderEmoji(`${item.taskTitle}`, [], hp(2.25), 0, 'black').map((item, index) => {
+                {item && renderEmoji(`${item.taskTitle}`, [], hp(2.5), 0, 'black',{fontWeight:'400'}).map((item, index) => {
                     return item;
                 })}
             </Text>
 
-            <View style={{flexDirection: 'row', alignItems: 'center', height: 25}}>
-                <Text
-                    style={{fontSize: hp(1.8), color: 'red', top: hp(0.07),  fontWeight: '800'}}>￥</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', height: 25,marginTop: hp(0.5),}}>
+                <Image resizeMode={'stretch'} source={require('../res/img/moneys.png')}
+                       style={{width: hp(1.8), marginRight:5,top:-hp(0.2), height: hp(2.1)}}/>
                 <Text style={{
-                    color: 'red', fontSize: hp(2.6),
-                     fontWeight: '700',
-                    marginRight: 5,
+                    color: 'red', fontSize: hp(3.2),
+                    fontWeight: '500',top: hp(-0.5),
+
                 }}>
                     {item.rewardPrice}
                 </Text>
-
+                <Text
+                    style={{fontSize: hp(1.8), color: 'red',  fontWeight: '400',marginRight: 5,}}>元</Text>
                 <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')}
                        style={{width: wp(2), height: wp(2)}}/>
             </View>
@@ -631,27 +647,40 @@ class TopLeftFilterComponent extends Component {
         const {index} = this.state;
         const {filterArray} = this.props;
         return <View style={{
-            paddingHorizontal: wp(3), flexDirection: 'row',
+            flexDirection: 'row',
             justifyContent: 'space-between', height: hp(5.9), alignItems: 'center', width: wp(60),
-
+            // padding
         }}>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                 {filterArray.map((item, Lindex, arr) => {
-                    return <TouchableOpacity
-                        key={Lindex}
-                        activeOpacity={0.6}
-                        style={{marginLeft: wp(2.1), alignItems: 'center', justifyContent: 'center'}}
-                        onPress={() => this._onPress(Lindex)}
-                    >
-                        <Text style={[{
-                            fontSize: hp(2.3),
-                            fontWeight: '400',
-                        }, Lindex === index ? {
-                            color: 'black',
-                            fontWeight: '400',
-                        } : {color: '#767676'}]}>{item.title}</Text>
+                    return <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <TouchableOpacity
+                            key={Lindex}
+                            activeOpacity={0.6}
+                            style={{
+                                marginLeft: Lindex === 0 ? 20 : wp(3),
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            onPress={() => this._onPress(Lindex)}
+                        >
+                            <Text style={[{
+                                fontSize: hp(2.5),
+                                fontWeight: '400',
+                            }, Lindex === index ? {
+                                color: bottomTheme,
+                                fontWeight: '500',
+                            } : {color: '#767676'}]}>{item.title}</Text>
 
-                    </TouchableOpacity>;
+                        </TouchableOpacity>
+                        {Lindex !== arr.length - 1 && <View style={{
+                            height: hp(1.9),
+                            width: 0.5,
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            marginLeft: wp(3),
+                        }}/>}
+
+                    </View>;
                 })}
 
             </View>

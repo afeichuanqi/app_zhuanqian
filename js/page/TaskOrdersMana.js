@@ -287,7 +287,7 @@ class FristListComponent extends PureComponent {
             });
         });
     };
-    _itemPress = () => {
+    _itemPress = (item) => {
         if (this.props.status == 3) {
             NavigationUtils.goPage({
                 sendFormId: item.sendFormId,
@@ -336,7 +336,9 @@ class FristListComponent extends PureComponent {
             cancelSignUp={(callback) => {
                 this._cancelSignUp(item, callback);
             }}
-            onPress={this._itemPress}
+            onPress={()=>{
+                this._itemPress(item)
+            }}
             redoTask={this._itemRedoTask}
         />;
     };

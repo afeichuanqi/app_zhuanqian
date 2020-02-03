@@ -36,8 +36,6 @@ const ImageUtil = {
         promise.then(data => {
             const edges = data.edges;
             const photos = [];
-            // console.log(data);
-
             for (let i in edges) {
                 photos.push(edges[i].node.image);
             }

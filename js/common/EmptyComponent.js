@@ -69,7 +69,7 @@ class EmptyComponent extends PureComponent {
                         height: this.props.icoH ? this.props.icoH : wp(30),
                     }}/>
                     <Text
-                        style={{fontSize: wp(3.6), color: 'rgba(0,0,0,0.6)', marginTop: hp(0.5)}}>{this.props.message} ~
+                        style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', marginTop: hp(1)}}>{this.props.message} ~
                         ~</Text>
                 </View>
             </View>

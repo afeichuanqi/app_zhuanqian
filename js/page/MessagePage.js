@@ -218,7 +218,7 @@ class MsgList extends Component {
         selectAppealNum(this.props.userinfo.token).then(result => {
             this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength, result.noticeArr);
         });
-        ChatSocket.verifyIdentidy();
+        ChatSocket.verifyIdentity();
         ChatSocket.selectAllFriendMessage(this.page.pageCount);
     };
     _renderIndexPath = ({item, index}) => {

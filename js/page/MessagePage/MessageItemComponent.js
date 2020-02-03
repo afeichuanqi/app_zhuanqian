@@ -12,6 +12,7 @@ import Global from '../../common/Global';
 
 import FastImagePro from '../../common/FastImagePro';
 import {renderEmoji} from '../../util/CommonUtils';
+import AnimatedFadeIn from '../../common/AnimatedFadeIn';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const width = Dimensions.get('window').width;
@@ -88,7 +89,7 @@ export default class MessageItemComponent extends Component {
         });
         const {marginHorizontal, item} = this.props;
         const {avatar_url, columnType, msg, msg_type, unReadLength, username, taskUri} = item;
-        return <AnimatedTouchableOpacity
+        return <AnimatedFadeIn><AnimatedTouchableOpacity
             onPress={this._onPress}
             activeOpacity={1}
             style={{
@@ -107,6 +108,7 @@ export default class MessageItemComponent extends Component {
             onPressIn={this._onPressIn}
             onPressOut={this._onPressOut}
         >
+
             <View>
                 <View style={{flexDirection: 'row'}}>
                     <View>
@@ -168,7 +170,7 @@ export default class MessageItemComponent extends Component {
                                 opacity: 0.6,
                                 marginLeft: 10,
                                 width: (width - 100) / 2,
-                            }}>{msg_type == 'text' ?renderEmoji(msg, [], hp(1.8), 0,'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
+                            }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.8), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
                         </Text>
                     </View>
 
@@ -208,7 +210,8 @@ export default class MessageItemComponent extends Component {
             </TouchableOpacity>
 
 
-        </AnimatedTouchableOpacity>;
+        </AnimatedTouchableOpacity>
+        </AnimatedFadeIn>;
 
 
     }

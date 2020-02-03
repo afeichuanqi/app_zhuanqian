@@ -1,28 +1,12 @@
 import types from '../action/Types';
 import Message from '../action';
-import ReconnectingWebSocket from './ReconnectingWebSocket';
 import Global from '../common/Global';
-import Toast from 'react-native-root-toast';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 class ChatSocket {
 
     isVerifyIdentIdy = false;
     historyMegLen = 0;
-    connctionServer = () => {
-        if (typeof Global.dispatch != 'function') {
-            return;
-        }
-        // const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
-        const URL = 'ws://chat.easy-z.cn/';
-        // const URL = 'ws://localhost:433/';
-
-        Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
-        Global.ws.onopen = () => {
-            Global.dispatch(Message.onChangeSocketStatue(''));
-            Global.connectionstatus = true;
-            this.verifyIdentidy();//重新被链接时再次验证身份
-            Global.ws.send('ping');
-            heartCheck.reset().start();
-        };
+    connectionServer = () => {
         //心跳包
         const heartCheck = {
             timeout: 5000,//default 10s
@@ -38,23 +22,39 @@ class ChatSocket {
                 this.timeoutObj = setTimeout(function () {
                     Global.ws.send('ping');
                     self.serverTimeoutObj = setTimeout(function () {
-                        Global.ws.close();
-                        Global.connectionstatus = false;
-                        if (typeof Global.dispatch != 'function') {
-                            return;
-                        }
-                        Global.dispatch(Message.onChangeSocketStatue('刷新重连...'));
-                        Toast.show('聊天连接已经断开了哦 ~ ~');
+                        // Global.ws.close();
+                        // Global.connectionstatus = false;
+                        // if (typeof Global.dispatch != 'function') {
+                        //     return;
+                        // }
+                        // Global.dispatch(Message.onChangeSocketStatue('刷新重连...'));
+                        // Toast.show('聊天连接已经断开了哦 ~ ~');
                     }, self.timeout);
                 }, this.timeout);
             },
         };
-        Global.ws.onmessage = (evt) => {
+        if (typeof Global.dispatch != 'function') {
+            return;
+        }
+        // const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
+        const URL = 'ws://chat.easy-z.cn/';
+        // const URL = 'ws://localhost:433/';
+
+        Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
+        Global.ws.addEventListener('open', () => {
+            Global.dispatch(Message.onChangeSocketStatue(''));
+            Global.connectionstatus = true;
+            this.verifyIdentity();//重新被链接时再次验证身份
+            Global.ws.send('ping');
+            heartCheck.reset().start();
+        });
+        Global.ws.addEventListener('message', (evt) => {
             const msgText = evt.data;
             if (msgText === 'pong') {
                 heartCheck.reset().start();
                 return;
             }
+            // console.log(msgText);
             const msgData = JSON.parse(msgText);
             const {type, data} = msgData;
             switch (type) {
@@ -156,32 +156,31 @@ class ChatSocket {
 
 
             }
-        };
-        //连接关闭的时候触发
-        Global.ws.onclose = (e) => {
-            console.log(e);
-            Toast.show('聊天连接已经断开了哦 ~ ~');
-            Global.connectionstatus = false;
-            if (typeof Global.dispatch != 'function') {
-                return;
-            }
-            Global.dispatch(Message.onChangeSocketStatue(''));
-
-        };
-        Global.ws.onerror = (e) => {
-            console.log('onerror', e);
-            Toast.show('聊天连接发生错误 ~ ~');
+        });
+        Global.ws.addEventListener('close',(e) => {
             // console.log(e);
+            // // Toast.show('聊天连接已经断开了哦 ~ ~ ~');
             Global.connectionstatus = false;
             if (typeof Global.dispatch != 'function') {
                 return;
             }
-            Global.dispatch(Message.onChangeSocketStatue('错误连接'));
-        };
+            Global.dispatch(Message.onChangeSocketStatue('重新连接中 (¬､¬)'));
+
+        });
+        Global.ws.addEventListener('error', (e) => {
+            // console.log('onerror', e);
+            // // Toast.show('聊天连接发生错误 ~ ~');
+            // // console.log(e);
+            Global.connectionstatus = false;
+            if (typeof Global.dispatch != 'function') {
+                return;
+            }
+            Global.dispatch(Message.onChangeSocketStatue('重新连接中 (¬､¬)'));
+        });
     };
 
     //验证身份
-    verifyIdentidy = () => {
+    verifyIdentity = () => {
         if (Global.ws.readyState === 2 || Global.ws.readyState === 3) {
             Global.ws.reconnect();
         }
@@ -214,12 +213,8 @@ class ChatSocket {
     quitAccount = () => {
         this.sendToServer(types.ACCOUNT_QUIT, {});
     };
-    //设置信息id已读取
-    // setMsgIdIsRead = (FriendId, toUserid) => {
-    //     this.sendToServer(types.MESSAGE_SET_MSG_ID_READ, {FriendId, toUserid});
-    // };
     //获取userid所有消息
-    selectAllMsgForFromUserid = (friendId, pageCount) => {
+    selectAllMsgForFromUserId = (friendId, pageCount) => {
 
         this.sendToServer(types.MESSAGE_GET_FRIENDUSERID_ALL_MES, {friendId, pageCount});
 
@@ -268,7 +263,7 @@ class ChatSocket {
                 // Global.dispatch(Message.onChangeSocketStatue('离线'));
                 return;
             }
-            this.verifyIdentidy();
+            this.verifyIdentity();
             return;
         }
         if (!Global.token || Global.token == '') {

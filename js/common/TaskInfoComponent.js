@@ -79,7 +79,7 @@ class TaskInfoComponent extends PureComponent {
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        width:wp(65),
+                        width:wp(55),
                     }}>
                         <Text
                             numberOfLines={this.props.numberOfLines}
@@ -87,6 +87,7 @@ class TaskInfoComponent extends PureComponent {
                                 // width: width - 150,
                                 fontSize: hp(2.12),
                                 color: 'black',
+
 
                             }}>
                             {item && renderEmoji(`${item.taskTitle}`, [], hp(2.2), 0, 'black').map((item, index) => {

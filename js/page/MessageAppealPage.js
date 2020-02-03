@@ -27,6 +27,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import {getUserAppealFriendList} from '../util/AppService';
 import EventBus from '../common/EventBus';
 import MessageItemComponent from './MessagePage/MessageItemComponent';
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 
 const width = Dimensions.get('window').width;
@@ -71,9 +72,9 @@ class MessageAppealPage extends PureComponent {
         />;
 
         const {type} = this.params;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, type == 2 ? '申诉消息' : type == 3 ? '投诉消息' : type == 4 ? '聊天消息' : '', null, null, 'black', 14, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, type == 2 ? '申诉消息' : type == 3 ? '投诉消息' : type == 4 ? '聊天消息' : '', null, null, 'black', 16, () => {
 
-        }, false);
+        }, false );
 
 
         return (
@@ -200,7 +201,7 @@ class MsgList extends Component {
 
         const {isLoading, hideLoaded, friendData} = this.state;
         return <FlatList
-            ListEmptyComponent={<EmptyComponent type={4} height={height - 100}/>}
+            ListEmptyComponent={<EmptyComponent icoW={wp(30)} icoH={wp(30)} type={4} height={height - 100}/>}
 
             style={{
                 flex: 1,

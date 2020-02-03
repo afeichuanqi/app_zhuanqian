@@ -25,7 +25,7 @@ import {selectSendFormTaskList, selectSignUpList} from '../util/AppService';
 import FastImage from 'react-native-fast-image';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -205,7 +205,7 @@ class TaskReleaseMana extends PureComponent {
 
             }}
             key={index} style={{
-            height: 60, width, paddingHorizontal: 10, justifyContent: 'space-between', alignItems: 'center',
+            height: hp(10), width, paddingHorizontal: 10, justifyContent: 'space-between', alignItems: 'center',
             flexDirection: 'row',
             backgroundColor: 'white',
         }}>
@@ -218,16 +218,16 @@ class TaskReleaseMana extends PureComponent {
                 />
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{flexDirection: 'row', marginLeft: 10}}>
-                        <Text style={{fontSize: 15,color:'black'}}>{item.username}</Text>
-                        <Text style={{marginLeft: 5,color:'black'}}>(ID:{item.userid})</Text>
+                        <Text style={{fontSize: hp(2.2),color:'black'}}>{item.username}</Text>
+                        <Text style={{marginLeft: 5,color:'black',fontSize: hp(2.2),}}>(ID:{item.userid})</Text>
                     </View>
                     <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 5, alignItems: 'center'}}>
                         <Text style={{
-                            fontSize: 12,
+                            fontSize: hp(1.9),
                             color: 'rgba(0,0,0,0.8)',
                         }}>{this.params.status == 1 ? '审核时间' : this.params.status == 0 ? '进行中' : this.params.status == -1 ? '驳回时间' : ''}:</Text>
                         <Text style={{
-                            fontSize: 12,
+                            fontSize: hp(1.9),
                             color: 'rgba(0,0,0,0.8)',
                         }}>{this.params.status == 0 ? item.send_date1 : item.review_time1}</Text>
                     </View>
@@ -235,7 +235,7 @@ class TaskReleaseMana extends PureComponent {
             </View>
             <View>
                 <Text
-                    style={{color: bottomTheme}}>{this.params.status == 1 ? '已完成' : this.params.status == 0 ? '进行中' : this.params.status == -1 ? '已驳回' : ''}</Text>
+                    style={{color: bottomTheme,fontSize: hp(2.1),}}>{this.params.status == 1 ? '已完成' : this.params.status == 0 ? '进行中' : this.params.status == -1 ? '已驳回' : ''}</Text>
             </View>
         </TouchableOpacity>;
     };
@@ -273,9 +273,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 40,
-        height: 40,
-        borderRadius: 25,
+        width: hp(7),
+        height: hp(7),
+        borderRadius: hp(4),
         // 设置高度
         // height:150
     },

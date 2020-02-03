@@ -297,7 +297,7 @@ class CodeInput extends PureComponent {
                 const {routes, navigation} = this.props;
                 const key = routes[0].routes[1].key;
                 Global.token = data.token;//进行验证token
-                ChatSocket.verifyIdentidy();//进行验证token
+                ChatSocket.verifyIdentity();//进行验证token
                 NavigationUtils.goBack(navigation, key);
                 setTimeout(()=>{
                     EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面

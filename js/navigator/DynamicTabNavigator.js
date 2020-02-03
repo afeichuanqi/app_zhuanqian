@@ -22,11 +22,12 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {equalsObj} from '../util/CommonUtils';
 import ImageViewerModal from '../common/ImageViewerModal';
-import ChatSocket from '../util/ChatSocket';
+// import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
 import {NavigationActions} from 'react-navigation';
 import RNExitApp from 'react-native-exit-app';
 import Toast from 'react-native-root-toast';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {SpringUtils, spring} = Animated;
 type Props = {};
@@ -57,7 +58,7 @@ class DynamicTabNavigator extends Component<Props> {
             >
                 <ImageViewerModal ref={ref => Global.imageViewModal = ref}/>
                 <TabView
-                    indicatorStyle={{backgroundColor: 'white'}}
+                    // indicatorStyle={{backgroundColor: 'white'}}
                     navigationState={{index: navigationIndex, routes: navigationRoutes}}
                     renderScene={this.renderScene}
                     renderTabBar={() => null}
@@ -305,10 +306,12 @@ class BottomBar extends Component {
         const isOtherUnRead = notice_arr.find(item => item > 0);
         return <View style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
-            borderTopWidth: 0.6,
-            borderTopColor: '#d7d7d7',
-
+            justifyContent: 'center',
+            alignItems: 'center',
+            // borderWidth:1,
+            // borderColor:'red',
+            borderTopWidth: 0.5,
+            borderTopColor: '#e8e8e8',
         }}>
 
             <BottomBarItem
@@ -318,7 +321,7 @@ class BottomBar extends Component {
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 0}
                 title={'首页'}
-                titleColor={navigationIndex === 0 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
+                titleColor={navigationIndex === 0 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
             />
             <BottomBarItem
                 source={navigationIndex === 1 ? require('../res/img/bottomBarIcon/hallC.png') : require('../res/img/bottomBarIcon/hall.png')}
@@ -327,7 +330,7 @@ class BottomBar extends Component {
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 1}
                 title={'大厅'}
-                titleColor={navigationIndex === 1 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
+                titleColor={navigationIndex === 1 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
             />
             <BottomBarItem
                 source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
@@ -337,7 +340,7 @@ class BottomBar extends Component {
                 unReadLength={unMessageLength > 0 ? unMessageLength : 0}
                 isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || isOtherUnRead)}
                 title={'消息'}
-                titleColor={navigationIndex === 2 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
+                titleColor={navigationIndex === 2 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
             />
             <BottomBarItem
                 source={navigationIndex === 3 ? require('../res/img/bottomBarIcon/myC.png') : require('../res/img/bottomBarIcon/my.png')}
@@ -347,7 +350,7 @@ class BottomBar extends Component {
                 unReadLength={0}
                 isOtherUnRead={isOtherUnRead}
                 title={'我的'}
-                titleColor={navigationIndex === 3 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.6)'}
+                titleColor={navigationIndex === 3 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
             />
         </View>;
     }
@@ -374,7 +377,7 @@ class BottomBarItem extends Component {
     };
     onPressIn = () => {
         if (!this.props.isActive) {
-            this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+            spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                 ...SpringUtils.makeDefaultConfig(),
                 bounciness: 13,
                 speed: 20,
@@ -383,7 +386,7 @@ class BottomBarItem extends Component {
 
             });
             setTimeout(() => {
-                this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+                spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                     ...SpringUtils.makeDefaultConfig(),
                     bounciness: 20,
                     speed: 20,
@@ -391,7 +394,7 @@ class BottomBarItem extends Component {
                 })).start(() => {
 
                 });
-            }, 100);
+            }, 150);
         }
 
     };
@@ -403,16 +406,18 @@ class BottomBarItem extends Component {
             onPress={this.onPress}
             onPressIn={this.onPressIn}
             style={{
-                width: width / 4,
-                height: 45,
-                backgroundColor:'#fbfbfb',
+                width: wp(25),
+                height: hp(7.5),
                 justifyContent: 'center',
                 alignItems: 'center',
-
             }}>
-            <Animated.View style={{marginTop: 3, transform: [{scale: this.animations.scale}]}}>
+            <Animated.View style={{
+                transform: [{scale: this.animations.scale}],
+                alignItems:'center',
+                marginTop:hp(0.5),
+            }}>
                 <Image
-                    style={{height: 20, width: 20}}
+                    style={{height: hp(3), width: hp(3)}}
                     source={source}
                 />
                 {unReadLength == 0 && isOtherUnRead && <View style={{
@@ -442,7 +447,7 @@ class BottomBarItem extends Component {
 
 
             </Animated.View>
-            <Text style={{fontSize: 11, color: titleColor, marginTop: 3}}>{title}</Text>
+            <Text style={{fontSize: hp(1.6), color: titleColor, marginTop:hp(0.4)}}>{title}</Text>
 
         </TouchableOpacity>;
     }

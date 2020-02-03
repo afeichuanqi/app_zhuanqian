@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text, Dimensions} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text, Dimensions, Platform} from 'react-native';
 
-import LabelBigComponent from './LabelBigComponent';
+// import LabelBigComponent from './LabelBigComponent';
 import {bottomTheme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
 import sex_nan_ from '../res/svg/sex_nan_.svg';
@@ -31,6 +31,17 @@ class TaskSumComponent extends Component {
             taskPassNum: 2,
         },
         statusBarType: 'dark',
+        boxStyle:{
+            paddingHorizontal: 5,
+            paddingVertical: 1,
+            borderRadius: 10,
+            backgroundColor: bottomTheme,
+            alignItems: 'center',
+            justifyContent: 'center',
+            // borderWidth:0.5,
+            // borderColor:'rgba(0,0,0,0.6)',
+        },
+        boxTextColor:'white'
     };
 
     constructor(props) {
@@ -56,19 +67,19 @@ class TaskSumComponent extends Component {
         let color = '';
         if (item.recommendIsExp == 1) {
             textArr.push('推荐');
-            color = '#73bc9e';
+            color = '#54ba98';
         }
         if (item.topIsExp == 1) {
             textArr.push('置顶');
-            color = '#bf4759';
+            color = '#ff2756';
         }
         if (item.hotIsExp == 1) {
             textArr.push('热门');
-            color = '#cc689a';
+            color = '#f76fbc';
         }
         if (item.bestNew == 1) {
             textArr.push('最新');
-            color = '#53a6d9';
+            color = '#2196F3';
         }
         return {
             text: textArr.join('/'),
@@ -78,15 +89,7 @@ class TaskSumComponent extends Component {
 
     render() {
         const {item} = this.props;
-        console.log(item);
         const labelBoxStyle = this.getItemTextColor(item);
-        // let maxWidth = width - 100;
-        // if (item.recommendIsExp == 1) {
-        //     maxWidth -= 40;
-        // }
-        // if (item.topIsExp == 1) {
-        //     maxWidth -= 40;
-        // }
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
@@ -94,17 +97,15 @@ class TaskSumComponent extends Component {
                 this.props.onPress && this.props.onPress(item.taskId);
             }}
             style={{
-
-                backgroundColor: '#fbfbfb',
+                backgroundColor: 'white',
                 borderRadius: 10,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginBottom: 10,
-                paddingVertical: 10,
+                marginTop: 10,
+                paddingVertical: 15,
                 width: width - 10,
                 alignSelf: 'center',
                 paddingHorizontal: 10,
-                // borderRadius:10,
 
             }}
         >
@@ -114,7 +115,7 @@ class TaskSumComponent extends Component {
                     onPress={() => {
                         Global.imageViewModal.show([{url: item.taskUri}], '', this.props.statusBarType);
                     }}
-                    style={{}}
+                    style={{alignSelf: 'flex-start'}}
                 >
                     <FastImagePro
                         style={{
@@ -130,7 +131,8 @@ class TaskSumComponent extends Component {
                     />
                 </TouchableOpacity>
                 <View style={{
-                    width: wp(55), paddingLeft: wp(2.7), overflow: 'hidden',
+                    width: wp(55), paddingLeft: wp(2.7),
+                    alignSelf: 'flex-start',
                 }}>
                     <Text
                         numberOfLines={1}
@@ -149,11 +151,11 @@ class TaskSumComponent extends Component {
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        marginTop: hp(0.5),
+                        marginTop: hp(0.8),
                     }}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={styles.bigFontStyle}>{parseInt(item.taskPassNum)}</Text>
-                            <Text style={styles.smallFontStyle}>人已完成</Text>
+                            <Text style={[styles.bigFontStyle]}>{parseInt(item.taskPassNum)}</Text>
+                            <Text style={[styles.smallFontStyle,{marginLeft:1}]}>人已完成</Text>
                         </View>
 
                         <View
@@ -161,7 +163,7 @@ class TaskSumComponent extends Component {
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style={styles.smallFontStyle}>剩余</Text>
                             <Text
-                                style={[styles.bigFontStyle, {color: 'red'}]}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
+                                style={[styles.bigFontStyle,{marginHorizontal:1}]}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
                             <Text style={styles.smallFontStyle}>个名额</Text>
                         </View>
 
@@ -171,32 +173,19 @@ class TaskSumComponent extends Component {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginTop:hp(0.5)
+                            marginTop: hp(1),
                         }}>
                         {/*标签*/}
                         <View style={{
                             flexDirection: 'row',
                         }}>
-                            <View style={styles.boxStyle}>
-                                <Text style={{fontSize: hp(1.3), color: 'rgba(0,0,0,0.5)'}}>{item.typeTitle}</Text>
+                            <View style={this.props.boxStyle}>
+                                <Text style={{fontSize: hp(1.3), color: this.props.boxTextColor}}>{item.typeTitle}</Text>
                             </View>
-                            <View style={[styles.boxStyle, {marginLeft: 5}]}>
-                                <Text style={{fontSize: hp(1.3), color: 'rgba(0,0,0,0.5)'}}>{item.taskName}</Text>
+                            <View
+                                style={[this.props.boxStyle, {marginLeft: 5}]}>
+                                <Text style={{fontSize: hp(1.3), color: this.props.boxTextColor}}>{item.taskName}</Text>
                             </View>
-                            {/*<LabelBigComponent*/}
-                            {/*    contaiStyle={styles.contaiStyle}*/}
-                            {/*    textStyle={{fontWeight:'500',color:'black'}}*/}
-                            {/*    paddingHorizontal={wp(1.5)}*/}
-                            {/*    fontSize={hp(1.3)}*/}
-                            {/*    title={item.typeTitle}/>*/}
-                            {/*<LabelBigComponent*/}
-                            {/*    contaiStyle={styles.contaiStyle}*/}
-                            {/*    textStyle={{fontWeight:'500',color:'black'}}*/}
-                            {/*    // contaiStyle={{borderWidth: 0.2, borderColor: '#2196F3',backgroundColor:'white'}}*/}
-                            {/*    // textStyle={{color: '#2196F3'}}*/}
-                            {/*    paddingHorizontal={wp(1.5)}*/}
-                            {/*    fontSize={hp(1.3)}*/}
-                            {/*    title={item.taskName}/>*/}
                         </View>
                     </View>
 
@@ -206,7 +195,7 @@ class TaskSumComponent extends Component {
                             NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
                         }}
                         style={{
-                            marginTop: hp(1),
+                            marginTop: hp(1.2),
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -221,20 +210,22 @@ class TaskSumComponent extends Component {
                                 />
                                 <SvgUri style={{
                                     position: 'absolute',
-                                    right: -wp(0.5),
-                                    bottom: -wp(0.5),
+                                    right: -hp(0.3),
+                                    bottom: -hp(0.2),
                                     backgroundColor: item.sex == 0 ? '#3b8ae8' : '#e893d8',
                                     borderRadius: 20,
+                                    zIndex: 10,
+                                    padding: 1,
 
-                                }} fill={'white'} width={wp(2.8)} height={wp(2.8)}
+                                }} fill={'white'} width={hp(0.8)} height={hp(0.8)}
                                         svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                             </View>
                             <Text style={{
-                                fontSize: hp(1.65),
+                                fontSize: hp(1.85),
                                 marginLeft: wp(2),
 
-                                color: 'rgba(0,0,0,0.8)',
-                                letterSpacing:0.5,
+                                color: 'rgba(0,0,0,1)',
+                                letterSpacing: 0.5,
                             }}>{item.userName}</Text>
                         </View>
                     </TouchableOpacity>
@@ -256,22 +247,22 @@ class TaskSumComponent extends Component {
                 }}>{item.rewardPrice}</Text>
 
             </View>
-            {labelBoxStyle.text.length>0 && <View style={{
+            {labelBoxStyle.text.length > 0 && <View style={{
                 position: 'absolute',
                 top: 0,
                 right: 0,
                 backgroundColor: labelBoxStyle.color,
                 paddingHorizontal: 5,
-                paddingVertical: 3,
+                paddingVertical: Platform.OS === 'android' ? 1 : 2,
                 borderTopRightRadius: 10,
                 borderBottomLeftRadius: 10,
                 alignItems: 'center',
                 justifyContent: 'center',
-                maxWidth:wp(35),
-                minWidth:wp(18),
+                maxWidth: wp(35),
+                minWidth: wp(18),
 
             }}>
-                <Text style={{fontSize: hp(1.8), color: 'white',letterSpacing:0.5,}}>{labelBoxStyle.text}</Text>
+                <Text style={{fontSize: hp(1.6), color: 'white', letterSpacing: 0.5}}>{labelBoxStyle.text}</Text>
             </View>}
 
         </TouchableOpacity>;
@@ -301,13 +292,13 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     smallFontStyle: {
-        letterSpacing:0.5,
-        fontSize: hp(1.4),
-        color: 'rgba(0,0,0,0.8)',
+        letterSpacing: 0.5,
+        fontSize: hp(1.5),
+        color: 'rgba(0,0,0,1)',
     },
     bigFontStyle: {
-        fontSize: hp(2.1),
-        color: bottomTheme,
+        fontSize: hp(2.3),
+        color: 'red',
         bottom: hp(0.2),
         // fontWeight: '500',
     },
@@ -327,8 +318,9 @@ const styles = StyleSheet.create({
     boxStyle: {
         paddingHorizontal: 5,
         paddingVertical: 1,
-        borderWidth: 0.5,
-        borderColor: 'rgba(0,0,0,0.5)',
         borderRadius: 10,
+        backgroundColor: bottomTheme,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

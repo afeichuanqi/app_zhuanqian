@@ -251,12 +251,11 @@ class PickerImage extends PureComponent {
                     width: (Platform.OS === 'ios') ? 1800 : width,
                     height: (Platform.OS === 'ios') ? 1200 : height,
                 }).then(image => {
-
                     this.props.select(image, this.timestamp);
                     this.hide(false);
                 });
             }}
-            key={item.id}
+            key={item.uri}
             style={{padding: 1}}>
             <Image
                 style={{height: FlatListItemHeight, width: imgWidth}}

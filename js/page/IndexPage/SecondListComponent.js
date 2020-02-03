@@ -104,7 +104,7 @@ class SecondListComponent extends PureComponent {
                 }}
                 onRefresh={this.updateBestNewList}
                 ListHeaderComponent={
-                    <View style={{height: 235, backgroundColor: 'white', zIndex: 10}}>
+                    <View style={{height: 195, backgroundColor: 'white', zIndex: 10, marginBottom: 30}}>
                         <View style={{marginTop: 15, paddingLeft: 15}}>
                             <Text style={{fontSize: hp(2.5), opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
@@ -132,22 +132,30 @@ class SecondListComponent extends PureComponent {
             />
 
             <Animated.View style={{
-                width, height: 40, position: 'absolute', justifyContent: 'center',
+                width, height: 35, position: 'absolute', justifyContent: 'center',
                 backgroundColor: 'white', transform: [{translateY: columnTop}], alignItems: 'flex-start',
-                marginLeft: 10,
+                paddingLeft: 10,
 
             }}>
                 <View style={{
                     alignItems: 'center',
                     paddingHorizontal: 5, paddingVertical: 4,
+                    flexDirection: 'row',
 
                 }}>
+                    <View style={{
+                        height: hp(2),
+                        width: 3,
+                        backgroundColor: bottomTheme,
+                        borderRadius: 3,
+                        marginRight:3,
+                    }}/>
                     <Text
                         style={{
-                            fontSize: hp(2.15),
+                            fontSize: hp(2),
                             color: bottomTheme,
                         }}>最近刷新</Text>
-                    <View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>
+                    {/*<View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>*/}
                 </View>
 
             </Animated.View>
@@ -201,25 +209,19 @@ class ScrollItem extends React.Component {
                            borderTopRightRadius: 5,
                        }}/>
             </View>
-            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
-                <Text numberOfLines={1} style={{fontSize: wp(3.3), color: 'black', opacity: 0.7}}>{item.title}</Text>
-                <View style={{
-                    width: 2,
-                    height: 2,
-                    borderRadius: 2,
-                    backgroundColor: 'black',
-                    marginHorizontal: 3,
-                    opacity: 0.7,
-                }}/>
-                <Text numberOfLines={1}
-                      style={{fontSize: hp(1.9), color: 'black', width: 65, opacity: 0.7}}>{item.task_name}</Text>
-            </View>
             {item.reward_price && <View style={{
                 flexDirection: 'row', alignItems: 'center',
-                elevation: 1, marginTop: 1,
+                elevation: 1, marginTop: 3,
             }}>
+                {/*<Image*/}
+                {/*    source={require('../../res/img/moneys.png')}*/}
+                {/*    style={{width:hp(1.6),height:hp(1.8)}}*/}
+                {/*    resizeMode={'stretch'}*/}
+                {/*/>*/}
+                <Image resizeMode={'stretch'} source={require('../../res/img/moneys.png')}
+                       style={{width: hp(1.8), marginRight:5, height: hp(2.1)}}/>
                 <Text style={{
-                    fontSize: hp(2.2),
+                    fontSize: hp(2.5),
                     color: 'red',
                     marginRight: 1,
 
@@ -229,9 +231,23 @@ class ScrollItem extends React.Component {
                     color: 'red',
                     fontWeight: '500',
                     top: 1,
+                    marginLeft: 1,
 
                 }}>元</Text>
             </View>}
+            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                <Text numberOfLines={1} style={{fontSize: hp(1.9), color: 'black', opacity: 0.9}}>{item.title}</Text>
+                <View style={{
+                    width: 2,
+                    height: 2,
+                    borderRadius: 2,
+                    backgroundColor: 'black',
+                    marginHorizontal: 3,
+                    opacity: 0.7,
+                }}/>
+                <Text numberOfLines={1}
+                      style={{fontSize: hp(1.9), color: 'black', width: 65, opacity: 0.9}}>{item.task_name}</Text>
+            </View>
 
 
         </TouchableOpacity>;

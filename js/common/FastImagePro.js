@@ -19,8 +19,7 @@ class FastImagePro extends Component {
             isSuccess: false,
         };
     }
-
-
+    // static
     onLoadStart = () => {
         this.setState({
             isSuccess: false,
@@ -84,6 +83,7 @@ class FastImagePro extends Component {
         loadingWidth: 50,
         loadingHeight: 50,
         loadingType: 1,
+        resizeMode:FastImage.resizeMode.stretch
 
     };
 
@@ -149,7 +149,7 @@ class FastImagePro extends Component {
                 onLoadStart={this.onLoadStart}
                 onLoadEnd={this.onLoadEnd}
                 onLoad={this.onLoad}
-                resizeMode={FastImage.resizeMode.stretch}
+                resizeMode={this.props.resizeMode}
             />
             {!isSuccess && ComponentView}
         </View>;

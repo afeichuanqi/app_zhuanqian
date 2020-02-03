@@ -113,7 +113,7 @@ class ChatRoomPage extends React.Component {
                     this.guzhuUserId = result.guzhuUserId;
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
-                    ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+                    ChatSocket.selectAllMsgForFromUserId(this.FriendId, this.pageCount);
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
                 } else {
                     this.props.onSetMessageLoad(false);
@@ -140,7 +140,7 @@ class ChatRoomPage extends React.Component {
                     this.guzhuUserId = result.guzhuUserId;
                     this.haveToDo = result.haveToDo;
                     this.FriendId = result.id;
-                    ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+                    ChatSocket.selectAllMsgForFromUserId(this.FriendId, this.pageCount);
                     // ChatSocket.setFromUserIdMessageIsRead(this.FriendId, this.columnType);
                     this.props.onSetAllFriendUnRead(this.FriendId, this.columnType);
                 } else {
@@ -297,7 +297,7 @@ class ChatRoomPage extends React.Component {
         if (this.getMessages().length >= 10 && this.props.message.msgIsLoad) {
             this.pageCount += 10;
             this.props.onSetMessageLoad(true);
-            ChatSocket.selectAllMsgForFromUserid(this.FriendId, this.pageCount);
+            ChatSocket.selectAllMsgForFromUserId(this.FriendId, this.pageCount);
         }
 
     };

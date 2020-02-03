@@ -65,7 +65,7 @@ class HomePage extends PureComponent {
     componentDidMount() {
         Global.token = this.props.userinfo.token;
         Global.dispatch = this.props.dispatch;
-        ChatSocket.connctionServer();
+        ChatSocket.connectionServer();
 
 
     }
@@ -222,8 +222,8 @@ class HomePage extends PureComponent {
                             handleIndexChange={this.handleIndexChange}
                             bounces={true}
                             titleMarginHorizontal={15}
-                            activeStyle={{fontSize: hp(2.4), color: [0, 0, 0]}}
-                            inactiveStyle={{fontSize: hp(2.0), color: [95, 95, 95], height: 10}}
+                            activeStyle={{fontSize: hp(2.5), color: [0, 0, 0]}}
+                            inactiveStyle={{fontSize: hp(2.2), color: [95, 95, 95], height: 10}}
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
                     </Animated.View>
@@ -406,19 +406,26 @@ class FristListComponent extends PureComponent {
                 ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 45,  position: 'absolute', top: -20, alignItems:'flex-start', justifyContent:'center',
+                width, height: 35,  position: 'absolute', top: -15, alignItems:'flex-start', justifyContent:'center',
                 backgroundColor: 'white', transform: [{translateY: columnTop}],left:10
             }}>
                 <View style={{  alignItems:'center',
-                    paddingHorizontal:5, paddingVertical:4
+                    paddingHorizontal:5, paddingVertical:4, flexDirection:'row',
 
                 }}>
+                    <View style={{
+                        height: hp(2),
+                        width: 3,
+                        backgroundColor: bottomTheme,
+                        borderRadius: 3,
+                        marginRight:3,
+                    }}/>
                     <Text
                         style={{
-                            fontSize: hp(2.15),
+                            fontSize: hp(2),
                             color: bottomTheme,
                         }}>为您推荐</Text>
-                    <View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>
+                    {/*<View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>*/}
                 </View>
             </Animated.View>
         </Animated.View>;
@@ -489,10 +496,11 @@ class LunBoComponent extends React.Component {
         const {lunboData} = this.state;
         return <View style={{
             alignItems: 'center',
-            height: lunboHeight+10,
+            height: lunboHeight,
             paddingTop: 10,
             backgroundColor: theme,
             width: width,
+            marginBottom:0,
 
 
         }}>
