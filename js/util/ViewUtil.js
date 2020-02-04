@@ -47,19 +47,19 @@ export default class ViewUtil {
 
     /**
      * 获取设置页的Item
-     * @param menuSvg 菜单svg
+     * @param menuSource 菜单svg
      * @param title 标题
      * @param menuinfo 菜单说明
      * @param isOtherMsg 菜单说明
      * @param click
      */
-    static getSettingItem = (menuSvg, title, menuinfo, click, isOtherMsg = false) => {
+    static getSettingItem = (menuSource, title, menuinfo, click, isOtherMsg = false) => {
         return (
             <TouchableOpacity
                 onPress={click}
                 style={{
                     backgroundColor: 'white',
-                    height: hp(6),
+                    height: hp(7),
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     flexDirection: 'row',
@@ -67,12 +67,20 @@ export default class ViewUtil {
                 }}>
 
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingLeft: wp(5)}}>
-                    <SvgUri width={wp(5)} height={wp(5)} fill={'rgba(0,0,0,0.9)'} svgXmlData={menuSvg}/>
-                    <Text style={{marginLeft: wp(2.5), fontSize: hp(2.2), opacity: 1, color: 'black'}}>{title}</Text>
+                    <Image
+                        source={menuSource}
+                        style={{width: hp(2.4), height: hp(2.4)}}
+                    />
+                    {/*<SvgUri*/}
+                    {/*    width={hp(2.3)}*/}
+                    {/*    height={hp(2.3)}*/}
+                    {/*    svgXmlData={menuSvg}*/}
+                    {/*/>*/}
+                    <Text style={{marginLeft: wp(3.5), fontSize: hp(2.3), opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingRight: wp(2)}}>
                     <Text
-                        style={{marginLeft: wp(2.5), fontSize:hp(1.8), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
+                        style={{marginLeft: wp(2.5), fontSize: hp(1.8), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={wp(3)} style={{marginLeft: wp(1)}} height={wp(3)} svgXmlData={menu_right}/>
                 </View>
                 {isOtherMsg && <View style={{

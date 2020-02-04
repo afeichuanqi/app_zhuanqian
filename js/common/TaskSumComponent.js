@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text, Dimensions, Platform} from 'react-native';
-
-// import LabelBigComponent from './LabelBigComponent';
 import {bottomTheme} from '../appSet';
 import NavigationUtils from '../navigator/NavigationUtils';
 import sex_nan_ from '../res/svg/sex_nan_.svg';
@@ -102,7 +100,7 @@ class TaskSumComponent extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginTop: 10,
-                paddingVertical: 15,
+                paddingVertical: hp(1.8),
                 width: width - 10,
                 alignSelf: 'center',
                 paddingHorizontal: 10,
@@ -125,8 +123,8 @@ class TaskSumComponent extends Component {
                             borderRadius: 5,
 
                         }}
-                        loadingWidth={hp(10)}
-                        loadingHeight={hp(10)}
+                        loadingWidth={hp(11)}
+                        loadingHeight={hp(11)}
                         source={{uri: item.taskUri}}
                     />
                 </TouchableOpacity>
@@ -142,7 +140,7 @@ class TaskSumComponent extends Component {
                             maxWidth: wp(55),
 
                         }}>
-                        {item && renderEmoji(item.taskTitle, [], hp(2.2), 0, 'black', {}).map((item, index) => {
+                        {item && renderEmoji(item.taskTitle, [], hp(2.1), 0, 'black', {}).map((item, index) => {
                             return item;
                         })}
                     </Text>
@@ -151,7 +149,7 @@ class TaskSumComponent extends Component {
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        marginTop: hp(0.8),
+                        marginTop: Platform.OS==='android'?hp(0.7):hp(0.9),
                     }}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style={[styles.bigFontStyle]}>{parseInt(item.taskPassNum)}</Text>
@@ -173,7 +171,7 @@ class TaskSumComponent extends Component {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginTop: hp(1),
+                            marginTop: Platform.OS==='android'?hp(0.7):hp(1),
                         }}>
                         {/*标签*/}
                         <View style={{
@@ -195,7 +193,7 @@ class TaskSumComponent extends Component {
                             NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
                         }}
                         style={{
-                            marginTop: hp(1.2),
+                            marginTop: Platform.OS==='android'?hp(0.7):hp(1),
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',

@@ -14,15 +14,6 @@ import {Dimensions, StyleSheet, Text, TouchableOpacity, View, ScrollView} from '
 import {bottomTheme} from '../appSet';
 import setting from '../res/svg/setting.svg';
 import shop from '../res/svg/shop.svg';
-import guanzhu2 from '../res/svg/mysvg/guanzhu2.svg';
-import bill from '../res/svg/mysvg/bill.svg';
-import yaoqing1 from '../res/svg/mysvg/yaoqing1.svg';
-import yaoqingipt from '../res/svg/mysvg/yaoqingipt.svg';
-import pingbi3 from '../res/svg/mysvg/pingbi3.svg';
-import updateOrder from '../res/svg/mysvg/updateOrder.svg';
-import feedback from '../res/svg/mysvg/feedback.svg';
-import viewHistory from '../res/svg/mysvg/viewHistory.svg';
-import favorite2 from '../res/svg/mysvg/favorite2.svg';
 import my_fabu from '../res/svg/my_fabu.svg';
 import SvgUri from 'react-native-svg-uri';
 import FastImage from 'react-native-fast-image';
@@ -69,12 +60,12 @@ class MyPage extends PureComponent {
         };
         const titleTop = Animated.interpolate(this.scrollY, {
             inputRange: [-800, 0, 100],
-            outputRange: [850, hp(7.9), 18],
+            outputRange: [850, hp(9), 18],
             extrapolate: 'clamp',
         });
         const titleFontSize = Animated.interpolate(this.scrollY, {
             inputRange: [0, 100],
-            outputRange: [22, 16],
+            outputRange: [23, 17],
             extrapolate: 'clamp',
         });
         const translateY = Animated.interpolate(this.scrollY, {
@@ -106,6 +97,16 @@ class MyPage extends PureComponent {
                         height: 50,
                         backgroundColor: bottomTheme,
                     }}>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={() => {
+                                NavigationUtils.goPage({}, 'ShopInfoPage');
+                            }}
+                            style={{marginRight:10}}
+
+                        >
+                            <SvgUri width={23} height={23} fill={'white'} svgXmlData={shop}/>
+                        </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.6}
                             onPress={() => {
@@ -273,37 +274,37 @@ class BottomInfoColumn extends Component {
                 />
             </ScrollView>
 
-            {ViewUtil.getSettingItem(updateOrder, '刷新购买', '实时刷新', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/updateOrder.png'), '刷新购买', '实时刷新', () => {
                 MenuClick('UserUpdateOrderPage');
             })}
-            {ViewUtil.getSettingItem(bill, '帐单详细', '支出、收入', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/bill.png'), '帐单详细', '支出、收入', () => {
                 MenuClick('UserBillListPage');
                 NavigationUtils.goPage({}, '');
             }, billIsNewMsg)}
 
 
             {ViewUtil.getMenuLine()}
-            {ViewUtil.getSettingItem(guanzhu2, '我的关注', '关注列表', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/guanzhu2.png'), '我的关注', '关注列表', () => {
                 MenuClick('MyAttentionList', {user_id: this.props.userinfo.userid, isMy: true});
                 // NavigationUtils.goPage();
             })}
-            {ViewUtil.getSettingItem(favorite2, '我的收藏', '收藏精品任务', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/favorite2.png'), '我的收藏', '收藏精品任务', () => {
                 MenuClick('MyFavoritePage');
             })}
-            {ViewUtil.getSettingItem(viewHistory, '浏览历史', '浏览历史', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/viewHistory.png'), '浏览历史', '浏览历史', () => {
                 MenuClick('MyViewHistoryPage');
             })}
-            {ViewUtil.getSettingItem(pingbi3, '屏蔽用户', '屏蔽用户列表', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/pingbi3.png'), '屏蔽用户', '屏蔽用户列表', () => {
                 MenuClick('MyShieldPage');
             })}
             {ViewUtil.getMenuLine()}
-            {ViewUtil.getSettingItem(yaoqing1, '邀请好友', '好友邀请得奖励', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/yaoqing1.png'), '邀请好友', '好友邀请得奖励', () => {
                 MenuClick('FriendPromotionPage');
             })}
-            {ViewUtil.getSettingItem(yaoqingipt, '输入邀请码', '输入邀请码', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/yaoqingipt.png'), '输入邀请码', '输入邀请码', () => {
                 MenuClick('InvitationCodePage');
             })}
-            {ViewUtil.getSettingItem(feedback, '意见反馈', '我们需要您的意见', () => {
+            {ViewUtil.getSettingItem(require('../res/img/myMenuIcon/feedback.png'), '意见反馈', '我们需要您的意见', () => {
                 MenuClick('UserFeedbackPage');
             })}
             {ViewUtil.getMenuLine()}
@@ -339,7 +340,7 @@ class ToolsItemComponent extends PureComponent {
             onPress={this.props.onPress}
             activeOpacity={0.6}
             style={{
-                 paddingVertical:hp(1.6),
+                paddingVertical: hp(1.6),
                 borderRadius: 10,
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -358,7 +359,8 @@ class ToolsItemComponent extends PureComponent {
                 <Text style={{fontSize: hp(2.3), color: 'black'}}>{title}</Text>
                 <Text style={{fontSize: hp(1.65), color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
-            <FastImage source={source} style={{width: wp(8.7), height: wp(8.7), borderRadius: 12, marginLeft:wp(1.5)}}/>
+            <FastImage source={source}
+                       style={{width: wp(8.7), height: wp(8.7), borderRadius: 12, marginLeft: wp(1.5)}}/>
             {isOtherMsg && <View style={{
                 height: 8,
                 width: 8,
@@ -384,7 +386,7 @@ class TopInfoColumn extends PureComponent {
             justifyContent: 'center',
             alignItems: 'center',
         }}>
-            <Text style={{color: 'white', fontSize: hp(2.2)}}>{value}</Text>
+            <Text style={{color: 'white', fontSize: hp(2.2), fontWeight:'500'}}>{value}</Text>
             <Text style={{color: 'white', fontSize: hp(1.8), opacity: 0.8, marginTop: 5}}>{title}</Text>
         </View>;
     };
@@ -408,12 +410,11 @@ class TopInfoColumn extends PureComponent {
             resizeMode={'stretch'}
             source={require('../res/img/my/my_background.png')}
             style={{backgroundColor: bottomTheme}}>
-            <View style={{marginTop: hp(19), height: 0}}/>
+            <View style={{marginTop: hp(22), height: 0}}/>
             <Animated.View
-                style={{height: hp(19), opacity, position: 'absolute', top: 0}}>
+                style={{height: hp(22), opacity, position: 'absolute', top: 0, width}}>
                 {/*头像*/}
                 <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row'}}>
-                    {/*{ ? }*/}
                     <TouchableOpacity
                         onPress={() => {
                             if (userinfo.login) {
@@ -424,12 +425,13 @@ class TopInfoColumn extends PureComponent {
 
 
                         }}
-                        style={{marginTop: hp(6), flexDirection: 'row', alignItems: 'center'}}>
+                        style={{marginTop: hp(7), flexDirection: 'row', alignItems: 'center'}}>
 
-                        <SvgUri width={14} height={14} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
-                        <Text style={{fontSize: hp(1.7), color: 'white'}}>我的店铺 > </Text>
+                        <SvgUri width={hp(2)} height={hp(2)} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
+                        <Text style={{fontSize: hp(2.05), color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        style={{marginTop: hp(2)}}
                         activeOpacity={0.6}
                         onPress={this._avatarClick}
                     >
@@ -440,7 +442,6 @@ class TopInfoColumn extends PureComponent {
                                 borderRadius: 25,
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                // backgroundColor:'white',
                             }}>
                                 <ActivityIndicator size="small" color="white"/>
                             </View>
@@ -448,9 +449,8 @@ class TopInfoColumn extends PureComponent {
                                 style={[styles.imgStyle]}
                                 source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
                                 resizeMode={FastImage.resizeMode.stretch}
-                            />}
-
-                        {/*<*/}
+                            />
+                        }
                         {userinfo.login && <SvgUri style={{
                             position: 'absolute',
                             right: 0,
@@ -468,7 +468,9 @@ class TopInfoColumn extends PureComponent {
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
-                    // marginTop:hp(0.3)
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
                 }}>
                     {this.genDataInfo(userinfo.login ? userinfo.task_currency : 0, '任务币')}
                     {this.genDataInfo(userinfo.login ? userinfo.share_dividend : 0, '分享收入')}
@@ -499,12 +501,8 @@ class TopInfoColumn extends PureComponent {
 const styles = StyleSheet.create({
     imgStyle: {
         // 设置背景颜色
-        // backgroundColor: '#E8E8E8',
-        // 设置宽度
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        // 设置高度
-        // height:150
+        width: hp(8),
+        height: hp(8),
+        borderRadius: hp(8) / 2,
     },
 });

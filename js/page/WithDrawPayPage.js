@@ -292,6 +292,7 @@ class InputTextPro extends React.PureComponent {
                 fontWeight: 'bold', fontSize: 30, width: width - 40, borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 5,
             }}
+            maxLength={4}
             value={this.state.price}
             onChangeText={(text) => {
                 this.setState({

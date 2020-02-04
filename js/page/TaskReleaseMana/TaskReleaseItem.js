@@ -27,7 +27,8 @@ export default class TaskReleaseItem extends PureComponent {
         return <Animated.View style={{
             borderBottomWidth: 0.3,
             borderBottomColor: 'rgba(0,0,0,0.1)',
-            transform: [{scale: this.animations.scale}],
+            // transform: [{scale: this.animations.scale}],
+            opacity:this.animations.scale,
         }}>
 
 

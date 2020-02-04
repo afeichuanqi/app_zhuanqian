@@ -722,14 +722,14 @@ class BottomInfoForm extends Component {
                 })}
                 {genFormItem('标题', 1,
                     {
-                        info: '如:注册账号 秒审(支持emoji表情 3-30字)',
+                        info: '如:1分钟帮忙投票(支持emoji表情 3-30字)',
                         onChangeText: this._changeTitle,
                         editable: true,
                         defaultValue: this.columnData.title,
                     })}
                 {genFormItem('任务说明', 1,
                     {
-                        info: '如:辅助注册(2-7字)',
+                        info: '如:投票(2-7字)',
                         onChangeText: this._changeTaskInfo,
                         editable: true,
 

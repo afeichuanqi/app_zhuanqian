@@ -457,7 +457,8 @@ class OrdersItem extends React.Component {
             style={{
                 backgroundColor: 'white', borderBottomWidth: 0.3,
                 borderBottomColor: '#e8e8e8',
-                transform: [{scale: this.animations.scale}],
+                opacity:this.animations.scale,
+                // transform: [{scale: this.animations.scale}],
             }}>
             <TouchableOpacity
                 onPress={this.props.onPress}

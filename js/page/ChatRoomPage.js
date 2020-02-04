@@ -596,7 +596,7 @@ class TaskInfo extends React.Component {
             return <SkeletonPlaceholder minOpacity={0.2}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 80}}>
                     <View style={{flexDirection: 'row'}}>
-                        <View style={{height: 60, width: 60, backgroundColor: 5, borderRadius: 3, marginLeft: 10}}/>
+                        <View style={{height: wp(14), width: wp(14), backgroundColor: 5, borderRadius: 3, marginLeft: 10}}/>
                         <View style={{justifyContent: 'space-around', marginLeft: 10}}>
                             <View style={{height: 15, width: 30}}/>
                             <View style={{height: 13, width: 100}}/>
@@ -649,13 +649,13 @@ class TaskInfo extends React.Component {
             }}>
             <View style={{flexDirection: 'row'}}>
                 <Image
-                    style={{height: wp(15), width: wp(15), borderRadius: 3}}
+                    style={{height: wp(14), width: wp(14)}}
                     source={{uri: taskInfo.task_uri}}
                     resizeMode={Image.resizeMode.stretch}
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-between', height: wp(15), width: wp(57)}}>
                     <Text style={{
-                        fontSize: hp(2.2),
+                        fontSize: hp(2.4),
                         color: 'black',
                     }}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
                     <Text numberOfLines={2} style={{fontSize: hp(2.0), opacity: 0.5, color: 'black'}}>
@@ -667,15 +667,13 @@ class TaskInfo extends React.Component {
 
                         <AnimatedFadeIn>
                             <Text style={{
-                                fontSize: hp(1.8), opacity: 0.5, color: 'black',
+                                fontSize: hp(1.7), opacity: 0.5, color: 'black',
 
                             }}>
                                 {statusText}
                             </Text>
                         </AnimatedFadeIn>
                     </View>
-
-
                 </View>
             </View>
             <View style={{height: wp(15), justifyContent: 'flex-end'}}>
