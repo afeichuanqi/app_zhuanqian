@@ -16,13 +16,13 @@ import {
     Image,
     FlatList,
     Platform,
-    View
+    View,
 } from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageUtil from '../util/ImageUtil';
 
-const {timing,SpringUtils,spring,} = Animated;
+const {timing, SpringUtils, spring} = Animated;
 const {width} = Dimensions.get('window');
 export const ImgOption = Platform.OS === 'android' ? {
     cropping: true,
@@ -105,12 +105,12 @@ class PickerImage extends PureComponent {
         this.timer && clearTimeout(this.timer);
     }
 
-    hide = (hideAnimated=false) => {
-        if(hideAnimated){
+    hide = (hideAnimated = false, callback) => {
+        if (hideAnimated) {
             this.setState({
                 visible: false,
-            });
-            return ;
+            }, callback);
+            return;
         }
 
         this._anim = timing(this.animations.bottom, {
@@ -144,7 +144,7 @@ class PickerImage extends PureComponent {
                     ...SpringUtils.makeDefaultConfig(),
                     bounciness: 10,
                     speed: 8,
-                    toValue:-400
+                    toValue: -400,
                 })).start();
                 // this._anim = timing(this.animations.bottom, {
                 //     duration: 200,
@@ -229,7 +229,7 @@ class PickerImage extends PureComponent {
                             }}>
                             <Text style={{color: 'black'}}>{'从相册选一张'}</Text>
                         </TouchableOpacity>
-                        <View style={{height:60, backgroundColor:'white'}}/>
+                        <View style={{height: 60, backgroundColor: 'white'}}/>
                     </Animated.View>
 
                 </TouchableOpacity>
@@ -245,15 +245,21 @@ class PickerImage extends PureComponent {
 
         return <TouchableOpacity
             onPress={() => {
+
+
                 ImagePicker.openCropper({
                     ...ImgOption,
                     path: uri,
                     width: (Platform.OS === 'ios') ? 1800 : width,
                     height: (Platform.OS === 'ios') ? 1200 : height,
                 }).then(image => {
+                    this.hide(false, () => {
+
+                    });
                     this.props.select(image, this.timestamp);
-                    this.hide(false);
+
                 });
+
             }}
             key={item.uri}
             style={{padding: 1}}>

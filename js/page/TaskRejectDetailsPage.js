@@ -325,7 +325,7 @@ class TaskRejectDetailsPage extends PureComponent {
 
                             style={{
                                 fontSize: 14,
-
+                                color:'rgba(0,0,0,0.7)'
                             }}>是否确认放弃此任务？</Text>
                     </View>
                 </ToastSelect>

@@ -477,7 +477,7 @@ class FristListComponent extends PureComponent {
                     paddingTop: 10,
 
                 }}>
-                    <Text style={{fontSize: 14, width: width - 80}}>删除后无法恢复,是否确认删除？</Text>
+                    <Text style={{fontSize: 14, width: width - 80,color:'rgba(0,0,0,0.7)'}}>删除后无法恢复,是否确认删除？</Text>
                 </View>
             </ToastSelect>
             <ToastTaskTopRecommend

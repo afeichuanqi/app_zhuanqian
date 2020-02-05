@@ -386,7 +386,7 @@ class MyTaskReview extends PureComponent {
                                 height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
                                 paddingTop: 10,
                             }}>
-                                <Text style={{fontSize: 14}}>仔细确认是否通过此任务的验证？</Text>
+                                <Text style={{fontSize: 14,color:'rgba(0,0,0,0.7)'}}>仔细确认是否通过此任务的验证？</Text>
                             </View>
                         </ToastSelect>
                     </View>}

@@ -7,8 +7,8 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Dimensions, StyleSheet, View, Text, StatusBar} from 'react-native';
-import {theme,bottomTheme} from '../appSet';
+import {Dimensions, StyleSheet, View, Text, StatusBar, Platform} from 'react-native';
+import {theme, bottomTheme} from '../appSet';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -18,6 +18,11 @@ import Global from '../common/Global';
 import {getAppSetting} from '../util/AppService';
 import Animated from 'react-native-reanimated';
 import JShareModule from 'jshare-react-native';
+import PrivacyToast from '../common/PrivacyToast';
+import actions from '../action';
+import {connect} from 'react-redux';
+import PrivacyToastStep2 from '../common/PrivacyToastStep2';
+
 const {spring} = Animated;
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
@@ -26,9 +31,9 @@ let bootSplashLogo = require('../../assets/bootsplash_logo.png');
 class HomePage extends PureComponent {
     constructor(props) {
         super(props);
+        NavigationUtils.navigation = this.props.navigation;
     }
 
-    // opacity = new Animated.Value(1);
     translateY = new Animated.Value(0);
     state = {
         showAnimated: true,
@@ -51,8 +56,17 @@ class HomePage extends PureComponent {
     }
 
     startAnimated = () => {
-
         RNBootSplash.hide();
+        // this.PrivacyToastStep2.show();
+        const {appSetting, onIsAgreePrivacy} = this.props;
+        // onIsAgreePrivacy(false);
+        if (Platform.OS === 'android' && !appSetting.agreePrivacy) {
+            this.PrivacyToast.show();
+        } else {
+            this.hideSelf();
+        }
+    };
+    hideSelf = () => {
         spring(this.translateY, {
             toValue: -50,
             damping: 100,
@@ -62,7 +76,6 @@ class HomePage extends PureComponent {
             restSpeedThreshold: 20,
             restDisplacementThreshold: 20,
         }).start(() => {
-
             StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('dark-content', false);
             StatusBar.setBackgroundColor(theme, false);
@@ -75,8 +88,8 @@ class HomePage extends PureComponent {
                 restSpeedThreshold: 1,
                 restDisplacementThreshold: 1,
             }).start(() => {
-                StatusBar.setHidden(false)
-                NavigationUtils.navigation = this.props.navigation;
+                StatusBar.setHidden(false);
+
                 this.setState({
                     showAnimated: false,
                 }, () => {
@@ -84,12 +97,12 @@ class HomePage extends PureComponent {
                 });
             });
         });
-
-
     };
 
     render() {
         const {showAnimated} = this.state;
+        const {appSetting, onIsAgreePrivacy} = this.props;
+
         const opacity = Animated.interpolate(this.translateY, {
             inputRange: [400, 500],
             outputRange: [1, 0],
@@ -130,10 +143,53 @@ class HomePage extends PureComponent {
                 </Animated.View>}
                 <DynamicTabNavigator/>
                 <PromotionToast ref={ref => this.promotionToast = ref}/>
+                {Platform.OS === 'android' && !appSetting.agreePrivacy && <PrivacyToast
+                    click={() => {
+                        this.PrivacyToast.hide();
+                        NavigationUtils.goPage({type: 3, onBackPress: this.onBackPress}, 'UserProtocol');
+                    }}
+                    sureClick={() => {
+                        this.PrivacyToast.hide();
+                        onIsAgreePrivacy(true);
+                        this.hideSelf();
+                    }}
+                    cancelClick={() => {
+                        this.PrivacyToast.hide(()=>{
+                            this.PrivacyToastStep2.show();
+                        });
+                    }}
+                    ref={ref => this.PrivacyToast = ref}/>}
+                <PrivacyToastStep2
+
+                    sureClick={() => {
+                        this.PrivacyToastStep2.hide(()=>{
+                            this.PrivacyToast.show();
+                        });
+                        // this.hideSelf();
+                    }}
+
+                    ref={ref => this.PrivacyToastStep2 = ref}/>
+                {/*{Platform.OS === 'android' && !appSetting.agreePrivacy && <PrivacyToastStep2*/}
+
+                {/*    sureClick={() => {*/}
+                {/*        this.PrivacyToastStep2.hide(()=>{*/}
+                {/*            this.PrivacyToast.show();*/}
+                {/*        });*/}
+                {/*        // this.hideSelf();*/}
+                {/*    }}*/}
+
+                {/*    ref={ref => this.PrivacyToastStep2 = ref}/>}*/}
             </View>
 
         );
     }
+
+    onBackPress = () => {
+        StatusBar.setTranslucent(true);
+        StatusBar.setBarStyle('light-content', false);
+        StatusBar.setBackgroundColor(bottomTheme, false);
+        this.PrivacyToast.show();
+    };
 }
 
 const styles = StyleSheet.create({
@@ -161,4 +217,11 @@ const styles = StyleSheet.create({
 
     },
 });
-export default HomePage;
+const mapStateToProps = state => ({
+    appSetting: state.appSetting,
+});
+const mapDispatchToProps = dispatch => ({
+    onIsAgreePrivacy: (bool) => dispatch(actions.onIsAgreePrivacy(bool)),
+});
+const HomePageRedux = connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default HomePageRedux;

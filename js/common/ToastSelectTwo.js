@@ -90,7 +90,7 @@ class ToastSelectTwo extends PureComponent {
 
             >
                 <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center',
+                    flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center',
                     alignItems: 'center', zIndex: 10,
                 }}
                                   activeOpacity={1}
@@ -102,7 +102,6 @@ class ToastSelectTwo extends PureComponent {
                         position: 'absolute', right: width,
                         transform: [{translateX: this.animations.translateX}], opacity: this.animations.scale,
                         backgroundColor: 'white',
-                        // transform: 1,
                         borderRadius: 4,
                     }]}>
 

@@ -4,6 +4,7 @@ import taskInfo from './taskInfo';
 import message from './message';
 import search from './search';
 import socketStatus from './socketStatus';
+import appSetting from './appSetting';
 import {persistCombineReducers} from 'redux-persist';
 import {rootCom, RootNavigator} from '../navigator/AppNavigators';
 import storage from '@react-native-community/async-storage';
@@ -32,12 +33,13 @@ const index = {
         socketStatus,
         taskInfo,
         search,
+        appSetting,
     }
 ;
 const config = {
     key: 'root',
     storage,
-    whitelist: ['userinfo', 'taskInfo', 'search'],
+    whitelist: ['userinfo', 'taskInfo', 'search', 'appSetting'],
 };
 let reducer = persistCombineReducers(config, index);
 export default reducer;

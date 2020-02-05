@@ -7,13 +7,13 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, TouchableOpacity, Text, ScrollView, Dimensions} from 'react-native';
+import {View, TouchableOpacity, Text, ScrollView, Dimensions, StatusBar} from 'react-native';
 import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../../appSet';
 import NavigationBar from '../../common/NavigationBar';
 import ViewUtil from '../../util/ViewUtil';
 import HTML from 'react-native-render-html';
-import {order_rule, release_rule,user_agreement} from '../../res/text/rule';
+import {order_rule, release_rule, user_agreement} from '../../res/text/rule';
 import BackPressComponent from '../../common/BackPressComponent';
 import NavigationUtils from '../../navigator/NavigationUtils';
 import {getAppSoftText} from '../../util/AppService';
@@ -32,10 +32,14 @@ class UserProtocol extends PureComponent {
 
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
+        this.params.onBackPress && this.params.onBackPress();
         return true;
     };
 
     componentDidMount() {
+        StatusBar.setTranslucent(false);
+        StatusBar.setBarStyle('dark-content', false);
+        StatusBar.setBackgroundColor(theme, false);
         this.backPress.componentDidMount();
         getAppSoftText({ziduan: this.params.type === 1 ? 'release_rule' : this.params.type === 2 ? 'order_rule' : this.params.type === 3 ? 'user_agreement' : ''}).then(result => {
             if (result) {
@@ -76,9 +80,7 @@ class UserProtocol extends PureComponent {
                     {TopColumn}
                     <TouchableOpacity
                         activeOpacity={0.5}
-                        onPress={() => {
-                            this.props.navigation.goBack();
-                        }}
+                        onPress={this.onBackPress}
                         style={{position: 'absolute', top: 15, right: 10}}>
                         <Text style={{color: bottomTheme}}>关闭</Text>
                     </TouchableOpacity>

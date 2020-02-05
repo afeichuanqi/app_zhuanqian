@@ -76,9 +76,9 @@ const dynamicModalTransition = (transitionProps, prevTransitionProps) => {
     //         screenInterpolator: CardStackStyleInterpolator.forNoAnimation,
     //     };
     // }
-    if(isModal1){
+    if (isModal1) {
         return {
-            screenInterpolator: Platform.OS === 'android' ? CardStackStyleInterpolator.forNoAnimation:CardStackStyleInterpolator.forHorizontal,
+            screenInterpolator: Platform.OS === 'android' ? CardStackStyleInterpolator.forNoAnimation : CardStackStyleInterpolator.forHorizontal,
         };
     }
     if (isModal) {
@@ -350,6 +350,7 @@ const MainNavigator = createStackNavigator({
 const AppContainer = createSwitchNavigator({
         Init: MainNavigator,
         Main: InitNavigator,
+        // UserProtocol: UserProtocol,
     }, {
         navigationOptions: {
             header: null,

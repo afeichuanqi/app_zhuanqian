@@ -755,7 +755,7 @@ class BottomBtns extends PureComponent {
                     height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
                     paddingTop: 10,
                 }}>
-                    <Text style={{fontSize: 14}}>{`是否确认此任务的${this.props.update ? '修改' : '发布'}？`}</Text>
+                    <Text style={{fontSize: 14,color:'rgba(0,0,0,0.7)'}}>{`是否确认此任务的${this.props.update ? '修改' : '发布'}？`}</Text>
                 </View>
             </ToastSelect>
         </View>;

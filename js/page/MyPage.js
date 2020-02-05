@@ -232,7 +232,7 @@ class BottomInfoColumn extends Component {
             <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                style={{paddingLeft: +5, backgroundColor: '#fafafa'}}
+                style={{paddingLeft: 5, backgroundColor: '#fafafa'}}
             >
                 <ToolsItemComponent
                     title={'发布管理'}
@@ -473,9 +473,11 @@ class TopInfoColumn extends PureComponent {
                     left: 0,
                 }}>
                     {this.genDataInfo(userinfo.login ? userinfo.task_currency : 0, '任务币')}
+                    {this.genDataInfo(userinfo.login ? userinfo.offer_reward_dividend : 0, '悬赏收入')}
                     {this.genDataInfo(userinfo.login ? userinfo.share_dividend : 0, '分享收入')}
+
                     {this.genDataInfo(userinfo.login ? userinfo.tota_withdrawal : 0, '提现总额')}
-                    {this.genDataInfo(userinfo.login ? userinfo.guaranteed_amount : 0, '保证金')}
+
                 </View>
             </Animated.View>
             <PickerImage showMorePhotos={true} cropping={true} includeBase64={true} select={this._avatarSelect}

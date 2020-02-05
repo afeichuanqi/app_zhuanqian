@@ -133,7 +133,7 @@ class TaskSumComponent extends Component {
                     alignSelf: 'flex-start',
                 }}>
                     <Text
-                        numberOfLines={1}
+
                         style={{
                             fontSize: hp(2.25),
                             color: 'black',
@@ -171,7 +171,7 @@ class TaskSumComponent extends Component {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginTop: Platform.OS==='android'?hp(0.7):hp(1),
+                            marginTop: Platform.OS==='android'?hp(0.7):hp(1.1),
                         }}>
                         {/*标签*/}
                         <View style={{
@@ -193,7 +193,7 @@ class TaskSumComponent extends Component {
                             NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
                         }}
                         style={{
-                            marginTop: Platform.OS==='android'?hp(0.7):hp(1),
+                            marginTop: Platform.OS==='android'?hp(0.7):hp(1.1),
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     smallFontStyle: {
         letterSpacing: 0.5,
         fontSize: hp(1.5),
-        color: 'rgba(0,0,0,1)',
+        color: 'rgba(0,0,0,0.9)',
     },
     bigFontStyle: {
         fontSize: hp(2.3),

@@ -14,7 +14,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 const {width, height} = Dimensions.get('window');
 const {spring, SpringUtils} = Animated;
 
-class MyModalBox extends PureComponent {
+class PromotionToast extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -40,6 +40,7 @@ class MyModalBox extends PureComponent {
     }
 
     hide = () => {
+
         this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
             ...SpringUtils.makeDefaultConfig(),
             bounciness: 0,
@@ -85,7 +86,7 @@ class MyModalBox extends PureComponent {
 
             >
                 <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.8)',
+                    flex: 1, backgroundColor: 'rgba(0,0,0,0.6)',
                 }}
                                   activeOpacity={1}
                                   onPress={() => {
@@ -148,4 +149,4 @@ class MyModalBox extends PureComponent {
 }
 
 
-export default MyModalBox;
+export default PromotionToast;

@@ -35,6 +35,7 @@ export default function onAction(state = defaultContent, action) {
                 game_dividend: data.game_dividend,
                 offer_reward_dividend: data.offer_reward_dividend,
                 share_dividend: data.share_dividend,
+
                 login: true,
             };
         case Types.LOGIN_FAIL://登录失败

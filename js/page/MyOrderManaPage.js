@@ -323,7 +323,7 @@ class MyOrderManaPage extends PureComponent {
                         paddingTop: 10,
 
                     }}>
-                        <Text style={{fontSize: 14, width: width - 80}}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
+                        <Text style={{fontSize: 14, width: width - 80,color:'rgba(0,0,0,0.7)'}}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
                     </View>
                 </ToastSelect>
                 <ToastShare ref={ref => this.toastShare = ref}/>

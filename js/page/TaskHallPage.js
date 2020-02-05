@@ -306,7 +306,7 @@ class FirstListComponent extends PureComponent {
         return <View style={{flex: 1, zIndex: 3}}>
 
 
-            <Animated.View style={{transform: [{translateY}]}}>
+            <Animated.View style={{transform: [{translateY},],top:-5}}>
                 <FlatListCommonUtil
                     EmptyH={height - hp(27) + (this.state.tOutputRange == hp(5.9) ? hp(5.9) : 0)}
                     statusBarType={'light'}

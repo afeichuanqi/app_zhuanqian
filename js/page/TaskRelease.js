@@ -563,7 +563,7 @@ class TaskRelease extends PureComponent {
                         height: 30,  paddingHorizontal: 18, justifyContent: 'center',
                         paddingTop: 10,
                     }}>
-                        <Text style={{fontSize: hp(2.0),color:'black'}}>{`是否确认此任务的${this.taskInfo.update ? '修改' : '发布'}？`}</Text>
+                        <Text style={{fontSize: hp(2.0),color:'rgba(0,0,0,0.7)'}}>{`是否确认此任务的${this.taskInfo.update ? '修改' : '发布'}？`}</Text>
                     </View>
                 </ToastSelect>
             </SafeAreaViewPlus>
