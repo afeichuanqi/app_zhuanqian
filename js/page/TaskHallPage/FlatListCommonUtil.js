@@ -5,9 +5,7 @@ import TaskSumComponent from '../../common/TaskSumComponent';
 import {getAllTask} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {bottomTheme} from '../../appSet';
 
-// const {height, width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
     static defaultProps = {
@@ -94,7 +92,12 @@ export default class FlatListCommonUtil extends PureComponent {
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
                                                 height={this.props.EmptyH}/>}
-            ListHeaderComponent={ListHeaderComponent}
+            ListHeaderComponent={() => {
+                if (taskData.length === 0) {
+                    return null;
+                }
+                return ListHeaderComponent;
+            }}
             ref={ref => this.flatList = ref}
             data={taskData}
             showsVerticalScrollIndicator={false}
@@ -102,7 +105,7 @@ export default class FlatListCommonUtil extends PureComponent {
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
             style={{
-                backgroundColor: '#f9f9f9',
+                backgroundColor: '#f5f5f5',
                 height: '100%',
             }}
             refreshControl={
@@ -179,7 +182,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth:0.5,
-        borderColor:'rgba(0,0,0,0.6)',
+        borderWidth: 0.5,
+        borderColor: 'rgba(0,0,0,0.6)',
     },
 });

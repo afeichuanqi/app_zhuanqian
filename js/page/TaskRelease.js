@@ -553,19 +553,12 @@ class TaskRelease extends PureComponent {
                     </TouchableOpacity>
                 </View>
                 <ToastSelect
-                    rightTitle={this.taskInfo.update ? '确认修改' : '确认发布'}
+                    sureTitle={this.taskInfo.update ? '确认修改' : '确认发布'}
                     sureClick={() => {
                         this.toastS.hide();
                         this._addTaskReleaseData();
                     }}
-                    ref={ref => this.toastS = ref}>
-                    <View style={{
-                        height: 30,  paddingHorizontal: 18, justifyContent: 'center',
-                        paddingTop: 10,
-                    }}>
-                        <Text style={{fontSize: hp(2.0),color:'rgba(0,0,0,0.7)'}}>{`是否确认此任务的${this.taskInfo.update ? '修改' : '发布'}？`}</Text>
-                    </View>
-                </ToastSelect>
+                    ref={ref => this.toastS = ref}/>
             </SafeAreaViewPlus>
         );
     }
@@ -792,46 +785,10 @@ class BottomInfoForm extends Component {
                     onchangeText: this._changePrepaidBounty,
                     editable: false,
                 }}/>
-                {/*<View style={{position:'absolute',flex:1,width, height:150,backgroundColor:'rgba(0,0,0,0.1)'}}/>*/}
             </View>
             <StepInfo stepData={this.props.taskInfo.stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
                       scrollTo={this.props.scrollTo}
                       scollToEnd={this.props.scollToEnd}/>
-            {/*{this.props.taskInfo.stepData && this.props.taskInfo.stepData.length > 0 && !showHistory ? <View*/}
-
-            {/*        style={{height: 80, width, justifyContent: 'center', alignItems: 'center'}}*/}
-            {/*    >*/}
-            {/*        <Text style={{color: 'blue'}}>是否显示历史存档?</Text>*/}
-            {/*        <View style={{width: 150, flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>*/}
-
-            {/*            <TouchableOpacity*/}
-            {/*                onPress={() => {*/}
-            {/*                    this.setState({*/}
-            {/*                        showHistory: true,*/}
-            {/*                        stepData: this.props.taskInfo.stepData,*/}
-            {/*                    });*/}
-            {/*                }}*/}
-
-            {/*            >*/}
-            {/*                <Text style={{color: 'blue'}}>是</Text>*/}
-
-            {/*            </TouchableOpacity>*/}
-            {/*            <TouchableOpacity*/}
-            {/*                onPress={() => {*/}
-            {/*                    this.setState({*/}
-            {/*                        showHistory: true,*/}
-            {/*                        stepData: [],*/}
-            {/*                    });*/}
-            {/*                }}*/}
-
-            {/*            >*/}
-            {/*                <Text style={{color: 'blue'}}>否</Text>*/}
-            {/*            </TouchableOpacity>*/}
-            {/*        </View>*/}
-            {/*    </View> :*/}
-            {/*    <StepInfo stepData={stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}*/}
-            {/*              scrollTo={this.props.scrollTo}*/}
-            {/*              scollToEnd={this.props.scollToEnd}/>}*/}
         </View>;
     }
 }

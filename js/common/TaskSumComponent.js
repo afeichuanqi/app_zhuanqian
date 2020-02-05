@@ -99,7 +99,7 @@ class TaskSumComponent extends Component {
                 borderRadius: 10,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginTop: 10,
+                marginTop: 5,
                 paddingVertical: hp(1.8),
                 width: width - 10,
                 alignSelf: 'center',
@@ -234,11 +234,11 @@ class TaskSumComponent extends Component {
                 <Text style={{
                     fontSize: hp(2.1),
                     color: '#e6493b',
-                    fontWeight: '700',
+                    fontWeight: '600',
                     top: hp(0.5),
                 }}>￥</Text>
                 <Text style={{
-                    fontSize: hp(4.3),
+                    fontSize: hp(3.5),
                     color: '#e6493b',
                     fontWeight: '700',
                     // marginRight: wp(0.3),
@@ -252,8 +252,8 @@ class TaskSumComponent extends Component {
                 backgroundColor: labelBoxStyle.color,
                 paddingHorizontal: 5,
                 paddingVertical: Platform.OS === 'android' ? 1 : 2,
-                borderTopRightRadius: 10,
-                borderBottomLeftRadius: 10,
+                borderTopRightRadius: 5,
+                borderBottomLeftRadius: 5,
                 alignItems: 'center',
                 justifyContent: 'center',
                 maxWidth: wp(35),

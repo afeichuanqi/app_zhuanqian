@@ -379,16 +379,9 @@ class MyTaskReview extends PureComponent {
 
                         <ImageViewerModal statusBarType={'dark'} ref={ref => this.imageModal = ref}/>
                         <ToastSelect
-                            rightTitle={'通过'}
+                            sureTitle={'确认通过'}
                             sureClick={() => this.thisTaskPass(taskData.taskStepId)}
-                            ref={ref => this.toastS = ref}>
-                            <View style={{
-                                height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                                paddingTop: 10,
-                            }}>
-                                <Text style={{fontSize: 14,color:'rgba(0,0,0,0.7)'}}>仔细确认是否通过此任务的验证？</Text>
-                            </View>
-                        </ToastSelect>
+                            ref={ref => this.toastS = ref}/>
                     </View>}
 
             </SafeAreaViewPlus>

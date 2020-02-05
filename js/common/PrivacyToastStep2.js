@@ -81,14 +81,14 @@ class PrivacyToast extends PureComponent {
                 transparent
                 visible={visible}
                 supportedOrientations={['portrait']}
-                onRequestClose={this.hide}
+                // onRequestClose={this.hide}
 
             >
-                <TouchableOpacity style={{
+                <View style={{
                     flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center',
                     alignItems: 'center',
                 }}
-                                  activeOpacity={1}
+                                  // activeOpacity={1}
                     // onPress={this.hide}
                 >
                     <Animated.View style={{
@@ -122,7 +122,7 @@ class PrivacyToast extends PureComponent {
                         </View>
                     </Animated.View>
 
-                </TouchableOpacity>
+                </View>
             </Modal>
         );
     }

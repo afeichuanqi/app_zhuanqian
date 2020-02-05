@@ -91,17 +91,17 @@ class HomePage extends PureComponent {
 
     render() {
         const {navigationRoutes, navigationIndex} = this.state;
-        let statusBar = {
-            hidden: false,
-            backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
-            barStyle: 'dark-content',
-        };
+        // let statusBar = {
+        //     hidden: false,
+        //     backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
+        //     barStyle: 'dark-content',
+        // };
 
-        let navigationBar = <NavigationBar
-            hide={true}
-            statusBar={statusBar}
-            // style={{backgroundColor: bottomTheme}} // 背景颜色
-        />;
+        // let navigationBar = <NavigationBar
+        //     hide={true}
+        //     statusBar={statusBar}
+        //     // style={{backgroundColor: bottomTheme}} // 背景颜色
+        // />;
         const searchWidth = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
             outputRange: [width - 20, width - 150],
@@ -251,7 +251,6 @@ class HomePage extends PureComponent {
     }
 
     handleIndexChange = (index) => {
-        // console.log(index);
         const {navigationRoutes} = this.state;
         this.jumpTo(navigationRoutes[index].key);
     };
@@ -260,25 +259,17 @@ class HomePage extends PureComponent {
         switch (route.key) {
             case 'first':
                 return <FristListComponent
-                    position={this.position}
-                    // onLoad={this._onLoad}
                     translateY={this.translateY}
                     showAnimated={this.showAnimated}
                 />;
             case 'second':
                 return <SecondListComponent
-                    position={this.position}
-                    // onLoad={this._onLoad}
                     translateY={this.translateY}
                     showAnimated={this.showAnimated}
                 />;
 
         }
     };
-    // flatListLoad = false;
-    // _onLoad = (refresh) => {
-    //     this.flatListLoad = refresh;
-    // };
     AnimatedIsshow = false;
     showAnimated = (show) => {
         if (show) {
@@ -304,12 +295,8 @@ class HomePage extends PureComponent {
     };
 
     SearchOnFocus = () => {
-        // Toast.show('无网络,请连接网络后重试');
-        // this.toast.show('text');
 
         NavigationUtils.goPage({}, 'SearchPage');
-        // NavigationUtils.goPage({}, 'ImageExample');
-        // this.test();
     };
 }
 
@@ -361,7 +348,6 @@ class FristListComponent extends PureComponent {
     }
 
     componentWillUnmount() {
-
         EventBus.getInstance().removeListener(this.listener);
     }
 
@@ -373,7 +359,7 @@ class FristListComponent extends PureComponent {
     };
 
     render() {
-
+        // console.log('render');
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-220, 0, lunboHeight - 35],
             outputRange: [lunboHeight + 230, lunboHeight + 10, 45],
@@ -500,10 +486,11 @@ class LunBoComponent extends React.Component {
             paddingTop: 10,
             backgroundColor: theme,
             width: width,
-            marginBottom:0,
+            // marginBottom:10,
 
 
         }}>
+
             {/*轮播图*/}
             <Carousel
                 style={styles.carousel}
@@ -520,7 +507,7 @@ class LunBoComponent extends React.Component {
 
 
             <View style={{height: 40}}/>
-
+            {/*<View style={{height: 15, width, backgroundColor: '#f5f5f5'}}/>*/}
         </View>;
     }
 }
@@ -531,13 +518,11 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     dispatch: dispatch,
-    // onLogin: (phone, code, callback) => dispatch(actions.onLogin(phone, code, callback)),
 });
 const HomePageRedux = connect(mapStateToProps, mapDispatchToProps)(HomePage);
 const styles = StyleSheet.create({
     carousel: {
         flex: 1,
-        // justifyContent:'center'
     },
     imgStyle: {
         // 设置背景颜色

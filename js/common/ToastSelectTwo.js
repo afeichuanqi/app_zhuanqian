@@ -7,15 +7,16 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
+import {Modal, View, Dimensions, Text, TouchableOpacity, ScrollView} from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 import Animated, {Easing} from 'react-native-reanimated';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 
-const {SpringUtils,spring} = Animated;
+const {SpringUtils, spring} = Animated;
 
 class ToastSelectTwo extends PureComponent {
     constructor(props) {
@@ -28,6 +29,8 @@ class ToastSelectTwo extends PureComponent {
         rightTitle: '添加',
         titleComponent: null,
         title: '温馨提示',
+        sureTitle: '确定',
+        cancelTitle: '取消',
     };
     state = {
         visible: false,
@@ -44,11 +47,11 @@ class ToastSelectTwo extends PureComponent {
     }
 
     hide = () => {
-        this._anim = spring(this.animations.translateX, SpringUtils.makeConfigFromBouncinessAndSpeed({
+        this._anim = spring(this.animations.translateY, SpringUtils.makeConfigFromBouncinessAndSpeed({
             ...SpringUtils.makeDefaultConfig(),
             bounciness: 0,
             speed: 20,
-            toValue:width*2
+            toValue: 0,
         })).start(() => {
 
 
@@ -64,17 +67,17 @@ class ToastSelectTwo extends PureComponent {
         this.setState({
             visible: true,
         }, () => {
-            this._anim = spring(this.animations.translateX, SpringUtils.makeConfigFromBouncinessAndSpeed({
+            this._anim = spring(this.animations.translateY, SpringUtils.makeConfigFromBouncinessAndSpeed({
                 ...SpringUtils.makeDefaultConfig(),
                 bounciness: 15,
                 speed: 20,
-                toValue:width-20
+                toValue: -150,
             })).start();
 
         });
     };
     animations = {
-        translateX: new Animated.Value(width*2),
+        translateY: new Animated.Value(0),
     };
 
     render() {
@@ -89,72 +92,43 @@ class ToastSelectTwo extends PureComponent {
                 onRequestClose={this.hide}
 
             >
-                <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center',
-                    alignItems: 'center', zIndex: 10,
-                }}
+                <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}
                                   activeOpacity={1}
                                   onPress={() => {
-                                      this.hide();
+                                      this.hide(null);
                                   }}
                 >
-                    <Animated.View style={[this.props.style, {
-                        position: 'absolute', right: width,
-                        transform: [{translateX: this.animations.translateX}], opacity: this.animations.scale,
-                        backgroundColor: 'white',
-                        borderRadius: 4,
-                    }]}>
+                    <Animated.View style={{
+                        width, position: 'absolute', bottom: -200, backgroundColor: 'white',
+                        borderTopLeftRadius: 5, borderTopRightRadius: 5,
+                        transform: [{translateY: this.animations.translateY}],
+                    }}>
+                        <TouchableOpacity
+                            onPress={this._sure}
+                            style={{
+                                width, alignItems: 'center', height: 50, justifyContent: 'center',
+                                borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
+
+                            }}>
+                            <Text
+                                style={{color: 'black', opacity: 0.7, fontSize: wp(3.8)}}>{this.props.sureTitle}</Text>
+                        </TouchableOpacity>
 
                         <View style={{
-                            paddingVertical: 10,
-                            width: width - 40,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            paddingHorizontal: 15,
-                            paddingTop: 15,
+                            height: 10, backgroundColor: '#e8e8e8',
+                        }}/>
+                        <TouchableOpacity
+                            onPress={this._cancel}
+                            style={{
+                                width, alignItems: 'center', height: 50, justifyContent: 'center',
 
-                        }}>
-                            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: 16, color: bottomTheme}}>{this.props.title}</Text>
-                                {this.props.titleComponent}
-                            </View>
+                            }}>
+                            <Text>{this.props.cancelTitle}</Text>
+                        </TouchableOpacity>
+                        <View style={{height: 50, width, backgroundColor: 'white'}}>
 
-                            <TouchableOpacity
-                                onPress={this.hide}>
-                                <SvgUri width={15} height={15} svgXmlData={cha}/>
-                            </TouchableOpacity>
-                        </View>
-                        {this.props.children}
-                        <View style={{
-                            flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',
-                            borderBottomLeftRadius: 4, borderBottomRightRadius: 4,
-                        }}>
-                            <TouchableOpacity
-                                activeOpacity={0.6}
-                                onPress={this._cancel}
-                                style={{
-                                    width: (width - 40) / 2,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    height: 50,
-                                }}>
-                                <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                activeOpacity={0.6}
-                                onPress={this._sure}
-                                style={{
-                                    width: (width - 40) / 2,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    height: 50,
-                                }}>
-                                <Text style={{color: '#2196F3'}}>{rightTitle}</Text>
-                            </TouchableOpacity>
                         </View>
                     </Animated.View>
-
                 </TouchableOpacity>
             </Modal>
         );

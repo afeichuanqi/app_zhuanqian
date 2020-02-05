@@ -305,9 +305,12 @@ class FirstListComponent extends PureComponent {
 
         return <View style={{flex: 1, zIndex: 3}}>
 
+            {/*<View style={{height:10,width, backgroundColor:'#f5f5f5'}}>*/}
 
-            <Animated.View style={{transform: [{translateY},],top:-5}}>
+            {/*</View>*/}
+            <Animated.View style={{transform: [{translateY}]}}>
                 <FlatListCommonUtil
+                    ListHeaderComponent={<View style={{height: 15, width, backgroundColor: '#f5f5f5'}}/>}
                     EmptyH={height - hp(27) + (this.state.tOutputRange == hp(5.9) ? hp(5.9) : 0)}
                     statusBarType={'light'}
                     device={this.props.device}
@@ -561,7 +564,7 @@ class HeadlineComponent extends PureComponent {
                 </TouchableOpacity>
             </View>
             {/*分割线*/}
-            <View style={{height: 0.1, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
+            <View style={{height: 0.2, backgroundColor: 'rgba(0,0,0,0.3)', width: width - 20, alignSelf: 'center'}}/>
         </AnimatedFadeIn>;
     }
 
@@ -592,7 +595,7 @@ class HeadlineComponent extends PureComponent {
 
             <View style={{flexDirection: 'row', alignItems: 'center', height: 25, marginTop: hp(0.5)}}>
                 <Image resizeMode={'stretch'} source={require('../res/img/moneys.png')}
-                       style={{width: hp(1.6), marginRight: 5, top:0, height: hp(1.9)}}/>
+                       style={{width: hp(1.6), marginRight: 5, top: 0, height: hp(1.9)}}/>
                 <Text style={{
                     color: 'red', fontSize: hp(3),
                     fontWeight: '500', top: hp(-0.2),
@@ -667,7 +670,7 @@ class TopLeftFilterComponent extends Component {
                                 fontWeight: '400',
                             }, Lindex === index ? {
                                 color: bottomTheme,
-                                fontWeight: '500',
+                                fontWeight: '600',
                             } : {color: '#767676'}]}>{item.title}</Text>
 
                         </TouchableOpacity>

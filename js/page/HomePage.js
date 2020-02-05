@@ -108,7 +108,9 @@ class HomePage extends PureComponent {
             outputRange: [1, 0],
             extrapolate: 'clamp',
         });
+        // console.log('homepagerender');
         return (
+
             <View style={{flex: 1}}>
 
                 {showAnimated && <Animated.View style={[styles.container, {opacity: opacity}]}>
@@ -154,31 +156,21 @@ class HomePage extends PureComponent {
                         this.hideSelf();
                     }}
                     cancelClick={() => {
-                        this.PrivacyToast.hide(()=>{
+                        this.PrivacyToast.hide(() => {
                             this.PrivacyToastStep2.show();
                         });
                     }}
                     ref={ref => this.PrivacyToast = ref}/>}
-                <PrivacyToastStep2
+                {Platform.OS === 'android' && !appSetting.agreePrivacy && <PrivacyToastStep2
 
                     sureClick={() => {
-                        this.PrivacyToastStep2.hide(()=>{
+                        this.PrivacyToastStep2.hide(() => {
                             this.PrivacyToast.show();
                         });
                         // this.hideSelf();
                     }}
 
-                    ref={ref => this.PrivacyToastStep2 = ref}/>
-                {/*{Platform.OS === 'android' && !appSetting.agreePrivacy && <PrivacyToastStep2*/}
-
-                {/*    sureClick={() => {*/}
-                {/*        this.PrivacyToastStep2.hide(()=>{*/}
-                {/*            this.PrivacyToast.show();*/}
-                {/*        });*/}
-                {/*        // this.hideSelf();*/}
-                {/*    }}*/}
-
-                {/*    ref={ref => this.PrivacyToastStep2 = ref}/>}*/}
+                    ref={ref => this.PrivacyToastStep2 = ref}/>}
             </View>
 
         );

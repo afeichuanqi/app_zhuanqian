@@ -34,7 +34,7 @@ import {
 } from '../util/AppService';
 import {connect} from 'react-redux';
 import TaskReleaseItem from './TaskReleaseMana/TaskReleaseItem';
-import ToastSelect from '../common/ToastSelect';
+import ToastSelect from '../common/ToastSelectTwo';
 import Toast from 'react-native-root-toast';
 import ToastTaskTopRecommend from './TaskReleaseMana/ToastTaskTopRecommend';
 import BackPressComponent from '../common/BackPressComponent';
@@ -469,17 +469,9 @@ class FristListComponent extends PureComponent {
             />
             {/*删除任务确定*/}
             <ToastSelect
-                rightTitle={'确认'}
+                sureTitle={'确认删除'}
                 sureClick={this._sureDelTask}
-                ref={ref => this.toastSelect = ref}>
-                <View style={{
-                    height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                    paddingTop: 10,
-
-                }}>
-                    <Text style={{fontSize: 14, width: width - 80,color:'rgba(0,0,0,0.7)'}}>删除后无法恢复,是否确认删除？</Text>
-                </View>
-            </ToastSelect>
+                ref={ref => this.toastSelect = ref}/>
             <ToastTaskTopRecommend
                 sureTopClick={(item, topNum) => {
                     this.this.sureTopClick(item, topNum);
