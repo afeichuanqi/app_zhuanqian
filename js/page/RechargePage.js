@@ -14,14 +14,14 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions, Text,
     View, StatusBar,
-    TextInput, TouchableOpacity, Image, ScrollView, Platform,
+    TextInput, TouchableOpacity, Image,  Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {bottomTheme} from '../appSet';
 import Toast from 'react-native-root-toast';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import XPay from 'react-native-puti-pay';
 import {alipaySignOrder} from '../util/AppService';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -87,7 +87,7 @@ class RechargePage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <ScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
+                <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
                     {this.props.userinfo.login && <TouchableOpacity
                         onPress={() => {
                             NavigationUtils.goPage({userid: this.props.userinfo.userid}, 'ShopInfoPage');
@@ -211,7 +211,7 @@ class RechargePage extends PureComponent {
                         </Text>
                     </View>
                     <View style={{height: hp(7)}}/>
-                </ScrollView>
+                </KeyboardAwareScrollView>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={this.sureRecharGe}

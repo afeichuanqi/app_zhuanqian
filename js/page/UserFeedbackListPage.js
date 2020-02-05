@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList,KeyboardAvoidingView} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme, theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
@@ -22,7 +22,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {selectFeedbackList} from '../util/AppService';
 import EmptyComponent from '../common/EmptyComponent';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FastImagePro from '../common/FastImagePro';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -108,7 +108,7 @@ class UserFeedbackListPage extends PureComponent {
             activeOpacity={0.6}
 
             style={{
-                flex: 1,
+                width,
                 paddingTop: 10,
                 paddingBottom: 10,
                 backgroundColor: 'white',
@@ -120,15 +120,15 @@ class UserFeedbackListPage extends PureComponent {
             <FastImagePro
                 resizeMode={'cover'}
                 source={{uri:JSON.parse(item.content).images&&JSON.parse(item.content).images[0]}}
-                style={{width: wp(12), height: wp(12), borderRadius: 5, marginLeft: 10}}
+                style={{width: wp(12), height: wp(12),  marginLeft: 10}}
             />
             <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{width: width - 210}}>{title}</Text>
-                    <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)'}}>{item.send_date1}</Text>
+                    <Text style={{color:'black'}}>{title}</Text>
+                    <Text style={{fontSize: hp(1.75), color: 'rgba(0,0,0,0.5)'}}>{item.send_date1}</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text numberOfLines={1} style={{color: 'rgba(0,0,0,0.5)'}}>{JSON.parse(item.content).info}</Text>
+                    <Text numberOfLines={1} style={{color: 'rgba(0,0,0,0.5)', fontSize:hp(1.8),width:wp(80)}}>{JSON.parse(item.content).info}</Text>
                     {/*<Text style={{*/}
                     {/*    fontSize: 11,*/}
                     {/*    color: 'rgba(0,0,0,0.7)',*/}
@@ -159,6 +159,9 @@ class UserFeedbackListPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
+                <KeyboardAvoidingView>
+
+                </KeyboardAvoidingView>
                 <View style={{flex: 1}}>
 
                     <FlatList

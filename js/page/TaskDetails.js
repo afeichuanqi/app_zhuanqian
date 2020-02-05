@@ -48,7 +48,8 @@ import shoucang_ from '../res/svg/shoucang_.svg';
 import ToastShare from '../common/ToastShare';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import ToastSelect from '../common/ToastSelect';
+import ToastSelect from '../common/ToastSelectTwo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {
@@ -56,6 +57,7 @@ const {
 } = Animated;
 const {width} = Dimensions.get('window');
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedKeyboardAwareScrollView = Animated.createAnimatedComponent(KeyboardAwareScrollView);
 const {height} = Dimensions.get('window');
 
 class TaskDetails extends PureComponent {
@@ -181,11 +183,8 @@ class TaskDetails extends PureComponent {
         });
         let statusBar = {
             barStyle: 'light-content',
-            // hidden: false,
-
             backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
-        // StatusBar.setBarStyle('light-content', true);
         StatusBar.setBackgroundColor(bottomTheme, true);
         let navigationBar = <NavigationBar
             hide={true}
@@ -249,7 +248,7 @@ class TaskDetails extends PureComponent {
                             transform: [{translateY: translateY}],
                         }}>
                     </Animated.View>
-                    <Animated.ScrollView
+                    <AnimatedKeyboardAwareScrollView
                         scrollEventThrottle={1}
                         onScroll={Animated.event([
                             {
@@ -449,7 +448,7 @@ class TaskDetails extends PureComponent {
                             isEdit={(StatusForTask.status === 4) ? true : false}
                             stepArr={stepData || []}
                             showUtilColumn={false}/>
-                    </Animated.ScrollView>
+                    </AnimatedKeyboardAwareScrollView>
                     {/*底部按钮*/}
                     <BottomBtns
                         test={test}
@@ -745,19 +744,12 @@ class BottomBtns extends PureComponent {
 
             </View>}
             <ToastSelect
-                rightTitle={this.props.update ? '确认修改' : '确认发布'}
+                sureTitle={this.props.update ? '确认修改' : '确认发布'}
                 sureClick={() => {
                     this.toastS.hide();
                     this.props.sendStepData;
                 }}
-                ref={ref => this.toastS = ref}>
-                <View style={{
-                    height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                    paddingTop: 10,
-                }}>
-                    <Text style={{fontSize: 14,color:'rgba(0,0,0,0.7)'}}>{`是否确认此任务的${this.props.update ? '修改' : '发布'}？`}</Text>
-                </View>
-            </ToastSelect>
+                ref={ref => this.toastS = ref}/>
         </View>;
     }
 }

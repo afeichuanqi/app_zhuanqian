@@ -1,11 +1,12 @@
 import React, {PureComponent} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, Text, View, StyleSheet} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, Text, View, StyleSheet, Dimensions} from 'react-native';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import {getAllTask} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
+const {width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {
     static defaultProps = {
@@ -92,12 +93,8 @@ export default class FlatListCommonUtil extends PureComponent {
         return <AnimatedFlatList
             ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
                                                 height={this.props.EmptyH}/>}
-            ListHeaderComponent={() => {
-                if (taskData.length === 0) {
-                    return null;
-                }
-                return ListHeaderComponent;
-            }}
+            ListHeaderComponent={<View
+                style={{height: taskData.length === 0 ? 0 : 10, width, backgroundColor: '#f5f5f5'}}/>}
             ref={ref => this.flatList = ref}
             data={taskData}
             showsVerticalScrollIndicator={false}

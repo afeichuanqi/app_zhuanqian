@@ -27,8 +27,10 @@ import FastImage from 'react-native-fast-image';
 import {renderEmoji} from '../util/CommonUtils';
 import ToastShare from '../common/ToastShare';
 import Toast from 'react-native-root-toast';
+
 const {width} = Dimensions.get('window');
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 class MyOrderManaPage extends PureComponent {
     constructor(props) {
         super(props);
@@ -120,11 +122,10 @@ class MyOrderManaPage extends PureComponent {
                     style={{
                         fontSize: hp(2.3),
                         color: 'black',
-                        width: width - 140,
-
+                        width: width - 160,
                     }}>
 
-                    {taskInfo && renderEmoji(`${taskInfo.id} - ${taskInfo.task_title}`, [],  hp(2.3), 0, 'black').map((item, index) => {
+                    {taskInfo && renderEmoji(`${taskInfo.id} - ${taskInfo.task_title}`, [], hp(2.2), 0, 'black').map((item, index) => {
                         return item;
                     })}
 
@@ -135,11 +136,17 @@ class MyOrderManaPage extends PureComponent {
             {/*左下*/}
             <View style={{
                 position: 'absolute',
-                bottom: (taskTitle && taskTitle.length) > 13 ? 3 : 15,
+                bottom: (taskTitle && taskTitle.length) > 11 ? 3 : 15,
                 left: 65,
                 flexDirection: 'row',
             }}>
-                <LabelBigComponent paddingVertical={3} paddingHorizontal={6} fontSize={hp(1.7)} title={taskInfo.task_info}/>
+                <LabelBigComponent
+                    contaiStyle={{backgroundColor:'#e8e8e8'}}
+                    paddingVertical={3}
+                    paddingHorizontal={6}
+                    fontSize={hp(1.6)}
+                    title={taskInfo.task_info}
+                />
             </View>
             {/*右上*/}
             <View style={{
@@ -226,8 +233,10 @@ class MyOrderManaPage extends PureComponent {
                             paddingRight: 10,
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: hp(2.0), marginRight: 10}}>剩余数量:</Text>
-                                <Text style={{fontSize:hp(2.0)}}>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
+                                <Text
+                                    style={{color: 'rgba(0,0,0,0.7)', fontSize: hp(2.0), marginRight: 10}}>剩余数量:</Text>
+                                <Text
+                                    style={{fontSize: hp(2.0)}}>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -238,7 +247,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:hp(2.05)}}>加量</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(2.05)}}>加量</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{
@@ -251,7 +260,8 @@ class MyOrderManaPage extends PureComponent {
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: hp(2.0), marginRight: 10}}>佣金:</Text>
-                                <Text style={{fontSize:hp(2.0)}}>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
+                                <Text
+                                    style={{fontSize: hp(2.0)}}>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -262,7 +272,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:hp(2.05)}}>加价</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(2.05)}}>加价</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -303,34 +313,38 @@ class MyOrderManaPage extends PureComponent {
                 </MyModalBoxTwo>
                 <ToastSelect
                     rightTitle={'确认'}
-                    sureClick={() => {
-                        const {userinfo} = this.props;
-                        const {taskid} = this.params;
-                        this.toastSelect.hide();
-                        stopUserTask({
-                            task_id: taskid,
-                            task_status: 1,
-                        }, userinfo.token).then(result => {
-                            NavigationUtils.goBack(this.props.navigation);
-                            this.params.updateReleasePage && this.params.updateReleasePage(true);
-                        }).catch(msg => {
-                            Toast.show(msg,{position:Toast.positions.CENTER});
-                        });
-                    }}
+                    sureClick={this._sureClick}
                     ref={ref => this.toastSelect = ref}>
                     <View style={{
                         height: 50, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
                         paddingTop: 10,
 
                     }}>
-                        <Text style={{fontSize: 14, width: width - 80,color:'rgba(0,0,0,0.7)'}}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
+                        <Text style={{
+                            fontSize: 14,
+                            width: width - 80,
+                            color: 'rgba(0,0,0,0.7)',
+                        }}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
                     </View>
                 </ToastSelect>
                 <ToastShare ref={ref => this.toastShare = ref}/>
             </SafeAreaViewPlus>
         );
     }
-
+    _sureClick=()=>{
+        const {userinfo} = this.props;
+        const {taskid} = this.params;
+        this.toastSelect.hide();
+        stopUserTask({
+            task_id: taskid,
+            task_status: 1,
+        }, userinfo.token).then(result => {
+            NavigationUtils.goBack(this.props.navigation);
+            this.params.updateReleasePage && this.params.updateReleasePage(true);
+        }).catch(msg => {
+            Toast.show(msg, {position: Toast.positions.CENTER});
+        });
+    }
     _sureAddPrice = () => {
         const {userinfo} = this.props;
 

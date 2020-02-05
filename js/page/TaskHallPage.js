@@ -310,7 +310,7 @@ class FirstListComponent extends PureComponent {
             {/*</View>*/}
             <Animated.View style={{transform: [{translateY}]}}>
                 <FlatListCommonUtil
-                    ListHeaderComponent={<View style={{height: 15, width, backgroundColor: '#f5f5f5'}}/>}
+                    // ListHeaderComponent={<View style={{height: 15, width, backgroundColor: '#f5f5f5'}}/>}
                     EmptyH={height - hp(27) + (this.state.tOutputRange == hp(5.9) ? hp(5.9) : 0)}
                     statusBarType={'light'}
                     device={this.props.device}
@@ -536,7 +536,7 @@ class HeadlineComponent extends PureComponent {
 
                 }}
                 >
-                    <Text style={{fontSize: hp(2.1), color: 'white'}}>Hot</Text>
+                    <Text style={{fontSize: hp(1.7), color: 'white'}}>Hot</Text>
                 </View>
                 <Text style={{fontSize: hp(3), color: '#ef3e5a', fontWeight: '700', marginLeft: hp(0.5)}}>:</Text>
                 <TouchableOpacity
@@ -564,7 +564,8 @@ class HeadlineComponent extends PureComponent {
                 </TouchableOpacity>
             </View>
             {/*分割线*/}
-            <View style={{height: 0.2, backgroundColor: 'rgba(0,0,0,0.3)', width: width - 20, alignSelf: 'center'}}/>
+            <View
+                style={{height: 0.3, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
         </AnimatedFadeIn>;
     }
 

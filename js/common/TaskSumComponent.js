@@ -29,7 +29,7 @@ class TaskSumComponent extends Component {
             taskPassNum: 2,
         },
         statusBarType: 'dark',
-        boxStyle:{
+        boxStyle: {
             paddingHorizontal: 5,
             paddingVertical: 1,
             borderRadius: 10,
@@ -39,7 +39,7 @@ class TaskSumComponent extends Component {
             // borderWidth:0.5,
             // borderColor:'rgba(0,0,0,0.6)',
         },
-        boxTextColor:'white'
+        boxTextColor: 'white',
     };
 
     constructor(props) {
@@ -149,11 +149,11 @@ class TaskSumComponent extends Component {
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        marginTop: Platform.OS==='android'?hp(0.7):hp(0.9),
+                        marginTop: Platform.OS === 'android' ? hp(0.7) : hp(0.9),
                     }}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style={[styles.bigFontStyle]}>{parseInt(item.taskPassNum)}</Text>
-                            <Text style={[styles.smallFontStyle,{marginLeft:1}]}>人已完成</Text>
+                            <Text style={[styles.smallFontStyle, {marginLeft: 1}]}>人已完成</Text>
                         </View>
 
                         <View
@@ -161,7 +161,7 @@ class TaskSumComponent extends Component {
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style={styles.smallFontStyle}>剩余</Text>
                             <Text
-                                style={[styles.bigFontStyle,{marginHorizontal:1}]}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
+                                style={[styles.bigFontStyle, {marginHorizontal: 1}]}>{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>
                             <Text style={styles.smallFontStyle}>个名额</Text>
                         </View>
 
@@ -171,14 +171,15 @@ class TaskSumComponent extends Component {
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginTop: Platform.OS==='android'?hp(0.7):hp(1.1),
+                            marginTop: Platform.OS === 'android' ? hp(0.7) : hp(1.1),
                         }}>
                         {/*标签*/}
                         <View style={{
                             flexDirection: 'row',
                         }}>
                             <View style={this.props.boxStyle}>
-                                <Text style={{fontSize: hp(1.3), color: this.props.boxTextColor}}>{item.typeTitle}</Text>
+                                <Text
+                                    style={{fontSize: hp(1.3), color: this.props.boxTextColor}}>{item.typeTitle}</Text>
                             </View>
                             <View
                                 style={[this.props.boxStyle, {marginLeft: 5}]}>
@@ -193,7 +194,7 @@ class TaskSumComponent extends Component {
                             NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
                         }}
                         style={{
-                            marginTop: Platform.OS==='android'?hp(0.7):hp(1.1),
+                            marginTop: Platform.OS === 'android' ? hp(0.7) : hp(1.1),
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -219,11 +220,11 @@ class TaskSumComponent extends Component {
                                         svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                             </View>
                             <Text style={{
-                                fontSize: hp(1.85),
+                                fontSize: hp(1.7),
                                 marginLeft: wp(2),
 
                                 color: 'rgba(0,0,0,1)',
-                                letterSpacing: 0.5,
+                                // letterSpacing: 0.5,
                             }}>{item.userName}</Text>
                         </View>
                     </TouchableOpacity>
@@ -275,9 +276,9 @@ export default TaskSumComponent;
 const styles = StyleSheet.create({
     imgStyle: {
         backgroundColor: '#E8E8E8',
-        width: hp(2.5),
-        height: hp(2.5),
-        borderRadius: wp(5.3) / 2,
+        width: hp(2.9),
+        height: hp(2.9),
+        borderRadius: hp(2.9) / 2,
     },
     labelStyle: {
         height: hp(2.3),

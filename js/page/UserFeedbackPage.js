@@ -22,7 +22,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {saveFeedBack} from '../util/AppService';
 import UploadImgsComponent from '../common/UploadImgsComponent';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -71,7 +71,7 @@ class UserFeedbackPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <ScrollView style={{flex: 1, backgroundColor: '#efefef'}}>
+                <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#efefef'}}>
                     <View>
                         <Text style={{
                             color: 'rgba(0,0,0,0.5)',
@@ -101,7 +101,7 @@ class UserFeedbackPage extends PureComponent {
                     </View>
                     <View style={{height: 50}}/>
 
-                </ScrollView>
+                </KeyboardAwareScrollView>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={this.sendView}
@@ -214,7 +214,7 @@ class InputTextImage extends PureComponent {
                 }}
                 value={this.state.changeText}
                 style={{
-                    height: height / 3,
+                    height: height / 4,
                     width,
                     backgroundColor: 'white',
                     paddingHorizontal: 5,
@@ -230,7 +230,7 @@ class InputTextImage extends PureComponent {
                 autoCapitalize={'none'}
                 autoComplete={'off'}
             />
-            <View style={{position: 'absolute', bottom: 10, flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row', backgroundColor:'white'}}>
                 <UploadImgsComponent userinfo={this.props.userinfo} ref={ref => this.uploadImgs = ref}/>
             </View>
 

@@ -10,7 +10,7 @@ import React, {Component, PureComponent} from 'react';
 import {
     Dimensions,
     findNodeHandle,
-    ScrollView,
+
     Text,
     TextInput,
     TouchableOpacity,
@@ -56,7 +56,11 @@ import BackPressComponent from '../common/BackPressComponent';
 import Global from '../common/Global';
 import ToastSelect from '../common/ToastSelectTwo';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 let PopButtomMenu = null;
+let ScrollViewRef = null;
+
 const {width} = Dimensions.get('window');
 
 class TextInputPro extends PureComponent {
@@ -76,6 +80,9 @@ class TextInputPro extends PureComponent {
     render() {
         const {rightComponentData} = this.props;
         return <TextInput
+            onFocus={(event: Event) => {
+                ScrollViewRef.scrollToFocusedInput(findNodeHandle(event.target));
+            }}
             value={this.state.defaultValue}
             editable={rightComponentData.editable}
             style={{flex: 1, color: 'black', padding: 0, fontSize: hp(2.1)}}
@@ -170,7 +177,9 @@ class ComplyColumn extends Component {
                 <Text style={{fontSize: 13, color: 'black'}}>我已阅读并同意遵守</Text>
                 <TouchableOpacity
                     activeOpacity={0.8}
-
+                    onPress={() => {
+                        NavigationUtils.goPage({type: 1}, 'UserProtocol');
+                    }}
 
                 >
                     <Text style={{color: 'red', fontSize: 13}}>《发布规则》</Text>
@@ -310,7 +319,7 @@ class TaskRelease extends PureComponent {
             const data = this._getFormData();
             const error = judgeTaskData(data);
             if (error != '') {
-                Toast.show(error,{position:Toast.positions.CENTER});
+                Toast.show(error, {position: Toast.positions.CENTER});
             } else {
                 const {userinfo} = this.props;
                 const {token} = userinfo;
@@ -323,33 +332,33 @@ class TaskRelease extends PureComponent {
                     }, 'TaskDetails');
 
                 }).catch(err => {
-                    Toast.show(err,{position:Toast.positions.CENTER});
+                    Toast.show(err, {position: Toast.positions.CENTER});
                 });
             }
         } else {
             const isTrue = this.complyColumn.getIsTrue();
             if (!isTrue) {
-                Toast.show('您未同意发布规则哦 ～ ～ ',{position:Toast.positions.CENTER});
+                Toast.show('您未同意发布规则哦 ～ ～ ', {position: Toast.positions.CENTER});
                 return;
 
             }
             const {userinfo} = this.props;
             const {token} = userinfo;
             if (!token || token.length === 0) {
-                Toast.show('您未登录哦 ～ ～ ',{position:Toast.positions.CENTER});
+                Toast.show('您未登录哦 ～ ～ ', {position: Toast.positions.CENTER});
                 return;
             }
             const data = this._getFormData();
             data.task_id = this.taskInfo.taskId;
             const error = judgeTaskData(data, true);
             if (error != '') {
-                Toast.show(error,{position:Toast.positions.CENTER});
+                Toast.show(error, {position: Toast.positions.CENTER});
             } else {
                 updateTaskReleaseData(data, token).then(result => {
                     NavigationUtils.goBack(this.props.navigation);
                     this.params.updatePage && this.params.updatePage();
                 }).catch(err => {
-                    Toast.show(err,{position:Toast.positions.CENTER});
+                    Toast.show(err, {position: Toast.positions.CENTER});
                 });
             }
         }
@@ -367,12 +376,11 @@ class TaskRelease extends PureComponent {
                 taskInfo.stepData = stepData;
                 taskInfo.columnData.rewardPrice = taskInfo.columnData.rewardPrice.toString();
                 taskInfo.columnData.rewardNum = taskInfo.columnData.rewardNum.toString();
+                taskInfo.update = update;//加标示
+                taskInfo.taskId = task_id;//加标示
                 this.taskInfo = taskInfo;
-                this.taskInfo.update = update;//加标示
-                this.taskInfo.taskId = task_id;//加标示
                 this.forceUpdate();
             });
-        } else {
         }
 
         selectTaskReleaseData().then((result) => {
@@ -432,9 +440,14 @@ class TaskRelease extends PureComponent {
             alignItems: 'center',
         }}>
             <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
-            <TextInput style={{marginLeft: 20, fontSize: 15, color: 'black', padding: 0}}
-                       placeholderTextColor={'rgba(0,0,0,0.5)'}
-                       placeholder={placeholder}/>
+            <TextInput
+                onFocus={(event: Event) => {
+                    ScrollViewRef.scrollToFocusedInput(findNodeHandle(event.target));
+                }}
+
+                style={{marginLeft: 20, fontSize: 15, color: 'black', padding: 0}}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholder={placeholder}/>
         </View>;
     };
 
@@ -460,9 +473,15 @@ class TaskRelease extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                {showColumn ? <ScrollView
+                {showColumn ? <KeyboardAwareScrollView
+                    // enableResetScrollToCoords={false}
                     // keyboardShouldPersistTaps={'always'}
-                    ref={ref => this.scrollView = ref}
+                    enableAutomaticScroll={false}
+                    ref={ref => {
+                        // this.scrollView = ref;
+                        ScrollViewRef = ref;
+
+                    }}
                     style={{backgroundColor: '#e8e8e8'}}>
 
                     <TypeSelect
@@ -479,11 +498,12 @@ class TaskRelease extends PureComponent {
                         taskInfo={this.taskInfo}
                         data={data}
                         userinfo={userinfo} ref={ref => this.bIform = ref}
-                        scrollTo={this._scrollTo}
-                        scollToEnd={this._scollToEnd}/>
+                        // scrollTo={this._scrollTo}
+                        // scrollToEnd={this._scrollToEnd}
+                    />
                     {/*顶部提示*/}
                     <ComplyColumn ref={ref => this.complyColumn = ref}/>
-                </ScrollView> : this.renderColumn()}
+                </KeyboardAwareScrollView> : this.renderColumn()}
 
                 <View style={{borderTopWidth: 0.5, borderTopColor: '#f6f6f6', flexDirection: 'row'}}>
                     <TouchableOpacity
@@ -509,28 +529,28 @@ class TaskRelease extends PureComponent {
                                 const data = this._getFormData();
                                 const error = judgeTaskData(data);
                                 if (error != '') {
-                                    Toast.show(error,{position:Toast.positions.CENTER});
+                                    Toast.show(error, {position: Toast.positions.CENTER});
                                 } else {
                                     this.toastS.show();
                                 }
                             } else {
                                 const isTrue = this.complyColumn.getIsTrue();
                                 if (!isTrue) {
-                                    Toast.show('您未同意发布规则哦 ～ ～ ',{position:Toast.positions.CENTER});
+                                    Toast.show('您未同意发布规则哦 ～ ～ ', {position: Toast.positions.CENTER});
                                     return;
 
                                 }
                                 const {userinfo} = this.props;
                                 const {token} = userinfo;
                                 if (!token || token.length === 0) {
-                                    Toast.show('您未登录哦 ～ ～ ',{position:Toast.positions.CENTER});
+                                    Toast.show('您未登录哦 ～ ～ ', {position: Toast.positions.CENTER});
                                     return;
                                 }
                                 const data = this._getFormData();
                                 data.task_id = this.taskInfo.taskId;
                                 const error = judgeTaskData(data, true);
                                 if (error != '') {
-                                    Toast.show(error,{position:Toast.positions.CENTER});
+                                    Toast.show(error, {position: Toast.positions.CENTER});
                                 } else {
                                     this.toastS.show();
                                 }
@@ -576,14 +596,11 @@ class TaskRelease extends PureComponent {
             stepData,
         };
     };
-    _scrollTo = (x, y, animated) => {
-        this.scrollView.scrollTo({x: x, y: y, animated: animated});
-    };
-    _scollToEnd = () => {
-        this.scrollView.scrollToEnd({animated: false, duration: 0});
-    };
-    // _scrollFun = {
-    //     scrollToEnd: this.scrollView.scrollToEnd,
+    // _scrollTo = (x, y, animated) => {
+    //     ScrollViewRef.scrollTo({x: x, y: y, animated: animated});
+    // };
+    // _scrollToEnd = () => {
+    //     ScrollViewRef.scrollToEnd({animated: false, duration: 0});
     // };
 
 }
@@ -695,16 +712,16 @@ class BottomInfoForm extends Component {
         // const {showHistory, stepData} = this.state;
 
         //悬赏单价
-        const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center',width:wp(60)}}>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:hp(2.1)}}>最低</Text>
-            <Text style={{color: 'black', marginHorizontal: 5, fontSize:hp(2.1)}}>0.5</Text>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:hp(2.1)}}>元</Text>
+        const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center', width: wp(60)}}>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>最低</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>0.5</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>元</Text>
         </View>;
         //悬赏数量
-        const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center',width:wp(60)}}>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:hp(2.1)}}>最少</Text>
-            <Text style={{color: 'black', marginHorizontal: 5, fontSize:hp(2.1)}}>10</Text>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize:hp(2.1)}}>单</Text>
+        const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center', width: wp(60)}}>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>最少</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>10</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>单</Text>
         </View>;
         const {userinfo} = this.props;
         return <View>
@@ -787,8 +804,7 @@ class BottomInfoForm extends Component {
                 }}/>
             </View>
             <StepInfo stepData={this.props.taskInfo.stepData} userinfo={userinfo} ref={ref => this.stepInfo = ref}
-                      scrollTo={this.props.scrollTo}
-                      scollToEnd={this.props.scollToEnd}/>
+            />
         </View>;
     }
 }
@@ -842,8 +858,6 @@ class InputSelect extends Component {
                     } else {
                         this.dateMenu.show();
                     }
-
-
                 }}
             >
                 <Text style={{fontSize: hp(2.1), color: 'black'}}>{title}</Text>
@@ -898,7 +912,7 @@ class InputTextPro extends Component {
                 onFocus={this.hidePlaceholder}
                 onBlur={this._onBlur}
                 onChangeText={this._onChangeText}
-                ref={ref => this.ipt = ref} style={{flex: 1, color: 'black', padding: 0, fontSize:hp(2.1)}}/>}
+                ref={ref => this.ipt = ref} style={{flex: 1, color: 'black', padding: 0, fontSize: hp(2.1)}}/>}
 
         </View>;
     }
@@ -943,12 +957,13 @@ class InputTextPro extends Component {
         });
 
     };
-    hidePlaceholder = () => {
+    hidePlaceholder = (event: Event) => {
         this.setState({
             showPlaceholder: false,
         }, () => {
             this.ipt.focus();
         });
+        ScrollViewRef.scrollToFocusedInput(findNodeHandle(event.target));
     };
 }
 
@@ -1143,7 +1158,6 @@ class StepInfo extends Component {
             </TaskMenu>
             {/*具体类型*/}
             <TaskPop
-
                 // 弹窗确认按钮被单击
                 sureClick={(data, type, stepNo, rightTitle, timestamp_) => {
                     // 获取一个时间戳
@@ -1180,8 +1194,8 @@ class StepInfo extends Component {
 
                     if (rightTitle === '添加') {
                         setTimeout(() => {
-                            this.props.scollToEnd();
-                        }, 200);
+                            ScrollViewRef.scrollToEnd({animated: false, duration: 0});
+                        }, 300);
                     }
                 }}
                 ref={ref => this.taskPop = ref}/>
@@ -1196,8 +1210,7 @@ class StepInfo extends Component {
             onPress={() => {
                 this.laPop.hide(false);
                 click();
-            }
-            }
+            }}
             style={{
                 width: 100, height: 35,
                 alignItems: 'center', flexDirection: 'row',
@@ -1207,11 +1220,13 @@ class StepInfo extends Component {
         </TouchableOpacity>;
     };
     _svgClick = () => {
-        this.props.scollToEnd();
-        const handle = findNodeHandle(this.svg);
-        UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
-            this.laPop.show(pageX, pageY);
-        });
+        ScrollViewRef.scrollToEnd({animated: false, duration: 0});
+        setTimeout(() => {
+            const handle = findNodeHandle(this.svg);
+            UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+                this.laPop.show(pageX, pageY);
+            });
+        }, 300);
     };
 }
 

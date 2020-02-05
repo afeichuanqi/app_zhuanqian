@@ -13,9 +13,6 @@ import Animated, {Easing} from 'react-native-reanimated';
 
 const {timing} = Animated;
 const {height} = Dimensions.get('window');
-
-// const {width} = Dimensions.get('window');
-
 class TaskMenu extends PureComponent {
     constructor(props) {
         super(props);
@@ -126,8 +123,10 @@ class TaskMenu extends PureComponent {
                             top: -12,
                             left: 83,
                         }}/>
+                        {/*<KeyboardAwareScrollView>*/}
+                            {this.props.children}
+                        {/*</KeyboardAwareScrollView>*/}
 
-                        {this.props.children}
 
                     </Animated.View>
 

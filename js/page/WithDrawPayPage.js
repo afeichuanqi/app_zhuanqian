@@ -26,8 +26,8 @@ import SvgUri from 'react-native-svg-uri';
 import {getUserWithDrawInfo, userWithDrawMoney} from '../util/AppService';
 import actions from '../action';
 import Toast from 'react-native-root-toast';
-import ToastSelect from '../common/ToastSelect';
-
+import ToastSelect from '../common/ToastSelectTwo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const width = Dimensions.get('window').width;
 
 class WithDrawPayPage extends React.Component {
@@ -100,7 +100,7 @@ class WithDrawPayPage extends React.Component {
                 {navigationBar}
                 {TopColumn}
 
-                <View style={{flex: 1, backgroundColor: '#f0f0f0'}}>
+                <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
                     <TouchableOpacity
                         onPress={() => {
 
@@ -227,33 +227,11 @@ class WithDrawPayPage extends React.Component {
                         <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、每天只能提现一次,请知晓
                         </Text>
                     </View>
-                </View>
+                </KeyboardAwareScrollView>
                 <ToastSelect
-                    rightTitle={'确认提现'}
-                    sureClick={() => {
-                        this.toastS.hide();
-                        userWithDrawMoney({
-                            withdraw_type: this.params.type,
-                            money: parseFloat(this.inputPro.getPrice()),
-                        }, this.props.userinfo.token).then(result => {
-                            this.props.onGetUserInFoForToken(this.props.userinfo.token, () => {
-                            });
-                            Toast.show('提现申请成功',{position:Toast.positions.CENTER});
-                            setTimeout(() => {
-                                NavigationUtils.goPage({navigationIndex: 1}, 'UserBillListPage');
-                            }, 1000);
-                        }).catch(msg => {
-                            Toast.show(msg,{position:Toast.positions.CENTER});
-                        });
-                    }}
-                    ref={ref => this.toastS = ref}>
-                    <View style={{
-                        height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                        paddingTop: 10,
-                    }}>
-                        <Text style={{fontSize: 14,color:'rgba(0,0,0,0.7)'}}>{`是否确认提现?`}</Text>
-                    </View>
-                </ToastSelect>
+                    sureTitle={'确认提现'}
+                    sureClick={this.sureClick}
+                    ref={ref => this.toastS = ref}/>
             </SafeAreaViewPlus>
         );
     }
@@ -261,7 +239,22 @@ class WithDrawPayPage extends React.Component {
     page = {
         pageIndex: 0,
     };
-
+    sureClick=()=>{
+        this.toastS.hide();
+        userWithDrawMoney({
+            withdraw_type: this.params.type,
+            money: parseFloat(this.inputPro.getPrice()),
+        }, this.props.userinfo.token).then(result => {
+            this.props.onGetUserInFoForToken(this.props.userinfo.token, () => {
+            });
+            Toast.show('提现申请成功',{position:Toast.positions.CENTER});
+            setTimeout(() => {
+                NavigationUtils.goPage({navigationIndex: 1}, 'UserBillListPage');
+            }, 1000);
+        }).catch(msg => {
+            Toast.show(msg,{position:Toast.positions.CENTER});
+        });
+    }
 }
 
 class InputTextPro extends React.PureComponent {

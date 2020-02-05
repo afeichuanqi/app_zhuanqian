@@ -32,6 +32,7 @@ import {equalsObj} from '../../util/CommonUtils';
 import FastImagePro from '../../common/FastImagePro';
 import {saveImg} from '../../util/ImageUtil';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 import Toast from 'react-native-root-toast';
 const {width, height} = Dimensions.get('window');
 
@@ -904,7 +905,6 @@ class TaskStepColumn extends Component {
                              select={this._selectVerifyImg}
                              ref={`pickerImg`}/>
                 {this.state.stepDataArr.map((item, index, arr) => {
-                    console.log(this.state.stepDataArr, 'item.timestamp');
                     return this.getStepColumn(index + 1, item.type, item.typeData, utilClick, item.timestamp, item.uploadStatus,
                         typeof (item.uploadStatus1) === 'undefined' ? -2 : item.uploadStatus1);
                 })}

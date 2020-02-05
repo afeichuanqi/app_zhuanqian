@@ -67,7 +67,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
                     <TextArea
                         ref={ref => this.textArea = ref}
                         value={this.inputData.info ? this.inputData.info : ''}
@@ -87,7 +87,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
                     <TextInputPro
                         ref={ref => this.textInputPro = ref}
                         inputValue={this.inputData.inputValue ? this.inputData.inputValue : ''}
@@ -117,7 +117,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}
@@ -137,7 +137,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13,color:'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}
@@ -192,12 +192,6 @@ class TaskPopMenu extends PureComponent {
 
         });
     };
-    // setThisInputAndType = (inputData, type) => {
-    //
-    //     this.inputType = type;
-    //     this.inputData = inputData;
-    //     console.log(this.inputData);
-    // };
     hide = () => {
         this.myModal.hide();
     };
@@ -241,8 +235,8 @@ class TaskPopMenu extends PureComponent {
         return istrue;
     };
     _checkImageSelect = () => {
-        const istrue = (this.inputData.uri ) ? true : false;
-        console.log(istrue,this.inputData.uri);
+        const istrue = (this.inputData.uri) ? true : false;
+        console.log(istrue, this.inputData.uri);
         this.imageSelect.showAnimated(!istrue);
         return istrue;
     };
@@ -309,8 +303,8 @@ class TextInputPro extends PureComponent {
         // }).start();
         this.textInput.setNativeProps({
             style: {
-                borderWidth:show? 1:0.3,
-                borderColor: show?`rgba(255, 0, 0, 1)`:'rgba(0,0,0,0.3)',
+                borderWidth: show ? 1 : 0.3,
+                borderColor: show ? `rgba(255, 0, 0, 1)` : 'rgba(0,0,0,0.3)',
             },
         });
 
@@ -480,7 +474,7 @@ class TextArea extends PureComponent {
                     borderRadius: 5,
                     padding: 0,
                     textAlignVertical: 'top',
-                    paddingTop:5,
+                    paddingTop: 5,
                     borderWidth: 0.3,
                     borderColor: 'rgba(0,0,0,0.3)',
                     // borderColor: `rgba(255, 0, 0, 1)`,

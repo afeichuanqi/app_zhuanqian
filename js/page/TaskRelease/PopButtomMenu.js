@@ -10,6 +10,7 @@ import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const {timing} = Animated;
 const {width, height} = Dimensions.get('window');
 
@@ -52,7 +53,7 @@ class PopButtomMenu extends PureComponent {
         }
 
         this._anim = timing(this.animations.bottom, {
-            duration: 200,
+            duration: 100,
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
@@ -70,23 +71,22 @@ class PopButtomMenu extends PureComponent {
             visible: true,
         }, () => {
             this._anim = timing(this.animations.bottom, {
-                duration: 200,
+                duration: 100,
                 toValue: -400,
-                easing: Easing.inOut(Easing.cubic),
+                easing: Easing.inOut(Easing.ease),
             }).start();
         });
     };
     animations = {
         bottom: new Animated.Value(0),
-
     };
 
     render() {
         const {visible} = this.state;
         const {menuArr} = this.props;
         const opacity = Animated.interpolate(this.animations.bottom, {
-            inputRange: [-400,-100, 0],
-            outputRange: [1,0.3, 0],
+            inputRange: [-400, -100, 0],
+            outputRange: [1, 0.3, 0],
             extrapolate: 'clamp',
         });
         return (
@@ -114,7 +114,10 @@ class PopButtomMenu extends PureComponent {
                             borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
 
                         }}>
-                            <Text style={{color: 'black', opacity: 0.7, fontSize:wp(3.8)}}>{this.props.popTitle}</Text>
+                            <Text style={{
+                                color: 'black', opacity: 0.8, fontSize: hp(2.1),
+
+                            }}>{this.props.popTitle}</Text>
                         </View>
                         <ScrollView style={{height: height / 3}}>
                             {menuArr.map((item, index, arr) => {
@@ -149,10 +152,10 @@ class PopButtomMenu extends PureComponent {
             }}
             style={{
                 width, alignItems: 'center', paddingVertical: 14,
-                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8', fontSize:wp(4)
+                borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
 
             }}>
-            <Text >{item.title}</Text>
+            <Text style={{fontSize: hp(1.9), color: 'rgba(0,0,0,0.9)'}}>{item.title}</Text>
         </TouchableOpacity>;
     };
 }

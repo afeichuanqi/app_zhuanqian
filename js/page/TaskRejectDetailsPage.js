@@ -26,7 +26,7 @@ import EmptyComponent from '../common/EmptyComponent';
 import FastImagePro from '../common/FastImagePro';
 import SvgUri from 'react-native-svg-uri';
 import menu_right from '../res/svg/menu_right.svg';
-import ToastSelect from '../common/ToastSelect';
+import ToastSelect from '../common/ToastSelectTwo';
 import Toast from 'react-native-root-toast';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
@@ -314,21 +314,9 @@ class TaskRejectDetailsPage extends PureComponent {
                 </View>
                 <ImageViewerModal statusBarType={'dark'} ref={ref => this.imgModal = ref}/>
                 <ToastSelect
-                    rightTitle={'放弃'}
+                    sureTitle={'确定放弃'}
                     sureClick={this.giveUpTask}
-                    ref={ref => this.toastS = ref}>
-                    <View style={{
-                        height: 30, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                        paddingTop: 10,
-                    }}>
-                        <Text
-
-                            style={{
-                                fontSize: 14,
-                                color:'rgba(0,0,0,0.7)'
-                            }}>是否确认放弃此任务？</Text>
-                    </View>
-                </ToastSelect>
+                    ref={ref => this.toastS = ref}/>
             </SafeAreaViewPlus>
         );
     }

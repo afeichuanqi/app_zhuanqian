@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
+import React  from 'react';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
@@ -23,7 +23,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import {setUserWithDrawInfo} from '../util/AppService';
 import actions from '../action';
 import Toast from 'react-native-root-toast';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const width = Dimensions.get('window').width;
 
 class WithDrawAccount extends React.Component {
@@ -83,7 +83,7 @@ class WithDrawAccount extends React.Component {
             >
                 {navigationBar}
                 {TopColumn}
-                <View style={{flex: 1, backgroundColor: '#f0f0f0'}}>
+                <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
                     <InputItem
                         ref={ref => this.payUserName = ref}
                         title={pay + '姓名'}
@@ -137,7 +137,7 @@ class WithDrawAccount extends React.Component {
                         }}>
                         <Text style={{color: 'white', fontSize: 19}}>保存</Text>
                     </TouchableOpacity>
-                </View>
+                </KeyboardAwareScrollView>
 
             </SafeAreaViewPlus>
         );
