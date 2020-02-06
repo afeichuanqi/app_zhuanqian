@@ -23,8 +23,8 @@ import LabelBigComponent from '../common/LabelBigComponent';
 import BackPressComponent from '../common/BackPressComponent';
 import actions from '../action';
 import {connect} from 'react-redux';
-import {onAddSearchTitle} from '../action/search';
 import FlatListCommonUtil from './SearchPage/FlatListCommonUtil';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const width = Dimensions.get('window').width;
 const topIputHeight = (Platform.OS === 'ios') ? 30 : 30;
@@ -105,8 +105,8 @@ class SearchPage extends PureComponent {
                     >
                         <Text style={{
                             marginLeft: 10,
-                            // opacity: 0.8,
-                            fontWeight: '200',
+                            opacity: 0.8,
+                            fontSize: hp(1.9),
                         }}>取消</Text>
                     </TouchableOpacity>
                 </View>
@@ -114,7 +114,8 @@ class SearchPage extends PureComponent {
                     <FlatListCommonUtil token={this.props.userinfo.token} ref={ref => this.flatList = ref}/> :
                     <ScrollView>
                         {/*<SearchColumn labelArray={search.searchArr} title={'热门搜索'}/>*/}
-                        <SearchColumn startSearch={this.SearchColumnStartSearch} labelArray={search.searchArr} title={'搜索历史'}/>
+                        <SearchColumn startSearch={this.SearchColumnStartSearch} labelArray={search.searchArr}
+                                      title={'搜索历史'}/>
                     </ScrollView>}
 
 
@@ -123,7 +124,7 @@ class SearchPage extends PureComponent {
     }
 
     SearchColumnStartSearch = (searchContent) => {
-        this.searchComponent.setValue(searchContent)
+        this.searchComponent.setValue(searchContent);
         this.startSearch(searchContent);
     };
     onSubmitEditing = () => {
@@ -164,7 +165,7 @@ class SearchColumn extends PureComponent {
 
         return <View style={{marginLeft: 15, marginTop: 20}}>
             <Text style={{
-                fontSize: 12,
+                fontSize: hp(2),
                 opacity: 0.8,
                 fontWeight: '200',
             }}>{title}</Text>
@@ -175,7 +176,7 @@ class SearchColumn extends PureComponent {
                         onClick={this._startSearch}
                         paddingHorizontal={10}
                         title={item.title}
-                        fontSize={12}
+                        fontSize={hp(1.7)}
                         paddingVertical={4}
                         marginRight={10}
                         marginTop={10}

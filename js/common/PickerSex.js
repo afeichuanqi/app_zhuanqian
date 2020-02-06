@@ -44,8 +44,8 @@ class PopMenu extends PureComponent {
 
     hide = () => {
         this._anim = timing(this.animations.bottom, {
-            duration: 200,
-            toValue: -(200 + (width / 3)),
+            duration: 100,
+            toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
             this.timer = setTimeout(() => {
@@ -63,38 +63,40 @@ class PopMenu extends PureComponent {
         }, () => {
             this._anim = timing(this.animations.bottom, {
                 duration: 100,
-                toValue: 0,
-                easing: Easing.inOut(Easing.cubic),
+                toValue: -(200 + (width / 3)),
+                easing: Easing.inOut(Easing.ease),
             }).start();
         });
     };
     animations = {
-        bottom: new Animated.Value(-(200 + (width / 3))),
-        // bottom: new Animated.Value(0),
+        bottom: new Animated.Value(0),
     };
 
     render() {
         const {visible} = this.state;
-
+        const opacity = Animated.interpolate(this.animations.bottom, {
+            inputRange: [-(200 + (width / 3)), -100, 0],
+            outputRange: [1, 0.3, 0],
+            extrapolate: 'clamp',
+        });
         return (
 
             <Modal
                 transparent
                 visible={visible}
-                animationType={'fade'}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
 
             >
-                <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'}}
+                <TouchableOpacity style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}
                                   activeOpacity={1}
                                   onPress={() => {
                                       this.hide(null);
                                   }}
                 >
                     <Animated.View style={{
-                        width, position: 'absolute', bottom: this.animations.bottom, backgroundColor: 'white',
-                        borderTopLeftRadius: 5, borderTopRightRadius: 5,
+                        width, position: 'absolute', bottom: -(200 + (width / 3)), backgroundColor: 'white',
+                        borderTopLeftRadius: 5, borderTopRightRadius: 5,transform: [{translateY:this.animations.bottom}],opacity
                     }}>
                         <View style={{
                             width, alignItems: 'center', height: hp(7), justifyContent: 'center',
@@ -108,7 +110,6 @@ class PopMenu extends PureComponent {
                                     this.props.select(0);
                                 }}
                                 style={{width: width / 2, height: hp(35), justifyContent: 'center', alignItems: 'center'}}>
-                                {/*<SvgUri width={wp(20)} height={wp(20)} svgXmlData={sex_nan1}/>*/}
                                 <Image source={require('../res/img/sex_nan.png')} style={{width:wp(20),height:wp(20)}}/>
                                 <SvgUri style={{marginTop: 10}} width={15} height={15} svgXmlData={sex_nan_}/>
 

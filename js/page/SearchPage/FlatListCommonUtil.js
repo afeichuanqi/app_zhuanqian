@@ -57,14 +57,14 @@ export default class FlatListCommonUtil extends PureComponent {
                     isLoading: false,
                     hideLoaded: result.length >= 10 ? false : true,
                 });
-                this.props.onRefresh(false);
+
             } else {
                 const tmpArr = [...this.state.taskData];
                 this.setState({
                     taskData: tmpArr.concat(result),
                     hideLoaded: result.length >= 10 ? false : true,
                 });
-                this.props.onLoading(false);
+
             }
         }).catch(() => {
             this.setState({
@@ -101,15 +101,17 @@ export default class FlatListCommonUtil extends PureComponent {
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
                 // 等待页面布局完成以后，在让加载更多
-                if (this.canLoadMore && taskData.length>=10) {
-                    this.onLoading();
-                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                }
+                setTimeout(() => {
+                    if (this.canLoadMore && taskData.length >= 10) {
+                        this.onLoading();
+                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                    }
+                }, 100);
             }}
             windowSize={300}
-            onEndReachedThreshold={0.3}
+            onEndReachedThreshold={0.01}
             // onScrollEndDrag={onScrollEndDrag}
-            onScrollBeginDrag={event => {
+            onMomentumScrollBegin={event => {
                 // onScrollBeginDrag(event);
                 this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
             }}
@@ -120,15 +122,13 @@ export default class FlatListCommonUtil extends PureComponent {
             // }}
         />;
     }
-
-    // _onMomentumScrollBegin=(3)=>{
-    //
-    // }
     onLoading = () => {
+        // console.log("onLoading");
         this._updateList(false);
 
     };
     onRefresh = () => {
+        // console.log("onRefresh");
         this._updateList(true);
     };
 

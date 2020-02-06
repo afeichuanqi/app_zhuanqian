@@ -94,7 +94,7 @@ export default class FlatListCommonUtil extends PureComponent {
             ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
                                                 height={this.props.EmptyH}/>}
             ListHeaderComponent={<View
-                style={{height: taskData.length === 0 ? 0 : 10, width, backgroundColor: '#f5f5f5'}}/>}
+                style={{height: taskData.length === 0 ? 0 : 5, width, backgroundColor: '#fbfbfb'}}/>}
             ref={ref => this.flatList = ref}
             data={taskData}
             showsVerticalScrollIndicator={false}
@@ -102,7 +102,7 @@ export default class FlatListCommonUtil extends PureComponent {
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
             style={{
-                backgroundColor: '#f5f5f5',
+                backgroundColor: '#fbfbfb',
                 height: '100%',
             }}
             refreshControl={
