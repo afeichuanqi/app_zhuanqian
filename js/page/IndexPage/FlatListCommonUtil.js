@@ -5,7 +5,6 @@ import {
     RefreshControl,
     Text,
     View,
-    Dimensions,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import {selectAllRecommendTask} from '../../util/AppService';
@@ -116,9 +115,9 @@ export default class FlatListCommonUtil extends PureComponent {
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
 
-            ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} type={4} message={'暂时没有符合任务'}
+            ListEmptyComponent={<EmptyComponent icoW={wp(27)} icoH={wp(25)} type={4} message={'暂时没有符合任务'}
                                                 height={this.props.EmptyHeight}/>}
-            ListHeaderComponent={<View style={{marginBottom:taskData.length===0?0:15}}>
+            ListHeaderComponent={<View style={{marginBottom:taskData.length===0?0:5}}>
                 {ListHeaderComponent}
             </View>}
             ref={ref => this.flatList = ref}
@@ -128,7 +127,7 @@ export default class FlatListCommonUtil extends PureComponent {
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
             style={{
-                backgroundColor: '#f5f5f5',
+                backgroundColor: '#f8f8f8',
                 height: '100%',
             }}
             refreshControl={

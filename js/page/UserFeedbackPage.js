@@ -14,7 +14,7 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions,
     StyleSheet, Text,
-    View, TouchableOpacity, StatusBar, ScrollView, TextInput,
+    View, TouchableOpacity, StatusBar, ScrollView, TextInput, Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
@@ -23,6 +23,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import {saveFeedBack} from '../util/AppService';
 import UploadImgsComponent from '../common/UploadImgsComponent';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -71,7 +72,8 @@ class UserFeedbackPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#efefef'}}>
+                <KeyboardAwareScrollView
+                                         enableOnAndroid={true} style={{flex: 1, backgroundColor: '#efefef'}}>
                     <View>
                         <Text style={{
                             color: 'rgba(0,0,0,0.5)',

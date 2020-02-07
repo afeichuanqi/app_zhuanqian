@@ -220,7 +220,7 @@ class BottomBar extends Component {
     }
 
     setStatusBar = (type) => {
-        console.log(type, 'type');
+        // console.log(type, 'type');
         if (type === 'dark') {
             StatusBar.setTranslucent(false);
             StatusBar.setBarStyle('dark-content', false);

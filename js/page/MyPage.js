@@ -105,7 +105,7 @@ class MyPage extends PureComponent {
                             style={{marginRight:10}}
 
                         >
-                            <SvgUri width={23} height={23} fill={'white'} svgXmlData={shop}/>
+                            <SvgUri width={18} height={18} fill={'white'} svgXmlData={shop}/>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.6}
@@ -114,7 +114,7 @@ class MyPage extends PureComponent {
                             }}
 
                         >
-                            <SvgUri width={23} height={23} fill={'white'} svgXmlData={setting}/>
+                            <SvgUri width={18} height={18} fill={'white'} svgXmlData={setting}/>
                         </TouchableOpacity>
                     </View>
 
@@ -427,7 +427,7 @@ class TopInfoColumn extends PureComponent {
                         }}
                         style={{marginTop: hp(7), flexDirection: 'row', alignItems: 'center'}}>
 
-                        <SvgUri width={hp(2)} height={hp(2)} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
+                        <SvgUri width={hp(1.9)} height={hp(1.9)} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
                         <Text style={{fontSize: hp(2.05), color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
                     <TouchableOpacity

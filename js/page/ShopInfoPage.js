@@ -37,7 +37,7 @@ import SvgUri from 'react-native-svg-uri';
 import goback from '../res/svg/goback.svg';
 import PickerImage from '../common/PickerImage';
 import actions from '../action';
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
@@ -394,7 +394,7 @@ class ShopList extends Component {
             }}
             ref={ref => this.flatList = ref}
             data={commodityData}
-            ListEmptyComponent={<EmptyComponent message={'暂无发布任务'} height={height - 380}/>}
+            ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} message={'暂无发布任务'} height={height - 380}/>}
             scrollEventThrottle={1}
             showsVerticalScrollIndicator={false}
             renderItem={data => this._renderIndexPath(data)}

@@ -7,9 +7,10 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Animated, Text, TouchableOpacity, ScrollView} from 'react-native';
+import {Modal, View, Dimensions, Animated, Text, TouchableOpacity, ScrollView, Clipboard} from 'react-native';
 import Image from 'react-native-fast-image';
 import JShareModule from 'jshare-react-native';
+import Toast from 'react-native-root-toast';
 
 const {width, height} = Dimensions.get('window');
 
@@ -46,8 +47,8 @@ class ToastShare extends PureComponent {
             });
         }, 150);
     };
-    show = () => {
-
+    show = (item={}) => {
+        this.shareInfo = Object.assign(this.shareInfo, item);
         this.setState({
             visible: true,
         }, () => {
@@ -100,29 +101,24 @@ class ToastShare extends PureComponent {
                                 style={{paddingHorizontal: 20, marginTop: 5}}>
 
                                 {this.getMenu('QQ', require('../res/img/share/qq.png'), () => {
-                                    JShareModule.share({
-                                        type: 'text',
-                                        platform: 'qzone', // 分享到指定平台
-                                        text: '111asasasas',
-                                    }, () => {
-                                    }, (msg) => {
-                                        // console.log(msg);
-                                    });
+                                    this.shareUtil('qq');
                                 })}
-                                {this.getMenu('QQ空间', require('../res/img/share/qqZone.png'), null)}
-                                {this.getMenu('微信', require('../res/img/share/wechat.png'), null)}
-                                {this.getMenu('朋友圈', require('../res/img/share/pengyouquan.png'), null)}
+                                {this.getMenu('QQ空间', require('../res/img/share/qqZone.png'), () => {
+                                    this.shareUtil('qzone');
+                                })}
+                                {this.getMenu('微信', require('../res/img/share/wechat.png'), () => {
+                                    this.shareUtil('wechat_session');
+                                })}
+                                {this.getMenu('朋友圈', require('../res/img/share/pengyouquan.png'), () => {
+                                    this.shareUtil('wechat_timeLine');
+                                })}
                                 {this.getMenu('微博', require('../res/img/share/xinlangweibo.png'), () => {
-                                    JShareModule.share({
-                                        type: 'text',
-                                        platform: 'sina_weibo', // 分享到指定平台
-                                        text: '111asasasas',
-                                    }, () => {
-                                    }, (msg) => {
-                                        // console.log(msg);
-                                    });
+                                    this.shareUtil('sina_weibo');
                                 })}
-                                {this.getMenu('复制链接', require('../res/img/share/copyurl.png'), null)}
+                                {this.getMenu('复制链接', require('../res/img/share/copyurl.png'), () => {
+                                    Clipboard.setString('http://www.easy-z.cn');
+                                    Toast.show('复制成功', {position: Toast.positions.CENTER});
+                                })}
 
 
                             </ScrollView>
@@ -136,6 +132,31 @@ class ToastShare extends PureComponent {
         );
     }
 
+    shareInfo = {
+        title: '15元悬赏任务,赏金可以立即提现！ - 简易赚',
+        text: '下载简易赚APP，完成悬赏任务即可赚取赏金！',
+        imageUrl: 'http://image.easy-z.cn/logo_share1.png',
+        url: 'http://www.easy-z.cn',
+    };
+    shareUtil = (platform) => {
+        JShareModule.share({
+            type: 'link',
+            platform: platform, // 分享到指定平台
+            title: this.shareInfo.title,
+            text: this.shareInfo.text,
+            imageUrl: this.shareInfo.imageUrl,
+            url: this.shareInfo.url,
+        }, () => {
+
+        }, (msg) => {
+            console.log(msg);
+            if (msg.code === 40009) {
+                Toast.show('您未安装应用');
+            } else {
+                Toast.show('分享失败');
+            }
+        });
+    };
     getMenu = (title, source, click) => {
         return <TouchableOpacity
             onPress={() => {

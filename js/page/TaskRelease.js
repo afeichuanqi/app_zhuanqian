@@ -474,6 +474,7 @@ class TaskRelease extends PureComponent {
                 {navigationBar}
                 {TopColumn}
                 {showColumn ? <KeyboardAwareScrollView
+                    enableOnAndroid={true}
                     // enableResetScrollToCoords={false}
                     // keyboardShouldPersistTaps={'always'}
                     enableAutomaticScroll={false}
@@ -962,8 +963,11 @@ class InputTextPro extends Component {
             showPlaceholder: false,
         }, () => {
             this.ipt.focus();
+
         });
-        ScrollViewRef.scrollToFocusedInput(findNodeHandle(event.target));
+        if (Platform.OS !== 'android') {
+            ScrollViewRef.scrollToFocusedInput(findNodeHandle(event.target));
+        }
     };
 }
 

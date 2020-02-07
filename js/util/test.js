@@ -1,24 +1,9 @@
-const localEmoji = new RegExp(/:([a-zA-Z0-9_\-\+]+):/g);
-const Viewssss = [];
+shareInfo = {
+    title: '15元悬赏任务,赏金可以立即提现！ - 简易赚',
+    text: '下载简易赚APP，完成悬赏任务即可赚取赏金！',
+    imageUrl: 'http://image.easy-z.cn/logo_share.png',
+    url: 'http://www.easy-z.cn',
 
-console.log(renderEmoji('微信注册 一个一块:yum::yum::yum:',Viewssss));
+};
 
-function renderEmoji(content,Views) {
-    const startIndex = content.search(localEmoji);
-    const endIndex = content.indexOf(':', startIndex + 1) + 1;
-    const contentText = content.substring(0, startIndex);
-    if (contentText.length > 0) {
-        Views.push(contentText);
-    }
-    if (startIndex !== -1) {
-        Views.push(`表情${content.substring(startIndex, endIndex)}表情`);
-
-    }else{
-        if(endIndex!==content.length){
-            Views.push(content.substring(endIndex,content.length));
-        }
-        return Views;
-    }
-
-    return renderEmoji(content.substring(endIndex),Views);
-}
+console.log(Object.assign(shareInfo,{}));

@@ -42,7 +42,7 @@ class PrivacyToast extends PureComponent {
 
     hide = (callback=null) => {
         this._anim = timing(this.animations.scale, {
-            duration: 200,
+            duration: 100,
             toValue: 0,
             easing: Easing.inOut(Easing.ease),
         }).start(() => {
@@ -52,9 +52,7 @@ class PrivacyToast extends PureComponent {
             this.setState({
                 visible: false,
             },callback);
-        }, 300);
-
-
+        }, 100);
     };
     show = (callback=null) => {
         this.setState({
@@ -62,7 +60,7 @@ class PrivacyToast extends PureComponent {
         }, () => {
 
             this._anim = timing(this.animations.scale, {
-                duration: 200,
+                duration: 100,
                 toValue: 1,
                 easing: Easing.inOut(Easing.ease),
             }).start(callback);
@@ -81,8 +79,6 @@ class PrivacyToast extends PureComponent {
                 transparent
                 visible={visible}
                 supportedOrientations={['portrait']}
-                // onRequestClose={this.hide}
-
             >
                 <View style={{
                     flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center',

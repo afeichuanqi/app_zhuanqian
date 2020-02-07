@@ -15,13 +15,13 @@
 	<key>wechatAppSecret</key>
 	<string>dcad950cd0633a27e353477c4ec12e7a</string>
 	<key>qqAppId</key>
-	<string>1110213694</string>
+	<string>1110206324</string>
 	<key>qqAppKey</key>
-	<string>9fwqPGmeHP5K7Wpw</string>
+	<string>Q1A6x4ZpQPr9kXs0</string>
 	<key>sinaWeiboAppKey</key>
-	<string>374535501</string>
+	<string>1912593481</string>
 	<key>sinaWeiboAppSecret</key>
-	<string>baccd12c166f1df96736b51ffbf600a2</string>
+	<string>addb2a629134f52b02de9cad184034a6</string>
 	<key>sinaRedirectUri</key>
 	<string>https://www.jiguang.cn</string>
 	<key>facebookAppId</key>

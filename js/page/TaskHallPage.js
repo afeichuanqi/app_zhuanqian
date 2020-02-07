@@ -85,7 +85,7 @@ class TaskHallPage extends PureComponent {
                 {/*顶部样式*/}
                 <View style={{
                     backgroundColor: bottomTheme,
-                    height: hp(9.7),
+                    height: hp(10),
                     width,
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -104,7 +104,7 @@ class TaskHallPage extends PureComponent {
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={wp(4)}
-                        activeStyle={{fontSize: hp(2.7), color: [255, 255, 255]}}
+                        activeStyle={{fontSize: hp(2.7), color: [255, 255, 255], fontWeight:'500'}}
                         inactiveStyle={{fontSize: hp(2.2), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.1)}}
                     />
@@ -336,7 +336,7 @@ class FirstListComponent extends PureComponent {
                     zIndex: 3,
                     height: hp(5.9),
                     width,
-
+                    // paddingHorizontal:10,
                     backgroundColor: theme,
                 }}>
                     <TopLeftFilterComponent onPress={this._columnTypeClick}
@@ -564,8 +564,8 @@ class HeadlineComponent extends PureComponent {
                 </TouchableOpacity>
             </View>
             {/*分割线*/}
-            <View
-                style={{height: 0.3, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
+            {/*<View*/}
+            {/*    style={{height: 0.3, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>*/}
         </AnimatedFadeIn>;
     }
 
@@ -650,7 +650,7 @@ class TopLeftFilterComponent extends Component {
         const {filterArray} = this.props;
         return <View style={{
             flexDirection: 'row',
-            justifyContent: 'space-between', height: hp(5.9), alignItems: 'center', width: wp(60),
+            justifyContent: 'space-between', height: hp(5.9), alignItems: 'center'
             // padding
         }}>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
@@ -667,11 +667,11 @@ class TopLeftFilterComponent extends Component {
                             onPress={() => this._onPress(Lindex)}
                         >
                             <Text style={[{
-                                fontSize: hp(2.3),
+                                fontSize: hp(2.6),
                                 fontWeight: '400',
                             }, Lindex === index ? {
                                 color: bottomTheme,
-                                fontWeight: '600',
+                                fontWeight: '900',
                             } : {color: '#767676'}]}>{item.title}</Text>
 
                         </TouchableOpacity>

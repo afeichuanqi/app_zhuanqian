@@ -27,6 +27,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import RadioComponent from '../common/RadioComponent';
 import Toast from 'react-native-root-toast';
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -120,7 +121,7 @@ class MyShieldPage extends PureComponent {
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5', paddingTop: 3}}
-                        ListEmptyComponent={<EmptyComponent height={height - 80} message={'你没有屏蔽任何人哦'}/>}
+                        ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} height={height - 80} message={'你没有屏蔽任何人哦'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
                         scrollEventThrottle={1}

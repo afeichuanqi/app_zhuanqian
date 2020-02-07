@@ -368,7 +368,7 @@ class FristListComponent extends PureComponent {
         return <Animated.View style={{
             transform: [{translateY: this.props.translateY}],
         }}>
-            <View style={{height: 30}}/>
+            <View style={{height: 25}}/>
             <FlatListCommonUtil
 
                 EmptyHeight={height - hp(43)}

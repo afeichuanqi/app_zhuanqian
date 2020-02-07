@@ -272,7 +272,7 @@ class UserBillList extends PureComponent {
         return (
             <AnimatedFlatList
                 style={{backgroundColor: '#f5f5f5', paddingTop: 1}}
-                ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关帐单'}/>}
+                ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} height={height - 80} message={'您还没有相关帐单'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}

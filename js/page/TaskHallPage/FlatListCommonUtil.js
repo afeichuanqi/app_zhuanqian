@@ -91,10 +91,10 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
+            ListEmptyComponent={<EmptyComponent  icoW={wp(23)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
                                                 height={this.props.EmptyH}/>}
             ListHeaderComponent={<View
-                style={{height: taskData.length === 0 ? 0 : 5, width, backgroundColor: '#fbfbfb'}}/>}
+                style={{height: taskData.length === 0 ? 0 : 5, width, backgroundColor: '#fafafa'}}/>}
             ref={ref => this.flatList = ref}
             data={taskData}
             showsVerticalScrollIndicator={false}
@@ -102,7 +102,7 @@ export default class FlatListCommonUtil extends PureComponent {
             renderItem={data => this._renderIndexPath(data)}
             keyExtractor={(item, index) => index + ''}
             style={{
-                backgroundColor: '#fbfbfb',
+                backgroundColor: '#fafafa',
                 height: '100%',
             }}
             refreshControl={

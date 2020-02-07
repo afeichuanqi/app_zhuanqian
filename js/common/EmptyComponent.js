@@ -35,6 +35,8 @@ class EmptyComponent extends PureComponent {
         marginTop: 0,
         height: height,
         type: 1,
+        backgroundColor:'white',
+
     };
 
     render() {
@@ -53,11 +55,17 @@ class EmptyComponent extends PureComponent {
                 source = require('../res/img/empty/write_empty.png');
             }
         }
+        if (this.props.type === 5) {
+            return <View style={{
+                height: this.props.height, justifyContent: 'center', alignItems: 'center',
+                backgroundColor:this.props.backgroundColor, width,
 
+            }}/>;
+        }
         return (
             <View style={{
                 height: this.props.height, justifyContent: 'center', alignItems: 'center',
-                backgroundColor: '#ffffff', width,
+                backgroundColor: this.props.backgroundColor, width,
 
             }}>
                 <View style={{

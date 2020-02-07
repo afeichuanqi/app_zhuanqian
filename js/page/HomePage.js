@@ -108,7 +108,6 @@ class HomePage extends PureComponent {
             outputRange: [1, 0],
             extrapolate: 'clamp',
         });
-        // console.log('homepagerender');
         return (
 
             <View style={{flex: 1}}>
@@ -125,7 +124,6 @@ class HomePage extends PureComponent {
                             source={bootSplashLogo}
                             fadeDuration={0}
                             onLoadEnd={this.startAnimated}
-                            // resizeMode={''}
                             style={[
                                 styles.logo,
                                 {transform: [{translateY: this.translateY}]},
@@ -138,10 +136,7 @@ class HomePage extends PureComponent {
                         justifyContent: 'center',
                     }}>
                         <Text style={{color: 'white', fontSize: 22}}>兼职 赚钱</Text>
-                        {/*<Text style={{color:'white'}}>芜湖易尔通</Text>*/}
-
                     </View>
-
                 </Animated.View>}
                 <DynamicTabNavigator/>
                 <PromotionToast ref={ref => this.promotionToast = ref}/>
@@ -167,7 +162,6 @@ class HomePage extends PureComponent {
                         this.PrivacyToastStep2.hide(() => {
                             this.PrivacyToast.show();
                         });
-                        // this.hideSelf();
                     }}
 
                     ref={ref => this.PrivacyToastStep2 = ref}/>}
@@ -177,10 +171,15 @@ class HomePage extends PureComponent {
     }
 
     onBackPress = () => {
-        StatusBar.setTranslucent(true);
-        StatusBar.setBarStyle('light-content', false);
-        StatusBar.setBackgroundColor(bottomTheme, false);
-        this.PrivacyToast.show();
+
+
+        setTimeout(()=>{
+            StatusBar.setHidden(true);
+            StatusBar.setTranslucent(true);
+            StatusBar.setBarStyle('light-content', false);
+            StatusBar.setBackgroundColor(bottomTheme, false);
+            this.PrivacyToast.show();
+        },100)
     };
 }
 

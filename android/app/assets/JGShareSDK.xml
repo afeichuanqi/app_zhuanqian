@@ -6,11 +6,11 @@
     <SinaWeibo
         AppKey="1912593481"
         AppSecret="addb2a629134f52b02de9cad184034a6"
-        RedirectUrl="http://www.baidu.com"/>
+        RedirectUrl="http://www.easy-z.cn/"/>
 
     <QQ
-        AppId="1110213694"
-        AppKey="9fwqPGmeHP5K7Wpw"/>
+        AppId="1110206324"
+        AppKey="Q1A6x4ZpQPr9kXs0"/>
 
     <Wechat
         AppId="微信的 AppId"

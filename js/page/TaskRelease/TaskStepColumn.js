@@ -297,6 +297,7 @@ class TaskStepColumn extends Component {
                             onPress={() => {
                                 if (this.props.isEdit) {
                                     Clipboard.setString(typeData.inputValue);
+                                    Toast.show('复制成功');
                                 } else {
                                     Toast.show('请先报名',{position:Toast.positions.CENTER});
                                 }

@@ -12,7 +12,7 @@ import {bottomTheme, theme} from '../appSet';
 import ViewUtil from '../util/ViewUtil';
 import NavigationBar from '../common/NavigationBar';
 import {
-    Dimensions,StyleSheet, Text,
+    Dimensions, StyleSheet, Text,
     View, TouchableOpacity, StatusBar, Clipboard, ScrollView,
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -22,6 +22,7 @@ import SvgUri from 'react-native-svg-uri';
 import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
+import ToastShare from '../common/ToastShare';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -38,6 +39,7 @@ class TaskReleaseMana extends PureComponent {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
+
     componentDidMount() {
         StatusBar.setBarStyle('dark-content', true);
         StatusBar.setBackgroundColor(theme, true);
@@ -80,7 +82,7 @@ class TaskReleaseMana extends PureComponent {
                             <TouchableOpacity
                                 onPress={() => {
                                     Clipboard.setString(this.props.userinfo.invite_code);
-                                    Toast.show('复制成功',{position:Toast.positions.CENTER});
+                                    Toast.show('复制成功', {position: Toast.positions.CENTER});
                                 }}
                                 style={{marginTop: 15, flexDirection: 'row', alignSelf: 'center'}}>
                                 <Text style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code}</Text>
@@ -99,20 +101,31 @@ class TaskReleaseMana extends PureComponent {
                         backgroundColor: 'white',
                         paddingBottom: 10,
                     }}>
-                        <TouchableOpacity style={{
-                            paddingHorizontal: 15,
-                            paddingVertical: 8,
-                            backgroundColor: bottomTheme,
-                            borderRadius: 10,
-                        }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.ToastShare.show({
+                                    title: `邀请码:${this.props.userinfo.invite_code} -简易赚`,
+                                    text: `下载简易赚APP，进入"我的"栏目输入邀请码:${this.props.userinfo.invite_code}，`,
+                                });
+                            }}
+                            style={{
+                                paddingHorizontal: 15,
+                                paddingVertical: 8,
+                                backgroundColor: bottomTheme,
+                                borderRadius: 10,
+                            }}>
                             <Text style={{color: 'white'}}>推广链接</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            paddingHorizontal: 15,
-                            paddingVertical: 8,
-                            backgroundColor: bottomTheme,
-                            borderRadius: 10,
-                        }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.ToastShare.show();
+                            }}
+                            style={{
+                                paddingHorizontal: 15,
+                                paddingVertical: 8,
+                                backgroundColor: bottomTheme,
+                                borderRadius: 10,
+                            }}>
                             <Text style={{color: 'white'}}>推广二维码</Text>
                         </TouchableOpacity>
                     </View>
@@ -138,19 +151,19 @@ class TaskReleaseMana extends PureComponent {
                             <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 12, marginTop: 5}}>收入分红</Text>
                         </View>
                     </View>
-                    <View style={{marginTop:10, paddingHorizontal:10}}>
-                        <Text style={{opacity:0.8,marginTop:10}}>
+                    <View style={{marginTop: 10, paddingHorizontal: 10}}>
+                        <Text style={{opacity: 0.8, marginTop: 10}}>
                             1、一级好友(直接推荐的好友)完成任意悬赏都可获得其赏金的8%奖励
                         </Text>
-                        <Text style={{opacity:0.8,marginTop:10}}>
+                        <Text style={{opacity: 0.8, marginTop: 10}}>
                             2、获得一级好友(直接推荐的好友)完成前20个任意悬赏额外奖励其赏金的4%奖励
                         </Text>
-                        <Text style={{opacity:0.8,marginTop:10}}>
+                        <Text style={{opacity: 0.8, marginTop: 10}}>
                             3、为防止恶意邀请(机器注册、注册多账号) 被邀请用户必须有一定活跃度才能正常获得佣金
                         </Text>
                     </View>
                 </ScrollView>
-
+                <ToastShare ref={ref => this.ToastShare = ref}/>
             </SafeAreaViewPlus>
         );
     }

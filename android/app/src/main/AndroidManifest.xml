@@ -24,7 +24,9 @@
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"> <!-- add this line -->
+
+            android:windowSoftInputMode="adjustPan"> <!-- add this line -->
+
             <!-- remove the intent-filter from MainActivity -->
 
         </activity>
