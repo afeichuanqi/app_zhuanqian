@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {PureComponent, Component} from 'react';
+import React, {Component} from 'react';
 import {
     Dimensions,
     View,
@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
     RefreshControl,
     FlatList,
-
+    StyleSheet,
     Image,
 } from 'react-native';
 import {bottomTheme} from '../appSet';
@@ -31,8 +31,9 @@ import actions from '../action';
 import MessageItemComponent from './MessagePage/MessageItemComponent';
 import {equalsObj} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+import ToastSelect from '../common/ToastSelect';
+
+const {width, height} = Dimensions.get('window');
 
 
 class MessagePage extends React.Component {
@@ -276,6 +277,7 @@ class MessageColumn extends Component {
             flexDirection: 'row',
             justifyContent: 'space-around',
         }}>
+
             <MessageColumnItem type={0} onSetNoticeMsgIsAllRead={onSetNoticeMsgIsAllRead}
                                unReadNum={noticeIsNew ? 1 : 0}
                                title={'通知消息'}/>
@@ -287,8 +289,9 @@ class MessageColumn extends Component {
                                unReadNum={appeal_3}
                                title={'投诉消息'}
                                size={42}/>
-            <MessageColumnItem type={3} columnType={4} unReadNum={0}
+            <MessageColumnItem toastSelect={this.toastSelect} type={3} columnType={4} unReadNum={0}
                                title={'在线客服'}/>
+
         </View>;
     }
 }
@@ -355,6 +358,9 @@ class MessageColumnItem extends Component {
                     this.props.onSetNoticeMsgIsAllRead();
                     NavigationUtils.goPage({}, 'SystemNotificationPage');
                 }
+                if (type == 3) {
+                    this.toastSelect.show();
+                }
             }}
             activeOpacity={0.6}
             style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>
@@ -384,16 +390,37 @@ class MessageColumnItem extends Component {
             </View>
 
             <Text style={{
-                fontSize:hp(2),
+                fontSize: hp(2),
                 color: 'black',
                 opacity: 0.8,
                 marginTop: 7,
 
             }}>{title}</Text>
+            {type === 3 && <ToastSelect
+                rightTitle={'确认'}
+                sureClick={() => {
+                    this.toastSelect.hide();
+                }}
+                ref={ref => this.toastSelect = ref}>
+                <View style={{
+                    backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                    paddingTop: 10,
 
+                }}>
+                    <Text style={styles.textStyle}>官方QQ：1412894</Text>
+                    <Text style={styles.textStyle}>官方微信：qingfengkjkj</Text>
+                </View>
+            </ToastSelect>}
         </TouchableOpacity>;
     }
 }
 
-
+const styles = StyleSheet.create({
+    textStyle: {
+        fontSize: hp(2.0),
+        width: width - 80,
+        color: 'rgba(0,0,0,0.8)',
+        lineHeight: 25,
+    },
+});
 export default MessagePageRedux;

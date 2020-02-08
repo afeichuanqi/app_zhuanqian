@@ -68,14 +68,10 @@ export default class ViewUtil {
 
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingLeft: wp(5)}}>
                     <Image
+                        resizeMode={'stretch'}
                         source={menuSource}
                         style={{width: hp(2.4), height: hp(2.4)}}
                     />
-                    {/*<SvgUri*/}
-                    {/*    width={hp(2.3)}*/}
-                    {/*    height={hp(2.3)}*/}
-                    {/*    svgXmlData={menuSvg}*/}
-                    {/*/>*/}
                     <Text style={{marginLeft: wp(3.5), fontSize: hp(2.3), opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingRight: wp(2)}}>

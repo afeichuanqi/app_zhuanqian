@@ -111,9 +111,8 @@ class ToastSelectTwo extends PureComponent {
 
                             }}>
                             <Text
-                                style={{color: 'black', opacity: 0.7, fontSize: wp(3.8)}}>{this.props.sureTitle}</Text>
+                                style={{color: 'black', opacity: 1, fontSize: wp(3.8)}}>{this.props.sureTitle}</Text>
                         </TouchableOpacity>
-
                         <View style={{
                             height: 10, backgroundColor: '#e8e8e8',
                         }}/>
@@ -123,7 +122,7 @@ class ToastSelectTwo extends PureComponent {
                                 width, alignItems: 'center', height: 50, justifyContent: 'center',
 
                             }}>
-                            <Text>{this.props.cancelTitle}</Text>
+                            <Text style={{opacity:0.9}}>{this.props.cancelTitle}</Text>
                         </TouchableOpacity>
                         <View style={{height: 50, width, backgroundColor: 'white'}}>
 

@@ -28,7 +28,7 @@ import {uploadQiniuImage} from '../../util/AppService';
 import add_image from '../../res/svg/add_image.svg';
 import PickerImage from '../../common/PickerImage';
 import ImageViewerModal from '../../common/ImageViewerModal';
-import {equalsObj} from '../../util/CommonUtils';
+import {equalsObj, renderEmoji} from '../../util/CommonUtils';
 import FastImagePro from '../../common/FastImagePro';
 import {saveImg} from '../../util/ImageUtil';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -265,9 +265,13 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={{
-                            marginTop: 20, fontSize: hp(2.15), lineHeight: 25,
-                            letterSpacing: 0.2, color: 'black',
-                        }}>{typeData.info}</Text>
+                            marginTop: 20
+                        }}>
+                            {typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
+                                letterSpacing: 0.2,}).map((item, index) => {
+                                return item;
+                            })}
+                        </Text>
                     </View>
                     <View style={{
                         flexDirection: 'row',
@@ -319,7 +323,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData.info}</Text>
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
+                        letterSpacing: 0.2,}).map((item, index) => {
+                        return item;
+                    })}</Text>
                     <View style={{
                         flexDirection: 'row',
                         marginTop: 20,
@@ -414,7 +421,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData.info}</Text>
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
+                        letterSpacing: 0.2,}).map((item, index) => {
+                        return item;
+                    })}</Text>
                     <View style={{flexDirection: 'row', marginTop: 20, paddingHorizontal: 10, alignItems: 'center'}}>
 
                         <View style={{
@@ -471,7 +481,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData.info}</Text>
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
+                        letterSpacing: 0.2,}).map((item, index) => {
+                        return item;
+                    })}</Text>
                     <TouchableOpacity
                         activeOpacity={0.6}
                         onPress={() => {
@@ -550,7 +563,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData.info}</Text>
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
+                        letterSpacing: 0.2,}).map((item, index) => {
+                        return item;
+                    })}</Text>
                     <View
 
                         style={{

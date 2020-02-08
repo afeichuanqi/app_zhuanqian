@@ -11,7 +11,7 @@ import {Modal, View, Dimensions, Text, TouchableOpacity} from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 import Animated from 'react-native-reanimated';
 
@@ -118,7 +118,7 @@ class ToastSelect extends PureComponent {
 
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: 16, color: bottomTheme}}>{this.props.title}</Text>
+                                <Text style={{fontSize: hp(2.3), color: 'black' , fontWeight:'500'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -141,7 +141,7 @@ class ToastSelect extends PureComponent {
                                     alignItems: 'center',
                                     height: 50,
                                 }}>
-                                <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.9)'}}>取消</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity

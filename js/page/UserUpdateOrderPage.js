@@ -22,6 +22,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import {getAllOrderForType,  userBuyOrder} from '../util/AppService';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
+import ToastSelect from '../common/ToastSelectTwo';
 
 const width = Dimensions.get('window').width;
 
@@ -108,12 +109,7 @@ class UserUpdateOrderPage extends PureComponent {
                     <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={() => {
-                            const orderId = this.radioCheck.getItem().id;
-                            userBuyOrder({id: orderId}, this.props.userinfo.token).then(result => {
-                                Toast.show('购买成功');
-                            }).catch(msg => {
-                                Toast.show(msg);
-                            });
+                            this.toastS.show();
                         }}
                         style={{
                             width: width / 2,
@@ -125,6 +121,18 @@ class UserUpdateOrderPage extends PureComponent {
                         <Text style={{color: 'white', fontSize: 18}}>提交</Text>
                     </TouchableOpacity>
                 </View>
+                <ToastSelect
+                    sureTitle={'确认购买'}
+                    sureClick={() => {
+                        this.toastS.hide();
+                        const orderId = this.radioCheck.getItem().id;
+                        userBuyOrder({id: orderId}, this.props.userinfo.token).then(result => {
+                            Toast.show('购买成功');
+                        }).catch(msg => {
+                            Toast.show(msg);
+                        });
+                    }}
+                    ref={ref => this.toastS = ref}/>
             </SafeAreaViewPlus>
         );
     }

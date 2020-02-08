@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:admin.easy-z.cn</string>
+		<string>applinks:www.easy-z.cn</string>
 	</array>
 </dict>
 </plist>

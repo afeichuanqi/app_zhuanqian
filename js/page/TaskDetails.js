@@ -113,6 +113,7 @@ class TaskDetails extends PureComponent {
                 device: Platform.OS == 'android' ? 2 : 3,
             }, this.props.userinfo.token);
             let {fromUserinfo, taskData, stepData} = TaskInfo;
+
             if (StatusForTask.status === 5) {
                 stepData = StatusForTask.stepData.task_step_data;
                 const totalData = {fromUserinfo, taskData, stepData: JSON.parse(stepData)};
@@ -193,6 +194,7 @@ class TaskDetails extends PureComponent {
         />;
 
         const {fromUserinfo, taskData, stepData} = this.state.totalData;
+        // console.log(this.state.totalData);
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
@@ -442,21 +444,22 @@ class TaskDetails extends PureComponent {
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Image
                                     resizeMode={'stretch'}
-                                    style={{width: hp(1.9), height:  hp(1.9), marginRight: 5}}
+                                    style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
                                     source={require('../res/img/item_icon/label_icon_green.png')}
                                 />
                                 <Text style={{fontSize: hp(2.3), color: bottomTheme}}>
+
                                     任务说明
                                 </Text>
                             </View>
 
                             <Text style={{
                                 marginTop: 10,
-                                color: 'rgba(0,0,0,1)',
-                                fontSize: hp(2.15),
-                                lineHeight: 20,
-                                // letterSpacing: 0.1,
-                            }}>{taskData && taskData.TaskInfo}</Text>
+                            }}>
+                                {taskData && renderEmoji(taskData.TaskInfo, [], hp(2.15), 0, 'rgba(0,0,0,1)', {lineHeight: 20}).map((item, index) => {
+                                    return item;
+                                })}
+                            </Text>
                         </View>
                         <View style={{
                             marginTop: 10, paddingHorizontal: 10, backgroundColor: 'white', marginHorizontal: 10,
@@ -465,7 +468,7 @@ class TaskDetails extends PureComponent {
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Image
                                     resizeMode={'stretch'}
-                                    style={{width: hp(1.9), height:  hp(1.9), marginRight: 5}}
+                                    style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
                                     source={require('../res/img/item_icon/label_icon_green.png')}
                                 />
                                 <Text style={{fontSize: hp(2.3), color: bottomTheme}}>
@@ -578,6 +581,7 @@ class TaskDetails extends PureComponent {
     };
     _sendStepData = () => {
         const {userinfo} = this.props;
+        // console.log(userinfo);
         if (!userinfo.token || userinfo.token.length === 0) {
             Toast.show('您未登录哦 ～ ～ ', {position: Toast.positions.CENTER});
             return;
@@ -604,6 +608,7 @@ class TaskDetails extends PureComponent {
                 return;
             }
             updateTaskReleaseData(FormData, token).then(result => {
+                // console.log(result);
                 Toast.show('修改成功 ~ ~ ', {position: Toast.positions.CENTER});
             }).catch(err => {
                 Toast.show(err, {position: Toast.positions.CENTER});
@@ -781,7 +786,7 @@ class BottomBtns extends PureComponent {
                 sureTitle={this.props.update ? '确认修改' : '确认发布'}
                 sureClick={() => {
                     this.toastS.hide();
-                    this.props.sendStepData;
+                    this.props.sendStepData();
                 }}
                 ref={ref => this.toastS = ref}/>
         </View>;

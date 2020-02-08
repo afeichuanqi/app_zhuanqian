@@ -147,7 +147,7 @@ class TaskReleaseMana extends PureComponent {
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5', paddingTop: 5}}
-                        ListEmptyComponent={<EmptyComponent height={height - 80} message={'您还没有相关任务'}/>}
+                        ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} height={height - 80} message={'您还没有相关任务'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
                         scrollEventThrottle={1}

@@ -129,7 +129,7 @@ class BottomBar extends Component {
         this.props.dispatch(NavigationActions.back());
         return true;//默认行为
     };
-    backSetBarStylePages = ['ChatRoomPage', 'ChatSettings', 'TaskSendFromUserList', 'RechargePage', 'MyAttentionList', 'TaskTurnDownPage'];
+    backSetBarStylePages = ['TaskRejectDetailsPage','ChatRoomPage', 'ChatSettings', 'TaskSendFromUserList', 'RechargePage', 'MyAttentionList', 'TaskTurnDownPage'];
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
 
@@ -407,7 +407,7 @@ class BottomBarItem extends Component {
             onPressIn={this.onPressIn}
             style={{
                 width: wp(25),
-                height: hp(7.5),
+                height: hp(7),
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
@@ -447,7 +447,7 @@ class BottomBarItem extends Component {
 
 
             </Animated.View>
-            <Text style={{fontSize: hp(1.6), color: titleColor, marginTop:hp(0.4)}}>{title}</Text>
+            <Text style={{fontSize: hp(1.5), color: titleColor, marginTop:hp(0.4)}}>{title}</Text>
 
         </TouchableOpacity>;
     }

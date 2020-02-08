@@ -93,15 +93,16 @@ class MyOrderManaPage extends PureComponent {
                 flexDirection: 'row',
                 paddingHorizontal: 10,
                 paddingTop: 18,
-                height: 80,
+                // height: 80,
                 backgroundColor: 'white',
+                paddingBottom:5,
 
             }}
         >
             <FastImage
                 style={{
                     height: 50,
-                    width: 48,
+                    width: 50,
                     backgroundColor: bottomTheme,
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -112,9 +113,10 @@ class MyOrderManaPage extends PureComponent {
             />
             {/*左上*/}
             <View style={{
-                position: 'absolute',
-                top: (taskTitle && taskTitle.length) > 15 ? 15 : 20,
-                left: 65,
+                // position: 'absolute',
+                // top: (taskTitle && taskTitle.length) > 15 ? 15 : 20,
+                // left: 65,
+                marginLeft:10,
 
             }}>
                 <Text
@@ -130,25 +132,29 @@ class MyOrderManaPage extends PureComponent {
                     })}
 
                 </Text>
-
-
-            </View>
-            {/*左下*/}
-            <View style={{
-                position: 'absolute',
-                bottom: (taskTitle && taskTitle.length) > 11 ? 3 : 15,
-                left: 65,
-                flexDirection: 'row',
-            }}>
                 <LabelBigComponent
-                    contaiStyle={{backgroundColor:'#e8e8e8'}}
+                    contaiStyle={{
+                        backgroundColor: '#eeeeee', maxWidth: wp(15), alignItems: 'center',
+                        justifyContent: 'center', marginTop: hp(1),
+                    }}
                     paddingVertical={3}
                     paddingHorizontal={6}
                     fontSize={hp(1.6)}
                     title={taskInfo.task_info}
                 />
+
             </View>
+            {/*左下*/}
+            {/*<View style={{*/}
+            {/*    position: 'absolute',*/}
+            {/*    bottom: (taskTitle && taskTitle.length) > 11 ? 3 : 15,*/}
+            {/*    left: 65,*/}
+            {/*    flexDirection: 'row',*/}
+            {/*}}>*/}
+            {/*    */}
+            {/*</View>*/}
             {/*右上*/}
+
             <View style={{
                 position: 'absolute',
                 top: 20,
@@ -157,27 +163,32 @@ class MyOrderManaPage extends PureComponent {
                 <Text style={{
                     fontSize: hp(2.5),
                     color: 'red',
+                    textAlign:'right',
                 }}>+{taskInfo.reward_price}元</Text>
-            </View>
-            {/*右下*/}
-            <View style={{
-                position: 'absolute',
-                bottom: hp(2.5),
-                right: 30,
-                alignItems: 'center',
-                flexDirection: 'row',
-            }}>
                 <Text style={{
                     fontSize: hp(1.8),
                     opacity: 0.5,
+                    marginTop:hp(0.5),
                 }}>浏览次数:{taskInfo.browse_num}</Text>
-
             </View>
+            {/*右下*/}
+            {/*<View style={{*/}
+            {/*    position: 'absolute',*/}
+            {/*    bottom: hp(2.5),*/}
+            {/*    right: 30,*/}
+            {/*    alignItems: 'center',*/}
+            {/*    flexDirection: 'row',*/}
+            {/*}}>*/}
+            {/*    */}
+
+            {/*</View>*/}
             <View style={{
                 position: 'absolute',
-                bottom: hp(3.5),
+                // bottom: hp(3.5),
                 right: 5,
                 alignItems: 'center',
+                justifyContent:'center',
+                height:75
             }}>
                 <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </View>
@@ -316,14 +327,16 @@ class MyOrderManaPage extends PureComponent {
                     sureClick={this._sureClick}
                     ref={ref => this.toastSelect = ref}>
                     <View style={{
-                        height: 50, backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
+                         backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
                         paddingTop: 10,
 
                     }}>
                         <Text style={{
-                            fontSize: 14,
+                            fontSize: hp(2),
                             width: width - 80,
-                            color: 'rgba(0,0,0,0.7)',
+                            color: 'rgba(0,0,0,0.8)',
+                            lineHeight: 25,
+                            // maxWidth:width-40,
                         }}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
                     </View>
                 </ToastSelect>
@@ -331,7 +344,8 @@ class MyOrderManaPage extends PureComponent {
             </SafeAreaViewPlus>
         );
     }
-    _sureClick=()=>{
+
+    _sureClick = () => {
         const {userinfo} = this.props;
         const {taskid} = this.params;
         this.toastSelect.hide();
@@ -344,7 +358,7 @@ class MyOrderManaPage extends PureComponent {
         }).catch(msg => {
             Toast.show(msg, {position: Toast.positions.CENTER});
         });
-    }
+    };
     _sureAddPrice = () => {
         const {userinfo} = this.props;
 

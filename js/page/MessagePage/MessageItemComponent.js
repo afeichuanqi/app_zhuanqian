@@ -89,128 +89,127 @@ export default class MessageItemComponent extends Component {
         });
         const {marginHorizontal, item} = this.props;
         const {avatar_url, columnType, msg, msg_type, unReadLength, username, taskUri} = item;
-        return <AnimatedFadeIn><AnimatedTouchableOpacity
-            onPress={this._onPress}
-            activeOpacity={1}
-            style={{
-
-                flexDirection: 'row',
-                marginHorizontal: marginHorizontal,
-                paddingVertical: 0,
-                borderBottomWidth: 0.5,
-                borderBottomColor: '#f0f0f0',
-                transform: [{scale}],
-                height: 80,
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                // backgroundColor:'red',
-            }}
-            onPressIn={this._onPressIn}
-            onPressOut={this._onPressOut}
-        >
-
-            <View>
-                <View style={{flexDirection: 'row'}}>
-                    <View>
-                        <FastImagePro
-                            loadingType={1}
-                            loadingWidth={wp(11.5)}
-                            loadingHeight={wp(11.5)}
-                            style={[styles.imgStyle]}
-                            source={{uri: avatar_url}}
-                            resizeMode={FastImage.resizeMode.stretch}
-                        />
-                        {unReadLength ? unReadLength > 0 && <View style={{
-                            borderRadius: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: 'absolute',
-                            top: -8, right: -8,
-                            backgroundColor: 'red',
-                            paddingHorizontal: 5,
-                            borderWidth: 2,
-                            borderColor: 'white',
-                        }}>
-                            <Text style={{
-                                fontSize: 10,
-                                color: 'white',
-                            }}>{unReadLength}</Text>
-                        </View> : null}
-                    </View>
-                    <View style={{justifyContent: 'space-around'}}>
-                        {/*左上*/}
-                        <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>
-                            <Text style={{
-                                fontSize: hp(2.1),
-                                color: 'black',
-                                opacity: 0.9,
-                                marginLeft: 10,
-                            }}>{username}</Text>
-                            <Text style={{
-                                marginLeft: 10,
-                                fontSize: hp(1.6),
-                                color: (columnType == 2 || columnType == 3) ? 'red' : 'black',
-                                opacity: 0.5,
-                            }}>{
-                                columnType == 1 ? `任务咨询` : columnType == 2 ? '申诉消息' : columnType == 3 ? '投诉消息' : columnType == 4 ? '聊天消息' : columnType == 5 ? '驳回沟通' : ''
-                            }</Text>
-
-
-                        </View>
-                        {/*中间*/}
-                        <Text
-                            numberOfLines={1}
-                            ellipsizeMode={'tail'}
-                            style={{
-                                fontSize: hp(1.8),
-                                color: 'black',
-                                opacity: 0.6,
-                                marginLeft: 10,
-                                width: (width - 100) / 2,
-                            }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.8), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
-                        </Text>
-                    </View>
-
-                </View>
-
-
-                <View style={{
-                    marginLeft: 55,
-                    marginTop: 5,
-                }}>
-                    <Text style={{
-                        fontSize: hp(1.65),
-                        color: 'black',
-                        opacity: 0.5,
-
-                    }}>{getCurrentTime(parseInt(item.sendDate))}</Text>
-                </View>
-            </View>
-            <TouchableOpacity
-                onPress={() => {
-                    Global.imageViewModal.show([{url: taskUri}]);
+        return <AnimatedFadeIn>
+            <AnimatedTouchableOpacity
+                onPress={this._onPress}
+                activeOpacity={1}
+                style={{
+                    flexDirection: 'row',
+                    marginHorizontal: marginHorizontal,
+                    paddingVertical: 0,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: '#f0f0f0',
+                    transform: [{scale}],
+                    height: 80,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                 }}
+                onPressIn={this._onPressIn}
+                onPressOut={this._onPressOut}
             >
-                <FastImagePro
-                    loadingWidth={wp(13.8)}
-                    loadingHeight={wp(13.8)}
-                    style={{
-                        backgroundColor: '#9d9d9d',
-                        // 设置宽度
-                        width: wp(13.8),
-                        height: wp(13.8),
-                        borderRadius: 2,
+
+                <View>
+                    <View style={{flexDirection: 'row'}}>
+                        <View>
+                            <FastImagePro
+                                loadingType={1}
+                                loadingWidth={wp(11.5)}
+                                loadingHeight={wp(11.5)}
+                                style={[styles.imgStyle]}
+                                source={{uri: avatar_url}}
+                                resizeMode={FastImage.resizeMode.stretch}
+                            />
+                            {unReadLength ? unReadLength > 0 && <View style={{
+                                borderRadius: 10,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                position: 'absolute',
+                                top: -8, right: -8,
+                                backgroundColor: 'red',
+                                paddingHorizontal: 5,
+                                borderWidth: 2,
+                                borderColor: 'white',
+                            }}>
+                                <Text style={{
+                                    fontSize: 10,
+                                    color: 'white',
+                                }}>{unReadLength}</Text>
+                            </View> : null}
+                        </View>
+                        <View style={{justifyContent: 'space-around'}}>
+                            {/*左上*/}
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                                <Text style={{
+                                    fontSize: hp(2.1),
+                                    color: 'black',
+                                    opacity: 0.9,
+                                    marginLeft: 10,
+                                }}>{username}</Text>
+                                <Text style={{
+                                    marginLeft: 10,
+                                    fontSize: hp(1.6),
+                                    color: (columnType == 2 || columnType == 3) ? 'red' : 'black',
+                                    opacity: 0.5,
+                                }}>{
+                                    columnType == 1 ? `任务咨询` : columnType == 2 ? '申诉消息' : columnType == 3 ? '投诉消息' : columnType == 4 ? '聊天消息' : columnType == 5 ? '驳回沟通' : ''
+                                }</Text>
+
+
+                            </View>
+                            {/*中间*/}
+                            <Text
+                                numberOfLines={1}
+                                ellipsizeMode={'tail'}
+                                style={{
+                                    fontSize: hp(1.8),
+                                    color: 'black',
+                                    opacity: 0.6,
+                                    marginLeft: 10,
+                                    width: (width - 100) / 2,
+                                }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.8), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
+                            </Text>
+                        </View>
+
+                    </View>
+
+
+                    <View style={{
+                        marginLeft: 55,
+                        marginTop: 5,
+                    }}>
+                        <Text style={{
+                            fontSize: hp(1.65),
+                            color: 'black',
+                            opacity: 0.5,
+
+                        }}>{getCurrentTime(parseInt(item.sendDate))}</Text>
+                    </View>
+                </View>
+                <TouchableOpacity
+                    onPress={() => {
+                        Global.imageViewModal.show([{url: taskUri}]);
                     }}
-                    source={{uri: taskUri}}
-                    resizeMode={FastImage.resizeMode.stretch}
-                />
-            </TouchableOpacity>
+                >
+                    <FastImagePro
+                        loadingWidth={wp(13.8)}
+                        loadingHeight={wp(13.8)}
+                        style={{
+                            backgroundColor: '#9d9d9d',
+                            // 设置宽度
+                            width: wp(13.8),
+                            height: wp(13.8),
+                            borderRadius: 2,
+                        }}
+                        source={{uri: taskUri}}
+                        resizeMode={FastImage.resizeMode.stretch}
+                    />
+                </TouchableOpacity>
 
 
-        </AnimatedTouchableOpacity>
+            </AnimatedTouchableOpacity>
         </AnimatedFadeIn>;
 
 

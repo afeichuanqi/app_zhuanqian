@@ -291,13 +291,9 @@ class TaskRelease extends PureComponent {
         }
         const reward_price = columnData.rewardPrice;
         const reward_num = columnData.rewardNum;
-
         const stepIndex = stepData && stepData.findIndex(d => d.type == 5);
-        // console.log(stepIndex, 'stepIndex');
-
         const task_uri = stepIndex !== -1 ? (stepIndex !== -1 ? stepData[stepIndex].typeData.uri : '') : '';
-
-        const task_steps = JSON.stringify(stepData);
+        let task_steps = JSON.stringify(stepData);
         return {
             task_type_id,
             task_device_id,
@@ -315,14 +311,24 @@ class TaskRelease extends PureComponent {
 
     };
     _addTaskReleaseData = () => {
+        const isTrue = this.complyColumn.getIsTrue();
+        if (!isTrue) {
+            Toast.show('您未同意发布规则哦 ～ ～ ', {position: Toast.positions.CENTER});
+            return;
+
+        }
+        const {userinfo} = this.props;
+        const {token} = userinfo;
+        if (!token || token.length === 0) {
+            Toast.show('您未登录哦 ～ ～ ', {position: Toast.positions.CENTER});
+            return;
+        }
         if (!this.taskInfo.update) {
             const data = this._getFormData();
             const error = judgeTaskData(data);
             if (error != '') {
                 Toast.show(error, {position: Toast.positions.CENTER});
             } else {
-                const {userinfo} = this.props;
-                const {token} = userinfo;
                 addTaskReleaseData(data, token).then(result => {
                     Toast.show('恭喜您,发布任务成功,等待审核');
                     const {task_id} = result;
@@ -336,18 +342,6 @@ class TaskRelease extends PureComponent {
                 });
             }
         } else {
-            const isTrue = this.complyColumn.getIsTrue();
-            if (!isTrue) {
-                Toast.show('您未同意发布规则哦 ～ ～ ', {position: Toast.positions.CENTER});
-                return;
-
-            }
-            const {userinfo} = this.props;
-            const {token} = userinfo;
-            if (!token || token.length === 0) {
-                Toast.show('您未登录哦 ～ ～ ', {position: Toast.positions.CENTER});
-                return;
-            }
             const data = this._getFormData();
             data.task_id = this.taskInfo.taskId;
             const error = judgeTaskData(data, true);
@@ -740,7 +734,7 @@ class BottomInfoForm extends Component {
                     })}
                 {genFormItem('任务说明', 1,
                     {
-                        info: '如:投票(2-7字)',
+                        info: '大于2个字',
                         onChangeText: this._changeTaskInfo,
                         editable: true,
 

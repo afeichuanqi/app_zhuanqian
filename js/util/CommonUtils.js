@@ -154,6 +154,7 @@ export const judgeTaskData = (data, update) => {
     if (!single_order_id || single_order_id === 0) {
         return '用户做单次数您是不是忘记选了 ~ ~';
     }
+    console.log(data);
     if (!update) {
         if (!reward_price || reward_price === 0) {
             return '悬赏单价记得填写哦 ~ ~';
@@ -283,7 +284,7 @@ export const equalsObj = (oldData, newData) => {
     // 走到这里,说明数组或者对象中所有元素都相同,返回true
     return true;
 };
-export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black', style_, fontSize2) => {
+export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black', style_ = {}, fontSize2 = 14) => {
     const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
     const endIndex = content.indexOf(':', startIndex + 1) + 1;
     const contentText = content.substring(0, startIndex);
@@ -293,7 +294,7 @@ export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black'
     }
     if (startIndex !== -1) {
         Views.push(<Emoji key={`Emoji${Math.random() * 100}`} name={content.substring(startIndex, endIndex)}
-                          style={{...style_,fontSize: fontSize2 ? fontSize2 : fontSize}}/>);
+                          style={{...style_, fontSize: fontSize2 ? fontSize2 : fontSize}}/>);
 
     } else {
         if (endIndex !== content.length) {
@@ -304,7 +305,7 @@ export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black'
         return Views;
     }
 
-    return renderEmoji(content.substring(endIndex), Views, fontSize, 0, color, style_,fontSize2);
+    return renderEmoji(content.substring(endIndex), Views, fontSize, 0, color, style_, fontSize2);
 };
 // export const _renderEmoji = (content, Views, fontSize, index = 0, color = 'black') => {
 //     index += 1;
