@@ -90,7 +90,7 @@ class TaskInfoComponent extends PureComponent {
 
 
                             }}>
-                            {item && renderEmoji(`${item.taskTitle}`, [], 17, 0, 'black').map((item, index) => {
+                            {item && renderEmoji(`${item.taskTitle}`, [], hp(2.2), 0, 'black').map((item, index) => {
                                 return item;
                             })}
                             </Text>
@@ -115,7 +115,7 @@ class TaskInfoComponent extends PureComponent {
                     {/*价格*/}
                     <View style={{}}>
                         <Text style={{
-                            fontSize: 18,
+                            fontSize: hp(2.4),
                             color: 'red',
                         }}>+{item.rewardPrice} 元</Text>
                     </View>
@@ -136,14 +136,14 @@ class TaskInfoComponent extends PureComponent {
                         alignItems: 'center',
                     }}>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: hp(1.7),
                             opacity: 0.5,
                             color: 'black',
                         }}>{parseInt(item.taskPassNum)}人已完成</Text>
                         <View
                             style={{width: 0.7, height: 13, backgroundColor: 'rgba(0,0,0,0.5)', marginHorizontal: 5}}/>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: hp(1.7),
                             opacity: 0.5,
                             color: 'black',
                         }}>剩余{parseInt(item.rewardNum) - parseInt(item.taskSignUpNum)}</Text>

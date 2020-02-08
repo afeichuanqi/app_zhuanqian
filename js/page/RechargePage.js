@@ -112,15 +112,15 @@ class RechargePage extends PureComponent {
                             height: hp(10),
                             paddingVertical: 5,
                         }}>
-                            <Text style={{fontSize: 19, color: 'black'}}>{this.props.userinfo.username}</Text>
+                            <Text style={{fontSize: hp(2.7), color: 'black'}}>{this.props.userinfo.username}</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     <Image
                                         resizeMode={'stretch'}
-                                        style={{height: 12, width: 12}}
+                                        style={{height: hp(1.6), width: hp(1.6)}}
                                         source={require('.././res/img/recharge/recharge_id.png')}/>
                                     <Text style={{
-                                        fontSize: 14,
+                                        fontSize: hp(1.7),
                                         marginLeft: 4,
                                         color: 'rgba(0,0,0,0.7)',
                                     }}>{this.props.userinfo.userid}</Text>
@@ -128,10 +128,10 @@ class RechargePage extends PureComponent {
                                 <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
                                     <Image
                                         resizeMode={'stretch'}
-                                        style={{height: 12, width: 12}}
+                                        style={{height: hp(1.6), width: hp(1.6)}}
                                         source={require('.././res/img/recharge/recharge_money.png')}/>
                                     <Text style={{
-                                        fontSize: 14,
+                                        fontSize: hp(1.7),
                                         marginLeft: 4,
                                         color: 'rgba(0,0,0,0.7)',
                                     }}>{this.props.userinfo.task_currency}</Text>
@@ -142,7 +142,7 @@ class RechargePage extends PureComponent {
                     </TouchableOpacity>}
 
                     <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                        <Text style={{fontSize:15, color: 'rgba(0,0,0,0.5)'}}>选择数量:</Text>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>选择数量:</Text>
                         <View style={{
                             width: width - 20,
                             flexDirection: 'row',
@@ -188,26 +188,26 @@ class RechargePage extends PureComponent {
 
                     </View>
                     <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                        <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
                         <PayType ref={ref => this.payType = ref}/>
                     </View>
                     <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 10}}>
-                        <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.5)', top: hp(1)}}>应付:</Text>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>应付:</Text>
                         <Text style={{
-                            fontSize: 22,
+                            fontSize: hp(3),
                             color: bottomTheme,
                             marginHorizontal: 5,
                         }}>{this.state.rechargeVal}</Text>
-                        <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.5)', top: hp(1)}}>元</Text>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>元</Text>
                     </View>
                     <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold', fontSize: 14}}>充值须知
+                        <Text style={{fontWeight: 'bold', fontSize: hp(2)}}>充值须知
                         </Text>
-                        <Text style={{fontSize:12, color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                         </Text>
                     </View>
                     <View style={{height: hp(7)}}/>
@@ -249,13 +249,13 @@ class RechargePage extends PureComponent {
                 justifyContent: 'center',
             }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{color: 'black', fontSize:18}}>{item.num}</Text>
+                <Text style={{color: 'black', fontSize: hp(2.3)}}>{item.num}</Text>
                 <Image
                     resizeMode={'stretch'}
                     style={{height: hp(2), width: hp(2), marginLeft: 3}}
                     source={require('.././res/img/recharge/recharge_money.png')}/>
             </View>
-            <Text style={{marginTop: 3, fontSize: 15, color: 'rgba(0,0,0,0.5)'}}>{item.info}</Text>
+            <Text style={{marginTop: 3, fontSize: hp(1.99), color: 'rgba(0,0,0,0.5)'}}>{item.info}</Text>
         </TouchableOpacity>;
     };
     sureRecharGe = () => {
@@ -372,9 +372,9 @@ class PayType extends React.Component {
                     style={{width: wp(6), height: wp(5), borderRadius: 5}}
                 />
                 <View>
-                    <Text style={{fontSize: 16, marginLeft: 10, color: 'black'}}>{item.title}</Text>
+                    <Text style={{fontSize: hp(2), marginLeft: 10, color: 'black'}}>{item.title}</Text>
                     <Text style={{
-                        fontSize: 13,
+                        fontSize: hp(1.6),
                         marginLeft: 10,
                         color: 'rgba(0,0,0,0.5)',
                         marginTop: 5,
@@ -444,7 +444,7 @@ class InputPro extends React.PureComponent {
                 alignSelf: 'center',
                 borderRadius: 5,
                 paddingLeft: 15,
-                fontSize: 16,
+                fontSize: hp(2.5),
             }}>
 
         </TextInput>;

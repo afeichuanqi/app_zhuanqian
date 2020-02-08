@@ -99,7 +99,7 @@ class PrivacyToast extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                            <Text style={{color: 'rgba(0,0,0,0.9)', fontSize: 17}}>隐私政策</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.9)', fontSize: hp(2.3)}}>隐私政策</Text>
                         </View>
                         <ScrollView
                             style={{paddingHorizontal: 25,height:hp(30)}}>
@@ -148,12 +148,12 @@ class PrivacyToast extends PureComponent {
                             <TouchableOpacity
                                 onPress={this.props.cancelClick}
                                 style={{width: (width - 100) / 2, justifyContent: 'center', alignItems: 'center'}}>
-                                <Text style={{fontSize:16, color: 'black'}}>不同意</Text>
+                                <Text style={{fontSize: hp(2.3), color: 'black'}}>不同意</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={this.props.sureClick}
                                 style={{width: (width - 100) / 2, justifyContent: 'center', alignItems: 'center'}}>
-                                <Text style={{fontSize: 16, color: bottomTheme}}>同意</Text>
+                                <Text style={{fontSize: hp(2.3), color: bottomTheme}}>同意</Text>
                             </TouchableOpacity>
                         </View>
                     </Animated.View>
@@ -168,7 +168,7 @@ class PrivacyToast extends PureComponent {
 
 const styles = StyleSheet.create({
     textStyle: {
-        fontSize: 15,
+        fontSize: hp(2.1),
         letterSpacing: 0.5,
         color: 'rgba(0,0,0,0.8)',
         lineHeight: hp(3),

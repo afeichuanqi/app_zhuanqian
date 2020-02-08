@@ -127,7 +127,7 @@ class MyModalBox extends PureComponent {
 
                             }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: 17, color: 'white'}}>{this.props.title}</Text>
+                                <Text style={{fontSize: hp(2.2), color: 'white'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -149,7 +149,7 @@ class MyModalBox extends PureComponent {
                                     top: 1,
                                     // backgroundColor:'red',
                                 }}>
-                                <Text style={{color: 'rgba(0,0,0,0.8)',fontSize:15}}>取消</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.8)',fontSize:hp(2.15)}}>取消</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 activeOpacity={0.6}
@@ -165,7 +165,7 @@ class MyModalBox extends PureComponent {
                                     }}
                                     source={require('../res/img/buttombackground.png')}>
 
-                                    <Text  style={{color: 'white', fontSize:15}}>{rightTitle}</Text>
+                                    <Text  style={{color: 'white', fontSize:hp(2.15)}}>{rightTitle}</Text>
 
                                 </ImageBackground>
                             </TouchableOpacity>

@@ -407,7 +407,7 @@ class BottomBarItem extends Component {
             onPressIn={this.onPressIn}
             style={{
                 width: wp(25),
-                height:50,
+                height: hp(7),
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
@@ -417,7 +417,7 @@ class BottomBarItem extends Component {
                 marginTop:hp(0.5),
             }}>
                 <Image
-                    style={{height: 20, width: 20}}
+                    style={{height: hp(3), width: hp(3)}}
                     source={source}
                 />
                 {unReadLength == 0 && isOtherUnRead && <View style={{
@@ -436,7 +436,7 @@ class BottomBarItem extends Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                     position: 'absolute',
-                    top: -8, right: (unReadLength.toString().length > 1 ? -18 : -12),
+                    top: -8, right: (unReadLength.toString().length > 1 ? -16 : -10),
                     backgroundColor: 'red',
                     paddingHorizontal: 5,
                     borderWidth: 2,

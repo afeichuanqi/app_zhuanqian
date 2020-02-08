@@ -336,18 +336,18 @@ class UserBillList extends PureComponent {
                 borderBottomColor: 'rgba(0,0,0,0.1)',
             }}>
             <View>
-                <Text style={{fontSize: 16, color: 'black'}}>{item.bill_title}</Text>
+                <Text style={{fontSize: hp(2.2), color: 'black'}}>{item.bill_title}</Text>
                 <Text style={{
                     marginTop: 8,
                     opacity: 0.7,
-                    fontSize: 14,
+                    fontSize: hp(1.9),
                     color: 'black',
                 }}>余额:{item.bill_balance}</Text>
-                <Text style={{marginTop: 8, opacity: 0.5, fontSize:14, color: 'black'}}>{item.bill_date1}</Text>
+                <Text style={{marginTop: 8, opacity: 0.5, fontSize: hp(1.8), color: 'black'}}>{item.bill_date1}</Text>
             </View>
             <View style={{alignSelf: 'flex-start', marginTop: 20}}>
                 <Text style={{
-                    fontSize: 18,
+                    fontSize: hp(2.5),
                     color: 'red',
                     textAlign: 'right',
                 }}>{item.bill_money_type}{parseFloat(item.bill_money).toFixed(2)}</Text>

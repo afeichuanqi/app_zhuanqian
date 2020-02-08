@@ -86,18 +86,18 @@ class TaskEasyInfoComponent extends PureComponent {
                                 color: 'black',
 
                             }}>
-                            {item && renderEmoji(`${item.taskTitle}`, [], 17, 0, 'black').map((item, index) => {
+                            {item && renderEmoji(`${item.taskTitle}`, [], hp(2.25), 0, 'black').map((item, index) => {
                                 return item;
                             })}
                         </Text>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style={{
-                                fontSize: 14,
+                                fontSize: hp(1.8),
                                 opacity: 0.5,
                                 color: 'black',
                             }}>{item.leftTopText}</Text>
                             <Text style={{
-                                fontSize:14,
+                                fontSize: hp(1.8),
                                 opacity: 0.5,
                                 marginLeft: 10,
                                 color: 'black',

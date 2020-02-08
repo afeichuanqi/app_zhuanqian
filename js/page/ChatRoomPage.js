@@ -655,11 +655,11 @@ class TaskInfo extends React.Component {
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-between', height: wp(15), width: wp(57)}}>
                     <Text style={{
-                        fontSize:20,
+                        fontSize: hp(2.4),
                         color: 'black',
                     }}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
                     <Text numberOfLines={2} style={{fontSize: hp(2.0), opacity: 0.5, color: 'black'}}>
-                        {taskInfo && renderEmoji(`${taskInfo.task_title}`, [], 13, 0, 'black').map((item, index) => {
+                        {taskInfo && renderEmoji(`${taskInfo.task_title}`, [], hp(1.7), 0, 'black').map((item, index) => {
                             return item;
                         })}
                     </Text>
@@ -667,7 +667,7 @@ class TaskInfo extends React.Component {
 
                         <AnimatedFadeIn>
                             <Text style={{
-                                fontSize: 13, opacity: 0.5, color: 'black',
+                                fontSize: hp(1.7), opacity: 0.5, color: 'black',
 
                             }}>
                                 {statusText}
@@ -701,7 +701,7 @@ class TaskInfo extends React.Component {
                     }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: 14,
+                        fontSize: hp(1.9),
                     }}>{(columnType == 2 || columnType == 3 || columnType == 5) ? '任务来往' : '查看详情'}</Text>
                 </TouchableOpacity>
 

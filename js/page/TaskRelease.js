@@ -85,7 +85,7 @@ class TextInputPro extends PureComponent {
             }}
             value={this.state.defaultValue}
             editable={rightComponentData.editable}
-            style={{flex: 1, color: 'black', padding: 0, fontSize: 16}}
+            style={{flex: 1, color: 'black', padding: 0, fontSize: hp(2.1)}}
             placeholder={rightComponentData.info}
             placeholderTextColor={'#7b798d'}
             onChangeText={this._onChangeText}
@@ -143,7 +143,7 @@ const genFormItem = (title, rightComponentType, rightComponentData) => {
         width, flexDirection: 'row', height: hp(6.2), paddingHorizontal: 10, paddingVertical: 10,
         alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
     }}>
-        <Text style={{width: width / 4.2, color: 'black', fontSize: 16}}>{title}</Text>
+        <Text style={{width: width / 4.2, color: 'black', fontSize: hp(2.18)}}>{title}</Text>
         {rightComponent}
         {rightComponentSvg}
     </View>;
@@ -514,7 +514,7 @@ class TaskRelease extends PureComponent {
                         }}>
                         <SvgUri width={20} fill={'rgba(0,0,0,0.9)'} style={{marginLeft: 5}} height={20}
                                 svgXmlData={task_yulan}/>
-                        <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>预览</Text>
+                        <Text style={{fontSize: hp(2.1), color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>预览</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.5}
@@ -561,7 +561,7 @@ class TaskRelease extends PureComponent {
                             backgroundColor: bottomTheme,
                         }}>
                         <Text style={{
-                            fontSize: 16,
+                            fontSize: hp(2.1),
                             color: 'white',
                             marginLeft: 5,
                         }}>{this.taskInfo.update ? '确认修改' : '申请发布'}</Text>
@@ -708,15 +708,15 @@ class BottomInfoForm extends Component {
 
         //悬赏单价
         const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center', width: wp(60)}}>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 16}}>最低</Text>
-            <Text style={{color: 'black', marginHorizontal: 5, fontSize: 16}}>0.5</Text>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 16}}>元</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>最低</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>0.5</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>元</Text>
         </View>;
         //悬赏数量
         const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center', width: wp(60)}}>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 16}}>最少</Text>
-            <Text style={{color: 'black', marginHorizontal: 5, fontSize: 16}}>10</Text>
-            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 16}}>单</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>最少</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>10</Text>
+            <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>单</Text>
         </View>;
         const {userinfo} = this.props;
         return <View>
@@ -855,7 +855,7 @@ class InputSelect extends Component {
                     }
                 }}
             >
-                <Text style={{fontSize: 16, color: 'black'}}>{title}</Text>
+                <Text style={{fontSize: hp(2.1), color: 'black'}}>{title}</Text>
             </TouchableOpacity>
             {this.state.showPopBtn ?
                 <PopButtomMenu popTitle={this.props.popTitle} menuArr={this.props.menuArr} select={this._select}
@@ -907,7 +907,7 @@ class InputTextPro extends Component {
                 onFocus={this.hidePlaceholder}
                 onBlur={this._onBlur}
                 onChangeText={this._onChangeText}
-                ref={ref => this.ipt = ref} style={{flex: 1, color: 'black', padding: 0, fontSize: 16}}/>}
+                ref={ref => this.ipt = ref} style={{flex: 1, color: 'black', padding: 0, fontSize: hp(2.1)}}/>}
 
         </View>;
     }
@@ -1012,7 +1012,7 @@ class RadioInfoComponent extends Component {
                     borderRadius: 8,
                 }}/>}
             </View>
-            <Text style={{fontSize: 16, marginLeft: 5, color: 'black'}}>{item.title}</Text>
+            <Text style={{fontSize: hp(2.1), marginLeft: 5, color: 'black'}}>{item.title}</Text>
         </TouchableOpacity>;
     };
 
@@ -1042,10 +1042,10 @@ class InputSetting extends Component {
             width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
             alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
-            <Text style={{width: width / 4.2, fontSize: 16, color: 'black'}}>{title}</Text>
+            <Text style={{width: width / 4.2, fontSize: hp(2.1), color: 'black'}}>{title}</Text>
             <TextInput
                 editable={rightComponentData.editable}
-                style={{flex: 1, color: 'red', padding: 0, fontSize: 16}}
+                style={{flex: 1, color: 'red', padding: 0, fontSize: hp(2.1)}}
                 placeholder={rightComponentData.info}
                 placeholderTextColor={'#7b798d'}
                 onChangeText={this._onChangeText}
@@ -1214,7 +1214,7 @@ class StepInfo extends Component {
                 alignItems: 'center', flexDirection: 'row',
             }}>
             <SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>
-            <Text style={{fontSize: 16, color: 'black'}}>{title}</Text>
+            <Text style={{fontSize: hp(2.1), color: 'black'}}>{title}</Text>
         </TouchableOpacity>;
     };
     _svgClick = () => {
@@ -1338,7 +1338,7 @@ class TypeComponent extends Component {
                 borderWidth: 0.3, borderColor: bottomTheme,
             }]}>
             <Text style={[{
-                fontSize: 16,
+                fontSize: hp(2.1),
                 color: 'rgba(255,255,255,0.5)',
                 opacity: 0.8,
             }, !checked ? {

@@ -166,7 +166,6 @@ class HomePage extends PureComponent {
                             style={{
                                 height: 30,
                                 paddingLeft: 10,
-
                             }}
                             position={this.position}
                             contentContainerStyle={{paddingTop: 7}}
@@ -176,8 +175,8 @@ class HomePage extends PureComponent {
                             handleIndexChange={this.handleIndexChange}
                             bounces={true}
                             titleMarginHorizontal={8}
-                            activeStyle={{fontSize: 15, color: [0, 0, 0]}}
-                            inactiveStyle={{fontSize: 13, color: [95, 95, 95], height: 10}}
+                            activeStyle={{fontSize: hp(2), color: [0, 0, 0]}}
+                            inactiveStyle={{fontSize: hp(1.8), color: [95, 95, 95], height: 10}}
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
 
@@ -212,7 +211,7 @@ class HomePage extends PureComponent {
                     }}>
                         <TabBar
                             style={{
-                                height: 30,
+                                height: 28,
                                 paddingLeft: 10,
                             }}
                             position={this.position}
@@ -223,8 +222,8 @@ class HomePage extends PureComponent {
                             handleIndexChange={this.handleIndexChange}
                             bounces={true}
                             titleMarginHorizontal={15}
-                            activeStyle={{fontSize: 19, color: [0, 0, 0]}}
-                            inactiveStyle={{fontSize: 16, color: [95, 95, 95], height: 10}}
+                            activeStyle={{fontSize: hp(2.5), color: [0, 0, 0]}}
+                            inactiveStyle={{fontSize: hp(2.2), color: [95, 95, 95], height: 10}}
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
                     </Animated.View>
@@ -409,7 +408,7 @@ class FristListComponent extends PureComponent {
                     }}/>
                     <Text
                         style={{
-                            fontSize: 15,
+                            fontSize: hp(2.1),
                             color: bottomTheme,
                         }}>为您推荐</Text>
                     {/*<View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>*/}
@@ -487,6 +486,8 @@ class LunBoComponent extends React.Component {
             paddingTop: 20,
             backgroundColor: theme,
             width: width,
+            // marginBottom:10,
+
 
         }}>
 

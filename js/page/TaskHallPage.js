@@ -94,19 +94,19 @@ class TaskHallPage extends PureComponent {
                 }}>
                     <TabBar
                         style={{
-                            height: 62,
+                            height: hp(7.5),
                             width: wp(50),
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 30}}
+                        contentContainerStyle={{paddingTop: hp(3.7)}}
                         routes={navigationRoutes}
                         index={navigationIndex}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
-                        titleMarginHorizontal={18}
-                        activeStyle={{fontSize: 21, color: [255, 255, 255], fontWeight:'500'}}
-                        inactiveStyle={{fontSize: 17, color: [255, 255, 255], height: 10}}
-                        indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -5}}
+                        titleMarginHorizontal={wp(4)}
+                        activeStyle={{fontSize: hp(2.7), color: [255, 255, 255], fontWeight:'500'}}
+                        inactiveStyle={{fontSize: hp(2.2), color: [255, 255, 255], height: 10}}
+                        indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.1)}}
                     />
                     <View style={{flexDirection: 'row', marginTop: hp(1.5), alignItems: 'center'}}>
                         {/*加图标*/}
@@ -345,7 +345,7 @@ class FirstListComponent extends PureComponent {
                 </View>
                 {/*分割线*/}
                 <View
-                    style={{height: 0.2, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
+                    style={{height: 0.3, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
                 <HeadlineComponent
                     onSuccess={this.onSuccess}
                     onError={this.onError}
@@ -441,7 +441,7 @@ class TypeItem extends PureComponent {
 
                 }}>
                 <Text style={[{
-                    fontSize: 16, marginRight: wp(0.5), color: 'white',
+                    fontSize: hp(2.05), marginRight: wp(0.5), color: 'white',
                 }]}>{title}</Text>
                 {
                     !show ?
@@ -564,8 +564,8 @@ class HeadlineComponent extends PureComponent {
                 </TouchableOpacity>
             </View>
             {/*分割线*/}
-            {/*<View*/}
-            {/*    style={{height: 0.3, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>*/}
+            <View
+                style={{height: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
         </AnimatedFadeIn>;
     }
 
@@ -589,26 +589,25 @@ class HeadlineComponent extends PureComponent {
 
                 }}>
 
-                {item && renderEmoji(`${item.taskTitle}`, [], 18, 0, 'black', {fontWeight: '400'}).map((item, index) => {
+                {item && renderEmoji(`${item.taskTitle}`, [], hp(2.4), 0, 'black', {fontWeight: '400'}).map((item, index) => {
                     return item;
-
                 })}
             </Text>
 
-            <View style={{flexDirection: 'row', alignItems: 'center', heigsht: 25, marginTop: 10}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', height: 25, marginTop: hp(0.5)}}>
                 <Image resizeMode={'stretch'} source={require('../res/img/moneys.png')}
-                       style={{width: hp(1.6), marginRight: 5, top: -1, height: hp(1.9)}}/>
+                       style={{width: hp(1.6), marginRight: 5, top: 0, height: hp(1.9)}}/>
                 <Text style={{
-                    color: 'red', fontSize: 23,
-                    fontWeight: '500', top: -2,
+                    color: 'red', fontSize: hp(3),
+                    fontWeight: '500', top: hp(-0.2),
 
                 }}>
                     {item.rewardPrice}
                 </Text>
                 <Text
-                    style={{fontSize:15, color: 'red', fontWeight: '400', marginRight: 5}}>元</Text>
+                    style={{fontSize: hp(1.8), color: 'red', fontWeight: '400', marginRight: 5}}>元</Text>
                 <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')}
-                       style={{width: 8, height: 8}}/>
+                       style={{width: wp(2), height: wp(2)}}/>
             </View>
 
 
@@ -668,7 +667,7 @@ class TopLeftFilterComponent extends Component {
                             onPress={() => this._onPress(Lindex)}
                         >
                             <Text style={[{
-                                fontSize: 17,
+                                fontSize: hp(2.4),
                                 fontWeight: '400',
                             }, Lindex === index ? {
                                 color: bottomTheme,

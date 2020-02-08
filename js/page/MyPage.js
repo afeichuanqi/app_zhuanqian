@@ -102,7 +102,7 @@ class MyPage extends PureComponent {
                             onPress={() => {
                                 NavigationUtils.goPage({}, 'ShopInfoPage');
                             }}
-                            style={{marginRight:10}}
+                            style={{marginRight: 10}}
 
                         >
                             <SvgUri width={18} height={18} fill={'white'} svgXmlData={shop}/>
@@ -356,8 +356,8 @@ class ToolsItemComponent extends PureComponent {
                 marginVertical: hp(1.5),
             }}>
             <View>
-                <Text style={{fontSize: 19, color: 'black'}}>{title}</Text>
-                <Text style={{fontSize: 14, color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
+                <Text style={{fontSize: hp(2.3), color: 'black'}}>{title}</Text>
+                <Text style={{fontSize: hp(1.65), color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
             </View>
             <FastImage source={source}
                        style={{width: wp(8.7), height: wp(8.7), borderRadius: 12, marginLeft: wp(1.5)}}/>
@@ -385,9 +385,10 @@ class TopInfoColumn extends PureComponent {
             height: 80,
             justifyContent: 'center',
             alignItems: 'center',
+            paddingTop: hp(1.5),
         }}>
-            <Text style={{color: 'white', fontSize: 18, fontWeight:'500'}}>{value}</Text>
-            <Text style={{color: 'white', fontSize: 14, opacity: 0.8, marginTop: 5}}>{title}</Text>
+            <Text style={{color: 'white', fontSize: hp(2.3), fontWeight: '500'}}>{value}</Text>
+            <Text style={{color: 'white', fontSize: hp(2), opacity: 0.8, marginTop: 5}}>{title}</Text>
         </View>;
     };
     _avatarClick = () => {
@@ -427,8 +428,9 @@ class TopInfoColumn extends PureComponent {
                         }}
                         style={{marginTop: hp(7), flexDirection: 'row', alignItems: 'center'}}>
 
-                        <SvgUri width={16} height={16} style={{marginRight: 5}} fill={'white'} svgXmlData={shop}/>
-                        <Text style={{fontSize: 16, color: 'white'}}>我的店铺 > </Text>
+                        <SvgUri width={hp(1.9)} height={hp(1.9)} style={{marginRight: 5}} fill={'white'}
+                                svgXmlData={shop}/>
+                        <Text style={{fontSize: hp(2.05), color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{marginTop: hp(2)}}

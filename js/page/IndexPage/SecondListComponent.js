@@ -87,13 +87,13 @@ class SecondListComponent extends PureComponent {
     render() {
         const columnTop = Animated.interpolate(this.scrollY, {
             inputRange: [-220, 0, lunboHeight - 30],
-            outputRange: [lunboHeight + 220 + 3, lunboHeight + 3, 30 + 0],
+            outputRange: [lunboHeight + 220 + 3, lunboHeight + 3, 30 + 1],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
             transform: [{translateY: this.props.translateY}],
         }}>
-            <View style={{height: 28}}/>
+            <View style={{height: 27}}/>
             <FlatListCommonUtil
                 EmptyHeight={height - 350}
                 ref={ref => this.flatList = ref}
@@ -106,7 +106,7 @@ class SecondListComponent extends PureComponent {
                 ListHeaderComponent={
                     <View style={{height: 195, backgroundColor: 'white', zIndex: 10, marginBottom: 30}}>
                         <View style={{marginTop: 15, paddingLeft: 15}}>
-                            <Text style={{fontSize: 18, opacity: 0.9, color: 'black'}}>最新发布</Text>
+                            <Text style={{fontSize: hp(2.5), opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
                         <View style={{paddingHorizontal: 10, marginTop: 10}}>
                             <FlatList
@@ -132,9 +132,9 @@ class SecondListComponent extends PureComponent {
             />
 
             <Animated.View style={{
-                width, height: 36, position: 'absolute', justifyContent: 'center',
+                width, height: 39, position: 'absolute', justifyContent: 'center',
                 backgroundColor: 'white', transform: [{translateY: columnTop}], alignItems: 'flex-start',
-                paddingLeft: 10,
+                paddingLeft: 10,top:-1
 
             }}>
                 <View style={{
@@ -152,9 +152,10 @@ class SecondListComponent extends PureComponent {
                     }}/>
                     <Text
                         style={{
-                            fontSize: 15,
+                            fontSize: hp(2.1),
                             color: bottomTheme,
                         }}>最近刷新</Text>
+                    {/*<View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>*/}
                 </View>
 
             </Animated.View>
@@ -212,16 +213,21 @@ class ScrollItem extends React.Component {
                 flexDirection: 'row', alignItems: 'center',
                 elevation: 1, marginTop: 3,
             }}>
+                {/*<Image*/}
+                {/*    source={require('../../res/img/moneys.png')}*/}
+                {/*    style={{width:hp(1.6),height:hp(1.8)}}*/}
+                {/*    resizeMode={'stretch'}*/}
+                {/*/>*/}
                 <Image resizeMode={'stretch'} source={require('../../res/img/moneys.png')}
-                       style={{width: 19, marginRight:5, height: 21}}/>
+                       style={{width: hp(1.8), marginRight:5, height: hp(2.1)}}/>
                 <Text style={{
-                    fontSize: 19,
+                    fontSize: hp(2.5),
                     color: 'red',
                     marginRight: 1,
 
                 }}>{item.reward_price}</Text>
                 <Text style={{
-                    fontSize: 15,
+                    fontSize: hp(1.7),
                     color: 'red',
                     fontWeight: '500',
                     top: 1,
@@ -230,7 +236,7 @@ class ScrollItem extends React.Component {
                 }}>元</Text>
             </View>}
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-                <Text numberOfLines={1} style={{fontSize: 14, color: 'black', opacity: 0.9}}>{item.title}</Text>
+                <Text numberOfLines={1} style={{fontSize: hp(1.9), color: 'black', opacity: 0.9}}>{item.title}</Text>
                 <View style={{
                     width: 2,
                     height: 2,
@@ -240,7 +246,7 @@ class ScrollItem extends React.Component {
                     opacity: 0.7,
                 }}/>
                 <Text numberOfLines={1}
-                      style={{fontSize: 14, color: 'black', width: 65, opacity: 0.9}}>{item.task_name}</Text>
+                      style={{fontSize: hp(1.9), color: 'black', width: 65, opacity: 0.9}}>{item.task_name}</Text>
             </View>
 
 

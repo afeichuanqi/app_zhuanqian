@@ -143,14 +143,14 @@ export default class MessageItemComponent extends Component {
                                 alignItems: 'center',
                             }}>
                                 <Text style={{
-                                    fontSize: 16,
+                                    fontSize: hp(2.1),
                                     color: 'black',
                                     opacity: 0.9,
                                     marginLeft: 10,
                                 }}>{username}</Text>
                                 <Text style={{
                                     marginLeft: 10,
-                                    fontSize: 12,
+                                    fontSize: hp(1.6),
                                     color: (columnType == 2 || columnType == 3) ? 'red' : 'black',
                                     opacity: 0.5,
                                 }}>{
@@ -169,7 +169,7 @@ export default class MessageItemComponent extends Component {
                                     opacity: 0.6,
                                     marginLeft: 10,
                                     width: (width - 100) / 2,
-                                }}>{msg_type == 'text' ? renderEmoji(msg, [], 13, 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
+                                }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.8), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
                             </Text>
                         </View>
 
@@ -181,7 +181,7 @@ export default class MessageItemComponent extends Component {
                         marginTop: 5,
                     }}>
                         <Text style={{
-                            fontSize: 12,
+                            fontSize: hp(1.65),
                             color: 'black',
                             opacity: 0.5,
 
