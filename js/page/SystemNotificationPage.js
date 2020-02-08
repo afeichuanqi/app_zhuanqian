@@ -202,7 +202,7 @@ class NoticeItem extends Component {
     render() {
         const {item} = this.props;
         const {is_read} = this.state;
-        console.log(renderEmoji(item.content, [], hp(2.0), 0).map((item, index) => {
+        console.log(renderEmoji('发布的任务[308]审核失败,理由:000', [], hp(2.0), 0).map((item, index) => {
             return item;
         }));
         return <TouchableOpacity

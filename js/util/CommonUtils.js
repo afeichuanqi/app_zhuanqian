@@ -286,6 +286,11 @@ export const equalsObj = (oldData, newData) => {
 };
 export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black', style_ = {}, fontSize2 = 14) => {
     const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
+    if (startIndex === -1) {
+        Views.push(<Text key={`endText${Math.random() * 100}`}
+                         style={{fontSize, color, ...style_}}>{content}</Text>);
+        return Views;
+    }
     const endIndex = content.indexOf(':', startIndex + 1) + 1;
     const contentText = content.substring(0, startIndex);
     if (contentText.length > 0) {
