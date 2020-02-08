@@ -72,11 +72,11 @@ export default class ViewUtil {
                         source={menuSource}
                         style={{width: hp(2.4), height: hp(2.4)}}
                     />
-                    <Text style={{marginLeft: wp(3.5), fontSize: hp(2.3), opacity: 1, color: 'black'}}>{title}</Text>
+                    <Text style={{marginLeft: wp(3.5), fontSize: 18, opacity: 1, color: 'black'}}>{title}</Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: hp(6), paddingRight: wp(2)}}>
                     <Text
-                        style={{marginLeft: wp(2.5), fontSize: hp(1.8), opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
+                        style={{marginLeft: wp(2.5), fontSize: 14, opacity: 0.4, color: 'black'}}>{menuinfo}</Text>
                     <SvgUri width={wp(3)} style={{marginLeft: wp(1)}} height={wp(3)} svgXmlData={menu_right}/>
                 </View>
                 {isOtherMsg && <View style={{
@@ -132,10 +132,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: wp(3.3), width: wp(3.3)}}
+                style={{height: 14, width: 14}}
                 source={require('../res/img/taskReView/task_chongxinfabu.png')}
             />
-            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
+            <Text style={{fontSize: 14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>重新发布</Text>
 
         </TouchableOpacity>;
     };
@@ -150,10 +150,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: wp(3.3), width: wp(3.3)}}
+                style={{height: 14, width: 14}}
                 source={require('../res/img/taskReView/reviewing.png')}
             />
-            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核中</Text>
+            <Text style={{fontSize: hp(14), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核中</Text>
 
         </View>;
     };
@@ -169,10 +169,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: wp(3.3), width: wp(3.3)}}
+                style={{height: 14, width: 14}}
                 source={require('../res/img/taskReView/task_delete.png')}
             />
-            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
+            <Text style={{fontSize: 14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>删除</Text>
 
         </TouchableOpacity>;
     };
@@ -181,10 +181,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: wp(3.3), width: wp(3)}}
+                style={{height: 14, width: 14}}
                 source={require('../res/img/taskReView/review.png')}
             />
-            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
+            <Text style={{fontSize: 14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>审核:{reviewNum}</Text>
 
         </TouchableOpacity>;
     };
@@ -193,10 +193,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: wp(3.3), width: wp(3)}}
+                style={{height: 14, width: 14}}
                 source={require('../res/img/taskReView/zhiding.png')}
             />
-            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
+            <Text style={{fontSize: 14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>置顶</Text>
 
         </TouchableOpacity>;
     };
@@ -206,10 +206,10 @@ export default class ViewUtil {
             onPress={click}
             style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
             <Image
-                style={{height: wp(3.3), width: wp(3.3)}}
+                style={{height: 14, width: 14}}
                 source={require('../res/img/taskReView/tuijian.png')}
             />
-            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
+            <Text style={{fontSize: 14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>推荐</Text>
 
         </TouchableOpacity>;
     };
@@ -219,10 +219,10 @@ export default class ViewUtil {
             style={{flexDirection: 'row', alignItems: 'center', height: wp(3.5)}}>
 
             <Image
-                style={{height: wp(3.3), width: wp(3.3)}}
+                style={{height: 14, width: 14}}
                 source={require('../res/img/taskReView/update.png')}
             />
-            <Text style={{fontSize: hp(1.8), marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
+            <Text style={{fontSize:14, marginLeft: 5, color: 'rgba(0,0,0,0.9)'}}>刷新</Text>
 
         </TouchableOpacity>;
     };

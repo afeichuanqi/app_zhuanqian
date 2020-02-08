@@ -119,7 +119,7 @@ class InvitationCodePage extends React.Component {
                         placeholderTextColor={'rgba(0,0,0,0.6)'}
                         placeholder={'输入好友邀请码（向介绍人索取）'}
                         style={{
-                            fontSize: hp(2.1),
+                            fontSize: 15,
                             width: width - 60,
                             borderBottomWidth: 0.3,
                             borderBottomColor: '#d7d7d7',
@@ -162,7 +162,7 @@ class InvitationCodePage extends React.Component {
                         marginTop: hp(4),
                         opacity: this.state.text.length > 0 ? 1 : 0.5,
                     }}>
-                    <Text style={{fontSize: hp(2.3), color: 'white'}}>提交邀请码</Text>
+                    <Text style={{fontSize: 16, color: 'white'}}>提交邀请码</Text>
                 </Container>}
                 {
                     (this.state.status === 1 || this.state.status === -1) && <View
@@ -178,7 +178,7 @@ class InvitationCodePage extends React.Component {
                             marginTop: hp(4),
                             opacity: 0.5,
                         }}>
-                        <Text style={{fontSize: hp(2.3), color: 'white'}}>{
+                        <Text style={{fontSize: 16, color: 'white'}}>{
                             this.state.status === 1 ? ' ✓ 已成功邀请' : this.state.status === -1 ? '未登录' : ''
                         }</Text>
                     </View>

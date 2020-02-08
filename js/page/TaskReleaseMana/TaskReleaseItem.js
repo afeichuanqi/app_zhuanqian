@@ -67,14 +67,14 @@ export default class TaskReleaseItem extends PureComponent {
                             width: wp(50),
                         }}>
                             <Text style={{
-                                fontSize: hp(2.2),
+                                fontSize: 17,
                                 color: 'black',
 
 
                             }}
                                   numberOfLines={1}
                             >
-                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [], hp(2.3), 0, 'black').map((item, index) => {
+                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [], 17, 0, 'black').map((item, index) => {
                                     return item;
                                 })}
                             </Text>
@@ -83,7 +83,7 @@ export default class TaskReleaseItem extends PureComponent {
                                 alignItems: 'center',
                                 justifyContent: 'center', marginLeft: 5,
                             }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.6)}}>推</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:12}}>推</Text>
                             </View>}
                             {item.topIsExp == 1 && <View style={{
                                 height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
@@ -91,13 +91,13 @@ export default class TaskReleaseItem extends PureComponent {
                                 justifyContent: 'center',
                                 marginLeft: 3,
                             }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.6)}}>顶</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 12}}>顶</Text>
                             </View>}
                         </View>
                         {/*价格*/}
                         <View style={{}}>
                             <Text style={{
-                                fontSize: hp(2.5),
+                                fontSize: 19,
                                 color: 'red',
                             }}>+{item.reward_price} 元</Text>
                         </View>
@@ -110,14 +110,14 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
+                            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
                             <View style={{
                                 height: hp(1.6),
                                 width: 0.5,
                                 backgroundColor: 'rgba(0,0,0,0.5)',
                                 marginHorizontal: 7,
                             }}/>
-                            <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
+                            <Text style={{fontSize:15, color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
                         </View>
                         {/*剩余数*/}
                         <View style={{
@@ -125,7 +125,7 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems: 'center',
                         }}>
                             <Text style={{
-                                fontSize: hp(1.7),
+                                fontSize: 15,
                                 opacity: 0.7,
                                 color: 'black',
                             }}>进行中:{item.task_ing_num}</Text>
@@ -137,7 +137,7 @@ export default class TaskReleaseItem extends PureComponent {
                                     marginHorizontal: 5,
                                 }}/>
                             <Text style={{
-                                fontSize: hp(1.7),
+                                fontSize:15,
                                 opacity: 0.7,
                                 color: 'black',
                             }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>

@@ -127,7 +127,7 @@ class MyOrderManaPage extends PureComponent {
                         width: width - 160,
                     }}>
 
-                    {taskInfo && renderEmoji(`${taskInfo.id} - ${taskInfo.task_title}`, [], hp(2.2), 0, 'black').map((item, index) => {
+                    {taskInfo && renderEmoji(`${taskInfo.id} - ${taskInfo.task_title}`, [], 17, 0, 'black').map((item, index) => {
                         return item;
                     })}
 
@@ -139,7 +139,7 @@ class MyOrderManaPage extends PureComponent {
                     }}
                     paddingVertical={3}
                     paddingHorizontal={6}
-                    fontSize={hp(1.6)}
+                    fontSize={13}
                     title={taskInfo.task_info}
                 />
 
@@ -161,12 +161,12 @@ class MyOrderManaPage extends PureComponent {
                 right: 30,
             }}>
                 <Text style={{
-                    fontSize: hp(2.5),
+                    fontSize: 18,
                     color: 'red',
                     textAlign:'right',
                 }}>+{taskInfo.reward_price}元</Text>
                 <Text style={{
-                    fontSize: hp(1.8),
+                    fontSize: 15,
                     opacity: 0.5,
                     marginTop:hp(0.5),
                 }}>浏览次数:{taskInfo.browse_num}</Text>
@@ -245,9 +245,9 @@ class MyOrderManaPage extends PureComponent {
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text
-                                    style={{color: 'rgba(0,0,0,0.7)', fontSize: hp(2.0), marginRight: 10}}>剩余数量:</Text>
+                                    style={{color: 'rgba(0,0,0,0.7)', fontSize: 15, marginRight: 10}}>剩余数量:</Text>
                                 <Text
-                                    style={{fontSize: hp(2.0)}}>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
+                                    style={{fontSize: 16,color:'black'}}>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -258,7 +258,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(2.05)}}>加量</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>加量</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{
@@ -270,9 +270,9 @@ class MyOrderManaPage extends PureComponent {
                             paddingRight: 10,
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: hp(2.0), marginRight: 10}}>佣金:</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 15, marginRight: 10}}>佣金:</Text>
                                 <Text
-                                    style={{fontSize: hp(2.0)}}>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
+                                    style={{fontSize: 16,color:'black'}}>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -283,7 +283,7 @@ class MyOrderManaPage extends PureComponent {
                                     width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(2.05)}}>加价</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>加价</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -332,7 +332,7 @@ class MyOrderManaPage extends PureComponent {
 
                     }}>
                         <Text style={{
-                            fontSize: hp(2),
+                            fontSize: 15,
                             width: width - 80,
                             color: 'rgba(0,0,0,0.8)',
                             lineHeight: 25,

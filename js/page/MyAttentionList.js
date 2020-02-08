@@ -313,7 +313,7 @@ class AttentionItem extends PureComponent {
 
             }}
             style={{
-                height: hp(12), width,
+                height: hp(11), width,
                 paddingHorizontal: wp(4.3),
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -344,10 +344,10 @@ class AttentionItem extends PureComponent {
 
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{marginLeft: 15}}>
-                        <Text style={{fontSize: hp(2.2), color: 'black'}}>{item.username}</Text>
+                        <Text style={{fontSize: 18, color: 'black'}}>{item.username}</Text>
                         <Text
                             style={{
-                                fontSize: hp(1.9),
+                                fontSize: 16,
                                 opacity: 0.6,
                                 marginTop: 7,
                                 color: 'black',
@@ -376,7 +376,7 @@ class AttentionItem extends PureComponent {
                     backgroundColor: attentionStatus == 1 ? '#5faff3' : bottomTheme,
                 }}>
                 <Text
-                    style={{color: 'white', fontSize: hp(1.9)}}>{attentionStatus == 1 ? '✓ 已关注' : '+ 关注'}</Text>
+                    style={{color: 'white', fontSize: 14}}>{attentionStatus == 1 ? '✓ 已关注' : '+ 关注'}</Text>
             </TouchableOpacity>}
 
         </TouchableOpacity>;

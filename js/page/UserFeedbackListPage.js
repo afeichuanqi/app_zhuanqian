@@ -125,10 +125,10 @@ class UserFeedbackListPage extends PureComponent {
             <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text style={{color:'black'}}>{title}</Text>
-                    <Text style={{fontSize: hp(1.75), color: 'rgba(0,0,0,0.5)'}}>{item.send_date1}</Text>
+                    <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.5)'}}>{item.send_date1}</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text numberOfLines={1} style={{color: 'rgba(0,0,0,0.5)', fontSize:hp(1.8),width:wp(80)}}>{JSON.parse(item.content).info}</Text>
+                    <Text numberOfLines={1} style={{color: 'rgba(0,0,0,0.5)', fontSize:13,width:wp(80)}}>{JSON.parse(item.content).info}</Text>
                     {/*<Text style={{*/}
                     {/*    fontSize: 11,*/}
                     {/*    color: 'rgba(0,0,0,0.7)',*/}
@@ -199,24 +199,25 @@ class UserFeedbackListPage extends PureComponent {
                             this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                         }}
                     />
-                </View>
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={() => {
-                        NavigationUtils.goBack(this.props.navigation);
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => {
+                            NavigationUtils.goBack(this.props.navigation);
 
-                    }}
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        width,
-                        height: 50,
-                        backgroundColor: bottomTheme,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                    <Text style={{color: 'white', fontSize: 18}}>我要反馈</Text>
-                </TouchableOpacity>
+                        }}
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width,
+                            height: 50,
+                            backgroundColor: bottomTheme,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Text style={{color: 'white', fontSize: 18}}>我要反馈</Text>
+                    </TouchableOpacity>
+                </View>
+
             </SafeAreaViewPlus>
         );
     }

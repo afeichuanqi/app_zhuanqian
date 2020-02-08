@@ -94,19 +94,19 @@ class TaskHallPage extends PureComponent {
                 }}>
                     <TabBar
                         style={{
-                            height: hp(7.5),
+                            height: 62,
                             width: wp(50),
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: hp(3.7)}}
+                        contentContainerStyle={{paddingTop: 30}}
                         routes={navigationRoutes}
                         index={navigationIndex}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
-                        titleMarginHorizontal={wp(4)}
-                        activeStyle={{fontSize: hp(2.7), color: [255, 255, 255], fontWeight:'500'}}
-                        inactiveStyle={{fontSize: hp(2.2), color: [255, 255, 255], height: 10}}
-                        indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.1)}}
+                        titleMarginHorizontal={18}
+                        activeStyle={{fontSize: 21, color: [255, 255, 255], fontWeight:'500'}}
+                        inactiveStyle={{fontSize: 17, color: [255, 255, 255], height: 10}}
+                        indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -5}}
                     />
                     <View style={{flexDirection: 'row', marginTop: hp(1.5), alignItems: 'center'}}>
                         {/*加图标*/}
@@ -441,7 +441,7 @@ class TypeItem extends PureComponent {
 
                 }}>
                 <Text style={[{
-                    fontSize: hp(2.05), marginRight: wp(0.5), color: 'white',
+                    fontSize: 16, marginRight: wp(0.5), color: 'white',
                 }]}>{title}</Text>
                 {
                     !show ?
@@ -589,25 +589,26 @@ class HeadlineComponent extends PureComponent {
 
                 }}>
 
-                {item && renderEmoji(`${item.taskTitle}`, [], hp(2.3), 0, 'black', {fontWeight: '400'}).map((item, index) => {
+                {item && renderEmoji(`${item.taskTitle}`, [], 18, 0, 'black', {fontWeight: '400'}).map((item, index) => {
                     return item;
+
                 })}
             </Text>
 
-            <View style={{flexDirection: 'row', alignItems: 'center', height: 25, marginTop: hp(0.5)}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', heigsht: 25, marginTop: 10}}>
                 <Image resizeMode={'stretch'} source={require('../res/img/moneys.png')}
-                       style={{width: hp(1.6), marginRight: 5, top: 0, height: hp(1.9)}}/>
+                       style={{width: hp(1.6), marginRight: 5, top: -1, height: hp(1.9)}}/>
                 <Text style={{
-                    color: 'red', fontSize: hp(3),
-                    fontWeight: '500', top: hp(-0.2),
+                    color: 'red', fontSize: 23,
+                    fontWeight: '500', top: -2,
 
                 }}>
                     {item.rewardPrice}
                 </Text>
                 <Text
-                    style={{fontSize: hp(1.8), color: 'red', fontWeight: '400', marginRight: 5}}>元</Text>
+                    style={{fontSize:15, color: 'red', fontWeight: '400', marginRight: 5}}>元</Text>
                 <Image resizeMode={'stretch'} source={require('../res/img/sanjiao.png')}
-                       style={{width: wp(2), height: wp(2)}}/>
+                       style={{width: 8, height: 8}}/>
             </View>
 
 
@@ -667,11 +668,11 @@ class TopLeftFilterComponent extends Component {
                             onPress={() => this._onPress(Lindex)}
                         >
                             <Text style={[{
-                                fontSize: hp(2.6),
+                                fontSize: 17,
                                 fontWeight: '400',
                             }, Lindex === index ? {
                                 color: bottomTheme,
-                                fontWeight: '900',
+                                fontWeight: '700',
                             } : {color: '#767676'}]}>{item.title}</Text>
 
                         </TouchableOpacity>

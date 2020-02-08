@@ -466,8 +466,8 @@ class ShopData extends Component {
         }
 
         return <View style={{width: width / 3, justifyContent: 'center', alignItems: 'center', height: 70}}>
-            <Text style={{fontSize: hp(2.2), color: 'black'}}>{value}{value1}</Text>
-            <Text style={{fontSize: hp(1.6), opacity: 0.7, marginTop: 5, color: 'black'}}>{title}</Text>
+            <Text style={{fontSize:17, color: 'black'}}>{value}{value1}</Text>
+            <Text style={{fontSize: 14, opacity: 0.7, marginTop: 5, color: 'black'}}>{title}</Text>
         </View>;
     };
 
@@ -488,7 +488,7 @@ class ShopData extends Component {
                 justifyContent: 'center',
 
             }}>
-                <Text style={{fontSize:hp(2.1)}}>店铺数据一览</Text>
+                <Text style={{fontSize:15}}>店铺数据一览</Text>
             </View>
             <View style={{height: 0.3, width: width, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.3)'}}/>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -534,7 +534,7 @@ class AvatarColumn extends Component {
                     flexDirection: 'row',
                 }}>
                     <Text style={{
-                        fontSize: hp(2.2),
+                        fontSize: 18,
                         color: 'white',
                     }}>{this.props.shopInfo.username}</Text>
                 </View>
@@ -546,7 +546,7 @@ class AvatarColumn extends Component {
                     flexDirection: 'row',
                 }}>
                     <Text style={{
-                        fontSize: hp(2.2),
+                        fontSize: 15,
                         color: 'white',
                     }}>ID:{this.props.shopInfo.userId}</Text>
                 </View>
@@ -572,7 +572,7 @@ class AvatarColumn extends Component {
                         }}>
                         <Text style={{
                             color: 'white',
-                            fontSize:hp(2.0),
+                            fontSize:15,
                         }}>{this.props.attentionStatus == 0 ? '+ 关注' : '✓ 已关注'}</Text>
                     </TouchableOpacity>
 
@@ -592,13 +592,13 @@ class AvatarColumn extends Component {
                     flexDirection: 'row',
                 }}>
                 <Text style={{
-                    fontSize: hp(1.9),
+                    fontSize: 14,
                     color: 'white',
                     fontWeight: 'bold',
                     letterSpacing: 1,
                 }}>{this.props.shopInfo.attention_num}关注</Text>
                 <Text style={{
-                    fontSize: hp(1.9),
+                    fontSize: 14,
                     color: 'white',
                     marginLeft: 15,
                     fontWeight: 'bold',

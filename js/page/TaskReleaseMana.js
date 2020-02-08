@@ -139,8 +139,8 @@ class TaskReleaseMana extends Component {
                         // indicatorStyle={styles.indicator}
                         bounces={true}
                         titleMarginHorizontal={wp(5)}
-                        activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: 10}}
+                        activeStyle={{fontSize: 17, color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: 13, color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
                     />
                     <TouchableOpacity

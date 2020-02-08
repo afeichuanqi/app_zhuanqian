@@ -120,7 +120,7 @@ class TaskSumComponent extends Component {
                     alignSelf: 'flex-start',
                 }}>
                     <Text style={{maxWidth: wp(48), flexDirection: 'row'}}>
-                        {item && renderEmoji(item.taskTitle, [], hp(2.3), 0, 'black', {}).map((item, index) => {
+                        {item && renderEmoji(item.taskTitle, [], 16, 0, 'black', {}).map((item, index) => {
                             return item;
                         })}
                     </Text>
@@ -204,7 +204,7 @@ class TaskSumComponent extends Component {
                                         svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                             </View>
                             <Text style={{
-                                fontSize: hp(1.7),
+                                fontSize: 14,
                                 marginLeft: wp(2),
                                 color: 'rgba(0,0,0,1)',
                             }}>{item.userName}</Text>
@@ -216,13 +216,13 @@ class TaskSumComponent extends Component {
             {/*价格*/}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text style={{
-                    fontSize: hp(2.1),
+                    fontSize:17,
                     color: '#e6493b',
-                    fontWeight: '600',
+                    fontWeight: '700',
                     top: hp(0.5),
                 }}>￥</Text>
                 <Text style={{
-                    fontSize: hp(3.7),
+                    fontSize: 30,
                     color: '#e6493b',
                     fontWeight: '700',
                 }}>{item.rewardPrice}</Text>
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     labelTextStyle: {
-        fontSize: hp(1.6), color: 'white',
+        fontSize: 13, color: 'white',
     },
     imgStyle: {
         backgroundColor: '#E8E8E8',
@@ -277,11 +277,11 @@ const styles = StyleSheet.create({
     },
     smallFontStyle: {
         letterSpacing: 0.5,
-        fontSize: hp(1.5),
+        fontSize: 11,
         color: 'rgba(0,0,0,0.9)',
     },
     bigFontStyle: {
-        fontSize: hp(2.3),
+        fontSize: 16,
         color: 'red',
         bottom: hp(0.2),
         // fontWeight: '500',
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemIconStyle: {
-        width: hp(6), height: hp(3),
-        marginLeft: hp(0.6),
+        width: 48, height:25,
+        marginLeft: 5,
     },
 });

@@ -113,7 +113,7 @@ class PrivacyToast extends PureComponent {
                             <TouchableOpacity
                                 onPress={this.props.sureClick}
                                 style={{width: (width - 100) , justifyContent: 'center', alignItems: 'center'}}>
-                                <Text style={{fontSize: hp(2.3), color: 'black'}}>知道了</Text>
+                                <Text style={{fontSize: 16, color: 'black'}}>知道了</Text>
                             </TouchableOpacity>
 
                         </View>

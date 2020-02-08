@@ -217,10 +217,10 @@ export default class ChatItem extends PureComponent {
                                 width: wp(95), backgroundColor: 'white', paddingTop: hp(2.5), paddingHorizontal: wp(3.5),
                                 borderRadius: 3, paddingBottom: hp(1.25),
                             }}>
-                            <Text style={{fontSize: hp(2.2), fontWeight: 'bold', color: 'black'}}>{title}</Text>
+                            <Text style={{fontSize: 16, fontWeight: 'bold', color: 'black'}}>{title}</Text>
                             <Text
                                 style={{
-                                    fontSize:hp(1.9),
+                                    fontSize:13,
                                     color: 'rgba(0,0,0,0.5)',
                                     marginTop: 10,
                                     marginBottom: 10,
@@ -235,7 +235,7 @@ export default class ChatItem extends PureComponent {
                                 borderTopColor: 'rgba(0,0,0,0.1)',
                                 paddingTop:hp(1)
                             }}>
-                                <Text style={{color: '#2196F3', fontSize:hp(2.0)}}>{btnTitle}</Text>
+                                <Text style={{color: '#2196F3', fontSize:15}}>{btnTitle}</Text>
                             </View> : null}
 
 
@@ -337,12 +337,12 @@ export default class ChatItem extends PureComponent {
                                                 marginRight: 5,
                                             }}>
                                                 <Text style={{
-                                                    fontSize: hp(1.6),
+                                                    fontSize: 12,
                                                     color: 'white',
                                                 }}>{message.isAdmin ? '客服' : message.targetId == guzhuInfo.guzhuUserId ? '雇主' : '接单'}</Text>
                                             </View>
                                             <Text style={{
-                                                fontSize: hp(1.8),
+                                                fontSize: 13,
                                                 color: '#888888',
                                             }}>{isSelf ? user.username : nickName}</Text>
                                         </View>

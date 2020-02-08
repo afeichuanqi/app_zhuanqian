@@ -53,7 +53,7 @@ class StepBox extends PureComponent {
                     {this.getNumNo(this.props.no)}
                     <Text
                         style={{
-                            fontSize: hp(2.2),
+                            fontSize: 16,
                             marginLeft: 5,
                             letterSpacing: 3,
                             color: 'black',
@@ -421,7 +421,7 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
+                    }}>{typeData && renderEmoji(typeData.info, [], 16, 0,'black',{lineHeight: 25,
                         letterSpacing: 0.2,}).map((item, index) => {
                         return item;
                     })}</Text>
@@ -563,7 +563,7 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
+                    }}>{typeData && renderEmoji(typeData.info, [], 16, 0,'black',{lineHeight: 25,
                         letterSpacing: 0.2,}).map((item, index) => {
                         return item;
                     })}</Text>
@@ -767,7 +767,7 @@ class TaskStepColumn extends Component {
                                 no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
-                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
+                        marginTop: 20, fontSize: 16, paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
                     }}>{typeData.collectInfo}</Text>
                     <View style={{

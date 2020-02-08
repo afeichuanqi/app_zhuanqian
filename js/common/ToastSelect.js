@@ -93,7 +93,7 @@ class ToastSelect extends PureComponent {
 
             >
                 <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center',
+                    flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center',
                     alignItems: 'center', zIndex: 10,
                 }}
                                   activeOpacity={1}
@@ -105,7 +105,7 @@ class ToastSelect extends PureComponent {
                         transform: [{scale: this.animations.scale}], opacity: this.animations.scale,
                         backgroundColor: 'white',
                         // transform: 1,
-                        borderRadius: 4,
+                        borderRadius: 5,
                     }]}>
 
                         <View style={{
@@ -118,7 +118,7 @@ class ToastSelect extends PureComponent {
 
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: hp(2.3), color: 'black' , fontWeight:'500'}}>{this.props.title}</Text>
+                                <Text style={{fontSize: 18, color: 'black' , fontWeight:'500'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -130,7 +130,7 @@ class ToastSelect extends PureComponent {
                         {this.props.children}
                         <View style={{
                             flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',
-                            borderBottomLeftRadius: 4, borderBottomRightRadius: 4,
+                            borderBottomLeftRadius: 5, borderBottomRightRadius: 5,
                         }}>
                             <TouchableOpacity
                                 activeOpacity={0.6}
