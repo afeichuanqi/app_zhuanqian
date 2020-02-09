@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text,  Dimensions, ScrollView} from 'react-native';
+import {View, Text,  Dimensions, ScrollView,Image} from 'react-native';
 import {connect} from 'react-redux';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ViewUtil from '../../util/ViewUtil';
@@ -38,7 +38,7 @@ class CustomerServiceIndex extends React.Component {
         />;
         const customerInfo = this.params.customerInfo;
         // const customerInfos = customerInfo.spi
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, customerInfo[2], null, null, 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, customerInfo[2], null, null, 'black', 17, null, false);
         return <SafeAreaViewPlus
             topColor={theme}
         >
@@ -49,24 +49,29 @@ class CustomerServiceIndex extends React.Component {
                     <FastImagePro
                         style={{
                             marginTop: hp(3),
-                            width: wp(24),
-                            height: wp(24),
+                            width: hp(12),
+                            height: hp(12),
 
-                            borderRadius: wp(24) / 2,
+                            borderRadius: hp(12) / 2,
                         }}
                         source={{uri: customerInfo[3]}}
                     />
                     <View style={{marginTop: 15, flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={{fontSize: wp(4.5)}}>{customerInfo[2]}</Text>
-                        <SvgUri
-                            style={{marginLeft: 5}}
-                            width={17}
-                            fill={'rgba(0,0,0,0.5)'}
-                            height={17}
-                            svgXmlData={kefu}/>
+                        <Text style={{fontSize: hp(2.5)}}>{customerInfo[2]}</Text>
+                        <Image
+                            resizeMode={'stretch'}
+                            source={require('../../res/img/kefu.png')}
+                            style={{marginLeft: 5,width:hp(6),height:hp(2.4)}}
+                        />
+                        {/*<SvgUri*/}
+                        {/*    style={{marginLeft: 5}}*/}
+                        {/*    width={hp(2.5)}*/}
+                        {/*    height={hp(2.5)}*/}
+                        {/*    fill={'rgba(0,0,0,0.5)'}*/}
+                        {/*    svgXmlData={kefu}/>*/}
                     </View>
                     <View style={{marginTop: 15}}>
-                        <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.5)'}}>
+                        <Text style={{fontSize: hp(1.9), color: 'rgba(0,0,0,0.5)'}}>
                             HI 我是客服{customerInfo[2]},让我们一起了解简易赚 ~ ~
                         </Text>
                     </View>

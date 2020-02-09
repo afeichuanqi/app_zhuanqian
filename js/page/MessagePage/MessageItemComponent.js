@@ -166,10 +166,10 @@ export default class MessageItemComponent extends Component {
                                 style={{
                                     fontSize: hp(1.8),
                                     color: 'black',
-                                    opacity: 0.6,
+                                    opacity: 0.5,
                                     marginLeft: 10,
                                     width: (width - 100) / 2,
-                                }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.8), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
+                                }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.9), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
                             </Text>
                         </View>
 
@@ -177,11 +177,11 @@ export default class MessageItemComponent extends Component {
 
 
                     <View style={{
-                        marginLeft: 55,
+                        marginLeft: 57,
                         marginTop: 5,
                     }}>
                         <Text style={{
-                            fontSize: hp(1.65),
+                            fontSize: hp(1.55),
                             color: 'black',
                             opacity: 0.5,
 

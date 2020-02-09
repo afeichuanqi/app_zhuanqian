@@ -120,7 +120,7 @@ class TaskSumComponent extends Component {
                     alignSelf: 'flex-start',
                 }}>
                     <Text style={{maxWidth: wp(48), flexDirection: 'row'}}>
-                        {item && renderEmoji(item.taskTitle, [], hp(2.15), 0, 'black', {}).map((item, index) => {
+                        {item && renderEmoji(item.taskTitle, [], hp(2.1), 0, 'black', {}).map((item, index) => {
                             return item;
                         })}
                     </Text>
@@ -172,8 +172,6 @@ class TaskSumComponent extends Component {
                             style={styles.itemIconStyle}
 
                         />}
-
-
                     </View>
                     <TouchableOpacity
                         onPress={() => {
@@ -281,7 +279,7 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,0.9)',
     },
     bigFontStyle: {
-        fontSize: hp(2.2),
+        fontSize: hp(2.1),
         color: 'red',
         bottom: hp(0.2),
         // fontWeight: '500',
@@ -308,7 +306,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemIconStyle: {
-        width: hp(6.5), height: hp(4),
-        marginLeft: hp(0.6),
+        marginTop:hp(0.5),
+        width: hp(6.5),
+        height: hp(3),
+        marginLeft: hp(0.5),
     },
 });

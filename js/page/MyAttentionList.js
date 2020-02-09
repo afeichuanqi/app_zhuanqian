@@ -230,7 +230,7 @@ class MyAttentionList extends PureComponent {
         return (
             <View style={{flex: 1}}>
                 <AnimatedFlatList
-                    style={{backgroundColor: '#f5f5f5', paddingTop: 5}}
+                    style={{backgroundColor: '#f5f5f5', paddingTop: 1}}
                     ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} type={3} height={height - 80} message={'您还没有任何关注'}/>}
                     ref={ref => this.flatList = ref}
                     data={taskData}
@@ -239,6 +239,7 @@ class MyAttentionList extends PureComponent {
                     keyExtractor={(item, index) => index + ''}
                     refreshControl={
                         <RefreshControl
+                            progressViewOffset={hp(8)}
                             title={'更新中'}
                             refreshing={isLoading}
                             onRefresh={this.onRefresh}

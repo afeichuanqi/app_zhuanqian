@@ -220,7 +220,7 @@ export default class ChatItem extends PureComponent {
                             <Text style={{fontSize: hp(2.2), fontWeight: 'bold', color: 'black'}}>{title}</Text>
                             <Text
                                 style={{
-                                    fontSize:hp(1.9),
+                                    fontSize:hp(1.7),
                                     color: 'rgba(0,0,0,0.5)',
                                     marginTop: 10,
                                     marginBottom: 10,

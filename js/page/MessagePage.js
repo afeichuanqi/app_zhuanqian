@@ -170,7 +170,7 @@ class MsgList extends Component {
                     }}/>
 
                     <MessageColumnRedux/>
-                    <View style={{height: 70}}/>
+                    <View style={{height: 80}}/>
                 </View>
 
             }
@@ -393,7 +393,7 @@ class MessageColumnItem extends Component {
                 fontSize: hp(2),
                 color: 'black',
                 opacity: 0.8,
-                marginTop: 7,
+                marginTop: 10,
 
             }}>{title}</Text>
             {type === 3 && <ToastSelect
@@ -407,8 +407,8 @@ class MessageColumnItem extends Component {
                     paddingTop: 10,
 
                 }}>
-                    <Text style={styles.textStyle}>官方QQ：1412894</Text>
-                    <Text style={styles.textStyle}>官方微信：qingfengkjkj</Text>
+                    <Text style={styles.textStyle}>官方QQ:1412894</Text>
+                    <Text style={styles.textStyle}>官方微信:qingfengkjkj</Text>
                 </View>
             </ToastSelect>}
         </TouchableOpacity>;
@@ -417,9 +417,9 @@ class MessageColumnItem extends Component {
 
 const styles = StyleSheet.create({
     textStyle: {
-        fontSize: hp(2.0),
+        fontSize: hp(2.1),
         width: width - 80,
-        color: 'rgba(0,0,0,0.8)',
+        color: 'rgba(0,0,0,0.9)',
         lineHeight: 25,
     },
 });

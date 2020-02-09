@@ -118,7 +118,7 @@ class ToastSelect extends PureComponent {
 
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: hp(2.3), color: 'black' , fontWeight:'500'}}>{this.props.title}</Text>
+                                <Text style={{fontSize: hp(2.35), color: 'black' , fontWeight:'500'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -141,7 +141,7 @@ class ToastSelect extends PureComponent {
                                     alignItems: 'center',
                                     height: 50,
                                 }}>
-                                <Text style={{color: 'rgba(0,0,0,0.9)'}}>取消</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.9)', fontSize:hp(2.2)}}>取消</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
@@ -153,7 +153,7 @@ class ToastSelect extends PureComponent {
                                     alignItems: 'center',
                                     height: 50,
                                 }}>
-                                <Text style={{color: '#2196F3'}}>{rightTitle}</Text>
+                                <Text style={{color: '#2196F3', fontSize:hp(2.2)}}>{rightTitle}</Text>
                             </TouchableOpacity>
                         </View>
                     </Animated.View>

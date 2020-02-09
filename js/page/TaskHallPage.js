@@ -98,7 +98,7 @@ class TaskHallPage extends PureComponent {
                             width: wp(50),
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: hp(3.7)}}
+                        contentContainerStyle={{paddingTop: hp(4)}}
                         routes={navigationRoutes}
                         index={navigationIndex}
                         handleIndexChange={this.handleIndexChange}
@@ -108,7 +108,7 @@ class TaskHallPage extends PureComponent {
                         inactiveStyle={{fontSize: hp(2.2), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.1)}}
                     />
-                    <View style={{flexDirection: 'row', marginTop: hp(1.5), alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', marginTop: hp(3), alignItems: 'center'}}>
                         {/*加图标*/}
                         <TouchableOpacity
                             onPress={() => {

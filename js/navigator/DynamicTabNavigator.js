@@ -407,7 +407,7 @@ class BottomBarItem extends Component {
             onPressIn={this.onPressIn}
             style={{
                 width: wp(25),
-                height: hp(7),
+                height: hp(6.5),
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>

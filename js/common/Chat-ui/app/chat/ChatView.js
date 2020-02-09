@@ -11,7 +11,7 @@ import {
     Clipboard,
     Dimensions,
     FlatList,
-    ViewPropTypes as RNViewPropTypes
+    ViewPropTypes as RNViewPropTypes,
 } from 'react-native';
 import Image from 'react-native-fast-image';
 import PropTypes from 'prop-types';
@@ -22,6 +22,7 @@ import {EMOJIS_ZH} from '../source/emojis';
 import EmojiPanel from './emoji';
 import InputBar from './InputBar';
 import PlusPanel from './plus';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {height, width} = Dimensions.get('window');
 const ViewPropTypes = RNViewPropTypes || View.propTypes;
@@ -154,7 +155,7 @@ class ChatWindow extends PureComponent {
     };
 
     static defaultProps = {
-        ListHeaderComponent:<View></View>,
+        ListHeaderComponent: <View></View>,
         renderLoadEarlier: () => (null),
         extraData: null,
         chatType: 'friend',
@@ -374,7 +375,7 @@ class ChatWindow extends PureComponent {
         const {androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding} = props;
         this.time = null;
         this._userHasBeenInputed = false;
-        this.iosHeaderHeight = 144;
+        this.iosHeaderHeight = hp(13) + 66;
         this.isIphoneX = isIPhoneX();
         this.visibleHeight = new Animated.Value(0);
         this.panelHeight = new Animated.Value(0);
@@ -573,9 +574,9 @@ class ChatWindow extends PureComponent {
         this.setState({voiceEnd: false});
     };
 
-    _PressAvatar = (isSelf, targetId,isAdmin) => {
+    _PressAvatar = (isSelf, targetId, isAdmin) => {
         const {pressAvatar} = this.props;
-        pressAvatar(isSelf, targetId,isAdmin);
+        pressAvatar(isSelf, targetId, isAdmin);
         this.closeAll();
     };
 
@@ -866,7 +867,8 @@ class ChatWindow extends PureComponent {
         }
         await this.props.loadHistory();
     };
-    cursorIndex=0;
+    cursorIndex = 0;
+
     _onEmojiSelected(code, index) {
         if (index === 0) {
             let emojiReg = new RegExp('\\[[^\\]]+\\]', 'g');
@@ -888,8 +890,8 @@ class ChatWindow extends PureComponent {
                     let emojiIndex = messageContent.search(emojiReg); // 匹配到的第一个表情符位置
                     let preStr = messageContent.substring(0, this.cursorIndex);
                     let nextStr = messageContent.substring(this.cursorIndex);
-                    lastText = preStr.substring(0, preStr.length - 1) + nextStr
-                    this.cursorIndex=preStr.length - 1;
+                    lastText = preStr.substring(0, preStr.length - 1) + nextStr;
+                    this.cursorIndex = preStr.length - 1;
                 } else { // 光标在字符串最后
                     let lastChar = messageContent.charAt(currentTextLength - 1);
                     if (lastChar === ']') {
@@ -898,31 +900,31 @@ class ChatWindow extends PureComponent {
                         if (castArray) {
                             let cast = castArray[castArray.length - 1];
                             lastText = messageContent.substring(0, messageContent.length - cast.length);
-                            this.cursorIndex=messageContent.length - cast.length;
+                            this.cursorIndex = messageContent.length - cast.length;
                         } else {
                             lastText = messageContent.substring(0, messageContent.length - 1);
-                            this.cursorIndex=messageContent.length - 1;
+                            this.cursorIndex = messageContent.length - 1;
                         }
                     } else {
                         lastText = messageContent.substring(0, currentTextLength - 1);
-                        this.cursorIndex=currentTextLength - 1;
+                        this.cursorIndex = currentTextLength - 1;
                     }
                 }
             } else {
                 if (currentTextLength >= this.cursorIndex) {
                     lastText = messageContent + EMOJIS_ZH[code];
-                    this.cursorIndex=lastText.length;
+                    this.cursorIndex = lastText.length;
                 } else {
                     let preTemp = messageContent.substring(0, this.cursorIndex);
                     let nextTemp = messageContent.substring(this.cursorIndex, currentTextLength);
                     lastText = preTemp + EMOJIS_ZH[code] + nextTemp;
-                    this.cursorIndex=this.cursorIndex + EMOJIS_ZH[code].length;
+                    this.cursorIndex = this.cursorIndex + EMOJIS_ZH[code].length;
                 }
             }
-            this.InputBar.setMessageContent(lastText)
+            this.InputBar.setMessageContent(lastText);
         } else {
             const messageContent = this.InputBar.getMessageContent();
-            this.InputBar.setMessageContent(messageContent + code)
+            this.InputBar.setMessageContent(messageContent + code);
         }
 
 

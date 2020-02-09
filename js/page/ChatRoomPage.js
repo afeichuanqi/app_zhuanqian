@@ -498,11 +498,6 @@ class ChatRoomPage extends React.Component {
                 return;
             }
             const uuid = getUUID();
-            // let content_=content;
-            // console.log(nodeEmoji.hasEmoji(content));
-            // if(nodeEmoji.hasEmoji(content)){
-            //     content_=nodeEmoji.unemojify(content)
-            // }
             ChatSocket.sendMsgToUserId(userId, toUserid, type, nodeEmoji.unemojify(content), uuid, userinfo.username, userinfo.avatar_url, FriendId, columnType, this.taskUri, this.task_id, this.fromUserinfo, this.sendFormId);
         } else {
             if (!this.FriendId) {
@@ -555,7 +550,7 @@ class LoadIng extends React.Component {
             {showNoMore ? <Text style={{color: 'rgba(0,0,0,0.5)', marginLeft: 5, fontSize: hp(1.6)}}>没有更多了
                 (¬､¬) </Text> : <View style={{flexDirection: 'row'}}>
                 <ActivityIndicator
-                    size="small" color={'black'}/>
+                    size="small" color={'rgba(0,0,0,0.5)'}/>
                 <Text style={{color: 'rgba(0,0,0,0.5)', marginLeft: 5}}>加载中...</Text>
             </View>}
 
@@ -594,7 +589,7 @@ class TaskInfo extends React.Component {
         const {columnType, appealInfo} = this.props;
         if (!taskInfo.task_uri) {
             return <SkeletonPlaceholder minOpacity={0.2}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 80}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: hp(13)}}>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{height: wp(14), width: wp(14), backgroundColor: 5, borderRadius: 3, marginLeft: 10}}/>
                         <View style={{justifyContent: 'space-around', marginLeft: 10}}>
@@ -643,31 +638,35 @@ class TaskInfo extends React.Component {
                 NavigationUtils.goPage({test: false, task_id: this.props.task_id}, 'TaskDetails');
             }}
             style={{
-                height: 80, width, backgroundColor: 'white', zIndex: 1,
+                height: hp(13), width, backgroundColor: 'white', zIndex: 1,
                 paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', flexDirection: 'row',
-                borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0',
+                borderBottomWidth: 0.3, borderBottomColor: '#d0d0d0', alignItems:'center',
             }}>
             <View style={{flexDirection: 'row'}}>
                 <Image
-                    style={{height: wp(14), width: wp(14)}}
+                    style={{height: hp(8), width: hp(8)}}
                     source={{uri: taskInfo.task_uri}}
                     resizeMode={Image.resizeMode.stretch}
                 />
                 <View style={{marginLeft: 10, justifyContent: 'space-between', height: wp(15), width: wp(57)}}>
                     <Text style={{
-                        fontSize: hp(2.4),
+                        fontSize: hp(2.5),
                         color: 'black',
+                        fontWeight:'600',
                     }}>¥ {parseFloat(taskInfo.reward_price).toFixed(2)}</Text>
-                    <Text numberOfLines={2} style={{fontSize: hp(2.0), opacity: 0.5, color: 'black'}}>
-                        {taskInfo && renderEmoji(`${taskInfo.task_title}`, [], hp(1.7), 0, 'black').map((item, index) => {
+                    <Text numberOfLines={2} style={{fontSize: hp(2.0), opacity: 0.5, color: 'black',top:-hp(0.3)}}>
+                        {taskInfo && renderEmoji(`${taskInfo.task_title}`, [], hp(1.8), 0, 'black').map((item, index) => {
                             return item;
                         })}
                     </Text>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
 
                         <AnimatedFadeIn>
-                            <Text style={{
-                                fontSize: hp(1.7), opacity: 0.5, color: 'black',
+                            <Text
+                                numberOfLines={2}
+                                style={{
+                                fontSize: hp(1.8), opacity: 0.5, color: 'black',
+                                top:-hp(0.3)
 
                             }}>
                                 {statusText}
@@ -697,7 +696,7 @@ class TaskInfo extends React.Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                         borderRadius: 3,
-                        marginTop: 20,
+                        marginTop: hp(2),
                     }}>
                     <Text style={{
                         color: 'white',

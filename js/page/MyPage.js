@@ -73,6 +73,11 @@ class MyPage extends PureComponent {
             outputRange: [height, 0, -height],
             extrapolate: 'clamp',
         });
+        const opacity = Animated.interpolate(this.scrollY, {
+            inputRange: [0,  150],
+            outputRange: [0, 1],
+            extrapolate: 'clamp',
+        });
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
@@ -90,32 +95,41 @@ class MyPage extends PureComponent {
                     style={{flex: 1}}
                 >
                     <View style={{
-                        flexDirection: 'row',
                         paddingHorizontal: 10,
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        height: 50,
                         backgroundColor: bottomTheme,
                     }}>
-                        <TouchableOpacity
-                            activeOpacity={0.6}
-                            onPress={() => {
-                                NavigationUtils.goPage({}, 'ShopInfoPage');
-                            }}
-                            style={{marginRight: 10}}
+                        <Animated.View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                            opacity,
+                            height: 50,
+                        }}>
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                onPress={() => {
+                                    if (this.props.userinfo.login) {
+                                        NavigationUtils.goPage({userid: this.props.userinfo.userid}, 'ShopInfoPage');
+                                    } else {
+                                        NavigationUtils.goPage({}, 'LoginPage');
+                                    }
+                                }}
+                                style={{marginRight: 10}}
 
-                        >
-                            <SvgUri width={18} height={18} fill={'white'} svgXmlData={shop}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={0.6}
-                            onPress={() => {
-                                NavigationUtils.goPage({}, 'SettingPage');
-                            }}
+                            >
+                                <SvgUri width={19} height={19} fill={'white'} svgXmlData={shop}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                onPress={() => {
+                                    NavigationUtils.goPage({}, 'SettingPage');
+                                }}
 
-                        >
-                            <SvgUri width={18} height={18} fill={'white'} svgXmlData={setting}/>
-                        </TouchableOpacity>
+                            >
+                                <SvgUri width={19} height={19} fill={'white'} svgXmlData={setting}/>
+                            </TouchableOpacity>
+                        </Animated.View>
+
                     </View>
 
 
@@ -127,6 +141,7 @@ class MyPage extends PureComponent {
                             position: 'absolute',
                             top: (-height) + 50,
                             transform: [{translateY: translateY}],
+                            zIndex:-1,
                         }}>
                     </Animated.View>
                     <AnimatedScrollView
@@ -387,8 +402,8 @@ class TopInfoColumn extends PureComponent {
             alignItems: 'center',
             paddingTop: hp(1.5),
         }}>
-            <Text style={{color: 'white', fontSize: hp(2.3), fontWeight: '500'}}>{value}</Text>
-            <Text style={{color: 'white', fontSize: hp(2), opacity: 0.8, marginTop: 5}}>{title}</Text>
+            <Text style={{color: 'white', fontSize: hp(2.2), fontWeight: '500'}}>{value}</Text>
+            <Text style={{color: 'white', fontSize: hp(1.85), opacity: 0.8, marginTop: 5}}>{title}</Text>
         </View>;
     };
     _avatarClick = () => {

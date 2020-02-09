@@ -140,6 +140,7 @@ class HomePage extends PureComponent {
                 </Animated.View>}
                 <DynamicTabNavigator/>
                 <PromotionToast ref={ref => this.promotionToast = ref}/>
+
                 {Platform.OS === 'android' && !appSetting.agreePrivacy && <PrivacyToast
                     click={() => {
                         this.PrivacyToast.hide();

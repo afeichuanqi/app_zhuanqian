@@ -111,20 +111,20 @@ class PrivacyToast extends PureComponent {
                                     简易赚app 一款网上兼职、悬赏、互助平台、在校学生、宝妈、赚客、自由职业者都可以利用空闲时间赚钱
                                     最简单、操作最方便的购物平台老人也能轻松的操作起来,在您使用简易赚的同时,我们可能会获取部分的必要信息,以提供基本服务。
                                 </Text>
-                                <Text style={[styles.textStyle, {marginTop: 15}]}>
+                                <Text style={[styles.textStyle, {marginTop: hp(0.8)}]}>
                                     1.上传头像和上传图片时必须您手机的访问相册权限
 
                                 </Text>
-                                <Text style={[styles.textStyle, {marginTop: 15}]}>
+                                <Text style={[styles.textStyle, {marginTop: hp(0.8)}]}>
                                     2.为帮助您发现更多有趣的内容,会基于您的使用习惯推荐更好的任务
 
                                 </Text>
-                                <Text style={[styles.textStyle, {marginTop: 15}]}>
+                                <Text style={[styles.textStyle, {marginTop: hp(0.8)}]}>
                                     3.您可灵活设置您发布内容的公开访问和互动权限
 
                                 </Text>
 
-                                <Text style={{flexDirection: 'row', marginTop: 15, width: width - 90}}>
+                                <Text style={{flexDirection: 'row', marginTop: hp(0.8), width: width - 90}}>
                                     <Text style={[styles.textStyle, {}]}>
                                         我们非常重视您的个人信息保护,关于个人信息收集和使用的详细信息,您可以点击查询
                                     </Text>

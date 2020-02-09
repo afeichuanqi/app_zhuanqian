@@ -280,6 +280,7 @@ class UserBillList extends PureComponent {
                 keyExtractor={(item, index) => index + ''}
                 refreshControl={
                     <RefreshControl
+                        progressViewOffset={hp(8)}
                         title={'更新中'}
                         refreshing={isLoading}
                         onRefresh={this.onRefresh}

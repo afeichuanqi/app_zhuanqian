@@ -14,11 +14,9 @@ import {
     StyleSheet,
     Platform,
     TouchableOpacity,
-    StatusBar,
-    Linking, DeviceInfo,
+    Linking, DeviceInfo,Image
 } from 'react-native';
 import {theme, bottomTheme} from '../appSet';
-import NavigationBar from '../common/NavigationBar';
 import Carousel from '../common/Carousel';
 import FastImage from 'react-native-fast-image';
 import TabBar from '../common/TabBar';
@@ -361,14 +359,14 @@ class FristListComponent extends PureComponent {
     render() {
         // console.log('render');
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220, 0, lunboHeight - 35],
-            outputRange: [lunboHeight + 230, lunboHeight + 10, 45],
+            inputRange: [-220-300, 0, lunboHeight - 37],
+            outputRange: [lunboHeight + 240+300, lunboHeight + 15, 55],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
             transform: [{translateY: this.props.translateY}],
         }}>
-            <View style={{height: 23}}/>
+            <View style={{height: 19}}/>
             <FlatListCommonUtil
 
                 EmptyHeight={height - hp(43)}
@@ -392,24 +390,35 @@ class FristListComponent extends PureComponent {
                 ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 35,  position: 'absolute', top: -15, alignItems:'flex-start', justifyContent:'center',
-                backgroundColor: 'white', transform: [{translateY: columnTop}],left:10
+                width, height: 30,  position: 'absolute', top: -25, alignItems:'flex-start', justifyContent:'center',
+                backgroundColor: 'rgba(255,255,255,0.9)', transform: [{translateY: columnTop}],left:10
             }}>
                 <View style={{  alignItems:'center',
                     paddingHorizontal:5, paddingVertical:4, flexDirection:'row',
+                    top:2
 
                 }}>
-                    <View style={{
-                        height: hp(2),
-                        width: 3,
-                        backgroundColor: bottomTheme,
-                        borderRadius: 3,
-                        marginRight:3,
-                    }}/>
+                    <Image
+                        resizeMode={'stretch'}
+                        style={{
+                            height: hp(1.8),
+                            width:hp(1.5),
+                            marginLeft:5,
+                        }}
+                        source={require('../res/img/indexPage/tuijian.png')}
+                    />
+                    {/*<View style={{*/}
+                    {/*    height: hp(2.1),*/}
+                    {/*    width: 3,*/}
+                    {/*    backgroundColor: bottomTheme,*/}
+                    {/*    borderRadius: 3,*/}
+                    {/*    marginRight:3,*/}
+                    {/*}}/>*/}
                     <Text
                         style={{
                             fontSize: hp(2.1),
                             color: bottomTheme,
+                            marginLeft:3,
                         }}>为您推荐</Text>
                     {/*<View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>*/}
                 </View>
@@ -486,7 +495,7 @@ class LunBoComponent extends React.Component {
             paddingTop: 20,
             backgroundColor: theme,
             width: width,
-            // marginBottom:10,
+            marginBottom:-7,
 
 
         }}>
