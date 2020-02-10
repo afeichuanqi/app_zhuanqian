@@ -2,6 +2,9 @@ import moment from 'moment';
 import React from 'react';
 import {Text} from 'react-native';
 import Emoji from 'react-native-emoji';
+import JShareModule from 'jshare-react-native';
+import Toast from 'react-native-root-toast';
+
 
 export const isPoneAvailable = (str) => {
     let myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
@@ -28,6 +31,53 @@ export const formatData = (data, insertData, ziduan) => {
         }
     }
     return oldData;
+};
+export const authorizeWechat = (callback) => {
+    let access_token = '', open_id = '', data = {};
+
+    JShareModule.authorize({
+        platform: 'wechat',
+    }, (info) => {
+        console.log(info);
+        access_token = info.token;
+        open_id = info.openId;
+        data.access_token = access_token;
+        data.open_id = open_id;
+        callback(true, data);
+
+    }, (msg) => {
+        console.log(msg);
+        if (msg.code == '40009') {
+            Toast.show('未安装微信客户端');
+            callback(false, msg);
+            return ;
+
+        }
+        if (msg.code == '42001') { //access_token过期
+            JShareModule.cancelAuthWithPlatform({
+                platform: 'wechat_session',
+            }, (i) => {
+                if (i == 0) {
+                    JShareModule.authorize({
+                        platform: 'wechat',
+                    }, (info) => {
+                        if (Platform.OS === 'ios') {
+                            access_token = info.token;
+                            open_id = info.openId;
+                            data.access_token = access_token;
+                            data.open_id = open_id;
+                            callback(true, data);
+                        }
+                    });
+                } else {
+                    callback(false, msg);
+                }
+            });
+        } else {
+            callback(false, msg);
+        }
+        // callback(true,access_token,open_id)
+    });
 };
 export const getCurrentTime = (time = 0) => {
     const nowTime = new Date(); // 当前日前对象

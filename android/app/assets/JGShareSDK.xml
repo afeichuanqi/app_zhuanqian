@@ -6,15 +6,15 @@
     <SinaWeibo
         AppKey="1912593481"
         AppSecret="addb2a629134f52b02de9cad184034a6"
-        RedirectUrl="http://www.easy-z.cn/"/>
+        RedirectUrl="https://www.easy-z.cn"/>
 
     <QQ
         AppId="1110206324"
         AppKey="Q1A6x4ZpQPr9kXs0"/>
 
     <Wechat
-        AppId="微信的 AppId"
-        AppSecret="微信的 AppSectet"/>
+        AppId="wx361451af380461c2"
+        AppSecret="2fbb2cf5c3718726e4eccb35be16b03a"/>
 
     <Facebook
         AppId="facebook 的 appId"

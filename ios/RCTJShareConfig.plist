@@ -11,9 +11,9 @@
 	<key>isProduction</key>
 	<true/>
 	<key>wechatAppId</key>
-	<string>wxc40e16f3ba6ebabc</string>
+	<string>wx361451af380461c2</string>
 	<key>wechatAppSecret</key>
-	<string>dcad950cd0633a27e353477c4ec12e7a</string>
+	<string>2fbb2cf5c3718726e4eccb35be16b03a</string>
 	<key>qqAppId</key>
 	<string>1110206324</string>
 	<key>qqAppKey</key>
@@ -23,7 +23,7 @@
 	<key>sinaWeiboAppSecret</key>
 	<string>addb2a629134f52b02de9cad184034a6</string>
 	<key>sinaRedirectUri</key>
-	<string>https://www.jiguang.cn</string>
+	<string>http://easy-z.cn</string>
 	<key>facebookAppId</key>
 	<string>177776412817787</string>
 	<key>facebookDisplayName</key>

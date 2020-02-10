@@ -29,7 +29,7 @@
 			<string>appid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx38e70176d0d810e2</string>
+				<string>wx361451af380461c2</string>
 			</array>
 		</dict>
 		<dict>
@@ -47,6 +47,10 @@
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>weixin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wx361451af380461c2</string>
+			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>

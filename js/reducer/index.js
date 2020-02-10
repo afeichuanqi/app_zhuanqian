@@ -39,7 +39,7 @@ const index = {
 const config = {
     key: 'root',
     storage,
-    whitelist: ['userinfo', 'taskInfo', 'search', 'appSetting'],
+    whitelist: ['userinfo', 'taskInfo',  'appSetting','search'],
 };
 let reducer = persistCombineReducers(config, index);
 export default reducer;

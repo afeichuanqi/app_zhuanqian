@@ -12,7 +12,7 @@ import {
     Text,
     Dimensions,
     StyleSheet, Platform,
-    TouchableOpacity, ScrollView, StatusBar,
+    TouchableOpacity, ScrollView, StatusBar, Image,
 } from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme} from '../appSet';
@@ -25,6 +25,7 @@ import actions from '../action';
 import {connect} from 'react-redux';
 import FlatListCommonUtil from './SearchPage/FlatListCommonUtil';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Toast from 'react-native-root-toast';
 
 const width = Dimensions.get('window').width;
 const topIputHeight = (Platform.OS === 'ios') ? 30 : 30;
@@ -113,9 +114,10 @@ class SearchPage extends PureComponent {
                 {showFlatList ?
                     <FlatListCommonUtil token={this.props.userinfo.token} ref={ref => this.flatList = ref}/> :
                     <ScrollView>
-                        {/*<SearchColumn labelArray={search.searchArr} title={'热门搜索'}/>*/}
-                        <SearchColumn startSearch={this.SearchColumnStartSearch} labelArray={search.searchArr}
-                                      title={'搜索历史'}/>
+                        <SearchColumn
+                            onDelAllSearchLog={this.props.onDelAllSearchLog}
+                            startSearch={this.SearchColumnStartSearch} labelArray={search.searchArr}
+                            title={'搜索历史'}/>
                     </ScrollView>}
 
 
@@ -163,12 +165,32 @@ class SearchColumn extends PureComponent {
     render() {
         const {title, labelArray} = this.props;
 
-        return <View style={{marginLeft: 15, marginTop: 20}}>
-            <Text style={{
-                fontSize: hp(2),
-                opacity: 0.8,
-                fontWeight: '200',
-            }}>{title}</Text>
+        return <View style={{paddingHorizontal: 15, marginTop: 20}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Text style={{
+                    fontSize: hp(2),
+                    opacity: 0.8,
+                    fontWeight: '200',
+                }}>{title}</Text>
+                {labelArray.length > 0 ? <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => {
+                        this.props.onDelAllSearchLog();
+                        Toast.show('清空成功');
+                    }}
+
+                >
+                    <Image
+                        resizeMode={'stretch'}
+                        style={{height: hp(1.7), width: hp(1.7)}}
+                        source={require('../res/img/searchPage/seach_delete.png')}
+                    />
+
+                </TouchableOpacity> : <View/>}
+
+
+            </View>
+
             <View style={{flexDirection: 'row', marginTop: 5, flexWrap: 'wrap'}}>
                 {labelArray.map((item, index, arr) => {
                     return <LabelBigComponent
@@ -194,6 +216,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     onAddSearchTitle: (title, callback) => dispatch(actions.onAddSearchTitle(title, callback)),
+    onDelAllSearchLog: () => dispatch(actions.onDelAllSearchLog()),
 });
 const SearchPageRedux = connect(mapStateToProps, mapDispatchToProps)(SearchPage);
 

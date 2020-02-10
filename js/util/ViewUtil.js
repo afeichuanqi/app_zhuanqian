@@ -6,6 +6,7 @@ import goback from '../res/svg/goback.svg';
 import message_more from '../res/svg/message_more.svg';
 import menu_right from '../res/svg/menu_right.svg';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {bottomTheme} from '../appSet';
 
 const {width, height} = Dimensions.get('window');
 export default class ViewUtil {
@@ -113,9 +114,14 @@ export default class ViewUtil {
                 alignItems: 'center',
 
             }}>
-            <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
+            <Text style={{fontSize: 14, color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
-                <Text style={{marginLeft: 10, fontSize: 12, opacity: 0.5, color: 'black'}}>{rightText}</Text>
+                <Text style={{
+                    marginLeft: 10,
+                    fontSize: 12,
+                    opacity: 0.5,
+                    color: rightText == '立即绑定' ? bottomTheme : 'black',
+                }}>{rightText}</Text>
                 {showSvg && <SvgUri width={10} style={{marginLeft: 5}} height={10} svgXmlData={menu_right}/>}
 
             </View>

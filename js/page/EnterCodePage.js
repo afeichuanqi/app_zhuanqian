@@ -25,6 +25,7 @@ import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 export default class EnterCodePage extends PureComponent {
     constructor(props) {
         super(props);
@@ -83,8 +84,11 @@ export default class EnterCodePage extends PureComponent {
                         color: 'black',
                     }}>验证码已经发送至{this.params.phone}</Text>
 
-                    <CodeInputRedux showError={this._showError} phone={this.params.phone}
-                                    navigation={this.props.navigation}/>
+                    <CodeInputRedux
+                        userinfo={this.props.userinfo}
+                        updatePhone={this.params.updatePhone} showError={this._showError}
+                        phone={this.params.phone}
+                        navigation={this.props.navigation}/>
                     <AgainSend ref={ref => this.againSend = ref}/>
 
                 </View>
@@ -282,36 +286,54 @@ class CodeInput extends PureComponent {
         </View>;
     };
     _onLogin = () => {
-        const {phone} = this.props;
+        const {phone, updatePhone} = this.props;
         const code = this.iptArrayNum.join('');
-        const DeviceID = DeviceInfo.getUniqueId();
-        const platform = Platform.OS;
-        const device_brand = DeviceInfo.getBrand();
-        const device_name = DeviceInfo.getDeviceName();
-        const device_system_version = DeviceInfo.getSystemVersion();
-        const device_is_tablet = DeviceInfo.isTablet();
-        // device_brand, device_name, device_system_version, device_is_tablet
-        this.props.onLogin(phone, code, platform, DeviceID, device_brand, device_name, device_system_version, device_is_tablet, (isTrue, data) => {
-            if (isTrue) {
-                this.props.showError('');
-                const {routes, navigation} = this.props;
-                const key = routes[0].routes[1].key;
-                Global.token = data.token;//进行验证token
-                ChatSocket.verifyIdentity();//进行验证token
-                NavigationUtils.goBack(navigation, key);
-                setTimeout(()=>{
-                    EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面
-                },2000)
+        if (updatePhone) {
+            const {routes, navigation,onChangePhone,userinfo} = this.props;
+            onChangePhone(phone, code, userinfo.token, (bool,data) => {
+                if(bool){
+                    const key = routes[0].routes[1].key;
+                    NavigationUtils.goBack(navigation, key);
+                }else{
+                    console.log(data.msg)
+                    this.props.showError(data.msg);
+                    this.iptArrayNum = new Array(this.props.iptNum);
+                    this.refs[`text0`].focus();
+                    this.forceUpdate();
+                }
+            });
+        } else {
+            const code = this.iptArrayNum.join('');
+            const DeviceID = DeviceInfo.getUniqueId();
+            const platform = Platform.OS;
+            const device_brand = DeviceInfo.getBrand();
+            const device_name = DeviceInfo.getDeviceName();
+            const device_system_version = DeviceInfo.getSystemVersion();
+            const device_is_tablet = DeviceInfo.isTablet();
+            // device_brand, device_name, device_system_version, device_is_tablet
+            this.props.onLogin(phone, code, platform, DeviceID, device_brand, device_name, device_system_version, device_is_tablet, (isTrue, data) => {
+                if (isTrue) {
+                    this.props.showError('');
+                    const {routes, navigation} = this.props;
+                    const key = routes[0].routes[1].key;
+                    Global.token = data.token;//进行验证token
+                    ChatSocket.verifyIdentity();//进行验证token
+                    NavigationUtils.goBack(navigation, key);
+                    setTimeout(() => {
+                        EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面
+                    }, 2000);
 
 
-            } else {
-                this.props.showError(data.msg);
-                this.iptArrayNum = new Array(this.props.iptNum);
-                this.refs[`text0`].focus();
-                this.forceUpdate();
-            }
+                } else {
+                    this.props.showError(data.msg);
+                    this.iptArrayNum = new Array(this.props.iptNum);
+                    this.refs[`text0`].focus();
+                    this.forceUpdate();
+                }
 
-        });
+            });
+        }
+
     };
 
     render() {
@@ -334,8 +356,10 @@ class CodeInput extends PureComponent {
 
 const mapStateToProps = state => ({
     routes: state.nav.routes,
+    userinfo: state.userinfo,
 });
 const mapDispatchToProps = dispatch => ({
     onLogin: (phone, code, platform, DeviceID, device_brand, device_name, device_system_version, device_is_tablet, callback) => dispatch(actions.onLogin(phone, code, platform, DeviceID, device_brand, device_name, device_system_version, device_is_tablet, callback)),
+    onChangePhone: (phone, code, token, callback) => dispatch(actions.onChangePhone(phone, code, token, callback)),
 });
 const CodeInputRedux = connect(mapStateToProps, mapDispatchToProps)(CodeInput);

@@ -18,6 +18,10 @@ import {connect} from 'react-redux';
 import PickerSex from '../../common/PickerSex';
 import BackPressComponent from '../../common/BackPressComponent';
 import ChatSocket from '../../util/ChatSocket';
+import Toast from 'react-native-root-toast';
+import JShareModule from 'jshare-react-native';
+import {authorizeWechat} from '../../util/CommonUtils';
+import LoddingModal from '../../common/LoddingModal';
 
 const {width} = Dimensions.get('window');
 
@@ -57,6 +61,7 @@ class AccountSetting extends PureComponent {
         // console.log(userinfo.login);
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '账号管理', null, theme, 'black', 16, () => {
         }, false);
+        console.log(userinfo);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -82,9 +87,32 @@ class AccountSetting extends PureComponent {
 
 
                     {ViewUtil.getSettingMenu('手机号码', () => {
-                    }, userinfo.login ? userinfo.phone : '', false)}
+                        if (userinfo.phone) {
+                            Toast.show('您已经绑定了手机号码');
+                        } else {
+                            NavigationUtils.goPage({updatePhone: true}, 'LoginPage');
+                        }
+
+                    }, userinfo.phone ? userinfo.phone : '立即绑定', true)}
                     {ViewUtil.getSettingMenu('微信', () => {
-                    }, '立即绑定')}
+                        if(userinfo.wechat_user){
+                            Toast.show('您已经绑定了微信');
+                        }else{
+                            this.loddingModal.show();
+                            authorizeWechat((bool,data)=>{
+                                this.loddingModal.hide();
+                                if(bool){
+                                    this.props.onChangeWechat(data.access_token,data.open_id,this.props.userinfo.token,(bool,data)=>{
+                                        if(bool){
+                                            Toast.show('绑定成功')
+                                        }else{
+                                            Toast.show(data.msg)
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }, userinfo.wechat_user ? userinfo.wechat_user : '立即绑定')}
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.6}
@@ -100,7 +128,9 @@ class AccountSetting extends PureComponent {
                     <Text style={{color: 'red'}}>退出当前账号</Text>
                 </TouchableOpacity>
                 <PickerSex select={this._sexSelect} ref={ref => this.pickerSex = ref} popTitle={'性别'}/>
-
+                <LoddingModal
+                    ref={ref => this.loddingModal = ref}
+                />
             </SafeAreaViewPlus>
         );
     }
@@ -130,6 +160,7 @@ const mapDispatchToProps = dispatch => ({
     // onSetUserName: (token, value, callback) => dispatch(actions.onSetUserName(token, value, callback)),
     onClearUserinfoAll: () => dispatch(actions.onClearUserinfoAll()),
     onSetNoticeMsgIsAllRead: () => dispatch(actions.onSetNoticeMsgIsAllRead()),
+    onChangeWechat: (token, openId, userToken, callback) => dispatch(actions.onChangeWechat(token, openId, userToken, callback)),
 });
 const AccountSettingRedux = connect(mapStateToProps, mapDispatchToProps)(AccountSetting);
 export default AccountSettingRedux;

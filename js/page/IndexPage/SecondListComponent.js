@@ -139,22 +139,19 @@ class SecondListComponent extends PureComponent {
                 backgroundColor: 'rgba(255,255,255,0.9)',
                 transform: [{translateY: columnTop}],
                 alignItems: 'flex-start',
-                paddingLeft: 10,
+                paddingLeft: 20,
                 top: 10,
-
             }}>
                 <View style={{
                     alignItems: 'center',
-                    paddingHorizontal: 5, paddingVertical: 4,
-                    flexDirection: 'row', top: 2,
-
+                    flexDirection: 'row', top: 2, justifyContent:'center'
                 }}>
                     <Image
                         resizeMode={'stretch'}
                         style={{
                             height: hp(1.8),
                             width: hp(1.5),
-                            marginLeft: 5,
+
                         }}
                         source={require('../../res/img/indexPage/bestNew.png')}
                     />
@@ -164,7 +161,6 @@ class SecondListComponent extends PureComponent {
                             color: bottomTheme,
                             marginLeft: 4,
                         }}>最近刷新</Text>
-                    {/*<View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>*/}
                 </View>
 
             </Animated.View>

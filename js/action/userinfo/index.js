@@ -5,7 +5,7 @@ import {
     setUserData,
     getUserInfoForToken,
     uploadQiniuImage,
-    uploadUserinfoBgImg,
+    uploadUserinfoBgImg, authorizeLogin, bindPhoneForUserId, changeWechatInfoForUserid,
 } from '../../util/AppService';
 
 /**
@@ -34,6 +34,65 @@ export function onLogin(phone, code, platform, DeviceID, device_brand, device_na
             callback(false, {msg});
             dispatch({type: Types.LOGIN_FAIL});
         });
+
+    };
+}
+
+/**
+ * 更换帐户手机号
+ * @returns {{theme: *, type: string}}
+ */
+export function onChangePhone(phone, code, token, callback) {
+    return dispatch => {
+        // dispatch({type: Types.LOGIN_LOADING});
+        bindPhoneForUserId({
+            phone,
+            code,
+        }, token).then((data) => {
+            callback(true, data);
+            console.log('验证成功');
+            dispatch({
+                type: Types.CHANGE_PHONE_SUCCESS,
+                data: {phone},
+            });
+        }).catch(msg => {
+            console.log(msg);
+            callback(false, {msg});
+            // dispatch({type: Types.LOGIN_FAIL});
+        });
+
+    };
+}
+
+/**
+ * 更换微信帐户
+ * @returns {{theme: *, type: string}}
+ */
+export function onChangeWechat(token, openId, userToken, callback) {
+    return dispatch => {
+        changeWechatInfoForUserid({
+            access_token: token,
+            open_id: openId,
+        }, userToken).then(data => {
+            callback(true, data);
+            // console.log('验证成功');
+            dispatch({
+                type: Types.CHANGE_WECHAT_SUCCESS,
+                data: data,
+            });
+        }).catch(msg=>{
+            callback(false, {msg});
+        })
+        // bindPhoneForUserId({
+        //     phone,
+        //     code,
+        // }, token).then((data) => {
+
+        // }).catch(msg => {
+        //     console.log(msg);
+        //     callback(false, {msg});
+        //     // dispatch({type: Types.LOGIN_FAIL});
+        // });
 
     };
 }
@@ -199,6 +258,27 @@ export function onGetUserInFoForToken(token, callback) {
 
             callback(false, {msg});
             dispatch({type: Types.GET_USER_INFO_FAIL});
+        });
+
+    };
+}
+
+/**
+ * 根据token获取用户基本信息
+ */
+
+export function onWechatAuthorizeLogin(data, callback) {
+    return dispatch => {
+        dispatch({type: Types.WECHAT_AUTH_LOADING});
+        authorizeLogin(data).then((data) => {
+            callback(true, data);
+            dispatch({
+                type: Types.WECHAT_AUTH_SUCCESS,
+                data,
+            });
+        }).catch((msg) => {
+            callback(false, {msg});
+            dispatch({type: Types.WECHAT_AUTH_FAIL});
         });
 
     };

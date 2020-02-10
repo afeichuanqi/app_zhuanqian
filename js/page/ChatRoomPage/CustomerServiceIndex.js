@@ -59,16 +59,9 @@ class CustomerServiceIndex extends React.Component {
                     <View style={{marginTop: 15, flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={{fontSize: hp(2.5)}}>{customerInfo[2]}</Text>
                         <Image
-                            resizeMode={'stretch'}
                             source={require('../../res/img/kefu.png')}
-                            style={{marginLeft: 5,width:hp(6),height:hp(2.4)}}
+                            style={{marginLeft: 5,width:hp(6),height:hp(2.4), borderRadius:3}}
                         />
-                        {/*<SvgUri*/}
-                        {/*    style={{marginLeft: 5}}*/}
-                        {/*    width={hp(2.5)}*/}
-                        {/*    height={hp(2.5)}*/}
-                        {/*    fill={'rgba(0,0,0,0.5)'}*/}
-                        {/*    svgXmlData={kefu}/>*/}
                     </View>
                     <View style={{marginTop: 15}}>
                         <Text style={{fontSize: hp(1.9), color: 'rgba(0,0,0,0.5)'}}>

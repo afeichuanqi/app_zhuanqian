@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, Text, TextInput, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, TextInput, Dimensions, TouchableOpacity, StatusBar, Image} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -16,16 +16,24 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../res/svg/phone_input_clear.svg';
 import gantanhao from '../res/svg/gantanhao.svg';
-import {isPoneAvailable} from '../util/CommonUtils';
+import {authorizeWechat, isPoneAvailable} from '../util/CommonUtils';
 import {sendSms} from '../util/AppService';
 import BackPressComponent from '../common/BackPressComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import JShareModule from 'jshare-react-native';
+import Toast from 'react-native-root-toast';
+import actions from '../action';
+import {connect} from 'react-redux';
+import LoddingModal from '../common/LoddingModal';
 
 const {width, height} = Dimensions.get('window');
 
 class LoginPage extends PureComponent {
     constructor(props) {
         super(props);
+        this.params = this.props.navigation.state.params;
+
+
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
@@ -84,8 +92,6 @@ class LoginPage extends PureComponent {
     };
 
     render() {
-        // const {phone} = this.state;
-
         let statusBar = {
             hidden: false,
             backgroundColor: theme,//安卓手机状态栏背景颜色
@@ -108,7 +114,7 @@ class LoginPage extends PureComponent {
                         marginLeft: 40,
                         fontSize: hp(2.7),
                         color: 'black',
-                    }}>账号登录</Text>
+                    }}>{this.params.updatePhone ? '账号绑定' : '账号登录'}</Text>
                     <View style={{width, justifyContent: 'center', alignItems: 'center', marginTop: 80}}>
 
 
@@ -146,48 +152,113 @@ class LoginPage extends PureComponent {
 
 
                     </View>
+                    {/*第三方登录*/}
+                    {!this.params.updatePhone && <View style={{
+                        position: 'absolute', bottom: hp(15), justifyContent: 'center',
+                        alignItems: 'center', width,
+                    }}>
+                        <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: hp(3)}}>
+                            <View style={{width: wp(20), height: 1, backgroundColor: '#dedede', borderRadius: 5}}/>
+                            <Text style={{
+                                marginHorizontal: 10,
+                                color: 'rgba(0,0,0,0.6)',
+                                fontSize: hp(1.6),
+                            }}>您还可以用以下方式登录</Text>
+                            <View style={{width: wp(20), height: 1, backgroundColor: '#dedede', borderRadius: 5}}/>
+                        </View>
+                        <View style={{
+                            flexDirection: 'row',
+                        }}>
+                            <TouchableOpacity
+                                activeOpacity={0.5}
+                                onPress={this.handleWechatAuthorize}
+                            >
+                                <Image
+                                    source={require('../res/img/share/wechat.png')}
+                                    style={{width: hp(6), height: hp(6)}}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={0.5}
+                                onPress={() => {
+
+                                }}
+                            >
+                                <Image
+                                    source={require('../res/img/share/xinlangweibo.png')}
+                                    style={{width: hp(6), height: hp(6), marginLeft: hp(3)}}
+                                />
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>}
+
                     {/*登录即将同意*/}
                     <View style={{
                         height: 20, width,
                         position: 'absolute',
-                        bottom: 10,
+                        bottom: hp(1.5),
                         justifyContent: 'center',
                         alignItems: 'center',
                         flexDirection: 'row',
                     }}>
-                        <Text style={{fontSize: hp(1.5), color: 'rgba(0,0,0,0.5)'}}>登录即代表已阅读并同意</Text>
+                        <Text style={{
+                            fontSize: hp(1.5),
+                            color: 'rgba(0,0,0,0.5)',
+                        }}>{this.params.updatePhone ? '绑定' : '登录'}即代表已阅读并同意</Text>
                         <TouchableOpacity
-                            onPress={()=>{
+                            onPress={() => {
                                 NavigationUtils.goPage({type: 3}, 'UserProtocol');
                             }}
                         >
-                            <Text style={{fontSize:  hp(1.5), color: bottomTheme}}>用户服务协议</Text>
+                            <Text style={{fontSize: hp(1.5), color: bottomTheme}}>用户服务协议</Text>
                         </TouchableOpacity>
-                        <Text style={{fontSize:  hp(1.5), color: 'rgba(0,0,0,0.5)'}}>即</Text>
-                        <Text style={{fontSize:  hp(1.5), color: bottomTheme}}>隐私协议</Text>
+                        <Text style={{fontSize: hp(1.5), color: 'rgba(0,0,0,0.5)'}}>即</Text>
+                        <Text style={{fontSize: hp(1.5), color: bottomTheme}}>隐私协议</Text>
                     </View>
                 </View>
-
+                <LoddingModal
+                    ref={ref => this.loddingModal = ref}
+                />
             </SafeAreaViewPlus>
         );
     }
+
+    handleWechatAuthorize = () => {
+        this.loddingModal.show();
+        authorizeWechat((bool, data) => {
+            this.loddingModal.hide();
+            if (bool) {
+                this.props.onWechatAuthorizeLogin({
+                    open_id: data.open_id,
+                    access_token: data.access_token,
+                }, (bool, data) => {
+                    if (bool) {
+                        Toast.show('登录成功');
+                        NavigationUtils.goBack(this.props.navigation);
+                    } else {
+                        Toast.show(data.msg);
+                    }
+                });
+            } else {
+                Toast.show('授权失败');
+            }
+        });
+
+
+    };
     _getCode = () => {
         this.phoneInput.onBlur();
-        // this.WXLogin();
-        // console.log(this.phone, 'this.phone');
         const isTrue = isPoneAvailable(this.phone);
-        //
         if (!isTrue) {
-            // console.log('我被触发111');
             this.phoneInput.showError('手机号码格式错误，请重新输入');
         } else {
             this.phoneInput.showError('');
         }
-
         if (isTrue) {
             sendSms({phone: this.phone}).then(() => {
                 this.phoneInput.showError('');
-                NavigationUtils.goPage({phone: this.phone}, 'EnterCodePage');
+                NavigationUtils.goPage({updatePhone: this.params.updatePhone, phone: this.phone}, 'EnterCodePage');
             }).catch((msg) => {
                 this.phoneInput.showError(!msg ? '网络错误' : msg);
             });
@@ -236,22 +307,18 @@ class PhoneInput extends PureComponent {
 
     render() {
         const {phone, errMsg} = this.state;
-        // console.log('render');
-        // console.log(errMsg);
         return <>
             <TextInput
                 ref={ref => this.textInput = ref}
                 value={phone}
                 dataDetectorTypes={'phoneNumber'}
-                // clearButtonMode={'always'}
                 placeholder={'请输入手机号码'}
                 maxLength={13}
                 keyboardType={'number-pad'}
                 onChangeText={this._pwdInputOnChangeText}
-                // multiline = {false}
                 style={{
                     width: width - 80,
-                    fontSize: hp(2),
+                    fontSize: hp(2.3),
                     color: 'rgba(0,0,0,0.8)',
                     padding: 0,
                     height: 30,
@@ -292,4 +359,9 @@ class PhoneInput extends PureComponent {
     }
 }
 
-export default LoginPage;
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+    onWechatAuthorizeLogin: (data, callback) => dispatch(actions.onWechatAuthorizeLogin(data, callback)),
+});
+const LoginPageRedux = connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default LoginPageRedux;

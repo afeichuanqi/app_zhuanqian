@@ -391,36 +391,31 @@ class FristListComponent extends PureComponent {
             />
             <Animated.View style={{
                 width, height: 30,  position: 'absolute', top: -25, alignItems:'flex-start', justifyContent:'center',
-                backgroundColor: 'rgba(255,255,255,0.9)', transform: [{translateY: columnTop}],left:10
+                backgroundColor: 'rgba(255,255,255,0.9)', transform: [{translateY: columnTop}]
             }}>
-                <View style={{  alignItems:'center',
-                    paddingHorizontal:5, paddingVertical:4, flexDirection:'row',
-                    top:2
-
+                <View style={{
+                    alignItems:'center',
+                    paddingHorizontal:5,
+                    flexDirection:'row',
+                    top:2,
+                    justifyContent:'center',
+                    paddingLeft: 20,
                 }}>
                     <Image
                         resizeMode={'stretch'}
                         style={{
                             height: hp(1.8),
                             width:hp(1.5),
-                            marginLeft:5,
+
                         }}
                         source={require('../res/img/indexPage/tuijian.png')}
                     />
-                    {/*<View style={{*/}
-                    {/*    height: hp(2.1),*/}
-                    {/*    width: 3,*/}
-                    {/*    backgroundColor: bottomTheme,*/}
-                    {/*    borderRadius: 3,*/}
-                    {/*    marginRight:3,*/}
-                    {/*}}/>*/}
                     <Text
                         style={{
                             fontSize: hp(2.1),
                             color: bottomTheme,
                             marginLeft:3,
                         }}>为您推荐</Text>
-                    {/*<View style={{width:60,height:2, backgroundColor:bottomTheme,top:5, borderRadius:5}}/>*/}
                 </View>
             </Animated.View>
         </Animated.View>;

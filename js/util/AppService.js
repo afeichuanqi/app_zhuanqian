@@ -35,6 +35,38 @@ export function verifyCode(data) {
 
 
 }
+export function bindPhoneForUserId(data,token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/bindPhoneForUserId', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+export function changeWechatInfoForUserid(data,token) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+            http.setPostHeader('token', token);
+            const ret = await http.post('user/changeWechatInfoForUserid', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 export function setInvitationCode(data,token) {
     return new Promise(async function (resolve, reject) {
         try {
@@ -75,6 +107,26 @@ export function startSignUpTask(data, token) {
     });
 }
 /**
+ * 用户微信授权
+ * @returns {Promise<any> | Promise<*>}
+ */
+export function authorizeLogin(data) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // const params = `userName=${username}&passWord=${password}&email=${email}`;
+
+            const ret = await http.post('user/authorizeLogin', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
  * 用户报名
  * @returns {Promise<any> | Promise<*>}
  */
@@ -94,6 +146,7 @@ export function getNewTaskId() {
         }
     });
 }
+
 /**
  * 用户报名
  * @returns {Promise<any> | Promise<*>}
