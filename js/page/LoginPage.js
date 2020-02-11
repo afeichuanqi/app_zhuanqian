@@ -213,14 +213,13 @@ class LoginPage extends PureComponent {
                             color: 'rgba(0,0,0,0.5)',
                         }}>{this.params.updatePhone ? '绑定' : '登录'}即代表已阅读并同意</Text>
                         <TouchableOpacity
+                            activeOpacity={0.8}
                             onPress={() => {
                                 NavigationUtils.goPage({type: 3}, 'UserProtocol');
                             }}
                         >
-                            <Text style={{fontSize: hp(1.5), color: bottomTheme}}>用户服务协议</Text>
+                            <Text style={{fontSize: hp(1.5), color: bottomTheme}}>用户服务协议与隐私协议</Text>
                         </TouchableOpacity>
-                        <Text style={{fontSize: hp(1.5), color: 'rgba(0,0,0,0.5)'}}>即</Text>
-                        <Text style={{fontSize: hp(1.5), color: bottomTheme}}>隐私协议</Text>
                     </View>
                 </View>
                 <LoddingModal
@@ -247,7 +246,12 @@ class LoginPage extends PureComponent {
                     }
                 });
             } else {
-                Toast.show('授权失败');
+                if (data.code == '40009') {
+                    Toast.show('未安装微信客户端');
+                }else{
+                    Toast.show('授权失败');
+                }
+
             }
         });
 

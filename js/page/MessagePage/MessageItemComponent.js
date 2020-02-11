@@ -169,7 +169,7 @@ export default class MessageItemComponent extends Component {
                                     opacity: 0.7,
                                     marginLeft: 10,
                                     width: (width - 100) / 2,
-                                }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.9), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
+                                }}>{msg_type == 'text' ? renderEmoji(msg, [], hp(1.7), 0, 'black') : msg_type == 'image' ? '[图片]' : msg_type == 'system' ? '[系统消息]' : ''}
                             </Text>
                         </View>
 

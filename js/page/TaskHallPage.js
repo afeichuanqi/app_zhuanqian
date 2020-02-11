@@ -18,8 +18,6 @@ import {bottomTheme, theme} from '../appSet';
 import Animated, {Easing} from 'react-native-reanimated';
 import NavigationBar from '../common/NavigationBar';
 import TabBar from '../common/TabBar';
-import search from '../res/svg/search.svg';
-import jia from '../res/svg/jia.svg';
 import SvgUri from 'react-native-svg-uri';
 import {TabView} from 'react-native-tab-view';
 import zhankai from '../res/svg/zhankai.svg';
@@ -35,6 +33,7 @@ import {renderEmoji} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
 
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const {timing} = Animated;
 let FilterComponent = null;
 
@@ -57,12 +56,50 @@ class TaskHallPage extends PureComponent {
 
 
     }
-
+    showAnimated = false;
+    showFeedBackTimer = null;
     position = new Animated.Value(0);
-
+    animations = {
+        opacity: new Animated.Value(0.5),
+    };
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
+        this.showFeedBackTimer && clearTimeout(this.showFeedBackTimer);
     }
+
+
+    animationClick = () => {
+        if (!this.showAnimated) {
+            this.showFeedBackImg();
+        } else {
+           NavigationUtils.goPage({},'UserFeedbackPage')
+        }
+    };
+
+
+    showFeedBackImg = () => {
+        this.showAnimated = true;
+        timing(this.animations.opacity, {
+            duration: 300,
+            toValue: 1,
+            easing: Easing.inOut(Easing.ease),
+        }).start(() => {
+            if (!this.showFeedBackTimer) {
+                this.showFeedBackTimer = setTimeout(() => {
+                    this.hideFeedBackImg();
+                    this.showFeedBackTimer = null;
+                }, 3000);
+            }
+        });
+    };
+    hideFeedBackImg = () => {
+        this.showAnimated = false;
+        timing(this.animations.opacity, {
+            duration: 300,
+            toValue: 0.5,
+            easing: Easing.inOut(Easing.ease),
+        }).start();
+    };
 
     render() {
 
@@ -77,6 +114,11 @@ class TaskHallPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
+        const translateX = Animated.interpolate(this.animations.opacity, {
+            inputRange: [0.5, 1],
+            outputRange: [hp(8), 0],
+            extrapolate: 'clamp',
+        });
         return (
             <View
                 style={{flex: 1}}
@@ -104,7 +146,7 @@ class TaskHallPage extends PureComponent {
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={wp(4)}
-                        activeStyle={{fontSize: hp(2.7), color: [255, 255, 255], fontWeight:'500'}}
+                        activeStyle={{fontSize: hp(2.7), color: [255, 255, 255], fontWeight: '500'}}
                         inactiveStyle={{fontSize: hp(2.2), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: hp(0.4), backgroundColor: 'white', borderRadius: 3, top: -hp(0.1)}}
                     />
@@ -115,7 +157,10 @@ class TaskHallPage extends PureComponent {
                                 NavigationUtils.goPage({}, 'TaskRelease');
                             }}
                         >
-                            <SvgUri width={wp(5.8)} height={hp(5.8)} fill={'white'} svgXmlData={jia}/>
+                            <Image
+                                source={require('../res/img/taskHall/jia.png')}
+                                style={{width: wp(5.1), height: wp(5.1)}}
+                            />
                         </TouchableOpacity>
                         <View style={{
                             height: hp(2.3),
@@ -129,7 +174,10 @@ class TaskHallPage extends PureComponent {
                                 NavigationUtils.goPage({}, 'SearchPage');
                             }}
                         >
-                            <SvgUri width={wp(5.5)} height={hp(5.5)} fill={'white'} svgXmlData={search}/>
+                            <Image
+                                source={require('../res/img/taskHall/search.png')}
+                                style={{width: wp(5.1), height: wp(5.1)}}
+                            />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -148,7 +196,21 @@ class TaskHallPage extends PureComponent {
                     initialLayout={{width}}
                     lazy={true}
                 />
-
+                <AnimatedTouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={this.animationClick}
+                    style={{
+                        position: 'absolute',
+                        bottom: hp(7),
+                        right: 0,
+                        transform: [{translateX}],
+                        opacity: this.animations.opacity,
+                    }}>
+                    <Image
+                        style={{width: hp(18), height: hp(7.5)}}
+                        source={require('../res/img/indexPage/Feedback.png')}
+                    />
+                </AnimatedTouchableOpacity>
             </View>
         );
     }
@@ -650,7 +712,7 @@ class TopLeftFilterComponent extends Component {
         const {filterArray} = this.props;
         return <View style={{
             flexDirection: 'row',
-            justifyContent: 'space-between', height: hp(5.9), alignItems: 'center'
+            justifyContent: 'space-between', height: hp(5.9), alignItems: 'center',
             // padding
         }}>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
@@ -671,7 +733,7 @@ class TopLeftFilterComponent extends Component {
                                 fontWeight: '400',
                             }, Lindex === index ? {
                                 color: bottomTheme,
-                                fontWeight: '700',
+                                fontWeight: '500',
                             } : {color: '#767676'}]}>{item.title}</Text>
 
                         </TouchableOpacity>

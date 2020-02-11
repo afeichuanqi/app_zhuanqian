@@ -36,7 +36,6 @@ import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 import FastImagePro from '../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -293,7 +292,6 @@ class HomePage extends PureComponent {
     };
 
     SearchOnFocus = () => {
-
         NavigationUtils.goPage({}, 'SearchPage');
     };
 }

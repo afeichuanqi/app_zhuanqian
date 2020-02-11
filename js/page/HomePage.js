@@ -22,6 +22,7 @@ import PrivacyToast from '../common/PrivacyToast';
 import actions from '../action';
 import {connect} from 'react-redux';
 import PrivacyToastStep2 from '../common/PrivacyToastStep2';
+// import JPush from 'jpush-react-native';
 
 const {spring} = Animated;
 
@@ -39,7 +40,9 @@ class HomePage extends PureComponent {
         showAnimated: true,
     };
 
+
     async componentDidMount() {
+        // this.componentDidMount1();
         getAppSetting().then(result => {
 
             Global.user_top_fee = result.user_top_fee;
@@ -65,6 +68,7 @@ class HomePage extends PureComponent {
         } else {
             this.hideSelf();
         }
+
     };
     hideSelf = () => {
         spring(this.translateY, {
@@ -174,13 +178,13 @@ class HomePage extends PureComponent {
     onBackPress = () => {
 
 
-        setTimeout(()=>{
+        setTimeout(() => {
             StatusBar.setHidden(true);
             StatusBar.setTranslucent(true);
             StatusBar.setBarStyle('light-content', false);
             StatusBar.setBackgroundColor(bottomTheme, false);
             this.PrivacyToast.show();
-        },100)
+        }, 100);
     };
 }
 

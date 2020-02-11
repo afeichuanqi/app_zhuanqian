@@ -14,14 +14,14 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions, Text,
     View, StatusBar,
-    TextInput, TouchableOpacity, Image,  Platform,
+    TextInput, TouchableOpacity, Image, Platform,TouchableHighlight
 } from 'react-native';
 import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import {bottomTheme} from '../appSet';
 import Toast from 'react-native-root-toast';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import XPay from 'react-native-puti-pay';
 import {alipaySignOrder} from '../util/AppService';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -87,7 +87,7 @@ class RechargePage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <View style={{flex:1}}>
+                <View style={{flex: 1}}>
                     <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
                         {this.props.userinfo.login && <TouchableOpacity
                             onPress={() => {
@@ -148,7 +148,7 @@ class RechargePage extends PureComponent {
                                 width: width - 20,
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
-                                justifyContent:'space-around',
+                                justifyContent: 'space-around',
                             }}>
                                 {this.nums.map((item, index, arr) => {
                                     return this.renderMoneyBox(index, item);
@@ -186,18 +186,21 @@ class RechargePage extends PureComponent {
                         </View>
                         <View style={{height: hp(7)}}/>
                     </KeyboardAwareScrollView>
-                    <TouchableOpacity
-                        activeOpacity={0.7}
+                    <TouchableHighlight
+                        underlayColor={"#2170cd"}
                         onPress={this.sureRecharGe}
                         style={{
                             position: 'absolute',
                             bottom: 0,
-
-                            width: wp(100), height: hp(7), alignItems: 'center', backgroundColor: bottomTheme,
-                            justifyContent: 'center', alignSelf: 'center',
+                            width: wp(100),
+                            height: hp(7),
+                            alignItems: 'center',
+                            backgroundColor: bottomTheme,
+                            justifyContent: 'center',
+                            alignSelf: 'center',
                         }}>
                         <Text style={{fontSize: hp(2.5), fontWeight: 'bold', color: 'white'}}>确认充值</Text>
-                    </TouchableOpacity>
+                    </TouchableHighlight>
                 </View>
 
             </SafeAreaViewPlus>

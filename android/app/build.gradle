@@ -141,6 +141,7 @@ android {
                 JPUSH_APPKEY: "ee6b0ae7c80a1605fe528f83",         //在此替换你的APPKey
                 JPUSH_CHANNEL: "5fd2f3c0ceaee29dab4ab7ac",        //在此替换你的channel
                 TENCENT_APPID:'1110214002',
+
         ]
         multiDexEnabled true
     }
@@ -223,6 +224,7 @@ dependencies {
     // 如果你需要支持GIF动图
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
     implementation project(':jshare-react-native')     // <-- JShare 依赖
+    implementation project(':jpush-react-native')  // 添加 jpush 依赖
     implementation project(':janalytics-react-native')  // 添加 janalytics 依赖
     implementation project(':jcore-react-native')  			// 添加 jcore 依赖
     implementation 'com.android.support:multidex:1.0.3'

@@ -2,6 +2,8 @@ import types from '../action/Types';
 import Message from '../action';
 import Global from '../common/Global';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import JPush from 'jpush-react-native';
+
 class ChatSocket {
 
     isVerifyIdentIdy = false;
@@ -140,24 +142,14 @@ class ChatSocket {
 
                     break;
                 case types.NOTICE_USER_MESSAGE://收到系统消息
-
-                    let userName = '', content = '';
-                    if (data.type > 0 && data.type <= 3) {
-                        userName = '发布消息';
-                        content = '您收到一条发布消息';
-
-                    } else if (data.type > 3 && data.type <= 8) {
-                        userName = '接单消息';
-                        content = '您收到一条接单消息';
-                    }
-                    Global.onNewMessage && Global.onNewMessage(2, data.type, userName, content);
+                    this.handleSystemMsgType(data.type);
                     Global.dispatch(Message.onSetNoticeMsg(data.type));
                     break;
 
 
             }
         });
-        Global.ws.addEventListener('close',(e) => {
+        Global.ws.addEventListener('close', (e) => {
             // console.log(e);
             // // Toast.show('聊天连接已经断开了哦 ~ ~ ~');
             Global.connectionstatus = false;
@@ -178,7 +170,30 @@ class ChatSocket {
             Global.dispatch(Message.onChangeSocketStatue('重新连接中 (¬､¬)'));
         });
     };
+    //处理系统消息
+    handleSystemMsgType = (type) => {
+        let userName = '', content = '';
+        if (type > 0 && type <= 3) {
+            userName = '发布消息';
+            content = '您收到一条发布消息';
 
+        } else if (type > 3 && type <= 7) {
+            userName = '接单消息';
+            content = '您收到一条接单消息';
+        } else if (type > 7 && type <= 10) {
+            userName = '账单消息';
+            content = '您收到一条账单消息';
+        }
+        Global.onNewMessage && Global.onNewMessage(2, type, userName, content);
+        console.log('handleSystemMsgType');
+
+        JPush.addLocalNotification({
+            messageID: type.toString(),
+            title: userName,
+            content: content,
+            extras: {priority: '2'},
+        });
+    };
     //验证身份
     verifyIdentity = () => {
         if (Global.ws.readyState === 2 || Global.ws.readyState === 3) {

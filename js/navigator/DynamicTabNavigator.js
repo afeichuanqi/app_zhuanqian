@@ -22,12 +22,13 @@ import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {equalsObj} from '../util/CommonUtils';
 import ImageViewerModal from '../common/ImageViewerModal';
-// import ChatSocket from '../util/ChatSocket';
 import BackPressComponent from '../common/BackPressComponent';
 import {NavigationActions} from 'react-navigation';
 import RNExitApp from 'react-native-exit-app';
 import Toast from 'react-native-root-toast';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 const {SpringUtils, spring} = Animated;
 type Props = {};
@@ -78,11 +79,11 @@ class DynamicTabNavigator extends Component<Props> {
                     initialLayout={{width}}
                     lazy={true}
                     timingConfig={{duration: 1}}
-                    // swipeEnabled={false}
                 />
                 <BottomBarRedux onPress={(index) => {
                     this.jumpTo(navigationRoutes[index].key);
                 }} navigationIndex={navigationIndex}/>
+
             </SafeAreaViewPlus>
 
         );
@@ -129,7 +130,7 @@ class BottomBar extends Component {
         this.props.dispatch(NavigationActions.back());
         return true;//默认行为
     };
-    backSetBarStylePages = ['TaskRejectDetailsPage','ChatRoomPage', 'ChatSettings', 'TaskSendFromUserList', 'RechargePage', 'MyAttentionList', 'TaskTurnDownPage'];
+    backSetBarStylePages = ['TaskRejectDetailsPage', 'ChatRoomPage', 'ChatSettings', 'TaskSendFromUserList', 'RechargePage', 'MyAttentionList', 'TaskTurnDownPage'];
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
 
@@ -308,8 +309,6 @@ class BottomBar extends Component {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            // borderWidth:1,
-            // borderColor:'red',
             borderTopWidth: 0.5,
             borderTopColor: '#e8e8e8',
         }}>
@@ -413,8 +412,8 @@ class BottomBarItem extends Component {
             }}>
             <Animated.View style={{
                 transform: [{scale: this.animations.scale}],
-                alignItems:'center',
-                marginTop:hp(0.5),
+                alignItems: 'center',
+                marginTop: hp(0.5),
             }}>
                 <Image
                     style={{height: hp(3), width: hp(3)}}
@@ -447,7 +446,7 @@ class BottomBarItem extends Component {
 
 
             </Animated.View>
-            <Text style={{fontSize: hp(1.5), color: titleColor, marginTop:hp(0.4)}}>{title}</Text>
+            <Text style={{fontSize: hp(1.5), color: titleColor, marginTop: hp(0.4)}}>{title}</Text>
 
         </TouchableOpacity>;
     }

@@ -20,6 +20,7 @@
     "janalytics-react-native": "^1.4.4",
     "jcore-react-native": "^1.6.0",
     "jimp": "^0.9.3",
+    "jpush-react-native": "^2.7.5",
     "jsc-android": "^241213.1.0",
     "jshare-react-native": "^1.4.1",
     "moment": "^2.24.0",

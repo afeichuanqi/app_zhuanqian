@@ -165,7 +165,7 @@ class UserFeedbackListPage extends PureComponent {
 
                     <FlatList
 
-                        ListEmptyComponent={<EmptyComponent type={4} message={'暂时没有反馈记录'} height={height - 120}/>}
+                        ListEmptyComponent={<EmptyComponent type={4} message={'暂时没有反馈记录'} height={height - 100}/>}
                         // ListHeaderComponent={ListHeaderComponent}
                         ref={ref => this.flatList = ref}
                         data={taskData}

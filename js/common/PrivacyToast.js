@@ -13,7 +13,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import {bottomTheme} from '../appSet';
 
 const {width, height} = Dimensions.get('window');
-const { timing} = Animated;
+const {timing} = Animated;
 
 class PrivacyToast extends PureComponent {
     constructor(props) {
@@ -40,7 +40,7 @@ class PrivacyToast extends PureComponent {
         this.timer && clearTimeout(this.timer);
     }
 
-    hide = (callback=null) => {
+    hide = (callback = null) => {
         this._anim = timing(this.animations.scale, {
             duration: 100,
             toValue: 0,
@@ -51,10 +51,10 @@ class PrivacyToast extends PureComponent {
         setTimeout(() => {
             this.setState({
                 visible: false,
-            },callback);
+            }, callback);
         }, 100);
     };
-    show = (callback=null) => {
+    show = (callback = null) => {
         this.setState({
             visible: true,
         }, () => {
@@ -84,8 +84,6 @@ class PrivacyToast extends PureComponent {
                     flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center',
                     alignItems: 'center',
                 }}
-                                  // activeOpacity={1}
-                    // onPress={this.hide}
                 >
                     <Animated.View style={{
                         opacity: this.animations.scale,
@@ -102,10 +100,9 @@ class PrivacyToast extends PureComponent {
                             <Text style={{color: 'rgba(0,0,0,0.9)', fontSize: hp(2.3)}}>隐私政策</Text>
                         </View>
                         <ScrollView
-                            style={{paddingHorizontal: 25,height:hp(30)}}>
+                            style={{paddingHorizontal: 25, height: hp(30)}}>
                             <TouchableOpacity
-                                activeOpacity={1}
-                                onPress={this.props.click}
+
                             >
                                 <Text style={styles.textStyle}>
                                     简易赚app 一款网上兼职、悬赏、互助平台、在校学生、宝妈、赚客、自由职业者都可以利用空闲时间赚钱
@@ -131,6 +128,8 @@ class PrivacyToast extends PureComponent {
                                     <Text style={[styles.textStyle, {color: bottomTheme}]}>
                                         《隐私保护》
                                     </Text>
+
+
                                     <Text style={[styles.textStyle, {}]}>
                                         进行了解
 
@@ -172,6 +171,7 @@ const styles = StyleSheet.create({
         letterSpacing: 0.5,
         color: 'rgba(0,0,0,0.8)',
         lineHeight: hp(3),
+        zIndex:100,
     },
 });
 

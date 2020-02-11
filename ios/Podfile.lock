@@ -30,6 +30,8 @@ PODS:
     - React
   - JCore (1.6.0):
     - React
+  - JPush (2.7.5):
+    - React
   - JShareRN (1.4.1):
     - React
   - JWT (3.0.0-beta.12):
@@ -299,6 +301,7 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - JAnalytics (from `../node_modules/janalytics-react-native`)
   - JCore (from `../node_modules/jcore-react-native`)
+  - JPush (from `../node_modules/jpush-react-native`)
   - JShareRN (from `../node_modules/jshare-react-native`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -370,6 +373,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/janalytics-react-native"
   JCore:
     :path: "../node_modules/jcore-react-native"
+  JPush:
+    :path: "../node_modules/jpush-react-native"
   JShareRN:
     :path: "../node_modules/jshare-react-native"
   RCTRequired:
@@ -455,6 +460,7 @@ SPEC CHECKSUMS:
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   JAnalytics: e68138dd3dd05b8dd4b8161e9eefb873b33c0067
   JCore: 54f06adbbb4a28c11e8bd2466d2a0656ec2f16c9
+  JPush: 9086549521c9031dd9ee25ed36860581f7a5c5a6
   JShareRN: 51e5151336d10345e38fac8b443926339d59dae2
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   libwebp: 3fc89febfa8af824571067b00adc108496febe24

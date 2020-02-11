@@ -9,12 +9,13 @@ import com.microsoft.codepush.react.CodePush;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.yiertong.easyz.BuildConfig;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import cn.jiguang.share.android.api.JShareInterface;     // <--  Import JShareInterface
-import cn.jiguang.share.reactnative.JSharePackage;       // <--  Import JSharePackage
+
+import cn.jiguang.plugins.push.JPushModule;
 public class MainApplication extends Application implements ReactApplication {
 
     private final ReactNativeHost mReactNativeHost =
@@ -28,7 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
                 protected List<ReactPackage> getPackages() {
                     @SuppressWarnings("UnnecessaryLocalVariable")
                     List<ReactPackage> packages = new PackageList(this).getPackages();
-
+//                    packages.add(new JPushPackage());
 
                     // Packages that cannot be autolinked yet can be added manually here, for example:
                     // packages.add(new MyReactNativePackage());
@@ -57,6 +58,8 @@ public class MainApplication extends Application implements ReactApplication {
         initializeFlipper(this); // Remove this line if you don't want Flipper enabled
         JShareInterface.setDebugMode(true);
         JShareInterface.init(this);             //   <-- jshareInit here
+        //调用此方法：点击通知让应用从后台切到前台
+        JPushModule.registerActivityLifecycle(this);
 
     }
 

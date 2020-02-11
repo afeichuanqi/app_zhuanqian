@@ -3,7 +3,7 @@ import React from 'react';
 import {Text} from 'react-native';
 import Emoji from 'react-native-emoji';
 import JShareModule from 'jshare-react-native';
-import Toast from 'react-native-root-toast';
+// import Toast from 'react-native-root-toast';
 
 
 export const isPoneAvailable = (str) => {
@@ -38,7 +38,7 @@ export const authorizeWechat = (callback) => {
     JShareModule.authorize({
         platform: 'wechat',
     }, (info) => {
-        console.log(info);
+        // console.log(info);
         access_token = info.token;
         open_id = info.openId;
         data.access_token = access_token;
@@ -46,13 +46,8 @@ export const authorizeWechat = (callback) => {
         callback(true, data);
 
     }, (msg) => {
-        console.log(msg);
-        if (msg.code == '40009') {
-            Toast.show('未安装微信客户端');
-            callback(false, msg);
-            return ;
+        // console.log(msg);
 
-        }
         if (msg.code == '42001') { //access_token过期
             JShareModule.cancelAuthWithPlatform({
                 platform: 'wechat_session',

@@ -101,22 +101,23 @@ class MyTaskReview extends PureComponent {
                                 borderRadius: 5, alignSelf:'flex-start',
                             }}/>
                         <View style={{marginLeft: 15, }}>
+
                             <Text style={{fontSize: hp(2.2), color: 'black'}}>{taskData.username}</Text>
                             <Text
                                 style={{
-                                    fontSize: hp(1.8),
+                                    fontSize: hp(1.9),
                                     marginTop: hp(0.5),
-                                    color: 'rgba(0,0,0,0.6)',
+                                    color: 'rgba(0,0,0,0.7)',
                                 }}>ID:{taskData.userid}</Text>
 
                             <Text style={{
                                 fontSize: hp(1.8),
                                 marginTop: hp(0.5),
-                                color: 'rgba(0,0,0,0.6)',
+                                color: 'rgba(0,0,0,0.7)',
                             }}>提交时间:{taskData.send_date}</Text>
                             <View style={{
                                 flexDirection: 'row',
-                                marginTop: hp(0.6),
+                                marginTop: hp(0.3),
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 width: screenWidth - 130,
@@ -153,7 +154,7 @@ class MyTaskReview extends PureComponent {
 
                                 multiline={true}
                                 style={{
-                                    height: 100, width: width - 20, backgroundColor: '#f1f1f1',
+                                    height: 100, width: width - 20, backgroundColor: '#f5f5f5',
                                     paddingHorizontal: 5, padding: 0, textAlignVertical: 'top',
                                     paddingTop: 5,
                                     paddingLeft: 5,
