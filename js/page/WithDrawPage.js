@@ -163,7 +163,7 @@ class WithDrawPage extends React.Component {
                                 alignItems: 'center',
                                 borderRadius: 8,
                             }}>
-                            <Text style={{fontSize: 19, color: 'white'}}>支付宝提现</Text>
+                            <Text style={{fontSize: hp(2.2), color: 'white'}}>支付宝提现</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.6}
@@ -178,7 +178,7 @@ class WithDrawPage extends React.Component {
                                 alignItems: 'center',
                                 borderRadius: 8,
                             }}>
-                            <Text style={{fontSize: 19, color: 'white'}}>微信提现</Text>
+                            <Text style={{fontSize: hp(2.2), color: 'white'}}>微信提现</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -57,6 +57,10 @@
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>con.sina</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wb1912593481</string>
+			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>

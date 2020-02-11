@@ -576,12 +576,12 @@ class TaskStepColumn extends Component {
                         <TouchableOpacity
                             activeOpacity={0.6}
                             onPress={() => {
-                                this._imageClick(typeData.uri);
+                                this._imageClick(`${typeData.uri}?imageView2/0/q/75|watermark/1/image/aHR0cDovL2ltYWdlcy5lYXN5LXouY24vVmVyaWZpY2F0aW9uUGljMi5wbmc=/dissolve/90/gravity/SouthEast/dx/10/dy/10`);
                             }}
                             style={{marginRight: wp(3)}}>
                             <FastImagePro
                                 loadingType={2}
-                                source={{uri: typeData.uri}}
+                                source={{uri: `${typeData.uri}?imageView2/0/q/75|watermark/1/image/aHR0cDovL2ltYWdlcy5lYXN5LXouY24vVmVyaWZpY2F0aW9uUGljMi5wbmc=/dissolve/90/gravity/SouthEast/dx/10/dy/10`}}
                                 style={{
                                     width: wp(42),
                                     height: wp(53),

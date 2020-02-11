@@ -5,11 +5,11 @@ export default {
         {id: 3, title: '关注'},
         {id: 4, title: '浏览'},
         {id: 5, title: '下载'},
-        {id: 6, title: '转发'}, {id: 7, title: '下载'},
-        {id: 8, title: '转发'}, {id: 9, title: '下载'},
-        {id: 10, title: '转发'}, {id: 11, title: '下载'},
-        {id: 12, title: '转发'}, {id: 13, title: '下载'},
-        {id: 14, title: '转发'}, {id: 15, title: '下载'},
+        {id: 6, title: '转发'}, {id: 7, title: '发帖'},
+        {id: 8, title: '回帖'}, {id: 9, title: '高价'},
+        {id: 10, title: '电商'}, {id: 11, title: '实名'},
+        {id: 12, title: '特单'}, {id: 13, title: '砍价'},
+        {id: 14, title: '其它'}
     ],
     app_task_device: [
         {id: 1, title: '全部'},

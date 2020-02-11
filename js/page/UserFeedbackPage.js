@@ -72,52 +72,55 @@ class UserFeedbackPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <KeyboardAwareScrollView
-                                         enableOnAndroid={true} style={{flex: 1, backgroundColor: '#efefef'}}>
-                    <View>
-                        <Text style={{
-                            color: 'rgba(0,0,0,0.5)',
-                            paddingTop: 10,
-                            paddingLeft: 5,
-                            marginBottom: 10,
-                        }}>标签</Text>
-                        <RadioCheck ref={ref => this.radioCheck = ref}/>
-                    </View>
-                    <View style={{marginTop: 10}}>
-                        <Text style={{
-                            color: 'rgba(0,0,0,0.5)',
-                            paddingTop: 10,
-                            paddingLeft: 5,
-                            marginBottom: 10,
-                        }}>反馈内容</Text>
-                        <InputTextImage ref={ref => this.inputTextImage = ref} userinfo={this.props.userinfo}/>
-                    </View>
-                    <View style={{marginTop: 10}}>
-                        <Text style={{
-                            color: 'rgba(0,0,0,0.5)',
-                            paddingTop: 10,
-                            paddingLeft: 5,
-                            marginBottom: 10,
-                        }}>联系方式</Text>
-                        <InputPro ref={ref => this.inputPro = ref}/>
-                    </View>
-                    <View style={{height: 50}}/>
+                <View style={{flex:1}}>
+                    <KeyboardAwareScrollView
+                        enableOnAndroid={true} style={{flex: 1, backgroundColor: '#efefef'}}>
+                        <View>
+                            <Text style={{
+                                color: 'rgba(0,0,0,0.5)',
+                                paddingTop: 10,
+                                paddingLeft: 5,
+                                marginBottom: 10,
+                            }}>标签</Text>
+                            <RadioCheck ref={ref => this.radioCheck = ref}/>
+                        </View>
+                        <View style={{marginTop: 10}}>
+                            <Text style={{
+                                color: 'rgba(0,0,0,0.5)',
+                                paddingTop: 10,
+                                paddingLeft: 5,
+                                marginBottom: 10,
+                            }}>反馈内容</Text>
+                            <InputTextImage ref={ref => this.inputTextImage = ref} userinfo={this.props.userinfo}/>
+                        </View>
+                        <View style={{marginTop: 10}}>
+                            <Text style={{
+                                color: 'rgba(0,0,0,0.5)',
+                                paddingTop: 10,
+                                paddingLeft: 5,
+                                marginBottom: 10,
+                            }}>联系方式</Text>
+                            <InputPro ref={ref => this.inputPro = ref}/>
+                        </View>
+                        <View style={{height: 50}}/>
 
-                </KeyboardAwareScrollView>
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={this.sendView}
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        width,
-                        height: 50,
-                        backgroundColor: bottomTheme,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                    <Text style={{color: 'white', fontSize: 18}}>提交</Text>
-                </TouchableOpacity>
+                    </KeyboardAwareScrollView>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={this.sendView}
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width,
+                            height: 50,
+                            backgroundColor: bottomTheme,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Text style={{color: 'white', fontSize: 18}}>提交</Text>
+                    </TouchableOpacity>
+                </View>
+
             </SafeAreaViewPlus>
         );
     }

@@ -127,7 +127,7 @@ class WithDrawAccount extends React.Component {
                         }}
                         style={{
                             marginTop: 40,
-                            borderRadius: 8,
+                            borderRadius: 5,
                             width: wp(90),
                             height: hp(8),
                             alignSelf: 'center',
@@ -135,7 +135,7 @@ class WithDrawAccount extends React.Component {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                        <Text style={{color: 'white', fontSize: 19}}>保存</Text>
+                        <Text style={{color: 'white', fontSize: hp(2.4)}}>保存</Text>
                     </TouchableOpacity>
                 </KeyboardAwareScrollView>
 
@@ -179,13 +179,13 @@ class InputItem extends React.PureComponent {
                 paddingHorizontal: 15,
                 alignItems: 'center',
             }}>
-                <Text style={{fontSize: 16,}}>{title}</Text>
+                <Text style={{fontSize: hp(2.1),}}>{title}</Text>
                 <TextInput
                     value={value}
                     style={{
                         textAlign: 'right',
                         flex: 1,
-                        fontSize: 16,
+                        fontSize:  hp(2.1),
                         color: 'rgba(0,0,0,0.5)',
                     }}
                     onChangeText={(text) => {

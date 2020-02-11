@@ -23,7 +23,7 @@
 	<key>sinaWeiboAppSecret</key>
 	<string>addb2a629134f52b02de9cad184034a6</string>
 	<key>sinaRedirectUri</key>
-	<string>http://easy-z.cn</string>
+	<string>https://www.easy-z.cn</string>
 	<key>facebookAppId</key>
 	<string>177776412817787</string>
 	<key>facebookDisplayName</key>

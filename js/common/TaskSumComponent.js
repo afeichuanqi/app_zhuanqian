@@ -147,7 +147,7 @@ class TaskSumComponent extends Component {
                         </View>
 
                     </View>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row', flexWrap:'wrap',width:wp(55)}}>
                         {item.recommendIsExp == 1 && <Image
                             resizeMode={'contain'}
                             source={require('../res/img/item_icon/tuijian_item.png')}
@@ -172,6 +172,7 @@ class TaskSumComponent extends Component {
                             style={styles.itemIconStyle}
 
                         />}
+
                     </View>
                     <TouchableOpacity
                         onPress={() => {

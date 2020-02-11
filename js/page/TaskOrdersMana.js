@@ -303,9 +303,9 @@ class FristListComponent extends PureComponent {
             NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
         }
     };
-    _itemRedoTask = () => {
+    _itemRedoTask = (item) => {
+        console.log(item);
         userRedoTask({SendFormTaskId: item.sendFormId}, this.props.userinfo.token).then((result) => {
-
             EventBus.getInstance().fireEvent(EventTypes.update_task_orders_mana, {indexs: [0, 2]});
             NavigationUtils.goPage({task_id: result.task_id, test: false}, 'TaskDetails');
         }).catch(msg => {
@@ -339,7 +339,7 @@ class FristListComponent extends PureComponent {
             onPress={()=>{
                 this._itemPress(item)
             }}
-            redoTask={this._itemRedoTask}
+            redoTask={()=>{this._itemRedoTask(item)}}
         />;
     };
 
@@ -446,9 +446,9 @@ class OrdersItem extends React.Component {
             style={{
                 fontWeight: 'bold',
                 color: 'black',
-                width: width - 150,
+                width: wp(55),
             }}>
-            {item && renderEmoji(`${item.taskId} - ${item.task_title}`, [], 15, 0, 'black').map((item, index) => {
+            {item && renderEmoji(`${item.taskId} - ${item.task_title}`, [], hp(2), 0, 'black').map((item, index) => {
                 return item;
             })}
         </Text>;
@@ -456,7 +456,7 @@ class OrdersItem extends React.Component {
 
             style={{
                 backgroundColor: 'white', borderBottomWidth: 0.3,
-                borderBottomColor: '#e8e8e8',
+                borderBottomColor: '#f0f0f0',
                 opacity:this.animations.scale,
                 // transform: [{scale: this.animations.scale}],
             }}>
@@ -483,28 +483,28 @@ class OrdersItem extends React.Component {
                             fontSize: 13,
                             color: 'black',
                             opacity: 0.7,
-                            marginTop: 5,
+                            marginTop: hp(0.5),
                         }}>到期时间:{item.orderExpTime}</Text>
                         <Text style={{color: 'red', fontSize: 13, marginTop: 5}}>请在{item.orderTimeTitle}内完成</Text>
                     </View> : status == 2 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: hp(1.7),
                             color: 'black',
                             opacity: 0.7,
-                            marginTop: 5,
+                            marginTop: hp(0.5),
                         }}>审核期限:{item.reviewExpTime}</Text>
                         <Text style={{
                             color: 'red',
-                            fontSize: 13,
-                            marginTop: 5,
+                            fontSize: hp(1.7),
+                            marginTop: hp(0.5),
                         }}>将在{item.reviewTimeTitle}内完成审核,期限外自动完成</Text>
                     </View> : status == 3 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: hp(1.7),
                             opacity: 0.7,
-                            marginTop: 5,
+                            marginTop: hp(0.5),
                             color: 'black',
                         }}>审核时间:{item.review_time1}</Text>
                         {(item.isSignUpExp == 1 && parseInt(item.align_num) <= 1) &&
@@ -517,8 +517,8 @@ class OrdersItem extends React.Component {
                             numberOfLines={2}
                             style={{
                                 color: 'red',
-                                fontSize: 13,
-                                marginTop: 5,
+                                fontSize: hp(1.7),
+                                marginTop: hp(0.5),
                                 width: width - 130,
 
                             }}>驳回理由:
@@ -529,9 +529,9 @@ class OrdersItem extends React.Component {
                     </View> : status == 4 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: hp(1.7),
                             opacity: 0.7,
-                            marginTop: 5,
+                            marginTop: hp(0.5),
                             color: 'black',
                         }}>审核时间:{item.review_time1}</Text>
                         <Text
@@ -539,8 +539,8 @@ class OrdersItem extends React.Component {
                             numberOfLines={2}
                             style={{
                                 color: 'red',
-                                fontSize: 13,
-                                marginTop: 5,
+                                fontSize: hp(1.7),
+                                marginTop: hp(0.5),
                                 width: width - 130,
 
                             }}>恭喜您,已经通过此任务
@@ -551,7 +551,7 @@ class OrdersItem extends React.Component {
                 </View>
 
                 <View style={{height: 50, alignItems: 'flex-start'}}>
-                    <Text style={{fontSize: 17, color: 'red'}}>+{item.reward_price}元</Text>
+                    <Text style={{fontSize: hp(2.3), color: 'red'}}>+{item.reward_price}元</Text>
                 </View>
             </TouchableOpacity>
 
@@ -568,22 +568,22 @@ class OrdersItem extends React.Component {
                             width: 60, height: 25, justifyContent: 'center',
                             alignItems: 'center', borderRadius: 5,
                         }}>
-                        <Text style={{color: bottomTheme, fontSize: 12}}>取消报名</Text>
+                        <Text style={{color: bottomTheme, fontSize: hp(1.7)}}>取消报名</Text>
                     </TouchableOpacity>
                     : status == 2 ? <View
                         style={{
                             backgroundColor: 'white', width: 60, height: 25, justifyContent: 'center',
                             alignItems: 'center', borderRadius: 5,
                         }}>
-                        <Text style={{color: 'black', opacity: 0.7, fontSize: 12}}>等待审核</Text>
+                        <Text style={{color: 'black', opacity: 0.7, fontSize: hp(1.7)}}>等待审核</Text>
                     </View> : status == 3 ?
                         <TouchableOpacity
                             onPress={this.props.redoTask}
                             style={{
-                                width: 50, height: 20, justifyContent: 'center',
+                                width: 50, height: 15, justifyContent: 'center',
                                 alignItems: 'center', borderRadius: 3,
                             }}>
-                            <Text style={{color: bottomTheme, fontSize: 12}}>重新提交</Text>
+                            <Text style={{color: bottomTheme, fontSize: hp(1.7)}}>重新提交</Text>
                         </TouchableOpacity>
                         : null}
             </View>

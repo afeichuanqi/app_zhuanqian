@@ -214,6 +214,19 @@ class ScrollItem extends React.Component {
                            borderTopRightRadius: 5,
                        }}/>
             </View>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                <Text numberOfLines={1} style={{fontSize: hp(2), color: 'black', opacity: 0.8}}>{item.title}</Text>
+                <View style={{
+                    width: 2,
+                    height: 2,
+                    borderRadius: 2,
+                    backgroundColor: 'black',
+                    marginHorizontal: 3,
+                    opacity: 0.7,
+                }}/>
+                <Text numberOfLines={1}
+                      style={{fontSize: hp(2), color: 'black', width: 65, opacity: 0.8}}>{item.task_name}</Text>
+            </View>
             {item.reward_price && <View style={{
                 flexDirection: 'row', alignItems: 'center',
                 elevation: 1, marginTop: 3,
@@ -240,19 +253,7 @@ class ScrollItem extends React.Component {
 
                 }}>元</Text>
             </View>}
-            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-                <Text numberOfLines={1} style={{fontSize: hp(2), color: 'black', opacity: 0.8}}>{item.title}</Text>
-                <View style={{
-                    width: 2,
-                    height: 2,
-                    borderRadius: 2,
-                    backgroundColor: 'black',
-                    marginHorizontal: 3,
-                    opacity: 0.7,
-                }}/>
-                <Text numberOfLines={1}
-                      style={{fontSize: hp(2), color: 'black', width: 65, opacity: 0.8}}>{item.task_name}</Text>
-            </View>
+
 
 
         </TouchableOpacity>;

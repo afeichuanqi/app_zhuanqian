@@ -87,143 +87,119 @@ class RechargePage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
-                    {this.props.userinfo.login && <TouchableOpacity
-                        onPress={() => {
-                            NavigationUtils.goPage({userid: this.props.userinfo.userid}, 'ShopInfoPage');
-                        }}
-                        activeOpacity={0.6}
-                        style={{
-                            flexDirection: 'row',
-                            padding: 10,
-                            paddingLeft: 15,
-                            backgroundColor: 'white',
-                            marginTop: 3,
-                            alignItems: 'center',
-                            paddingVertical: hp(2),
-                        }}>
-                        <FastImagePro
-                            source={{uri: this.props.userinfo.avatar_url}}
-                            style={{width: hp(9), height: hp(9), borderRadius: hp(10) / 2}}
-                        />
-                        <View style={{
-                            marginLeft: 10,
-                            justifyContent: 'space-around',
-                            height: hp(10),
-                            paddingVertical: 5,
-                        }}>
-                            <Text style={{fontSize: hp(2.7), color: 'black'}}>{this.props.userinfo.username}</Text>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{flex:1}}>
+                    <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#f0f0f0'}}>
+                        {this.props.userinfo.login && <TouchableOpacity
+                            onPress={() => {
+                                NavigationUtils.goPage({userid: this.props.userinfo.userid}, 'ShopInfoPage');
+                            }}
+                            activeOpacity={0.6}
+                            style={{
+                                flexDirection: 'row',
+                                padding: 10,
+                                paddingLeft: 15,
+                                backgroundColor: 'white',
+                                marginTop: 3,
+                                alignItems: 'center',
+                                paddingVertical: hp(2),
+                            }}>
+                            <FastImagePro
+                                source={{uri: this.props.userinfo.avatar_url}}
+                                style={{width: hp(9), height: hp(9), borderRadius: hp(10) / 2}}
+                            />
+                            <View style={{
+                                marginLeft: 10,
+                                justifyContent: 'space-around',
+                                height: hp(10),
+                                paddingVertical: 5,
+                            }}>
+                                <Text style={{fontSize: hp(2.7), color: 'black'}}>{this.props.userinfo.username}</Text>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <Image
-                                        resizeMode={'stretch'}
-                                        style={{height: hp(1.6), width: hp(1.6)}}
-                                        source={require('.././res/img/recharge/recharge_id.png')}/>
-                                    <Text style={{
-                                        fontSize: hp(1.7),
-                                        marginLeft: 4,
-                                        color: 'rgba(0,0,0,0.7)',
-                                    }}>{this.props.userinfo.userid}</Text>
-                                </View>
-                                <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
-                                    <Image
-                                        resizeMode={'stretch'}
-                                        style={{height: hp(1.6), width: hp(1.6)}}
-                                        source={require('.././res/img/recharge/recharge_money.png')}/>
-                                    <Text style={{
-                                        fontSize: hp(1.7),
-                                        marginLeft: 4,
-                                        color: 'rgba(0,0,0,0.7)',
-                                    }}>{this.props.userinfo.task_currency}</Text>
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <Image
+                                            resizeMode={'stretch'}
+                                            style={{height: hp(1.6), width: hp(1.6)}}
+                                            source={require('.././res/img/recharge/recharge_id.png')}/>
+                                        <Text style={{
+                                            fontSize: hp(1.7),
+                                            marginLeft: 4,
+                                            color: 'rgba(0,0,0,0.7)',
+                                        }}>{this.props.userinfo.userid}</Text>
+                                    </View>
+                                    <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
+                                        <Image
+                                            resizeMode={'stretch'}
+                                            style={{height: hp(1.6), width: hp(1.6)}}
+                                            source={require('.././res/img/recharge/recharge_money.png')}/>
+                                        <Text style={{
+                                            fontSize: hp(1.7),
+                                            marginLeft: 4,
+                                            color: 'rgba(0,0,0,0.7)',
+                                        }}>{this.props.userinfo.task_currency}</Text>
+                                    </View>
                                 </View>
                             </View>
+
+                        </TouchableOpacity>}
+
+                        <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
+                            <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>选择数量:</Text>
+                            <View style={{
+                                width: width - 20,
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                justifyContent:'space-around',
+                            }}>
+                                {this.nums.map((item, index, arr) => {
+                                    return this.renderMoneyBox(index, item);
+                                })}
+                            </View>
+                            <InputPro onChangeText={(text) => {
+                                this.setState({
+                                    rechargeVal: parseFloat(text),
+                                });
+                            }}/>
+
                         </View>
+                        <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
+                            <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
+                            <PayType ref={ref => this.payType = ref}/>
+                        </View>
+                        <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 10}}>
+                            <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>应付:</Text>
+                            <Text style={{
+                                fontSize: hp(3),
+                                color: bottomTheme,
+                                marginHorizontal: 5,
+                            }}>{this.state.rechargeVal}</Text>
+                            <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>元</Text>
+                        </View>
+                        <View style={{marginTop: 20, padding: 10}}>
+                            <Text style={{fontWeight: 'bold', fontSize: hp(2)}}>充值须知
+                            </Text>
+                            <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                            </Text>
+                            <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
+                            </Text>
+                            <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
+                            </Text>
+                        </View>
+                        <View style={{height: hp(7)}}/>
+                    </KeyboardAwareScrollView>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={this.sureRecharGe}
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
 
-                    </TouchableOpacity>}
-
-                    <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>选择数量:</Text>
-                        <View style={{
-                            width: width - 20,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            justifyContent:'space-around',
+                            width: wp(100), height: hp(7), alignItems: 'center', backgroundColor: bottomTheme,
+                            justifyContent: 'center', alignSelf: 'center',
                         }}>
-                            {this.nums.map((item, index, arr) => {
-                                return this.renderMoneyBox(index, item);
-                            })}
-                        </View>
-                        <InputPro onChangeText={(text) => {
-                            this.setState({
-                                rechargeVal: parseFloat(text),
-                            });
-                        }}/>
-                        {/*<View style={{marginVertical: 20, marginLeft: 5, flexDirection: 'row'}}>*/}
-                        {/*    <Text style={{*/}
-                        {/*        fontSize: 25,*/}
-                        {/*        fontWeight: 'bold',*/}
-                        {/*        color: 'black',*/}
-                        {/*        position: 'absolute',*/}
-                        {/*        left: 0,*/}
-                        {/*        top: 10,*/}
-                        {/*    }}>¥</Text>*/}
-                        {/*    <TextInput*/}
-                        {/*        keyboardType={'number-pad'}*/}
-                        {/*        onChangeText={(text) => {*/}
-                        {/*            this.rechargeVal = text;*/}
-                        {/*        }}*/}
-                        {/*        style={{*/}
-                        {/*            fontWeight: 'bold', fontSize: 35, width: width - 40, borderBottomWidth: 1,*/}
-                        {/*            borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 10,*/}
-                        {/*        }}*/}
-                        {/*    />*/}
-                        {/*</View>*/}
-                        {/*<View style={{paddingVertical: 10}}>*/}
-                        {/*    <View style={{alignSelf: 'center', flexDirection: 'row'}}>*/}
-                        {/*        {this.items.map((item, index) => {*/}
-                        {/*            return this.genRadio(item, index);*/}
-                        {/*        })}*/}
-                        {/*    </View>*/}
-                        {/*</View>*/}
+                        <Text style={{fontSize: hp(2.5), fontWeight: 'bold', color: 'white'}}>确认充值</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    </View>
-                    <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
-                        <PayType ref={ref => this.payType = ref}/>
-                    </View>
-                    <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 10}}>
-                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>应付:</Text>
-                        <Text style={{
-                            fontSize: hp(3),
-                            color: bottomTheme,
-                            marginHorizontal: 5,
-                        }}>{this.state.rechargeVal}</Text>
-                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>元</Text>
-                    </View>
-                    <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold', fontSize: hp(2)}}>充值须知
-                        </Text>
-                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
-                        </Text>
-                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
-                        </Text>
-                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
-                        </Text>
-                    </View>
-                    <View style={{height: hp(7)}}/>
-                </KeyboardAwareScrollView>
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={this.sureRecharGe}
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-
-                        width: wp(100), height: hp(7), alignItems: 'center', backgroundColor: bottomTheme,
-                        justifyContent: 'center', alignSelf: 'center',
-                    }}>
-                    <Text style={{fontSize: hp(2.5), fontWeight: 'bold', color: 'white'}}>确认充值</Text>
-                </TouchableOpacity>
             </SafeAreaViewPlus>
         );
     }

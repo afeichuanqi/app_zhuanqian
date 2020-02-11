@@ -28,6 +28,7 @@ import actions from '../action';
 import Toast from 'react-native-root-toast';
 import ToastSelect from '../common/ToastSelectTwo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const width = Dimensions.get('window').width;
 
 class WithDrawPayPage extends React.Component {
@@ -121,14 +122,14 @@ class WithDrawPayPage extends React.Component {
 
                                 style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Image
-                                    style={{width: 50, height: 50, borderRadius: 25}}
+                                    style={{width: hp(7), height: hp(7), borderRadius: hp(3.5)}}
                                     source={pay_source}
                                 />
                                 <View style={{height: 50, justifyContent: 'space-around', marginLeft: 10}}>
                                     <Text
-                                        style={{color: 'rgba(0,0,0,1)'}}>{pay}:{pay_account}</Text>
+                                        style={{color: 'rgba(0,0,0,1)', fontSize:hp(2)}}>{pay}:{pay_account}</Text>
                                     <Text style={{
-                                        fontSize: 12,
+                                        fontSize: hp(1.7),
                                         opacity: 0.5,
                                         color: 'black',
 
@@ -144,7 +145,7 @@ class WithDrawPayPage extends React.Component {
                                 <View style={{height: 30, justifyContent: 'space-around', marginLeft: 10}}>
                                     <Text style={{
                                         // fontWeight: 'bold',
-                                        fontSize: 12,
+                                        fontSize: hp(1.6),
                                         opacity: 0.5,
                                         color: 'black',
 
@@ -159,10 +160,10 @@ class WithDrawPayPage extends React.Component {
                     </TouchableOpacity>
 
                     <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                        <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.8)'}}>请输入提现金额:</Text>
+                        <Text style={{fontSize: hp(2.1), color: 'rgba(0,0,0,0.8)'}}>请输入提现金额:</Text>
                         <View style={{marginVertical: 15, marginLeft: 5, flexDirection: 'row'}}>
                             <Text style={{
-                                fontSize: 25,
+                                fontSize: hp(3),
                                 color: 'black',
                                 fontWeight: 'bold',
                                 position: 'absolute',
@@ -177,7 +178,7 @@ class WithDrawPayPage extends React.Component {
                         </View>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
                             <Text style={{
-                                fontSize: 13,
+                                fontSize: hp(1.7),
                                 color: 'rgba(0,0,0,0.5)',
                             }}>可提现金额{this.props.userinfo.task_currency}元</Text>
                             <TouchableOpacity
@@ -187,7 +188,7 @@ class WithDrawPayPage extends React.Component {
                                 }}
                             >
 
-                                <Text style={{color: bottomTheme, fontWeight: 'bold'}}>全部提现</Text>
+                                <Text style={{color: bottomTheme, fontSize:hp(1.8)}}>全部提现</Text>
                             </TouchableOpacity>
 
                         </View>
@@ -214,17 +215,17 @@ class WithDrawPayPage extends React.Component {
                             alignSelf: 'center',
                             borderRadius: 8,
                         }}>
-                        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>确认提现</Text>
+                        <Text style={{fontSize: hp(2.3), fontWeight: 'bold', color: 'white'}}>确认提现</Text>
                     </TouchableOpacity>
                     <View style={{marginTop: 20, padding: 10}}>
-                        <Text style={{fontWeight: 'bold', fontSize: 15}}>提现须知
+                        <Text style={{ fontSize: hp(2)}}>提现须知
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付提现、后续其他提现方式及时公告通知大家
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付提现、后续其他提现方式及时公告通知大家
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、提现金额需大于1
-                            小于1000元之间的证书，提现时间为工作日9:00 -- 17:00
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、提现金额需大于1
+                            小于1000元之间的整数，提现时间为工作日9:00 -- 17:00
                         </Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、每天只能提现一次,请知晓
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、每天只能提现一次,请知晓
                         </Text>
                     </View>
                 </KeyboardAwareScrollView>
@@ -282,10 +283,10 @@ class InputTextPro extends React.PureComponent {
         return <TextInput
             keyboardType={'number-pad'}
             style={{
-                fontWeight: 'bold', fontSize: 30, width: width - 40, borderBottomWidth: 1,
+                fontWeight: 'bold', fontSize: hp(4), width: width - 40, borderBottomWidth: 1,
                 borderBottomColor: '#e8e8e8', padding: 0, paddingLeft: 25, paddingBottom: 5,
             }}
-            maxLength={4}
+            maxLength={6}
             value={this.state.price}
             onChangeText={(text) => {
                 this.setState({

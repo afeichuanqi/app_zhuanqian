@@ -443,9 +443,9 @@ class TopInfoColumn extends PureComponent {
                         }}
                         style={{marginTop: hp(7), flexDirection: 'row', alignItems: 'center'}}>
 
-                        <SvgUri width={hp(1.9)} height={hp(1.9)} style={{marginRight: 5}} fill={'white'}
+                        <SvgUri width={hp(1.8)} height={hp(1.8)} style={{marginRight: 5}} fill={'white'}
                                 svgXmlData={shop}/>
-                        <Text style={{fontSize: hp(2.05), color: 'white'}}>我的店铺 > </Text>
+                        <Text style={{fontSize: hp(1.9), color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{marginTop: hp(2)}}

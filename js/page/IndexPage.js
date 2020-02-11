@@ -209,11 +209,11 @@ class HomePage extends PureComponent {
                     }}>
                         <TabBar
                             style={{
-                                height: 28,
+                                height: hp(4),
                                 paddingLeft: 10,
                             }}
                             position={this.position}
-                            contentContainerStyle={{paddingTop: 5}}
+                            contentContainerStyle={{paddingTop: hp(0.5)}}
                             routes={navigationRoutes}
                             index={navigationIndex}
                             sidePadding={0}
@@ -487,7 +487,7 @@ class LunBoComponent extends React.Component {
         return <View style={{
             alignItems: 'center',
             height: lunboHeight,
-            paddingTop: 20,
+            paddingTop: hp(3.5),
             backgroundColor: theme,
             width: width,
             marginBottom:-7,

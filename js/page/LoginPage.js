@@ -181,7 +181,13 @@ class LoginPage extends PureComponent {
                             <TouchableOpacity
                                 activeOpacity={0.5}
                                 onPress={() => {
-
+                                    JShareModule.authorize({
+                                        platform: 'weibo',
+                                    },(info)=>{
+                                        console.log(info);
+                                    },(msg)=>{
+                                        console.log(msg);
+                                    })
                                 }}
                             >
                                 <Image

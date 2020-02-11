@@ -159,9 +159,8 @@ class UserFeedbackListPage extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <KeyboardAvoidingView>
 
-                </KeyboardAvoidingView>
+
                 <View style={{flex: 1}}>
 
                     <FlatList
@@ -199,24 +198,25 @@ class UserFeedbackListPage extends PureComponent {
                             this.canLoadMore = true; // flatview内部组件布局完成以后会调用这个方法
                         }}
                     />
-                </View>
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={() => {
-                        NavigationUtils.goBack(this.props.navigation);
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => {
+                            NavigationUtils.goBack(this.props.navigation);
 
-                    }}
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        width,
-                        height: 50,
-                        backgroundColor: bottomTheme,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                    <Text style={{color: 'white', fontSize: 18}}>我要反馈</Text>
-                </TouchableOpacity>
+                        }}
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width,
+                            height: 50,
+                            backgroundColor: bottomTheme,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Text style={{color: 'white', fontSize: 18}}>我要反馈</Text>
+                    </TouchableOpacity>
+                </View>
+
             </SafeAreaViewPlus>
         );
     }

@@ -110,10 +110,10 @@ export default class FilterComponent extends PureComponent {
                     backgroundColor: 'white',
                 }}>
                     {/*栏目二*/}
-                    <View style={{flexDirection: 'row', marginTop: hp(3.1), marginBottom: hp(0.8)}}>
+                    <View style={{flexDirection: 'row', alignItems:'center',marginTop: hp(3.1), marginBottom: hp(0.8)}}>
                         <View style={{
                             height: hp(1.5), width: wp(0.8), backgroundColor: bottomTheme,
-
+                            top:-2
                         }}/>
                         <View style={{marginLeft: wp(3.7)}}>
                             <Text style={{
@@ -140,10 +140,10 @@ export default class FilterComponent extends PureComponent {
                         })}
                     </View>
                     {/*栏目一*/}
-                    <View style={{flexDirection: 'row', marginTop: hp(1.7), marginBottom: hp(1)}}>
+                    <View style={{flexDirection: 'row', marginTop: hp(1.7), alignItems:'center',marginBottom: hp(1)}}>
                         <View style={{
                             height: hp(1.5), width: wp(0.8), backgroundColor: bottomTheme,
-
+                            top:-2
                         }}/>
                         <View style={{marginLeft: wp(3.7)}}>
                             <Text style={{
@@ -179,10 +179,12 @@ export default class FilterComponent extends PureComponent {
                         activeOpacity={0.6}
                         onPress={this._ResetClick}
                         style={{
-                            width: width / 2 - 60, height: hp(4.7), borderWidth: wp(0.3), borderColor: '#e8e8e8',
+                            width: width / 2 - 60, height: hp(6),  backgroundColor: 'white',
+                            borderWidth: 0.3, borderColor: bottomTheme,
                             justifyContent: 'center', borderRadius: 5,
                         }}>
-                        <Text style={{alignSelf: 'center', color: 'black', opacity: 0.7, fontSize:hp(2.1)}}>
+                        <Text style={{alignSelf: 'center',
+                            fontWeight:'bold', color: bottomTheme, opacity: 0.7, fontSize:hp(2.0)}}>
                             重置
                         </Text>
                     </TouchableOpacity>
@@ -190,10 +192,10 @@ export default class FilterComponent extends PureComponent {
                         onPress={this._sureClick}
                         activeOpacity={0.6}
                         style={{
-                            width: width / 2, height: hp(4.7), borderWidth: wp(0.3), borderColor: '#e8e8e8',
+                            width: width / 2, height: hp(6), borderWidth: wp(0.3), borderColor: '#e8e8e8',
                             justifyContent: 'center', backgroundColor: bottomTheme, borderRadius: 5,
                         }}>
-                        <Text style={{alignSelf: 'center', color: 'white', fontSize: hp(2.1)}}>
+                        <Text style={{alignSelf: 'center',fontWeight:'bold', color: 'white', fontSize: hp(2.0)}}>
                             确定
                         </Text>
                     </TouchableOpacity>
@@ -279,16 +281,16 @@ class TypeComponent extends Component {
                 width: width / 4 - 20,
                 height: hp(3.7),
                 marginTop: hp(1.6),
-                backgroundColor: '#f1f1f1',
+                backgroundColor: '#f7f7f7',
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginHorizontal: wp(2.4),
                 borderRadius: 3,
-                borderWidth: 0.3,
-                borderColor: 'rgba(0,0,0,0.2)',
-            }, !checked ? {backgroundColor: '#f6f6f6'} : {
+                // borderWidth: 0.3,
+                // borderColor: 'rgba(0,0,0,0.2)',
+            }, !checked ? {backgroundColor: '#f7f7f7'} : {
                 backgroundColor: 'rgba(33,150,243,0.1)',
-                borderWidth: wp(0.2), borderColor: bottomTheme,
+                borderWidth: 0.3, borderColor: bottomTheme,
             }]}>
             <Text style={[{
                 fontSize: hp(2.0),

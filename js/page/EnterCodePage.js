@@ -289,13 +289,18 @@ class CodeInput extends PureComponent {
         const {phone, updatePhone} = this.props;
         const code = this.iptArrayNum.join('');
         if (updatePhone) {
-            const {routes, navigation,onChangePhone,userinfo} = this.props;
-            onChangePhone(phone, code, userinfo.token, (bool,data) => {
-                if(bool){
-                    const key = routes[0].routes[1].key;
+            // const {routes, navigation,onChangePhone,userinfo} = this.props;
+            // const key = routes[0].routes[1].routeName;
+            // console.log(routes,key);
+            // NavigationUtils.goPage({}, key);
+            // NavigationUtils.goBack(navigation, key);
+            const {routes, navigation, onChangePhone, userinfo} = this.props;
+            onChangePhone(phone, code, userinfo.token, (bool, data) => {
+                if (bool) {
+                    const key = routes[0].routes[routes[0].routes.length - 2].key;
                     NavigationUtils.goBack(navigation, key);
-                }else{
-                    console.log(data.msg)
+                } else {
+                    // console.log(data.msg)
                     this.props.showError(data.msg);
                     this.iptArrayNum = new Array(this.props.iptNum);
                     this.refs[`text0`].focus();
@@ -315,7 +320,8 @@ class CodeInput extends PureComponent {
                 if (isTrue) {
                     this.props.showError('');
                     const {routes, navigation} = this.props;
-                    const key = routes[0].routes[1].key;
+                    const key = routes[0].routes[routes[0].routes.length - 2].key;
+                    console.log(routes);
                     Global.token = data.token;//进行验证token
                     ChatSocket.verifyIdentity();//进行验证token
                     NavigationUtils.goBack(navigation, key);

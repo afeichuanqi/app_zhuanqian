@@ -97,7 +97,7 @@ class MyTaskReview extends PureComponent {
                         <Image
                             source={{uri: taskData.avatar_url}}
                             style={{
-                                width: 40, height: 40,
+                                width: hp(10), height: hp(10),
                                 borderRadius: 5, alignSelf:'flex-start',
                             }}/>
                         <View style={{marginLeft: 15, }}>
@@ -105,23 +105,23 @@ class MyTaskReview extends PureComponent {
                             <Text
                                 style={{
                                     fontSize: hp(1.8),
-                                    marginTop: 5,
+                                    marginTop: hp(0.5),
                                     color: 'rgba(0,0,0,0.6)',
                                 }}>ID:{taskData.userid}</Text>
 
                             <Text style={{
-                                fontSize: hp(1.7),
-                                marginTop: 5,
+                                fontSize: hp(1.8),
+                                marginTop: hp(0.5),
                                 color: 'rgba(0,0,0,0.6)',
                             }}>提交时间:{taskData.send_date}</Text>
                             <View style={{
                                 flexDirection: 'row',
-                                marginTop: 5,
+                                marginTop: hp(0.6),
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                width: screenWidth - 80,
+                                width: screenWidth - 130,
                             }}>
-                                <Text style={{fontSize: hp(2.0), color: 'rgba(0,0,0,1)',width:wp(70)}}>
+                                <Text style={{fontSize: hp(2.0), color: 'rgba(0,0,0,1)',width:wp(60)}}>
 
                                     {taskData && renderEmoji(`${taskData.task_title}`, [], hp(2.0), 0, 'black').map((item, index) => {
                                         return item;

@@ -39,10 +39,8 @@ export default class TaskReleaseItem extends PureComponent {
                     flex: 1,
                     flexDirection: 'row',
                     paddingHorizontal: 10,
-                    // paddingRight:15,
                     paddingTop: 25,
-                    // paddingBottom: 25,
-                    height: 90,
+                    height:  hp(12),
                     backgroundColor: 'white',
                 }}
             >
@@ -57,6 +55,7 @@ export default class TaskReleaseItem extends PureComponent {
                     paddingLeft: 10,
                     paddingRight: 5,
                     justifyContent: 'space-between',
+                    // paddingVertical:1,
 
                 }}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -74,7 +73,7 @@ export default class TaskReleaseItem extends PureComponent {
                             }}
                                   numberOfLines={1}
                             >
-                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [], hp(2.3), 0, 'black').map((item, index) => {
+                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [], hp(2.2), 0, 'black').map((item, index) => {
                                     return item;
                                 })}
                             </Text>
@@ -110,14 +109,14 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
+                            <Text style={{fontSize: hp(1.7), color: 'rgba(0,0,0,0.8)'}}>{item.typeTitle}</Text>
                             <View style={{
-                                height: hp(1.8),
+                                height: hp(1.3),
                                 width: 0.5,
                                 backgroundColor: 'rgba(0,0,0,0.5)',
-                                marginHorizontal: 7,
+                                marginHorizontal: 5,
                             }}/>
-                            <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
+                            <Text style={{fontSize: hp(1.7), color: 'rgba(0,0,0,0.8)'}}>{item.task_name}</Text>
                         </View>
                         {/*剩余数*/}
                         <View style={{
@@ -125,19 +124,19 @@ export default class TaskReleaseItem extends PureComponent {
                             alignItems: 'center',
                         }}>
                             <Text style={{
-                                fontSize: hp(1.9),
+                                fontSize: hp(1.7),
                                 opacity: 0.7,
                                 color: 'black',
                             }}>进行中:{item.task_ing_num}</Text>
                             <View
                                 style={{
                                     width: 0.7,
-                                    height: hp(1.7),
+                                    height: hp(1.4),
                                     backgroundColor: 'rgba(0,0,0,0.5)',
                                     marginHorizontal: 5,
                                 }}/>
                             <Text style={{
-                                fontSize: hp(1.9),
+                                fontSize: hp(1.7),
                                 opacity: 0.7,
                                 color: 'black',
                             }}>剩余:{(parseInt(item.reward_num) - parseInt(item.task_sign_up_num)).toString()}</Text>
@@ -230,8 +229,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: bottomTheme,
         // 设置宽度
-        width: 55,
-        height: 55,
+        width: hp(7),
+        height:  hp(7),
         borderRadius: 5,
         // 设置高度
         // height:150

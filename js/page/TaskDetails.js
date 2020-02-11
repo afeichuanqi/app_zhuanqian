@@ -301,7 +301,7 @@ class TaskDetails extends PureComponent {
                                             <Text
                                                 style={{
                                                     color: 'rgba(0,0,0,0.7)',
-                                                    fontSize: hp(2.1),
+                                                    fontSize: hp(1.8),
                                                 }}>{taskData && taskData.taskType.title}</Text>
                                             <View style={{
                                                 height: 10, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)',
@@ -309,13 +309,13 @@ class TaskDetails extends PureComponent {
                                             }}/>
                                             <Text style={{
                                                 color: 'rgba(0,0,0,0.7)',
-                                                fontSize: hp(2.1),
+                                                fontSize: hp(1.8),
                                             }}>{taskData && taskData.projectTitle}</Text>
                                         </View>
                                     </View>
 
                                     <Text style={{
-                                        fontSize: hp(3),
+                                        fontSize: hp(2.8),
                                         color: bottomTheme,
                                     }}>{taskData && taskData.rewardPrice}元</Text>
                                 </View>
@@ -329,11 +329,11 @@ class TaskDetails extends PureComponent {
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: hp(2.32),
+                                            fontSize: hp(2.3),
                                         }}>{taskData && taskData.rewardNum - taskData.taskSignUpNum}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(2.15),
+                                            fontSize: hp(1.9),
                                             marginTop: 5,
                                         }}>剩余数量</Text>
                                     </View>
@@ -341,11 +341,11 @@ class TaskDetails extends PureComponent {
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: hp(2.32),
+                                            fontSize: hp(2.3),
                                         }}>{taskData && taskData.taskPassNum}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(2.15),
+                                            fontSize: hp(1.9),
                                             marginTop: 5,
                                         }}>完成数量</Text>
                                     </View>
@@ -353,11 +353,11 @@ class TaskDetails extends PureComponent {
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: hp(2.32),
+                                            fontSize: hp(2.3),
                                         }}>{taskData && taskData.orderTimeLimit.title}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(2.15),
+                                            fontSize: hp(1.9),
                                             marginTop: 5,
                                         }}>做单时间</Text>
                                     </View>
@@ -366,11 +366,11 @@ class TaskDetails extends PureComponent {
                                         <Text
                                             style={{
                                                 color: 'black',
-                                                fontSize: hp(2.32),
+                                                fontSize: hp(2.3),
                                             }}>{taskData && taskData.reviewTime.title}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(2.15),
+                                            fontSize: hp(1.9),
                                             marginTop: 5,
                                         }}>审核时间</Text>
                                     </View>
@@ -409,7 +409,7 @@ class TaskDetails extends PureComponent {
                                         color: 'black',
                                         fontSize: hp(2.2),
                                     }}>{fromUserinfo && fromUserinfo.username}</Text>
-                                    <Text style={{color: 'red', opacity: 0.8, fontSize: hp(2.0)}}>{
+                                    <Text style={{color: 'red', opacity: 0.8, fontSize: hp(1.8)}}>{
                                         taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
                                             :
                                             taskData.singOrder.type == 2 ? `此任务每人每天${taskData.singOrder.num}次`
@@ -447,8 +447,7 @@ class TaskDetails extends PureComponent {
                                     style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
                                     source={require('../res/img/item_icon/label_icon_green.png')}
                                 />
-                                <Text style={{fontSize: hp(2.3), color: bottomTheme}}>
-
+                                <Text style={{fontSize: hp(2.2), color: bottomTheme}}>
                                     任务说明
                                 </Text>
                             </View>
@@ -471,7 +470,7 @@ class TaskDetails extends PureComponent {
                                     style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
                                     source={require('../res/img/item_icon/label_icon_green.png')}
                                 />
-                                <Text style={{fontSize: hp(2.3), color: bottomTheme}}>
+                                <Text style={{fontSize: hp(2.2), color: bottomTheme}}>
                                     做单步骤（请仔细审阅任务步骤）
                                 </Text>
                             </View>
