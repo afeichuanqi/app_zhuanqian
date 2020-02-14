@@ -34,7 +34,7 @@ export const formatData = (data, insertData, ziduan) => {
 };
 export const authorizeWechat = (callback) => {
     let access_token = '', open_id = '', data = {};
-
+    JShareModule.cancelAuthWithPlatform({platform: 'wechat_session',},()=>{})
     JShareModule.authorize({
         platform: 'wechat',
     }, (info) => {
@@ -48,30 +48,30 @@ export const authorizeWechat = (callback) => {
     }, (msg) => {
         // console.log(msg);
 
-        if (msg.code == '42001') { //access_token过期
-            JShareModule.cancelAuthWithPlatform({
-                platform: 'wechat_session',
-            }, (i) => {
-                if (i == 0) {
-                    JShareModule.authorize({
-                        platform: 'wechat',
-                    }, (info) => {
-                        if (Platform.OS === 'ios') {
-                            access_token = info.token;
-                            open_id = info.openId;
-                            data.access_token = access_token;
-                            data.open_id = open_id;
-                            callback(true, data);
-                        }
-                    });
-                } else {
-                    callback(false, msg);
-                }
-            });
-        } else {
-            callback(false, msg);
-        }
-        // callback(true,access_token,open_id)
+        // if (msg.code == '42001') { //access_token过期
+        //     JShareModule.cancelAuthWithPlatform({
+        //         platform: 'wechat_session',
+        //     }, (i) => {
+        //         if (i == 0) {
+        //             JShareModule.authorize({
+        //                 platform: 'wechat',
+        //             }, (info) => {
+        //                 if (Platform.OS === 'ios') {
+        //                     access_token = info.token;
+        //                     open_id = info.openId;
+        //                     data.access_token = access_token;
+        //                     data.open_id = open_id;
+        //                     callback(true, data);
+        //                 }
+        //             });
+        //         } else {
+        //             callback(false, msg);
+        //         }
+        //     });
+        // } else {
+        //     callback(false, msg);
+        // }
+        callback(false,msg)
     });
 };
 export const getCurrentTime = (time = 0) => {

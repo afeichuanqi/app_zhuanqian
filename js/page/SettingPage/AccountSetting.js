@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, Text, Dimensions, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, Dimensions, TextInput, TouchableOpacity, Platform} from 'react-native';
 import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 import {theme} from '../../appSet';
 import NavigationBar from '../../common/NavigationBar';
@@ -22,6 +22,8 @@ import Toast from 'react-native-root-toast';
 import JShareModule from 'jshare-react-native';
 import {authorizeWechat} from '../../util/CommonUtils';
 import LoddingModal from '../../common/LoddingModal';
+import ToastSelect from '../../common/ToastSelectTwo';
+import {onCancelAuthorize} from '../../action/userinfo';
 
 const {width} = Dimensions.get('window');
 
@@ -45,6 +47,7 @@ class AccountSetting extends PureComponent {
         this.backPress.componentWillUnmount();
     }
 
+    cancelPlatform = '';
 
     render() {
         let statusBar = {
@@ -61,7 +64,6 @@ class AccountSetting extends PureComponent {
         // console.log(userinfo.login);
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '账号管理', null, theme, 'black', 16, () => {
         }, false);
-        console.log(userinfo);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -88,36 +90,43 @@ class AccountSetting extends PureComponent {
 
                     {ViewUtil.getSettingMenu('手机号码', () => {
                         if (userinfo.phone) {
-                            Toast.show('您已经绑定了手机号码');
+                            this.cancelPlatform = 'phone';
+                            this.toastS.show();
+                            // Toast.show('您已经绑定了手机号码');
                         } else {
                             NavigationUtils.goPage({updatePhone: true}, 'LoginPage');
                         }
 
-                    }, userinfo.phone ? userinfo.phone : '立即绑定', true)}
+                    }, userinfo.phone ? userinfo.phone : '未绑定', true)}
                     {ViewUtil.getSettingMenu('微信', () => {
-                        if(userinfo.wechat_user){
-                            Toast.show('您已经绑定了微信');
-                        }else{
+                        if (userinfo.wechat_user) {
+                            this.cancelPlatform = 'wechat';
+                            this.toastS.show();
+                        } else {
                             this.loddingModal.show();
-                            authorizeWechat((bool,data)=>{
+                            authorizeWechat((bool, data) => {
                                 this.loddingModal.hide();
-                                if(bool){
-                                    this.props.onChangeWechat(data.access_token,data.open_id,this.props.userinfo.token,(bool,data)=>{
-                                        if(bool){
-                                            Toast.show('绑定成功')
-                                        }else{
-                                            Toast.show(data.msg)
+                                if (bool) {
+                                    this.props.onChangeWechat(data.access_token, data.open_id, this.props.userinfo.token, (bool, data) => {
+                                        if (bool) {
+                                            Toast.show('绑定成功');
+                                        } else {
+                                            Toast.show(data.msg);
                                         }
-                                    })
+                                    });
                                 }
-                            })
+                            });
                         }
-                    }, userinfo.wechat_user ? userinfo.wechat_user : '立即绑定')}
+                    }, userinfo.wechat_user ? userinfo.wechat_user : '未绑定')}
                     {ViewUtil.getSettingMenu('新浪微博', () => {
-                        if(userinfo.weibo_user){
-                            Toast.show('您已经绑定了新浪微博');
-                        }else{
+                        if (userinfo.weibo_user) {
+                            this.cancelPlatform = 'sina';
+                            this.toastS.show();
+                            // Toast.show('您已经绑定了新浪微博');
+                        } else {
                             this.loddingModal.show();
+                            JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo'}, () => {
+                            });
                             JShareModule.authorize({
                                 platform: 'weibo',
                             }, (info) => {
@@ -125,37 +134,41 @@ class AccountSetting extends PureComponent {
                                 const id = JSON.parse(originData).id || JSON.parse(originData).uid;
 
                                 this.loddingModal.hide();
-                                this.props.onChangeSina(token,id,this.props.userinfo.token,(bool,data)=>{
-                                    if(bool){
-                                        Toast.show('绑定成功')
-                                    }else{
-                                        Toast.show(data.msg)
+                                this.props.onChangeSina(token, id, this.props.userinfo.token, (bool, data) => {
+                                    if (bool) {
+                                        Toast.show('绑定成功');
+                                    } else {
+                                        Toast.show(data.msg);
                                     }
-                                })
-                            })
+                                });
+                            });
                         }
-                    }, userinfo.weibo_user ? userinfo.weibo_user : '立即绑定')}
+                    }, userinfo.weibo_user ? userinfo.weibo_user : '未绑定')}
                     {ViewUtil.getSettingMenu('QQ', () => {
-                        if(userinfo.qq_user){
-                            Toast.show('您已经绑定了QQ');
-                        }else{
+                        if (userinfo.qq_user) {
+                            this.cancelPlatform = 'qq';
+                            this.toastS.show();
+                            // Toast.show('您已经绑定了QQ');
+                        } else {
                             this.loddingModal.show();
+                            JShareModule.cancelAuthWithPlatform({platform: 'qq'}, () => {
+                            });
                             JShareModule.authorize({
                                 platform: 'qq',
                             }, (info) => {
                                 const {openId, token} = info;
 
                                 this.loddingModal.hide();
-                                this.props.onChangeQQ(token,openId,this.props.userinfo.token,(bool,data)=>{
-                                    if(bool){
-                                        Toast.show('绑定成功')
-                                    }else{
-                                        Toast.show(data.msg)
+                                this.props.onChangeQQ(token, openId, this.props.userinfo.token, (bool, data) => {
+                                    if (bool) {
+                                        Toast.show('绑定成功');
+                                    } else {
+                                        Toast.show(data.msg);
                                     }
-                                })
-                            })
+                                });
+                            });
                         }
-                    }, userinfo.qq_user ? userinfo.qq_user : '立即绑定')}
+                    }, userinfo.qq_user ? userinfo.qq_user : '未绑定')}
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.6}
@@ -174,6 +187,20 @@ class AccountSetting extends PureComponent {
                 <LoddingModal
                     ref={ref => this.loddingModal = ref}
                 />
+                <ToastSelect
+                    sureTitle={'确认取消绑定'}
+                    sureClick={() => {
+                        this.toastS.hide();
+                        this.props.onCancelAuthorize(this.cancelPlatform, this.props.userinfo.token, (bool, data) => {
+                            if (bool) {
+                                Toast.show('解除成功');
+                            } else {
+                                Toast.show(data.msg);
+                            }
+                        });
+                        // this._addTaskReleaseData();
+                    }}
+                    ref={ref => this.toastS = ref}/>
             </SafeAreaViewPlus>
         );
     }
@@ -206,6 +233,7 @@ const mapDispatchToProps = dispatch => ({
     onChangeWechat: (token, openId, userToken, callback) => dispatch(actions.onChangeWechat(token, openId, userToken, callback)),
     onChangeSina: (token, uuid, userToken, callback) => dispatch(actions.onChangeSina(token, uuid, userToken, callback)),
     onChangeQQ: (token, uuid, userToken, callback) => dispatch(actions.onChangeQQ(token, uuid, userToken, callback)),
+    onCancelAuthorize: (platform, userToken, callback) => dispatch(actions.onCancelAuthorize(platform, userToken, callback)),
 });
 const AccountSettingRedux = connect(mapStateToProps, mapDispatchToProps)(AccountSetting);
 export default AccountSettingRedux;

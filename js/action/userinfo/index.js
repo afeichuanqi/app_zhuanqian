@@ -10,7 +10,7 @@ import {
     bindPhoneForUserId,
     changeWechatInfoForUserid,
     authorizeSinaLogin,
-    changeSinaInfoForUserid, authorizeQQLogin, changeQQInfoForUserid,
+    changeSinaInfoForUserid, authorizeQQLogin, changeQQInfoForUserid, cancelAuthorize,
 } from '../../util/AppService';
 
 /**
@@ -85,11 +85,12 @@ export function onChangeWechat(token, openId, userToken, callback) {
                 type: Types.CHANGE_WECHAT_SUCCESS,
                 data: data,
             });
-        }).catch(msg=>{
+        }).catch(msg => {
             callback(false, {msg});
-        })
+        });
     };
 }
+
 /**
  * 更换微博帐户
  * @returns {{theme: *, type: string}}
@@ -106,11 +107,12 @@ export function onChangeSina(token, uuid, userToken, callback) {
                 type: Types.CHANGE_WEIBO_SUCCESS,
                 data: data,
             });
-        }).catch(msg=>{
+        }).catch(msg => {
             callback(false, {msg});
-        })
+        });
     };
 }
+
 /**
  * 更换QQ帐户
  * @returns {{theme: *, type: string}}
@@ -128,11 +130,45 @@ export function onChangeQQ(token, uuid, userToken, callback) {
                 type: Types.CHANGE_QQ_SUCCESS,
                 data: data,
             });
-        }).catch(msg=>{
+        }).catch(msg => {
             callback(false, {msg});
-        })
+        });
     };
 }
+
+/**
+ * 更换QQ帐户
+ * @returns {{theme: *, type: string}}
+ */
+export function onCancelAuthorize(platform, userToken, callback) {
+    return dispatch => {
+        cancelAuthorize({
+            platform,
+        }, userToken).then(data => {
+            callback(true, data);
+            let typeText = '';
+            if (platform == 'qq') {
+                typeText = Types.CLEAR_QQ_BIND;
+            }
+            if (platform == 'wechat') {
+                typeText = Types.CLEAR_WECHAT_BIND;
+            }
+            if (platform == 'sina') {
+                typeText = Types.CLEAR_SINA_BIND;
+            }
+            if (platform == 'phone') {
+                typeText = Types.CLEAR_PHONE_BIND;
+            }
+            dispatch({
+                type: typeText,
+                data: data,
+            });
+        }).catch(msg => {
+            callback(false, {msg});
+        });
+    };
+}
+
 /**
  * 修改头像
  * @returns {{theme: *, type: string}}
@@ -318,6 +354,7 @@ export function onWechatAuthorizeLogin(data, callback) {
         });
     };
 }
+
 /**
  * 根据token获取用户基本信息
  */
@@ -338,6 +375,7 @@ export function onSinaAuthorizeLogin(data, callback) {
         });
     };
 }
+
 /**
  * 根据token获取用户基本信息
  */

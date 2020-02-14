@@ -321,7 +321,6 @@ class CodeInput extends PureComponent {
                     this.props.showError('');
                     const {routes, navigation} = this.props;
                     const key = routes[0].routes[routes[0].routes.length - 2].key;
-                    console.log(routes);
                     Global.token = data.token;//进行验证token
                     ChatSocket.verifyIdentity();//进行验证token
                     NavigationUtils.goBack(navigation, key);

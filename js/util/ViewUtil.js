@@ -112,13 +112,13 @@ export default class ViewUtil {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-
+                fontSize: hp(2),
             }}>
             <Text style={{fontSize: 14, color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
                 <Text style={{
                     marginLeft: 10,
-                    fontSize: 12,
+                    fontSize: hp(1.7),
                     opacity: 0.5,
                     color: rightText == '立即绑定' ? bottomTheme : 'black',
                 }}>{rightText}</Text>

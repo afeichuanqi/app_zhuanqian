@@ -329,49 +329,50 @@ class TaskDetails extends PureComponent {
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: hp(2.3),
+                                            fontSize: hp(2.2),
                                         }}>{taskData && taskData.rewardNum - taskData.taskSignUpNum}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
                                             fontSize: hp(1.8),
-                                            marginTop: 5,
+                                            marginTop: hp(1.2),
                                         }}>剩余数量</Text>
                                     </View>
-                                    <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                                    <View style={{height: 20, width: 0.4, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: hp(2.3),
+                                            fontSize: hp(2.2),
+
                                         }}>{taskData && taskData.taskPassNum}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
                                             fontSize: hp(1.8),
-                                            marginTop: 5,
+                                            marginTop: hp(1.2),
                                         }}>完成数量</Text>
                                     </View>
-                                    <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                                    <View style={{height: 20, width: 0.4, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
                                         <Text style={{
                                             color: 'black',
-                                            fontSize: hp(2.3),
+                                            fontSize: hp(2.2),
                                         }}>{taskData && taskData.orderTimeLimit.title}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
                                             fontSize: hp(1.8),
-                                            marginTop: 5,
+                                            marginTop: hp(1.2),
                                         }}>做单时间</Text>
                                     </View>
-                                    <View style={{height: 20, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                                    <View style={{height: 20, width: 0.4, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                                     <View style={{alignItems: 'center'}}>
                                         <Text
                                             style={{
                                                 color: 'black',
-                                                fontSize: hp(2.3),
+                                                fontSize: hp(2.2),
                                             }}>{taskData && taskData.reviewTime.title}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
                                             fontSize: hp(1.8),
-                                            marginTop: 5,
+                                            marginTop: hp(1.2),
                                         }}>审核时间</Text>
                                     </View>
                                 </View>

@@ -126,8 +126,8 @@ export default function onAction(state = defaultContent, action) {
                 wechat_id: data.wechat_id,
                 wechat_user: data.wechat_user,
             };
-            case Types.CHANGE_QQ_SUCCESS:
-                console.log(data);
+        case Types.CHANGE_QQ_SUCCESS:
+            console.log(data);
             return {
                 ...state,
                 qq_id: data.qq_id,
@@ -145,6 +145,29 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 avatar_url: data.avatar_url.length > 0 ? data.avatar_url : state.avatar_url,
                 upload_avatar_loading: true,
+            };
+        case Types.CLEAR_PHONE_BIND:
+            return {
+                ...state,
+                phone: '',
+            };
+        case Types.CLEAR_QQ_BIND:
+            return {
+                ...state,
+                qq_id: '',
+                qq_user: '',
+            };
+        case Types.CLEAR_WECHAT_BIND:
+            return {
+                ...state,
+                wechat_id: '',
+                wechat_user: '',
+            };
+        case Types.CLEAR_SINA_BIND:
+            return {
+                ...state,
+                weibo_id: '',
+                weibo_user: '',
             };
         case Types.UPLOAD_AVATAR_SUCCESS:
             // console.log(data.avatar_url);

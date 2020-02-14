@@ -63,6 +63,7 @@ class UpdateUserName extends PureComponent {
             onSetUserName(userinfo.token, this.state.text, (bool, msg) => {
                 if (bool) {
                     Toast.show('修改成功');
+                    NavigationUtils.goBack(this.props.navigation)
                 } else {
                     Toast.show(msg);
                 }

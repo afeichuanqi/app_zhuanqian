@@ -26,6 +26,10 @@ import actions from '../action';
 import {connect} from 'react-redux';
 import LoddingModal from '../common/LoddingModal';
 import DeviceInfo from 'react-native-device-info';
+import Global from '../common/Global';
+import ChatSocket from '../util/ChatSocket';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
 
 const {width, height} = Dimensions.get('window');
 
@@ -232,6 +236,7 @@ class LoginPage extends PureComponent {
     }
 
     handleQQAuthorze = () => {
+        JShareModule.cancelAuthWithPlatform({platform: 'qq',},()=>{})
         JShareModule.authorize({
             platform: 'qq',
         }, (info) => {
@@ -249,6 +254,11 @@ class LoginPage extends PureComponent {
                 platform, device_brand, device_name, device_system_version, device_is_tablet,
             },(bool, data)=>{
                 if (bool) {
+                    Global.token = data.token;//进行验证token
+                    ChatSocket.verifyIdentity();//进行验证token
+                    setTimeout(() => {
+                        EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面
+                    }, 2000);
                     Toast.show('登录成功');
                     NavigationUtils.goBack(this.props.navigation);
                 } else {
@@ -261,7 +271,7 @@ class LoginPage extends PureComponent {
 
     handleSinaAuthorze = () => {
         this.loddingModal.show();
-
+        JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo',},()=>{})
         JShareModule.authorize({
             platform: 'weibo',
         }, (info) => {
@@ -280,9 +290,19 @@ class LoginPage extends PureComponent {
             onSinaAuthorizeLogin({
                 access_token: token,
                 uuid: id, DeviceID, platform, device_brand, device_name, device_system_version, device_is_tablet,
-            }, () => {
-                Toast.show('登录成功');
-                NavigationUtils.goBack(this.props.navigation);
+            }, (bool, data) => {
+                if (bool) {
+                    Global.token = data.token;//进行验证token
+                    ChatSocket.verifyIdentity();//进行验证token
+                    setTimeout(() => {
+                        EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面
+                    }, 2000);
+                    Toast.show('登录成功');
+                    NavigationUtils.goBack(this.props.navigation);
+                }else {
+                    Toast.show(data.msg);
+                }
+
             });
         }, (msg) => {
             Toast.show(msg);
@@ -290,6 +310,7 @@ class LoginPage extends PureComponent {
     };
     handleWechatAuthorize = () => {
         this.loddingModal.show();
+
         authorizeWechat((bool, data) => {
             this.loddingModal.hide();
             if (bool) {
@@ -307,6 +328,11 @@ class LoginPage extends PureComponent {
                     platform, device_brand, device_name, device_system_version, device_is_tablet,
                 }, (bool, data) => {
                     if (bool) {
+                        Global.token = data.token;//进行验证token
+                        ChatSocket.verifyIdentity();//进行验证token
+                        setTimeout(() => {
+                            EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面
+                        }, 2000);
                         Toast.show('登录成功');
                         NavigationUtils.goBack(this.props.navigation);
                     } else {

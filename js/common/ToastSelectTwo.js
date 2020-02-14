@@ -73,7 +73,6 @@ class ToastSelectTwo extends PureComponent {
                 speed: 20,
                 toValue: -150,
             })).start();
-
         });
     };
     animations = {
@@ -122,7 +121,7 @@ class ToastSelectTwo extends PureComponent {
                                 width, alignItems: 'center', height: 50, justifyContent: 'center',
 
                             }}>
-                            <Text style={{opacity:0.9}}>{this.props.cancelTitle}</Text>
+                            <Text style={{color:'rgba(0,0,0,0.9)'}}>{this.props.cancelTitle}</Text>
                         </TouchableOpacity>
                         <View style={{height: 50, width, backgroundColor: 'white'}}>
 

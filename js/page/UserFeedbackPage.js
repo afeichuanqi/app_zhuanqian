@@ -309,16 +309,16 @@ class RadioCheck extends PureComponent {
                         // borderColor: bottomTheme,
                         marginHorizontal: 10,
                         borderRadius: 4,
-                        backgroundColor: '#f7f7f7',
+                        // backgroundColor: '#f7f7f7',
                         borderWidth: 0.3,
                         // borderStyle: 'dashed',
                         // borderWidth: 1,
                     }, checkIndex === index ? {
                         backgroundColor: 'rgba(33,150,243,0.1)',
                          borderColor: bottomTheme,
-                    }:{backgroundColor: '#f7f7f7'}]}>
+                    }:{backgroundColor: '#fcfcfc', borderColor:'#d2d2d2'}]}>
                     <Text
-                        style={[{color: bottomTheme}, , checkIndex === index ? {color: bottomTheme} : {color: 'rgba(0,0,0,0.7)'}]}>{item.title}</Text>
+                        style={[{color: bottomTheme}, checkIndex === index ? {color: bottomTheme} : {color: 'rgba(0,0,0,0.7)'}]}>{item.title}</Text>
                 </TouchableOpacity>;
             })}
 

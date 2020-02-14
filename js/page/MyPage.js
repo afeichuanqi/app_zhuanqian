@@ -430,7 +430,9 @@ class TopInfoColumn extends PureComponent {
             <Animated.View
                 style={{height: hp(22), opacity, position: 'absolute', top: 0, width}}>
                 {/*头像*/}
-                <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row'}}>
+                <View style={{justifyContent: 'space-between', paddingHorizontal: 10, flexDirection: 'row',
+                    paddingLeft:15,
+                }}>
                     <TouchableOpacity
                         onPress={() => {
                             if (userinfo.login) {
