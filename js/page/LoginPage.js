@@ -236,10 +236,12 @@ class LoginPage extends PureComponent {
     }
 
     handleQQAuthorze = () => {
+        this.loddingModal.show();
         JShareModule.cancelAuthWithPlatform({platform: 'qq',},()=>{})
         JShareModule.authorize({
             platform: 'qq',
         }, (info) => {
+            this.loddingModal.hide();
             const {openId, token} = info;
             const DeviceID = DeviceInfo.getUniqueId();
             const platform = Platform.OS;
@@ -266,11 +268,13 @@ class LoginPage extends PureComponent {
                 }
             })
             // console.log(info);
+        },()=>{
+            this.loddingModal.hide();
         });
     };
 
     handleSinaAuthorze = () => {
-        this.loddingModal.show();
+        // this.loddingModal.show();
         JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo',},()=>{})
         JShareModule.authorize({
             platform: 'weibo',
@@ -283,7 +287,7 @@ class LoginPage extends PureComponent {
             const device_name = DeviceInfo.getDeviceName();
             const device_system_version = DeviceInfo.getSystemVersion();
             const device_is_tablet = DeviceInfo.isTablet();
-            this.loddingModal.hide();
+            // this.loddingModal.hide();
             const {token, originData} = info;
             const id = JSON.parse(originData).id || JSON.parse(originData).uid;
 
@@ -305,7 +309,7 @@ class LoginPage extends PureComponent {
 
             });
         }, (msg) => {
-            Toast.show(msg);
+            // Toast.show(msg);
         });
     };
     handleWechatAuthorize = () => {
@@ -340,6 +344,7 @@ class LoginPage extends PureComponent {
                     }
                 });
             } else {
+                
                 if (data.code == '40009') {
                     Toast.show('未安装微信客户端');
                 } else {

@@ -102,6 +102,7 @@ class PrivacyToast extends PureComponent {
                         <ScrollView
                             style={{paddingHorizontal: 25, height: hp(30)}}>
                             <TouchableOpacity
+                                activeOpacity={1}
 
                             >
                                 <Text style={styles.textStyle}>
@@ -125,7 +126,9 @@ class PrivacyToast extends PureComponent {
                                     <Text style={[styles.textStyle, {}]}>
                                         我们非常重视您的个人信息保护,关于个人信息收集和使用的详细信息,您可以点击查询
                                     </Text>
-                                    <Text style={[styles.textStyle, {color: bottomTheme}]}>
+                                    <Text
+                                        activeOpacity={0.5}
+                                        onPress={this.props.click} style={[styles.textStyle, {color: bottomTheme}]}>
                                         《隐私保护》
                                     </Text>
 

@@ -8,13 +8,14 @@
 
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import Image from 'react-native-fast-image';
+
 import SvgUri from 'react-native-svg-uri';
 import add_image from '../res/svg/add_image.svg';
 import {uploadQiniuImage} from '../util/AppService';
 import PickerImage from './PickerImage';
 import ImageViewerModal from './ImageViewerModal';
 import Toast from 'react-native-root-toast';
+import FastImagePro from './FastImagePro';
 class UploadImgsComponent extends PureComponent {
     constructor(props) {
         super(props);
@@ -83,7 +84,8 @@ class UploadImgsComponent extends PureComponent {
                                 marginLeft: 10,
                                 // borderWidth:1, borderColor:'rgba(255,0,0,1)',
                             }}>
-                            {item.uri ? <Image
+                            {item.uri ? <FastImagePro
+                                loadingType={2}
                                 source={{uri: item.uri}}
                                 style={{
                                     width: 55, height: 55,

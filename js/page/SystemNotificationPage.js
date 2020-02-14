@@ -119,7 +119,7 @@ class SystemNotificationPage extends PureComponent {
                 <View style={{flex: 1}}>
                     <AnimatedFlatList
                         style={{backgroundColor: '#f5f5f5'}}
-                        ListEmptyComponent={<EmptyComponent type={4} height={height - 80} message={'您还没有相关任务'}/>}
+                        ListEmptyComponent={<EmptyComponent type={4} height={height - 60} message={'您还没有相关任务'}/>}
                         ref={ref => this.flatList = ref}
                         data={taskData}
                         scrollEventThrottle={1}

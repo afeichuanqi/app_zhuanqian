@@ -124,7 +124,7 @@ class AccountSetting extends PureComponent {
                             this.toastS.show();
                             // Toast.show('您已经绑定了新浪微博');
                         } else {
-                            this.loddingModal.show();
+                            // this.loddingModal.show();
                             JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo'}, () => {
                             });
                             JShareModule.authorize({
@@ -133,7 +133,7 @@ class AccountSetting extends PureComponent {
                                 const {token, originData} = info;
                                 const id = JSON.parse(originData).id || JSON.parse(originData).uid;
 
-                                this.loddingModal.hide();
+                                // this.loddingModal.hide();
                                 this.props.onChangeSina(token, id, this.props.userinfo.token, (bool, data) => {
                                     if (bool) {
                                         Toast.show('绑定成功');
@@ -141,6 +141,8 @@ class AccountSetting extends PureComponent {
                                         Toast.show(data.msg);
                                     }
                                 });
+                            },()=>{
+
                             });
                         }
                     }, userinfo.weibo_user ? userinfo.weibo_user : '未绑定')}
@@ -166,6 +168,8 @@ class AccountSetting extends PureComponent {
                                         Toast.show(data.msg);
                                     }
                                 });
+                            },()=>{
+                                this.loddingModal.hide();
                             });
                         }
                     }, userinfo.qq_user ? userinfo.qq_user : '未绑定')}

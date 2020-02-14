@@ -722,7 +722,7 @@ class BottomInfoForm extends Component {
         return <View>
             <View style={{marginTop: 10, backgroundColor: 'white'}}>
                 {genFormItem('项目名称', 1, {
-                    info: '如:微信/58同城(2-7字)', onChangeText: this._changeProjectTitle,
+                    info: '如:简易赚/58同城(2-7字)', onChangeText: this._changeProjectTitle,
                     editable: true, defaultValue: this.columnData.projectTitle,
                 })}
                 {genFormItem('标题', 1,
@@ -734,7 +734,7 @@ class BottomInfoForm extends Component {
                     })}
                 {genFormItem('任务说明', 1,
                     {
-                        info: '简单说明任务概要(2-n)',
+                        info: '简单说明任务概要(2-n字)',
                         onChangeText: this._changeTaskInfo,
                         editable: true,
 

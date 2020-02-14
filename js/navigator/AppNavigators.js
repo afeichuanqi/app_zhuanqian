@@ -45,6 +45,7 @@ import WithDrawPage from '../page/WithDrawPage';
 import CustomerServiceIndex from '../page/ChatRoomPage/CustomerServiceIndex';
 import WithDrawPayPage from '../page/WithDrawPayPage';
 import WithDrawAccount from '../page/WithDrawAccount';
+import OnlineService from '../page/OnlineService';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 import UserFeedbackPage from '../page/UserFeedbackPage';
@@ -158,6 +159,12 @@ const MainNavigator = createStackNavigator({
         },
         WithDrawPayPage: {
             screen: WithDrawPayPage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        OnlineService: {
+            screen: OnlineService,
             navigationOptions: {
                 header: null,
             },

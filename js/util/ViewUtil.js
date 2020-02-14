@@ -114,7 +114,7 @@ export default class ViewUtil {
                 alignItems: 'center',
                 fontSize: hp(2),
             }}>
-            <Text style={{fontSize: 14, color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
+            <Text style={{fontSize: hp(1.9), color: 'rgba(0,0,0,0.8)'}}>{MenuTitle}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
                 <Text style={{
                     marginLeft: 10,

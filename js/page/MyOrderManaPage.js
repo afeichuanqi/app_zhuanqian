@@ -95,7 +95,7 @@ class MyOrderManaPage extends PureComponent {
                 paddingTop: 18,
                 // height: 80,
                 backgroundColor: 'white',
-                paddingBottom:5,
+                paddingBottom: 5,
 
             }}
         >
@@ -116,7 +116,7 @@ class MyOrderManaPage extends PureComponent {
                 // position: 'absolute',
                 // top: (taskTitle && taskTitle.length) > 15 ? 15 : 20,
                 // left: 65,
-                marginLeft:10,
+                marginLeft: 10,
 
             }}>
                 <Text
@@ -163,12 +163,12 @@ class MyOrderManaPage extends PureComponent {
                 <Text style={{
                     fontSize: hp(2.5),
                     color: 'red',
-                    textAlign:'right',
+                    textAlign: 'right',
                 }}>+{taskInfo.reward_price}元</Text>
                 <Text style={{
                     fontSize: hp(1.8),
                     opacity: 0.5,
-                    marginTop:hp(0.5),
+                    marginTop: hp(0.5),
                 }}>浏览次数:{taskInfo.browse_num}</Text>
             </View>
             {/*右下*/}
@@ -187,8 +187,8 @@ class MyOrderManaPage extends PureComponent {
                 // bottom: hp(3.5),
                 right: 5,
                 alignItems: 'center',
-                justifyContent:'center',
-                height:75
+                justifyContent: 'center',
+                height: 75,
             }}>
                 <SvgUri width={20} height={20} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </View>
@@ -247,7 +247,10 @@ class MyOrderManaPage extends PureComponent {
                                 <Text
                                     style={{color: 'rgba(0,0,0,0.9)', fontSize: hp(2.0), marginRight: 10}}>剩余数量:</Text>
                                 <Text
-                                    style={{fontSize: hp(2.1),color:'rgba(0,0,0,0.9)'}}>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
+                                    style={{
+                                        fontSize: hp(2.1),
+                                        color: 'rgba(0,0,0,0.9)',
+                                    }}>{taskInfo.reward_num ? (parseInt(taskInfo.reward_num) - parseInt(taskInfo.task_sign_up_num)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -272,7 +275,10 @@ class MyOrderManaPage extends PureComponent {
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{color: 'rgba(0,0,0,0.9)', fontSize: hp(2.0), marginRight: 10}}>佣金:</Text>
                                 <Text
-                                    style={{fontSize: hp(2.1),color:'rgba(0,0,0,0.9)'}}>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
+                                    style={{
+                                        fontSize: hp(2.1),
+                                        color: 'rgba(0,0,0,0.9)',
+                                    }}>{taskInfo.reward_price ? (parseFloat(taskInfo.reward_price)) : ''}</Text>
                             </View>
 
                             <TouchableOpacity
@@ -326,19 +332,16 @@ class MyOrderManaPage extends PureComponent {
                     rightTitle={'确认'}
                     sureClick={this._sureClick}
                     ref={ref => this.toastSelect = ref}>
-                    <View style={{
-                         backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                        paddingTop: 10,
 
-                    }}>
-                        <Text style={{
-                            fontSize: hp(2),
-                            width: width - 80,
+                    <Text
+                        numberOfLines={3}
+                        style={{
+                            fontSize: hp(2.0),
                             color: 'rgba(0,0,0,0.8)',
-                            lineHeight: 25,
-                            // maxWidth:width-40,
+                            maxWidth:width-100,
+                            letterSpacing:0.3
+
                         }}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
-                    </View>
                 </ToastSelect>
                 <ToastShare ref={ref => this.toastShare = ref}/>
             </SafeAreaViewPlus>
@@ -405,7 +408,8 @@ class MyOrderManaPage extends PureComponent {
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                 }}>
-                <Text style={{color:'rgba(0,0,0,0.9)'}}>已完成：{taskInfo.task_pass_num && (parseInt(taskInfo.task_pass_num))}</Text>
+                <Text
+                    style={{color: 'rgba(0,0,0,0.9)'}}>已完成：{taskInfo.task_pass_num && (parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -421,7 +425,8 @@ class MyOrderManaPage extends PureComponent {
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                 }}>
-                <Text style={{color:'rgba(0,0,0,0.9)'}}>投诉：{taskInfo.appeal_3_num && (parseInt(taskInfo.appeal_3_num))}</Text>
+                <Text
+                    style={{color: 'rgba(0,0,0,0.9)'}}>投诉：{taskInfo.appeal_3_num && (parseInt(taskInfo.appeal_3_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -438,7 +443,8 @@ class MyOrderManaPage extends PureComponent {
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                 }}>
-                <Text style={{color:'rgba(0,0,0,0.9)'}}>进行中：{taskInfo.task_sign_up_num && (parseInt(taskInfo.task_sign_up_num) - parseInt(taskInfo.task_pass_num))}</Text>
+                <Text
+                    style={{color: 'rgba(0,0,0,0.9)'}}>进行中：{taskInfo.task_sign_up_num && (parseInt(taskInfo.task_sign_up_num) - parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -454,7 +460,8 @@ class MyOrderManaPage extends PureComponent {
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                 }}>
-                <Text style={{color:'rgba(0,0,0,0.9)'}}>申诉：{taskInfo.appeal_2_num && (parseInt(taskInfo.appeal_2_num))}</Text>
+                <Text
+                    style={{color: 'rgba(0,0,0,0.9)'}}>申诉：{taskInfo.appeal_2_num && (parseInt(taskInfo.appeal_2_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -472,7 +479,8 @@ class MyOrderManaPage extends PureComponent {
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                 }}>
-                <Text style={{color:'rgba(0,0,0,0.9)'}}>已驳回：{taskInfo.task_noPass_num && (parseInt(taskInfo.task_noPass_num))}</Text>
+                <Text
+                    style={{color: 'rgba(0,0,0,0.9)'}}>已驳回：{taskInfo.task_noPass_num && (parseInt(taskInfo.task_noPass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
         </View>;
@@ -511,7 +519,7 @@ class MyOrderManaPage extends PureComponent {
                 }}>
                 <Image source={require('../res/img/orderMana/xiugai.png')}
                        style={{width: 23, height: 23}}/>
-                <Text style={{marginTop: 5,color:'rgba(0,0,0,0.9)'}}>修改</Text>
+                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)'}}>修改</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
@@ -546,7 +554,10 @@ class MyOrderManaPage extends PureComponent {
                         :
                         require('../res/img/orderMana/shangjia.png')}
                     style={{width: 23, height: 23}}/>
-                <Text style={{marginTop: 5,color:'rgba(0,0,0,0.9)'}}> {this.state.taskInfo.task_status == 0 ? '暂停' : '运行'}</Text>
+                <Text style={{
+                    marginTop: 5,
+                    color: 'rgba(0,0,0,0.9)',
+                }}> {this.state.taskInfo.task_status == 0 ? '暂停' : '运行'}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
@@ -566,7 +577,7 @@ class MyOrderManaPage extends PureComponent {
                 }}>
                 <Image source={require('../res/img/orderMana/xiajia.png')}
                        style={{width: 23, height: 23}}/>
-                <Text style={{marginTop: 5,color:'rgba(0,0,0,0.9)'}}>下架</Text>
+                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)'}}>下架</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
@@ -580,7 +591,7 @@ class MyOrderManaPage extends PureComponent {
                 }}>
                 <Image source={require('../res/img/orderMana/fenxiang.png')}
                        style={{width: 23, height: 23}}/>
-                <Text style={{marginTop: 5,color:'rgba(0,0,0,0.9)'}}>分享</Text>
+                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)'}}>分享</Text>
             </TouchableOpacity>
 
         </View>;

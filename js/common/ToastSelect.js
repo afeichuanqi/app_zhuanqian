@@ -13,9 +13,9 @@ import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
-import Animated from 'react-native-reanimated';
+import Animated, {Easing} from 'react-native-reanimated';
 
-const {SpringUtils, spring} = Animated;
+const {SpringUtils, spring,timing} = Animated;
 
 class ToastSelect extends PureComponent {
     constructor(props) {
@@ -44,12 +44,11 @@ class ToastSelect extends PureComponent {
     }
 
     hide = () => {
-        this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
-            ...SpringUtils.makeDefaultConfig(),
-            bounciness: 0,
-            speed: 20,
-            toValue: 0,
-        })).start(() => {
+        this._anim = timing(this.animations.bottom, {
+            duration: 200,
+            toValue: 200,
+            easing: Easing.inOut(Easing.ease),
+        }).start(() => {
 
 
         });
@@ -66,17 +65,16 @@ class ToastSelect extends PureComponent {
         this.setState({
             visible: true,
         }, () => {
-            this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
-                ...SpringUtils.makeDefaultConfig(),
-                bounciness: 13,
-                speed: 8,
-                toValue: 1,
-            })).start();
+            this._anim = timing(this.animations.bottom, {
+                duration: 200,
+                toValue: 0,
+                easing: Easing.inOut(Easing.ease),
+            }).start();
 
         });
     };
     animations = {
-        scale: new Animated.Value(0),
+        bottom: new Animated.Value(200),
     };
 
     render() {
@@ -93,8 +91,9 @@ class ToastSelect extends PureComponent {
 
             >
                 <TouchableOpacity style={{
-                    flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center',
+                    flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center',
                     alignItems: 'center', zIndex: 10,
+
                 }}
                                   activeOpacity={1}
                                   onPress={() => {
@@ -102,35 +101,35 @@ class ToastSelect extends PureComponent {
                                   }}
                 >
                     <Animated.View style={[this.props.style, {
-                        transform: [{scale: this.animations.scale}], opacity: this.animations.scale,
+                        opacity: this.animations.scale,
                         backgroundColor: 'white',
-                        // transform: 1,
-                        borderRadius: 4,
+                        borderRadius: 8,
+                        justifyContent:'center',
+                        alignItems:'center',
+                        position:'absolute',
+                        bottom:20,
+                        transform: [{translateY: this.animations.bottom}],
                     }]}>
 
                         <View style={{
                             paddingVertical: 10,
                             width: width - 40,
                             flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            justifyContent: 'center',
                             paddingHorizontal: 15,
                             paddingTop: 15,
 
                         }}>
-                            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={{fontSize: hp(2.35), color: 'black' , fontWeight:'500'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
-                            <TouchableOpacity
-                                onPress={this.hide}>
-                                <SvgUri width={15} height={15} svgXmlData={cha}/>
-                            </TouchableOpacity>
                         </View>
                         {this.props.children}
                         <View style={{
                             flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white',
-                            borderBottomLeftRadius: 4, borderBottomRightRadius: 4,
+                            borderBottomLeftRadius: 8, borderBottomRightRadius: 8,
                         }}>
                             <TouchableOpacity
                                 activeOpacity={0.6}

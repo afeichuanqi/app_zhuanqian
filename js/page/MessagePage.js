@@ -359,7 +359,7 @@ class MessageColumnItem extends Component {
                     NavigationUtils.goPage({}, 'SystemNotificationPage');
                 }
                 if (type == 3) {
-                    this.toastSelect.show();
+                    NavigationUtils.goPage({},'OnlineService')
                 }
             }}
             activeOpacity={0.6}
@@ -396,21 +396,21 @@ class MessageColumnItem extends Component {
                 marginTop: 10,
 
             }}>{title}</Text>
-            {type === 3 && <ToastSelect
-                rightTitle={'确认'}
-                sureClick={() => {
-                    this.toastSelect.hide();
-                }}
-                ref={ref => this.toastSelect = ref}>
-                <View style={{
-                    backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',
-                    paddingTop: 10,
+            {/*{type === 3 && <ToastSelect*/}
+            {/*    rightTitle={'确认'}*/}
+            {/*    sureClick={() => {*/}
+            {/*        this.toastSelect.hide();*/}
+            {/*    }}*/}
+            {/*    ref={ref => this.toastSelect = ref}>*/}
+            {/*    <View style={{*/}
+            {/*        backgroundColor: 'white', paddingHorizontal: 18, justifyContent: 'center',*/}
+            {/*        paddingTop: 10,*/}
 
-                }}>
-                    <Text style={styles.textStyle}>官方QQ:1412894</Text>
-                    <Text style={styles.textStyle}>官方微信:qingfengkjkj</Text>
-                </View>
-            </ToastSelect>}
+            {/*    }}>*/}
+            {/*        <Text style={styles.textStyle}>官方QQ:1412894</Text>*/}
+            {/*        <Text style={styles.textStyle}>官方微信:qingfengkjkj</Text>*/}
+            {/*    </View>*/}
+            {/*</ToastSelect>}*/}
         </TouchableOpacity>;
     }
 }

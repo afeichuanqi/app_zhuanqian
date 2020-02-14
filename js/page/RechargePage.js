@@ -427,7 +427,7 @@ class RechargePage extends PureComponent {
 
 class PayType extends React.Component {
     state = {
-        activeIndex: 0,
+        activeIndex: 1,
     };
 
     items = [
@@ -472,16 +472,23 @@ class PayType extends React.Component {
                 <View>
                     <View style={{
                         flexDirection: 'row',
+                        alignItems:'center',
+
 
                     }}>
                         <Text style={{fontSize: hp(2), marginLeft: 10, color: 'black'}}>{item.title}</Text>
-                        {item.isRecommend===1&&<View style={{backgroundColor: bottomTheme, justifyContent:'center', alignItems:'center',
-                            marginLeft:7,
-                            paddingHorizontal:hp(0.4),
-                            paddingVertical:hp(0.1),
-                            borderRadius:3,
+                        {item.isRecommend === 1 &&
+                        <View style={{
+                            backgroundColor: bottomTheme,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginLeft: 7,
+                            paddingHorizontal: 4,
+                            borderRadius: 3,
+                            paddingVertical:0,
+                            height:hp(2),
                         }}>
-                            <Text style={{fontSize: hp(1.35),color:'white'}}>推荐</Text>
+                            <Text style={{fontSize: hp(1.35), color: 'white'}}>推荐</Text>
                         </View>}
 
                     </View>
