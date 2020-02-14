@@ -22,8 +22,6 @@ import PrivacyToast from '../common/PrivacyToast';
 import actions from '../action';
 import {connect} from 'react-redux';
 import PrivacyToastStep2 from '../common/PrivacyToastStep2';
-// import JPush from 'jpush-react-native';
-
 const {spring} = Animated;
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
@@ -42,16 +40,14 @@ class HomePage extends PureComponent {
 
 
     async componentDidMount() {
-        // this.componentDidMount1();
         getAppSetting().then(result => {
-
             Global.user_top_fee = result.user_top_fee;
             Global.user_service_fee = result.user_service_fee;
             Global.user_recommend_fee = result.user_recommend_fee;
+            Global.apple_pay = result.apple_pay;
         });
         Global.toast = Toast;
         JShareModule.setup();
-
     }
 
     componentWillUnmount() {
@@ -60,9 +56,7 @@ class HomePage extends PureComponent {
 
     startAnimated = () => {
         RNBootSplash.hide();
-        // this.PrivacyToastStep2.show();
         const {appSetting, onIsAgreePrivacy} = this.props;
-        // onIsAgreePrivacy(false);
         if (Platform.OS === 'android' && !appSetting.agreePrivacy) {
             this.PrivacyToast.show();
         } else {
@@ -93,7 +87,6 @@ class HomePage extends PureComponent {
                 restDisplacementThreshold: 1,
             }).start(() => {
                 StatusBar.setHidden(false);
-
                 this.setState({
                     showAnimated: false,
                 }, () => {

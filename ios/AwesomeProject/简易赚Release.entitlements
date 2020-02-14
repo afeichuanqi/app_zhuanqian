@@ -8,5 +8,9 @@
 	<array>
 		<string>applinks:www.easy-z.cn</string>
 	</array>
+	<key>com.apple.developer.in-app-payments</key>
+	<array>
+		<string>merchant.com.yiertong.easyz</string>
+	</array>
 </dict>
 </plist>

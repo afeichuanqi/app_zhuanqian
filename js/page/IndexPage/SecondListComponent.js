@@ -86,8 +86,8 @@ class SecondListComponent extends PureComponent {
 
     render() {
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-217 - 300, 0, lunboHeight - 20 - 4],
-            outputRange: [lunboHeight + 220 + 3 - 9 + 300, lunboHeight - 4, 30 - 10],
+            inputRange: [-217 - 300, 0, lunboHeight - 20 - 4 + 14],
+            outputRange: [lunboHeight + 220 + 3 - 9 + 300 + 23, lunboHeight - 4 + 14 + 10, 30 - 10 + 10],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -104,11 +104,11 @@ class SecondListComponent extends PureComponent {
                 }}
                 onRefresh={this.updateBestNewList}
                 ListHeaderComponent={
-                    <View style={{height: 199, backgroundColor: 'white', zIndex: 10, marginBottom: 23}}>
+                    <View style={{height: 199 + 14, backgroundColor: 'white', zIndex: 10, marginBottom: 23}}>
                         <View style={{marginTop: 20, paddingLeft: 15}}>
                             <Text style={{fontSize: hp(2.6), opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
-                        <View style={{paddingHorizontal: 10, marginTop: 10}}>
+                        <View style={{paddingHorizontal: 10, marginTop: 15}}>
                             <FlatList
                                 keyExtractor={(item, index) => index + ''}
                                 showsHorizontalScrollIndicator={false}
@@ -140,11 +140,11 @@ class SecondListComponent extends PureComponent {
                 transform: [{translateY: columnTop}],
                 alignItems: 'flex-start',
                 paddingLeft: 20,
-                top: 10,
+                // top: -4,
             }}>
                 <View style={{
                     alignItems: 'center',
-                    flexDirection: 'row', top: 2, justifyContent:'center'
+                    flexDirection: 'row', top: 2, justifyContent: 'center',
                 }}>
                     <Image
                         resizeMode={'stretch'}
@@ -253,7 +253,6 @@ class ScrollItem extends React.Component {
 
                 }}>元</Text>
             </View>}
-
 
 
         </TouchableOpacity>;

@@ -18,6 +18,8 @@ const Global = {
     user_recommend_fee: 10,
     //每小时置顶数
     user_top_fee: 10,
+    //苹果支付
+    apple_pay: 1,
     onNewMessage: null,
     //全局弹窗
     toast: null,

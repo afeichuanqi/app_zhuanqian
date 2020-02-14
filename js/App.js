@@ -27,7 +27,7 @@ export class App extends Component<Props> {
 
         JPush.setLoggerEnable(true);
         this.localNotificationListener = result => {
-            console.log(result);
+            // console.log(result);
             if (result.notificationEventType === 'notificationOpened') {
                 let pageName = '', navigationIndex = 0, type = result.messageID;
                 if (type > 0 && type <= 3) {

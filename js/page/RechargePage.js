@@ -14,7 +14,7 @@ import NavigationBar from '../common/NavigationBar';
 import {
     Dimensions, Text,
     View, StatusBar,
-    TextInput, TouchableOpacity, Image, Platform,TouchableHighlight
+    TextInput, TouchableOpacity, Image, Platform, TouchableHighlight,
 } from 'react-native';
 import {connect} from 'react-redux';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -23,10 +23,14 @@ import {bottomTheme} from '../appSet';
 import Toast from 'react-native-root-toast';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import XPay from 'react-native-puti-pay';
-import {alipaySignOrder} from '../util/AppService';
+import {ApplePay} from 'react-native-apay';
+import {alipaySignOrder, wechatSignOrder} from '../util/AppService';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FastImagePro from '../common/FastImagePro';
 import actions from '../action';
+import Global from '../common/Global';
+import JShareModule from 'jshare-react-native';
+import JPush from 'jpush-react-native';
 
 const width = Dimensions.get('window').width;
 
@@ -60,6 +64,7 @@ class RechargePage extends PureComponent {
     }
 
     nums = [
+        // {id: 0, num: 1, info: '1元'},
         {id: 1, num: 10, info: '10元'},
         {id: 2, num: 50, info: '50元'},
         {id: 3, num: 100, info: '100元'},
@@ -81,6 +86,7 @@ class RechargePage extends PureComponent {
             style={{backgroundColor: theme}} // 背景颜色
         />;
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '充值管理', null, 'white', 'black', 16, null, false, false, '清空', 'black');
+        console.log(Global.apple_pay, 'Global.apple_pay');
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -161,10 +167,15 @@ class RechargePage extends PureComponent {
                             }}/>
 
                         </View>
-                        <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                            <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
-                            <PayType ref={ref => this.payType = ref}/>
-                        </View>
+                        {/*<View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>*/}
+                        {/*    <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>*/}
+                        {/*    <PayType ref={ref => this.payType = ref}/>*/}
+                        {/*</View>*/}
+                        {(Global.apple_pay == 1 && Platform.OS === 'ios') ? null :
+                            <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
+                                <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
+                                <PayType ref={ref => this.payType = ref}/>
+                            </View>}
                         <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 10}}>
                             <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>应付:</Text>
                             <Text style={{
@@ -179,7 +190,7 @@ class RechargePage extends PureComponent {
                             </Text>
                             <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                             </Text>
-                            <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取一定的费用
+                            <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、充值无最低额度限制，请根据发布任务的单价和数量确定充值金额，账户余额可以提现，但会收取2%的手续费(支付平台收取并非简易赚APP)
                             </Text>
                             <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、目前支持支付宝和微信支付充值、后续其他充值方式及时公告通知大家
                             </Text>
@@ -187,7 +198,7 @@ class RechargePage extends PureComponent {
                         <View style={{height: hp(7)}}/>
                     </KeyboardAwareScrollView>
                     <TouchableHighlight
-                        underlayColor={"#2170cd"}
+                        underlayColor={'#2170cd'}
                         onPress={this.sureRecharGe}
                         style={{
                             position: 'absolute',
@@ -235,7 +246,44 @@ class RechargePage extends PureComponent {
                     source={require('.././res/img/recharge/recharge_money.png')}/>
             </View>
             <Text style={{marginTop: 3, fontSize: hp(1.99), color: 'rgba(0,0,0,0.5)'}}>{item.info}</Text>
+            {this.state.moneyBoxIndex == item.id && <Image
+                resizeMode={'stretch'}
+                style={{height: hp(3), width: hp(3), position: 'absolute', bottom: 0, right: 0}}
+                source={require('.././res/img/recharge/changed.png')}/>}
+
         </TouchableOpacity>;
+    };
+    iosPay = () => {
+        const requestData = {
+            merchantIdentifier: 'merchant.com.yiertong.easyz',
+            supportedNetworks: ['mastercard', 'visa', 'chinaunionpay'],
+            countryCode: 'HK',
+            currencyCode: 'HKD',
+            paymentSummaryItems: [
+                {
+                    label: 'Item label',
+                    amount: '0.1',
+                },
+            ],
+        };
+
+        // Check if ApplePay is available
+        if (ApplePay.canMakePayments) {
+            ApplePay.requestPayment(requestData)
+                .then((paymentData) => {
+                    console.log(paymentData);
+                    // Simulate a request to the gateway
+                    setTimeout(() => {
+                        // Show status to user ApplePay.SUCCESS || ApplePay.FAILURE
+                        ApplePay.complete(ApplePay.SUCCESS)
+                            .then(() => {
+                                console.log('completed');
+                                // do something
+                            });
+                    }, 1000);
+                });
+        }
+        ;
     };
     sureRecharGe = () => {
         const rechargeVal = this.state.rechargeVal;
@@ -247,59 +295,130 @@ class RechargePage extends PureComponent {
             Toast.show('请输入正确的金额哦 ～ ～');
             return;
         }
-        //
-        if (this.payType.getActiveIndex() === 1) {
-            const params = {
-                subject: '任务币充值',
-                body: '任务币充值-RechargePage',
-                product_code: 'Recharge-Task-Money',
-                platform: Platform.OS,
-                total_amount: rechargeVal,
-            };
-            alipaySignOrder(params, this.props.userinfo.token).then(result => {
-                const orderInfo = result.orderInfo;
-                console.log(orderInfo);
-                //设置支付宝URL方案
-                XPay.setAlipayScheme('ap2021001108698283');
-                //支付宝开启沙箱模式仅限安卓
-                XPay.setAlipaySandbox(false);
-                XPay.alipay(orderInfo, (result) => {
-                    let msg = '支付未成功';
-                    console.log(result, 'result');
-                    if (result.resultStatus == 9000) {
-                        msg = '支付成功';
-                    } else if (result.resultStatus == 8000) {
-                        msg = '正在处理中';
-                    } else if (result.resultStatus == 4000) {
-                        msg = '订单支付失败';
-                    } else if (result.resultStatus == 5000) {
-                        msg = '重复请求';
-                    } else if (result.resultStatus == 6001) {
-                        msg = '用户中途取消';
-                    } else if (result.resultStatus == 6002) {
-                        msg = '网络连接出错';
-                    } else if (result.resultStatus == 6004) {
-                        msg = '支付结果未知（有可能已经支付成功）';
-                    }
-                    if (result.resultStatus == 9000) {
-                        Toast.show(msg);
-                        setTimeout(() => {
-                            NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
-                            const {userinfo, onGetUserInFoForToken} = this.props;
-                            onGetUserInFoForToken(userinfo.token, () => {
-                            });
-                            // this.props.onGetUserInFoForToken()
-                        }, 1000);
-                    } else {
-                        Toast.show(msg);
+        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+            this.iosPay();
+            return;
+        }
 
-                    }
-                });
-            });
+        if (this.payType.getActiveIndex() === 0) {
+
+            this.wechatPay(rechargeVal);
+        }
+        if (this.payType.getActiveIndex() === 1) {
+            this.aliPay(rechargeVal);
         }
 
     };
+    addLocalNotification = (rechargeVal) => {
+        JPush.addLocalNotification({
+            messageID: '10',
+            title: '任务币充值成功',
+            content: `您充值${rechargeVal}个任务币已经到账`,
+            extras: {priority: '2'},
+        });
+    };
+    aliPay = (rechargeVal) => {
+        const params = {
+            subject: '任务币充值',
+            body: '任务币充值-RechargePage',
+            product_code: 'Recharge-Task-Money',
+            platform: Platform.OS,
+            total_amount: rechargeVal,
+        };
+        alipaySignOrder(params, this.props.userinfo.token).then(result => {
+            const orderInfo = result.orderInfo;
+            // console.log(orderInfo);
+            //设置支付宝URL方案
+            XPay.setAlipayScheme('ap2021001108698283');
+            //支付宝开启沙箱模式仅限安卓
+            XPay.setAlipaySandbox(false);
+            XPay.alipay(orderInfo, (result) => {
+                let msg = '支付未成功';
+                console.log(result, 'result');
+                if (result.resultStatus == 9000) {
+                    msg = '支付成功';
+                } else if (result.resultStatus == 8000) {
+                    msg = '正在处理中';
+                } else if (result.resultStatus == 4000) {
+                    msg = '订单支付失败';
+                } else if (result.resultStatus == 5000) {
+                    msg = '重复请求';
+                } else if (result.resultStatus == 6001) {
+                    msg = '用户中途取消';
+                } else if (result.resultStatus == 6002) {
+                    msg = '网络连接出错';
+                } else if (result.resultStatus == 6004) {
+                    msg = '支付结果未知（有可能已经支付成功）';
+                }
+                if (result.resultStatus == 9000) {
+                    Toast.show(msg);
+                    setTimeout(() => {
+                        NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
+                        const {userinfo, onGetUserInFoForToken} = this.props;
+                        onGetUserInFoForToken(userinfo.token, () => {
+                        });
+                    }, 1000);
+                    this.addLocalNotification(rechargeVal);
+                } else {
+                    Toast.show(msg);
 
+                }
+            });
+        }).catch(msg => {
+            Toast.show(msg);
+        });
+    };
+    wechatPay = (rechargeVal) => {
+        JShareModule.isWeChatInstalled(bool => {
+            if (bool) {
+                const params = {
+                    subject: '任务币充值',
+                    body: '任务币充值-RechargePage',
+                    product_code: 'Recharge-Task-Money',
+                    platform: Platform.OS,
+                    total_amount: rechargeVal,
+                };
+                wechatSignOrder(params, this.props.userinfo.token).then(result => {
+                    console.log(result);
+                    const {partnerid, noncestr, timestamp, prepayid, sign} = result.params;
+                    XPay.setWxId('wx361451af380461c2');
+                    const data = {
+                        partnerId: partnerid,
+                        prepayId: prepayid,
+                        packageValue: result.params.package,
+                        nonceStr: noncestr,
+                        timeStamp: String(timestamp),
+                        sign: sign,
+                    };
+
+                    XPay.wxPay(data, (res) => {
+                        if (res.errCode == '-2') {
+                            Toast.show('用户中途取消');
+                        }
+                        if (res.errCode == '0') {
+                            Toast.show('支付成功');
+                            setTimeout(() => {
+                                NavigationUtils.goPage({navigationIndex: 2}, 'UserBillListPage');
+                                const {userinfo, onGetUserInFoForToken} = this.props;
+                                onGetUserInFoForToken(userinfo.token, () => {
+                                });
+                            }, 1000);
+                            this.addLocalNotification(rechargeVal);
+                        }
+                        if (res.errCode == '-1') {
+                            Toast.show('发生错误,请联系客服');
+                        }
+                    });
+                    console.log(data);
+                }).catch(msg => {
+                    // console.log(msg);
+                    Toast.show(msg);
+                });
+            } else {
+                Toast.show('请安装微信客户端');
+            }
+        });
+    };
     page = {
         pageIndex: 0,
     };
@@ -314,10 +433,10 @@ class PayType extends React.Component {
     items = [
         {title: '微信支付', id: 0, source: require('../res/img/payType/wechat.png'), info: '亿万用户的选择，更快更安全'},
         {title: '支付宝', id: 1, source: require('../res/img/payType/alipay.png'), info: '用户量最大的支付公司'},
+        // {title: '苹果支付', id: 2, source: require('../res/img/payType/alipay.png'), info: '苹果专用支付'},
     ];
     getActiveIndex = () => {
         return this.state.activeIndex;
-
     };
 
     render() {

@@ -579,6 +579,11 @@ class HeadlineComponent extends PureComponent {
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingLeft: 20,
+                shadowColor: '#efefef',
+                shadowRadius: 5,
+                shadowOpacity: 1,
+                shadowOffset: {w: 1, h: 1},
+                elevation: 0.3,//安卓的阴影
             }}>
                 <Image
                     style={{width: hp(2.8), height: hp(2.3)}}
@@ -626,8 +631,8 @@ class HeadlineComponent extends PureComponent {
                 </TouchableOpacity>
             </View>
             {/*分割线*/}
-            <View
-                style={{height: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>
+            {/*<View*/}
+            {/*    style={{height: 0.5, backgroundColor: 'rgba(0,0,0,0.2)', width: width - 20, alignSelf: 'center'}}/>*/}
         </AnimatedFadeIn>;
     }
 
@@ -729,7 +734,7 @@ class TopLeftFilterComponent extends Component {
                             onPress={() => this._onPress(Lindex)}
                         >
                             <Text style={[{
-                                fontSize: hp(2.4),
+                                fontSize: hp(2.35),
                                 fontWeight: '400',
                             }, Lindex === index ? {
                                 color: bottomTheme,

@@ -225,7 +225,7 @@ class WithDrawPayPage extends React.Component {
                         <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、提现金额需大于1
                             小于1000元之间的整数，提现时间为工作日9:00 -- 17:00
                         </Text>
-                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、每天只能提现一次,请知晓
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、提现手续费收取2%(支付平台收取,并非简易赚APP)
                         </Text>
                     </View>
                 </KeyboardAwareScrollView>

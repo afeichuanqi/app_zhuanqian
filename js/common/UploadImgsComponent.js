@@ -103,7 +103,10 @@ class UploadImgsComponent extends PureComponent {
                             <TouchableOpacity
                                 onPress={() => {
                                     const {userinfo} = this.props;
-
+                                    if(!userinfo.token){
+                                        Toast.show('请先登录');
+                                        return
+                                    }
                                     const tmpArr = [...this.state.data];
                                     const item = tmpArr[index];
                                     const uri = item.uri;
@@ -201,6 +204,10 @@ class UploadImgsComponent extends PureComponent {
     _selectImg = (imageData, timestamp) => {
 
         const {userinfo} = this.props;
+        if(!userinfo.token){
+            Toast.show('请先登录');
+            return
+        }
         let mime = imageData.mime;
         const mimeIndex = mime.indexOf('/');
         mime = mime.substring(mimeIndex + 1, mime.length);

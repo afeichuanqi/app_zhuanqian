@@ -79,7 +79,7 @@ class UserFeedbackPage extends PureComponent {
                             <Text style={{
                                 color: 'rgba(0,0,0,0.5)',
                                 paddingTop: 10,
-                                paddingLeft: 5,
+                                paddingLeft: 10,
                                 marginBottom: 10,
                             }}>标签</Text>
                             <RadioCheck ref={ref => this.radioCheck = ref}/>
@@ -88,7 +88,7 @@ class UserFeedbackPage extends PureComponent {
                             <Text style={{
                                 color: 'rgba(0,0,0,0.5)',
                                 paddingTop: 10,
-                                paddingLeft: 5,
+                                paddingLeft: 10,
                                 marginBottom: 10,
                             }}>反馈内容</Text>
                             <InputTextImage ref={ref => this.inputTextImage = ref} userinfo={this.props.userinfo}/>
@@ -97,7 +97,7 @@ class UserFeedbackPage extends PureComponent {
                             <Text style={{
                                 color: 'rgba(0,0,0,0.5)',
                                 paddingTop: 10,
-                                paddingLeft: 5,
+                                paddingLeft: 10,
                                 marginBottom: 10,
                             }}>联系方式</Text>
                             <InputPro ref={ref => this.inputPro = ref}/>
@@ -305,14 +305,18 @@ class RadioCheck extends PureComponent {
                     style={[{
                         paddingHorizontal: 8,
                         paddingVertical: 8,
-                        borderWidth: 1,
-                        borderColor: bottomTheme,
+                        // borderWidth: 1,
+                        // borderColor: bottomTheme,
                         marginHorizontal: 10,
                         borderRadius: 4,
-                        backgroundColor: 'rgb(252,252,252)',
-                        borderStyle: 'dashed',
+                        backgroundColor: '#f7f7f7',
+                        borderWidth: 0.3,
+                        // borderStyle: 'dashed',
                         // borderWidth: 1,
-                    }, checkIndex === index ? {borderColor: bottomTheme} : {borderColor: 'rgba(0,0,0,0.7)'}]}>
+                    }, checkIndex === index ? {
+                        backgroundColor: 'rgba(33,150,243,0.1)',
+                         borderColor: bottomTheme,
+                    }:{backgroundColor: '#f7f7f7'}]}>
                     <Text
                         style={[{color: bottomTheme}, , checkIndex === index ? {color: bottomTheme} : {color: 'rgba(0,0,0,0.7)'}]}>{item.title}</Text>
                 </TouchableOpacity>;
