@@ -68,8 +68,11 @@ export default function onAction(state = defaultContent, action) {
                 wechat_user: data.wechat_user,
                 weibo_id: data.weibo_id,
                 weibo_user: data.weibo_user,
+                qq_id: data.qq_id,
+                qq_user: data.qq_user,
                 login: true,
             };
+
         case Types.LOGIN_FAIL://登录失败
             return {
                 ...state,
@@ -100,6 +103,8 @@ export default function onAction(state = defaultContent, action) {
                 wechat_user: data.wechat_user,
                 weibo_id: data.weibo_id,
                 weibo_user: data.weibo_user,
+                qq_id: data.qq_id,
+                qq_user: data.qq_user,
                 login: true,
             };
         case Types.GET_USER_INFO_FAIL:
@@ -115,11 +120,25 @@ export default function onAction(state = defaultContent, action) {
             };
 
         case Types.CHANGE_WECHAT_SUCCESS:
-            console.log(data);
+
             return {
                 ...state,
                 wechat_id: data.wechat_id,
                 wechat_user: data.wechat_user,
+            };
+            case Types.CHANGE_QQ_SUCCESS:
+                console.log(data);
+            return {
+                ...state,
+                qq_id: data.qq_id,
+                qq_user: data.qq_user,
+            };
+        case Types.CHANGE_WEIBO_SUCCESS:
+            console.log(data);
+            return {
+                ...state,
+                weibo_id: data.weibo_id,
+                weibo_user: data.weibo_user,
             };
         case Types.UPLOAD_AVATAR_LOADING:
             return {

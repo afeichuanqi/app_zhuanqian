@@ -9,6 +9,7 @@ const ImageUtil = {
         if (Platform.OS === 'ios') {
             let promise = CameraRoll.saveToCameraRoll(img, 'photo');
             promise.then(function (result) {
+                console.log(result);
                 callback('保存成功');
             }).catch(function (error) {
                 callback('保存失败');

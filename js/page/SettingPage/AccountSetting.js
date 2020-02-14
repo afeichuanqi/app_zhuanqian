@@ -113,6 +113,49 @@ class AccountSetting extends PureComponent {
                             })
                         }
                     }, userinfo.wechat_user ? userinfo.wechat_user : '立即绑定')}
+                    {ViewUtil.getSettingMenu('新浪微博', () => {
+                        if(userinfo.weibo_user){
+                            Toast.show('您已经绑定了新浪微博');
+                        }else{
+                            this.loddingModal.show();
+                            JShareModule.authorize({
+                                platform: 'weibo',
+                            }, (info) => {
+                                const {token, originData} = info;
+                                const id = JSON.parse(originData).id || JSON.parse(originData).uid;
+
+                                this.loddingModal.hide();
+                                this.props.onChangeSina(token,id,this.props.userinfo.token,(bool,data)=>{
+                                    if(bool){
+                                        Toast.show('绑定成功')
+                                    }else{
+                                        Toast.show(data.msg)
+                                    }
+                                })
+                            })
+                        }
+                    }, userinfo.weibo_user ? userinfo.weibo_user : '立即绑定')}
+                    {ViewUtil.getSettingMenu('QQ', () => {
+                        if(userinfo.qq_user){
+                            Toast.show('您已经绑定了QQ');
+                        }else{
+                            this.loddingModal.show();
+                            JShareModule.authorize({
+                                platform: 'qq',
+                            }, (info) => {
+                                const {openId, token} = info;
+
+                                this.loddingModal.hide();
+                                this.props.onChangeQQ(token,openId,this.props.userinfo.token,(bool,data)=>{
+                                    if(bool){
+                                        Toast.show('绑定成功')
+                                    }else{
+                                        Toast.show(data.msg)
+                                    }
+                                })
+                            })
+                        }
+                    }, userinfo.qq_user ? userinfo.qq_user : '立即绑定')}
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.6}
@@ -161,6 +204,8 @@ const mapDispatchToProps = dispatch => ({
     onClearUserinfoAll: () => dispatch(actions.onClearUserinfoAll()),
     onSetNoticeMsgIsAllRead: () => dispatch(actions.onSetNoticeMsgIsAllRead()),
     onChangeWechat: (token, openId, userToken, callback) => dispatch(actions.onChangeWechat(token, openId, userToken, callback)),
+    onChangeSina: (token, uuid, userToken, callback) => dispatch(actions.onChangeSina(token, uuid, userToken, callback)),
+    onChangeQQ: (token, uuid, userToken, callback) => dispatch(actions.onChangeQQ(token, uuid, userToken, callback)),
 });
 const AccountSettingRedux = connect(mapStateToProps, mapDispatchToProps)(AccountSetting);
 export default AccountSettingRedux;

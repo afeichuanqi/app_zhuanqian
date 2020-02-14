@@ -5,7 +5,12 @@ import {
     setUserData,
     getUserInfoForToken,
     uploadQiniuImage,
-    uploadUserinfoBgImg, authorizeLogin, bindPhoneForUserId, changeWechatInfoForUserid,
+    uploadUserinfoBgImg,
+    authorizeLogin,
+    bindPhoneForUserId,
+    changeWechatInfoForUserid,
+    authorizeSinaLogin,
+    changeSinaInfoForUserid, authorizeQQLogin, changeQQInfoForUserid,
 } from '../../util/AppService';
 
 /**
@@ -83,20 +88,51 @@ export function onChangeWechat(token, openId, userToken, callback) {
         }).catch(msg=>{
             callback(false, {msg});
         })
-        // bindPhoneForUserId({
-        //     phone,
-        //     code,
-        // }, token).then((data) => {
-
-        // }).catch(msg => {
-        //     console.log(msg);
-        //     callback(false, {msg});
-        //     // dispatch({type: Types.LOGIN_FAIL});
-        // });
-
     };
 }
-
+/**
+ * 更换微博帐户
+ * @returns {{theme: *, type: string}}
+ */
+export function onChangeSina(token, uuid, userToken, callback) {
+    return dispatch => {
+        changeSinaInfoForUserid({
+            access_token: token,
+            uuid: uuid,
+        }, userToken).then(data => {
+            callback(true, data);
+            // console.log('验证成功');
+            dispatch({
+                type: Types.CHANGE_WEIBO_SUCCESS,
+                data: data,
+            });
+        }).catch(msg=>{
+            callback(false, {msg});
+        })
+    };
+}
+/**
+ * 更换QQ帐户
+ * @returns {{theme: *, type: string}}
+ */
+export function onChangeQQ(token, uuid, userToken, callback) {
+    return dispatch => {
+        changeQQInfoForUserid({
+            access_token: token,
+            open_id: uuid,
+        }, userToken).then(data => {
+            callback(true, data);
+            // console.log('验证成功');
+            console.log(data);
+            dispatch({
+                type: Types.CHANGE_QQ_SUCCESS,
+                data: data,
+            });
+        }).catch(msg=>{
+            callback(false, {msg});
+        })
+    };
+}
 /**
  * 修改头像
  * @returns {{theme: *, type: string}}
@@ -280,7 +316,45 @@ export function onWechatAuthorizeLogin(data, callback) {
             callback(false, {msg});
             dispatch({type: Types.WECHAT_AUTH_FAIL});
         });
-
     };
 }
+/**
+ * 根据token获取用户基本信息
+ */
 
+export function onSinaAuthorizeLogin(data, callback) {
+    return dispatch => {
+        dispatch({type: Types.WECHAT_AUTH_LOADING});
+        // console.log(data);
+        authorizeSinaLogin(data).then((data) => {
+            callback(true, data);
+            dispatch({
+                type: Types.WECHAT_AUTH_SUCCESS,
+                data,
+            });
+        }).catch((msg) => {
+            callback(false, {msg});
+            dispatch({type: Types.WECHAT_AUTH_FAIL});
+        });
+    };
+}
+/**
+ * 根据token获取用户基本信息
+ */
+
+export function onQQAuthorizeLogin(data, callback) {
+    return dispatch => {
+        dispatch({type: Types.WECHAT_AUTH_LOADING});
+        // console.log(data);
+        authorizeQQLogin(data).then((data) => {
+            callback(true, data);
+            dispatch({
+                type: Types.WECHAT_AUTH_SUCCESS,
+                data,
+            });
+        }).catch((msg) => {
+            callback(false, {msg});
+            dispatch({type: Types.WECHAT_AUTH_FAIL});
+        });
+    };
+}

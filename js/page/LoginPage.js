@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {View, Text, TextInput, Dimensions, TouchableOpacity, StatusBar, Image} from 'react-native';
+import {View, Text, TextInput, Dimensions, TouchableOpacity, StatusBar, Image, Platform} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {theme, bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -25,6 +25,7 @@ import Toast from 'react-native-root-toast';
 import actions from '../action';
 import {connect} from 'react-redux';
 import LoddingModal from '../common/LoddingModal';
+import DeviceInfo from 'react-native-device-info';
 
 const {width, height} = Dimensions.get('window');
 
@@ -161,7 +162,7 @@ class LoginPage extends PureComponent {
                             <View style={{width: wp(20), height: 1, backgroundColor: '#dedede', borderRadius: 5}}/>
                             <Text style={{
                                 marginHorizontal: 10,
-                                color: 'rgba(0,0,0,0.6)',
+                                color: 'rgba(0,0,0,0.5)',
                                 fontSize: hp(1.6),
                             }}>您还可以用以下方式登录</Text>
                             <View style={{width: wp(20), height: 1, backgroundColor: '#dedede', borderRadius: 5}}/>
@@ -180,18 +181,19 @@ class LoginPage extends PureComponent {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 activeOpacity={0.5}
-                                onPress={() => {
-                                    JShareModule.authorize({
-                                        platform: 'weibo',
-                                    },(info)=>{
-                                        console.log(info);
-                                    },(msg)=>{
-                                        console.log(msg);
-                                    })
-                                }}
+                                onPress={this.handleSinaAuthorze}
                             >
                                 <Image
                                     source={require('../res/img/share/xinlangweibo.png')}
+                                    style={{width: hp(6), height: hp(6), marginLeft: hp(3)}}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                activeOpacity={0.5}
+                                onPress={this.handleQQAuthorze}
+                            >
+                                <Image
+                                    source={require('../res/img/share/qq.png')}
                                     style={{width: hp(6), height: hp(6), marginLeft: hp(3)}}
                                 />
                             </TouchableOpacity>
@@ -229,14 +231,80 @@ class LoginPage extends PureComponent {
         );
     }
 
+    handleQQAuthorze = () => {
+        JShareModule.authorize({
+            platform: 'qq',
+        }, (info) => {
+            const {openId, token} = info;
+            const DeviceID = DeviceInfo.getUniqueId();
+            const platform = Platform.OS;
+            const device_brand = DeviceInfo.getBrand();
+            const device_name = DeviceInfo.getDeviceName();
+            const device_system_version = DeviceInfo.getSystemVersion();
+            const device_is_tablet = DeviceInfo.isTablet();
+            this.props.onQQAuthorizeLogin({
+                open_id:openId,
+                access_token: token,
+                DeviceID,
+                platform, device_brand, device_name, device_system_version, device_is_tablet,
+            },(bool, data)=>{
+                if (bool) {
+                    Toast.show('登录成功');
+                    NavigationUtils.goBack(this.props.navigation);
+                } else {
+                    Toast.show(data.msg);
+                }
+            })
+            // console.log(info);
+        });
+    };
+
+    handleSinaAuthorze = () => {
+        this.loddingModal.show();
+
+        JShareModule.authorize({
+            platform: 'weibo',
+        }, (info) => {
+            const {onSinaAuthorizeLogin} = this.props;
+
+            const DeviceID = DeviceInfo.getUniqueId();
+            const platform = Platform.OS;
+            const device_brand = DeviceInfo.getBrand();
+            const device_name = DeviceInfo.getDeviceName();
+            const device_system_version = DeviceInfo.getSystemVersion();
+            const device_is_tablet = DeviceInfo.isTablet();
+            this.loddingModal.hide();
+            const {token, originData} = info;
+            const id = JSON.parse(originData).id || JSON.parse(originData).uid;
+
+            onSinaAuthorizeLogin({
+                access_token: token,
+                uuid: id, DeviceID, platform, device_brand, device_name, device_system_version, device_is_tablet,
+            }, () => {
+                Toast.show('登录成功');
+                NavigationUtils.goBack(this.props.navigation);
+            });
+        }, (msg) => {
+            Toast.show(msg);
+        });
+    };
     handleWechatAuthorize = () => {
         this.loddingModal.show();
         authorizeWechat((bool, data) => {
             this.loddingModal.hide();
             if (bool) {
+
+                const DeviceID = DeviceInfo.getUniqueId();
+                const platform = Platform.OS;
+                const device_brand = DeviceInfo.getBrand();
+                const device_name = DeviceInfo.getDeviceName();
+                const device_system_version = DeviceInfo.getSystemVersion();
+                const device_is_tablet = DeviceInfo.isTablet();
                 this.props.onWechatAuthorizeLogin({
                     open_id: data.open_id,
                     access_token: data.access_token,
+                    DeviceID,
+                    platform, device_brand, device_name, device_system_version, device_is_tablet,
                 }, (bool, data) => {
                     if (bool) {
                         Toast.show('登录成功');
@@ -248,15 +316,15 @@ class LoginPage extends PureComponent {
             } else {
                 if (data.code == '40009') {
                     Toast.show('未安装微信客户端');
-                }else{
+                } else {
                     Toast.show('授权失败');
                 }
 
             }
         });
-
-
     };
+
+
     _getCode = () => {
         this.phoneInput.onBlur();
         const isTrue = isPoneAvailable(this.phone);
@@ -372,6 +440,8 @@ class PhoneInput extends PureComponent {
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
     onWechatAuthorizeLogin: (data, callback) => dispatch(actions.onWechatAuthorizeLogin(data, callback)),
+    onSinaAuthorizeLogin: (data, callback) => dispatch(actions.onSinaAuthorizeLogin(data, callback)),
+    onQQAuthorizeLogin: (data, callback) => dispatch(actions.onQQAuthorizeLogin(data, callback)),
 });
 const LoginPageRedux = connect(mapStateToProps, mapDispatchToProps)(LoginPage);
 export default LoginPageRedux;

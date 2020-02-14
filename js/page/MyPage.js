@@ -65,7 +65,7 @@ class MyPage extends PureComponent {
         });
         const titleFontSize = Animated.interpolate(this.scrollY, {
             inputRange: [0, 100],
-            outputRange: [23, 17],
+            outputRange: [24, 17],
             extrapolate: 'clamp',
         });
         const translateY = Animated.interpolate(this.scrollY, {
@@ -73,11 +73,11 @@ class MyPage extends PureComponent {
             outputRange: [height, 0, -height],
             extrapolate: 'clamp',
         });
-        const opacity = Animated.interpolate(this.scrollY, {
-            inputRange: [0,  150],
-            outputRange: [0, 1],
-            extrapolate: 'clamp',
-        });
+        // const opacity = Animated.interpolate(this.scrollY, {
+        //     inputRange: [0,  150],
+        //     outputRange: [0, 1],
+        //     extrapolate: 'clamp',
+        // });
         let navigationBar = <NavigationBar
             hide={true}
             statusBar={statusBar}
@@ -98,27 +98,27 @@ class MyPage extends PureComponent {
                         paddingHorizontal: 10,
                         backgroundColor: bottomTheme,
                     }}>
-                        <Animated.View style={{
+                        <View style={{
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'flex-end',
-                            opacity,
+                            opacity:1,
                             height: 50,
                         }}>
-                            <TouchableOpacity
-                                activeOpacity={0.6}
-                                onPress={() => {
-                                    if (this.props.userinfo.login) {
-                                        NavigationUtils.goPage({userid: this.props.userinfo.userid}, 'ShopInfoPage');
-                                    } else {
-                                        NavigationUtils.goPage({}, 'LoginPage');
-                                    }
-                                }}
-                                style={{marginRight: 10}}
+                            {/*<TouchableOpacity*/}
+                            {/*    activeOpacity={0.6}*/}
+                            {/*    onPress={() => {*/}
+                            {/*        if (this.props.userinfo.login) {*/}
+                            {/*            NavigationUtils.goPage({userid: this.props.userinfo.userid}, 'ShopInfoPage');*/}
+                            {/*        } else {*/}
+                            {/*            NavigationUtils.goPage({}, 'LoginPage');*/}
+                            {/*        }*/}
+                            {/*    }}*/}
+                            {/*    style={{marginRight: 10}}*/}
 
-                            >
-                                <SvgUri width={19} height={19} fill={'white'} svgXmlData={shop}/>
-                            </TouchableOpacity>
+                            {/*>*/}
+                            {/*    <SvgUri width={19} height={19} fill={'white'} svgXmlData={shop}/>*/}
+                            {/*</TouchableOpacity>*/}
                             <TouchableOpacity
                                 activeOpacity={0.6}
                                 onPress={() => {
@@ -126,9 +126,9 @@ class MyPage extends PureComponent {
                                 }}
 
                             >
-                                <SvgUri width={19} height={19} fill={'white'} svgXmlData={setting}/>
+                                <SvgUri width={hp(2.7)} height={hp(2.7)} fill={'white'} svgXmlData={setting}/>
                             </TouchableOpacity>
-                        </Animated.View>
+                        </View>
 
                     </View>
 
@@ -372,7 +372,7 @@ class ToolsItemComponent extends PureComponent {
             }}>
             <View>
                 <Text style={{fontSize: hp(2.3), color: 'black'}}>{title}</Text>
-                <Text style={{fontSize: hp(1.65), color: 'black', marginTop: 5, opacity: 0.7}}>{info}</Text>
+                <Text style={{fontSize: hp(1.65), color: 'black', marginTop: 5, opacity: 0.6}}>{info}</Text>
             </View>
             <FastImage source={source}
                        style={{width: wp(8.7), height: wp(8.7), borderRadius: 12, marginLeft: wp(1.5)}}/>
@@ -400,10 +400,10 @@ class TopInfoColumn extends PureComponent {
             height: 80,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingTop: hp(1.5),
+            paddingTop: hp(1),
         }}>
-            <Text style={{color: 'white', fontSize: hp(2.2), fontWeight: '500'}}>{value}</Text>
-            <Text style={{color: 'white', fontSize: hp(1.85), opacity: 0.8, marginTop: 5}}>{title}</Text>
+            <Text style={{color: 'white', fontSize: hp(2.1), fontWeight: '500'}}>{value}</Text>
+            <Text style={{color: 'white', fontSize: hp(1.7), opacity: 0.8, marginTop: 5}}>{title}</Text>
         </View>;
     };
     _avatarClick = () => {
@@ -445,7 +445,7 @@ class TopInfoColumn extends PureComponent {
 
                         <SvgUri width={hp(1.8)} height={hp(1.8)} style={{marginRight: 5}} fill={'white'}
                                 svgXmlData={shop}/>
-                        <Text style={{fontSize: hp(1.9), color: 'white'}}>我的店铺 > </Text>
+                        <Text style={{fontSize: hp(1.8), color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{marginTop: hp(2)}}

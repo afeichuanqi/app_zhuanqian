@@ -734,7 +734,7 @@ class BottomInfoForm extends Component {
                     })}
                 {genFormItem('任务说明', 1,
                     {
-                        info: '大于2个字',
+                        info: '简单说明任务概要(2-n)',
                         onChangeText: this._changeTaskInfo,
                         editable: true,
 

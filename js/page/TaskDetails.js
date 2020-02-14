@@ -333,7 +333,7 @@ class TaskDetails extends PureComponent {
                                         }}>{taskData && taskData.rewardNum - taskData.taskSignUpNum}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.9),
+                                            fontSize: hp(1.8),
                                             marginTop: 5,
                                         }}>剩余数量</Text>
                                     </View>
@@ -345,7 +345,7 @@ class TaskDetails extends PureComponent {
                                         }}>{taskData && taskData.taskPassNum}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.9),
+                                            fontSize: hp(1.8),
                                             marginTop: 5,
                                         }}>完成数量</Text>
                                     </View>
@@ -357,7 +357,7 @@ class TaskDetails extends PureComponent {
                                         }}>{taskData && taskData.orderTimeLimit.title}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.9),
+                                            fontSize: hp(1.8),
                                             marginTop: 5,
                                         }}>做单时间</Text>
                                     </View>
@@ -370,7 +370,7 @@ class TaskDetails extends PureComponent {
                                             }}>{taskData && taskData.reviewTime.title}</Text>
                                         <Text style={{
                                             color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.9),
+                                            fontSize: hp(1.8),
                                             marginTop: 5,
                                         }}>审核时间</Text>
                                     </View>
@@ -665,7 +665,7 @@ class TaskDetailsPop extends Component {
                     alignItems: 'center', flexDirection: 'row',
                     justifyContent: 'center',
                 }}>
-                <Text style={{fontSize: hp(2.2), opacity: 0.9, color: 'black'}}>接单规则</Text>
+                <Text style={{fontSize: hp(2), opacity: 0.7, color: 'black'}}>接单规则</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 // key={index}
@@ -678,9 +678,9 @@ class TaskDetailsPop extends Component {
                     width: 100, height: 35,
                     alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                 }}>
-                <SvgUri width={18} fill={'rgba(0,0,0,0.9)'} height={18} svgXmlData={fenxiang}/>
+                <SvgUri width={hp(2.7)} fill={'rgba(0,0,0,0.7)'} height={hp(2.7)} svgXmlData={fenxiang}/>
                 <Text
-                    style={{fontSize: hp(2.2), width: 50, textAlign: 'center', opacity: 0.9, color: 'black'}}>分享</Text>
+                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.7, color: 'black'}}>分享</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 activeOpacity={0.6}
@@ -701,10 +701,10 @@ class TaskDetailsPop extends Component {
                     width: 100, height: 35,
                     alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                 }}>
-                <SvgUri width={18} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.9)'} height={18}
+                <SvgUri width={hp(2.7)} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={hp(2.7)}
                         svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
                 <Text
-                    style={{fontSize: hp(2.2), width: 50, textAlign: 'center', opacity: 0.9, color: 'black'}}>收藏</Text>
+                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.7, color: 'black'}}>收藏</Text>
             </TouchableOpacity>
 
         </TaskMenu>;

@@ -1,4 +1,4 @@
-import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken,onSetShopInfoBgImg,onAddPayAccount,onWechatAuthorizeLogin,onChangePhone,onChangeWechat} from './userinfo';
+import {onLogin,onUploadAvatar,onSetUserSex,onSetUserName,onClearUserinfoAll,onGetUserInFoForToken,onSetShopInfoBgImg,onAddPayAccount,onWechatAuthorizeLogin,onChangePhone,onChangeWechat,onSinaAuthorizeLogin,onChangeSina,onQQAuthorizeLogin,onChangeQQ} from './userinfo';
 import {onSetMessageLoad,verifyIdentIdy,onMessageFrom,onAddMesage,onSetMsgStatus,onGetMegForUserid,onSetImageMsgStatus,onMessageInitialiZation} from './message';
 import {onSetNoticeMsgIsAllRead,onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onFriendInitialiZation,onSetOtherTypeUnread,setAppeal_2IsRead,setAppeal_3IsRead,onSetNoticeMsg,onSetNoticeMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
@@ -18,6 +18,10 @@ export default {
     onAddPayAccount,
     onWechatAuthorizeLogin,
     onChangeWechat,
+    onSinaAuthorizeLogin,
+    onChangeSina,
+    onQQAuthorizeLogin,
+    onChangeQQ,
     //消息列表
     verifyIdentIdy,
     onSetMessageLoad,

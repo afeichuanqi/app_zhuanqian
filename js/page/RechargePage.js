@@ -431,9 +431,9 @@ class PayType extends React.Component {
     };
 
     items = [
-        {title: '微信支付', id: 0, source: require('../res/img/payType/wechat.png'), info: '亿万用户的选择，更快更安全'},
-        {title: '支付宝', id: 1, source: require('../res/img/payType/alipay.png'), info: '用户量最大的支付公司'},
-        // {title: '苹果支付', id: 2, source: require('../res/img/payType/alipay.png'), info: '苹果专用支付'},
+
+        {title: '支付宝', id: 1, source: require('../res/img/payType/alipay.png'), info: '亿万用户的选择，更快更安全', isRecommend: 1},
+        {title: '微信支付', id: 0, source: require('../res/img/payType/wechat.png'), info: '用户量第二大支付平台', isRecommend: 0},
     ];
     getActiveIndex = () => {
         return this.state.activeIndex;
@@ -470,7 +470,22 @@ class PayType extends React.Component {
                     style={{width: wp(6), height: wp(5), borderRadius: 5}}
                 />
                 <View>
-                    <Text style={{fontSize: hp(2), marginLeft: 10, color: 'black'}}>{item.title}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+
+                    }}>
+                        <Text style={{fontSize: hp(2), marginLeft: 10, color: 'black'}}>{item.title}</Text>
+                        {item.isRecommend===1&&<View style={{backgroundColor: bottomTheme, justifyContent:'center', alignItems:'center',
+                            marginLeft:7,
+                            paddingHorizontal:hp(0.4),
+                            paddingVertical:hp(0.1),
+                            borderRadius:3,
+                        }}>
+                            <Text style={{fontSize: hp(1.35),color:'white'}}>推荐</Text>
+                        </View>}
+
+                    </View>
+
                     <Text style={{
                         fontSize: hp(1.6),
                         marginLeft: 10,

@@ -115,6 +115,9 @@ class ToastShare extends PureComponent {
                                 {this.getMenu('微博', require('../res/img/share/xinlangweibo.png'), () => {
                                     this.shareUtil('sina_weibo');
                                 })}
+                                {/*{this.getMenu('微博还有', require('../res/img/share/xinlangweibo.png'), () => {*/}
+                                {/*    this.shareUtil('sina_weibo_contact');*/}
+                                {/*})}*/}
                                 {this.getMenu('复制链接', require('../res/img/share/copyurl.png'), () => {
                                     Clipboard.setString('http://www.easy-z.cn');
                                     Toast.show('复制成功', {position: Toast.positions.CENTER});
@@ -139,14 +142,17 @@ class ToastShare extends PureComponent {
         url: 'http://www.easy-z.cn',
     };
     shareUtil = (platform) => {
-        JShareModule.share({
+        let data = {
             type: 'link',
             platform: platform, // 分享到指定平台
             title: this.shareInfo.title,
             text: this.shareInfo.text,
             imageUrl: this.shareInfo.imageUrl,
             url: this.shareInfo.url,
-        }, () => {
+
+        }
+
+        JShareModule.share(data, () => {
 
         }, (msg) => {
             console.log(msg);

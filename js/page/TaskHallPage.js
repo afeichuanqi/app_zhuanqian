@@ -50,18 +50,21 @@ class TaskHallPage extends PureComponent {
             {key: 'first', title: '全部'},
             {key: 'second', title: Platform.OS === 'android' ? '安卓手机' : '苹果手机'},
         ],
+        showFeekBack:true
     };
 
     componentDidMount() {
 
 
     }
+
     showAnimated = false;
     showFeedBackTimer = null;
     position = new Animated.Value(0);
     animations = {
         opacity: new Animated.Value(0.5),
     };
+
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
         this.showFeedBackTimer && clearTimeout(this.showFeedBackTimer);
@@ -72,7 +75,7 @@ class TaskHallPage extends PureComponent {
         if (!this.showAnimated) {
             this.showFeedBackImg();
         } else {
-           NavigationUtils.goPage({},'UserFeedbackPage')
+            NavigationUtils.goPage({}, 'UserFeedbackPage');
         }
     };
 
@@ -103,7 +106,7 @@ class TaskHallPage extends PureComponent {
 
     render() {
 
-        const {navigationIndex, navigationRoutes} = this.state;
+        const {navigationIndex, navigationRoutes,showFeekBack} = this.state;
 
         let statusBar = {
             hidden: false,
@@ -196,8 +199,14 @@ class TaskHallPage extends PureComponent {
                     initialLayout={{width}}
                     lazy={true}
                 />
+                {showFeekBack &&
                 <AnimatedTouchableOpacity
                     activeOpacity={0.5}
+                    onLongPress={() => {
+                        this.setState({
+                            showFeekBack: false
+                        })
+                    }}
                     onPress={this.animationClick}
                     style={{
                         position: 'absolute',
@@ -210,7 +219,10 @@ class TaskHallPage extends PureComponent {
                         style={{width: hp(18), height: hp(7.5)}}
                         source={require('../res/img/indexPage/Feedback.png')}
                     />
+
                 </AnimatedTouchableOpacity>
+                }
+
             </View>
         );
     }
