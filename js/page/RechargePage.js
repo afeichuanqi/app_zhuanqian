@@ -23,8 +23,8 @@ import {bottomTheme} from '../appSet';
 import Toast from 'react-native-root-toast';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import XPay from 'react-native-puti-pay';
-import {ApplePay} from 'react-native-apay';
-import {alipaySignOrder, wechatSignOrder} from '../util/AppService';
+// import {ApplePay} from 'react-native-apay';
+import {alipaySignOrder, applePayConfirmOrder, wechatSignOrder} from '../util/AppService';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FastImagePro from '../common/FastImagePro';
 import actions from '../action';
@@ -32,13 +32,41 @@ import Global from '../common/Global';
 import JShareModule from 'jshare-react-native';
 import JPush from 'jpush-react-native';
 
+// import Utils from 'react-native-in-app-utils';
+// const {RNInAppPurchaseModule} = NativeModules;
+import {NativeModules} from 'react-native';
+import LoddingModal from '../common/LoddingModal';
+
+const {InAppUtils} = NativeModules;
 const width = Dimensions.get('window').width;
 
 class RechargePage extends PureComponent {
+
+    nums = [
+        // {id: 0, num: 1, info: '1元'},
+        {id: 1, num: 10, info: '10元', price: 10},
+        {id: 2, num: 50, info: '50元', price: 50},
+        {id: 3, num: 100, info: '100元', price: 100},
+        {id: 4, num: 300, info: '300元', price: 300},
+        {id: 5, num: 500, info: '500元', price: 500},
+        {id: 6, num: 800, info: '800元', price: 800},
+
+    ];
+
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
+        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+            this.nums = [
+                {id: 1, num: 35, info: '50元', price: 50, identifier: 'com.yiertong.easyz1'},
+                {id: 2, num: 61.6, info: '88元', price: 88, identifier: 'com.yiertong.easyz2'},
+                {id: 3, num: 75.6, info: '108元', price: 108, identifier: 'com.yiertong.easyz3'},
+                {id: 4, num: 362.6, info: '518元', price: 518, identifier: 'com.yiertong.easyz4'},
+                {id: 5, num: 500, info: '500元', price: 10, hide: true},
+                {id: 6, num: 800, info: '800元', price: 10, hide: true},
+            ];
+        }
     }
 
     onBackPress = () => {
@@ -63,16 +91,6 @@ class RechargePage extends PureComponent {
         this.backPress.componentWillUnmount();
     }
 
-    nums = [
-        // {id: 0, num: 1, info: '1元'},
-        {id: 1, num: 10, info: '10元'},
-        {id: 2, num: 50, info: '50元'},
-        {id: 3, num: 100, info: '100元'},
-        {id: 4, num: 300, info: '300元'},
-        {id: 5, num: 500, info: '500元'},
-        {id: 6, num: 800, info: '800元'},
-
-    ];
 
     render() {
         let statusBar = {
@@ -160,22 +178,18 @@ class RechargePage extends PureComponent {
                                     return this.renderMoneyBox(index, item);
                                 })}
                             </View>
-                            <InputPro onChangeText={(text) => {
+                            {Global.apple_pay == 1 && Platform.OS === 'ios' ? null : <InputPro onChangeText={(text) => {
                                 this.setState({
                                     rechargeVal: parseFloat(text),
                                 });
-                            }}/>
-
+                            }}/>}
                         </View>
-                        {/*<View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>*/}
-                        {/*    <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>*/}
-                        {/*    <PayType ref={ref => this.payType = ref}/>*/}
-                        {/*</View>*/}
-                        {(Global.apple_pay == 1 && Platform.OS === 'ios') ? null :
-                            <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
-                                <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
-                                <PayType ref={ref => this.payType = ref}/>
-                            </View>}
+                        <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
+                            <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>
+                            <PayType apple_pay={Global.apple_pay} ref={ref => this.payType = ref}/>
+                        </View>
+                        {/*{(Global.apple_pay == 1 && Platform.OS === 'ios') ? null :*/}
+                        {/*   }*/}
                         <View style={{flexDirection: 'row', marginLeft: 10, marginTop: 10}}>
                             <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)', top: hp(1)}}>应付:</Text>
                             <Text style={{
@@ -212,6 +226,9 @@ class RechargePage extends PureComponent {
                         }}>
                         <Text style={{fontSize: hp(2.5), fontWeight: 'bold', color: 'white'}}>确认充值</Text>
                     </TouchableHighlight>
+                    <LoddingModal
+                        ref={ref => this.loddingModal = ref}
+                    />
                 </View>
 
             </SafeAreaViewPlus>
@@ -219,10 +236,18 @@ class RechargePage extends PureComponent {
     }
 
     renderMoneyBox = (index, item) => {
+        if (item.hide) {
+            return <View
+                key={index}
+                style={{
+                    width: wp(30),
+                    height: hp(10),
+                }}/>;
+        }
         return <TouchableOpacity
             onPress={() => {
                 this.setState({
-                    rechargeVal: parseFloat(item.num),
+                    rechargeVal: parseFloat(item.price),
                     moneyBoxIndex: item.id,
                 });
             }}
@@ -253,37 +278,71 @@ class RechargePage extends PureComponent {
 
         </TouchableOpacity>;
     };
-    iosPay = () => {
-        const requestData = {
-            merchantIdentifier: 'merchant.com.yiertong.easyz',
-            supportedNetworks: ['mastercard', 'visa', 'chinaunionpay'],
-            countryCode: 'HK',
-            currencyCode: 'HKD',
-            paymentSummaryItems: [
-                {
-                    label: 'Item label',
-                    amount: '0.1',
-                },
-            ],
-        };
+    iosPay = (price) => {
+        const findIndex = this.nums.findIndex(item => item.price == price);
+        const item = this.nums[findIndex];
+        if (item.identifier) {
+            const identifier = item.identifier;
 
-        // Check if ApplePay is available
-        if (ApplePay.canMakePayments) {
-            ApplePay.requestPayment(requestData)
-                .then((paymentData) => {
-                    console.log(paymentData);
-                    // Simulate a request to the gateway
-                    setTimeout(() => {
-                        // Show status to user ApplePay.SUCCESS || ApplePay.FAILURE
-                        ApplePay.complete(ApplePay.SUCCESS)
-                            .then(() => {
-                                console.log('completed');
-                                // do something
-                            });
-                    }, 1000);
-                });
+            InAppUtils.canMakePayments((canMakePayments) => {
+                if (!canMakePayments) {
+                    Toast.show('您手机暂时不支持');
+                } else {
+                    this.loddingModal.show();
+                    const identifiers = [];
+                    identifiers.push(identifier);
+                    InAppUtils.loadProducts(identifiers, (error, products) => {
+
+                        if (error) {
+                            Toast.show('item错误');
+                            this.loddingModal.hide();
+                            return;
+                        }
+                        const {description, title, priceString, price} = products[0];
+                        InAppUtils.purchaseProduct(identifier, (error, response) => {
+                            this.loddingModal.hide();
+                            // console.log(error);
+                            if (error) {
+                                Toast.show('用户取消');
+                                return;
+                            }
+
+                            if (response && response.transactionReceipt) {
+                                // console.log('我被调用');
+                                const transactionReceipt = response.transactionReceipt;
+                                applePayConfirmOrder({
+                                    product_code: 'Recharge-Task-Money',
+                                    subject: title,
+                                    body: description,
+                                    out_biz_no: identifier,
+                                    platform: Platform.OS,
+                                    data: transactionReceipt,
+                                }, this.props.userinfo.token).then(result => {
+                                    this.addLocalNotification(price);
+                                }).catch(msg => {
+                                    console.log(msg);
+                                    Toast.show(msg);
+                                    // console.log(msg);
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        } else {
+            Toast.show('选择错误');
         }
-        ;
+
+
+        // RNInAppPurchaseModule.loadProducts([
+
+        // ], (error, products) => {
+        //     console.log(products);
+        //     RNInAppPurchaseModule.purchaseProduct('com.yiertong.easyz1', '1', (error, result) => {
+        //         console.log(error, result);
+        //     });
+        // });
+
     };
     sureRecharGe = () => {
         const rechargeVal = this.state.rechargeVal;
@@ -296,7 +355,7 @@ class RechargePage extends PureComponent {
             return;
         }
         if (Global.apple_pay == 1 && Platform.OS === 'ios') {
-            this.iosPay();
+            this.iosPay(rechargeVal);
             return;
         }
 
@@ -429,12 +488,27 @@ class PayType extends React.Component {
     state = {
         activeIndex: 1,
     };
-
     items = [
-
         {title: '支付宝', id: 1, source: require('../res/img/payType/alipay.png'), info: '亿万用户的选择，更快更安全', isRecommend: 1},
         {title: '微信支付', id: 0, source: require('../res/img/payType/wechat.png'), info: '用户量第二大支付平台', isRecommend: 0},
     ];
+
+    constructor(props) {
+        super(props);
+        if (this.props.apple_pay === 1 && Platform.OS === 'ios') {
+            this.items = [
+                {
+                    title: 'Apple Id支付',
+                    id: 1,
+                    source: require('../res/img/payType/apple.png'),
+                    info: '苹果官方支付',
+                    isRecommend: 0,
+                },
+            ];
+        }
+    }
+
+
     getActiveIndex = () => {
         return this.state.activeIndex;
     };
@@ -472,7 +546,7 @@ class PayType extends React.Component {
                 <View>
                     <View style={{
                         flexDirection: 'row',
-                        alignItems:'center',
+                        alignItems: 'center',
 
 
                     }}>
@@ -485,8 +559,8 @@ class PayType extends React.Component {
                             marginLeft: 7,
                             paddingHorizontal: 4,
                             borderRadius: 3,
-                            paddingVertical:0,
-                            height:hp(2),
+                            paddingVertical: 0,
+                            height: hp(2),
                         }}>
                             <Text style={{fontSize: hp(1.35), color: 'white'}}>推荐</Text>
                         </View>}

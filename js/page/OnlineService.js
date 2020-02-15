@@ -7,7 +7,7 @@
  */
 
 import React, {PureComponent} from 'react';
-import {StatusBar, Text, TouchableOpacity, View, Dimensions, Image, Clipboard} from 'react-native';
+import {StatusBar, Text, TouchableOpacity, View, Dimensions, Image, Clipboard,Linking} from 'react-native';
 import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 import {bottomTheme, theme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -78,10 +78,24 @@ class OnlineService extends PureComponent {
                     {this.getSettingMenu('QQ', () => {
                         Clipboard.setString('1412894');
                         Toast.show('已经复制到剪切板');
+                        Linking.canOpenURL('mqq://').then(supported => {
+                            if (supported) {
+                                Linking.openURL('mqq://');
+                            } else {
+                            }
+                        });
+                        // 2、跳转代码
+
                     }, `1412894`)}
                     {this.getSettingMenu('微信', () => {
                         Clipboard.setString('qingfengkjkj');
-                        Toast.show('已经复制到剪切板')
+                        Toast.show('已经复制到剪切板');
+                        Linking.canOpenURL('weixin://').then(supported => {
+                            if (supported) {
+                                Linking.openURL('weixin://');
+                            } else {
+                            }
+                        });
                     },'qingfengkjkj')}
 
                 </View>

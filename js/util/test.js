@@ -1,3 +1,7 @@
-const content = '发布的任务[308]审核失败,理由:000';
-const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
-console.log(startIndex);
+const url = 'easy://openTask?&task_id=1';
+const coverdomain = url.substring(7)
+const findIndex = coverdomain.indexOf('?');
+const funName = coverdomain.substring(0,findIndex);
+const paramsStr = coverdomain.substring(findIndex+2);
+
+console.log(funName,paramsStr);

@@ -213,6 +213,8 @@ PODS:
     - React
   - react-native-clear-cache (1.0.0):
     - React
+  - react-native-in-app-utils (6.0.2):
+    - React
   - react-native-viewpager (2.0.2):
     - React
   - React-RCTActionSheet (0.61.5):
@@ -250,8 +252,6 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - RNApplePay (1.3.1):
-    - React
   - RNBootSplash (1.2.0):
     - React
   - RNCAsyncStorage (1.6.2):
@@ -318,6 +318,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-clear-cache (from `../node_modules/react-native-clear-cache`)
+  - react-native-in-app-utils (from `../node_modules/react-native-in-app-utils`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -330,7 +331,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - RNApplePay (from `../node_modules/react-native-apay`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -402,6 +402,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/cameraroll"
   react-native-clear-cache:
     :path: "../node_modules/react-native-clear-cache"
+  react-native-in-app-utils:
+    :path: "../node_modules/react-native-in-app-utils"
   react-native-viewpager:
     :path: "../node_modules/@react-native-community/viewpager"
   React-RCTActionSheet:
@@ -424,8 +426,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  RNApplePay:
-    :path: "../node_modules/react-native-apay"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
@@ -481,6 +481,7 @@ SPEC CHECKSUMS:
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-cameraroll: ad20f5a93c25cb83a76455df57a2c62fbb63aaed
   react-native-clear-cache: 2e4540f2d5c4cfc5a3493931a4a965d6c43a1696
+  react-native-in-app-utils: 07ea1df4bb6e8cbb27337d42a65ffe4cf7a35e97
   react-native-viewpager: bbba55db2dc7554b88f986a88f8440bf2e624419
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -492,7 +493,6 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  RNApplePay: 568747d052d9848014bdccf78782b2a48c28eceb
   RNBootSplash: 9ef2df5fa4f4c7c4b1fea7dac7fbca37cf516423
   RNCAsyncStorage: 5ae4d57458804e99f73d427214442a6b10a53856
   RNDeviceInfo: a1562e1cb972e22d34dc49ed45dd71c6856373c1

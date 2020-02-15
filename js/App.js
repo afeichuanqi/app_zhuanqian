@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-
+import {Linking, Platform} from 'react-native';
 import AppNavigators from './navigator/AppNavigators';
 import {Provider} from 'react-redux';
 import store from './store';
@@ -17,10 +17,9 @@ import CodePush from 'react-native-code-push';
 import JAnalytics from 'janalytics-react-native';
 import JPush from 'jpush-react-native';
 import NavigationUtils from './navigator/NavigationUtils';
+import qs from 'qs';
 
 type Props = {}
-
-// JAnalytics.rnCrashLogON();
 
 export class App extends Component<Props> {
     JPushInit() {
@@ -48,44 +47,43 @@ export class App extends Component<Props> {
         };
         JPush.addLocalNotificationListener(this.localNotificationListener);
         JPush.init();
-        JPush.getRegistrationID((text)=>{
+        JPush.getRegistrationID((text) => {
             console.log(text);
-        })
+        });
         this.connectListener = result => {
             console.log('notificationListener:' + JSON.stringify(result));
         };
-        // JPush.get
         //连接状态
         JPush.addConnectEventListener(this.connectListener);
-        // //通知回调
-        // this.notificationListener = result => {
-        //     console.log('notificationListener:' + JSON.stringify(result));
-        // };
-        // JPush.addNotificationListener(this.notificationListener);
-        // //本地通知回调
-        // this.localNotificationListener = result => {
-        //     console.log('localNotificationListener:' + JSON.stringify(result));
-        // };
-        // JPush.addLocalNotificationListener(this.localNotificationListener);
-        // //自定义消息回调
-        // this.customMessageListener = result => {
-        //     console.log('customMessageListener:' + JSON.stringify(result));
-        // };
-        // JPush.addCustomMessagegListener(this.customMessageListener);
-        // //tag alias事件回调
-        // this.tagAliasListener = result => {
-        //     console.log('tagAliasListener:' + JSON.stringify(result));
-        // };
-        // JPush.addTagAliasListener(this.tagAliasListener);
-        // //手机号码事件回调
-        // this.mobileNumberListener = result => {
-        //     console.log('mobileNumberListener:' + JSON.stringify(result));
-        // };
-        // JPush.addMobileNumberListener(this.mobileNumberListener);
+    }
+
+
+
+    _handleOpenURL(event) {
+        if (event.url) {
+            const prefix = Platform.OS === 'android' ? 14 : 8;
+            const url = event.url;
+            const coverdomain = url.substring(prefix);
+            const findIndex = coverdomain.indexOf('?');
+            const funName = coverdomain.substring(0, findIndex);
+            const paramsStr = coverdomain.substring(findIndex + 2);
+            console.log(funName,paramsStr);
+            if (funName === 'openTask') {
+                NavigationUtils.goPage({
+                    test: false,
+                    task_id: qs.parse(paramsStr).task_id,
+                }, 'TaskDetails');
+            }
+        }
+    }
+
+    componentWillUnmount(): void {
+        Linking.removeEventListener('url', this._handleOpenURL);
     }
 
     componentDidMount() {
         this.JPushInit();
+        Linking.addEventListener('url', this._handleOpenURL);
         JAnalytics.setLoggerEnable({'enable': true});
         JAnalytics.crashLogON();
         JAnalytics.init({appKey: 'ee6b0ae7c80a1605fe528f83'});

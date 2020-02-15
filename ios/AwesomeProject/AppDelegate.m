@@ -28,6 +28,8 @@
 // work in iOS(8.0)
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
   [JSHAREService handleOpenUrl:url];
+
+  
   [RCTLinkingManager application:application openURL:url
                sourceApplication:sourceApplication annotation:annotation];
   return YES;
@@ -37,6 +39,7 @@
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
 {
+
     [JSHAREService handleOpenUrl:url];
   return [RCTLinkingManager application:application openURL:url options:options];
 }
