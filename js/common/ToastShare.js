@@ -49,6 +49,7 @@ class ToastShare extends PureComponent {
     };
     show = (item={}) => {
         this.shareInfo = Object.assign(this.shareInfo, item);
+        console.log(this.shareInfo);
         this.setState({
             visible: true,
         }, () => {

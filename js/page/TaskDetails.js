@@ -17,7 +17,7 @@ import {
     Platform,
     StatusBar,
     UIManager,
-    findNodeHandle, Image,
+    findNodeHandle,
 } from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -174,7 +174,7 @@ class TaskDetails extends PureComponent {
         });
         const goBackTop = Animated.interpolate(this.animations.value, {
             inputRange: [0, 40],
-            outputRange: [20, 5],
+            outputRange: [20, 11],
             extrapolate: 'clamp',
         });
         const translateY = Animated.interpolate(this.animations.value, {
@@ -208,7 +208,7 @@ class TaskDetails extends PureComponent {
 
                     <View style={{
                         backgroundColor: bottomTheme,
-                        height: 35,
+                        height: 45,
                         justifyContent: 'center',
                     }}/>
 
@@ -227,16 +227,17 @@ class TaskDetails extends PureComponent {
                         style={{
                             width,
                             position: 'absolute',
-                            top: 8,
+                            top: 14,
                             alignItems: 'center',
                             zIndex: 2,
                             opacity: NameOpacity,
                         }}>
                         <Text numberOfLines={1} style={{
                             color: 'white',
-                            fontSize: 16,
+                            // fontSize: 16,
                             width: width - 90,
-                        }}>{taskData && renderEmoji(taskData.title, [], 16, 0, 'white').map((item, index) => {
+                            // textAlign:'center',
+                        }}>{taskData && renderEmoji(taskData.title, [], hp(2.2), 0, 'white').map((item, index) => {
                             return item;
                         })}</Text>
                     </Animated.View>
@@ -246,7 +247,7 @@ class TaskDetails extends PureComponent {
                             height,
                             width,
                             position: 'absolute',
-                            top: (-height) + 35,
+                            top: (-height) + 45,
                             transform: [{translateY: translateY}],
                         }}>
                     </Animated.View>
@@ -410,7 +411,7 @@ class TaskDetails extends PureComponent {
                                         color: 'black',
                                         fontSize: hp(2.2),
                                     }}>{fromUserinfo && fromUserinfo.username}</Text>
-                                    <Text style={{color: 'red', opacity: 0.8, fontSize: hp(1.8)}}>{
+                                    <Text style={{color: 'red', opacity: 0.8, fontSize: hp(1.7)}}>{
                                         taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
                                             :
                                             taskData.singOrder.type == 2 ? `此任务每人每天${taskData.singOrder.num}次`
@@ -530,8 +531,9 @@ class TaskDetails extends PureComponent {
                     task_id={this.task_id}
                     shareClick={() => {
                         this.toastShare.show({
-                            imageUrl: `http://www.easy-z.cn/?amount=${taskData.rewardPrice}&title=&count=${taskData.taskSignUpNum}&taskId=${this.task_id}`,
-                            //
+                            title:taskData.title,
+                            text:taskData.TaskInfo,
+                            url: `http://www.easy-z.cn/?amount=${taskData.rewardPrice}&title=&count=${taskData.rewardNum}&taskId=${this.task_id}`,
                         });
                     }}
                 />
@@ -669,7 +671,7 @@ class TaskDetailsPop extends Component {
                     alignItems: 'center', flexDirection: 'row',
                     justifyContent: 'center',
                 }}>
-                <Text style={{fontSize: hp(2), opacity: 0.7, color: 'black'}}>接单规则</Text>
+                <Text style={{fontSize: hp(2), opacity: 0.8, color: 'black'}}>接单规则</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 // key={index}
@@ -684,7 +686,7 @@ class TaskDetailsPop extends Component {
                 }}>
                 <SvgUri width={hp(2.7)} fill={'rgba(0,0,0,0.7)'} height={hp(2.7)} svgXmlData={fenxiang}/>
                 <Text
-                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.7, color: 'black'}}>分享</Text>
+                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.8, color: 'black'}}>分享</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 activeOpacity={0.6}
@@ -708,7 +710,7 @@ class TaskDetailsPop extends Component {
                 <SvgUri width={hp(2.7)} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={hp(2.7)}
                         svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
                 <Text
-                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.7, color: 'black'}}>收藏</Text>
+                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.8, color: 'black'}}>收藏</Text>
             </TouchableOpacity>
 
         </TaskMenu>;
@@ -723,6 +725,7 @@ class BottomBtns extends PureComponent {
     };
 
     render() {
+        console.log(this.props.StatusForTask);
         const {test, StatusForTask} = this.props;
         return <View>
             {test ? <View style={{flexDirection: 'row'}}>

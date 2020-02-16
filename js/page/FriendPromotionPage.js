@@ -23,7 +23,7 @@ import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import ToastShare from '../common/ToastShare';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -87,8 +87,8 @@ class TaskReleaseMana extends PureComponent {
                                 style={{marginTop: 15, flexDirection: 'row', alignSelf: 'center'}}>
                                 <Text style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code}</Text>
                                 <SvgUri style={{
-                                    marginLeft: 20,
-                                }} width={19} height={19} svgXmlData={copy}/>
+                                    marginLeft: 10,
+                                }} width={17} height={17} svgXmlData={copy}/>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -104,15 +104,19 @@ class TaskReleaseMana extends PureComponent {
                         <TouchableOpacity
                             onPress={() => {
                                 this.ToastShare.show({
-                                    title: `邀请码:${this.props.userinfo.invite_code} -简易赚`,
-                                    text: `下载简易赚APP，进入"我的"栏目输入邀请码:${this.props.userinfo.invite_code}，`,
+                                    title: `好友在召唤`,
+                                    text: `下载简易赚APP，点击此链接速来助攻好友`,
+                                    url:`http://www.easy-z.cn/share?&invitation_id=${this.props.userinfo.invite_code}`
                                 });
                             }}
                             style={{
                                 paddingHorizontal: 15,
-                                paddingVertical: 8,
+                                paddingVertical: 12,
                                 backgroundColor: bottomTheme,
-                                borderRadius: 10,
+                                borderRadius: 8,
+                                minWidth:110,
+                                justifyContent:'center',
+                                alignItems:'center',
                             }}>
                             <Text style={{color: 'white'}}>推广链接</Text>
                         </TouchableOpacity>
@@ -122,9 +126,12 @@ class TaskReleaseMana extends PureComponent {
                             }}
                             style={{
                                 paddingHorizontal: 15,
-                                paddingVertical: 8,
+                                paddingVertical: 12,
                                 backgroundColor: bottomTheme,
-                                borderRadius: 10,
+                                borderRadius: 8,
+                                minWidth:110,
+                                justifyContent:'center',
+                                alignItems:'center',
                             }}>
                             <Text style={{color: 'white'}}>推广二维码</Text>
                         </TouchableOpacity>
@@ -141,24 +148,24 @@ class TaskReleaseMana extends PureComponent {
                     }}>
                         <View style={{width: width / 2 - 5, justifyContent: 'center', alignItems: 'center'}}>
 
-                            <Text style={{color: 'red', fontSize: 16}}>0位</Text>
-                            <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 12, marginTop: 5}}>累计邀请好友</Text>
+                            <Text style={{color: 'red', fontSize: 16}}>0 位</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.8)', fontSize: hp(1.7), marginTop: 5}}>累计邀请好友</Text>
 
                         </View>
                         <View style={{height: 40, width: 1, backgroundColor: bottomTheme}}/>
                         <View style={{width: width / 2 - 5, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color: 'red', fontSize: 16}}>0元</Text>
-                            <Text style={{color: 'rgba(0,0,0,0.7)', fontSize: 12, marginTop: 5}}>收入分红</Text>
+                            <Text style={{color: 'red', fontSize: 16}}>0 元</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.8)', fontSize: hp(1.7), marginTop: 5}}>收入分红</Text>
                         </View>
                     </View>
                     <View style={{marginTop: 10, paddingHorizontal: 10}}>
-                        <Text style={{opacity: 0.8, marginTop: 10}}>
+                        <Text style={{opacity: 0.8, marginTop: 10, fontSize:hp(1.7)}}>
                             1、一级好友(直接推荐的好友)完成任意悬赏都可获得其赏金的8%奖励
                         </Text>
-                        <Text style={{opacity: 0.8, marginTop: 10}}>
+                        <Text style={{opacity: 0.8, marginTop: 10, fontSize:hp(1.7)}}>
                             2、获得一级好友(直接推荐的好友)完成前20个任意悬赏额外奖励其赏金的4%奖励
                         </Text>
-                        <Text style={{opacity: 0.8, marginTop: 10}}>
+                        <Text style={{opacity: 0.8, marginTop: 10, fontSize:hp(1.7)}}>
                             3、为防止恶意邀请(机器注册、注册多账号) 被邀请用户必须有一定活跃度才能正常获得佣金
                         </Text>
                     </View>

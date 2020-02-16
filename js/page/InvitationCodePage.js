@@ -28,7 +28,7 @@ class InvitationCodePage extends React.Component {
     constructor(props) {
         super(props);
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
-
+        this.params = this.props.navigation.state.params;
         this.state = {
             text: '',
             status: 0,
@@ -48,7 +48,6 @@ class InvitationCodePage extends React.Component {
 
     updatePage = () => {
         getInvitationCode(this.props.userinfo.token).then(result => {
-            console.log(result);
             if (result.InvitationCode && result.InvitationCode.length > 0) {
                 this.setState({
                     text: result.InvitationCode,
@@ -57,6 +56,7 @@ class InvitationCodePage extends React.Component {
             } else {
                 this.setState({
                     status: 0,
+                    text: this.params.invitationId ? this.params.invitationId : '',
                 });
             }
         }).catch(msg => {
@@ -125,7 +125,8 @@ class InvitationCodePage extends React.Component {
                             borderBottomColor: '#d7d7d7',
                             padding: 0,
                             height: 30,
-                        }} value={this.state.text}/>
+                        }}
+                        value={this.state.text}/>
                     <View
                         style={{flexDirection: 'row', alignItems: 'center', position: 'absolute', right: 40, top: 16}}>
                         <View style={{flexDirection: 'row'}}>

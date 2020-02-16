@@ -58,7 +58,6 @@ export class App extends Component<Props> {
     }
 
 
-
     _handleOpenURL(event) {
         if (event.url) {
             const prefix = Platform.OS === 'android' ? 14 : 8;
@@ -67,12 +66,16 @@ export class App extends Component<Props> {
             const findIndex = coverdomain.indexOf('?');
             const funName = coverdomain.substring(0, findIndex);
             const paramsStr = coverdomain.substring(findIndex + 2);
-            console.log(funName,paramsStr);
+            console.log(funName, paramsStr);
             if (funName === 'openTask') {
                 NavigationUtils.goPage({
                     test: false,
                     task_id: qs.parse(paramsStr).task_id,
                 }, 'TaskDetails');
+            } else if (funName === 'shareFriend') {
+                NavigationUtils.goPage({
+                    invitationId: qs.parse(paramsStr).invitation_id,
+                }, 'InvitationCodePage');
             }
         }
     }

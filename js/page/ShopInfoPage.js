@@ -24,7 +24,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import FastImage from 'react-native-fast-image';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../common/TaskInfoComponent';
-import {attentionUserId, selectShopInfoForUserId, selectTaskListForUserId, uploadQiniuImage} from '../util/AppService';
+import {attentionUserId, selectShopInfoForUserId, selectTaskListForUserId} from '../util/AppService';
 import {connect} from 'react-redux';
 import EmptyComponent from '../common/EmptyComponent';
 import Toast from 'react-native-root-toast';
@@ -146,7 +146,10 @@ class ShopInfoPage extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                            <Text style={{color: 'rgba(255,255,255,0.5)', fontSize: hp(1.7)}}>简易赚 - 人人都能赚钱</Text>
+                            <Text style={{color: 'rgba(255,255,255,0.5)', fontSize: hp(1.7)}}>
+                                简易赚 - 人人都能赚钱
+
+                            </Text>
                         </View>
                         <FastImage
                             source={{uri: this.state.userId === this.props.userinfo.userid ? this.props.userinfo.shopinfo_url : this.state.shopInfo.shopinfoUrl}}
@@ -478,7 +481,7 @@ class ShopData extends Component {
 
             backgroundColor: 'white',
             borderBottomWidth: 10,
-            borderBottomColor: '#e2e2e2',
+            borderBottomColor: '#f6f4f6',
         }}>
             <View style={{
                 width,
@@ -548,7 +551,7 @@ class AvatarColumn extends Component {
                     <Text style={{
                         fontSize: hp(2.2),
                         color: 'white',
-                    }}>ID:{this.props.shopInfo.userId}</Text>
+                    }}>ID: {this.props.shopInfo.userId}</Text>
                 </View>
 
                 {/*右中*/}

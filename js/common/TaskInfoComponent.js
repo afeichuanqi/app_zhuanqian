@@ -127,8 +127,8 @@ class TaskInfoComponent extends PureComponent {
                         flexDirection: 'row',
                         marginTop: wp(1)
                     }}>
-                        <LabelBigComponent contaiStyle={{backgroundColor: '#ebebeb',}} fontSize={this.props.fontSize} title={item.typeTitle}/>
-                        <LabelBigComponent contaiStyle={{backgroundColor: '#ebebeb',}} fontSize={this.props.fontSize} title={item.taskName}/>
+                        <LabelBigComponent contaiStyle={{backgroundColor: '#f5f5f5',}} fontSize={this.props.fontSize} title={item.typeTitle}/>
+                        <LabelBigComponent contaiStyle={{backgroundColor: '#f5f5f5',}} fontSize={this.props.fontSize} title={item.taskName}/>
                     </View>
                     {/*剩余数*/}
                     <View style={{
