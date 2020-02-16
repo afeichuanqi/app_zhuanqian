@@ -204,7 +204,7 @@ class TaskDetails extends PureComponent {
                 topColor={bottomTheme}
             >
                 {navigationBar}
-                <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
+                <View style={{flex: 1, backgroundColor: '#f8f8f8'}}>
 
                     <View style={{
                         backgroundColor: bottomTheme,
@@ -443,11 +443,11 @@ class TaskDetails extends PureComponent {
                             paddingVertical: wp(4), borderRadius: 5,
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Image
-                                    resizeMode={'stretch'}
-                                    style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
-                                    source={require('../res/img/item_icon/label_icon_green.png')}
-                                />
+                                {/*<Image*/}
+                                {/*    resizeMode={'stretch'}*/}
+                                {/*    style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}*/}
+                                {/*    source={require('../res/img/item_icon/label_icon_green.png')}*/}
+                                {/*/>*/}
                                 <Text style={{fontSize: hp(2.2), color: bottomTheme}}>
                                     任务说明
                                 </Text>
@@ -466,11 +466,11 @@ class TaskDetails extends PureComponent {
                             borderRadius: 3, height: hp(6), justifyContent: 'center',
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Image
-                                    resizeMode={'stretch'}
-                                    style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
-                                    source={require('../res/img/item_icon/label_icon_green.png')}
-                                />
+                                {/*<Image*/}
+                                {/*    resizeMode={'stretch'}*/}
+                                {/*    style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}*/}
+                                {/*    source={require('../res/img/item_icon/label_icon_green.png')}*/}
+                                {/*/>*/}
                                 <Text style={{fontSize: hp(2.2), color: bottomTheme}}>
                                     做单步骤（请仔细审阅任务步骤）
                                 </Text>
@@ -529,7 +529,10 @@ class TaskDetails extends PureComponent {
                     userinfo={userinfo}
                     task_id={this.task_id}
                     shareClick={() => {
-                        this.toastShare.show();
+                        this.toastShare.show({
+                            imageUrl: `http://www.easy-z.cn/?amount=${taskData.rewardPrice}&title=&count=${taskData.taskSignUpNum}&taskId=${this.task_id}`,
+                            //
+                        });
                     }}
                 />
                 {/*分享弹窗*/}

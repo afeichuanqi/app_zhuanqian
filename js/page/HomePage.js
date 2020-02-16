@@ -57,7 +57,7 @@ class HomePage extends PureComponent {
     startAnimated = () => {
         RNBootSplash.hide();
         const {appSetting, onIsAgreePrivacy} = this.props;
-        if (Platform.OS === 'android' && !appSetting.agreePrivacy) {
+        if ( !appSetting.agreePrivacy) {
             this.PrivacyToast.show();
         } else {
             this.hideSelf();
@@ -138,7 +138,7 @@ class HomePage extends PureComponent {
                 <DynamicTabNavigator/>
                 <PromotionToast ref={ref => this.promotionToast = ref}/>
 
-                {Platform.OS === 'android' && !appSetting.agreePrivacy && <PrivacyToast
+                { !appSetting.agreePrivacy && <PrivacyToast
                     click={() => {
                         this.PrivacyToast.hide();
                         NavigationUtils.goPage({type: 3, onBackPress: this.onBackPress}, 'UserProtocol');
@@ -154,7 +154,7 @@ class HomePage extends PureComponent {
                         });
                     }}
                     ref={ref => this.PrivacyToast = ref}/>}
-                {Platform.OS === 'android' && !appSetting.agreePrivacy && <PrivacyToastStep2
+                { !appSetting.agreePrivacy && <PrivacyToastStep2
 
                     sureClick={() => {
                         this.PrivacyToastStep2.hide(() => {

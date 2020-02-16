@@ -28,7 +28,7 @@ import RNExitApp from 'react-native-exit-app';
 import Toast from 'react-native-root-toast';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+// const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 const {SpringUtils, spring} = Animated;
 type Props = {};
@@ -93,7 +93,7 @@ class DynamicTabNavigator extends Component<Props> {
         this.jumpTo = jumpTo;
         switch (route.key) {
             case 'index':
-                return <IndexPage/>;
+                return <IndexPage jumpTo={jumpTo}/>;
             case 'hall':
                 return <TaskHallPage/>;
             case 'message':

@@ -120,7 +120,7 @@ class TaskSumComponent extends Component {
                     alignSelf: 'flex-start',
                 }}>
                     <Text style={{maxWidth: wp(48), flexDirection: 'row'}}>
-                        {item && renderEmoji(item.taskTitle, [], hp(2.1), 0, 'black', {}).map((item, index) => {
+                        {item && renderEmoji(item.taskTitle, [], hp(2.0), 0, 'black', {}).map((item, index) => {
                             return item;
                         })}
                     </Text>
@@ -203,7 +203,7 @@ class TaskSumComponent extends Component {
                                         svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                             </View>
                             <Text style={{
-                                fontSize: hp(1.9),
+                                fontSize: hp(1.8),
                                 marginLeft: wp(2),
                                 color: 'rgba(0,0,0,1)',
                             }}>{item.userName}</Text>
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
         fontSize: hp(2.1),
         color: 'red',
         bottom: hp(0.2),
-        // fontWeight: '500',
+        fontWeight: '500',
     },
     fengefu: {
         width: 0.5,

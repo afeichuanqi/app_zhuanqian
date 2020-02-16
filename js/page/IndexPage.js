@@ -14,7 +14,7 @@ import {
     StyleSheet,
     Platform,
     TouchableOpacity,
-    Linking, DeviceInfo,Image
+    Linking, DeviceInfo, Image,
 } from 'react-native';
 import {theme, bottomTheme} from '../appSet';
 import Carousel from '../common/Carousel';
@@ -36,6 +36,7 @@ import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 import FastImagePro from '../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -43,10 +44,12 @@ const lunboHeight = height / 4;
 const topIputHeight = (Platform.OS === 'ios') ? 35 : 35;
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const STATUS_BAR_HEIGHT = DeviceInfo.isIPhoneX_deprecated ? 40 : 20;//状态栏的高度
+let jumpTo = null;
 
 class HomePage extends PureComponent {
     constructor(props) {
         super(props);
+        jumpTo = this.props.jumpTo;
     }
 
     state = {
@@ -121,7 +124,7 @@ class HomePage extends PureComponent {
                 style={{flex: 1}}
             >
                 <View style={{
-                    height:Platform.OS === 'ios' ? STATUS_BAR_HEIGHT : 0,
+                    height: Platform.OS === 'ios' ? STATUS_BAR_HEIGHT : 0,
                 }}/>
                 {/*{navigationBar}*/}
                 {/*顶部搜索栏样式*/}
@@ -357,8 +360,8 @@ class FristListComponent extends PureComponent {
     render() {
         // console.log('render');
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220-300, 0, lunboHeight - 37],
-            outputRange: [lunboHeight + 240+300, lunboHeight + 15, 55],
+            inputRange: [-220 - 300, 0, lunboHeight - 37],
+            outputRange: [lunboHeight + 240 + 300, lunboHeight + 15, 55],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
@@ -388,22 +391,22 @@ class FristListComponent extends PureComponent {
                 ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 30,  position: 'absolute', top: -25, alignItems:'flex-start', justifyContent:'center',
-                backgroundColor: 'rgba(255,255,255,0.9)', transform: [{translateY: columnTop}]
+                width, height: 30, position: 'absolute', top: -25, alignItems: 'flex-start', justifyContent: 'center',
+                backgroundColor: 'rgba(255,255,255,0.9)', transform: [{translateY: columnTop}],
             }}>
                 <View style={{
-                    alignItems:'center',
-                    paddingHorizontal:5,
-                    flexDirection:'row',
-                    top:2,
-                    justifyContent:'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 5,
+                    flexDirection: 'row',
+                    top: 2,
+                    justifyContent: 'center',
                     paddingLeft: 20,
                 }}>
                     <Image
                         resizeMode={'stretch'}
                         style={{
                             height: hp(1.8),
-                            width:hp(1.5),
+                            width: hp(1.5),
 
                         }}
                         source={require('../res/img/indexPage/tuijian.png')}
@@ -412,7 +415,7 @@ class FristListComponent extends PureComponent {
                         style={{
                             fontSize: hp(2.1),
                             color: bottomTheme,
-                            marginLeft:3,
+                            marginLeft: 3,
                         }}>为您推荐</Text>
                 </View>
             </Animated.View>
@@ -454,7 +457,13 @@ class LunBoComponent extends React.Component {
             onPress={() => {
                 //console.log(item);
                 if (item.type == 1) {
-                    NavigationUtils.goPage(JSON.parse(item.params), item.page_name);
+                    if (item.page_name.indexOf('indexPage') !== -1 && item.page_name.indexOf('-') !== -1) {
+                        const pageArray = item.page_name.split('-');
+                        jumpTo(pageArray[1])
+                    } else {
+                        NavigationUtils.goPage(JSON.parse(item.params), item.page_name);
+                    }
+
 
                 } else if (item.type == 2) {
                     Linking.canOpenURL(item.page_name).then(supported => {
@@ -488,7 +497,7 @@ class LunBoComponent extends React.Component {
             paddingTop: hp(3.5),
             backgroundColor: theme,
             width: width,
-            marginBottom:-7,
+            marginBottom: -7,
 
 
         }}>
@@ -496,7 +505,7 @@ class LunBoComponent extends React.Component {
             {/*轮播图*/}
             <Carousel
                 style={styles.carousel}
-                timeout={3000}
+                timeout={6000}
                 data={lunboData}
                 renderItem={this._renderItem}
                 itemWidth={containerWidth}

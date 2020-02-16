@@ -773,7 +773,7 @@
 				CODE_SIGN_ENTITLEMENTS = "AwesomeProject/简易赚.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = ZV9Y34KF6M;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -857,7 +857,7 @@
 				CODE_SIGN_ENTITLEMENTS = "AwesomeProject/简易赚Release.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = ZV9Y34KF6M;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

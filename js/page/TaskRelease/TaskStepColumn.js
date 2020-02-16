@@ -32,8 +32,8 @@ import {equalsObj, renderEmoji} from '../../util/CommonUtils';
 import FastImagePro from '../../common/FastImagePro';
 import {saveImg} from '../../util/ImageUtil';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
 import Toast from 'react-native-root-toast';
+
 const {width, height} = Dimensions.get('window');
 
 class StepBox extends PureComponent {
@@ -265,10 +265,12 @@ class TaskStepColumn extends Component {
                                 typeData={typeData}>
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={{
-                            marginTop: 20
+                            marginTop: 20,
                         }}>
-                            {typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
-                                letterSpacing: 0.2,}).map((item, index) => {
+                            {typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
+                                lineHeight: 25,
+                                letterSpacing: 0.2,
+                            }).map((item, index) => {
                                 return item;
                             })}
                         </Text>
@@ -286,7 +288,7 @@ class TaskStepColumn extends Component {
                                 if (this.props.isEdit) {
                                     Linking.openURL(typeData.inputValue);
                                 } else {
-                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
+                                    Toast.show('请先报名', {position: Toast.positions.CENTER});
                                 }
 
                             }}
@@ -303,7 +305,7 @@ class TaskStepColumn extends Component {
                                     Clipboard.setString(typeData.inputValue);
                                     Toast.show('复制成功');
                                 } else {
-                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
+                                    Toast.show('请先报名', {position: Toast.positions.CENTER});
                                 }
 
                             }}
@@ -323,8 +325,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
-                        letterSpacing: 0.2,}).map((item, index) => {
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
+                        lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }).map((item, index) => {
                         return item;
                     })}</Text>
                     <View style={{
@@ -337,9 +341,16 @@ class TaskStepColumn extends Component {
                         <TouchableOpacity
                             activeOpacity={0.6}
                             onPress={() => {
-                                this._imageClick(typeData.uri);
+                                if (this.props.isEdit) {
+                                    this._imageClick(typeData.uri);
+                                } else {
+                                    Toast.show('请先报名哦', {position: Toast.positions.CENTER});
+                                }
+
                             }}
                             style={styles.imgBox}>
+                            {/*<View></View>*/}
+
                             <FastImagePro
                                 loadingType={2}
                                 source={{uri: typeData.uri}}
@@ -348,6 +359,26 @@ class TaskStepColumn extends Component {
                                     height: wp(33), backgroundColor: '#F0F0F0', borderRadius: 3,
                                 }}
                                 resizeMode={'contain'}/>
+                            {!this.props.isEdit && <View style={{
+                                position: 'absolute',
+                                top: 0, left: 0,
+                                width: wp(33),
+                                height: wp(33),
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                opacity: 0.8,
+                            }}>
+                                <Image
+                                    style={{
+                                        width: wp(20),
+                                        height: wp(20),
+                                    }}
+                                    source={require('../../res/img/taskHall/erweima.png')}
+                                />
+
+                            </View>}
+
+
                             {uploadStatus == 0 ?//正在上传
                                 <View style={{
                                     position: 'absolute', top: 0, left: 0, width: wp(33),
@@ -401,7 +432,7 @@ class TaskStepColumn extends Component {
                                             Toast.show(msg);
                                         });
                                     } else {
-                                        Toast.show('请先报名哦',{position:Toast.positions.CENTER});
+                                        Toast.show('请先报名哦', {position: Toast.positions.CENTER});
                                     }
                                 }}
                                 style={{
@@ -421,8 +452,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
-                        letterSpacing: 0.2,}).map((item, index) => {
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
+                        lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }).map((item, index) => {
                         return item;
                     })}</Text>
                     <View style={{flexDirection: 'row', marginTop: 20, paddingHorizontal: 10, alignItems: 'center'}}>
@@ -455,7 +488,7 @@ class TaskStepColumn extends Component {
                                 if (this.props.isEdit) {
                                     Clipboard.setString(typeData.inputValue);
                                 } else {
-                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
+                                    Toast.show('请先报名', {position: Toast.positions.CENTER});
                                 }
 
                             }}
@@ -481,8 +514,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
-                        letterSpacing: 0.2,}).map((item, index) => {
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
+                        lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }).map((item, index) => {
                         return item;
                     })}</Text>
                     <TouchableOpacity
@@ -563,8 +598,10 @@ class TaskStepColumn extends Component {
                     <Text style={{
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
-                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0,'black',{lineHeight: 25,
-                        letterSpacing: 0.2,}).map((item, index) => {
+                    }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
+                        lineHeight: 25,
+                        letterSpacing: 0.2,
+                    }).map((item, index) => {
                         return item;
                     })}</Text>
                     <View
@@ -798,7 +835,7 @@ class TaskStepColumn extends Component {
                             <TouchableOpacity
                                 activeOpacity={1}
                                 onPress={() => {
-                                    Toast.show('请先报名',{position:Toast.positions.CENTER});
+                                    Toast.show('请先报名', {position: Toast.positions.CENTER});
                                 }}
                                 style={{
                                     padding: 0,

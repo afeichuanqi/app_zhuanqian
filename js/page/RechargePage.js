@@ -284,14 +284,14 @@ class RechargePage extends PureComponent {
         if (item.identifier) {
             const identifier = item.identifier;
 
-            InAppUtils.canMakePayments((canMakePayments) => {
+            InAppUtils.canMakePayments((canMakePayments) => {//是否能否购买
                 if (!canMakePayments) {
                     Toast.show('您手机暂时不支持');
                 } else {
                     this.loddingModal.show();
                     const identifiers = [];
                     identifiers.push(identifier);
-                    InAppUtils.loadProducts(identifiers, (error, products) => {
+                    InAppUtils.loadProducts(identifiers, (error, products) => {//查询产品详细信息
 
                         if (error) {
                             Toast.show('item错误');
@@ -299,7 +299,7 @@ class RechargePage extends PureComponent {
                             return;
                         }
                         const {description, title, priceString, price} = products[0];
-                        InAppUtils.purchaseProduct(identifier, (error, response) => {
+                        InAppUtils.purchaseProduct(identifier, (error, response) => {//进行购买
                             this.loddingModal.hide();
                             // console.log(error);
                             if (error) {

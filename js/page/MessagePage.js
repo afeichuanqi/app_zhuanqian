@@ -152,7 +152,7 @@ class MsgList extends Component {
         const {isLoading} = this.state;
         return <AnimatedFlatList
 
-            ListEmptyComponent={<EmptyComponent type={2} height={height - 210}/>}
+            ListEmptyComponent={<EmptyComponent  type={2} height={height - 210}/>}
             ListHeaderComponent={
                 <View style={{
                     justifyContent: 'center',

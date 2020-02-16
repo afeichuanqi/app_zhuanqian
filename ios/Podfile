@@ -72,6 +72,7 @@ target 'AwesomeProject' do
 
   pod 'RNPutiPay', :path => '../node_modules/react-native-puti-pay/ios'
 
+
   target 'AwesomeProjectTests' do
     inherit! :search_paths
     # Pods for testing
