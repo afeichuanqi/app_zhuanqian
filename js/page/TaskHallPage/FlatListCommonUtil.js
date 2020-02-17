@@ -1,10 +1,12 @@
 import React, {PureComponent} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, Text, View, StyleSheet, Dimensions} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, Text, View, StyleSheet, Dimensions, Platform} from 'react-native';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import {getAllTask} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Global from '../../common/Global';
+import TaskSumComponent_tmp from '../../common/TaskSumComponent_tmp';
 
 const {width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -162,6 +164,10 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
+        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+            return <TaskSumComponent_tmp statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
+                                         item={item} key={index}/>;
+        }
         return <TaskSumComponent
 
 
@@ -171,15 +177,3 @@ export default class FlatListCommonUtil extends PureComponent {
     };
 
 }
-const styles = StyleSheet.create({
-    boxStyle: {
-        paddingHorizontal: 5,
-        paddingVertical: 1,
-        borderRadius: 10,
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 0.5,
-        borderColor: 'rgba(0,0,0,0.6)',
-    },
-});

@@ -22,6 +22,9 @@ import PrivacyToast from '../common/PrivacyToast';
 import actions from '../action';
 import {connect} from 'react-redux';
 import PrivacyToastStep2 from '../common/PrivacyToastStep2';
+import EventBus from '../common/EventBus';
+import EventTypes from '../util/EventTypes';
+
 const {spring} = Animated;
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
@@ -44,7 +47,14 @@ class HomePage extends PureComponent {
             Global.user_top_fee = result.user_top_fee;
             Global.user_service_fee = result.user_service_fee;
             Global.user_recommend_fee = result.user_recommend_fee;
-            Global.apple_pay = result.apple_pay;
+
+            if (result.apple_pay != Global.apple_pay) {
+                Global.apple_pay = result.apple_pay;
+                // console.log('我被触发1')
+                EventBus.getInstance().fireEvent(EventTypes.change_for_apple, {});
+            }
+
+
         });
         Global.toast = Toast;
         JShareModule.setup();
@@ -57,7 +67,7 @@ class HomePage extends PureComponent {
     startAnimated = () => {
         RNBootSplash.hide();
         const {appSetting, onIsAgreePrivacy} = this.props;
-        if ( !appSetting.agreePrivacy) {
+        if (!appSetting.agreePrivacy) {
             this.PrivacyToast.show();
         } else {
             this.hideSelf();
@@ -138,7 +148,7 @@ class HomePage extends PureComponent {
                 <DynamicTabNavigator/>
                 <PromotionToast ref={ref => this.promotionToast = ref}/>
 
-                { !appSetting.agreePrivacy && <PrivacyToast
+                {!appSetting.agreePrivacy && <PrivacyToast
                     click={() => {
                         this.PrivacyToast.hide();
                         NavigationUtils.goPage({type: 3, onBackPress: this.onBackPress}, 'UserProtocol');
@@ -154,7 +164,7 @@ class HomePage extends PureComponent {
                         });
                     }}
                     ref={ref => this.PrivacyToast = ref}/>}
-                { !appSetting.agreePrivacy && <PrivacyToastStep2
+                {!appSetting.agreePrivacy && <PrivacyToastStep2
 
                     sureClick={() => {
                         this.PrivacyToastStep2.hide(() => {
@@ -177,7 +187,7 @@ class HomePage extends PureComponent {
             StatusBar.setBarStyle('light-content', false);
             StatusBar.setBackgroundColor(bottomTheme, false);
             this.PrivacyToast.show();
-        }, 100);
+        }, 0);
     };
 }
 

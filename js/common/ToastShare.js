@@ -7,10 +7,23 @@
  */
 
 import React, {PureComponent} from 'react';
-import {Modal, View, Dimensions, Animated, Text, TouchableOpacity, ScrollView, Clipboard} from 'react-native';
+import {
+    Modal,
+    View,
+    Dimensions,
+    Animated,
+    Text,
+    TouchableOpacity,
+    ScrollView,
+    Clipboard,
+    Platform,
+    PermissionsAndroid,
+} from 'react-native';
 import Image from 'react-native-fast-image';
 import JShareModule from 'jshare-react-native';
 import Toast from 'react-native-root-toast';
+import ImageUtil from '../util/ImageUtil';
+import emoji from 'node-emoji';
 
 const {width, height} = Dimensions.get('window');
 
@@ -47,9 +60,11 @@ class ToastShare extends PureComponent {
             });
         }, 150);
     };
-    show = (item={}) => {
+    utilType = 1;
+    show = (item = {}, utilType = 1) => {
         this.shareInfo = Object.assign(this.shareInfo, item);
-        console.log(this.shareInfo);
+        this.utilType = utilType;
+        // console.log(this.shareInfo);
         this.setState({
             visible: true,
         }, () => {
@@ -102,25 +117,49 @@ class ToastShare extends PureComponent {
                                 style={{paddingHorizontal: 20, marginTop: 5}}>
 
                                 {this.getMenu('QQ', require('../res/img/share/qq.png'), () => {
-                                    this.shareUtil('qq');
+                                    if (this.utilType === 1) {
+                                        this.shareUtil('qq');
+                                    } else {
+                                        this.shareUtil2('qq');
+                                    }
                                 })}
                                 {this.getMenu('QQ空间', require('../res/img/share/qqZone.png'), () => {
-                                    this.shareUtil('qzone');
+                                    if (this.utilType === 1) {
+                                        this.shareUtil('qzone');
+                                    } else {
+                                        this.shareUtil2('qzone');
+                                    }
+
                                 })}
                                 {this.getMenu('微信', require('../res/img/share/wechat.png'), () => {
-                                    this.shareUtil('wechat_session');
+                                    if (this.utilType === 1) {
+                                        this.shareUtil('wechat_session');
+                                    } else {
+                                        this.shareUtil2('wechat_session');
+                                    }
+
                                 })}
                                 {this.getMenu('朋友圈', require('../res/img/share/pengyouquan.png'), () => {
-                                    this.shareUtil('wechat_timeLine');
+                                    if (this.utilType === 1) {
+                                        this.shareUtil('wechat_timeLine');
+                                    } else {
+                                        this.shareUtil2('wechat_timeLine');
+                                    }
+
                                 })}
                                 {this.getMenu('微博', require('../res/img/share/xinlangweibo.png'), () => {
-                                    this.shareUtil('sina_weibo');
+                                    if (this.utilType === 1) {
+                                        this.shareUtil('sina_weibo');
+                                    } else {
+                                        this.shareUtil2('sina_weibo');
+                                    }
+
                                 })}
                                 {/*{this.getMenu('微博还有', require('../res/img/share/xinlangweibo.png'), () => {*/}
                                 {/*    this.shareUtil('sina_weibo_contact');*/}
                                 {/*})}*/}
                                 {this.getMenu('复制链接', require('../res/img/share/copyurl.png'), () => {
-                                    Clipboard.setString('http://www.easy-z.cn');
+                                    Clipboard.setString('http://www.easy-z.cn/share/');
                                     Toast.show('复制成功', {position: Toast.positions.CENTER});
                                 })}
 
@@ -143,26 +182,105 @@ class ToastShare extends PureComponent {
         url: 'http://www.easy-z.cn',
     };
     shareUtil = (platform) => {
+
         let data = {
             type: 'link',
             platform: platform, // 分享到指定平台
-            title: this.shareInfo.title,
-            text: this.shareInfo.text,
+            title: emoji.emojify(this.shareInfo.title, () => '').substring(0, 40),
+            text: emoji.emojify(this.shareInfo.text, () => '').substring(0, 40),
             imageUrl: this.shareInfo.imageUrl,
             url: this.shareInfo.url,
 
-        }
+        };
 
         JShareModule.share(data, () => {
 
         }, (msg) => {
-            console.log(msg);
+            // console.log(msg);
             if (msg.code === 40009) {
                 Toast.show('您未安装应用');
             } else {
                 Toast.show('分享失败');
             }
         });
+    };
+    shareUtil2 = async (platform) => {
+        let data = {
+            type: 'image',
+            platform: platform, // 分享到指定平台
+            // imagePath: 'http://images.easy-z.cn/share_util.png',
+            // text:'需要你的帮助',
+            imagePath: 'http://images.easy-z.cn/share_util.png',
+            imageUrl: 'http://images.easy-z.cn/share_util.png',
+        };
+        if (Platform.OS === 'android') {
+            const bool = await this.checkPermission();
+            if (bool) {
+                ImageUtil.saveImg('http://images.easy-z.cn/share_util.png', (bool, url) => {
+                    data.imagePath = url;
+                    data.imageUrl = url;
+                    // console.log(data);
+                    JShareModule.share(data, () => {
+
+                    }, (msg) => {
+                        console.log(msg);
+                        if (msg.code === 40009) {
+                            Toast.show('您未安装应用');
+                        } else {
+                            Toast.show('分享失败');
+                        }
+                    });
+                });
+            }
+
+        } else {
+            JShareModule.share(data, () => {
+
+            }, (msg) => {
+                // console.log(msg);
+                if (msg.code === 40009) {
+                    Toast.show('您未安装应用');
+                } else {
+                    Toast.show('分享失败');
+                }
+            });
+        }
+
+
+    };
+    checkPermission = async () => {
+        if (Platform.OS === 'android') {
+            //返回Promise类型
+            const data = await PermissionsAndroid.check(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            );
+            if (!data) {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    {
+                        title: '申请写权限',
+                        message:
+                            '简单赚需要您手机的写文件权限',
+                        buttonNeutral: '稍后询问',
+                        buttonNegative: '拒绝',
+                        buttonPositive: '授予',
+                    },
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {//获取成功
+                    return true;
+                } else {//权限获取失败
+                    // this.show('权限获取失败');
+                    return false;
+                }
+            } else {//已经有此权限
+
+                return true;
+            }
+
+        } else {//ios
+            return true;
+        }
+
     };
     getMenu = (title, source, click) => {
         return <TouchableOpacity

@@ -6,7 +6,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, BackHandler} from 'react-native';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, BackHandler, Platform} from 'react-native';
 import Animated from 'react-native-reanimated';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
@@ -27,6 +27,7 @@ import {NavigationActions} from 'react-navigation';
 import RNExitApp from 'react-native-exit-app';
 import Toast from 'react-native-root-toast';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import MyPageTmp from '../page/MyPageTmp';
 
 // const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -41,17 +42,41 @@ class DynamicTabNavigator extends Component<Props> {
         console.disableYellowBox = true;
         this.state = {
             navigationIndex: 0,
-            navigationRoutes: [
+            navigationRoutes: (Global.apple_pay == 1 && Platform.OS === 'ios') ? [
+                {key: 'index', title: '推荐'},
+                {key: 'hall', title: '最新'},
+                {},
+                {key: 'my', title: '最新'},
+            ] : [
                 {key: 'index', title: '推荐'},
                 {key: 'hall', title: '最新'},
                 {key: 'message', title: '最新'},
                 {key: 'my', title: '最新'},
             ],
+
         };
     }
 
-    render() {
+    componentDidMount(): void {
+        EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
+            console.log('我被触发');
+            this.setState({
+                navigationRoutes: [
+                    {key: 'index', title: '推荐'},
+                    {key: 'hall', title: '最新'},
+                    {key: 'message', title: '最新'},
+                    {key: 'my', title: '最新'},
+                ],
+            });
+            // this.f
+        });
+    }
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListener(this.listener);
+    }
 
+    render() {
+        // console.log('我被刷新了申诉');
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus
@@ -80,7 +105,9 @@ class DynamicTabNavigator extends Component<Props> {
                     lazy={true}
                     timingConfig={{duration: 1}}
                 />
-                <BottomBarRedux onPress={(index) => {
+                <BottomBarRedux
+                    navigationRoutes={navigationRoutes}
+                    onPress={(index) => {
                     this.jumpTo(navigationRoutes[index].key);
                 }} navigationIndex={navigationIndex}/>
 
@@ -99,7 +126,10 @@ class DynamicTabNavigator extends Component<Props> {
             case 'message':
                 return <MessagePage/>;
             case 'my':
-                return <MyPage/>;
+                if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+                    return <MyPageTmp jumpTo={jumpTo}/>;
+                }
+                return <MyPage jumpTo={jumpTo}/>;
         }
     };
 }
@@ -261,12 +291,14 @@ class BottomBar extends Component {
             || (this.props.friend && (this.props.friend.appeal_3 !== nextProps.friend.appeal_3))
             || (this.props.friend && (this.props.friend.appeal_2 !== nextProps.friend.appeal_2))
             || !equalsObj(this.props.friend.notice_arr, nextProps.friend.notice_arr)
+            || (this.props.navigationRoutes !== nextProps.navigationRoutes)
         ) {
             return true;
         }
         return false;
 
     }
+
 
     _BottomBarClick = (index) => {
         // console.log(index);
@@ -316,31 +348,35 @@ class BottomBar extends Component {
             <BottomBarItem
                 source={navigationIndex === 0 ? require('../res/img/bottomBarIcon/homeC.png') : require('../res/img/bottomBarIcon/home.png')}
                 onPress={this._BottomBarClick}
+                navigationRoutes={this.props.navigationRoutes}
                 index={0}
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 0}
                 title={'首页'}
-                titleColor={navigationIndex === 0 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
+                titleColor={navigationIndex === 0 ? bottomTheme : 'rgba(0,0,0,0.5)'}
             />
             <BottomBarItem
                 source={navigationIndex === 1 ? require('../res/img/bottomBarIcon/hallC.png') : require('../res/img/bottomBarIcon/hall.png')}
                 onPress={this._BottomBarClick}
                 index={1}
+                navigationRoutes={this.props.navigationRoutes}
                 navigationIndex={navigationIndex}
                 isActive={navigationIndex === 1}
                 title={'大厅'}
-                titleColor={navigationIndex === 1 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
+                titleColor={navigationIndex === 1 ? bottomTheme : 'rgba(0,0,0,0.5)'}
             />
-            <BottomBarItem
+            {(Global.apple_pay == 1 && Platform.OS === 'ios') ? null : <BottomBarItem
                 source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
                 onPress={this._BottomBarClick}
                 index={2}
+                navigationRoutes={this.props.navigationRoutes}
                 isActive={navigationIndex === 2}
                 unReadLength={unMessageLength > 0 ? unMessageLength : 0}
                 isOtherUnRead={(appeal_2 > 0 || appeal_3 > 0 || isOtherUnRead)}
                 title={'消息'}
-                titleColor={navigationIndex === 2 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
-            />
+                titleColor={navigationIndex === 2 ? bottomTheme : 'rgba(0,0,0,0.5)'}
+            />}
+
             <BottomBarItem
                 source={navigationIndex === 3 ? require('../res/img/bottomBarIcon/myC.png') : require('../res/img/bottomBarIcon/my.png')}
                 onPress={this._BottomBarClick}
@@ -349,7 +385,8 @@ class BottomBar extends Component {
                 unReadLength={0}
                 isOtherUnRead={isOtherUnRead}
                 title={'我的'}
-                titleColor={navigationIndex === 3 ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.5)'}
+                navigationRoutes={this.props.navigationRoutes}
+                titleColor={navigationIndex === 3 ? bottomTheme : 'rgba(0,0,0,0.5)'}
             />
         </View>;
     }
@@ -361,6 +398,7 @@ class BottomBarItem extends Component {
         if (this.props.unReadLength != nextProps.unReadLength
             || this.props.isOtherUnRead != nextProps.isOtherUnRead
             || this.props.isActive != nextProps.isActive
+            || (this.props.navigationRoutes !== nextProps.navigationRoutes)
         ) {
             return true;
         }
@@ -405,7 +443,7 @@ class BottomBarItem extends Component {
             onPress={this.onPress}
             onPressIn={this.onPressIn}
             style={{
-                width: wp(25),
+                width: (Global.apple_pay == 1 && Platform.OS === 'ios') ? wp(33) : wp(25),
                 height: hp(6.5),
                 justifyContent: 'center',
                 alignItems: 'center',

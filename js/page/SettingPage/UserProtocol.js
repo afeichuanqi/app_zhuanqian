@@ -32,7 +32,7 @@ class UserProtocol extends PureComponent {
 
     onBackPress = () => {
         NavigationUtils.goBack(this.props.navigation);
-        this.params.onBackPress && this.params.onBackPress();
+        // this.params.onBackPress && this.params.onBackPress();
         return true;
     };
 
@@ -53,6 +53,7 @@ class UserProtocol extends PureComponent {
     }
 
     componentWillUnmount() {
+        this.params.onBackPress && this.params.onBackPress();
         this.backPress.componentWillUnmount();
     }
 

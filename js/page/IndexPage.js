@@ -46,27 +46,25 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 const STATUS_BAR_HEIGHT = DeviceInfo.isIPhoneX_deprecated ? 40 : 20;//状态栏的高度
 let jumpTo = null;
 
-class HomePage extends PureComponent {
+class HomePage extends React.Component {
     constructor(props) {
         super(props);
         jumpTo = this.props.jumpTo;
+        this.state = {
+            navigationIndex: 0,
+            navigationRoutes: [
+                {key: 'first', title: '推荐'},
+                {key: 'second', title: '最新'},
+            ],
+        };
     }
 
-    state = {
-
-        navigationIndex: 0,
-        navigationRoutes: [
-            {key: 'first', title: '推荐'},
-            {key: 'second', title: '最新'},
-        ],
-
-    };
+    // comp
 
     componentDidMount() {
         Global.token = this.props.userinfo.token;
         Global.dispatch = this.props.dispatch;
         ChatSocket.connectionServer();
-
 
     }
 
@@ -91,17 +89,7 @@ class HomePage extends PureComponent {
 
     render() {
         const {navigationRoutes, navigationIndex} = this.state;
-        // let statusBar = {
-        //     hidden: false,
-        //     backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
-        //     barStyle: 'dark-content',
-        // };
-
-        // let navigationBar = <NavigationBar
-        //     hide={true}
-        //     statusBar={statusBar}
-        //     // style={{backgroundColor: bottomTheme}} // 背景颜色
-        // />;
+        // console.log(navigationRoutes);
         const searchWidth = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
             outputRange: [width - 20, width - 150],
@@ -459,7 +447,7 @@ class LunBoComponent extends React.Component {
                 if (item.type == 1) {
                     if (item.page_name.indexOf('indexPage') !== -1 && item.page_name.indexOf('-') !== -1) {
                         const pageArray = item.page_name.split('-');
-                        jumpTo(pageArray[1])
+                        jumpTo(pageArray[1]);
                     } else {
                         NavigationUtils.goPage(JSON.parse(item.params), item.page_name);
                     }

@@ -45,6 +45,9 @@ import WithDrawPage from '../page/WithDrawPage';
 import CustomerServiceIndex from '../page/ChatRoomPage/CustomerServiceIndex';
 import WithDrawPayPage from '../page/WithDrawPayPage';
 import WithDrawAccount from '../page/WithDrawAccount';
+import AountMePage from '../page/AboutMePage';
+import MyPageTmp from '../page/MyPageTmp';
+import TaskDetailsTmp from '../page/TaskDetailsTmp';
 import OnlineService from '../page/OnlineService';
 import ImageExample from '../common/ImageViewer/ImageViewer';
 import CardStackStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
@@ -333,6 +336,24 @@ const MainNavigator = createStackNavigator({
         },
         CustomerServiceIndex: {
             screen: CustomerServiceIndex,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        AountMePage: {
+            screen: AountMePage,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        TaskDetailsTmp: {
+            screen: TaskDetailsTmp,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        MyPageTmp: {
+            screen: MyPageTmp,
             navigationOptions: {
                 header: null,
             },

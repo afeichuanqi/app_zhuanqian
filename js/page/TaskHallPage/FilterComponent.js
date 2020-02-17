@@ -25,7 +25,6 @@ export default class FilterComponent extends PureComponent {
             {id: 12, title: '特单', type: 2},
             {id: 13, title: '砍价', type: 2},
             {id: 14, title: '其它', type: 2},
-
         ],
     };
     typeMap = new Map();

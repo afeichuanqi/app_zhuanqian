@@ -16,7 +16,7 @@ import {TabView} from 'react-native-tab-view';
 import {
     ActivityIndicator,
     Dimensions,
-    FlatList,
+    FlatList, Platform,
     RefreshControl, StyleSheet,
     Text,
     TouchableOpacity,
@@ -35,6 +35,7 @@ import EventTypes from '../util/EventTypes';
 import {equalsObj, renderEmoji} from '../util/CommonUtils';
 import actions from '../action';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Global from '../common/Global';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -109,7 +110,7 @@ class TaskOrdersMana extends Component {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '接单管理', null, bottomTheme, 'white', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, (Global.apple_pay == 1 && Platform.OS === 'ios') ? '已投递' : '接单管理', null, bottomTheme, 'white', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus
@@ -117,8 +118,8 @@ class TaskOrdersMana extends Component {
             >
                 {navigationBar}
                 {TopColumn}
-                <View>
-                    <TabBar
+                <View style={{flex: 1}}>
+                    {(Global.apple_pay == 1 && Platform.OS === 'ios') ? null : <TabBar
                         style={{
                             height: 35,
                             backgroundColor: bottomTheme,
@@ -136,28 +137,29 @@ class TaskOrdersMana extends Component {
                         activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
                         inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
+                    />}
+                    <TabView
+                        ref={ref => this.tabView = ref}
+                        indicatorStyle={{backgroundColor: 'white'}}
+                        navigationState={{index: navigationIndex, routes: navigationRoutes}}
+                        renderScene={this.renderScene}
+                        position={this.position}
+                        renderTabBar={() => null}
+                        onIndexChange={index => {
+                            // const noticeType = index + 4;
+                            // const {onSetNoticeMsgIsRead, userinfo} = this.props;
+                            // onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
+                            this.setState({
+                                navigationIndex: index,
+                            });
+                        }}
+
+                        initialLayout={{width}}
+                        lazy={true}
                     />
 
                 </View>
-                <TabView
-                    ref={ref => this.tabView = ref}
-                    indicatorStyle={{backgroundColor: 'white'}}
-                    navigationState={{index: navigationIndex, routes: navigationRoutes}}
-                    renderScene={this.renderScene}
-                    position={this.position}
-                    renderTabBar={() => null}
-                    onIndexChange={index => {
-                        // const noticeType = index + 4;
-                        // const {onSetNoticeMsgIsRead, userinfo} = this.props;
-                        // onSetNoticeMsgIsRead(noticeType) && updateNoticeIsReadForType({type: noticeType}, userinfo.token);
-                        this.setState({
-                            navigationIndex: index,
-                        });
-                    }}
 
-                    initialLayout={{width}}
-                    lazy={true}
-                />
 
             </SafeAreaViewPlus>
         );
@@ -247,6 +249,7 @@ class FristListComponent extends PureComponent {
     componentWillUnmount() {
         EventBus.getInstance().removeListener(this.listener);
     }
+
     hideItemLength = 0;
     _updateList = (refreshing) => {
         const {noticeType, clearNotice} = this.props;
@@ -288,20 +291,25 @@ class FristListComponent extends PureComponent {
         });
     };
     _itemPress = (item) => {
-        if (this.props.status == 3) {
-            NavigationUtils.goPage({
-                sendFormId: item.sendFormId,
-                taskId: item.taskId,
-                fromUserinfo: {
-                    avatar_url: item.avatar_url,
-                    id: item.userid,
-                    username: item.username,
-                },
-                task_uri: item.task_uri,
-            }, 'TaskRejectDetailsPage');
+        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+            NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetailsTmp');
         } else {
-            NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
+            if (this.props.status == 3) {
+                NavigationUtils.goPage({
+                    sendFormId: item.sendFormId,
+                    taskId: item.taskId,
+                    fromUserinfo: {
+                        avatar_url: item.avatar_url,
+                        id: item.userid,
+                        username: item.username,
+                    },
+                    task_uri: item.task_uri,
+                }, 'TaskRejectDetailsPage');
+            } else {
+                NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetails');
+            }
         }
+
     };
     _itemRedoTask = (item) => {
         console.log(item);
@@ -336,10 +344,12 @@ class FristListComponent extends PureComponent {
             cancelSignUp={(callback) => {
                 this._cancelSignUp(item, callback);
             }}
-            onPress={()=>{
-                this._itemPress(item)
+            onPress={() => {
+                this._itemPress(item);
             }}
-            redoTask={()=>{this._itemRedoTask(item)}}
+            redoTask={() => {
+                this._itemRedoTask(item);
+            }}
         />;
     };
 
@@ -374,9 +384,12 @@ class FristListComponent extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         return <View style={{flex: 1}}>
             <AnimatedFlatList
-                style={{backgroundColor: '#e8e8e8'}}
-                ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} source={this.props.source} height={height - 100}
-                                                    message={'您还没有相关任务'}/>}
+                style={{backgroundColor: '#f7f7f7'}}
+                ListEmptyComponent={<EmptyComponent icoW={wp(23)}
+                                                    icoH={wp(21)}
+                                                    source={this.props.source}
+                                                    height={(Global.apple_pay == 1 && Platform.OS === 'ios') ? height - 70 : height - 100}
+                                                    message={(Global.apple_pay == 1 && Platform.OS === 'ios') ? '您还没有投递任何公司' : '您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}
@@ -441,7 +454,64 @@ class OrdersItem extends React.Component {
         if (!item.taskId) {
             return null;
         }
-        const TextTitle = <Text
+        let TextTitle = <Text
+            numberOfLines={2}
+            style={{
+                fontWeight: 'bold',
+                color: 'black',
+                width: wp(55),
+            }}>
+            {item && renderEmoji(`${item.task_title}`, [], hp(2), 0, 'black').map((item, index) => {
+                return item;
+            })}
+        </Text>;
+        if ((Global.apple_pay == 1 && Platform.OS === 'ios')) {
+            return <Animated.View
+                style={{
+                    backgroundColor: 'white', borderBottomWidth: 0.3,
+                    borderBottomColor: '#f0f0f0',
+                    opacity: this.animations.scale,
+                }}>
+                <TouchableOpacity
+                    onPress={this.props.onPress}
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        paddingHorizontal: 10,
+                        paddingVertical: 20,
+                        paddingBottom:10,
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <View style={{marginLeft: 10}}>
+                        {TextTitle}
+                    </View>
+
+                    <Text style={{fontSize: hp(2.3), color: 'red'}}>{item.reward_price}元/天</Text>
+                </TouchableOpacity>
+                <View style={{
+                    width, justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    paddingRight:10,
+                }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.cancelSignUp((bool) => {
+                                bool && this.hideAnimated();
+                            });
+                        }}
+                        style={{
+                            width:60, height: 30, justifyContent: 'center',
+                            // alignItems:'flex-end',
+                        }}>
+                        <Text style={{color: bottomTheme, fontSize: hp(1.7)}}>取消投递</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </Animated.View>;
+        }
+        TextTitle = <Text
             numberOfLines={2}
             style={{
                 fontWeight: 'bold',
@@ -457,7 +527,7 @@ class OrdersItem extends React.Component {
             style={{
                 backgroundColor: 'white', borderBottomWidth: 0.3,
                 borderBottomColor: '#f0f0f0',
-                opacity:this.animations.scale,
+                opacity: this.animations.scale,
                 // transform: [{scale: this.animations.scale}],
             }}>
             <TouchableOpacity
@@ -477,6 +547,7 @@ class OrdersItem extends React.Component {
                         source={{uri: item.avatar_url}}
                         resizeMode={FastImage.resizeMode.stretch}
                     />
+
                     {status == 1 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
                         <Text style={{

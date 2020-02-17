@@ -24,6 +24,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
 import ToastShare from '../common/ToastShare';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -71,7 +72,7 @@ class TaskReleaseMana extends PureComponent {
             >
                 {navigationBar}
                 {TopColumn}
-                <ScrollView style={{flex: 1, backgroundColor: '#efefef'}}>
+                <ScrollView style={{flex: 1, backgroundColor: '#f7f7f7'}}>
                     <View>
                         <FastImage source={require('../res/img/yaoqing/yaoqinghaoyou.png')}
                                    style={{width: width, height: 180}}/>
@@ -85,7 +86,8 @@ class TaskReleaseMana extends PureComponent {
                                     Toast.show('复制成功', {position: Toast.positions.CENTER});
                                 }}
                                 style={{marginTop: 15, flexDirection: 'row', alignSelf: 'center'}}>
-                                <Text style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code}</Text>
+                                <Text
+                                    style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code ? this.props.userinfo.invite_code : '请先登录'}</Text>
                                 <SvgUri style={{
                                     marginLeft: 10,
                                 }} width={17} height={17} svgXmlData={copy}/>
@@ -103,10 +105,14 @@ class TaskReleaseMana extends PureComponent {
                     }}>
                         <TouchableOpacity
                             onPress={() => {
+                                // if (this.props.userinfo.token && this.props.userinfo.token.length === 0) {
+                                //     Toast.show('请先登录');
+                                //     return ;
+                                // }
                                 this.ToastShare.show({
                                     title: `好友在召唤`,
                                     text: `下载简易赚APP，点击此链接速来助攻好友`,
-                                    url:`http://www.easy-z.cn/share?&invitation_id=${this.props.userinfo.invite_code}`
+                                    url: `http://www.easy-z.cn/share?&invitation_id=${this.props.userinfo.invite_code}`,
                                 });
                             }}
                             style={{
@@ -114,24 +120,24 @@ class TaskReleaseMana extends PureComponent {
                                 paddingVertical: 12,
                                 backgroundColor: bottomTheme,
                                 borderRadius: 8,
-                                minWidth:110,
-                                justifyContent:'center',
-                                alignItems:'center',
+                                minWidth: 110,
+                                justifyContent: 'center',
+                                alignItems: 'center',
                             }}>
                             <Text style={{color: 'white'}}>推广链接</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
-                                this.ToastShare.show();
+                                this.ToastShare.show({}, 2);
                             }}
                             style={{
                                 paddingHorizontal: 15,
                                 paddingVertical: 12,
                                 backgroundColor: bottomTheme,
                                 borderRadius: 8,
-                                minWidth:110,
-                                justifyContent:'center',
-                                alignItems:'center',
+                                minWidth: 110,
+                                justifyContent: 'center',
+                                alignItems: 'center',
                             }}>
                             <Text style={{color: 'white'}}>推广二维码</Text>
                         </TouchableOpacity>
@@ -159,13 +165,13 @@ class TaskReleaseMana extends PureComponent {
                         </View>
                     </View>
                     <View style={{marginTop: 10, paddingHorizontal: 10}}>
-                        <Text style={{opacity: 0.8, marginTop: 10, fontSize:hp(1.7)}}>
+                        <Text style={{opacity: 0.8, marginTop: 10, fontSize: hp(1.7)}}>
                             1、一级好友(直接推荐的好友)完成任意悬赏都可获得其赏金的8%奖励
                         </Text>
-                        <Text style={{opacity: 0.8, marginTop: 10, fontSize:hp(1.7)}}>
+                        <Text style={{opacity: 0.8, marginTop: 10, fontSize: hp(1.7)}}>
                             2、获得一级好友(直接推荐的好友)完成前20个任意悬赏额外奖励其赏金的4%奖励
                         </Text>
-                        <Text style={{opacity: 0.8, marginTop: 10, fontSize:hp(1.7)}}>
+                        <Text style={{opacity: 0.8, marginTop: 10, fontSize: hp(1.7)}}>
                             3、为防止恶意邀请(机器注册、注册多账号) 被邀请用户必须有一定活跃度才能正常获得佣金
                         </Text>
                     </View>

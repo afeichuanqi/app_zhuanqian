@@ -74,7 +74,7 @@ class UserFeedbackPage extends PureComponent {
                 {TopColumn}
                 <View style={{flex:1}}>
                     <KeyboardAwareScrollView
-                        enableOnAndroid={true} style={{flex: 1, backgroundColor: '#efefef'}}>
+                        enableOnAndroid={true} style={{flex: 1, backgroundColor: '#f7f7f7'}}>
                         <View>
                             <Text style={{
                                 color: 'rgba(0,0,0,0.5)',

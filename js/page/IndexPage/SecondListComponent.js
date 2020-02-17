@@ -10,6 +10,8 @@ import EventTypes from '../../util/EventTypes';
 import SkeletonPlaceholder from '../../common/SkeletonPlaceholder';
 import FastImagePro from '../../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Global from '../../common/Global';
+import {_handleTypeTitle} from '../../util/CommonUtils';
 
 const {width, height} = Dimensions.get('window');
 const lunboHeight = 220;
@@ -168,10 +170,91 @@ class SecondListComponent extends PureComponent {
     }
 
     _renderBestNewItem = ({item, index}) => {
+        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+            return <ScrollItemTmp item={item}/>;
+        }
         return <ScrollItem item={item}/>;
     };
 }
+class ScrollItemTmp extends React.Component {
+    state = {
+        loadEnd: false,
 
+    };
+    render() {
+
+        const {item} = this.props;
+
+        if (!item.task_name) {
+            return <SkeletonPlaceholder minOpacity={0.2}>
+                <View style={{width: 140, height: 100, marginRight: 10, borderRadius: 5}}/>
+                <View style={{height: 15, width: 100, marginTop: 5}}/>
+                <View style={{height: 20, width: 50, marginTop: 2}}/>
+            </SkeletonPlaceholder>;
+        }
+        return <TouchableOpacity
+            onPress={() => {
+                NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
+            }}
+            key={item.id}
+            style={{height: 160, width: 140, paddingHorizontal: 5}}>
+            <View style={{width: 130}}>
+                <FastImagePro
+                    loadingType={1}
+                    loadingWidth={130}
+                    loadingHeight={100}
+                    style={{
+                        backgroundColor: 'rgba(0,0,0,0.2)',
+                        height: 100,
+                        borderRadius: 5,
+                    }}
+                    source={require('../../res/img/indexPage/zhiwei1.png')}
+                />
+                {/*<Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}*/}
+                {/*       style={{*/}
+                {/*           position: 'absolute', right: 0, top: 0, width: 35, height: 15,*/}
+                {/*           borderTopRightRadius: 5,*/}
+                {/*       }}/>*/}
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                <Text numberOfLines={1} style={{fontSize: hp(2), color: 'black', opacity: 0.8}}>{_handleTypeTitle(item.title)}</Text>
+                <View style={{
+                    width: 2,
+                    height: 2,
+                    borderRadius: 2,
+                    backgroundColor: 'black',
+                    marginHorizontal: 3,
+                    opacity: 0.7,
+                }}/>
+                <Text numberOfLines={1}
+                      style={{fontSize: hp(2), color: 'black', width: 65, opacity: 0.8}}>{item.task_name}</Text>
+            </View>
+            {item.reward_price && <View style={{
+                flexDirection: 'row', alignItems: 'center',
+                elevation: 1, marginTop: 3,
+            }}>
+                <Image resizeMode={'stretch'} source={require('../../res/img/moneys.png')}
+                       style={{width: hp(1.8), marginRight: 5, height: hp(2.1)}}/>
+                <Text style={{
+                    fontSize: hp(2.5),
+                    color: 'red',
+                    marginRight: 1,
+
+                }}>{item.reward_price}</Text>
+                <Text style={{
+                    fontSize: hp(1.7),
+                    color: 'red',
+                    fontWeight: '500',
+                    top: 1,
+                    marginLeft: 1,
+
+                }}>元/天</Text>
+            </View>}
+
+
+        </TouchableOpacity>;
+    }
+}
 class ScrollItem extends React.Component {
     state = {
         loadEnd: false,
@@ -205,7 +288,6 @@ class ScrollItem extends React.Component {
                         height: 100,
                         borderRadius: 5,
                     }}
-                    // resizeMode={'stretch'}
                     source={{uri: item.task_uri}}
                 />
                 <Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}
@@ -231,11 +313,6 @@ class ScrollItem extends React.Component {
                 flexDirection: 'row', alignItems: 'center',
                 elevation: 1, marginTop: 3,
             }}>
-                {/*<Image*/}
-                {/*    source={require('../../res/img/moneys.png')}*/}
-                {/*    style={{width:hp(1.6),height:hp(1.8)}}*/}
-                {/*    resizeMode={'stretch'}*/}
-                {/*/>*/}
                 <Image resizeMode={'stretch'} source={require('../../res/img/moneys.png')}
                        style={{width: hp(1.8), marginRight: 5, height: hp(2.1)}}/>
                 <Text style={{

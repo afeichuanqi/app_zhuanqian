@@ -15,7 +15,7 @@ import {
     RefreshControl,
     FlatList,
     StyleSheet,
-    Image,
+    Image, Platform,
 } from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
@@ -32,6 +32,7 @@ import MessageItemComponent from './MessagePage/MessageItemComponent';
 import {equalsObj} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ToastSelect from '../common/ToastSelect';
+import Global from '../common/Global';
 
 const {width, height} = Dimensions.get('window');
 
@@ -62,7 +63,6 @@ class MessagePage extends React.Component {
             <View style={{flex: 1}}>
                 {navigationBar}
                 <Animated.View
-                    // ref={ref => this.zhedangRef = ref}
                     style={{
                         backgroundColor: bottomTheme,
                         height,
@@ -70,7 +70,6 @@ class MessagePage extends React.Component {
                         position: 'absolute',
                         top: -height + 70,
                         transform: [{translateY: translateY}],
-                        // zIndex:1,
                     }}>
                 </Animated.View>
                 <View style={{

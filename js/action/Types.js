@@ -140,5 +140,7 @@ export default {
     SET_IS_OPEN_IMAGE_PICKER:"SET_IS_OPEN_IMAGE_PICKER",
     //设置是否打开过照片选择器
     AGREE_PRIVACY:"AGREE_PRIVACY",
+    //设置appPay
+    SET_APP_PAY:"SET_APP_PAY",
 };
 

@@ -7,4 +7,5 @@ export default {
     update_message_appeal_3_page: 'update_message_appeal_3_page',
     update_message_page: 'update_message_page',
     scroll_top_for_page:'scroll_top_for_page',
+    change_for_apple:'change_for_apple'
 };

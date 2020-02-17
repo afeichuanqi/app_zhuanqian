@@ -15,5 +15,12 @@ export function onIsOpenImagePicker(bool) {
 export function onIsAgreePrivacy(bool) {
     return {type: Types.AGREE_PRIVACY, data: {bool}};
 }
+/**
+ * 同意隐私政策
+ * @returns {{theme: *, type: string}}
+ */
+export function onSetAppPay(i) {
+    return {type: Types.SET_APP_PAY, data: {i}};
+}
 
 

@@ -26,6 +26,7 @@ import {connect} from 'react-redux';
 import FlatListCommonUtil from './SearchPage/FlatListCommonUtil';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Toast from 'react-native-root-toast';
+import Global from '../common/Global';
 
 const width = Dimensions.get('window').width;
 const topIputHeight = (Platform.OS === 'ios') ? 30 : 30;
@@ -111,9 +112,22 @@ class SearchPage extends PureComponent {
                         }}>取消</Text>
                     </TouchableOpacity>
                 </View>
+
                 {showFlatList ?
                     <FlatListCommonUtil token={this.props.userinfo.token} ref={ref => this.flatList = ref}/> :
                     <ScrollView>
+                        {(Global.apple_pay == 1 && Platform.OS === 'ios') && <SearchColumn
+                            onDelAllSearchLog={this.props.onDelAllSearchLog}
+                            startSearch={this.SearchColumnStartSearch}
+                            showDel={false}
+                            labelArray={[
+                                {title: '网络兼职'},
+                                {title: '学生寒假工'},
+                                {title: '手机'},
+                                {title: '手机工作'},
+                                {title: '手机单'},
+                            ]}
+                            title={'热门搜索'}/>}
                         <SearchColumn
                             onDelAllSearchLog={this.props.onDelAllSearchLog}
                             startSearch={this.SearchColumnStartSearch} labelArray={search.searchArr}
@@ -157,6 +171,7 @@ class SearchColumn extends PureComponent {
     static defaultProps = {
         title: '热门搜索',
         labelArray: [],
+        showDel: true,
     };
     _startSearch = (title) => {
         this.props.startSearch(title);
@@ -172,7 +187,7 @@ class SearchColumn extends PureComponent {
                     opacity: 0.8,
                     fontWeight: '200',
                 }}>{title}</Text>
-                {labelArray.length > 0 ? <TouchableOpacity
+                {(labelArray.length > 0 && this.props.showDel) ? <TouchableOpacity
                     activeOpacity={0.6}
                     onPress={() => {
                         this.props.onDelAllSearchLog();

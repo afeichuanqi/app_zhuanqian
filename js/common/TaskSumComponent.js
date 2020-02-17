@@ -119,7 +119,7 @@ class TaskSumComponent extends Component {
                     width: wp(55), paddingLeft: wp(2.3),
                     alignSelf: 'flex-start',
                 }}>
-                    <Text style={{maxWidth: wp(48), flexDirection: 'row'}}>
+                    <Text numberOfLines={1} style={{maxWidth: wp(48), flexDirection: 'row'}}>
                         {item && renderEmoji(item.taskTitle, [], hp(2.0), 0, 'black', {}).map((item, index) => {
                             return item;
                         })}
@@ -227,6 +227,7 @@ class TaskSumComponent extends Component {
                 }}>{item.rewardPrice}</Text>
             </View>
             <View style={styles.labelStyle}>
+
                 <Image
                     resizeMode={'stretch'}
                     style={{width: 12, height: 12, marginRight: 1}}
@@ -259,7 +260,8 @@ const styles = StyleSheet.create({
         paddingVertical: Platform.OS === 'android' ? 2 : 3,
         borderTopRightRadius: 8,
         borderBottomLeftRadius: 10,
-        borderTopLeftRadius:1,
+        borderTopLeftRadius:2,
+        borderBottomRightRadius:2,
         alignItems: 'center',
         justifyContent: 'center',
         maxWidth: wp(35),

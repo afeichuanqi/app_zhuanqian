@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {
     ActivityIndicator,
-    FlatList,
+    FlatList, Platform,
     RefreshControl,
     Text,
     View,
@@ -11,6 +11,8 @@ import {selectAllRecommendTask} from '../../util/AppService';
 import TaskSumComponent from '../../common/TaskSumComponent';
 import EmptyComponent from '../../common/EmptyComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Global from '../../common/Global';
+import TaskSumComponent_tmp from '../../common/TaskSumComponent_tmp';
 
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -189,6 +191,10 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
+        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+            return <TaskSumComponent_tmp statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
+                                     item={item} key={index}/>;
+        }
         return <TaskSumComponent statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
                                  item={item} key={index}/>;
     };

@@ -16,40 +16,31 @@ import {
     Dimensions,
     Platform,
     StatusBar,
-    UIManager,
-    findNodeHandle,
-    Image
+    Image, Clipboard,
+    Linking
 } from 'react-native';
 import {bottomTheme} from '../appSet';
 import NavigationBar from '../common/NavigationBar';
-import FastImage from 'react-native-fast-image';
 import SvgUri from 'react-native-svg-uri';
-import TaskStepColumn from './TaskRelease/TaskStepColumn';
 import Animated, {Easing} from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import {
-    addTaskReleaseData, getNewTaskId,
     selectTaskInfo, selectUserIsFavoriteTask,
     selectUserStatusForTaskId,
     sendTaskStepForm, setUserFavoriteTask,
     startSignUpTask, updateTaskReleaseData,
 } from '../util/AppService';
-import taskHallNext from '../res/svg/taskHallNext.svg';
 import goback from '../res/svg/goback.svg';
 import NavigationUtils from '../navigator/NavigationUtils';
-import {judgeSendTaskData, judgeTaskData, renderEmoji} from '../util/CommonUtils';
+import {_handleTypeTitle, judgeSendTaskData, judgeTaskData, renderEmoji} from '../util/CommonUtils';
 import Toast from 'react-native-root-toast';
-import liaotian from '../res/svg/liaotian.svg';
 import BackPressComponent from '../common/BackPressComponent';
-import message_more from '../res/svg/message_more.svg';
 import TaskMenu from './TaskDetails/TaskMenu';
 import fenxiang from '../res/svg/fenxiang.svg';
 import shoucang from '../res/svg/shoucang.svg';
 import shoucang_ from '../res/svg/shoucang_.svg';
-import ToastShare from '../common/ToastShare';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-import ToastSelect from '../common/ToastSelectTwo';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -157,6 +148,7 @@ class TaskDetails extends PureComponent {
         value: new Animated.Value(0),
     };
 
+
     render() {
         const TitleTop = Animated.interpolate(this.animations.value, {
             inputRange: [0, 70],
@@ -199,6 +191,13 @@ class TaskDetails extends PureComponent {
         const {StatusForTask, taskStatus} = this.state;
         const {userinfo} = this.props;
         const {test} = this.params;
+        const taskInfo = taskData && taskData.TaskInfo;
+        // console.log(taskInfo);
+        let taskInfoArr = [];
+        if (taskInfo && taskInfo.indexOf('---')) {
+            taskInfoArr = taskInfo.split('---');
+            // console.log(taskInfoArr[2].toString().replace(new RegExp('\\\\n', 'gm'), 'sss'));
+        }
 
         return (
             <SafeAreaViewPlus
@@ -222,7 +221,7 @@ class TaskDetails extends PureComponent {
                             alignItems: 'center',
                             zIndex: 2,
                         }}>
-                        <Text style={{color: 'white', fontSize: 18}}>任务详情</Text>
+                        <Text style={{color: 'white', fontSize: 18}}>职位详情</Text>
                     </Animated.View>
                     <Animated.View
                         style={{
@@ -266,18 +265,19 @@ class TaskDetails extends PureComponent {
 
                     >
                         <View style={{backgroundColor: bottomTheme, height: 30}}/>
-                        <Animated.View style={{height: hp(19), opacity: opacity}}>
+                        <Animated.View style={{height: hp(14), opacity: opacity}}>
                             <View style={{
                                 height: hp(9), backgroundColor: bottomTheme, borderBottomLeftRadius: 10,
                                 borderBottomRightRadius: 10,
                             }}/>
                             <View style={{
-                                height: hp(19), backgroundColor: 'white',
+                                height: hp(14), backgroundColor: 'white',
                                 position: 'absolute',
                                 top: 0, width: width - 20,
                                 left: 10,
                                 paddingHorizontal: 10,
                                 borderRadius: 5,
+                                paddingTop: hp(1.5),
                             }}>
                                 <View style={{
                                     height: hp(9),
@@ -293,9 +293,9 @@ class TaskDetails extends PureComponent {
                                                   fontSize: hp(2.3),
                                                   opacity: 0.9,
                                                   color: 'black',
-                                                  width: width - 90,
+                                                  width: width - 95,
                                               }}>
-                                            {taskData && renderEmoji(taskData.title, [], hp(2.4), 0).map((item, index) => {
+                                            {taskData && renderEmoji(taskData.title, [], hp(2.3), 0).map((item, index) => {
                                                 return item;
                                             })}
                                         </Text>
@@ -304,7 +304,7 @@ class TaskDetails extends PureComponent {
                                                 style={{
                                                     color: 'rgba(0,0,0,0.7)',
                                                     fontSize: hp(1.8),
-                                                }}>{taskData && taskData.taskType.title}</Text>
+                                                }}>{taskData && _handleTypeTitle(taskData.taskType.title)}</Text>
                                             <View style={{
                                                 height: 10, width: 0.3, backgroundColor: 'rgba(0,0,0,0.3)',
                                                 marginHorizontal: 10,
@@ -321,125 +321,80 @@ class TaskDetails extends PureComponent {
                                         color: bottomTheme,
                                     }}>{taskData && taskData.rewardPrice}元</Text>
                                 </View>
-                                <View style={{
-                                    height: hp(8),
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-around',
-                                    // marginTop: 20,
-                                    alignItems: 'center',
-                                }}>
-                                    <View style={{alignItems: 'center'}}>
-                                        <Text style={{
-                                            color: 'black',
-                                            fontSize: hp(2.2),
-                                        }}>{taskData && taskData.rewardNum - taskData.taskSignUpNum}</Text>
-                                        <Text style={{
-                                            color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.8),
-                                            marginTop: hp(1.2),
-                                        }}>剩余数量</Text>
-                                    </View>
-                                    <View style={{height: 20, width: 0.4, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                                    <View style={{alignItems: 'center'}}>
-                                        <Text style={{
-                                            color: 'black',
-                                            fontSize: hp(2.2),
-
-                                        }}>{taskData && taskData.taskPassNum}</Text>
-                                        <Text style={{
-                                            color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.8),
-                                            marginTop: hp(1.2),
-                                        }}>完成数量</Text>
-                                    </View>
-                                    <View style={{height: 20, width: 0.4, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                                    <View style={{alignItems: 'center'}}>
-                                        <Text style={{
-                                            color: 'black',
-                                            fontSize: hp(2.2),
-                                        }}>{taskData && taskData.orderTimeLimit.title}</Text>
-                                        <Text style={{
-                                            color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.8),
-                                            marginTop: hp(1.2),
-                                        }}>做单时间</Text>
-                                    </View>
-                                    <View style={{height: 20, width: 0.4, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
-                                    <View style={{alignItems: 'center'}}>
-                                        <Text
-                                            style={{
-                                                color: 'black',
-                                                fontSize: hp(2.2),
-                                            }}>{taskData && taskData.reviewTime.title}</Text>
-                                        <Text style={{
-                                            color: 'rgba(0,0,0,0.6)',
-                                            fontSize: hp(1.8),
-                                            marginTop: hp(1.2),
-                                        }}>审核时间</Text>
-                                    </View>
-                                </View>
                             </View>
                         </Animated.View>
-                        <TouchableOpacity
-                            onPress={() => {
-                                NavigationUtils.goPage({
-                                    userid: fromUserinfo.userid,
-                                    taskId: this.task_id,
-                                    taskUri: taskData.taskUri,
-                                }, 'ShopInfoPage');
-                            }}
-                            activeOpacity={0.6}
-                            style={{
-                                backgroundColor: 'white',
-                                height: hp(11),
-                                marginTop: 10,
-                                marginHorizontal: 10,
-                                paddingVertical: 10,
-                                paddingHorizontal: 10,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                borderRadius: 5,
-                            }}>
-                            <View style={{flexDirection: 'row'}}>
-                                <FastImage
-                                    style={[styles.imgStyle]}
-                                    source={{uri: fromUserinfo && fromUserinfo.avatar_url}}
-                                    resizeMode={FastImage.stretch}
+                        <View style={{
+                            backgroundColor: 'white', marginTop: 10, paddingHorizontal: 10, marginHorizontal: 10,
+                            paddingVertical: wp(4), borderRadius: 5,
+                        }}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Image
+                                    resizeMode={'stretch'}
+                                    style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
+                                    source={require('../res/img/item_icon/label_icon_green.png')}
                                 />
-                                <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
-                                    <Text style={{
-                                        color: 'black',
-                                        fontSize: hp(2.2),
-                                    }}>{fromUserinfo && fromUserinfo.username}</Text>
-                                    <Text style={{color: 'red', opacity: 0.8, fontSize: hp(1.7)}}>{
-                                        taskData ? (taskData.singOrder.type == 1 ? `此任务每人${taskData.singOrder.num}次`
-                                            :
-                                            taskData.singOrder.type == 2 ? `此任务每人每天${taskData.singOrder.num}次`
-                                                :
-                                                '') : '...'
-
-                                    }</Text>
-                                </View>
+                                <Text style={{fontSize: hp(2.2), color: bottomTheme, fontWeight: 'bold'}}>
+                                    公司信息
+                                </Text>
                             </View>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    NavigationUtils.goPage({
-                                        fromUserinfo: {
-                                            avatar_url: fromUserinfo && fromUserinfo.avatar_url,
-                                            id: fromUserinfo && fromUserinfo.userid,
-                                            username: fromUserinfo && fromUserinfo.username,
-                                        },
-                                        columnType: 1,
-                                        task_id: this.task_id,
-                                        taskUri: taskData.taskUri,
-                                        sendFormId: -1,
-                                    }, 'ChatRoomPage');
-                                }}
-                                style={{marginRight: 10}}>
-                                <SvgUri width={25} fill={'#6d6d6d'} height={25} svgXmlData={liaotian}/>
-                            </TouchableOpacity>
-                        </TouchableOpacity>
+
+                            <Text style={{
+                                marginTop: 20,
+                                marginHorizontal: 15,
+                                fontSize: hp(2.1),
+                                opacity: 0.8,
+                            }}>
+                                {taskInfoArr[0]}
+                            </Text>
+                            <View style={{
+                                marginTop: 15,
+                                marginHorizontal: 5,
+                                width: wp(87),
+                                height: hp(7),
+                                borderWidth: 3,
+                                borderColor: 'rgba(33,150,243,0.2)',
+                                borderRadius: hp(1),
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                paddingHorizontal: 10,
+                                justifyContent: 'space-between',
+                            }}>
+                                <Text style={{fontSize: hp(2.1), opacity: 0.8}}>报名联系方式</Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Image
+                                        style={{height: hp(3), width: hp(3)}}
+                                        source={(taskInfoArr[1]&&taskInfoArr[1].length===11)?require('../res/img/share/phone.png'):require('../res/img/share/wechat.png')}
+                                    />
+                                    <Text style={{fontSize: hp(2.0), opacity: 0.8}}>{taskInfoArr[1]}</Text>
+                                </View>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        if((taskInfoArr[1]&&taskInfoArr[1].length===11)){
+                                            Linking.openURL(`tel:${taskInfoArr[1]}`)
+                                            console.log(`tel:${taskInfoArr[1]}`);
+                                        }else{
+                                            Clipboard.setString(taskInfoArr[1]);
+                                            Toast.show('复制成功');
+                                        }
+
+                                    }}
+                                    style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        borderWidth: 0.3,
+                                        borderColor: 'rgba(0,0,0,0.8)',
+                                        paddingHorizontal: 10,
+                                        paddingVertical: 3,
+                                        borderRadius: 6,
+                                    }}
+                                >
+                                    <Text style={{
+                                        fontSize: hp(1.9),
+                                        opacity: 0.8,
+                                    }}>{(taskInfoArr[1]&&taskInfoArr[1].length===11)?'拨打':'复制'}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                         <View style={{
                             backgroundColor: 'white', marginTop: 10, paddingHorizontal: 10, marginHorizontal: 10,
                             paddingVertical: wp(4), borderRadius: 5,
@@ -455,22 +410,26 @@ class TaskDetails extends PureComponent {
                                 {/*    backgroundColor:'red',*/}
                                 {/*    marginRight:5,*/}
                                 {/*}}/>*/}
-                                <Text style={{fontSize: hp(2.2), color: bottomTheme, fontWeight:'bold'}}>
-                                    任务说明
+                                <Text style={{fontSize: hp(2.2), color: bottomTheme, fontWeight: 'bold'}}>
+                                    职位详情
                                 </Text>
                             </View>
 
                             <Text style={{
-                                marginTop: 10,
+                                marginTop: 20,
+                                fontSize: hp(2.2),
+                                paddingHorizontal: 15,
+                                opacity: 0.8,
+                                lineHeight: hp(3.5),
                             }}>
-                                {taskData && renderEmoji(taskData.TaskInfo, [], hp(2.0), 0, 'rgba(0,0,0,0.8)', {lineHeight: 20}).map((item, index) => {
-                                    return item;
-                                })}
+
+                                {taskInfoArr.length > 0 && taskInfoArr[2].toString().replace(new RegExp('\\\\n', 'gm'), '\n')}
+                                {/*{'"职位类型：计算机/互联网\\n发布时间：2020-02-17\\n有效日期：2020-05-19\\n基本要求：年龄不限性别不限\\n工作地点：池州"'}*/}
                             </Text>
                         </View>
                         <View style={{
-                            marginTop: 10, paddingHorizontal: 10, backgroundColor: 'white', marginHorizontal: 10,
-                            borderRadius: 3, height: hp(6), justifyContent: 'center',
+                            backgroundColor: 'white', marginTop: 10, paddingHorizontal: 10, marginHorizontal: 10,
+                            paddingVertical: wp(4), borderRadius: 5,
                         }}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Image
@@ -478,21 +437,25 @@ class TaskDetails extends PureComponent {
                                     style={{width: hp(1.9), height: hp(1.9), marginRight: 5}}
                                     source={require('../res/img/item_icon/label_icon_green.png')}
                                 />
-                                <Text style={{fontSize: hp(2.2), color: bottomTheme, fontWeight:'bold'}}>
-                                    做单步骤（请仔细审阅任务步骤）
+                                {/*<View style={{*/}
+                                {/*    width:3,height:'100%',*/}
+                                {/*    backgroundColor:'red',*/}
+                                {/*    marginRight:5,*/}
+                                {/*}}/>*/}
+                                <Text style={{fontSize: hp(2.2), color: bottomTheme, fontWeight: 'bold'}}>
+                                    公司介绍
                                 </Text>
                             </View>
 
-
+                            <Text style={{
+                                marginTop: 20,
+                                fontSize: hp(2.1),
+                                paddingHorizontal: 15,
+                                opacity: 0.8,
+                            }}>
+                                {taskInfoArr[3]}
+                            </Text>
                         </View>
-                        {/*做单步骤图*/}
-                        <TaskStepColumn
-                            ref={ref => this.taskStep = ref}
-                            showEditModel={(StatusForTask.status === 4 || StatusForTask.status === 5) ? true : false}
-                            userinfo={userinfo}
-                            isEdit={(StatusForTask.status === 4) ? true : false}
-                            stepArr={stepData || []}
-                            showUtilColumn={false}/>
                     </AnimatedKeyboardAwareScrollView>
                     {/*底部按钮*/}
                     <BottomBtns
@@ -502,6 +465,8 @@ class TaskDetails extends PureComponent {
                         StatusForTask={StatusForTask}
                         startSignUp={this._startSignUp}
                         updateStep={this.onBackPress}
+                        userinfo={this.props.userinfo}
+                        task_id={this.task_id}
                         sendStepData={this._sendStepData}
                     />
                     <AnimatedTouchableOpacity
@@ -517,35 +482,7 @@ class TaskDetails extends PureComponent {
                         }}>
                         <SvgUri width={24} height={24} fill={'white'} svgXmlData={goback}/>
                     </AnimatedTouchableOpacity>
-                    <AnimatedTouchableOpacity
-                        ref={ref => this.moreSvg = ref}
-                        activeOpacity={0.6}
-                        onPress={() => {
-                            const handle = findNodeHandle(this.moreSvg);
-                            UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
-                                this.taskDetailsPop.show(pageX, pageY);
-                            });
-                        }}
-                        style={{position: 'absolute', top: goBackTop, right: 0, zIndex: 10, width: 40, marginTop: 3}}>
-                        <SvgUri width={20} height={20} fill={'white'} svgXmlData={message_more}/>
-                    </AnimatedTouchableOpacity>
                 </View>
-                {/*右上角的弹出菜单*/}
-                <TaskDetailsPop
-                    ref={ref => this.taskDetailsPop = ref}
-                    userinfo={userinfo}
-                    task_id={this.task_id}
-                    shareClick={() => {
-                        // console.log();
-                        this.toastShare.show({
-                            title:taskData.title,
-                            text:taskData.TaskInfo,
-                            url: `http://www.easy-z.cn/?amount=${taskData.rewardPrice}&title=&count=${taskData.rewardNum}&taskId=${this.task_id}`,
-                        });
-                    }}
-                />
-                {/*分享弹窗*/}
-                <ToastShare ref={ref => this.toastShare = ref}/>
 
             </SafeAreaViewPlus>
         );
@@ -591,42 +528,7 @@ class TaskDetails extends PureComponent {
         }
 
     };
-    _sendStepData = () => {
-        const {userinfo} = this.props;
-        // console.log(userinfo);
-        if (!userinfo.token || userinfo.token.length === 0) {
-            Toast.show('您未登录哦 ～ ～ ', {position: Toast.positions.CENTER});
-            return;
-        }
-        if (!this.params.update) {
-            const {FormData} = this.params;
-            const {token} = userinfo;
-            const error = judgeTaskData(FormData);
-            if (error != '') {
-                Toast.show(error, {position: Toast.positions.CENTER});
-                return;
-            }
-            addTaskReleaseData(FormData, token).then(result => {
-                Toast.show('发布成功 ~ ~ ', {position: Toast.positions.CENTER});
-            }).catch(err => {
-                Toast.show(err, {position: Toast.positions.CENTER});
-            });
-        } else {
-            const {FormData} = this.params;
-            const {token} = userinfo;
-            const error = judgeTaskData(FormData, true);
-            if (error != '') {
-                Toast.show(error);
-                return;
-            }
-            updateTaskReleaseData(FormData, token).then(result => {
-                // console.log(result);
-                Toast.show('修改成功 ~ ~ ', {position: Toast.positions.CENTER});
-            }).catch(err => {
-                Toast.show(err, {position: Toast.positions.CENTER});
-            });
-        }
-    };
+
 }
 
 class TaskDetailsPop extends Component {
@@ -732,47 +634,13 @@ class BottomBtns extends PureComponent {
     };
 
     render() {
-        console.log(this.props.StatusForTask);
+        // console.log(this.props.StatusForTask);
         const {test, StatusForTask} = this.props;
         return <View>
-            {test ? <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                    onPress={this.props.updateStep}
-                    activeOpacity={0.6}
-                    style={{
-                        height: 60,
-                        width: width / 3,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        backgroundColor: '#f6f6f6',
-                    }}>
-
-                    <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>修改</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => {
-                        this.toastS.show();
-                    }}
-                    style={{
-                        height: 60,
-                        width: (width / 3) * 2,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        backgroundColor: bottomTheme,
-                    }}>
-                    <Text
-                        style={{
-                            fontSize: 15,
-                            color: 'white',
-                            marginLeft: 5,
-                        }}>{this.props.update ? '确认修改' : '申请发布'}</Text>
-                </TouchableOpacity>
-
-            </View> : <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row'}}>
                 <ChangeTask
+                    task_id={this.props.task_id}
+                    userinfo={this.props.userinfo}
                 />
                 <TouchableOpacity
                     activeOpacity={(StatusForTask.status === 0 || StatusForTask.status === 4 || StatusForTask.status === 5) ? 0.5 : 1}
@@ -790,18 +658,18 @@ class BottomBtns extends PureComponent {
                             fontSize: 15,
                             color: 'white',
                             marginLeft: 5,
-                        }}>{StatusForTask.status === 0 ? '开始报名' : StatusForTask.status === 4 ? '提交验证' : StatusForTask.status === 5 ? '待审核' : StatusForTask.msg || ''}</Text>
+                        }}>{StatusForTask.status === 0 ? '立即报名' : StatusForTask.status === 4 ? '已经报名' : StatusForTask.status === 5 ? '待审核' : StatusForTask.msg || ''}</Text>
                 </TouchableOpacity>
 
 
-            </View>}
-            <ToastSelect
-                sureTitle={this.props.update ? '确认修改' : '确认发布'}
-                sureClick={() => {
-                    this.toastS.hide();
-                    this.props.sendStepData();
-                }}
-                ref={ref => this.toastS = ref}/>
+            </View>
+            {/*<ToastSelect*/}
+            {/*    sureTitle={this.props.update ? '确认修改' : '确认发布'}*/}
+            {/*    sureClick={() => {*/}
+            {/*        this.toastS.hide();*/}
+            {/*        this.props.sendStepData();*/}
+            {/*    }}*/}
+            {/*    ref={ref => this.toastS = ref}/>*/}
         </View>;
     }
 }
@@ -810,37 +678,42 @@ class ChangeTask extends Component {
     animations = {
         rotate: new Animated.Value(0),
     };
+    state = {
+        isFavorite: 0,
+    };
+
+    componentDidMount(): void {
+        selectUserIsFavoriteTask({task_id: this.props.task_id}, this.props.userinfo.token).then(data => {
+
+            this.setState({
+                isFavorite: data.status,
+            });
+        }).catch(msg => {
+            this.setState({
+                isFavorite: 0,
+            });
+        });
+    }
     _onPress = () => {
         //隐藏box
-        Toast.show('已切换', {position: Toast.positions.CENTER});
-        getNewTaskId().then(result => {
-            const taskId = result.task_id;
-            console.log(result)
-            EventBus.getInstance().fireEvent(EventTypes.update_task_page, {
-                test: false,
-                task_id: taskId,
+        if(!this.props.userinfo.token || this.props.userinfo.token.length===0){
+            Toast.show(`请先登录`, {position: Toast.positions.CENTER});
+            return ;
+        }
+        const is_favorite = this.state.isFavorite == 1 ? 0 : 1;
+        setUserFavoriteTask({
+            task_id: this.props.task_id,
+            favorite_status: is_favorite,
+        }, this.props.userinfo.token).then(result => {
+            Toast.show(`${is_favorite == 1 ? '收藏' : '取消收藏'}成功`, {position: Toast.positions.CENTER});
+            this.setState({
+                isFavorite: is_favorite,
             });
-
-        }).catch(msg => {
         });
-        this._anim = timing(this.animations.rotate, {
-            duration: 1000,
-            toValue: 1,
-            easing: Easing.inOut(Easing.ease),
-        }).start();
-        this.animations.rotate.setValue(0);
     };
 
 
     render() {
-        // const rotate = this.runProgression();
-        const rotate = Animated.concat(
-            Animated.interpolate(this.animations.rotate, {
-                inputRange: [0, 1],
-                outputRange: [0, 360],
-            }),
-            'deg',
-        );
         return <TouchableOpacity
             onPress={this._onPress}
             activeOpacity={0.6}
@@ -853,13 +726,13 @@ class ChangeTask extends Component {
                 backgroundColor: '#f6f6f6',
             }}>
             <Animated.View
-                style={{transform: [{rotate: rotate}]}}
+                // style={{transform: [{rotate: rotate}]}}
             >
-                <SvgUri width={13} fill={'rgba(0,0,0,0.7)'} style={{}} height={13}
-                        svgXmlData={taskHallNext}/>
+                <SvgUri width={hp(2.5)} fill={'rgba(0,0,0,0.7)'} style={{}} height={hp(2.5)}
+                        svgXmlData={this.state.isFavorite == 1 ? shoucang_ : shoucang}/>
             </Animated.View>
 
-            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
+            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>收藏</Text>
         </TouchableOpacity>;
     }
 }

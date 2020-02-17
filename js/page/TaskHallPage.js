@@ -42,19 +42,31 @@ const {width, height} = Dimensions.get('window');
 class TaskHallPage extends PureComponent {
     constructor(props) {
         super(props);
+        this.state = {
+            navigationIndex: 0,
+            navigationRoutes: (Global.apple_pay == 1 && Platform.OS === 'ios') ? [
+                {key: 'first', title: '全部'},
+                {key: 'second', title: '更多'},
+            ] : [
+                {key: 'first', title: '全部'},
+                {key: 'second', title: Platform.OS === 'android' ? '安卓手机' : '苹果手机'},
+            ],
+            showFeekBack: true,
+        };
     }
 
-    state = {
-        navigationIndex: 0,
-        navigationRoutes: [
-            {key: 'first', title: '全部'},
-            {key: 'second', title: Platform.OS === 'android' ? '安卓手机' : '苹果手机'},
-        ],
-        showFeekBack:true
-    };
 
     componentDidMount() {
-
+        EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
+            if (Global.apple_pay === 0 && this.state.navigationRoutes[1].title == '更多') {
+                this.setState({
+                    navigationRoutes: [
+                        {key: 'first', title: '全部'},
+                        {key: 'second', title: Platform.OS === 'android' ? '安卓手机' : '苹果手机'},
+                    ],
+                });
+            }
+        });
 
     }
 
@@ -68,6 +80,7 @@ class TaskHallPage extends PureComponent {
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
         this.showFeedBackTimer && clearTimeout(this.showFeedBackTimer);
+        EventBus.getInstance().removeListener(this.listener);
     }
 
 
@@ -106,7 +119,7 @@ class TaskHallPage extends PureComponent {
 
     render() {
 
-        const {navigationIndex, navigationRoutes,showFeekBack} = this.state;
+        const {navigationIndex, navigationRoutes, showFeekBack} = this.state;
 
         let statusBar = {
             hidden: false,
@@ -155,22 +168,25 @@ class TaskHallPage extends PureComponent {
                     />
                     <View style={{flexDirection: 'row', marginTop: hp(3), alignItems: 'center'}}>
                         {/*加图标*/}
-                        <TouchableOpacity
-                            onPress={() => {
-                                NavigationUtils.goPage({}, 'TaskRelease');
-                            }}
-                        >
-                            <Image
-                                source={require('../res/img/taskHall/jia.png')}
-                                style={{width: wp(5.1), height: wp(5.1)}}
-                            />
-                        </TouchableOpacity>
-                        <View style={{
-                            height: hp(2.3),
-                            width: wp(0.05),
-                            backgroundColor: 'white',
-                            marginHorizontal: wp(3.5),
-                        }}/>
+                        {Global.apple_pay == 1 && Platform.OS === 'ios' ? null : <>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    NavigationUtils.goPage({}, 'TaskRelease');
+                                }}
+                            >
+                                <Image
+                                    source={require('../res/img/taskHall/jia.png')}
+                                    style={{width: wp(5.1), height: wp(5.1)}}
+                                />
+                            </TouchableOpacity>
+                            <View style={{
+                                height: hp(2.3),
+                                width: wp(0.05),
+                                backgroundColor: 'white',
+                                marginHorizontal: wp(3.5),
+                            }}/>
+                        </>}
+
                         {/*搜索图标*/}
                         <TouchableOpacity
                             onPress={() => {
@@ -204,8 +220,8 @@ class TaskHallPage extends PureComponent {
                     activeOpacity={0.5}
                     onLongPress={() => {
                         this.setState({
-                            showFeekBack: false
-                        })
+                            showFeekBack: false,
+                        });
                     }}
                     onPress={this.animationClick}
                     style={{
@@ -415,7 +431,9 @@ class FirstListComponent extends PureComponent {
                 }}>
                     <TopLeftFilterComponent onPress={this._columnTypeClick}
                                             ref={ref => this.topLeftFilterComponent = ref}/>
-                    <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>
+                    {Global.apple_pay == 1 && Platform.OS === 'ios' ? null :
+                        <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>}
+
                 </View>
                 {/*分割线*/}
                 <View
@@ -429,6 +447,7 @@ class FirstListComponent extends PureComponent {
 
             </Animated.View>
             {/*筛选器*/}
+            {/*{() ? null :}*/}
             {showFilterComponent ?
                 <FilterComponent
                     top={(this.state.tOutputRange == hp(5.9) ? 0 : hp(5.9))}

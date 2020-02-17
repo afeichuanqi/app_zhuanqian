@@ -16,7 +16,7 @@ import {
     Dimensions,
     FlatList,
     RefreshControl, StyleSheet, Text,
-    View, StatusBar,
+    View, StatusBar, Platform, TouchableOpacity,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import EmptyComponent from '../common/EmptyComponent';
@@ -26,6 +26,8 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import BackPressComponent from '../common/BackPressComponent';
 import TaskEasyInfoComponent from '../common/TaskEasyInfoComponent';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import Global from '../common/Global';
+import {renderEmoji} from '../util/CommonUtils';
 
 const height = Dimensions.get('window').height;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -164,6 +166,45 @@ class MyFavoritePage extends PureComponent {
     _renderIndexPath = ({item, index}) => {
 
 
+
+        const TextTitle = <Text
+            numberOfLines={2}
+            style={{
+                fontWeight: 'bold',
+                color: 'black',
+                width: wp(55),
+            }}>
+            {item && renderEmoji(`${item.task_title}`, [], hp(2), 0, 'black').map((item, index) => {
+                return item;
+            })}
+        </Text>;
+        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+            return <View
+                style={{
+                    backgroundColor: 'white', borderBottomWidth: 0.3,
+                    borderBottomColor: '#f0f0f0',
+                    // opacity: this.animations.scale,
+                }}>
+                <TouchableOpacity
+                    onPress={this.props.onPress}
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        paddingHorizontal: 10,
+                        paddingVertical:20,
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <View style={{marginLeft: 10}}>
+                        {TextTitle}
+
+                    </View>
+
+                    <Text style={{fontSize: hp(2.3), color: 'red'}}>{item.rewardPrice}元/天</Text>
+                </TouchableOpacity>
+            </View>
+        }
         const tmpItem = {
 
             taskTitle: item.task_title,

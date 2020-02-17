@@ -21,11 +21,11 @@ const ImageUtil = {
             const ret = RNFS.downloadFile({fromUrl: img, toFile: downloadPath});
             ret.promise.then(res => {
                 if (res && res.statusCode === 200) {
-                    var promise = CameraRoll.saveToCameraRoll('file://' + downloadPath);
+                    var promise = CameraRoll.saveToCameraRoll(downloadPath);
                     promise.then(function (result) {
-                        callback('保存成功');
+                        callback('保存成功', downloadPath);
                     }).catch(function (error) {
-                        callback('保存失败');
+                        callback('保存失败', downloadPath);
                     });
                 }
             });

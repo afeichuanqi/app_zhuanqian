@@ -1,9 +1,11 @@
 import React, {PureComponent} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, Text, View, Dimensions} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, Text, View, Dimensions, Platform} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {getSearchContent} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
 import TaskInfoComponent from '../../common/TaskInfoComponent';
+import TaskInfoComponent_tmp from '../../common/TaskInfoComponent_tmp';
+import Global from '../../common/Global';
 
 const {height, width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -122,6 +124,7 @@ export default class FlatListCommonUtil extends PureComponent {
             // }}
         />;
     }
+
     onLoading = () => {
         // console.log("onLoading");
         this._updateList(false);
@@ -148,6 +151,12 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
+        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+            return <TaskInfoComponent_tmp
+                item={item}
+                key={index}
+            />;
+        }
         return <TaskInfoComponent item={item} key={index}/>;
     };
 

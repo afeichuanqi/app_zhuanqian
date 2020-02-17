@@ -16,6 +16,39 @@ export const isPoneAvailable = (str) => {
         return true;
     }
 };
+export const _handleTypeTitle = (text) => {
+    if (text == '注册') {
+        return '全国';
+    } else if (text == '投票') {
+        return '兰州';
+    } else if (text == '关注') {
+        return '厦门';
+    } else if (text == '浏览') {
+        return '福州';
+    } else if (text == '下载') {
+        return '南宁';
+    } else if (text == '转发') {
+        return '乌鲁木齐';
+    } else if (text == '发帖') {
+        return '济南';
+    } else if (text == '回帖') {
+        return '珠海';
+    } else if (text == '高价') {
+        return '北京';
+    } else if (text == '电商') {
+        return '呼和浩特';
+    } else if (text == '实名') {
+        return '哈尔滨';
+    } else if (text == '特单') {
+        return '南昌';
+    } else if (text == '砍价') {
+        return '贵阳';
+    } else if (text == '其它') {
+        return '上海';
+    } else {
+        return '海口';
+    }
+};
 export const formatData = (data, insertData, ziduan) => {
     const oldData = [...data];
     for (let i = 0; i < insertData.length; i++) {
