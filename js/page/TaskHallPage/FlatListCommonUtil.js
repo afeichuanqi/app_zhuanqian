@@ -7,6 +7,8 @@ import EmptyComponent from '../../common/EmptyComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Global from '../../common/Global';
 import TaskSumComponent_tmp from '../../common/TaskSumComponent_tmp';
+import EventBus from '../../common/EventBus';
+import EventTypes from '../../util/EventTypes';
 
 const {width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -23,7 +25,13 @@ export default class FlatListCommonUtil extends PureComponent {
         setTimeout(() => {
             this._updateList(true);
         }, 500);
+        EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
+            this._updateList(true);
+        })
 
+    }
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     getItemLength = () => {
@@ -65,6 +73,9 @@ export default class FlatListCommonUtil extends PureComponent {
             column_type: this.params.column_type,
             types: this.params.types,
             device: this.params.device,
+            platform: Platform.OS,
+            androidV: Global.android_pay,
+            iosV: Global.apple_pay,
         }).then(result => {
             if (refresh) {
                 this.setState({
@@ -93,7 +104,7 @@ export default class FlatListCommonUtil extends PureComponent {
         const {taskData, isLoading, hideLoaded} = this.state;
         const {ListHeaderComponent, onScroll, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollEnd} = this.props;
         return <AnimatedFlatList
-            ListEmptyComponent={<EmptyComponent  icoW={wp(23)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
+            ListEmptyComponent={<EmptyComponent icoW={wp(23)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
                                                 height={this.props.EmptyH}/>}
             ListHeaderComponent={<View
                 style={{height: taskData.length === 0 ? 0 : 5, width, backgroundColor: '#fafafa'}}/>}
@@ -164,7 +175,7 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
             return <TaskSumComponent_tmp statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
                                          item={item} key={index}/>;
         }

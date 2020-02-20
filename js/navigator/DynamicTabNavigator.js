@@ -59,7 +59,6 @@ class DynamicTabNavigator extends Component<Props> {
 
     componentDidMount(): void {
         EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
-            console.log('我被触发');
             this.setState({
                 navigationRoutes: [
                     {key: 'index', title: '推荐'},

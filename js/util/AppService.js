@@ -834,11 +834,11 @@ export function getAllTask(data) {
 /**
  * 获取所有任务
  */
-export function getLunboList() {
+export function getLunboList(data) {
     return new Promise(async function (resolve, reject) {
         try {
             // http.setPostHeader('token', token);
-            const ret = await http.get('user/getLunboList');
+            const ret = await http.get('user/getLunboList',data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -853,11 +853,11 @@ export function getLunboList() {
 /**
  * 最新首页
  */
-export function getBestNewTask() {
+export function getBestNewTask(data) {
     return new Promise(async function (resolve, reject) {
         try {
             // http.setPostHeader('token', token);
-            const ret = await http.get('user/getBestNewTask', {});
+            const ret = await http.get('user/getBestNewTask', data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {
@@ -1478,11 +1478,11 @@ export function deleteViewHistory(data, token) {
  * @param token
  * @returns {Promise<any> | Promise<*>}
  */
-export function getHotTasks() {
+export function getHotTasks(data) {
     return new Promise(async function (resolve, reject) {
         try {
             // http.setGetHeader('token', token);
-            const ret = await http.get('user/getHotTasks');
+            const ret = await http.get('user/getHotTasks',data);
             if (ret && ret.status == 0) {
                 resolve(ret && ret.data);
             } else {

@@ -20,6 +20,7 @@ const Global = {
     user_top_fee: 10,
     //苹果支付
     apple_pay: 1,
+    android_pay: 1,
     onNewMessage: null,
     //全局弹窗
     toast: null,

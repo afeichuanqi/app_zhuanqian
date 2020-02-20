@@ -13,6 +13,8 @@ import EmptyComponent from '../../common/EmptyComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Global from '../../common/Global';
 import TaskSumComponent_tmp from '../../common/TaskSumComponent_tmp';
+import EventBus from '../../common/EventBus';
+import EventTypes from '../../util/EventTypes';
 
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -37,6 +39,9 @@ export default class FlatListCommonUtil extends PureComponent {
                 pageSize: this.page.pageSize,
                 pageIndex: this.page.pageIndex,
                 type: this.props.type,
+                platform: Platform.OS,
+                iosV:Global.apple_pay,
+                androidV:Global.android_pay,
             }).then(result => {
                 this.setState({
                     taskData: result,
@@ -52,7 +57,13 @@ export default class FlatListCommonUtil extends PureComponent {
         } else {
             this._updateList(true);
         }
+        EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
+            this._updateList(true);
+        })
 
+    }
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     static defaultProps = {
@@ -82,12 +93,13 @@ export default class FlatListCommonUtil extends PureComponent {
         } else {
             this.page.pageIndex = this.page.pageIndex + 1;
         }
-        //console.log({pageSize: this.page.pageSize,
-
         selectAllRecommendTask({
             pageSize: this.page.pageSize,
             pageIndex: this.page.pageIndex,
             type: this.props.type,
+            platform: Platform.OS,
+            iosV:Global.apple_pay,
+            androidV:Global.android_pay,
         }).then(result => {
             if (refresh) {
                 this.setState({
@@ -119,7 +131,7 @@ export default class FlatListCommonUtil extends PureComponent {
 
             ListEmptyComponent={<EmptyComponent icoW={wp(21)} icoH={wp(21)} type={1} message={'暂时没有符合任务'}
                                                 height={this.props.EmptyHeight}/>}
-            ListHeaderComponent={<View style={{marginBottom:taskData.length===0?0:0}}>
+            ListHeaderComponent={<View style={{marginBottom: taskData.length === 0 ? 0 : 0}}>
                 {ListHeaderComponent}
             </View>}
             ref={ref => this.flatList = ref}
@@ -191,9 +203,9 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
             return <TaskSumComponent_tmp statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
-                                     item={item} key={index}/>;
+                                         item={item} key={index}/>;
         }
         return <TaskSumComponent statusBarType={this.props.statusBarType} imageViewModal={this.imageViewModal}
                                  item={item} key={index}/>;

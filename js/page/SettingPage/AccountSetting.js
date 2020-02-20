@@ -37,10 +37,25 @@ class AccountSetting extends PureComponent {
         NavigationUtils.goBack(this.props.navigation);
         return true;
     };
-    state = {};
+    state = {
+        showWechat: false,
+        showQQ: false,
+    };
 
     componentDidMount() {
         this.backPress.componentDidMount();
+        JShareModule.isWeChatInstalled(bool => {
+            this.setState({
+                showWechat: !(Platform.OS === 'ios' && !bool),
+            });
+
+        });
+        JShareModule.isQQInstalled(bool => {
+            this.setState({
+                showQQ: !(Platform.OS === 'ios' && !bool),
+            });
+
+        });
     }
 
     componentWillUnmount() {
@@ -64,6 +79,7 @@ class AccountSetting extends PureComponent {
         // console.log(userinfo.login);
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '账号管理', null, theme, 'black', 16, () => {
         }, false);
+        const {showWechat, showQQ} = this.state;
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -98,7 +114,7 @@ class AccountSetting extends PureComponent {
                         }
 
                     }, userinfo.phone ? userinfo.phone : '未绑定', true)}
-                    {ViewUtil.getSettingMenu('微信', () => {
+                    {showWechat && ViewUtil.getSettingMenu('微信', () => {
                         if (userinfo.wechat_user) {
                             this.cancelPlatform = 'wechat';
                             this.toastS.show();
@@ -146,7 +162,8 @@ class AccountSetting extends PureComponent {
                             });
                         }
                     }, userinfo.weibo_user ? userinfo.weibo_user : '未绑定')}
-                    {ViewUtil.getSettingMenu('QQ', () => {
+
+                    {showQQ && ViewUtil.getSettingMenu('QQ', () => {
                         if (userinfo.qq_user) {
                             this.cancelPlatform = 'qq';
                             this.toastS.show();

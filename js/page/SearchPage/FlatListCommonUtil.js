@@ -51,6 +51,9 @@ export default class FlatListCommonUtil extends PureComponent {
         getSearchContent({
             pageIndex: this.params.pageIndex,
             searchContent: this.params.searchContent,
+            platform: Platform.OS,
+            iosV: 0,
+            androidV: Global.android_pay,
         }, this.props.token).then(result => {
             // console.log(result,"result");
             if (refresh) {

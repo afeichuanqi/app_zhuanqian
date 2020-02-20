@@ -47,14 +47,18 @@ class HomePage extends PureComponent {
             Global.user_top_fee = result.user_top_fee;
             Global.user_service_fee = result.user_service_fee;
             Global.user_recommend_fee = result.user_recommend_fee;
-
-            if (result.apple_pay != Global.apple_pay) {
-                Global.apple_pay = result.apple_pay;
-                // console.log('我被触发1')
-                EventBus.getInstance().fireEvent(EventTypes.change_for_apple, {});
+            if (Platform.OS === 'ios') {
+                if (result.apple_pay != Global.apple_pay) {
+                    Global.apple_pay = result.apple_pay;
+                    EventBus.getInstance().fireEvent(EventTypes.change_for_apple, {});
+                }
             }
-
-
+            if (Platform.OS === 'android') {
+                if (result.android_pay != Global.android_pay) {
+                    Global.android_pay = result.android_pay;
+                    EventBus.getInstance().fireEvent(EventTypes.change_for_apple, {});
+                }
+            }
         });
         Global.toast = Toast;
         JShareModule.setup();
@@ -100,7 +104,10 @@ class HomePage extends PureComponent {
                 this.setState({
                     showAnimated: false,
                 }, () => {
-                    this.promotionToast.show();
+                    if (!(Global.apple_pay == 1 && Platform.OS === 'ios')) {
+                        this.promotionToast.show();
+                    }
+
                 });
             });
         });

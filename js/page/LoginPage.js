@@ -42,7 +42,12 @@ class LoginPage extends PureComponent {
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
     }
 
-    state = {};
+    state = {
+        showWechat: false,
+        showQQ: false,
+
+    };
+
     phone = '';
 
     componentDidMount() {
@@ -58,6 +63,19 @@ class LoginPage extends PureComponent {
             style: {
                 height: 50,
             },
+        });
+        JShareModule.isWeChatInstalled(bool => {
+            // console.log(Platform.OS === 'ios' && !bool);
+            this.setState({
+                showWechat: !(Platform.OS === 'ios' && !bool),
+            });
+
+        });
+        JShareModule.isQQInstalled(bool => {
+            this.setState({
+                showQQ: !(Platform.OS === 'ios' && !bool),
+            });
+
         });
     }
 
@@ -107,6 +125,8 @@ class LoginPage extends PureComponent {
             statusBar={statusBar}
         />;
         let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '', null, 'white', 'black', 14, null, false);
+        const {showWechat, showQQ} = this.state;
+
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -174,7 +194,7 @@ class LoginPage extends PureComponent {
                         <View style={{
                             flexDirection: 'row',
                         }}>
-                            <TouchableOpacity
+                            {showWechat && <TouchableOpacity
                                 activeOpacity={0.5}
                                 onPress={this.handleWechatAuthorize}
                             >
@@ -182,7 +202,8 @@ class LoginPage extends PureComponent {
                                     source={require('../res/img/share/wechat.png')}
                                     style={{width: hp(6), height: hp(6)}}
                                 />
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
+
                             <TouchableOpacity
                                 activeOpacity={0.5}
                                 onPress={this.handleSinaAuthorze}
@@ -192,15 +213,18 @@ class LoginPage extends PureComponent {
                                     style={{width: hp(6), height: hp(6), marginLeft: hp(3)}}
                                 />
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                activeOpacity={0.5}
-                                onPress={this.handleQQAuthorze}
-                            >
-                                <Image
-                                    source={require('../res/img/share/qq.png')}
-                                    style={{width: hp(6), height: hp(6), marginLeft: hp(3)}}
-                                />
-                            </TouchableOpacity>
+                            {
+                                showQQ && <TouchableOpacity
+                                    activeOpacity={0.5}
+                                    onPress={this.handleQQAuthorze}
+                                >
+                                    <Image
+                                        source={require('../res/img/share/qq.png')}
+                                        style={{width: hp(6), height: hp(6), marginLeft: hp(3)}}
+                                    />
+                                </TouchableOpacity>
+                            }
+
                         </View>
 
                     </View>}
@@ -237,7 +261,8 @@ class LoginPage extends PureComponent {
 
     handleQQAuthorze = () => {
         this.loddingModal.show();
-        JShareModule.cancelAuthWithPlatform({platform: 'qq',},()=>{})
+        JShareModule.cancelAuthWithPlatform({platform: 'qq'}, () => {
+        });
         JShareModule.authorize({
             platform: 'qq',
         }, (info) => {
@@ -250,11 +275,11 @@ class LoginPage extends PureComponent {
             const device_system_version = DeviceInfo.getSystemVersion();
             const device_is_tablet = DeviceInfo.isTablet();
             this.props.onQQAuthorizeLogin({
-                open_id:openId,
+                open_id: openId,
                 access_token: token,
                 DeviceID,
                 platform, device_brand, device_name, device_system_version, device_is_tablet,
-            },(bool, data)=>{
+            }, (bool, data) => {
                 if (bool) {
                     Global.token = data.token;//进行验证token
                     ChatSocket.verifyIdentity();//进行验证token
@@ -266,16 +291,17 @@ class LoginPage extends PureComponent {
                 } else {
                     Toast.show(data.msg);
                 }
-            })
+            });
             // console.log(info);
-        },()=>{
+        }, () => {
             this.loddingModal.hide();
         });
     };
 
     handleSinaAuthorze = () => {
         // this.loddingModal.show();
-        JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo',},()=>{})
+        JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo'}, () => {
+        });
         JShareModule.authorize({
             platform: 'weibo',
         }, (info) => {
@@ -303,7 +329,7 @@ class LoginPage extends PureComponent {
                     }, 2000);
                     Toast.show('登录成功');
                     NavigationUtils.goBack(this.props.navigation);
-                }else {
+                } else {
                     Toast.show(data.msg);
                 }
 
@@ -344,7 +370,7 @@ class LoginPage extends PureComponent {
                     }
                 });
             } else {
-                
+
                 if (data.code == '40009') {
                     Toast.show('未安装微信客户端');
                 } else {

@@ -567,7 +567,11 @@ class HeadlineComponent extends PureComponent {
 
     updatePage = () => {
 
-        getHotTasks().then(result => {
+        getHotTasks({
+            platform: Platform.OS,
+            iosV:Global.apple_pay,
+            androidV:Global.android_pay,
+        }).then(result => {
             result.length > 0 && this.props.onSuccess();
             result.length === 0 && this.props.onError();
             console.log(result);
@@ -592,7 +596,13 @@ class HeadlineComponent extends PureComponent {
     componentDidMount() {
         // this.updatePage();
         !this.timer && this.startLunbo();
+        EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
+            this.updatePage();
+        })
 
+    }
+    componentWillUnmount(): * {
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     render() {

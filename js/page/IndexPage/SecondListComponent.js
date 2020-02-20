@@ -32,10 +32,13 @@ class SecondListComponent extends PureComponent {
                 this.props.showAnimated(false);
             }
         });
+        EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener1 = data => {
+            this.updateBestNewList();
+        })
     }
 
     updateBestNewList = () => {
-        getBestNewTask().then(data => {
+        getBestNewTask({platform: Platform.OS, androidV: Global.android_pay, iosV: Global.apple_pay}).then(data => {
             this.setState({
                 bestNewData: data,
             });
@@ -44,6 +47,7 @@ class SecondListComponent extends PureComponent {
 
     componentWillUnmount(): void {
         EventBus.getInstance().removeListener(this.listener);
+        EventBus.getInstance().removeListener(this.listener1);
     }
 
 
@@ -170,17 +174,19 @@ class SecondListComponent extends PureComponent {
     }
 
     _renderBestNewItem = ({item, index}) => {
-        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
             return <ScrollItemTmp item={item}/>;
         }
         return <ScrollItem item={item}/>;
     };
 }
+
 class ScrollItemTmp extends React.Component {
     state = {
         loadEnd: false,
 
     };
+
     render() {
 
         const {item} = this.props;
@@ -204,20 +210,16 @@ class ScrollItemTmp extends React.Component {
                     loadingWidth={130}
                     loadingHeight={100}
                     style={{
-                        backgroundColor: 'rgba(0,0,0,0.2)',
+                        // backgroundColor: 'rgba(0,0,0,0.2)',
                         height: 100,
-                        borderRadius: 5,
+                        // borderRadius: 10,
                     }}
                     source={require('../../res/img/indexPage/zhiwei1.png')}
                 />
-                {/*<Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}*/}
-                {/*       style={{*/}
-                {/*           position: 'absolute', right: 0, top: 0, width: 35, height: 15,*/}
-                {/*           borderTopRightRadius: 5,*/}
-                {/*       }}/>*/}
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-                <Text numberOfLines={1} style={{fontSize: hp(2), color: 'black', opacity: 0.8}}>{_handleTypeTitle(item.title)}</Text>
+                <Text numberOfLines={1}
+                      style={{fontSize: hp(2), color: 'black', opacity: 0.8}}>{_handleTypeTitle(item.title)}</Text>
                 <View style={{
                     width: 2,
                     height: 2,
@@ -255,6 +257,7 @@ class ScrollItemTmp extends React.Component {
         </TouchableOpacity>;
     }
 }
+
 class ScrollItem extends React.Component {
     state = {
         loadEnd: false,

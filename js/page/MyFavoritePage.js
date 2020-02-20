@@ -186,7 +186,9 @@ class MyFavoritePage extends PureComponent {
                     // opacity: this.animations.scale,
                 }}>
                 <TouchableOpacity
-                    onPress={this.props.onPress}
+                    onPress={()=>{
+                        NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetailsTmp');
+                    }}
                     style={{
                         flex: 1,
                         flexDirection: 'row',
@@ -198,7 +200,6 @@ class MyFavoritePage extends PureComponent {
                 >
                     <View style={{marginLeft: 10}}>
                         {TextTitle}
-
                     </View>
 
                     <Text style={{fontSize: hp(2.3), color: 'red'}}>{item.rewardPrice}元/天</Text>
@@ -206,7 +207,6 @@ class MyFavoritePage extends PureComponent {
             </View>
         }
         const tmpItem = {
-
             taskTitle: item.task_title,
             imageUrl: item.task_uri,
             rewardPrice: item.rewardPrice,

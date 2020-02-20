@@ -186,7 +186,7 @@ class InputPro extends PureComponent {
             value={this.state.phone}
             placeholder={'请留下您的联系方式，方便我们联系您'}
             placeholderTextColor={'rgba(0,0,0,0.4)'}
-            style={{height: 40, width, backgroundColor: 'white', paddingLeft: 5}}
+            style={{height: 40, width, backgroundColor: 'white', paddingHorizontal: 15}}
         />;
     }
 }
@@ -222,11 +222,11 @@ class InputTextImage extends PureComponent {
                     height: height / 4,
                     width,
                     backgroundColor: 'white',
-                    paddingHorizontal: 5,
+                    // paddingHorizontal: 5,
                     padding: 0,
                     textAlignVertical: 'top',
                     paddingTop: 5,
-                    paddingLeft: 5,
+                    paddingHorizontal:15,
                     borderRadius: 5,
                 }}
                 placeholder={'希望您能积极的提交平台的不足,请我们及时能知道我们的缺点 ~ ~ 请务必在登录模式下提交,如bug存在将赠送红包'}
@@ -292,7 +292,7 @@ class RadioCheck extends PureComponent {
     // get
     render() {
         const {data, checkIndex} = this.state;
-        return <View style={{flexDirection: 'row', paddingVertical: 20, backgroundColor: 'white'}}>
+        return <View style={{flexDirection: 'row', paddingVertical: 20, backgroundColor: 'white', paddingLeft:15}}>
             {data.map((item, index, arrs) => {
                 return <TouchableOpacity
                     activeOpacity={0.6}

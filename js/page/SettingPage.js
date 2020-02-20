@@ -26,6 +26,7 @@ class SettingPage extends PureComponent {
     state = {
         CacheSize: 0,
 
+
     };
 
     componentDidMount() {

@@ -82,7 +82,6 @@ class HomePage extends React.Component {
         if (!userinfo.login) {
             NavigationUtils.goPage({}, 'LoginPage');
         } else {
-            // this.pickerImage.show();
             NavigationUtils.goPage({}, 'AccountSetting');
         }
     };
@@ -413,7 +412,11 @@ class FristListComponent extends PureComponent {
 
 class LunBoComponent extends React.Component {
     updatePage = () => {
-        getLunboList().then(result => {
+        getLunboList({
+            platform: Platform.OS,
+            iosV:Global.apple_pay,
+            androidV:Global.android_pay,
+        }).then(result => {
             this.setState({
                 lunboData: result,
             });
@@ -434,6 +437,12 @@ class LunBoComponent extends React.Component {
 
     componentDidMount() {
         this.updatePage();
+        EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
+            this.updatePage();
+        })
+    }
+    componentWillUnmount(): * {
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     _renderItem = ({item, index}) => {
