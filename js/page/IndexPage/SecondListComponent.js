@@ -8,10 +8,10 @@ import NavigationUtils from '../../navigator/NavigationUtils';
 import EventBus from '../../common/EventBus';
 import EventTypes from '../../util/EventTypes';
 import SkeletonPlaceholder from '../../common/SkeletonPlaceholder';
-import FastImagePro from '../../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Global from '../../common/Global';
 import {_handleTypeTitle} from '../../util/CommonUtils';
+import FastImage from 'react-native-fast-image';
 
 const {width, height} = Dimensions.get('window');
 const lunboHeight = 220;
@@ -34,7 +34,7 @@ class SecondListComponent extends PureComponent {
         });
         EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener1 = data => {
             this.updateBestNewList();
-        })
+        });
     }
 
     updateBestNewList = () => {
@@ -205,17 +205,13 @@ class ScrollItemTmp extends React.Component {
             key={item.id}
             style={{height: 160, width: 140, paddingHorizontal: 5}}>
             <View style={{width: 130}}>
-                <FastImagePro
-                    loadingType={1}
-                    loadingWidth={130}
-                    loadingHeight={100}
+                <FastImage
                     style={{
-                        // backgroundColor: 'rgba(0,0,0,0.2)',
                         height: 100,
-                        // borderRadius: 10,
                     }}
                     source={require('../../res/img/indexPage/zhiwei1.png')}
                 />
+
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                 <Text numberOfLines={1}
@@ -282,17 +278,16 @@ class ScrollItem extends React.Component {
             key={item.id}
             style={{height: 160, width: 140, paddingHorizontal: 5}}>
             <View style={{width: 130}}>
-                <FastImagePro
-                    loadingType={1}
-                    loadingWidth={130}
-                    loadingHeight={100}
+                <FastImage
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
                         height: 100,
                         borderRadius: 5,
                     }}
+                    resizeMode={FastImage.resizeMode.stretch}
                     source={{uri: item.task_uri}}
                 />
+
                 <Image source={require('../../res/img/yanzhengbiaozhu/zuixin.png')}
                        style={{
                            position: 'absolute', right: 0, top: 0, width: 35, height: 15,

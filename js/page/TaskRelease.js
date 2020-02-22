@@ -391,7 +391,7 @@ class TaskRelease extends PureComponent {
     }
 
     renderColumn = () => {
-        return <View style={{flex: 1, backgroundColor: '#e8e8e8'}}>
+        return <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
             <View style={{height: 40, backgroundColor: 'white'}}>
                 <Text style={{fontSize: 15, marginTop: 10, marginLeft: 10, color: 'black'}}>请选择类型</Text>
             </View>
@@ -477,7 +477,7 @@ class TaskRelease extends PureComponent {
                         ScrollViewRef = ref;
 
                     }}
-                    style={{backgroundColor: '#e8e8e8'}}>
+                    style={{backgroundColor: '#f5f5f5'}}>
 
                     <TypeSelect
                         defaultId={this.taskInfo.typeData.id}

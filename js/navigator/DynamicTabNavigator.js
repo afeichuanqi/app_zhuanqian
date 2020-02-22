@@ -6,8 +6,8 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, BackHandler, Platform} from 'react-native';
-import Animated from 'react-native-reanimated';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, Platform} from 'react-native';
+// import Animated from 'react-native-reanimated';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
 import {bottomTheme, theme} from '../appSet';
@@ -31,7 +31,7 @@ import MyPageTmp from '../page/MyPageTmp';
 
 // const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-const {SpringUtils, spring} = Animated;
+// const {SpringUtils, spring} = Animated;
 type Props = {};
 
 const {width, height} = Dimensions.get('window');
@@ -408,47 +408,47 @@ class BottomBarItem extends Component {
         const {onPress, index} = this.props;
         onPress(index);
     };
-    animations = {
-        scale: new Animated.Value(1),
-    };
-    onPressIn = () => {
-        if (!this.props.isActive) {
-            spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
-                ...SpringUtils.makeDefaultConfig(),
-                bounciness: 13,
-                speed: 20,
-                toValue: 0.7,
-            })).start(() => {
-
-            });
-            setTimeout(() => {
-                spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
-                    ...SpringUtils.makeDefaultConfig(),
-                    bounciness: 20,
-                    speed: 20,
-                    toValue: 1,
-                })).start(() => {
-
-                });
-            }, 150);
-        }
-
-    };
+    // animations = {
+    //     scale: new Animated.Value(1),
+    // };
+    // onPressIn = () => {
+    //     if (!this.props.isActive) {
+    //         spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+    //             ...SpringUtils.makeDefaultConfig(),
+    //             bounciness: 13,
+    //             speed: 20,
+    //             toValue: 0.7,
+    //         })).start(() => {
+    //
+    //         });
+    //         setTimeout(() => {
+    //             spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
+    //                 ...SpringUtils.makeDefaultConfig(),
+    //                 bounciness: 20,
+    //                 speed: 20,
+    //                 toValue: 1,
+    //             })).start(() => {
+    //
+    //             });
+    //         }, 150);
+    //     }
+    //
+    // };
 
     render() {
         const {source, unReadLength = 0, isOtherUnRead = false, title = '首页', titleColor} = this.props;
         return <TouchableOpacity
             activeOpacity={1}
             onPress={this.onPress}
-            onPressIn={this.onPressIn}
+            // onPressIn={this.onPressIn}
             style={{
                 width: (Global.apple_pay == 1 && Platform.OS === 'ios') ? wp(33) : wp(25),
                 height: hp(6.5),
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
-            <Animated.View style={{
-                transform: [{scale: this.animations.scale}],
+            <View style={{
+                // transform: [{scale: this.animations.scale}],
                 alignItems: 'center',
                 marginTop: hp(0.5),
             }}>
@@ -482,7 +482,7 @@ class BottomBarItem extends Component {
                 </View>}
 
 
-            </Animated.View>
+            </View>
             <Text style={{fontSize: hp(1.5), color: titleColor, marginTop: hp(0.4)}}>{title}</Text>
 
         </TouchableOpacity>;

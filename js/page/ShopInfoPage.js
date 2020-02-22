@@ -38,6 +38,7 @@ import goback from '../res/svg/goback.svg';
 import PickerImage from '../common/PickerImage';
 import actions from '../action';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import Global from '../common/Global';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
@@ -297,6 +298,9 @@ class ShopList extends Component {
         selectTaskListForUserId({
             user_id: this.userid,
             pageIndex: this.params.pageIndex,
+            platform: Platform.OS,
+            iosV: Global.apple_pay,
+            androidV: Global.android_pay,
         }, this.props.userinfo.token).then(result => {
             // console.log('刷新中');
             if (refresh) {

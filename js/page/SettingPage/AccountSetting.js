@@ -142,24 +142,28 @@ class AccountSetting extends PureComponent {
                         } else {
                             // this.loddingModal.show();
                             JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo'}, () => {
-                            });
-                            JShareModule.authorize({
-                                platform: 'weibo',
-                            }, (info) => {
-                                const {token, originData} = info;
-                                const id = JSON.parse(originData).id || JSON.parse(originData).uid;
-
-                                // this.loddingModal.hide();
-                                this.props.onChangeSina(token, id, this.props.userinfo.token, (bool, data) => {
-                                    if (bool) {
-                                        Toast.show('绑定成功');
-                                    } else {
-                                        Toast.show(data.msg);
+                                JShareModule.authorize({
+                                    platform: 'weibo',
+                                }, (info) => {
+                                    try {
+                                        const {token, originData} = info;
+                                        const id = JSON.parse(originData).id || JSON.parse(originData).uid;
+                                        this.props.onChangeSina(token, id, this.props.userinfo.token, (bool, data) => {
+                                            if (bool) {
+                                                Toast.show('绑定成功');
+                                            } else {
+                                                Toast.show(data.msg);
+                                            }
+                                        });
+                                    }catch (e) {
+                                        Toast.show('绑定失败');
                                     }
-                                });
-                            },()=>{
 
+                                },()=>{
+
+                                });
                             });
+
                         }
                     }, userinfo.weibo_user ? userinfo.weibo_user : '未绑定')}
 
@@ -171,23 +175,28 @@ class AccountSetting extends PureComponent {
                         } else {
                             this.loddingModal.show();
                             JShareModule.cancelAuthWithPlatform({platform: 'qq'}, () => {
-                            });
-                            JShareModule.authorize({
-                                platform: 'qq',
-                            }, (info) => {
-                                const {openId, token} = info;
-
-                                this.loddingModal.hide();
-                                this.props.onChangeQQ(token, openId, this.props.userinfo.token, (bool, data) => {
-                                    if (bool) {
-                                        Toast.show('绑定成功');
-                                    } else {
-                                        Toast.show(data.msg);
+                                JShareModule.authorize({
+                                    platform: 'qq',
+                                }, (info) => {
+                                    try {
+                                        const {openId, token} = info;
+                                        this.loddingModal.hide();
+                                        this.props.onChangeQQ(token, openId, this.props.userinfo.token, (bool, data) => {
+                                            if (bool) {
+                                                Toast.show('绑定成功');
+                                            } else {
+                                                Toast.show(data.msg);
+                                            }
+                                        });
+                                    }catch (e) {
+                                        Toast.show('绑定失败');
                                     }
+
+                                },()=>{
+                                    this.loddingModal.hide();
                                 });
-                            },()=>{
-                                this.loddingModal.hide();
                             });
+
                         }
                     }, userinfo.qq_user ? userinfo.qq_user : '未绑定')}
                 </View>

@@ -48,11 +48,18 @@ export default class FlatListCommonUtil extends PureComponent {
             this.props.onLoading(true);
             this.params.pageIndex += 1;
         }
+        // console.log({
+        //     pageIndex: this.params.pageIndex,
+        //     searchContent: this.params.searchContent,
+        //     platform: Platform.OS,
+        //     iosV: Global.apple_pay,
+        //     androidV: Global.android_pay,
+        // });
         getSearchContent({
             pageIndex: this.params.pageIndex,
             searchContent: this.params.searchContent,
             platform: Platform.OS,
-            iosV: 0,
+            iosV: Global.apple_pay,
             androidV: Global.android_pay,
         }, this.props.token).then(result => {
             // console.log(result,"result");

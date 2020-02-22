@@ -569,15 +569,18 @@ class HeadlineComponent extends PureComponent {
 
         getHotTasks({
             platform: Platform.OS,
-            iosV:Global.apple_pay,
-            androidV:Global.android_pay,
+            iosV: Global.apple_pay,
+            androidV: Global.android_pay,
         }).then(result => {
-            result.length > 0 && this.props.onSuccess();
-            result.length === 0 && this.props.onError();
-            console.log(result);
-            this.setState({
-                HeadlineArrays: result,
-            });
+
+            // console.log(result);
+            setTimeout(() => {
+                result.length > 0 && this.props.onSuccess();
+                result.length === 0 && this.props.onError();
+                this.setState({
+                    HeadlineArrays: result,
+                });
+            }, 700);
         });
     };
     startLunbo = () => {
@@ -598,9 +601,10 @@ class HeadlineComponent extends PureComponent {
         !this.timer && this.startLunbo();
         EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
             this.updatePage();
-        })
+        });
 
     }
+
     componentWillUnmount(): * {
         EventBus.getInstance().removeListener(this.listener);
     }

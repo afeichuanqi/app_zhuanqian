@@ -7,9 +7,8 @@ import sex_nv_ from '../res/svg/sex_nv_.svg';
 import SvgUri from 'react-native-svg-uri';
 import {equalsObj, renderEmoji} from '../util/CommonUtils';
 import Global from './Global';
-import FastImagePro from './FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import FastImage from 'react-native-fast-image';
 const {width} = Dimensions.get('window');
 
 class TaskSumComponent extends Component {
@@ -102,7 +101,8 @@ class TaskSumComponent extends Component {
                     }}
                     style={{alignSelf: 'flex-start'}}
                 >
-                    <FastImagePro
+
+                    <FastImage
                         style={{
                             backgroundColor: '#E8E8E8',
                             width: hp(10),
@@ -110,8 +110,7 @@ class TaskSumComponent extends Component {
                             borderRadius: 5,
 
                         }}
-                        loadingWidth={hp(10)}
-                        loadingHeight={hp(10)}
+                        resizeMode={FastImage.resizeMode.stretch}
                         source={{uri: item.taskUri}}
                     />
                 </TouchableOpacity>
@@ -186,12 +185,11 @@ class TaskSumComponent extends Component {
                         }}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <View>
-                                <FastImagePro
-                                    loadingHeight={hp(1.5)}
-                                    loadingWidth={hp(1.5)}
+                                <FastImage
                                     style={[styles.imgStyle]}
                                     source={{uri: item.avatarUrl}}
                                 />
+
                                 <SvgUri style={{
                                     position: 'absolute',
                                     right: -hp(0.3),
