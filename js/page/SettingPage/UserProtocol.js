@@ -71,7 +71,7 @@ class UserProtocol extends PureComponent {
         />;
         const {html} = this.state;
 
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.params.type === 1 ? '《简单赚发单规则》' : this.params.type === 2 ? '《简单赚接单规则》' : this.params.type === 3 ? '用户协议' : '', null, theme, 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.params.type === 1 ? '《简单赚发单规则》' : this.params.type === 2 ? '《简单赚接单规则》' : this.params.type === 3 ? '用户协议与隐私政策' : '', null, theme, 'black', 16, null, false);
         return (
             <SafeAreaViewPlus
                 topColor={theme}
@@ -97,7 +97,7 @@ class UserProtocol extends PureComponent {
                         fontSize: 15,
                         marginVertical: 10,
                         fontWeight: 'bold',
-                    }}>{this.params.type === 1 ? '发单规则如下' : this.params.type === 2 ? '接单规则如下' : this.params.type === 3 ? '用户协议' : ''}</Text>
+                    }}>{this.params.type === 1 ? '发单规则如下' : this.params.type === 2 ? '接单规则如下' : this.params.type === 3 ? '用户协议与隐私政策如下' : ''}</Text>
                     <HTML onLinkPress={this.onLinkPress}
                           imagesMaxWidth={Dimensions.get('window').width / 1.2}
                           html={html}

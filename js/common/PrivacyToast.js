@@ -97,7 +97,7 @@ class PrivacyToast extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                            <Text style={{color: 'rgba(0,0,0,0.9)', fontSize: hp(2.3)}}>隐私政策</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.9)', fontSize: hp(2.3)}}>用户协议与隐私政策</Text>
                         </View>
                         <ScrollView
                             style={{paddingHorizontal: 25, height: hp(30)}}>
@@ -129,7 +129,7 @@ class PrivacyToast extends PureComponent {
                                     <Text
                                         activeOpacity={0.5}
                                         onPress={this.props.click} style={[styles.textStyle, {color: bottomTheme}]}>
-                                        《隐私保护》
+                                        《用户协议与隐私政策》
                                     </Text>
 
 

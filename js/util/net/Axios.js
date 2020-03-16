@@ -4,9 +4,9 @@ import qs from 'qs';
 import Toast from 'react-native-root-toast';
 
 let defaultConfig = {
-        // baseUrl: Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000',//测试
+        baseUrl: Platform.OS === 'android' ? 'http://bzcgpg.natappfree.cc' : 'http://localhost:3000',//测试
         // baseUrl: 'http://test.xiaofaka.com',//测试
-        baseUrl: 'http://www.easy-z.cn',//测试
+        // baseUrl: 'http://www.easy-z.cn',//测试
         // baseUrl: 'http://39.99.145.203:3000',//测试
         timeout:
             15000,

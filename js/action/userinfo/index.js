@@ -292,13 +292,14 @@ export function onSetUserName(token, value, callback) {
  * 增加/更新支付宝帐户
  * @returns {{theme: *, type: string}}
  */
-export function onAddPayAccount(name, account, type) {
+export function onAddPayAccount(name, account, type,uri) {
     // console.log(name, account, type);
+    // console.log(uri)
     if (type === 1) {
-        return {type: Types.ADD_ALIPAY_ACCOUNT, data: {name, account}};
+        return {type: Types.ADD_ALIPAY_ACCOUNT, data: {name, account,uri}};
     }
     if (type === 2) {
-        return {type: Types.ADD_WECHAT_ACCOUNT, data: {name, account}};
+        return {type: Types.ADD_WECHAT_ACCOUNT, data: {name, account,uri}};
     }
 
 }

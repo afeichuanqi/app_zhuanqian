@@ -25,6 +25,7 @@ import Global from '../common/Global';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import JPush from 'jpush-react-native';
 
 export default class EnterCodePage extends PureComponent {
     constructor(props) {
@@ -324,6 +325,10 @@ class CodeInput extends PureComponent {
                     Global.token = data.token;//进行验证token
                     ChatSocket.verifyIdentity();//进行验证token
                     NavigationUtils.goBack(navigation, key);
+                    JPush.setAlias({
+                        alias: `jiguang_${data.id}`,
+                        sequence: 1,
+                    });
                     setTimeout(() => {
                         EventBus.getInstance().fireEvent(EventTypes.update_message_page, {});//刷新消息页面
                     }, 2000);

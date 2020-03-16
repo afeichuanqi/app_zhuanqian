@@ -57,7 +57,7 @@ class RechargePage extends PureComponent {
         super(props);
         this.params = this.props.navigation.state.params;
         this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
-        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+        if ((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) {
             this.nums = [
                 {id: 1, num: 35, info: '50元', price: 50, identifier: 'com.yiertong.easyz1'},
                 {id: 2, num: 61.6, info: '88元', price: 88, identifier: 'com.yiertong.easyz2'},
@@ -178,11 +178,12 @@ class RechargePage extends PureComponent {
                                     return this.renderMoneyBox(index, item);
                                 })}
                             </View>
-                            {Global.apple_pay == 1 && Platform.OS === 'ios' ? null : <InputPro onChangeText={(text) => {
-                                this.setState({
-                                    rechargeVal: parseFloat(text),
-                                });
-                            }}/>}
+                            {((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? null :
+                                <InputPro onChangeText={(text) => {
+                                    this.setState({
+                                        rechargeVal: parseFloat(text),
+                                    });
+                                }}/>}
                         </View>
                         <View style={{backgroundColor: 'white', padding: 10, marginTop: 10}}>
                             <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.5)'}}>支付方式:</Text>

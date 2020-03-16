@@ -52,9 +52,9 @@ class WithDrawPayPage extends React.Component {
         const type = this.params.type;
         getUserWithDrawInfo({type}, this.props.userinfo.token).then(result => {
 
-            const {pay_username, pay_account} = result;
-            console.log(pay_username, pay_account, 'pay_username, pay_account');
-            this.props.onAddPayAccount(pay_username, pay_account, type);
+            const {pay_username, pay_account,pay_uri} = result;
+            // console.log(pay_username, pay_account, 'pay_username, pay_account');
+            this.props.onAddPayAccount(pay_username, pay_account, type,pay_uri);
         });
     }
 
@@ -81,18 +81,21 @@ class WithDrawPayPage extends React.Component {
         let pay_account = '';
         let pay = '';
         let pay_source = null;
+        let pay_uri = '';
 
         if (this.params.type === 1) {
             pay = '支付宝';
             pay_name = this.props.userinfo.alipay_name;
             pay_account = this.props.userinfo.alipay_account;
             pay_source = require('../res/img/payType/alipay-1.png');
+            pay_uri = this.props.userinfo.alipay_uri;
 
         } else {
             pay = '微信';
             pay_name = this.props.userinfo.wechat_name;
             pay_account = this.props.userinfo.wechat_account;
             pay_source = require('../res/img/payType/wechat-1.png');
+            pay_uri = this.props.userinfo.wechat_uri;
         }
         return (
             <SafeAreaViewPlus
@@ -218,6 +221,8 @@ class WithDrawPayPage extends React.Component {
                         <Text style={{fontSize: hp(2.3), fontWeight: 'bold', color: 'white'}}>确认提现</Text>
                     </TouchableOpacity>
                     <View style={{marginTop: 20, padding: 10}}>
+                        {(!pay_uri||pay_uri.length<2)&&<Text style={{color:'red',fontSize: hp(1.8), marginBottom:10}}>* (重要) 发现您还没有绑定收款二维码,请点击第一栏您的支付宝或者微信,进入绑定二维码收款图</Text>}
+
                         <Text style={{ fontSize: hp(2)}}>提现须知
                         </Text>
                         <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付提现、后续其他提现方式及时公告通知大家
@@ -313,7 +318,7 @@ const mapStateToProps = state => ({
     userinfo: state.userinfo,
 });
 const mapDispatchToProps = dispatch => ({
-    onAddPayAccount: (name, account, type) => dispatch(actions.onAddPayAccount(name, account, type)),
+    onAddPayAccount: (name, account, type,pay_uri) => dispatch(actions.onAddPayAccount(name, account, type,pay_uri)),
     onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
 });
 const WithDrawPageRedux = connect(mapStateToProps, mapDispatchToProps)(WithDrawPayPage);

@@ -94,7 +94,7 @@ class SettingPage extends PureComponent {
                     {ViewUtil.getSettingMenu('发单规则', () => {
                         NavigationUtils.goPage({type: 1}, 'UserProtocol');
                     })}
-                    {ViewUtil.getSettingMenu('用户协议', () => {
+                    {ViewUtil.getSettingMenu('用户协议与隐私政策', () => {
                         NavigationUtils.goPage({type: 3}, 'UserProtocol');
                     })}
                     {/*{ViewUtil.getSettingMenu('关于简单赚')}*/}

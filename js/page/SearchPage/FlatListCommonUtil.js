@@ -161,7 +161,7 @@ export default class FlatListCommonUtil extends PureComponent {
     }
 
     _renderIndexPath = ({item, index}) => {
-        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+        if ((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) {
             return <TaskInfoComponent_tmp
                 item={item}
                 key={index}

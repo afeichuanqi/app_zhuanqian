@@ -138,9 +138,7 @@ class AccountSetting extends PureComponent {
                         if (userinfo.weibo_user) {
                             this.cancelPlatform = 'sina';
                             this.toastS.show();
-                            // Toast.show('您已经绑定了新浪微博');
                         } else {
-                            // this.loddingModal.show();
                             JShareModule.cancelAuthWithPlatform({platform: 'sina_weibo'}, () => {
                                 JShareModule.authorize({
                                     platform: 'weibo',

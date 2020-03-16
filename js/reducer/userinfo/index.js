@@ -101,6 +101,8 @@ export default function onAction(state = defaultContent, action) {
                 share_dividend: data.share_dividend,
                 wechat_id: data.wechat_id,
                 wechat_user: data.wechat_user,
+
+
                 weibo_id: data.weibo_id,
                 weibo_user: data.weibo_user,
                 qq_id: data.qq_id,
@@ -200,12 +202,14 @@ export default function onAction(state = defaultContent, action) {
                 ...state,
                 alipay_name: data.name,
                 alipay_account: data.account,
+                alipay_uri: data.uri,
             };
         case Types.ADD_WECHAT_ACCOUNT:
             return {
                 ...state,
                 wechat_name: data.name,
                 wechat_account: data.account,
+                wechat_uri: data.uri,
             };
         default:
             return state;

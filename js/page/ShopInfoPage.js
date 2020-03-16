@@ -172,7 +172,9 @@ class ShopInfoPage extends PureComponent {
                                 bottom: 0,
                                 backgroundColor: 'rgba(0,0,0,0.3)',
                             }}
-                        />
+                        >
+
+                        </TouchableOpacity>
 
                     </Animated.View>
                     <View
@@ -261,7 +263,6 @@ class ShopInfoPage extends PureComponent {
         });
     };
 }
-
 class ShopList extends Component {
     state = {
         commodityData: [],

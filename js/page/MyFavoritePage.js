@@ -178,7 +178,7 @@ class MyFavoritePage extends PureComponent {
                 return item;
             })}
         </Text>;
-        if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+        if((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')){
             return <View
                 style={{
                     backgroundColor: 'white', borderBottomWidth: 0.3,

@@ -16,7 +16,7 @@ import PromotionToast from '../common/PromotionToast';
 import Toast from 'react-native-root-toast';
 import Global from '../common/Global';
 import {getAppSetting} from '../util/AppService';
-import Animated from 'react-native-reanimated';
+import Animated, {Easing} from 'react-native-reanimated';
 import JShareModule from 'jshare-react-native';
 import PrivacyToast from '../common/PrivacyToast';
 import actions from '../action';
@@ -25,7 +25,7 @@ import PrivacyToastStep2 from '../common/PrivacyToastStep2';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 
-const {spring} = Animated;
+const {spring, timing} = Animated;
 
 let bootSplashLogo = require('../../assets/bootsplash_logo.png');
 
@@ -77,9 +77,36 @@ class HomePage extends PureComponent {
         if (!appSetting.agreePrivacy) {
             this.PrivacyToast.show();
         } else {
-            this.hideSelf();
+            if (Platform.OS === 'ios') {
+                this.hideSelf();
+            } else {
+                this.hideSelfAndroid();
+            }
+
         }
 
+    };
+    hideSelfAndroid = () => {
+        this._anim = timing(this.translateY, {
+            duration: 1000,
+            toValue: 500,
+            easing: Easing.inOut(Easing.ease),
+        }).start(() => {
+            StatusBar.setTranslucent(false);
+            StatusBar.setBarStyle('dark-content', false);
+            StatusBar.setBackgroundColor(theme, false);
+            StatusBar.setHidden(false);
+            this.setState({
+                showAnimated: false,
+            }, () => {
+                setTimeout(() => {
+                    if (!(Global.apple_pay == 1 && Platform.OS === 'ios')) {
+                        this.promotionToast.show();
+                    }
+                }, 1000);
+
+            });
+        });
     };
     hideSelf = () => {
         spring(this.translateY, {
@@ -145,7 +172,7 @@ class HomePage extends PureComponent {
                             onLoadEnd={this.startAnimated}
                             style={[
                                 styles.logo,
-                                {transform: [{translateY: this.translateY}]},
+                                {transform: [{translateY: Platform.OS === 'ios' ? this.translateY : 0}]},
                             ]}
                         />
                     </Animated.View>

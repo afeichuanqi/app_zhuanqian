@@ -112,11 +112,17 @@ class SearchPage extends PureComponent {
                         }}>取消</Text>
                     </TouchableOpacity>
                 </View>
-
+                {/*<Text style={{width:300, fontSize:15}}>*/}
+                {/*    <View style={{ backgroundColor:'red',width:60,height:30}}>*/}
+                {/*        <Text style={{color:'blue', fontSize:15}}>啊</Text>*/}
+                {/*    </View>*/}
+                {/*    <Text style={{color:'red', fontSize:15}}>ss撒啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊sss</Text>*/}
+                {/*</Text>*/}
                 {showFlatList ?
                     <FlatListCommonUtil token={this.props.userinfo.token} ref={ref => this.flatList = ref}/> :
                     <ScrollView>
-                        {(Global.apple_pay == 1 && Platform.OS === 'ios') && <SearchColumn
+
+                        {((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) && <SearchColumn
                             onDelAllSearchLog={this.props.onDelAllSearchLog}
                             startSearch={this.SearchColumnStartSearch}
                             showDel={false}
@@ -132,7 +138,9 @@ class SearchPage extends PureComponent {
                             onDelAllSearchLog={this.props.onDelAllSearchLog}
                             startSearch={this.SearchColumnStartSearch} labelArray={search.searchArr}
                             title={'搜索历史'}/>
+
                     </ScrollView>}
+
 
 
             </SafeAreaViewPlus>

@@ -42,7 +42,7 @@ class DynamicTabNavigator extends Component<Props> {
         console.disableYellowBox = true;
         this.state = {
             navigationIndex: 0,
-            navigationRoutes: (Global.apple_pay == 1 && Platform.OS === 'ios') ? [
+            navigationRoutes: ((Global.apple_pay == 1 && Platform.OS === 'ios')|| (Global.android_pay == 1 && Platform.OS === 'android')) ? [
                 {key: 'index', title: '推荐'},
                 {key: 'hall', title: '最新'},
                 {},
@@ -125,7 +125,7 @@ class DynamicTabNavigator extends Component<Props> {
             case 'message':
                 return <MessagePage/>;
             case 'my':
-                if(Global.apple_pay == 1 && Platform.OS === 'ios'){
+                if((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')){
                     return <MyPageTmp jumpTo={jumpTo}/>;
                 }
                 return <MyPage jumpTo={jumpTo}/>;
@@ -364,7 +364,7 @@ class BottomBar extends Component {
                 title={'大厅'}
                 titleColor={navigationIndex === 1 ? bottomTheme : 'rgba(0,0,0,0.5)'}
             />
-            {(Global.apple_pay == 1 && Platform.OS === 'ios') ? null : <BottomBarItem
+            {((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? null : <BottomBarItem
                 source={navigationIndex === 2 ? require('../res/img/bottomBarIcon/messageC.png') : require('../res/img/bottomBarIcon/message.png')}
                 onPress={this._BottomBarClick}
                 index={2}
@@ -442,7 +442,7 @@ class BottomBarItem extends Component {
             onPress={this.onPress}
             // onPressIn={this.onPressIn}
             style={{
-                width: (Global.apple_pay == 1 && Platform.OS === 'ios') ? wp(33) : wp(25),
+                width: ((Global.apple_pay == 1 && Platform.OS === 'ios')||(Global.android_pay == 1 && Platform.OS === 'android')) ? wp(33) : wp(25),
                 height: hp(6.5),
                 justifyContent: 'center',
                 alignItems: 'center',

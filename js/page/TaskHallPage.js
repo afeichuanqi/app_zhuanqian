@@ -44,7 +44,7 @@ class TaskHallPage extends PureComponent {
         super(props);
         this.state = {
             navigationIndex: 0,
-            navigationRoutes: (Global.apple_pay == 1 && Platform.OS === 'ios') ? [
+            navigationRoutes: ((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? [
                 {key: 'first', title: '全部'},
                 {key: 'second', title: '更多'},
             ] : [
@@ -168,7 +168,7 @@ class TaskHallPage extends PureComponent {
                     />
                     <View style={{flexDirection: 'row', marginTop: hp(3), alignItems: 'center'}}>
                         {/*加图标*/}
-                        {Global.apple_pay == 1 && Platform.OS === 'ios' ? null : <>
+                        {((Global.apple_pay == 1 && Platform.OS === 'ios')||(Global.android_pay == 1 && Platform.OS === 'android')) ? null : <>
                             <TouchableOpacity
                                 onPress={() => {
                                     NavigationUtils.goPage({}, 'TaskRelease');
@@ -431,7 +431,7 @@ class FirstListComponent extends PureComponent {
                 }}>
                     <TopLeftFilterComponent onPress={this._columnTypeClick}
                                             ref={ref => this.topLeftFilterComponent = ref}/>
-                    {Global.apple_pay == 1 && Platform.OS === 'ios' ? null :
+                    {((Global.apple_pay == 1 && Platform.OS === 'ios')||(Global.android_pay == 1 && Platform.OS === 'android')) ? null :
                         <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>}
 
                 </View>

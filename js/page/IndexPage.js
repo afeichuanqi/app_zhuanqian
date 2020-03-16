@@ -36,6 +36,7 @@ import {getLunboList} from '../util/AppService';
 import {equalsObj} from '../util/CommonUtils';
 import FastImagePro from '../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import JPush from 'jpush-react-native';
 
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
@@ -65,6 +66,13 @@ class HomePage extends React.Component {
         Global.token = this.props.userinfo.token;
         Global.dispatch = this.props.dispatch;
         ChatSocket.connectionServer();
+        if (this.props.userinfo.userid) {
+            JPush.setAlias({
+                alias: `jiguang_${this.props.userinfo.userid}`,
+                sequence:'1'
+            })
+        }
+        // JPush.setAlias（{“ sequence”：102，“ alias”：'sID_54916'}）
 
     }
 
@@ -414,8 +422,8 @@ class LunBoComponent extends React.Component {
     updatePage = () => {
         getLunboList({
             platform: Platform.OS,
-            iosV:Global.apple_pay,
-            androidV:Global.android_pay,
+            iosV: Global.apple_pay,
+            androidV: Global.android_pay,
         }).then(result => {
             this.setState({
                 lunboData: result,
@@ -439,8 +447,9 @@ class LunBoComponent extends React.Component {
         this.updatePage();
         EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
             this.updatePage();
-        })
+        });
     }
+
     componentWillUnmount(): * {
         EventBus.getInstance().removeListener(this.listener);
     }

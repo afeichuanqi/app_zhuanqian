@@ -110,7 +110,7 @@ class TaskOrdersMana extends Component {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, (Global.apple_pay == 1 && Platform.OS === 'ios') ? '已投递' : '接单管理', null, bottomTheme, 'white', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, ((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? '已投递' : '接单管理', null, bottomTheme, 'white', 16, null, false);
         const {navigationIndex, navigationRoutes} = this.state;
         return (
             <SafeAreaViewPlus
@@ -119,7 +119,7 @@ class TaskOrdersMana extends Component {
                 {navigationBar}
                 {TopColumn}
                 <View style={{flex: 1}}>
-                    {(Global.apple_pay == 1 && Platform.OS === 'ios') ? null : <TabBar
+                    {((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? null : <TabBar
                         style={{
                             height: 35,
                             backgroundColor: bottomTheme,
@@ -291,7 +291,7 @@ class FristListComponent extends PureComponent {
         });
     };
     _itemPress = (item) => {
-        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+        if ((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) {
             NavigationUtils.goPage({task_id: item.taskId, test: false}, 'TaskDetailsTmp');
         } else {
             if (this.props.status == 3) {
@@ -388,8 +388,8 @@ class FristListComponent extends PureComponent {
                 ListEmptyComponent={<EmptyComponent icoW={wp(23)}
                                                     icoH={wp(21)}
                                                     source={this.props.source}
-                                                    height={(Global.apple_pay == 1 && Platform.OS === 'ios') ? height - 70 : height - 100}
-                                                    message={(Global.apple_pay == 1 && Platform.OS === 'ios') ? '您还没有投递任何公司' : '您还没有相关任务'}/>}
+                                                    height={((Global.apple_pay == 1 && Platform.OS === 'ios')||(Global.android_pay == 1 && Platform.OS === 'android')) ? height - 70 : height - 100}
+                                                    message={((Global.apple_pay == 1 && Platform.OS === 'ios')||(Global.android_pay == 1 && Platform.OS === 'android')) ? '您还没有投递任何公司' : '您还没有相关任务'}/>}
                 ref={ref => this.flatList = ref}
                 data={taskData}
                 scrollEventThrottle={1}
@@ -465,7 +465,7 @@ class OrdersItem extends React.Component {
                 return item;
             })}
         </Text>;
-        if ((Global.apple_pay == 1 && Platform.OS === 'ios')) {
+        if ((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) {
             return <Animated.View
                 style={{
                     backgroundColor: 'white', borderBottomWidth: 0.3,

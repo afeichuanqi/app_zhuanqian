@@ -7,7 +7,7 @@ import JShareModule from 'jshare-react-native';
 
 
 export const isPoneAvailable = (str) => {
-    let myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+    let myreg = /^[1][3,4,5,6,7,8][0-9]{9}$/;
     if (str.length == 0 || str == null) {
         return false;
     } else if (!myreg.test(str)) {

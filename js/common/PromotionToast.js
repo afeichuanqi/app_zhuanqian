@@ -63,7 +63,7 @@ class PromotionToast extends PureComponent {
         }, () => {
             this._anim = spring(this.animations.scale, SpringUtils.makeConfigFromBouncinessAndSpeed({
                 ...SpringUtils.makeDefaultConfig(),
-                bounciness: 10,
+                bounciness: 4,
                 speed: 8,
                 toValue: 1,
             })).start();

@@ -174,7 +174,7 @@ class SecondListComponent extends PureComponent {
     }
 
     _renderBestNewItem = ({item, index}) => {
-        if (Global.apple_pay == 1 && Platform.OS === 'ios') {
+        if ((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) {
             return <ScrollItemTmp item={item}/>;
         }
         return <ScrollItem item={item}/>;
