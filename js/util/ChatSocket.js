@@ -39,8 +39,8 @@ class ChatSocket {
             return;
         }
         // const URL = 'ws://d53feb71b6a1b222.natapp.cc:65530/';
-        // const URL = 'ws://chat.easy-z.cn/';
-        const URL = 'ws://localhost:433/';
+        const URL = 'ws://chat.easy-z.cn/';
+        // const URL = 'ws://localhost:433/';
 
         Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
         Global.ws.addEventListener('open', () => {
@@ -156,7 +156,7 @@ class ChatSocket {
             if (typeof Global.dispatch != 'function') {
                 return;
             }
-            Global.dispatch(Message.onChangeSocketStatue('重新连接中 (¬､¬)'));
+            // Global.dispatch(Message.onChangeSocketStatue('重新连接中 (¬､¬)'));
 
         });
         Global.ws.addEventListener('error', (e) => {
@@ -167,7 +167,7 @@ class ChatSocket {
             if (typeof Global.dispatch != 'function') {
                 return;
             }
-            Global.dispatch(Message.onChangeSocketStatue('重新连接中 (¬､¬)'));
+            // Global.dispatch(Message.onChangeSocketStatue('重新连接中 (¬､¬)'));
         });
     };
     //处理系统消息
@@ -269,7 +269,7 @@ class ChatSocket {
     sendToServer = (type, data) => {
         // console.log(Global.ws.readyState);
         if (!Global.connectionstatus && Global.ws.readyState == 3) {
-            Global.dispatch(Message.onChangeSocketStatue('正在连接...'));
+            // Global.dispatch(Message.onChangeSocketStatue('正在连接...'));
             Global.ws.reconnect();
             return;
         }

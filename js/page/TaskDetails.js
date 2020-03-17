@@ -293,7 +293,7 @@ class TaskDetails extends PureComponent {
                                                   fontSize: hp(2.3),
                                                   opacity: 0.9,
                                                   color: 'black',
-                                                  width: width - 90,
+                                                  width: wp(75),
                                               }}>
                                             {taskData && renderEmoji(taskData.title, [], hp(2.4), 0).map((item, index) => {
                                                 return item;
@@ -319,7 +319,7 @@ class TaskDetails extends PureComponent {
                                     <Text style={{
                                         fontSize: hp(2.8),
                                         color: bottomTheme,
-                                    }}>{taskData && taskData.rewardPrice}元</Text>
+                                    }}>{taskData &&( taskData.rewardPrice.toString().length===1?`${taskData.rewardPrice}.0`:taskData.rewardPrice)}元</Text>
                                 </View>
                                 <View style={{
                                     height: hp(8),

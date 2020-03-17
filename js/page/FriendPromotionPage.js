@@ -17,8 +17,8 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
-import copy from '../res/svg/yaoqing/copy.svg';
-import SvgUri from 'react-native-svg-uri';
+// import copy from '../res/svg/yaoqing/copy.svg';
+// import SvgUri from 'react-native-svg-uri';
 import Toast from 'react-native-root-toast';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtils from '../navigator/NavigationUtils';
@@ -74,23 +74,25 @@ class TaskReleaseMana extends PureComponent {
                 {TopColumn}
                 <ScrollView style={{flex: 1, backgroundColor: '#f7f7f7'}}>
                     <View>
-                        <FastImage source={require('../res/img/yaoqing/yaoqinghaoyou.png')}
+                        <FastImage
+                            resizeMode={FastImage.resizeMode.stretch}
+                            source={{uri:'http://images.easy-z.cn/yaoqingsongdali.png'}}
                                    style={{width: width, height: 180}}/>
                     </View>
                     <View style={{backgroundColor: 'white', marginTop: 10}}>
                         <View style={{alignSelf: 'center', paddingTop: 10}}>
-                            <Text style={{alignSelf: 'center', fontWeight: 'bold'}}>我的邀请码</Text>
+                            <Text style={{alignSelf: 'center', fontSize:hp(2.1)}}>我的邀请码</Text>
                             <TouchableOpacity
                                 onPress={() => {
                                     Clipboard.setString(this.props.userinfo.invite_code);
                                     Toast.show('复制成功', {position: Toast.positions.CENTER});
                                 }}
-                                style={{marginTop: 15, flexDirection: 'row', alignSelf: 'center'}}>
+                                style={{marginTop: 8, flexDirection: 'row', alignSelf: 'center'}}>
                                 <Text
                                     style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code ? this.props.userinfo.invite_code : '请先登录'}</Text>
-                                <SvgUri style={{
-                                    marginLeft: 10,
-                                }} width={17} height={17} svgXmlData={copy}/>
+                                {/*<SvgUri style={{*/}
+                                {/*    marginLeft: 10,*/}
+                                {/*}} width={17} height={17} svgXmlData={copy}/>*/}
                             </TouchableOpacity>
                         </View>
                     </View>

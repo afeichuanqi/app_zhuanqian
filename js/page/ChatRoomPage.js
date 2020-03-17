@@ -245,7 +245,7 @@ class ChatRoomPage extends React.Component {
                         tmpArr.push({
                             id: -1,
                             type: 'system',
-                            content: '安全交易规范|为了确保您的资金安全，请遵守平台交易规范，一定要在平台内完成支付|了解更多安全交易规范',
+                            content: '安全交易规范|为了确保您的资金安全，聊天全程有客服监控，切勿出现微信以及平台字眼，违者将作出一定惩罚|了解更多安全交易规范',
 
                             chatInfo: {
                                 avatar: this.fromUserinfo.avatar_url,

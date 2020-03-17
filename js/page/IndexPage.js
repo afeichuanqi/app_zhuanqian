@@ -69,8 +69,8 @@ class HomePage extends React.Component {
         if (this.props.userinfo.userid) {
             JPush.setAlias({
                 alias: `jiguang_${this.props.userinfo.userid}`,
-                sequence:'1'
-            })
+                sequence: 1,
+            });
         }
         // JPush.setAlias（{“ sequence”：102，“ alias”：'sID_54916'}）
 
@@ -456,7 +456,7 @@ class LunBoComponent extends React.Component {
 
     _renderItem = ({item, index}) => {
 
-        const source = item.image_url.startsWith('http') ? {uri: `${item.image_url}`} : require('../res/img/yaoqing/yaoqinghaoyou.png');
+        const source = item.image_url.startsWith('http') ? {uri: `${item.image_url}`} : {uri: `http://images.easy-z.cn/yaoqingsongdali.png`};
         return <TouchableOpacity
             key={item.id}
             activeOpacity={0.8}

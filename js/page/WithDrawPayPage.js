@@ -227,7 +227,7 @@ class WithDrawPayPage extends React.Component {
                         </Text>
                         <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 10}}>1、目前支持支付宝和微信支付提现、后续其他提现方式及时公告通知大家
                         </Text>
-                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、提现金额需大于1
+                        <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>2、提现金额需大于3
                             小于1000元之间的整数，提现时间为工作日9:00 -- 17:00
                         </Text>
                         <Text style={{fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)', marginTop: 5}}>3、提现手续费收取2%(支付平台收取,并非简易赚APP)

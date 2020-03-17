@@ -406,8 +406,8 @@ class TaskRelease extends PureComponent {
                 {this.getXuniTitle('做单次数', '每人一次')}
             </View>
             <View style={{backgroundColor: 'white', marginTop: 10}}>
-                {this.getXuniTitle('悬赏单价', '最低 0.5 元')}
-                {this.getXuniTitle('悬赏数量', '最少 10 单')}
+                {this.getXuniTitle('悬赏单价', '最低 0.1 元')}
+                {this.getXuniTitle('悬赏数量', '最少 3 单')}
                 {this.getXuniTitle('预付赏金', '服务费、成交额12%')}
 
             </View>
@@ -709,13 +709,13 @@ class BottomInfoForm extends Component {
         //悬赏单价
         const rewardPrice = <View style={{flexDirection: 'row', alignItems: 'center', width: wp(60)}}>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>最低</Text>
-            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>0.5</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>0.1</Text>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>元</Text>
         </View>;
         //悬赏数量
         const rewardNum = <View style={{flexDirection: 'row', alignItems: 'center', width: wp(60)}}>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>最少</Text>
-            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>10</Text>
+            <Text style={{color: 'black', marginHorizontal: 5, fontSize: hp(2.1)}}>3</Text>
             <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(2.1)}}>单</Text>
         </View>;
         const {userinfo} = this.props;

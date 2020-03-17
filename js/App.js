@@ -25,6 +25,7 @@ export class App extends Component<Props> {
     JPushInit() {
 
         JPush.setLoggerEnable(true);
+
         this.localNotificationListener = result => {
             // console.log(result);
             if (result.notificationEventType === 'notificationOpened') {
@@ -44,8 +45,14 @@ export class App extends Component<Props> {
                     NavigationUtils.goPage({navigationIndex}, pageName);
                 }
             }
+            JPush.setBadge({badge: 0, appBadge: 0});
+        };
+        this.NotificationListener = result => {
+            JPush.setBadge({badge: 0, appBadge: 0});
         };
         JPush.addLocalNotificationListener(this.localNotificationListener);
+        JPush.addNotificationListener(this.NotificationListener);
+
         JPush.init();
         JPush.getRegistrationID((text) => {
             console.log(text);

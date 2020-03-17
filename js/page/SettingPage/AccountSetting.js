@@ -24,6 +24,7 @@ import {authorizeWechat} from '../../util/CommonUtils';
 import LoddingModal from '../../common/LoddingModal';
 import ToastSelect from '../../common/ToastSelectTwo';
 import {onCancelAuthorize} from '../../action/userinfo';
+import JPush from 'jpush-react-native';
 
 const {width} = Dimensions.get('window');
 
@@ -56,6 +57,7 @@ class AccountSetting extends PureComponent {
             });
 
         });
+
     }
 
     componentWillUnmount() {

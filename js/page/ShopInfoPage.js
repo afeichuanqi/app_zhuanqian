@@ -173,6 +173,22 @@ class ShopInfoPage extends PureComponent {
                                 backgroundColor: 'rgba(0,0,0,0.3)',
                             }}
                         >
+                            {this.state.userId === this.props.userinfo.userid && <TouchableOpacity
+                                onPress={this.changeShopBackImg}
+                                style={{
+                                position: 'absolute',
+                                top: Platform.OS === 'ios' ?150:70,
+                                right: 10,
+                                backgroundColor: 'black',
+                                paddingHorizontal: 6,
+                                paddingVertical: 3,
+                                borderRadius: 3,
+                                borderTopLeftRadius: 10,
+                                borderBottomLeftRadius: 10,
+                                paddingLeft: 10,
+                            }}>
+                                <Text style={{color: 'white'}}>点击可修改商铺背景图</Text>
+                            </TouchableOpacity>}
 
                         </TouchableOpacity>
 
@@ -263,6 +279,7 @@ class ShopInfoPage extends PureComponent {
         });
     };
 }
+
 class ShopList extends Component {
     state = {
         commodityData: [],
@@ -496,7 +513,7 @@ class ShopData extends Component {
                 justifyContent: 'center',
 
             }}>
-                <Text style={{fontSize:hp(2.1)}}>店铺数据一览</Text>
+                <Text style={{fontSize: hp(2.1)}}>店铺数据一览</Text>
             </View>
             <View style={{height: 0.3, width: width, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.3)'}}/>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -580,7 +597,7 @@ class AvatarColumn extends Component {
                         }}>
                         <Text style={{
                             color: 'white',
-                            fontSize:hp(2.0),
+                            fontSize: hp(2.0),
                         }}>{this.props.attentionStatus == 0 ? '+ 关注' : '✓ 已关注'}</Text>
                     </TouchableOpacity>
 

@@ -587,12 +587,18 @@ class HeadlineComponent extends PureComponent {
         this.index = 0;
         this.timer = setInterval(() => {
             // console.log(Global.TaskHallPage_Index,Global.TaskHallPage_Index );
-            if (Global.TaskHallPage_Index == this.props.index &&
-                Global.activeRouteName == 'TaskHallPage' &&
-                this.state.HeadlineArrays.length > 1) {//只有在当前页面才进行跑马灯
-                this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
-                this.flatList.scrollToIndex({animated: true, index: this.index});
+            try {
+                if (Global.TaskHallPage_Index == this.props.index &&
+                    Global.activeRouteName == 'TaskHallPage' &&
+                    this.state.HeadlineArrays.length > 1) {//只有在当前页面才进行跑马灯
+                    this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
+                    this.flatList.scrollToIndex({animated: true, index: this.index});
+                }
+
+            }catch (e) {
+                console.log(e)
             }
+
         }, 2500);
     };
 
@@ -671,6 +677,9 @@ class HeadlineComponent extends PureComponent {
                         scrollEventThrottle={1}
                         renderItem={data => this._renderIndexPath(data)}
                         keyExtractor={(item, index) => index + ''}
+                        getItemLayout={(data, index) => (
+                            {length: hp(2.6), offset: hp(5.9) * index, index}
+                        )}
                     />
 
                 </TouchableOpacity>

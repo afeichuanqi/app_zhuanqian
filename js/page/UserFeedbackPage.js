@@ -235,7 +235,7 @@ class InputTextImage extends PureComponent {
                 autoCapitalize={'none'}
                 autoComplete={'off'}
             />
-            <View style={{ flexDirection: 'row', backgroundColor:'white'}}>
+            <View style={{ flexDirection: 'row', backgroundColor:'white', marginLeft:13}}>
                 <UploadImgsComponent userinfo={this.props.userinfo} ref={ref => this.uploadImgs = ref}/>
             </View>
 
@@ -310,9 +310,9 @@ class RadioCheck extends PureComponent {
                         marginHorizontal: 10,
                         borderRadius: 4,
                         // backgroundColor: '#f7f7f7',
-                        borderWidth: 0.3,
-                        // borderStyle: 'dashed',
-                        // borderWidth: 1,
+                        // borderWidth: 0.3,
+                        borderStyle: 'dashed',
+                        borderWidth: 1,
                     }, checkIndex === index ? {
                         backgroundColor: 'rgba(33,150,243,0.1)',
                          borderColor: bottomTheme,

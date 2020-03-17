@@ -74,6 +74,7 @@ class TaskSumComponent extends Component {
         const {item} = this.props;
         // {item.typeTitle}/{item.taskName}
         const labelText = this.handleLabelText(`${item.typeTitle}/${item.taskName}`);
+        // console.log(item.rewardPrice.toString().length);
         return <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
@@ -119,7 +120,7 @@ class TaskSumComponent extends Component {
                     alignSelf: 'flex-start',
                 }}>
                     <Text numberOfLines={1} style={{maxWidth: wp(48), flexDirection: 'row'}}>
-                        {item && renderEmoji(item.taskTitle, [], hp(2.0), 0, 'black', {}).map((item, index) => {
+                        {item && renderEmoji(item.taskTitle, [], hp(2.05), 0, 'black', {}).map((item, index) => {
                             return item;
                         })}
                     </Text>
@@ -201,7 +202,7 @@ class TaskSumComponent extends Component {
                                         svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                             </View>
                             <Text style={{
-                                fontSize: hp(1.8),
+                                fontSize: hp(1.7),
                                 marginLeft: wp(2),
                                 color: 'rgba(0,0,0,1)',
                             }}>{item.userName}</Text>
@@ -222,7 +223,7 @@ class TaskSumComponent extends Component {
                     fontSize: hp(3.7),
                     color: '#e6493b',
                     fontWeight: '700',
-                }}>{item.rewardPrice}</Text>
+                }}>{item.rewardPrice.toString().length==1?`${item.rewardPrice}.0`:item.rewardPrice}</Text>
             </View>
             <View style={styles.labelStyle}>
 
@@ -271,9 +272,9 @@ const styles = StyleSheet.create({
     },
     imgStyle: {
         backgroundColor: '#E8E8E8',
-        width: hp(2.9),
-        height: hp(2.9),
-        borderRadius: hp(2.9) / 2,
+        width: hp(2.4),
+        height: hp(2.4),
+        borderRadius: hp(2.4) / 2,
     },
     smallFontStyle: {
         letterSpacing: 0.5,
@@ -281,9 +282,9 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,0.9)',
     },
     bigFontStyle: {
-        fontSize: hp(2.1),
+        fontSize: hp(1.9),
         color: 'red',
-        bottom: hp(0.2),
+        bottom: hp(0.1),
         fontWeight: '500',
     },
     fengefu: {

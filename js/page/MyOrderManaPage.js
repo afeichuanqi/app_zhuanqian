@@ -27,7 +27,7 @@ import FastImage from 'react-native-fast-image';
 import {renderEmoji} from '../util/CommonUtils';
 import ToastShare from '../common/ToastShare';
 import Toast from 'react-native-root-toast';
-
+import Global from '../common/Global'
 const {width} = Dimensions.get('window');
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -83,7 +83,7 @@ class MyOrderManaPage extends PureComponent {
 
     getTaskItem = (taskInfo) => {
         let taskTitle = taskInfo.task_title;
-
+        console.log(taskInfo);
         return <TouchableOpacity
             onPress={() => {
                 NavigationUtils.goPage({test: false, task_id: this.params.taskid}, 'TaskDetails');
@@ -134,13 +134,13 @@ class MyOrderManaPage extends PureComponent {
                 </Text>
                 <LabelBigComponent
                     contaiStyle={{
-                        backgroundColor: '#eeeeee', maxWidth: wp(15), alignItems: 'center',
+                        backgroundColor: '#f7f7f7', maxWidth: wp(15), alignItems: 'center',
                         justifyContent: 'center', marginTop: hp(1),
                     }}
                     paddingVertical={3}
                     paddingHorizontal={6}
                     fontSize={hp(1.6)}
-                    title={taskInfo.task_info}
+                    title={taskInfo.task_name}
                 />
 
             </View>
@@ -643,7 +643,7 @@ class UpdateTaskPrice extends PureComponent {
             </View>
             <View style={{paddingVertical: 10}}>
                 <TextInput
-                    keyboardType={'number-pad'}
+                    // keyboardType={'number-pad'}
                     placeholder={'输入调整的价格'}
                     placeholderTextColor={'rgba(0,0,0,0.5)'}
                     maxLength={4}
@@ -654,7 +654,7 @@ class UpdateTaskPrice extends PureComponent {
                         });
                         if (parseFloat(text) > parseFloat(rewardPrice)) {
                             this.setState({
-                                price: ((parseFloat(text) - parseFloat(rewardPrice)) * rewardNum * 1.05).toFixed(2),
+                                price: ((parseFloat(text) - parseFloat(rewardPrice)) * rewardNum * parseFloat(Global.user_service_fee)).toFixed(2),
                             });
                         } else {
 
@@ -700,7 +700,7 @@ class UpdateTaskNum extends PureComponent {
             </View>
             <View style={{paddingVertical: 10}}>
                 <TextInput
-                    keyboardType={'number-pad'}
+                    // keyboardType={'number-pad'}
                     placeholder={'输入调整的数量'}
                     placeholderTextColor={'rgba(0,0,0,0.5)'}
                     maxLength={4}
@@ -710,7 +710,7 @@ class UpdateTaskNum extends PureComponent {
                             error: !(parseFloat(text) >= 1),
                         });
                         this.setState({
-                            price: (parseInt(text) * parseFloat(rewardPrice) * 1.05).toFixed(2),
+                            price: (parseInt(text) * parseFloat(rewardPrice) * parseFloat(Global.user_service_fee)).toFixed(2),
                         });
                     }}
                     style={{
