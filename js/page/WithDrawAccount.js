@@ -141,15 +141,18 @@ class WithDrawAccount extends React.Component {
         const pay_account = this.payAccount.getValue();
         const uri = this.inputPic.getUri();
         const pay_type = this.params.type;
-        if (pay_username.length === 0) {
+        if (!pay_username || pay_username.length === 0) {
             Toast.show('您并没有输入姓名');
             return;
         }
-        if (pay_account.length === 0) {
+        if (!pay_account || pay_account.length === 0) {
             Toast.show('您并没有输入帐户');
             return;
         }
-
+        if(!uri || uri.length===0){
+            Toast.show('请绑定收款二维码');
+            return;
+        }
         setUserWithDrawInfo({
             pay_username,
             pay_account,

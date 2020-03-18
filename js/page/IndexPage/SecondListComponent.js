@@ -294,7 +294,7 @@ class ScrollItem extends React.Component {
                            borderTopRightRadius: 5,
                        }}/>
             </View>
-            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 2}}>
                 <Text numberOfLines={1} style={{fontSize: hp(2), color: 'black', opacity: 0.8}}>{item.title}</Text>
                 <View style={{
                     width: 2,
@@ -314,13 +314,13 @@ class ScrollItem extends React.Component {
                 <Image resizeMode={'stretch'} source={require('../../res/img/moneys.png')}
                        style={{width: hp(1.8), marginRight: 5, height: hp(2.1)}}/>
                 <Text style={{
-                    fontSize: hp(2.5),
+                    fontSize: hp(2.1),
                     color: 'red',
                     marginRight: 1,
 
                 }}>{item.reward_price}</Text>
                 <Text style={{
-                    fontSize: hp(1.7),
+                    fontSize: hp(1.5),
                     color: 'red',
                     fontWeight: '500',
                     top: 1,

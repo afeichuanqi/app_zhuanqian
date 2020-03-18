@@ -153,28 +153,30 @@ class TaskReleaseMana extends PureComponent {
                         paddingVertical: 10,
                         backgroundColor: 'white',
                         marginTop: 10,
+
+
                     }}>
                         <View style={{width: width / 2 - 5, justifyContent: 'center', alignItems: 'center'}}>
 
-                            <Text style={{color: 'red', fontSize: 16}}>0 位</Text>
+                            <Text style={{color: 'red', fontSize: hp(2.3)}}>0 位</Text>
                             <Text style={{color: 'rgba(0,0,0,0.8)', fontSize: hp(1.7), marginTop: 5}}>累计邀请好友</Text>
 
                         </View>
                         <View style={{height: 40, width: 1, backgroundColor: bottomTheme}}/>
                         <View style={{width: width / 2 - 5, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color: 'red', fontSize: 16}}>0 元</Text>
+                            <Text style={{color: 'red', fontSize: hp(2.3)}}>0 元</Text>
                             <Text style={{color: 'rgba(0,0,0,0.8)', fontSize: hp(1.7), marginTop: 5}}>收入分红</Text>
                         </View>
                     </View>
-                    <View style={{marginTop: 10, paddingHorizontal: 10}}>
-                        <Text style={{opacity: 0.8, marginTop: 10, fontSize: hp(1.7)}}>
+                    <View style={{marginTop: 10, paddingHorizontal: 20}}>
+                        <Text style={{marginTop: 10, fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)'}}>
                             1、一级好友(直接推荐的好友)完成任意悬赏都可获得其赏金的8%奖励
                         </Text>
-                        <Text style={{opacity: 0.8, marginTop: 10, fontSize: hp(1.7)}}>
+                        <Text style={{marginTop: 10, fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)'}}>
                             2、获得一级好友(直接推荐的好友)完成前20个任意悬赏额外奖励其赏金的4%奖励
                         </Text>
-                        <Text style={{opacity: 0.8, marginTop: 10, fontSize: hp(1.7)}}>
-                            3、为防止恶意邀请(机器注册、注册多账号) 被邀请用户必须有一定活跃度才能正常获得佣金
+                        <Text style={{ marginTop: 10, fontSize: hp(1.6), color: 'rgba(0,0,0,0.5)'}}>
+                            3、为防止恶意邀请(机器注册、注册多账号) 被邀请用户必须有一定活跃度才能正常获得佣金,否则将默认不增加累计邀请好友
                         </Text>
                     </View>
                 </ScrollView>

@@ -391,6 +391,7 @@ class TaskRelease extends PureComponent {
     }
 
     renderColumn = () => {
+        // console.log((((Global.user_service_fee ) - 1)*100).toFixed(0),"(((Global.user_service_fee ) - 1)*100).toFixed(0)");
         return <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
             <View style={{height: 40, backgroundColor: 'white'}}>
                 <Text style={{fontSize: 15, marginTop: 10, marginLeft: 10, color: 'black'}}>请选择类型</Text>
@@ -408,7 +409,7 @@ class TaskRelease extends PureComponent {
             <View style={{backgroundColor: 'white', marginTop: 10}}>
                 {this.getXuniTitle('悬赏单价', '最低 0.1 元')}
                 {this.getXuniTitle('悬赏数量', '最少 3 单')}
-                {this.getXuniTitle('预付赏金', '服务费、成交额12%')}
+                {this.getXuniTitle('预付赏金', `服务费、成交额 ${(((Global.user_service_fee ) - 1)*100).toFixed(0)}`)}
 
             </View>
             <View style={{backgroundColor: 'white', marginTop: 10}}>

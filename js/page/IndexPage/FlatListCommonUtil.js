@@ -154,13 +154,14 @@ export default class FlatListCommonUtil extends PureComponent {
             onScroll={onScroll}
             ListFooterComponent={() => this.genIndicator(hideLoaded)}
             onEndReached={() => {
-                setTimeout(() => {
-                    // 等待页面布局完成以后，在让加载更多
-                    if (this.canLoadMore && taskData.length >= 10) {
-                        this.onLoading();
-                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                    }
-                }, 100);
+                this.onLoading();
+                // setTimeout(() => {
+                //     // 等待页面布局完成以后，在让加载更多
+                //     if (this.canLoadMore && taskData.length >= 10) {
+                //         this.onLoading();
+                //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                //     }
+                // }, 100);
             }}
             windowSize={300}
             onEndReachedThreshold={0.3}

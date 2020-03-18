@@ -100,7 +100,7 @@ export default class MessageItemComponent extends Component {
                     borderBottomWidth: 0.5,
                     borderBottomColor: '#f0f0f0',
                     transform: [{scale}],
-                    height: 80,
+                    height: hp(12),
                     alignItems: 'center',
                     justifyContent: 'space-between',
                 }}
@@ -143,7 +143,7 @@ export default class MessageItemComponent extends Component {
                                 alignItems: 'center',
                             }}>
                                 <Text style={{
-                                    fontSize: hp(2.1),
+                                    fontSize: hp(1.9),
                                     color: 'black',
                                     opacity: 0.9,
                                     marginLeft: 10,
@@ -177,7 +177,7 @@ export default class MessageItemComponent extends Component {
 
 
                     <View style={{
-                        marginLeft: 55,
+                        marginLeft: hp(6)+20,
                         marginTop: 5,
                     }}>
                         <Text style={{
@@ -194,13 +194,13 @@ export default class MessageItemComponent extends Component {
                     }}
                 >
                     <FastImagePro
-                        loadingWidth={wp(13.8)}
-                        loadingHeight={wp(13.8)}
+                        loadingWidth={hp(6)}
+                        loadingHeight={hp(6)}
                         style={{
                             backgroundColor: '#9d9d9d',
                             // 设置宽度
-                            width: wp(13.8),
-                            height: wp(13.8),
+                            width: hp(6),
+                            height: hp(6),
                             borderRadius: 2,
                         }}
                         source={{uri: taskUri}}

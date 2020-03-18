@@ -27,7 +27,8 @@ import FastImage from 'react-native-fast-image';
 import {renderEmoji} from '../util/CommonUtils';
 import ToastShare from '../common/ToastShare';
 import Toast from 'react-native-root-toast';
-import Global from '../common/Global'
+import Global from '../common/Global';
+
 const {width} = Dimensions.get('window');
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -324,6 +325,7 @@ class MyOrderManaPage extends PureComponent {
                         ref={ref => this.updateTaskPrice = ref}
                         rewardPrice={taskInfo.reward_price}
                         rewardNum={taskInfo.reward_num}
+                        task_pass_num={taskInfo.task_pass_num}
                         taskSignUpNum={taskInfo.task_sign_up_num}
                     />
 
@@ -338,8 +340,8 @@ class MyOrderManaPage extends PureComponent {
                         style={{
                             fontSize: hp(2.0),
                             color: 'rgba(0,0,0,0.8)',
-                            maxWidth:width-100,
-                            letterSpacing:0.3
+                            maxWidth: width - 100,
+                            letterSpacing: 0.3,
 
                         }}>下架后将删除此任务,您必须重新发布才能上架,是否确认？</Text>
                 </ToastSelect>
@@ -634,7 +636,7 @@ class UpdateTaskPrice extends PureComponent {
     };
 
     render() {
-        const {rewardNum, rewardPrice} = this.props;
+        const {rewardNum, rewardPrice, task_pass_num} = this.props;
         const {price, error} = this.state;
         return <View style={{backgroundColor: 'white', paddingHorizontal: 10, paddingTop: 20, paddingBottom: 10}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -654,7 +656,7 @@ class UpdateTaskPrice extends PureComponent {
                         });
                         if (parseFloat(text) > parseFloat(rewardPrice)) {
                             this.setState({
-                                price: ((parseFloat(text) - parseFloat(rewardPrice)) * rewardNum * parseFloat(Global.user_service_fee)).toFixed(2),
+                                price: ((parseFloat(text) - parseFloat(rewardPrice)) * (rewardNum - task_pass_num) * parseFloat(Global.user_service_fee)).toFixed(2),
                             });
                         } else {
 

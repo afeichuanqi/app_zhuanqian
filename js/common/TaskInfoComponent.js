@@ -71,7 +71,7 @@ class TaskInfoComponent extends PureComponent {
                 resizeMode={FastImage.resizeMode.stretch}
             />
             <View style={[{
-                 width: wp(80), paddingLeft: 11, justifyContent: 'space-between',
+                 width: wp(82), paddingLeft: 11, justifyContent: 'space-between',
 
             },this.props.viewStyle]}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -117,7 +117,7 @@ class TaskInfoComponent extends PureComponent {
                         <Text style={{
                             fontSize: hp(2.4),
                             color: 'red',
-                        }}>+{item.rewardPrice} 元</Text>
+                        }}>+{item.rewardPrice.toString().length==1?`${item.rewardPrice}.0`:item.rewardPrice} 元</Text>
                     </View>
                 </View>
                 <View

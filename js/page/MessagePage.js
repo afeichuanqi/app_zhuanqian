@@ -156,6 +156,7 @@ class MsgList extends Component {
                 <View style={{
                     justifyContent: 'center',
                     alignItems: 'center',
+
                 }}>
                     <View style={{
                         height: 35,
@@ -201,12 +202,13 @@ class MsgList extends Component {
             }}
             onEndReached={() => {
                 // 等待页面布局完成以后，在让加载更多
-                setTimeout(() => {
-                    if (this.canLoadMore && friendData.length >= 20) {
-                        this.onLoading();
-                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                    }
-                }, 100);
+                this.onLoading();
+                // setTimeout(() => {
+                //     if (this.canLoadMore && friendData.length >= 20) {
+                //         this.onLoading();
+                //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                //     }
+                // }, 100);
             }}
             windowSize={300}
             onEndReachedThreshold={0.3}
@@ -275,6 +277,8 @@ class MessageColumn extends Component {
             elevation: 3,//安卓的阴影
             flexDirection: 'row',
             justifyContent: 'space-around',
+            alignItems:'center',
+
         }}>
 
             <MessageColumnItem type={0} onSetNoticeMsgIsAllRead={onSetNoticeMsgIsAllRead}
@@ -369,7 +373,7 @@ class MessageColumnItem extends Component {
                        resizeMode={'stretch'}
                        style={{
 
-                           width: wp(13), height: wp(13),
+                           width:  hp(7), height: hp(7),
 
                            backgroundColor: 'white',
 
@@ -389,10 +393,10 @@ class MessageColumnItem extends Component {
             </View>
 
             <Text style={{
-                fontSize: hp(2),
+                fontSize: hp(1.9),
                 color: 'black',
                 opacity: 0.8,
-                marginTop: 10,
+                marginTop: 5,
 
             }}>{title}</Text>
             {/*{type === 3 && <ToastSelect*/}

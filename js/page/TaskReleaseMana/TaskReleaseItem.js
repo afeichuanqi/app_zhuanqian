@@ -39,7 +39,7 @@ export default class TaskReleaseItem extends PureComponent {
                     flex: 1,
                     flexDirection: 'row',
                     paddingHorizontal: 10,
-                    paddingTop: 25,
+                    paddingTop: 20,
                     height:  hp(12),
                     backgroundColor: 'white',
                 }}
@@ -78,7 +78,7 @@ export default class TaskReleaseItem extends PureComponent {
                                 })}
                             </Text>
                             {item.recommendIsExp == 1 && <View style={{
-                                height: wp(3.7), width: wp(3.7), borderRadius: 3, backgroundColor: bottomTheme,
+                                height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
                                 alignItems: 'center',
                                 justifyContent: 'center', marginLeft: 5,
                             }}>
@@ -98,7 +98,7 @@ export default class TaskReleaseItem extends PureComponent {
                             <Text style={{
                                 fontSize: hp(2.5),
                                 color: 'red',
-                            }}>+{item.reward_price} 元</Text>
+                            }}>+{item.reward_price.toString().length===1?`${item.reward_price}.0`:item.reward_price} 元</Text>
                         </View>
                     </View>
                     <View

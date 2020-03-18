@@ -173,8 +173,8 @@ class ShopInfoPage extends PureComponent {
                                 backgroundColor: 'rgba(0,0,0,0.3)',
                             }}
                         >
-                            {this.state.userId === this.props.userinfo.userid && <TouchableOpacity
-                                onPress={this.changeShopBackImg}
+                            {this.state.userId === this.props.userinfo.userid && <View
+
                                 style={{
                                 position: 'absolute',
                                 top: Platform.OS === 'ios' ?150:70,
@@ -187,8 +187,8 @@ class ShopInfoPage extends PureComponent {
                                 borderBottomLeftRadius: 10,
                                 paddingLeft: 10,
                             }}>
-                                <Text style={{color: 'white'}}>点击可修改商铺背景图</Text>
-                            </TouchableOpacity>}
+                                <Text onPress={this.changeShopBackImg} style={{color: 'white'}}>点击可修改商铺背景图</Text>
+                            </View>}
 
                         </TouchableOpacity>
 
@@ -497,7 +497,7 @@ class ShopData extends Component {
     };
 
     render() {
-        const {total_hair_tasks_num, total_hair_order_num, success_hair_order_num, total_join_order_num, success_join_order_num} = this.props.shopInfo;
+        const {total_hair_tasks_num, total_hair_order_num, complaint_num,success_hair_order_num, total_join_order_num, success_join_order_num} = this.props.shopInfo;
         // console.log(parseInt(success_join_order_num) / parseInt(total_join_order_num),"(parseInt(success_join_order_num) / parseInt(total_join_order_num) * 100).toFixed(2)");
         return <View style={{
 
@@ -513,7 +513,7 @@ class ShopData extends Component {
                 justifyContent: 'center',
 
             }}>
-                <Text style={{fontSize: hp(2.1)}}>店铺数据一览</Text>
+                <Text style={{fontSize: hp(2.0)}}>店铺数据一览</Text>
             </View>
             <View style={{height: 0.3, width: width, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.3)'}}/>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -522,7 +522,8 @@ class ShopData extends Component {
                 {this.getTaskDataColumn('成功派单数', success_hair_order_num)}
                 {this.getTaskDataColumn('总接单数', total_join_order_num)}
                 {this.getTaskDataColumn('成功接单数', success_join_order_num)}
-                {this.getTaskDataColumn('接单转化比', (success_join_order_num == 0 && total_join_order_num == 0) ? 0 : (parseInt(success_join_order_num) / parseInt(total_join_order_num) * 100).toFixed(2), '%')}
+                {this.getTaskDataColumn('被投诉数', complaint_num)}
+                {/*{this.getTaskDataColumn('接单转化比', (success_join_order_num == 0 && total_join_order_num == 0) ? 0 : (parseInt(success_join_order_num) / parseInt(total_join_order_num) * 100).toFixed(2), '%')}*/}
             </View>
 
         </View>;
@@ -566,7 +567,7 @@ class AvatarColumn extends Component {
                 {/*左下*/}
                 <View style={{
                     position: 'absolute',
-                    bottom: 5,
+                    bottom: 0,
                     left: 65,
                     flexDirection: 'row',
                 }}>

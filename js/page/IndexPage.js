@@ -104,7 +104,7 @@ class HomePage extends React.Component {
         });
         this.translateY = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [0, -30],
+            outputRange: [0, -35],
             extrapolate: 'clamp',
         });
         const svgTop = Animated.interpolate(this.animations.val, {
