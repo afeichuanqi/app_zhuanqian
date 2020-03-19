@@ -95,22 +95,21 @@ class MyAttention extends PureComponent {
                 <View style={{paddingBottom: 10, marginTop: 10}}>
                     <TabBar
                         style={{
-                            height: 35,
-                            width: 200,
+                            height: hp(5),
+                            width: hp(20),
                             alignSelf: 'center',
-                            marginLeft: 55,
-
+                            marginLeft: hp(4),
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 13}}
+                        contentContainerStyle={{paddingTop: hp(2.2)}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={20}
-                        activeStyle={{fontSize: 16, color: [0, 0, 0]}}
-                        inactiveStyle={{fontSize: 16, color: [150, 150, 150], height: 10}}
+                        activeStyle={{fontSize: hp(2), color: [0, 0, 0], fontWeight: 'bold'}}
+                        inactiveStyle={{fontSize: hp(2), color: [150, 150, 150], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3,top:3}}
                     />
                     <TouchableOpacity
@@ -249,14 +248,14 @@ class MyAttentionList extends PureComponent {
                     ListFooterComponent={() => this.genIndicator(hideLoaded)}
                     onEndReached={() => {
                         //console.log('onEndReached.....');
-                        this.onLoading();
-                        // setTimeout(() => {
-                        //     // 等待页面布局完成以后，在让加载更多
-                        //     if (this.canLoadMore && taskData.length >= 10) {
-                        //         this.onLoading();
-                        //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                        //     }
-                        // }, 100);
+                        // this.onLoading();
+                        setTimeout(() => {
+                            // 等待页面布局完成以后，在让加载更多
+                            if (this.canLoadMore && taskData.length >= 10) {
+                                this.onLoading();
+                                this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                            }
+                        }, 100);
                     }}
                     // onScrollEndDrag={this._onScrollEndDrag}
                     windowSize={300}
@@ -288,11 +287,11 @@ class MyAttentionList extends PureComponent {
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.7)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }

@@ -148,13 +148,13 @@ class MyViewHistoryPage extends PureComponent {
                         ListFooterComponent={() => this.genIndicator(hideLoaded)}
                         onEndReached={() => {
                             // 等待页面布局完成以后，在让加载更多
-                            this.onLoading();
-                            // setTimeout(() => {
-                            //     if (this.canLoadMore && taskData.length >= 10) {
-                            //         this.onLoading();
-                            //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                            //     }
-                            // }, 100);
+                            // this.onLoading();
+                            setTimeout(() => {
+                                if (this.canLoadMore && taskData.length >= 10) {
+                                    this.onLoading();
+                                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                                }
+                            }, 100);
                         }}
                         windowSize={300}
                         onEndReachedThreshold={0.01}
@@ -204,11 +204,11 @@ class MyViewHistoryPage extends PureComponent {
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.7)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }

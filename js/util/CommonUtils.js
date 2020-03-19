@@ -5,7 +5,7 @@ import Emoji from 'react-native-emoji';
 import JShareModule from 'jshare-react-native';
 // import Toast from 'react-native-root-toast';
 
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 export const isPoneAvailable = (str) => {
     let myreg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
     if (str.length == 0 || str == null) {
@@ -343,7 +343,7 @@ export const equalsObj = (oldData, newData) => {
     // 走到这里,说明数组或者对象中所有元素都相同,返回true
     return true;
 };
-export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black', style_ = {}, fontSize2 = 14) => {
+export const renderEmoji = (content, Views, fontSize, index = 0, color = 'black', style_ = {}, fontSize2 = hp(2.4)) => {
     const startIndex = content.search(new RegExp(/:([a-zA-Z0-9_\-\+]+):/g));
     if (startIndex === -1) {
         Views.push(<Text key={`endText${Math.random() * 100}`}

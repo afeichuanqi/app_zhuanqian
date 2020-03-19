@@ -60,7 +60,7 @@ class WithDrawPage extends React.Component {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提现管理', null, bottomTheme, 'white', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提现管理', null, bottomTheme, 'white', hp(2), () => {
             NavigationUtils.goPage({navigationIndex:1}, 'UserBillListPage');
         }, false, true, '明细', 'white');
         let {tota_withdrawal, task_currency, offer_reward_dividend, share_dividend, game_dividend, login} = this.props.userinfo;
@@ -90,11 +90,11 @@ class WithDrawPage extends React.Component {
                         <View style={{alignItems: 'center', width: width / 2, justifyContent: 'center'}}>
                             <Text
                                 style={{
-                                    fontSize: 25,
+                                    fontSize: hp(2.5),
                                     fontWeight: 'bold',
                                     color: 'white',
                                 }}>{tota_withdrawal}</Text>
-                            <Text style={{color: 'white', marginTop: 5}}>累计提现(元)</Text>
+                            <Text style={{color: 'white', marginTop: 5, fontSize:hp(2)}}>累计提现(元)</Text>
                         </View>
 
                         <View style={{
@@ -104,11 +104,11 @@ class WithDrawPage extends React.Component {
                         }}/>
                         <View style={{alignItems: 'center', width: width / 2, justifyContent: 'center'}}>
                             <Text style={{
-                                fontSize: 25,
+                                fontSize: hp(2.5),
                                 fontWeight: 'bold',
                                 color: 'white',
                             }}>{task_currency}</Text>
-                            <Text style={{color: 'white', marginTop: 5}}>余额(元)</Text>
+                            <Text style={{color: 'white', marginTop: 5, fontSize:hp(2)}}>余额(元)</Text>
                         </View>
 
 
@@ -201,9 +201,9 @@ class WithDrawPage extends React.Component {
                     borderWidth: 3,
                     borderColor: color,
                 }}/>
-                <Text style={{color: 'rgba(0,0,0,0.3)', marginLeft: 5, fontSize: 13}}>{title}</Text>
+                <Text style={{color: 'rgba(0,0,0,0.3)', marginLeft: 5, fontSize: hp(1.8)}}>{title}</Text>
             </View>
-            <Text style={{color: 'red', fontSize: 20, fontWeight: 'bold', marginTop: 6}}>{num}</Text>
+            <Text style={{color: 'red', fontSize: hp(2.2), fontWeight: 'bold', marginTop: 6}}>{num}</Text>
         </View>;
     };
     page = {

@@ -2,7 +2,7 @@
 import React, {PureComponent} from 'react';
 import {View} from 'react-native';
 import Animated from 'react-native-reanimated';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 type Props = {
     item: Object,
     index: number,
@@ -81,14 +81,14 @@ class TabBarItem extends PureComponent<Props> {
                 </Animated.Text>
                 {item.isMsg > 0 &&
                 <View style={{
-                    width: 8,
-                    height: 8,
+                    width: hp(1.2),
+                    height: hp(1.2),
                     backgroundColor: 'red',
-                    borderRadius: 8,
+                    borderRadius: hp(1.2)/2,
                     position: 'absolute',
-                    top: -4,
-                    right: -2,
-                    borderWidth: 1,
+                    top: -hp(0.3),
+                    right: -hp(0.1),
+                    borderWidth: hp(0.1),
                     borderColor: 'white',
                 }}/>}
             </View>

@@ -22,7 +22,7 @@ import {insertReportList, selectIsBeBlackList, setToBlackList} from '../../util/
 import MyModalBox from '../../common/MyModalBox';
 import BackPressComponent from '../../common/BackPressComponent';
 import Toast from 'react-native-root-toast';
-
+import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width, height} = Dimensions.get('window');
 
 class ChatSetting extends PureComponent {
@@ -89,29 +89,29 @@ class ChatSetting extends PureComponent {
                         onPress={() => {
                             NavigationUtils.goPage({userid: fromUserinfo.id}, 'ShopInfoPage');
                         }}
-                        style={{width, height: 70, alignItems: 'center', flexDirection: 'row', paddingHorizontal: 10}}>
+                        style={{width, height: hp(10), alignItems: 'center', flexDirection: 'row', paddingHorizontal: 10}}>
                         <Image
                             source={{uri: fromUserinfo.avatar_url}}
                             style={{
-                                width: 50, height: 50,
-                                borderRadius: 25,
+                                width: hp(7), height: hp(7),
+                                borderRadius: hp(7)/2,
                             }}/>
-                        <View style={{marginLeft: 15, height: 50, justifyContent: 'space-around'}}>
-                            <Text style={{fontSize: 15, color: 'black'}}>{fromUserinfo.username}</Text>
-                            <Text style={{color: 'rgba(0,0,0,0.7)'}}>ID:{fromUserinfo.id}</Text>
+                        <View style={{marginLeft: 15, height: hp(7), justifyContent: 'space-around'}}>
+                            <Text style={{fontSize: hp(2), color: 'black'}}>{fromUserinfo.username}</Text>
+                            <Text style={{color: 'rgba(0,0,0,0.7)', fontSize:hp(2)}}>ID:{fromUserinfo.id}</Text>
                         </View>
                         <SvgUri style={{position: 'absolute', right: 15, top: 30}} width={15} height={15}
                                 svgXmlData={menu_right}/>
                     </TouchableOpacity>
                     <View style={{
-                        height: 20,
+                        height: hp(2),
                         backgroundColor: '#f5f5f5',
                     }}/>
                     <TouchableOpacity
                         activeOpacity={0.6}
                         // onPress={click}
                         style={{
-                            height: 40,
+                            height: hp(4),
                             width,
                             paddingHorizontal: 15,
                             flexDirection: 'row',
@@ -119,8 +119,8 @@ class ChatSetting extends PureComponent {
                             alignItems: 'center',
 
                         }}>
-                        <Text style={{fontSize: 14, color: 'rgba(0,0,0,0.9)'}}>{'屏蔽此人'}</Text>
-                        <View style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.9)'}}>{'屏蔽此人'}</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center', height: hp(4)}}>
                             <RadioComponent ref={ref => this.radioComponent = ref} select={this._select}/>
                         </View>
 
@@ -134,7 +134,7 @@ class ChatSetting extends PureComponent {
                             this.myModalBox.show();
                         }}
                         style={{
-                            height: 35,
+                            height: hp(5),
                             backgroundColor: 'red',
                             marginHorizontal: 20,
                             width: width - 20,
@@ -143,7 +143,7 @@ class ChatSetting extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                        <Text style={{fontSize: 16, color: 'white'}}>举报此人</Text>
+                        <Text style={{fontSize: hp(2.1), color: 'white'}}>举报此人</Text>
                     </TouchableOpacity>
                 </View>
                 <MyModalBox
@@ -169,12 +169,12 @@ class ChatSetting extends PureComponent {
                         placeholder={'请勿频繁提交或提交不属实的内容'}
                         multiline={true}
                         style={{
-                            height: 130,
+                            height: hp(20),
                             backgroundColor: '#f7f7f7',
                             padding: 0,
                             paddingTop: 8,
                             width: width - 40,
-                            fontSize: 13,
+                            fontSize: hp(1.6),
                             paddingHorizontal: 10,
                             textAlignVertical: 'top',
                         }}

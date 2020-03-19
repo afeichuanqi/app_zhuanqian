@@ -108,7 +108,7 @@ class SystemNotificationPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '系统通知', null, 'white', 'black', 16, null, false, false, '清空', 'black');
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '系统通知', null, 'white', 'black', hp(2), null, false, false, '清空', 'black');
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <SafeAreaViewPlus
@@ -135,13 +135,13 @@ class SystemNotificationPage extends PureComponent {
                         ListFooterComponent={() => this.genIndicator(hideLoaded)}
                         onEndReached={() => {
                             // 等待页面布局完成以后，在让加载更多
-                            this.onLoading();
-                            // setTimeout(() => {
-                            //     if (this.canLoadMore && taskData.length >= 10) {
-                            //         this.onLoading();
-                            //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                            //     }
-                            // }, 100);
+                            // this.onLoading();
+                            setTimeout(() => {
+                                if (this.canLoadMore && taskData.length >= 10) {
+                                    this.onLoading();
+                                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                                }
+                            }, 100);
                         }}
                         windowSize={300}
                         onEndReachedThreshold={0.3}
@@ -171,15 +171,15 @@ class SystemNotificationPage extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: hp(2), flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.7)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }

@@ -110,7 +110,7 @@ class MyShieldPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '屏蔽列表', null, 'white', 'black', 16, null, false, false, '清空', 'black');
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '屏蔽列表', null, 'white', 'black', hp(2), null, false, false, '清空', 'black');
         const {taskData, isLoading, hideLoaded} = this.state;
         return (
             <SafeAreaViewPlus
@@ -138,13 +138,13 @@ class MyShieldPage extends PureComponent {
                         ListFooterComponent={() => this.genIndicator(hideLoaded)}
                         onEndReached={() => {
                             // 等待页面布局完成以后，在让加载更多
-                            this.onLoading();
-                            // setTimeout(() => {
-                            //     if (this.canLoadMore && this.taskData >= 10) {
-                            //         this.onLoading();
-                            //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                            //     }
-                            // }, 100);
+                            // this.onLoading();
+                            setTimeout(() => {
+                                if (this.canLoadMore && this.taskData >= 10) {
+                                    this.onLoading();
+                                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                                }
+                            }, 100);
                         }}
                         windowSize={300}
                         onEndReachedThreshold={0.01}
@@ -177,11 +177,11 @@ class MyShieldPage extends PureComponent {
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.7)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }
@@ -214,7 +214,7 @@ class ShiedItem extends PureComponent {
             }}
             key={item.id}
             style={{
-                height: 60, width,
+                height: hp(11), width,
                 paddingHorizontal: 10,
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -230,9 +230,9 @@ class ShiedItem extends PureComponent {
                         resizeMode={FastImage.resizeMode.stretch}
                     />
                     <View style={{justifyContent: 'space-around', marginLeft: 12}}>
-                        <Text style={{fontSize: 14}}>{item.username}</Text>
+                        <Text style={{fontSize: hp(2)}}>{item.username}</Text>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text style={{fontSize: 12, opacity: 0.5}}>屏蔽时间:{item.be_date}</Text>
+                            <Text style={{fontSize: hp(1.7), opacity: 0.5}}>屏蔽时间:{item.be_date}</Text>
                             {/*<Text style={{fontSize: 12, opacity: 0.5, marginLeft: 10}}>编号:{item.taskId}</Text>*/}
                         </View>
                     </View>
@@ -257,8 +257,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 40,
-        height: 40,
+        width: hp(7),
+        height: hp(7),
         borderRadius: 3,
         // 设置高度
         // height:150

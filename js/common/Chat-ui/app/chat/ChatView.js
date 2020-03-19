@@ -270,7 +270,7 @@ class ChatWindow extends PureComponent {
                 paddingHorizontal: 8,
                 borderRadius: 16,
             }}>
-                <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: 13}}>{getCurrentTime(parseInt(time))}</Text>
+                <Text style={{color: 'rgba(0,0,0,0.5)', fontSize: hp(1.7)}}>{getCurrentTime(parseInt(time))}</Text>
             </View>,
         placeholder: '请输入...',
         pressInText: '按住 说话',

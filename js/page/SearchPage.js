@@ -29,7 +29,7 @@ import Toast from 'react-native-root-toast';
 import Global from '../common/Global';
 
 const width = Dimensions.get('window').width;
-const topIputHeight = (Platform.OS === 'ios') ? 30 : 30;
+const topIputHeight = hp(5);
 
 class SearchPage extends PureComponent {
     constructor(props) {

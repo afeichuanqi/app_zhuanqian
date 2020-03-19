@@ -102,10 +102,10 @@ class StepBox extends PureComponent {
     };
     getNumNo = (num) => {
         return <View style={{
-            width: 20, height: 20, backgroundColor: bottomTheme, borderRadius: 20,
+            width: hp(2.5), height: hp(2.5), backgroundColor: bottomTheme, borderRadius: hp(2.5)/2,
             justifyContent: 'center', alignItems: 'center',
         }}>
-            <Text style={{color: 'white', fontSize: 15, fontWeight: 'bold'}}>{num}</Text>
+            <Text style={{color: 'white', fontSize: hp(2), fontWeight: 'bold'}}>{num}</Text>
         </View>;
     };
 }
@@ -268,7 +268,7 @@ class TaskStepColumn extends Component {
                             marginTop: 20,
                         }}>
                             {typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
-                                lineHeight: 25,
+                                lineHeight: hp(3),
                                 letterSpacing: 0.2,
                             }).map((item, index) => {
                                 return item;
@@ -293,10 +293,10 @@ class TaskStepColumn extends Component {
 
                             }}
                             style={{
-                                backgroundColor: bottomTheme, height: 40, width: 100, justifyContent: 'center',
+                                backgroundColor: bottomTheme, height: hp(4), width: hp(13), justifyContent: 'center',
                                 alignItems: 'center', borderRadius: 3,
                             }}>
-                            <Text style={{color: 'white', fontWeight: 'bold'}}>打开链接</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold', fontSize:hp(1.8)}}>打开链接</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.6}
@@ -310,10 +310,10 @@ class TaskStepColumn extends Component {
 
                             }}
                             style={{
-                                backgroundColor: bottomTheme, height: 40, width: 100, justifyContent: 'center',
+                                backgroundColor: bottomTheme, height: hp(4), width: hp(13), justifyContent: 'center',
                                 alignItems: 'center', borderRadius: 3, marginLeft: 10,
                             }}>
-                            <Text style={{color: 'white', fontWeight: 'bold'}}>复制链接</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold', fontSize:hp(1.8)}}>复制链接</Text>
                         </TouchableOpacity>
                     </View>
                 </StepBox>;
@@ -326,7 +326,7 @@ class TaskStepColumn extends Component {
                         marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
                         letterSpacing: 0.2, color: 'black',
                     }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
-                        lineHeight: 25,
+                        lineHeight: hp(3),
                         letterSpacing: 0.2,
                     }).map((item, index) => {
                         return item;
@@ -385,7 +385,7 @@ class TaskStepColumn extends Component {
                                     height: wp(33),
                                     backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
                                 }}>
-                                    <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
+                                    <Text style={{color: 'white', fontSize: hp(1.7)}}>正在上传</Text>
                                 </View>
                                 : uploadStatus == -1 ?//上传失败
                                     <View style={{
@@ -398,7 +398,7 @@ class TaskStepColumn extends Component {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={{color: 'white', fontSize: 13}}>上传失败</Text>
+                                        <Text style={{color: 'white', fontSize: hp(1.7)}}>上传失败</Text>
                                         <TouchableOpacity
                                             onPress={() => {
                                                 this._resetUploadImage(timestamp);
@@ -407,7 +407,7 @@ class TaskStepColumn extends Component {
                                                 backgroundColor: 'red', paddingHorizontal: 10, paddingVertical: 5,
                                                 borderRadius: 3, marginTop: 8,
                                             }}>
-                                            <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
+                                            <Text style={{color: 'white', fontSize: hp(1.7)}}>点击重传</Text>
                                         </TouchableOpacity>
                                     </View> : uploadStatus == 1 ?
                                         <Image
@@ -436,10 +436,10 @@ class TaskStepColumn extends Component {
                                     }
                                 }}
                                 style={{
-                                    backgroundColor: bottomTheme, height: 40, width: 100, justifyContent: 'center',
+                                    backgroundColor: bottomTheme, height: hp(4), width: hp(13), justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 3,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold'}}>保存二维码</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize:hp(1.8)}}>保存二维码</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -450,10 +450,10 @@ class TaskStepColumn extends Component {
                                 no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
-                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
+                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: hp(3),
                         letterSpacing: 0.2, color: 'black',
                     }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
-                        lineHeight: 25,
+                        lineHeight: hp(3),
                         letterSpacing: 0.2,
                     }).map((item, index) => {
                         return item;
@@ -512,10 +512,10 @@ class TaskStepColumn extends Component {
                                 no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
-                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
+                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: hp(3),
                         letterSpacing: 0.2, color: 'black',
                     }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
-                        lineHeight: 25,
+                        lineHeight: hp(3),
                         letterSpacing: 0.2,
                     }).map((item, index) => {
                         return item;
@@ -549,7 +549,7 @@ class TaskStepColumn extends Component {
                                     height: wp(55),
                                     backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center',
                                 }}>
-                                    <Text style={{color: 'white', fontSize: 14}}>正在上传</Text>
+                                    <Text style={{color: 'white', fontSize: hp(1.7)}}>正在上传</Text>
                                 </View>
                                 : uploadStatus == -1 ?//上传失败
                                     <View style={{
@@ -562,7 +562,7 @@ class TaskStepColumn extends Component {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={{color: 'white', fontSize: 13}}>上传失败</Text>
+                                        <Text style={{color: 'white', fontSize: hp(1.7)}}>上传失败</Text>
                                         <TouchableOpacity
                                             onPress={() => {
                                                 this._resetUploadImage(timestamp);
@@ -571,7 +571,7 @@ class TaskStepColumn extends Component {
                                                 backgroundColor: 'red', paddingHorizontal: 10, paddingVertical: 5,
                                                 borderRadius: 3, marginTop: 8,
                                             }}>
-                                            <Text style={{color: 'white', fontSize: 12}}>点击重传</Text>
+                                            <Text style={{color: 'white', fontSize: hp(1.7)}}>点击重传</Text>
                                         </TouchableOpacity>
                                     </View> : uploadStatus == 1 ?
                                         <Image
@@ -596,10 +596,10 @@ class TaskStepColumn extends Component {
                                 no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
-                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
+                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: hp(3),
                         letterSpacing: 0.2, color: 'black',
                     }}>{typeData && renderEmoji(typeData.info, [], hp(2.15), 0, 'black', {
-                        lineHeight: 25,
+                        lineHeight: hp(3),
                         letterSpacing: 0.2,
                     }).map((item, index) => {
                         return item;
@@ -702,7 +702,7 @@ class TaskStepColumn extends Component {
                                         alignItems: 'center',
                                     }}>
                                     <SvgUri width={50} height={50} svgXmlData={add_image}/>
-                                    <Text style={{marginTop: 10, color: 'rgba(0,0,0,0.6)'}}>添加验证图片</Text>
+                                    <Text style={{marginTop: 10, color: 'rgba(0,0,0,0.6)', fontSize:hp(1.8)}}>添加验证图片</Text>
                                 </TouchableOpacity>
                                 : <TouchableOpacity  //已经上传验证图
                                     activeOpacity={0.6}
@@ -804,7 +804,7 @@ class TaskStepColumn extends Component {
                                 no={stepNo} type={type}
                                 typeData={typeData}>
                     <Text style={{
-                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: 25,
+                        marginTop: 20, fontSize: hp(2.15), paddingHorizontal: 10, lineHeight: hp(3),
                         letterSpacing: 0.2, color: 'black',
                     }}>{typeData.collectInfo}</Text>
                     <View style={{

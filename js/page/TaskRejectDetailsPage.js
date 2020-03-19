@@ -30,7 +30,7 @@ import ToastSelect from '../common/ToastSelectTwo';
 import Toast from 'react-native-root-toast';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const screenWidth = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -146,33 +146,33 @@ class TaskRejectDetailsPage extends PureComponent {
                                 NavigationUtils.goPage({userid: userid}, 'ShopInfoPage');
                             }}
                             style={{
-                                width: screenWidth, height: 70,
+                                width: screenWidth, height: hp(8),
                                 alignItems: 'center',
                                 flexDirection: 'row',
                                 paddingHorizontal: 10,
                                 backgroundColor: 'white',
-                                marginTop: 10,
+                                marginTop: hp(1.5),
                             }}>
                             <FastImagePro
                                 loadingType={2}
                                 source={{uri: avatar_url}}
                                 style={{
-                                    width: 40, height: 40,
-                                    borderRadius: 25,
+                                    width: hp(6), height: hp(6),
+                                    borderRadius: hp(3),
                                 }}/>
-                            <View style={{marginLeft: 15, height: 40, justifyContent: 'space-around'}}>
+                            <View style={{marginLeft: 15, height: hp(5), justifyContent: 'space-around'}}>
                                 <View style={{flexDirection: 'row', width: Dimensions.get('window').width - 80}}>
-                                    <Text style={{fontSize: 15, color: 'black'}}>{username}</Text>
+                                    <Text style={{fontSize: hp(2), color: 'black'}}>{username}</Text>
                                     <Text
                                         style={{
-                                            fontSize: 15,
+                                            fontSize: hp(2),
                                             color: 'black',
                                             marginLeft: 5,
                                         }}>(ID:{userid})</Text>
                                 </View>
 
                                 <Text style={{
-                                    fontSize: 12,
+                                    fontSize: hp(1.7),
                                     color: 'rgba(0,0,0,0.6)',
                                     width: Dimensions.get('window').width - 80,
                                 }}>审核时间:{review_time}</Text>
@@ -182,19 +182,19 @@ class TaskRejectDetailsPage extends PureComponent {
                         </TouchableOpacity>
                         {task_status === -1 ? <View style={{
                                 backgroundColor: 'white',
-                                marginTop: 10,
+                                marginTop: hp(1.5),
                                 justifyContent: 'center',
                                 paddingLeft: 15,
-                                paddingVertical: 10,
+                                paddingVertical: hp(1.5),
                             }}>
                                 <View style={{alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap'}}>
-                                    <Text style={{color: 'rgba(0,0,0,0.8)'}}>驳回理由:</Text>
+                                    <Text style={{color: 'rgba(0,0,0,0.8)', fontSize:hp(1.8)}}>驳回理由:</Text>
                                     <Text
                                         // numberOfLines={5}
                                         // ellipsizeMode={'tail'}
                                         style={{
                                             width: screenWidth - 120,
-                                            fontSize: 14,
+                                            fontSize: hp(1.8),
                                             color: 'rgba(0,0,0,0.8)',
                                             marginLeft: 10,
                                         }}>{JSON.parse(reason_for_rejection).turnDownInfo}</Text>
@@ -217,7 +217,7 @@ class TaskRejectDetailsPage extends PureComponent {
                                         >
                                             <FastImagePro
                                                 loadingType={2}
-                                                style={{height: 100, width: 80, marginTop: 10, marginRight: 5}}
+                                                style={{height: hp(11), width: hp(9), marginTop: 10, marginRight: 5}}
                                                 source={{uri: url}}
                                             />
 
@@ -237,7 +237,8 @@ class TaskRejectDetailsPage extends PureComponent {
                             if (type === 5 && typeData && typeData.uri1) {
                                 this.reviewPic.push({url: typeData.uri1});
                                 ImageIndex += 1;
-                                return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 500, typeData.uri1ImgWidth || screenWidth - 40, ImageIndex, '验证图', index);
+                                return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || hp(80), typeData.uri1ImgWidth || screenWidth - 40, ImageIndex, '验证图', index);
+                            } else if (type === 6 && typeData.collectInfoContent) {
                             } else if (type === 6 && typeData.collectInfoContent) {
                                 return this.getTextView(typeData.collectInfoContent, index);
                             } else {
@@ -255,7 +256,7 @@ class TaskRejectDetailsPage extends PureComponent {
                         // paddingVertical: 5,
                         backgroundColor: bottomTheme,
                         alignItems: 'center',
-                        height: 50,
+                        height: hp(8),
                     }}>
 
                         <TouchableOpacity
@@ -272,23 +273,23 @@ class TaskRejectDetailsPage extends PureComponent {
                             }}
                             activeOpacity={0.5}
                             style={{
-                                height: 40,
+                                height: hp(8),
                                 width: (screenWidth - 2) / 3,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}>
-                            <Text style={{color: 'white'}}>沟通</Text>
+                            <Text style={{color: 'white', fontSize:hp(2.1)}}>沟通</Text>
                         </TouchableOpacity>
                         <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
                         <TouchableOpacity onPress={() => {//放弃
                             this.toastS.show();
                         }} style={{
-                            height: 40,
+                            height: hp(8),
                             width: (screenWidth - 2) / 3,
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            <Text style={{color: 'white'}}>放弃</Text>
+                            <Text style={{color: 'white', fontSize:hp(2.1)}}>放弃</Text>
                         </TouchableOpacity>
                         <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
                         <TouchableOpacity onPress={() => {//重做
@@ -302,12 +303,12 @@ class TaskRejectDetailsPage extends PureComponent {
                             });
 
                         }} style={{
-                            height: 40,
+                            height: hp(8),
                             width: (screenWidth - 2) / 3,
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            <Text style={{color: 'white'}}>重做</Text>
+                            <Text style={{color: 'white', fontSize:hp(2.1)}}>重做</Text>
                         </TouchableOpacity>
 
                     </View>}
@@ -341,7 +342,7 @@ class TaskRejectDetailsPage extends PureComponent {
                 flexDirection: 'row',
             }}>
                 <View style={{width: 20, height: 0.7, backgroundColor: 'black'}}/>
-                <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15, paddingHorizontal: 10}}> {title} </Text>
+                <Text style={{color: 'black', fontWeight: 'bold', fontSize: hp(1.8), paddingHorizontal: 10}}> {title} </Text>
                 <View style={{width: 20, height: 0.7, backgroundColor: 'black'}}/>
             </View>
             {/*<Flat*/}
@@ -382,9 +383,9 @@ class TaskRejectDetailsPage extends PureComponent {
                 flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 10,
                 borderRadius: 3,
             }}>
-                <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.5)'}}>文字验证:</Text>
+                <Text style={{fontSize: hp(1.8), color: 'rgba(0,0,0,0.5)'}}>文字验证:</Text>
                 <Text style={{
-                    fontSize: 13,
+                    fontSize: hp(1.8),
                     marginLeft: 5,
                     color: 'rgba(0,0,0,0.5)',
                     width: screenWidth - 100,

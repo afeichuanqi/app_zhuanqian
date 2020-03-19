@@ -113,25 +113,25 @@ export default class MessageItemComponent extends Component {
                         <View>
                             <FastImagePro
                                 loadingType={1}
-                                loadingWidth={wp(11.5)}
-                                loadingHeight={wp(11.5)}
+                                loadingWidth={ hp(7.5)}
+                                loadingHeight={ hp(7.5)}
                                 style={[styles.imgStyle]}
                                 source={{uri: avatar_url}}
                                 resizeMode={FastImage.resizeMode.stretch}
                             />
                             {unReadLength ? unReadLength > 0 && <View style={{
-                                borderRadius: 10,
+                                borderRadius: hp(3),
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 position: 'absolute',
-                                top: -8, right: -8,
+                                top: -hp(1), right:unReadLength.toString().length>1? -hp(2):-hp(1),
                                 backgroundColor: 'red',
-                                paddingHorizontal: 5,
+                                paddingHorizontal: hp(0.8),
                                 borderWidth: 2,
                                 borderColor: 'white',
                             }}>
                                 <Text style={{
-                                    fontSize: 10,
+                                    fontSize: hp(1.5),
                                     color: 'white',
                                 }}>{unReadLength}</Text>
                             </View> : null}
@@ -222,8 +222,8 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: wp(11.5),
-        height: wp(11.5),
+        width: hp(7.5),
+        height: hp(7.5),
         borderRadius: 3,
         // 设置高度
         // height:150

@@ -23,7 +23,7 @@ import NavigationUtils from '../navigator/NavigationUtils';
 import {getAllOrderForType,  userBuyOrder} from '../util/AppService';
 import SkeletonPlaceholder from '../common/SkeletonPlaceholder';
 import ToastSelect from '../common/ToastSelectTwo';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const width = Dimensions.get('window').width;
 
 class UserUpdateOrderPage extends PureComponent {
@@ -61,7 +61,7 @@ class UserUpdateOrderPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '刷新包购买', null, 'white', 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '刷新包购买', null, 'white', 'black', hp(2), null, false);
 
         return (
             <SafeAreaViewPlus
@@ -76,7 +76,7 @@ class UserUpdateOrderPage extends PureComponent {
                             paddingTop: 15,
                             paddingHorizontal: 10,
                             marginBottom: 10,
-                            fontSize: 16,
+                            fontSize: hp(1.8),
                         }}>购买须知：刷新包使用期限不限，不支持退订，请确认后购买</Text>
 
                     </View>
@@ -99,12 +99,12 @@ class UserUpdateOrderPage extends PureComponent {
                         style={{
 
                             width: width / 2,
-                            height: 50,
+                            height:  hp(9),
                             backgroundColor: 'white',
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                        <Text style={{color: 'black', fontSize: 18}}>取消</Text>
+                        <Text style={{color: 'black', fontSize: hp(2)}}>取消</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.7}
@@ -113,12 +113,12 @@ class UserUpdateOrderPage extends PureComponent {
                         }}
                         style={{
                             width: width / 2,
-                            height: 50,
+                            height: hp(9),
                             backgroundColor: bottomTheme,
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                        <Text style={{color: 'white', fontSize: 18}}>提交</Text>
+                        <Text style={{color: 'white', fontSize: hp(2)}}>提交</Text>
                     </TouchableOpacity>
                 </View>
                 <ToastSelect
@@ -197,23 +197,23 @@ class RadioCheck extends PureComponent {
                     }}
                     style={[{
                         paddingHorizontal: 8,
-                        paddingVertical: 8,
+                        paddingVertical: hp(2),
                         borderWidth: 0.3,
                         borderColor: bottomTheme,
                         marginHorizontal: 10,
-                        borderRadius: 4,
+                        borderRadius: hp(1),
                         backgroundColor: 'rgb(252,252,252)',
                         // borderStyle: 'dashed',
                         width: (width - 40) / 2,
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginBottom: 15,
+                        marginBottom: hp(1.5),
                         // borderWidth: 1,
                     }, checkIndex === index ? {borderColor: bottomTheme} : {borderColor: 'rgba(0,0,0,0.3)'}]}>
                     <Text
                         style={[{
                             color: bottomTheme,
-                            fontSize: 16,
+                            fontSize: hp(1.9),
                         }, , checkIndex === index ? {color: bottomTheme} : {color: 'rgba(0,0,0,0.7)'}]}>{item.title}</Text>
                 </TouchableOpacity>;
             })}

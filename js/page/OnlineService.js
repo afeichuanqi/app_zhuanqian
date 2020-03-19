@@ -107,7 +107,7 @@ class OnlineService extends PureComponent {
             activeOpacity={0.6}
             onPress={click}
             style={{
-                height: 40,
+                height: hp(7),
                 width,
                 paddingHorizontal: 15,
                 flexDirection: 'row',

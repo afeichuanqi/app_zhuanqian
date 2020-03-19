@@ -16,6 +16,13 @@ export function onIsAgreePrivacy(bool) {
     return {type: Types.AGREE_PRIVACY, data: {bool}};
 }
 /**
+ * 新版本是否有过更新提示
+ * @returns {{theme: *, type: string}}
+ */
+export function onSetUpdateToast(bool) {
+    return {type: Types.IS_SET_UPDATE_TOAST, data: {bool}};
+}
+/**
  * 同意隐私政策
  * @returns {{theme: *, type: string}}
  */

@@ -254,6 +254,7 @@ class CodeInput extends PureComponent {
                             this.iptArrayNum[index] = '';
                         }
                     }
+                    // console.log(nativeEvent.key);
                     this.forceUpdate();
                 }}
                 onChangeText={(text) => {
@@ -276,10 +277,8 @@ class CodeInput extends PureComponent {
                 ref={`text${index}`}
                 maxLength={1}
                 style={{
-                    fontSize: 20,
-                    // marginLeft: 25,
+                    fontSize: hp(3),
                     color: 'black',
-
                     width: 50,
                     textAlign: 'center',
 

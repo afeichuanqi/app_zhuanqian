@@ -1,6 +1,6 @@
 import Types from '../../action/Types';
 
-const defaultContent = {isOpenImagePicker: false, agreePrivacy: false, appPay: 1};
+const defaultContent = {isOpenImagePicker: false, agreePrivacy: false, appPay: 1, isUpdateToast: false};
 
 export default function onAction(state = defaultContent, action) {
     const {data, type} = action;
@@ -19,6 +19,11 @@ export default function onAction(state = defaultContent, action) {
             return {
                 ...state,
                 appPay: data.i,
+            };
+        case Types.IS_SET_UPDATE_TOAST :
+            return {
+                ...state,
+                isUpdateToast: data.bool,
             };
         default:
             return state;

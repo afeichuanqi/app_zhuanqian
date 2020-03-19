@@ -70,7 +70,7 @@ class WithDrawAccount extends React.Component {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提现帐户', null, 'white', 'black', 16, null, false, false, '清空', 'black');
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提现帐户', null, 'white', 'black', hp(2), null, false, false, '清空', 'black');
         let pay_name = '';
         let pay_account = '';
         let pay_uri = '';
@@ -263,20 +263,20 @@ class InputPic extends React.Component {
                         this.picker.show();
                     }}>
                     {
-                        uploadStatus === 0 ? <SvgUri width={35} height={35} svgXmlData={add_image}/>
+                        uploadStatus === 0 ? <SvgUri width={hp(5)} height={hp(5)} svgXmlData={add_image}/>
                             : uploadStatus === 1 ? <FastImagePro
                                 loadingType={2}
                                 source={{uri: uri}}
-                                loadingWidth={30}
-                                loadingHeight={30}
+                                loadingWidth={hp(5)}
+                                loadingHeight={hp(5)}
                                 style={{
-                                    width: 40,
-                                    height: 40, backgroundColor: '#F0F0F0', borderRadius: 3,
+                                    width: hp(7),
+                                    height: hp(7), backgroundColor: '#F0F0F0', borderRadius: 3,
                                 }}
                                 resizeMode={'contain'}
                             /> : uploadStatus === -1 ?
-                            <Text style={{fontSize: 11, color: 'red'}}>上传失败</Text> : uploadStatus === 2 ?
-                                <Text style={{fontSize: 11, }}>正在上传</Text> : null
+                            <Text style={{fontSize: hp(1.6), color: 'red'}}>上传失败</Text> : uploadStatus === 2 ?
+                                <Text style={{fontSize: hp(1.6),color:'rgba(0,0,0,0.7)' }}>正在上传</Text> : null
                     }
                 </TouchableOpacity>
 

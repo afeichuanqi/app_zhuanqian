@@ -142,5 +142,7 @@ export default {
     AGREE_PRIVACY:"AGREE_PRIVACY",
     //设置appPay
     SET_APP_PAY:"SET_APP_PAY",
+    //是否进行过更新提示
+    IS_SET_UPDATE_TOAST:"IS_SET_UPDATE_TOAST",
 };
 

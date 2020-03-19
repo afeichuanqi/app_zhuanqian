@@ -159,8 +159,8 @@ class TaskDetails extends PureComponent {
 
     render() {
         const TitleTop = Animated.interpolate(this.animations.value, {
-            inputRange: [0, 70],
-            outputRange: [20, -50],
+            inputRange: [0, hp(6.5)],
+            outputRange: [hp(3), -hp(5)],
             extrapolate: 'clamp',
         });
         const NameOpacity = Animated.interpolate(this.animations.value, {
@@ -174,8 +174,8 @@ class TaskDetails extends PureComponent {
             extrapolate: 'clamp',
         });
         const goBackTop = Animated.interpolate(this.animations.value, {
-            inputRange: [0, 40],
-            outputRange: [20, 11],
+            inputRange: [0, hp(1.5)],
+            outputRange: [hp(3),  hp(2)],
             extrapolate: 'clamp',
         });
         const translateY = Animated.interpolate(this.animations.value, {
@@ -209,7 +209,7 @@ class TaskDetails extends PureComponent {
 
                     <View style={{
                         backgroundColor: bottomTheme,
-                        height: 45,
+                        height: hp(6.5),
                         justifyContent: 'center',
                     }}/>
 
@@ -222,13 +222,13 @@ class TaskDetails extends PureComponent {
                             alignItems: 'center',
                             zIndex: 2,
                         }}>
-                        <Text style={{color: 'white', fontSize: 18}}>任务详情</Text>
+                        <Text style={{color: 'white', fontSize: hp(2.5)}}>任务详情</Text>
                     </Animated.View>
                     <Animated.View
                         style={{
                             width,
                             position: 'absolute',
-                            top: 14,
+                            top: hp(2),
                             alignItems: 'center',
                             zIndex: 2,
                             opacity: NameOpacity,
@@ -248,7 +248,7 @@ class TaskDetails extends PureComponent {
                             height,
                             width,
                             position: 'absolute',
-                            top: (-height) + 45,
+                            top: (-height) + hp(6.5),
                             transform: [{translateY: translateY}],
                         }}>
                     </Animated.View>
@@ -463,7 +463,7 @@ class TaskDetails extends PureComponent {
                             <Text style={{
                                 marginTop: 10,
                             }}>
-                                {taskData && renderEmoji(taskData.TaskInfo, [], hp(2.0), 0, 'rgba(0,0,0,0.8)', {lineHeight: 20}).map((item, index) => {
+                                {taskData && renderEmoji(taskData.TaskInfo, [], hp(2.0), 0, 'rgba(0,0,0,0.8)', {lineHeight: hp(3)}).map((item, index) => {
                                     return item;
                                 })}
                             </Text>
@@ -515,7 +515,7 @@ class TaskDetails extends PureComponent {
                             zIndex: 10,
                             width: 50,
                         }}>
-                        <SvgUri width={24} height={24} fill={'white'} svgXmlData={goback}/>
+                        <SvgUri width={hp(2.8)} height={hp(2.8)} fill={'white'} svgXmlData={goback}/>
                     </AnimatedTouchableOpacity>
                     <AnimatedTouchableOpacity
                         ref={ref => this.moreSvg = ref}
@@ -526,8 +526,8 @@ class TaskDetails extends PureComponent {
                                 this.taskDetailsPop.show(pageX, pageY);
                             });
                         }}
-                        style={{position: 'absolute', top: goBackTop, right: 0, zIndex: 10, width: 40, marginTop: 3}}>
-                        <SvgUri width={20} height={20} fill={'white'} svgXmlData={message_more}/>
+                        style={{position: 'absolute', transform: [{translateY: goBackTop}],top: 0, right: 0, zIndex: 10, width: 40, marginTop: 3}}>
+                        <SvgUri width={hp(2.8)} height={hp(2.8)} fill={'white'} svgXmlData={message_more}/>
                     </AnimatedTouchableOpacity>
                 </View>
                 {/*右上角的弹出菜单*/}
@@ -765,7 +765,7 @@ class BottomBtns extends PureComponent {
                     }}>
                     <Text
                         style={{
-                            fontSize: 15,
+                            fontSize: hp(1.9),
                             color: 'white',
                             marginLeft: 5,
                         }}>{this.props.update ? '确认修改' : '申请发布'}</Text>
@@ -787,7 +787,7 @@ class BottomBtns extends PureComponent {
                     }}>
                     <Text
                         style={{
-                            fontSize: 15,
+                            fontSize: hp(1.9),
                             color: 'white',
                             marginLeft: 5,
                         }}>{StatusForTask.status === 0 ? '开始报名' : StatusForTask.status === 4 ? '提交验证' : StatusForTask.status === 5 ? '待审核' : StatusForTask.msg || ''}</Text>
@@ -855,11 +855,11 @@ class ChangeTask extends Component {
             <Animated.View
                 style={{transform: [{rotate: rotate}]}}
             >
-                <SvgUri width={13} fill={'rgba(0,0,0,0.7)'} style={{}} height={13}
+                <SvgUri width={hp(2)} fill={'rgba(0,0,0,0.7)'} style={{}} height={hp(2)}
                         svgXmlData={taskHallNext}/>
             </Animated.View>
 
-            <Text style={{fontSize: 15, color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
+            <Text style={{fontSize: hp(1.9), color: 'rgba(0,0,0,0.9)', marginLeft: 5}}>换一批</Text>
         </TouchableOpacity>;
     }
 }

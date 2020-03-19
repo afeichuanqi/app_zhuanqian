@@ -121,13 +121,13 @@ class TaskOrdersMana extends Component {
                 <View style={{flex: 1}}>
                     {((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? null : <TabBar
                         style={{
-                            height: 35,
+                            height: hp(5),
                             backgroundColor: bottomTheme,
                             paddingLeft: 10,
 
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 10}}
+                        contentContainerStyle={{paddingTop: hp(1.7)}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
@@ -135,7 +135,7 @@ class TaskOrdersMana extends Component {
                         bounces={true}
                         titleMarginHorizontal={wp(5)}
                         activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: 10}}
+                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: hp(1.2)}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
                     />}
                     <TabView
@@ -356,15 +356,15 @@ class FristListComponent extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: hp(2), flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.7)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
@@ -407,11 +407,11 @@ class FristListComponent extends PureComponent {
 
                     setTimeout(() => {
                         // 等待页面布局完成以后，在让加载更多
-                        this.onLoading();
-                        // if (this.canLoadMore && taskData.length >= 10) {
-                        //     this.onLoading();
-                        //     this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                        // }
+                        // this.onLoading();
+                        if (this.canLoadMore && taskData.length >= 10) {
+                            this.onLoading();
+                            this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                        }
                     }, 100);
                 }}
                 windowSize={300}
@@ -542,7 +542,7 @@ class OrdersItem extends React.Component {
                     justifyContent: 'space-between',
                 }}
             >
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row',width:wp(60)}}>
                     <FastImage
                         style={[styles.imgStyle]}
                         source={{uri: item.avatar_url}}
@@ -552,12 +552,12 @@ class OrdersItem extends React.Component {
                     {status == 1 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: hp(1.6),
                             color: 'black',
                             opacity: 0.7,
                             marginTop: hp(0.5),
                         }}>到期时间:{item.orderExpTime}</Text>
-                        <Text style={{color: 'red', fontSize: 13, marginTop: 5}}>请在{item.orderTimeTitle}内完成</Text>
+                        <Text style={{color: 'red', fontSize: hp(1.6), marginTop: 5}}>请在{item.orderTimeTitle}内完成</Text>
                     </View> : status == 2 ? <View style={{marginLeft: 10}}>
                         {TextTitle}
                         <Text style={{
@@ -622,7 +622,7 @@ class OrdersItem extends React.Component {
 
                 </View>
 
-                <View style={{height: 50, alignItems: 'flex-start'}}>
+                <View style={{height: hp(5.5), alignItems: 'flex-start'}}>
                     <Text style={{fontSize: hp(2.3), color: 'red'}}>+{item.reward_price}元</Text>
                 </View>
             </TouchableOpacity>
@@ -637,14 +637,14 @@ class OrdersItem extends React.Component {
                             });
                         }}
                         style={{
-                            width: 60, height: 25, justifyContent: 'center',
+                             height: hp(2), justifyContent: 'center',
                             alignItems: 'center', borderRadius: 5,
                         }}>
                         <Text style={{color: bottomTheme, fontSize: hp(1.7)}}>取消报名</Text>
                     </TouchableOpacity>
                     : status == 2 ? <View
                         style={{
-                            backgroundColor: 'white', width: 60, height: 25, justifyContent: 'center',
+                            backgroundColor: 'white',  height: hp(3), justifyContent: 'center',
                             alignItems: 'center', borderRadius: 5,
                         }}>
                         <Text style={{color: 'black', opacity: 0.7, fontSize: hp(1.7)}}>等待审核</Text>
@@ -652,7 +652,7 @@ class OrdersItem extends React.Component {
                         <TouchableOpacity
                             onPress={this.props.redoTask}
                             style={{
-                                width: 50, height: 15, justifyContent: 'center',
+                                 height: hp(3), justifyContent: 'center',
                                 alignItems: 'center', borderRadius: 3,
                             }}>
                             <Text style={{color: bottomTheme, fontSize: hp(1.7)}}>重新提交</Text>
@@ -669,9 +669,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: hp(6),
+        height: hp(6),
+        borderRadius:  hp(3),
         // 设置高度
         // height:150
     },

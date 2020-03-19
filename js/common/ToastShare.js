@@ -24,7 +24,7 @@ import JShareModule from 'jshare-react-native';
 import Toast from 'react-native-root-toast';
 import ImageUtil from '../util/ImageUtil';
 import emoji from 'node-emoji';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width, height} = Dimensions.get('window');
 
 class ToastShare extends PureComponent {
@@ -49,7 +49,7 @@ class ToastShare extends PureComponent {
     hide = () => {
         this._anim = Animated.timing(this.animations.translateY, {
             duration: 200,
-            toValue: 150,
+            toValue: hp(12),
         }).start(() => {
 
 
@@ -76,7 +76,7 @@ class ToastShare extends PureComponent {
         });
     };
     animations = {
-        translateY: new Animated.Value(150),
+        translateY: new Animated.Value(hp(12)),
     };
 
     render() {
@@ -103,10 +103,10 @@ class ToastShare extends PureComponent {
                         transform: [{translateY: this.animations.translateY}],
                         position: 'absolute', bottom: 0,
                     }]}>
-                        <View style={{height: 90, width: width, backgroundColor: 'white'}}>
+                        <View style={{height: hp(12), width: width, backgroundColor: 'white'}}>
                             <Text style={{
                                 textAlign: 'center',
-                                fontSize: 12,
+                                fontSize: hp(1.7),
                                 color: 'black',
                                 opacity: 0.8,
                                 marginVertical: 5,
@@ -293,12 +293,12 @@ class ToastShare extends PureComponent {
             }}
             style={{alignItems: 'center', width: (width - 50) / 6}}>
             <Image
-                style={{height: 25, width: 25, marginHorizontal: 8}}
+                style={{height: wp(8), width: wp(8), marginHorizontal: 8}}
                 source={source}
                 resizeMode={Image.resizeMode.stretch}
             />
             <Text style={{
-                fontSize: 12,
+                fontSize: hp(1.5),
                 color: 'black',
                 opacity: 0.8,
                 marginTop: 5,

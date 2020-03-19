@@ -42,7 +42,7 @@ import Global from '../common/Global';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const {height, width} = Dimensions.get('window');
-const backgroundHeight = 100;
+const backgroundHeight = hp(18);
 const topHeight = 140;
 const {call, block, set} = Animated;
 
@@ -114,12 +114,12 @@ class ShopInfoPage extends PureComponent {
             extrapolate: 'clamp',
         });
         const whiteOpacity = Animated.interpolate(this.animations.val, {
-            inputRange: [0, 100, 130],
+            inputRange: [0, backgroundHeight, backgroundHeight+30],
             outputRange: [1, 1, 0],
             extrapolate: 'clamp',
         });
         const blackOpacity = Animated.interpolate(this.animations.val, {
-            inputRange: [0, 130, 160],
+            inputRange: [0, backgroundHeight+30, backgroundHeight+60],
             outputRange: [0, 0, 1],
             extrapolate: 'clamp',
         });
@@ -149,7 +149,6 @@ class ShopInfoPage extends PureComponent {
                         }}>
                             <Text style={{color: 'rgba(255,255,255,0.5)', fontSize: hp(1.7)}}>
                                 简易赚 - 人人都能赚钱
-
                             </Text>
                         </View>
                         <FastImage
@@ -187,7 +186,7 @@ class ShopInfoPage extends PureComponent {
                                 borderBottomLeftRadius: 10,
                                 paddingLeft: 10,
                             }}>
-                                <Text onPress={this.changeShopBackImg} style={{color: 'white'}}>点击可修改商铺背景图</Text>
+                                <Text onPress={this.changeShopBackImg} style={{color: 'white', fontSize:hp(1.9)}}>点击可修改商铺背景图</Text>
                             </View>}
 
                         </TouchableOpacity>
@@ -198,10 +197,10 @@ class ShopInfoPage extends PureComponent {
                             position: 'absolute', top: 0, width, zIndex: 100,
                         }}
                     >
-                        <Animated.View style={{backgroundColor: '#eeecee', width, height: 60, opacity: blackOpacity}}>
+                        <Animated.View style={{backgroundColor: '#eeecee', width, height: hp(7.5), opacity: blackOpacity}}>
                             <View style={{
                                 position: 'absolute', marginTop: 10, width, flexDirection: 'row', alignItems: 'center',
-                                justifyContent: 'space-between', height: 60,
+                                justifyContent: 'space-between', height: hp(7.5),
                             }}>
                                 <TouchableOpacity
                                     activeOpacity={0.6}
@@ -217,7 +216,7 @@ class ShopInfoPage extends PureComponent {
 
                         </Animated.View>
                         <Animated.View style={{
-                            position: 'absolute', top: 30, width, flexDirection: 'row', alignItems: 'center',
+                            position: 'absolute', top: hp(3.75), width, flexDirection: 'row', alignItems: 'center',
                             justifyContent: 'space-between', opacity: whiteOpacity,
                         }}>
                             <TouchableOpacity
@@ -353,11 +352,11 @@ class ShopList extends Component {
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.7)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
@@ -486,11 +485,11 @@ class ShopData extends Component {
 
         if ((isNaN(value))) {
             return <SkeletonPlaceholder minOpacity={0.2}>
-                <View style={{width: width / 3 - 10, marginHorizontal: 5, marginVertical: 5, height: 70}}/>
+                <View style={{width: wp(33.3)-10, marginHorizontal: 5, marginVertical: 5, height: hp(9.5)}}/>
             </SkeletonPlaceholder>;
         }
 
-        return <View style={{width: width / 3, justifyContent: 'center', alignItems: 'center', height: 70}}>
+        return <View style={{width: wp(33.3), justifyContent: 'center', alignItems: 'center', height: hp(9.5)}}>
             <Text style={{fontSize: hp(2.2), color: 'black'}}>{value}{value1}</Text>
             <Text style={{fontSize: hp(1.6), opacity: 0.7, marginTop: 5, color: 'black'}}>{title}</Text>
         </View>;
@@ -507,9 +506,9 @@ class ShopData extends Component {
         }}>
             <View style={{
                 width,
-                height: 40,
+                height: hp(5),
                 paddingHorizontal: 20,
-                paddingVertical: 10,
+                paddingVertical: hp(1),
                 justifyContent: 'center',
 
             }}>
@@ -533,13 +532,13 @@ class ShopData extends Component {
 
 class AvatarColumn extends Component {
     render() {
-        return <View style={{width, paddingVertical: 10, paddingBottom: 50}}>
+        return <View style={{width,  paddingBottom: hp(5),top:-hp(2)}}>
             <View style={{marginTop: 5, marginLeft: 10}}>
                 <TouchableOpacity
                     activeOpacity={0.6}
                     style={{
-                        width: 50,
-                        height: 50,
+                        width: hp(6),
+                        height: hp(6),
                     }}
                     onPress={() => {
                         this.imageViewer.show([{url: this.props.shopInfo.avatar_url}]);
@@ -556,7 +555,7 @@ class AvatarColumn extends Component {
                 <View style={{
                     position: 'absolute',
                     top: 5,
-                    left: 65,
+                    left: hp(6)+20,
                     flexDirection: 'row',
                 }}>
                     <Text style={{
@@ -568,7 +567,7 @@ class AvatarColumn extends Component {
                 <View style={{
                     position: 'absolute',
                     bottom: 0,
-                    left: 65,
+                    left: hp(6)+20,
                     flexDirection: 'row',
                 }}>
                     <Text style={{
@@ -580,7 +579,7 @@ class AvatarColumn extends Component {
                 {/*右中*/}
                 <View style={{
                     position: 'absolute',
-                    bottom: 15,
+                    bottom: hp(2.5),
                     right: 20,
                     flexDirection: 'row',
                 }}>
@@ -613,7 +612,7 @@ class AvatarColumn extends Component {
                 }}
                 style={{
                     position: 'absolute',
-                    bottom: 15,
+                    bottom: hp(0.2),
                     left: 15,
                     flexDirection: 'row',
                 }}>
@@ -650,9 +649,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: hp(6),
+        height: hp(6),
+        borderRadius:  hp(3),
         // 设置高度
         // height:150
     },

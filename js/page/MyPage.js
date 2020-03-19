@@ -59,13 +59,13 @@ class MyPage extends PureComponent {
             // backgroundColor: bottomTheme,//安卓手机状态栏背景颜色
         };
         const titleTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-800, 0, 100],
-            outputRange: [850, hp(9), 18],
+            inputRange: [-hp(200), hp(0), hp(10)],
+            outputRange: [hp(250), hp(10), hp(1.8)],
             extrapolate: 'clamp',
         });
         const titleFontSize = Animated.interpolate(this.scrollY, {
             inputRange: [0, 100],
-            outputRange: [24, 17],
+            outputRange: [hp(2.8), hp(2.3)],
             extrapolate: 'clamp',
         });
         const translateY = Animated.interpolate(this.scrollY, {
@@ -103,7 +103,7 @@ class MyPage extends PureComponent {
                             alignItems: 'center',
                             justifyContent: 'flex-end',
                             opacity:1,
-                            height: 50,
+                            height: hp(7.5),
                         }}>
                             {/*<TouchableOpacity*/}
                             {/*    activeOpacity={0.6}*/}
@@ -139,7 +139,7 @@ class MyPage extends PureComponent {
                             height,
                             width,
                             position: 'absolute',
-                            top: (-height) + 50,
+                            top: (-height) + hp(7.5),
                             transform: [{translateY: translateY}],
                             zIndex:-1,
                         }}>
@@ -183,7 +183,7 @@ class MyPage extends PureComponent {
                         } : this._nameClick}
                         style={{
                             position: 'absolute',
-                            top: 0,
+                            top: hp(0.5),
                             transform: [{translateY: titleTop}],
                             left: 10,
                             zIndex: 2,
@@ -240,7 +240,7 @@ class BottomInfoColumn extends Component {
         const billIsNewMsg = notice_arr.slice(8, 11).find(item => item > 0);
         return <View style={{}}>
             <View style={{paddingHorizontal: 10, paddingTop: 20, paddingVertical: 10, backgroundColor: 'white'}}>
-                <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+                <Text style={{color: 'black', fontWeight: 'bold', fontSize: hp(2.2)}}>
                     我的工具
                 </Text>
             </View>
@@ -380,13 +380,13 @@ class ToolsItemComponent extends PureComponent {
             <FastImage source={source}
                        style={{width: wp(8.7), height: wp(8.7), borderRadius: 12, marginLeft: wp(1.5)}}/>
             {isOtherMsg && <View style={{
-                height: 8,
-                width: 8,
+                height: hp(1.3),
+                width: hp(1.3),
                 position: 'absolute',
-                right: 5,
-                top: 5,
+                right: hp(0.8),
+                top: hp(0.8),
                 backgroundColor: 'red',
-                borderRadius: 5,
+                borderRadius: hp(1.3)/2,
             }}/>}
         </TouchableOpacity>;
     }
@@ -400,7 +400,7 @@ class TopInfoColumn extends PureComponent {
     genDataInfo = (value, title) => {
         return <View style={{
             width: width / 4,
-            height: 80,
+            height: hp(10),
             justifyContent: 'center',
             alignItems: 'center',
             paddingTop: hp(1),

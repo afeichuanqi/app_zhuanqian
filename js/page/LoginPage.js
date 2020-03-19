@@ -140,7 +140,7 @@ class LoginPage extends PureComponent {
                         fontSize: hp(2.7),
                         color: 'black',
                     }}>{this.params.updatePhone ? '账号绑定' : '账号登录'}</Text>
-                    <View style={{width, justifyContent: 'center', alignItems: 'center', marginTop: 80}}>
+                    <View style={{width, justifyContent: 'center', alignItems: 'center', marginTop: hp(11.5)}}>
 
 
                         <PhoneInput
@@ -154,13 +154,13 @@ class LoginPage extends PureComponent {
                             activeOpacity={0.6}
                             onPress={this._getCode}
                             style={[{
-                                marginTop: 40,
+                                marginTop: hp(5),
                                 width: width - 90,
-                                height: 50,
+                                height: hp(7),
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 backgroundColor: bottomTheme,
-                                borderRadius: 30,
+                                borderRadius: hp(4),
                                 // opacity: 0.3,
                             }]}>
                             <Text style={{color: 'white', fontSize: hp(2.3)}}>获取验证码</Text>
@@ -453,18 +453,18 @@ class PhoneInput extends PureComponent {
                 onChangeText={this._pwdInputOnChangeText}
                 style={{
                     width: width - 80,
-                    fontSize: hp(2.3),
+                    fontSize: hp(2.2),
                     color: 'rgba(0,0,0,0.8)',
                     padding: 0,
-                    height: 30,
+                    height: hp(4),
                 }}/>
             {phone.length > 0 &&
             <TouchableOpacity
                 onPress={this._clearInput}
-                style={{position: 'absolute', top: 10, right: 50}} fill={'rgba(0,0,0,0.6)'}
+                style={{position: 'absolute', top: hp(1.5), right: 50}} fill={'rgba(0,0,0,0.6)'}
                 activeOpacity={0.7}>
-                <SvgUri width={15}
-                        height={15}
+                <SvgUri width={hp(2)}
+                        height={hp(2)}
                         svgXmlData={phone_input_clear}/>
             </TouchableOpacity>
             }

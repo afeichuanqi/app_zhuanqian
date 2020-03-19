@@ -21,7 +21,7 @@ import {
 import Animated, {Easing} from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageUtil from '../util/ImageUtil';
-
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 const {timing, SpringUtils, spring} = Animated;
 const {width} = Dimensions.get('window');
 export const ImgOption = Platform.OS === 'android' ? {
@@ -218,7 +218,7 @@ class PickerImage extends PureComponent {
                                 width, alignItems: 'center', paddingVertical: 15,
                                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
                             }}>
-                            <Text style={{color: 'black'}}>{'拍一张照片'}</Text>
+                            <Text style={{color: 'black', fontSize:hp(1.8)}}>{'拍一张照片'}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             activeOpacity={0.6}
@@ -227,7 +227,7 @@ class PickerImage extends PureComponent {
                                 width, alignItems: 'center', paddingVertical: 15,
                                 borderBottomWidth: 0.3, borderBottomColor: '#e8e8e8',
                             }}>
-                            <Text style={{color: 'black'}}>{'从相册选一张'}</Text>
+                            <Text style={{color: 'black' ,fontSize:hp(1.8)}}>{'从相册选一张'}</Text>
                         </TouchableOpacity>
                         <View style={{height: 60, backgroundColor: 'white'}}/>
                     </Animated.View>
@@ -239,7 +239,7 @@ class PickerImage extends PureComponent {
 
     _renderBestNewItem = ({item, index}) => {
         let {height, width, uri} = item;
-        const FlatListItemHeight = 130;
+        const FlatListItemHeight = hp(14);
         const size = FlatListItemHeight / height;
         const imgWidth = width * size;
 

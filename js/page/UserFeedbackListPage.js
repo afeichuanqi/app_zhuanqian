@@ -120,11 +120,11 @@ class UserFeedbackListPage extends PureComponent {
             <FastImagePro
                 resizeMode={'cover'}
                 source={{uri:JSON.parse(item.content).images&&JSON.parse(item.content).images[0]}}
-                style={{width: wp(12), height: wp(12),  marginLeft: 10}}
+                style={{width:hp(7), height: hp(7),  marginLeft: 10}}
             />
-            <View style={{marginLeft: 10, justifyContent: 'space-around'}}>
+            <View style={{marginLeft: hp(1.5), justifyContent: 'space-around'}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color:'black'}}>{title}</Text>
+                    <Text style={{color:'black', fontSize:hp(1.8)}}>{title}</Text>
                     <Text style={{fontSize: hp(1.75), color: 'rgba(0,0,0,0.5)'}}>{item.send_date1}</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -150,7 +150,7 @@ class UserFeedbackListPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '历史反馈', null, 'white', 'black', 16, null, false, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '历史反馈', null, 'white', 'black', hp(2), null, false, false);
         const {isLoading, taskData, hideLoaded} = this.state;
 
         return (
@@ -186,11 +186,11 @@ class UserFeedbackListPage extends PureComponent {
                         onEndReached={() => {
                             setTimeout(() => {
                                 // 等待页面布局完成以后，在让加载更多
-                                this.onLoading();
-                                // if (this.canLoadMore && taskData.length >= 10) {
-                                //     this.onLoading();
-                                //     this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                                // }
+
+                                if (this.canLoadMore && taskData.length >= 10) {
+                                    this._updateList(false);
+                                    this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                                }
                             }, 100);
                         }}
                         windowSize={300}
@@ -209,12 +209,12 @@ class UserFeedbackListPage extends PureComponent {
                             position: 'absolute',
                             bottom: 0,
                             width,
-                            height: 50,
+                            height: hp(8),
                             backgroundColor: bottomTheme,
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                        <Text style={{color: 'white', fontSize: 18}}>我要反馈</Text>
+                        <Text style={{color: 'white', fontSize: hp(2.1)}}>我要反馈</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -224,15 +224,15 @@ class UserFeedbackListPage extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: hp(2), flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.8)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 }

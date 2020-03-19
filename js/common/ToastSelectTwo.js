@@ -8,13 +8,10 @@
 
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, Text, TouchableOpacity, ScrollView} from 'react-native';
-import SvgUri from 'react-native-svg-uri';
-import cha from '../res/svg/cha.svg';
-import {bottomTheme} from '../appSet';
 
 const {width, height} = Dimensions.get('window');
 import Animated, {Easing} from 'react-native-reanimated';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {SpringUtils, spring} = Animated;
 
@@ -105,23 +102,23 @@ class ToastSelectTwo extends PureComponent {
                         <TouchableOpacity
                             onPress={this._sure}
                             style={{
-                                width, alignItems: 'center', height: 50, justifyContent: 'center',
+                                width, alignItems: 'center', height: hp(6), justifyContent: 'center',
                                 borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
 
                             }}>
                             <Text
-                                style={{color: 'black', opacity: 1, fontSize: wp(3.8)}}>{this.props.sureTitle}</Text>
+                                style={{color: 'black', opacity: 1, fontSize: hp(2.1)}}>{this.props.sureTitle}</Text>
                         </TouchableOpacity>
                         <View style={{
-                            height: 10, backgroundColor: '#e8e8e8',
+                            height: hp(1.3), backgroundColor: '#e8e8e8',
                         }}/>
                         <TouchableOpacity
                             onPress={this._cancel}
                             style={{
-                                width, alignItems: 'center', height: 50, justifyContent: 'center',
+                                width, alignItems: 'center', height: hp(6), justifyContent: 'center',
 
                             }}>
-                            <Text style={{color:'rgba(0,0,0,0.9)'}}>{this.props.cancelTitle}</Text>
+                            <Text style={{color:'rgba(0,0,0,0.9)', fontSize:hp(2.0)}}>{this.props.cancelTitle}</Text>
                         </TouchableOpacity>
                         <View style={{height: 50, width, backgroundColor: 'white'}}>
 

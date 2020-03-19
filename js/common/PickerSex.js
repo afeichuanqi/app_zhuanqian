@@ -102,7 +102,7 @@ class PopMenu extends PureComponent {
                             width, alignItems: 'center', height: hp(7), justifyContent: 'center',
                             borderBottomWidth: 1, borderBottomColor: '#e8e8e8',
                         }}>
-                            <Text style={{color: 'black', opacity: 0.9, fontSize: 15}}>{this.props.popTitle}</Text>
+                            <Text style={{color: 'black', opacity: 0.9, fontSize: hp(2.1)}}>{this.props.popTitle}</Text>
                         </View>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <TouchableOpacity

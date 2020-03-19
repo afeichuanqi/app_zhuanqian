@@ -23,9 +23,7 @@ import JShareModule from 'jshare-react-native';
 import {authorizeWechat} from '../../util/CommonUtils';
 import LoddingModal from '../../common/LoddingModal';
 import ToastSelect from '../../common/ToastSelectTwo';
-import {onCancelAuthorize} from '../../action/userinfo';
-import JPush from 'jpush-react-native';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 
 class AccountSetting extends PureComponent {
@@ -211,7 +209,7 @@ class AccountSetting extends PureComponent {
                         alignItems: 'center',
 
                     }}>
-                    <Text style={{color: 'red'}}>退出当前账号</Text>
+                    <Text style={{color: 'red', fontSize:hp(1.8)}}>退出当前账号</Text>
                 </TouchableOpacity>
                 <PickerSex select={this._sexSelect} ref={ref => this.pickerSex = ref} popTitle={'性别'}/>
                 <LoddingModal

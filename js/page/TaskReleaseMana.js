@@ -126,12 +126,12 @@ class TaskReleaseMana extends Component {
                 <View>
                     <TabBar
                         style={{
-                            height: 35,
+                            height: hp(5),
                             backgroundColor: bottomTheme,
                             paddingLeft: 10,
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: 10}}
+                        contentContainerStyle={{paddingTop: hp(1.7)}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
@@ -140,7 +140,7 @@ class TaskReleaseMana extends Component {
                         bounces={true}
                         titleMarginHorizontal={wp(5)}
                         activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: 10}}
+                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: hp(1.2)}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
                     />
                     <TouchableOpacity
@@ -148,7 +148,7 @@ class TaskReleaseMana extends Component {
                         activeOpacity={0.6}
                         style={{position: 'absolute', top: 10, right: 10}}>
                         <Text style={{
-                            fontSize: 13,
+                            fontSize: hp(1.9),
                             color: 'white',
                         }}>发布任务</Text>
                     </TouchableOpacity>
@@ -249,7 +249,7 @@ class FristListComponent extends PureComponent {
                 clearNotice(noticeType);
                 selectTaskReleaseList({
                     task_status: task_status.join(','),
-                    pageIndex: this.page.pageIndex,
+                    pageIndex: 0,
                 }, userinfo.token).then(result => {
                     this.setState({
                         taskData: result,
@@ -372,15 +372,15 @@ class FristListComponent extends PureComponent {
 
     genIndicator(hideLoaded) {
         return !hideLoaded ?
-            <View style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{marginVertical: hp(2), flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10,fontSize:hp(1.7)}}>正在加载更多</Text>
             </View> : this.page.pageIndex === 0 || !this.page.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: 13}}>没有更多了哦 ~ ~</Text>
+                <Text style={{marginLeft: 10, opacity: 0.7, fontSize: hp(1.7)}}>没有更多了哦 ~ ~</Text>
             </View>;
     }
 
@@ -453,13 +453,13 @@ class FristListComponent extends PureComponent {
                 onEndReached={() => {
                     //console.log('onEndReached.....');
                     // 等待页面布局完成以后，在让加载更多
-                    this.onLoading();
-                    // setTimeout(() => {
-                    //     if (this.canLoadMore && taskData.length >= 10) {
-                    //         this.onLoading();
-                    //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                    //     }
-                    // }, 100);
+                    // this.onLoading();
+                    setTimeout(() => {
+                        if (this.canLoadMore && taskData.length >= 10) {
+                            this.onLoading();
+                            this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                        }
+                    }, 100);
                 }}
                 // onScrollEndDrag={this._onScrollEndDrag}
                 windowSize={300}

@@ -277,7 +277,7 @@ class TypeComponent extends Component {
         return <TouchableOpacity
             onPress={this._onPress}
             style={[{
-                width: width / 4 - 20,
+                width: wp(20),
                 height: hp(3.7),
                 marginTop: hp(1.6),
                 backgroundColor: '#f7f7f7',

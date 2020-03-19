@@ -39,7 +39,7 @@ export default class TaskReleaseItem extends PureComponent {
                     flex: 1,
                     flexDirection: 'row',
                     paddingHorizontal: 10,
-                    paddingTop: 20,
+                    paddingTop: hp(3),
                     height:  hp(12),
                     backgroundColor: 'white',
                 }}
@@ -50,11 +50,13 @@ export default class TaskReleaseItem extends PureComponent {
                     resizeMode={FastImage.resizeMode.stretch}
                 />
                 <View style={{
-                    height: wp(13),
-                    width: width - 70,
-                    paddingLeft: 10,
+                    height:hp(7),
+                    width: wp(85),
+                    paddingLeft: 15,
                     paddingRight: 5,
                     justifyContent: 'space-between',
+                    // alignSelf:'center',
+
                     // paddingVertical:1,
 
                 }}>
@@ -73,19 +75,19 @@ export default class TaskReleaseItem extends PureComponent {
                             }}
                                   numberOfLines={1}
                             >
-                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [], hp(2.2), 0, 'black').map((item, index) => {
+                                {item && renderEmoji(`${item.id} - ${item.task_title}`, [], hp(2.1), 0, 'black').map((item, index) => {
                                     return item;
                                 })}
                             </Text>
                             {item.recommendIsExp == 1 && <View style={{
-                                height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                                height: hp(2), width:  hp(2), borderRadius: 3, backgroundColor: bottomTheme,
                                 alignItems: 'center',
                                 justifyContent: 'center', marginLeft: 5,
                             }}>
                                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.6)}}>推</Text>
                             </View>}
                             {item.topIsExp == 1 && <View style={{
-                                height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                                height:  hp(2), width:  hp(2), borderRadius: 3, backgroundColor: bottomTheme,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 marginLeft: 3,
@@ -102,7 +104,9 @@ export default class TaskReleaseItem extends PureComponent {
                         </View>
                     </View>
                     <View
-                        style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        style={{height:hp(2),flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+
+                        }}>
                         {/*标签*/}
                         <View style={{
                             flexDirection: 'row',
@@ -146,23 +150,23 @@ export default class TaskReleaseItem extends PureComponent {
                 </View>
             </TouchableOpacity>
             {(item.task_status == 0 || item.task_status == 2) ? <View style={{
-                height: 28,
+                height: hp(3),
                 paddingVertical: 6,
-                paddingHorizontal: 11,
+                paddingHorizontal: hp(1),
                 alignItems: 'center',
                 flexDirection: 'row',
                 backgroundColor: 'rgba(255,255,255,1)',
             }}>
 
                 {ViewUtil.getReviewIco(parseInt(item.review_num), this._reViewClick)}
-                <View style={{height: 15, width: 1, marginHorizontal: 8, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 15, width: 1, marginHorizontal: hp(1), backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getzhidingIco(this.props.setTopClick)}
-                <View style={{height: 15, width: 1, marginHorizontal: 8, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 15, width: 1, marginHorizontal: hp(1), backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getrecommendedIco(this.props.setRecommendClick)}
-                <View style={{height: 15, width: 1, marginHorizontal: 8, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 15, width: 1, marginHorizontal: hp(1), backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getUpdateIco(this.props.updateTaskUpdateTime)}
             </View> : item.task_status == 1 ? <View style={{
-                height: 25,
+                height: hp(3),
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
@@ -178,7 +182,7 @@ export default class TaskReleaseItem extends PureComponent {
                         // updatePage: this._updatePage,
                     }, 'TaskRelease');
                 })}
-                <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 10, width: 1, marginHorizontal: hp(1), backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getDeleteIco(() => {
                     this.props.deleteTask((bool) => {
                         bool && this.hideItem();
@@ -186,7 +190,7 @@ export default class TaskReleaseItem extends PureComponent {
                     });
                 })}
             </View> : item.task_status == 3 ? <View style={{
-                height: 25,
+                height: hp(3),
                 paddingVertical: 6,
                 paddingHorizontal: 11,
                 alignItems: 'center',
@@ -202,7 +206,7 @@ export default class TaskReleaseItem extends PureComponent {
                         // updatePage: this._updatePage,
                     }, 'TaskRelease');
                 })}
-                <View style={{height: 10, width: 1, marginHorizontal: 10, backgroundColor: 'rgba(0,0,0,0.3)'}}/>
+                <View style={{height: 10, width: 1, marginHorizontal: hp(1), backgroundColor: 'rgba(0,0,0,0.3)'}}/>
                 {ViewUtil.getDeleteIco(this.props.deleteTask)}
             </View> : null}
         </Animated.View>;

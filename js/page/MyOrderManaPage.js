@@ -228,16 +228,16 @@ class MyOrderManaPage extends PureComponent {
                     {this.getTaskItem(taskInfo)}
                     <View style={{
                         width: width - 20,
-                        height: 0.3,
+                        height: hp(0.08),
                         backgroundColor: 'rgba(0,0,0,0.3)',
                         alignSelf: 'center',
                     }}/>
                     <View style={{
-                        height: 60, backgroundColor: 'white', width: width, justifyContent: 'center',
+                        height: hp(8), backgroundColor: 'white', width: width, justifyContent: 'center',
                         flexDirection: 'row',
                     }}>
                         <View style={{
-                            width: (width) / 2,
+                            width: wp(45),
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -259,14 +259,14 @@ class MyOrderManaPage extends PureComponent {
                                     this.myModalBoxNum.show();
                                 }}
                                 style={{
-                                    width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
+                                    width: hp(6), height: hp(3), backgroundColor: bottomTheme, justifyContent: 'center',
                                     alignItems: 'center', borderRadius: 5,
                                 }}>
-                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(2)}}>加量</Text>
+                                <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.9)}}>加量</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{
-                            width: (width - 40) / 2,
+                            width: wp(45),
                             flexDirection: 'row',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -287,8 +287,8 @@ class MyOrderManaPage extends PureComponent {
                                     this.myModalBoxPrice.show();
                                 }}
                                 style={{
-                                    width: 45, height: 25, backgroundColor: bottomTheme, justifyContent: 'center',
-                                    alignItems: 'center', borderRadius: 5,
+                                    width: hp(6), height: hp(3), backgroundColor: bottomTheme, justifyContent: 'center',
+                                    alignItems: 'center', borderRadius: hp(0.8),
                                 }}>
                                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(2)}}>加价</Text>
                             </TouchableOpacity>
@@ -296,7 +296,7 @@ class MyOrderManaPage extends PureComponent {
                     </View>
                     <View style={{
                         width: width - 20,
-                        height: 0.5,
+                        height: hp(0.08),
                         backgroundColor: 'rgba(0,0,0,0.3)',
                         alignSelf: 'center',
                     }}/>
@@ -408,10 +408,10 @@ class MyOrderManaPage extends PureComponent {
                     flexDirection: 'row', alignItems: 'center', width: (width) / 2,
                     justifyContent: 'space-between',
                     paddingHorizontal: 10,
-                    paddingVertical: 10,
+                    paddingVertical: hp(1),
                 }}>
                 <Text
-                    style={{color: 'rgba(0,0,0,0.9)'}}>已完成：{taskInfo.task_pass_num && (parseInt(taskInfo.task_pass_num))}</Text>
+                    style={{color: 'rgba(0,0,0,0.9)', fontSize:hp(2)}}>已完成：{taskInfo.task_pass_num && (parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -425,10 +425,10 @@ class MyOrderManaPage extends PureComponent {
                     flexDirection: 'row', alignItems: 'center', width: (width) / 2,
                     justifyContent: 'space-between',
                     paddingHorizontal: 10,
-                    paddingVertical: 10,
+                    paddingVertical: hp(1),
                 }}>
                 <Text
-                    style={{color: 'rgba(0,0,0,0.9)'}}>投诉：{taskInfo.appeal_3_num && (parseInt(taskInfo.appeal_3_num))}</Text>
+                    style={{color: 'rgba(0,0,0,0.9)', fontSize:hp(2)}}>投诉：{taskInfo.appeal_3_num && (parseInt(taskInfo.appeal_3_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -443,10 +443,10 @@ class MyOrderManaPage extends PureComponent {
                     flexDirection: 'row', alignItems: 'center', width: (width) / 2,
                     justifyContent: 'space-between',
                     paddingHorizontal: 10,
-                    paddingVertical: 10,
+                    paddingVertical: hp(1),
                 }}>
                 <Text
-                    style={{color: 'rgba(0,0,0,0.9)'}}>进行中：{taskInfo.task_sign_up_num && (parseInt(taskInfo.task_sign_up_num) - parseInt(taskInfo.task_pass_num))}</Text>
+                    style={{color: 'rgba(0,0,0,0.9)', fontSize:hp(2)}}>进行中：{taskInfo.task_sign_up_num && (parseInt(taskInfo.task_sign_up_num) - parseInt(taskInfo.task_pass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -460,10 +460,10 @@ class MyOrderManaPage extends PureComponent {
                     flexDirection: 'row', alignItems: 'center', width: (width) / 2,
                     justifyContent: 'space-between',
                     paddingHorizontal: 10,
-                    paddingVertical: 10,
+                    paddingVertical: hp(1),
                 }}>
                 <Text
-                    style={{color: 'rgba(0,0,0,0.9)'}}>申诉：{taskInfo.appeal_2_num && (parseInt(taskInfo.appeal_2_num))}</Text>
+                    style={{color: 'rgba(0,0,0,0.9)', fontSize:hp(2)}}>申诉：{taskInfo.appeal_2_num && (parseInt(taskInfo.appeal_2_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
             <TouchableOpacity
@@ -479,10 +479,10 @@ class MyOrderManaPage extends PureComponent {
                     flexDirection: 'row', alignItems: 'center', width: (width) / 2,
                     justifyContent: 'space-between',
                     paddingHorizontal: 10,
-                    paddingVertical: 10,
+                    paddingVertical: hp(1),
                 }}>
                 <Text
-                    style={{color: 'rgba(0,0,0,0.9)'}}>已驳回：{taskInfo.task_noPass_num && (parseInt(taskInfo.task_noPass_num))}</Text>
+                    style={{color: 'rgba(0,0,0,0.9)', fontSize:hp(2)}}>已驳回：{taskInfo.task_noPass_num && (parseInt(taskInfo.task_noPass_num))}</Text>
                 <SvgUri width={15} height={15} fill={'rgba(0,0,0,0.6)'} svgXmlData={menu_right}/>
             </TouchableOpacity>
         </View>;
@@ -514,14 +514,14 @@ class MyOrderManaPage extends PureComponent {
 
                 style={{
                     width: (width - 20) / 4,
-                    height: 50,
+                    height: hp(10),
                     justifyContent: 'center',
                     alignItems: 'center',
 
                 }}>
                 <Image source={require('../res/img/orderMana/xiugai.png')}
-                       style={{width: 23, height: 23}}/>
-                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)'}}>修改</Text>
+                       style={{width: hp(3.5), height: hp(3.5)}}/>
+                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)',fontSize:hp(2.2)}}>修改</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
@@ -546,7 +546,7 @@ class MyOrderManaPage extends PureComponent {
 
                 style={{
                     width: (width - 20) / 4,
-                    height: 50,
+                    height: hp(10),
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
@@ -555,10 +555,11 @@ class MyOrderManaPage extends PureComponent {
                         require('../res/img/orderMana/task_stop.png')
                         :
                         require('../res/img/orderMana/shangjia.png')}
-                    style={{width: 23, height: 23}}/>
+                    style={{width: hp(3.5), height: hp(3.5)}}/>
                 <Text style={{
                     marginTop: 5,
                     color: 'rgba(0,0,0,0.9)',
+                    fontSize:hp(2.2),
                 }}> {this.state.taskInfo.task_status == 0 ? '暂停' : '运行'}</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -573,13 +574,13 @@ class MyOrderManaPage extends PureComponent {
                 }}
                 style={{
                     width: (width - 20) / 4,
-                    height: 50,
+                    height: hp(10),
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
                 <Image source={require('../res/img/orderMana/xiajia.png')}
-                       style={{width: 23, height: 23}}/>
-                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)'}}>下架</Text>
+                       style={{width: hp(3.5), height: hp(3.5)}}/>
+                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)', fontSize:hp(2.3)}}>下架</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
@@ -587,13 +588,13 @@ class MyOrderManaPage extends PureComponent {
                 }}
                 style={{
                     width: (width - 20) / 4,
-                    height: 50,
+                    height: hp(10),
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
                 <Image source={require('../res/img/orderMana/fenxiang.png')}
-                       style={{width: 23, height: 23}}/>
-                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)'}}>分享</Text>
+                       style={{width: hp(3.5), height: hp(3.5)}}/>
+                <Text style={{marginTop: 5, color: 'rgba(0,0,0,0.9)', fontSize:hp(2.3)}}>分享</Text>
             </TouchableOpacity>
 
         </View>;

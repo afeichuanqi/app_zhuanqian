@@ -563,6 +563,7 @@ class HeadlineComponent extends PureComponent {
 
     componentWillUnmount() {
         this.timer && clearInterval(this.timer);
+        EventBus.getInstance().removeListener(this.listener);
     }
 
     updatePage = () => {
@@ -592,7 +593,7 @@ class HeadlineComponent extends PureComponent {
                     Global.activeRouteName == 'TaskHallPage' &&
                     this.state.HeadlineArrays.length > 1) {//只有在当前页面才进行跑马灯
                     this.index = this.index >= this.state.HeadlineArrays.length - 1 ? 0 : this.index + 1;
-                    this.flatList.scrollToIndex({animated: true, index: this.index});
+                    this.flatList.scrollToIndex && this.flatList.scrollToIndex({animated: true, index: this.index});
                 }
 
             }catch (e) {
@@ -611,9 +612,6 @@ class HeadlineComponent extends PureComponent {
 
     }
 
-    componentWillUnmount(): * {
-        EventBus.getInstance().removeListener(this.listener);
-    }
 
     render() {
         const {HeadlineArrays} = this.state;
@@ -776,7 +774,7 @@ class TopLeftFilterComponent extends Component {
         }}>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                 {filterArray.map((item, Lindex, arr) => {
-                    return <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    return <View key={Lindex} style={{flexDirection: 'row', alignItems: 'center'}}>
                         <TouchableOpacity
                             key={Lindex}
                             activeOpacity={0.6}

@@ -3,7 +3,7 @@ import {Platform, View, StyleSheet, TouchableOpacity, TextInput} from 'react-nat
 import search from '../res/svg/search.svg';
 import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../res/svg/phone_input_clear.svg';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 class SearchComponent extends Component {
 
@@ -85,13 +85,14 @@ class SearchComponent extends Component {
                 position: 'absolute',
                 left: 10,
                 opacity: 1,
-            }} width={19} height={19} svgXmlData={search}/>
+                top:hp(1.5)
+            }} width={hp(2)} height={hp(2)} svgXmlData={search}/>
             {value.length > 0 && <TouchableOpacity
                 onPress={this._clearInput}
-                style={{position: 'absolute', top: 9, right: 10}}
+                style={{position: 'absolute', top: hp(1.5), right: 10}}
                 activeOpacity={0.7}>
-                <SvgUri width={13}
-                        height={13}
+                <SvgUri width={hp(2)}
+                        height={hp(2)}
                         fill={'rgba(0,0,0,0.6)'}
                         svgXmlData={phone_input_clear}/>
             </TouchableOpacity>}
@@ -130,16 +131,17 @@ const styles = StyleSheet.create({
 
     textInput: {
         flex: 1,
-        height: (Platform.OS === 'ios') ? 30 : 30,
+        height: hp(4),
         borderWidth: (Platform.OS === 'ios') ? 1 : 0,
         borderColor: 'white',
         alignSelf: 'center',
-        paddingLeft: 35,
+        paddingLeft: hp(4),
         // marginHorizontal: 5,
         borderRadius: 7,
-        opacity: 1,
+        opacity: 0.8,
         // color: 'white',
         backgroundColor: '#f2f2f2',
         paddingVertical: 0,
+        fontSize:hp(1.9),
     },
 });

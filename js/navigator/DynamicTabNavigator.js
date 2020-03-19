@@ -458,13 +458,14 @@ class BottomBarItem extends Component {
                 />
                 {unReadLength == 0 && isOtherUnRead && <View style={{
                     position: 'absolute',
-                    right: -5,
-                    top: -5,
+                    right: -hp(0.8),
+                    top: -hp(0.8),
                     backgroundColor: 'red',
-                    borderRadius: 8,
-                    width: 13,
-                    height: 13,
-                    borderWidth: 3,
+                    borderRadius: hp(1.7)/2,
+                    width: hp(1.7),
+                    height: hp(1.7),
+                    borderWidth: hp(0.3),
+
                     borderColor: 'white',
                 }}/>}
                 {unReadLength > 0 && <View style={{

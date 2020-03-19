@@ -16,6 +16,7 @@ import PickerImage from './PickerImage';
 import ImageViewerModal from './ImageViewerModal';
 import Toast from 'react-native-root-toast';
 import FastImagePro from './FastImagePro';
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 class UploadImgsComponent extends PureComponent {
     constructor(props) {
         super(props);
@@ -70,8 +71,8 @@ class UploadImgsComponent extends PureComponent {
                             }}
                             style={{
 
-                                width: 55,
-                                height: 55,
+                                width: hp(5.5),
+                                height: hp(5.5),
                                 backgroundColor: 'white',
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -88,17 +89,18 @@ class UploadImgsComponent extends PureComponent {
                                 loadingType={2}
                                 source={{uri: item.uri}}
                                 style={{
-                                    width: 55, height: 55,
+                                    width: hp(5.5), height: hp(5.5),
                                     borderRadius: 0,
                                 }}
-                            /> : <SvgUri width={35} height={35} svgXmlData={add_image}/>}
+                            /> : <SvgUri width={hp(3.5)} height={hp(3.5)} svgXmlData={add_image}/>}
                             {item.uploadStatus == 0 &&
                             <View style={{
-                                width: 55, height: 55, backgroundColor: 'rgba(0,0,0,0.5)',
+                                width: hp(5.5),
+                                height: hp(5.5), backgroundColor: 'rgba(0,0,0,0.5)',
                                 justifyContent: 'center', alignItems: 'center', position: 'absolute',
 
                             }}>
-                                <Text style={{fontSize: 12, color: 'white'}}>正在上传</Text>
+                                <Text style={{fontSize: hp(1.3), color: 'white'}}>正在上传</Text>
                             </View>
                             }
                             {item.uploadStatus == -1 &&
@@ -134,12 +136,13 @@ class UploadImgsComponent extends PureComponent {
                                     });
                                 }}
                                 style={{
-                                    width: 55, height: 55, backgroundColor: 'rgba(0,0,0,0.5)',
+                                    width: hp(5.5),
+                                    height: hp(5.5), backgroundColor: 'rgba(0,0,0,0.5)',
                                     justifyContent: 'center', alignItems: 'center', position: 'absolute',
                                 }}>
                                 <View style={{
-                                    width: 40,
-                                    height: 20,
+                                    width: hp(4),
+                                    height: hp(2),
                                     borderRadius: 3,
                                     backgroundColor: 'red',
                                     justifyContent: 'center',

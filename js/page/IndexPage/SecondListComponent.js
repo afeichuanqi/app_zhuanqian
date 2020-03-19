@@ -92,14 +92,14 @@ class SecondListComponent extends PureComponent {
 
     render() {
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-217 - 300, 0, lunboHeight - 20 - 4 + 14],
-            outputRange: [lunboHeight + 220 + 3 - 9 + 300 + 23, lunboHeight - 4 + 14 + 10, 30 - 10 + 10],
+            inputRange: [-hp(100), 0, hp(30)],
+            outputRange: [hp(133), hp(33), hp(3.2)],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
             transform: [{translateY: this.props.translateY}],
         }}>
-            <View style={{height: 27}}/>
+            <View style={{height: hp(2.5)}}/>
             <FlatListCommonUtil
                 EmptyHeight={height - 350}
                 ref={ref => this.flatList = ref}
@@ -110,11 +110,11 @@ class SecondListComponent extends PureComponent {
                 }}
                 onRefresh={this.updateBestNewList}
                 ListHeaderComponent={
-                    <View style={{height: 199 + 14, backgroundColor: 'white', zIndex: 10, marginBottom: 23}}>
-                        <View style={{marginTop: 20, paddingLeft: 15}}>
-                            <Text style={{fontSize: hp(2.6), opacity: 0.9, color: 'black'}}>最新发布</Text>
+                    <View style={{height: hp(32), backgroundColor: 'white', zIndex: 10, marginBottom: hp(3)}}>
+                        <View style={{marginTop: hp(3), paddingLeft: 15}}>
+                            <Text style={{fontSize: hp(2.4), opacity: 0.9, color: 'black'}}>最新发布</Text>
                         </View>
-                        <View style={{paddingHorizontal: 10, marginTop: 15}}>
+                        <View style={{paddingHorizontal: 10, marginTop: hp(1.5)}}>
                             <FlatList
                                 keyExtractor={(item, index) => index + ''}
                                 showsHorizontalScrollIndicator={false}
@@ -123,6 +123,7 @@ class SecondListComponent extends PureComponent {
                                 renderItem={data => this._renderBestNewItem(data)}
                             />
                         </View>
+
                     </View>
                 }
                 onScrollBeginDrag={this._onScroll}
@@ -139,7 +140,7 @@ class SecondListComponent extends PureComponent {
 
             <Animated.View style={{
                 width,
-                height: 30,
+                height: hp(5.5),
                 position: 'absolute',
                 justifyContent: 'center',
                 backgroundColor: 'rgba(255,255,255,0.9)',
@@ -150,7 +151,7 @@ class SecondListComponent extends PureComponent {
             }}>
                 <View style={{
                     alignItems: 'center',
-                    flexDirection: 'row', top: 2, justifyContent: 'center',
+                    flexDirection: 'row', top: hp(1), justifyContent: 'center',
                 }}>
                     <Image
                         resizeMode={'stretch'}
@@ -266,8 +267,8 @@ class ScrollItem extends React.Component {
 
         if (!item.task_name) {
             return <SkeletonPlaceholder minOpacity={0.2}>
-                <View style={{width: 140, height: 100, marginRight: 10, borderRadius: 5}}/>
-                <View style={{height: 15, width: 100, marginTop: 5}}/>
+                <View style={{width: hp(23), height: hp(20), marginRight: 10, borderRadius: 5}}/>
+                <View style={{height: 15, width: hp(23), marginTop: 5}}/>
                 <View style={{height: 20, width: 50, marginTop: 2}}/>
             </SkeletonPlaceholder>;
         }
@@ -276,13 +277,14 @@ class ScrollItem extends React.Component {
                 NavigationUtils.goPage({task_id: item.id, test: false}, 'TaskDetails');
             }}
             key={item.id}
-            style={{height: 160, width: 140, paddingHorizontal: 5}}>
-            <View style={{width: 130}}>
+            style={{height:  hp(23), width: hp(24), paddingHorizontal: 5, overflow:'hidden'}}>
+            <View style={{width: hp(23)}}>
                 <FastImage
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
-                        height: 100,
+                        height: hp(16),
                         borderRadius: 5,
+                        width:hp(23),
                     }}
                     resizeMode={FastImage.resizeMode.stretch}
                     source={{uri: item.task_uri}}
@@ -305,7 +307,7 @@ class ScrollItem extends React.Component {
                     opacity: 0.7,
                 }}/>
                 <Text numberOfLines={1}
-                      style={{fontSize: hp(2), color: 'black', width: 65, opacity: 0.8}}>{item.task_name}</Text>
+                      style={{fontSize: hp(2.1), color: 'black', width: 65, opacity: 0.8}}>{item.task_name}</Text>
             </View>
             {item.reward_price && <View style={{
                 flexDirection: 'row', alignItems: 'center',

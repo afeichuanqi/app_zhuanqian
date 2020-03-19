@@ -3,7 +3,7 @@ import {onSetMessageLoad,verifyIdentIdy,onMessageFrom,onAddMesage,onSetMsgStatus
 import {onSetNoticeMsgIsAllRead,onSelectAllFriend,onSetAllFriendUnRead,onSetNewMsgForRromUserid,onFriendInitialiZation,onSetOtherTypeUnread,setAppeal_2IsRead,setAppeal_3IsRead,onSetNoticeMsg,onSetNoticeMsgIsRead} from './friend';
 import {onChangeSocketStatue} from './socketStaus';
 import {onSetTaskReleaseInfo} from './taskInfo';
-import {onIsOpenImagePicker,onIsAgreePrivacy,onSetAppPay} from './appsetting';
+import {onIsOpenImagePicker,onIsAgreePrivacy,onSetAppPay,onSetUpdateToast} from './appsetting';
 
 import {onAddSearchTitle,onDelAllSearchLog} from './search';
 export default {
@@ -58,6 +58,7 @@ export default {
     onIsOpenImagePicker,
     onIsAgreePrivacy,
     onSetAppPay,
+    onSetUpdateToast
 
 
 }

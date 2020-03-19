@@ -19,7 +19,7 @@ import BackPressComponent from '../../common/BackPressComponent';
 import Toast from 'react-native-root-toast';
 import SvgUri from 'react-native-svg-uri';
 import phone_input_clear from '../../res/svg/phone_input_clear.svg';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 
 class UpdateUserName extends PureComponent {
@@ -93,18 +93,18 @@ class UpdateUserName extends PureComponent {
                         placeholder={'输入昵称 ~ ~'}
                         maxLength={12}
                         style={{
-                            fontSize: 14,
+                            fontSize: hp(2),
                             width: width - 20,
                             borderBottomWidth: 0.3,
                             borderBottomColor: '#e8e8e8',
                             // paddingBottom: 10,
                             padding: 0,
-                            height: 30,
+                            height: hp(5),
                         }} value={this.state.text}/>
                     <View>
                         <View style={{flexDirection: 'row', position: 'absolute', right: 10, top: 10}}>
-                            <Text style={{color: bottomTheme}}>{this.state.text.length}</Text>
-                            <Text style={{opacity: 0.5}}>/12</Text>
+                            <Text style={{color: bottomTheme, fontSize:hp(2)}}>{this.state.text.length}</Text>
+                            <Text style={{opacity: 0.5, fontSize:hp(2)}}>/12</Text>
                         </View>
                     </View>
                     {this.state.text.length > 0 && <TouchableOpacity
@@ -113,10 +113,10 @@ class UpdateUserName extends PureComponent {
                                 text: '',
                             });
                         }}
-                        style={{position: 'absolute', top: 18, right: 15}}
+                        style={{position: 'absolute', top: hp(2.5), right: 15}}
                         activeOpacity={0.7}>
-                        <SvgUri width={13}
-                                height={13}
+                        <SvgUri width={hp(1.8)}
+                                height={hp(1.8)}
                                 fill={'rgba(0,0,0,0.6)'}
                                 svgXmlData={phone_input_clear}/>
                     </TouchableOpacity>}

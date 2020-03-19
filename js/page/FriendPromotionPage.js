@@ -64,7 +64,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '邀请送大礼', null, 'white', 'black', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '邀请送大礼', null, 'white', 'black', hp(2), null, false);
 
         return (
             <SafeAreaViewPlus
@@ -77,7 +77,7 @@ class TaskReleaseMana extends PureComponent {
                         <FastImage
                             resizeMode={FastImage.resizeMode.stretch}
                             source={{uri:'http://images.easy-z.cn/yaoqingsongdali.png'}}
-                                   style={{width: width, height: 180}}/>
+                                   style={{width: width, height: hp(30)}}/>
                     </View>
                     <View style={{backgroundColor: 'white', marginTop: 10}}>
                         <View style={{alignSelf: 'center', paddingTop: 10}}>
@@ -89,7 +89,7 @@ class TaskReleaseMana extends PureComponent {
                                 }}
                                 style={{marginTop: 8, flexDirection: 'row', alignSelf: 'center'}}>
                                 <Text
-                                    style={{fontWeight: 'bold'}}>{this.props.userinfo.invite_code ? this.props.userinfo.invite_code : '请先登录'}</Text>
+                                    style={{fontWeight: 'bold', fontSize:hp(2.2)}}>{this.props.userinfo.invite_code ? this.props.userinfo.invite_code : '请先登录'}</Text>
                                 {/*<SvgUri style={{*/}
                                 {/*    marginLeft: 10,*/}
                                 {/*}} width={17} height={17} svgXmlData={copy}/>*/}
@@ -122,11 +122,11 @@ class TaskReleaseMana extends PureComponent {
                                 paddingVertical: 12,
                                 backgroundColor: bottomTheme,
                                 borderRadius: 8,
-                                minWidth: 110,
+                                minWidth: wp(20),
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}>
-                            <Text style={{color: 'white'}}>推广链接</Text>
+                            <Text style={{color: 'white', fontSize:hp(1.8)}}>推广链接</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
@@ -137,11 +137,12 @@ class TaskReleaseMana extends PureComponent {
                                 paddingVertical: 12,
                                 backgroundColor: bottomTheme,
                                 borderRadius: 8,
-                                minWidth: 110,
+                                minWidth: wp(20),
                                 justifyContent: 'center',
                                 alignItems: 'center',
+
                             }}>
-                            <Text style={{color: 'white'}}>推广二维码</Text>
+                            <Text style={{color: 'white',fontSize:hp(1.8)}}>推广二维码</Text>
                         </TouchableOpacity>
                     </View>
 

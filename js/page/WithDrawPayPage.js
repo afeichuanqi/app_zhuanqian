@@ -128,11 +128,11 @@ class WithDrawPayPage extends React.Component {
                                     style={{width: hp(7), height: hp(7), borderRadius: hp(3.5)}}
                                     source={pay_source}
                                 />
-                                <View style={{height: 50, justifyContent: 'space-around', marginLeft: 10}}>
+                                <View style={{height: hp(7), justifyContent: 'space-around', marginLeft: 10}}>
                                     <Text
                                         style={{color: 'rgba(0,0,0,1)', fontSize:hp(2)}}>{pay}:{pay_account}</Text>
                                     <Text style={{
-                                        fontSize: hp(1.7),
+                                        fontSize: hp(1.6),
                                         opacity: 0.5,
                                         color: 'black',
 

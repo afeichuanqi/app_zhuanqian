@@ -38,6 +38,9 @@ import FastImagePro from '../common/FastImagePro';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import JPush from 'jpush-react-native';
 
+import Toast from 'react-native-root-toast';
+import actions from '../action';
+import {onSetUpdateToast} from '../action/appsetting';
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -72,7 +75,12 @@ class HomePage extends React.Component {
                 sequence: 1,
             });
         }
-        // JPush.setAlias（{“ sequence”：102，“ alias”：'sID_54916'}）
+        setTimeout(()=>{
+            if(!this.props.appSetting.isUpdateToast){
+                Toast.show('V1.0.4升级成功');
+                this.props.onSetUpdateToast(true)
+            }
+        },2000)
 
     }
 
@@ -99,17 +107,17 @@ class HomePage extends React.Component {
         // console.log(navigationRoutes);
         const searchWidth = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [width - 20, width - 150],
+            outputRange: [wp(97), wp(65)],
             extrapolate: 'clamp',
         });
         this.translateY = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [0, -35],
+            outputRange: [0, -(hp(4.5))],
             extrapolate: 'clamp',
         });
         const svgTop = Animated.interpolate(this.animations.val, {
             inputRange: [0, 1],
-            outputRange: [60, 20],
+            outputRange: [hp(8.4), hp(2.9)],
             extrapolate: 'clamp',
         });
 
@@ -138,13 +146,13 @@ class HomePage extends React.Component {
                         zIndex: 2,
                         elevation: 0.2,
                         backgroundColor: theme,
-                        height: 60,
+                        height: hp(8),
                     }}>
                         <AnimatedTouchableOpacity
                             activeOpacity={1}
                             onPress={this.SearchOnFocus}
                             style={{
-                                height: topIputHeight,
+                                height: hp(5),
                                 width: searchWidth, backgroundColor: 'rgba(0,0,0,0.05)',
                                 alignItems: 'center',
                                 borderRadius: 10, flexDirection: 'row',
@@ -153,13 +161,13 @@ class HomePage extends React.Component {
                             }}>
                             <SvgUri style={{
                                 marginHorizontal: 8,
-                            }} width={19} height={19} svgXmlData={search}/>
-                            <Text style={{color: 'rgba(0,0,0,0.2)'}}>任务标题、任务ID、用户名</Text>
+                            }} width={hp(2)} height={hp(2)} svgXmlData={search}/>
+                            <Text style={{color: 'rgba(0,0,0,0.2)', fontSize:hp(1.9)}}>任务标题、任务ID、用户名</Text>
                         </AnimatedTouchableOpacity>
 
                         <TabBar
                             style={{
-                                height: 30,
+                                height: hp(4),
                                 paddingLeft: 10,
                             }}
                             position={this.position}
@@ -198,10 +206,10 @@ class HomePage extends React.Component {
                     />
                     <Animated.View style={{
                         width,
-                        height: 30,
+                        height: hp(4),
                         backgroundColor: 'white',
                         position: 'absolute',
-                        top: 60,
+                        top: hp(8.2),
                         transform: [{translateY: this.translateY}],
                     }}>
                         <TabBar
@@ -210,14 +218,14 @@ class HomePage extends React.Component {
                                 paddingLeft: 10,
                             }}
                             position={this.position}
-                            contentContainerStyle={{paddingTop: hp(0.5)}}
+                            contentContainerStyle={{paddingTop: hp(0.6)}}
                             routes={navigationRoutes}
                             index={navigationIndex}
                             sidePadding={0}
                             handleIndexChange={this.handleIndexChange}
                             bounces={true}
                             titleMarginHorizontal={15}
-                            activeStyle={{fontSize: hp(2.5), color: [0, 0, 0]}}
+                            activeStyle={{fontSize: hp(2.4), color: [0, 0, 0]}}
                             inactiveStyle={{fontSize: hp(2.2), color: [95, 95, 95], height: 10}}
                             indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
                         />
@@ -225,15 +233,17 @@ class HomePage extends React.Component {
                     {/*头像组件*/}
                     <AnimatedTouchableOpacity
                         onPress={this._avatarClick}
-                        style={{position: 'absolute', top: svgTop, zIndex: 3, right: 10, elevation: 1}}>
+                        style={{position: 'absolute', top: 0,
+                            transform: [{translateY: svgTop}]
+                            , zIndex: 3, right: 10, elevation: 1}}>
                         {/*<Image*/}
                         <FastImage
                             style={{
                                 backgroundColor: '#E8E8E8',
                                 // 设置宽度
-                                width: 25,
-                                height: 25,
-                                borderRadius: 25, zIndex: 3, elevation: 1,
+                                width: hp(3),
+                                height: hp(3),
+                                borderRadius: hp(3)/2, zIndex: 3, elevation: 1,
                             }}
                             source={userinfo.login ? {uri: userinfo.avatar_url} : require('../res/img/no_login.png')}
                             resizeMode={FastImage.resizeMode.stretch}
@@ -355,19 +365,20 @@ class FristListComponent extends PureComponent {
     render() {
         // console.log('render');
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-220 - 300, 0, lunboHeight - 37],
-            outputRange: [lunboHeight + 240 + 300, lunboHeight + 15, 55],
+            inputRange: [-hp(100), 0, hp(30)],
+            outputRange: [hp(134), hp(34), hp(7)],
             extrapolate: 'clamp',
         });
         return <Animated.View style={{
             transform: [{translateY: this.props.translateY}],
         }}>
-            <View style={{height: 19}}/>
+            <View style={{height: hp(2)}}/>
             <FlatListCommonUtil
 
                 EmptyHeight={height - hp(43)}
                 statusBarType={'dark'}
                 pageSize={30}
+                // type={2}
                 ref={ref => this.flatList = ref}
                 style={{zIndex: -100, elevation: -100}}
                 onScrollBeginDrag={this._onScroll}
@@ -386,14 +397,14 @@ class FristListComponent extends PureComponent {
                 ListHeaderComponent={<LunBoComponent ref={ref => this.lunboComponent = ref}/>}
             />
             <Animated.View style={{
-                width, height: 30, position: 'absolute', top: -25, alignItems: 'flex-start', justifyContent: 'center',
+                width, height: hp(4.5), position: 'absolute', top: -hp(3), alignItems: 'flex-start', justifyContent: 'center',
                 backgroundColor: 'rgba(255,255,255,0.9)', transform: [{translateY: columnTop}],
             }}>
                 <View style={{
                     alignItems: 'center',
                     paddingHorizontal: 5,
                     flexDirection: 'row',
-                    top: 2,
+                    top: hp(0.5),
                     justifyContent: 'center',
                     paddingLeft: 20,
                 }}>
@@ -499,13 +510,11 @@ class LunBoComponent extends React.Component {
         const {lunboData} = this.state;
         return <View style={{
             alignItems: 'center',
-            height: lunboHeight,
+            height: hp(32.5),
             paddingTop: hp(3.5),
             backgroundColor: theme,
             width: width,
-            marginBottom: -7,
-
-
+            // marginBottom:hp(2.5),
         }}>
 
             {/*轮播图*/}
@@ -523,7 +532,7 @@ class LunBoComponent extends React.Component {
             />
 
 
-            <View style={{height: 40}}/>
+            <View style={{height: hp(4)}}/>
             {/*<View style={{height: 15, width, backgroundColor: '#f5f5f5'}}/>*/}
         </View>;
     }
@@ -532,9 +541,11 @@ class LunBoComponent extends React.Component {
 
 const mapStateToProps = state => ({
     userinfo: state.userinfo,
+    appSetting:state.appSetting
 });
 const mapDispatchToProps = dispatch => ({
     dispatch: dispatch,
+    onSetUpdateToast: (bool) => dispatch(actions.onSetUpdateToast(bool)),
 });
 const HomePageRedux = connect(mapStateToProps, mapDispatchToProps)(HomePage);
 const styles = StyleSheet.create({

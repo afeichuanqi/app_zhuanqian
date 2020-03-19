@@ -73,7 +73,7 @@ class MessagePage extends React.Component {
                     }}>
                 </Animated.View>
                 <View style={{
-                    height: 50,
+                    height: hp(7),
                     width,
                     backgroundColor: bottomTheme,
                     justifyContent: 'center',
@@ -82,7 +82,7 @@ class MessagePage extends React.Component {
                 }}>
                     <Text style={{
                         color: 'white',
-                        fontSize: 17,
+                        fontSize: hp(2.4),
                     }}>互动{statusText != '' ? `(${statusText})` : unMessageLength ? unMessageLength > 0 ? `(${unMessageLength})` : '' : ''}</Text>
                 </View>
 
@@ -159,7 +159,7 @@ class MsgList extends Component {
 
                 }}>
                     <View style={{
-                        height: 35,
+                        height: hp(7),
                         width,
                         backgroundColor: bottomTheme,
                         justifyContent: 'center',
@@ -170,7 +170,7 @@ class MsgList extends Component {
                     }}/>
 
                     <MessageColumnRedux/>
-                    <View style={{height: 75}}/>
+                    <View style={{height: hp(7)}}/>
                 </View>
 
             }
@@ -202,13 +202,13 @@ class MsgList extends Component {
             }}
             onEndReached={() => {
                 // 等待页面布局完成以后，在让加载更多
-                this.onLoading();
-                // setTimeout(() => {
-                //     if (this.canLoadMore && friendData.length >= 20) {
-                //         this.onLoading();
-                //         this.canLoadMore = false; // 加载更多时，不让再次的加载更多
-                //     }
-                // }, 100);
+                // this.onLoading();
+                setTimeout(() => {
+                    if (this.canLoadMore && friendData.length >= 20) {
+                        this.onLoading();
+                        this.canLoadMore = false; // 加载更多时，不让再次的加载更多
+                    }
+                }, 100);
             }}
             windowSize={300}
             onEndReachedThreshold={0.3}
@@ -264,11 +264,11 @@ class MessageColumn extends Component {
         // console.log(notice_arr,"notice_arr");
         const noticeIsNew = notice_arr.find(item => item > 0);
         return <View style={{
-            width: width - 20,
-            height: 100,
+            width: wp(96),
+            height: hp(13),
             backgroundColor: 'white',
             position: 'absolute',
-            top: 0,
+            // top: hp(3),
             borderRadius: 10,
             shadowColor: '#d9d9d9',
             shadowRadius: 5,
@@ -366,7 +366,7 @@ class MessageColumnItem extends Component {
                 }
             }}
             activeOpacity={0.6}
-            style={{width: 80, height: 100, justifyContent: 'center', alignItems: 'center'}}>
+            style={{width: hp(10),  justifyContent: 'center', alignItems: 'center'}}>
             <View>
 
                 <Image source={source}
@@ -380,14 +380,14 @@ class MessageColumnItem extends Component {
                        }}/>
 
                 {unReadNum > 0 ? <View style={{
-                    borderRadius: 10,
+                    borderRadius: hp(1.7)/2,
                     position: 'absolute',
                     top: -2,
                     right: -2,
                     backgroundColor: 'red',
-                    width: 13,
-                    height: 13,
-                    borderWidth: 2,
+                    width: hp(1.7),
+                    height: hp(1.7),
+                    borderWidth: hp(0.3),
                     borderColor: 'white',
                 }}/> : null}
             </View>

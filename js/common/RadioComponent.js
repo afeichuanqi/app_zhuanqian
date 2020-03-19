@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
 import {bottomTheme} from '../appSet';
-
+import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {timing} = Animated;
 export default class RadioComponent extends PureComponent {
     static defaultProps = {
@@ -100,7 +100,7 @@ export default class RadioComponent extends PureComponent {
     render() {
         const left = Animated.interpolate(this.animations.left, {
             inputRange: [0, 1],
-            outputRange: [0, 30],
+            outputRange: [0, hp(3)],
             extrapolate: 'clamp',
         });
         return <TouchableOpacity
@@ -108,8 +108,8 @@ export default class RadioComponent extends PureComponent {
             activeOpacity={1}
             onPress={this._radioClick}
             style={{
-                width: 60,
-                height: 30,
+                width: hp(6),
+                height: hp(3),
                 borderRadius: 20,
                 backgroundColor: this.props.Checked ? bottomTheme : '#ececec',
                 borderWidth: 1,
@@ -117,7 +117,7 @@ export default class RadioComponent extends PureComponent {
 
             }}>
             <Animated.View style={{
-                height: 30, width: 30, backgroundColor: 'white', borderRadius: 20, shadowColor: '#d9d9d9',
+                height: hp(3), width: hp(3), backgroundColor: 'white', borderRadius: 20, shadowColor: '#d9d9d9',
                 shadowRadius: 5,
                 shadowOpacity: 1,
                 shadowOffset: {w: 1, h: 1},
