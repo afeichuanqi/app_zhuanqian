@@ -40,12 +40,12 @@ import JPush from 'jpush-react-native';
 
 import Toast from 'react-native-root-toast';
 import actions from '../action';
-import {onSetUpdateToast} from '../action/appsetting';
+// import {onSetUpdateToast} from '../action/appsetting';
 const {timing} = Animated;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-const lunboHeight = height / 4;
-const topIputHeight = (Platform.OS === 'ios') ? 35 : 35;
+// const lunboHeight = height / 4;
+// const topIputHeight = (Platform.OS === 'ios') ? 35 : 35;
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const STATUS_BAR_HEIGHT = DeviceInfo.isIPhoneX_deprecated ? 40 : 20;//状态栏的高度
 let jumpTo = null;
@@ -76,11 +76,11 @@ class HomePage extends React.Component {
             });
         }
         setTimeout(()=>{
-            if(!this.props.appSetting.isUpdateToast){
-                Toast.show('V1.0.4升级成功');
+            if(!this.props.appSetting.isUpdate5Toast){
+                Toast.show('V1.0.5升级成功');
                 this.props.onSetUpdateToast(true)
             }
-        },2000)
+        },3000)
 
     }
 

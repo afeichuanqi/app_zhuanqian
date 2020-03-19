@@ -6,7 +6,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, Platform} from 'react-native';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, Platform,AppState} from 'react-native';
 // import Animated from 'react-native-reanimated';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
@@ -28,6 +28,7 @@ import RNExitApp from 'react-native-exit-app';
 import Toast from 'react-native-root-toast';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import MyPageTmp from '../page/MyPageTmp';
+import {selectAppealNum} from '../util/AppService';
 
 // const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -141,6 +142,14 @@ class BottomBar extends Component {
 
     componentDidMount(): void {
         this.backPress.componentDidMount();
+        AppState.addEventListener('change', (state)=>{
+            if(state==='active'){
+                selectAppealNum(this.props.userinfo.token).then(result => {
+                    this.props.onSetOtherTypeUnread(result.appeal2UnReadLength, result.appeal3UnReadLength, result.noticeArr);
+                });
+            }
+
+        });
     }
 
     onBackPress = () => {
@@ -500,6 +509,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     dispatch: dispatch,
     onGetUserInFoForToken: (token, callback) => dispatch(actions.onGetUserInFoForToken(token, callback)),
+    onSetOtherTypeUnread: (app2, app3, noticeArr) => dispatch(actions.onSetOtherTypeUnread(app2, app3, noticeArr)),
 });
 const BottomBarRedux = connect(mapStateToProps, mapDispatchToProps)(BottomBar);
 export default DynamicTabNavigator;

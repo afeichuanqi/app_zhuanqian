@@ -103,7 +103,7 @@ class HomePage extends PureComponent {
                     if (!(Global.apple_pay == 1 && Platform.OS === 'ios')) {
                         this.promotionToast.show();
                     }
-                }, 1000);
+                }, 2000);
 
             });
         });

@@ -96,7 +96,7 @@ class MyAttention extends PureComponent {
                     <TabBar
                         style={{
                             height: hp(5),
-                            width: hp(20),
+                            // width: hp(20),
                             alignSelf: 'center',
                             marginLeft: hp(4),
                         }}
@@ -334,8 +334,8 @@ class AttentionItem extends PureComponent {
                     />
                     <SvgUri style={{
                         position: 'absolute',
-                        right: -3,
-                        bottom: -3,
+                        right: -hp(0.5),
+                        bottom: -hp(0.5),
                         backgroundColor: item.sex == 0 ? '#3b8ae8' : '#e893d8',
                         borderRadius: 20,
                         padding: 3,

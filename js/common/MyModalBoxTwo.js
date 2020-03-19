@@ -13,7 +13,7 @@ import SvgUri from 'react-native-svg-uri';
 import cha from '../res/svg/cha.svg';
 import {bottomTheme} from '../appSet';
 const {timing} = Animated;
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {width, height} = Dimensions.get('window');
 
@@ -125,7 +125,7 @@ class MyModalBox extends PureComponent {
 
                             }}>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <Text style={{fontSize: 15, color: 'white'}}>{this.props.title}</Text>
+                                <Text style={{fontSize: hp(2.3), color: 'white'}}>{this.props.title}</Text>
                                 {this.props.titleComponent}
                             </View>
 
@@ -146,9 +146,9 @@ class MyModalBox extends PureComponent {
                                     width: (width - 40) / 2,
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    height: 50,
+                                    height: hp(7),
                                 }}>
-                                <Text style={{color: 'rgba(0,0,0,0.8)'}}>取消</Text>
+                                <Text style={{color: 'rgba(0,0,0,0.8)', fontSize:hp(2.2)}}>取消</Text>
                             </TouchableOpacity>
                             {/*<View*/}
                             {/*    style={{*/}
@@ -167,12 +167,12 @@ class MyModalBox extends PureComponent {
                                         borderBottomRightRadius: 5,
                                     }}
                                     style={{
-                                        width: (width - 40) / 2, height: 50, top: 1, justifyContent: 'center',
+                                        width: (width - 40) / 2, height: hp(7), top: 1, justifyContent: 'center',
                                         alignItems: 'center', backgroundColor: bottomTheme,
                                     }}
                                     source={require('../res/img/buttombackground.png')}>
 
-                                    <Text style={{color: 'white'}}>{rightTitle}</Text>
+                                    <Text style={{color: 'white', fontSize:hp(2.2)}}>{rightTitle}</Text>
 
                                 </ImageBackground>
                             </TouchableOpacity>

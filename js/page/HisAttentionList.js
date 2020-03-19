@@ -32,6 +32,7 @@ import SvgUri from 'react-native-svg-uri';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import BackPressComponent from '../common/BackPressComponent';
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -91,13 +92,14 @@ class MyAttention extends PureComponent {
                 {TopColumn}
                 <TabBar
                     style={{
-                        height: 35,
+                        height: hp(5),
+                        // width: hp(20),
                         backgroundColor: theme,
                         paddingLeft: 10,
 
                     }}
                     position={this.position}
-                    contentContainerStyle={{paddingTop: 10}}
+                    contentContainerStyle={{paddingTop: hp(2.2)}}
                     routes={navigationRoutes}
                     index={0}
                     sidePadding={0}
@@ -105,9 +107,9 @@ class MyAttention extends PureComponent {
                     // indicatorStyle={styles.indicator}
                     bounces={true}
                     titleMarginHorizontal={25}
-                    activeStyle={{fontSize: 14, color: [33, 150, 243]}}
-                    inactiveStyle={{fontSize: 13, color: [0, 0, 0], height: 10}}
-                    indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3}}
+                    activeStyle={{fontSize: hp(2), color: [0, 0, 0], fontWeight: 'bold'}}
+                    inactiveStyle={{fontSize: hp(2), color: [150, 150, 150], height: 10}}
+                    indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3,top:3}}
                 />
                 <TabView
                     ref={ref => this.tabView = ref}
@@ -294,7 +296,7 @@ class AttentionItem extends PureComponent {
 
             }}
             style={{
-                height: 70, width, paddingHorizontal: 15, justifyContent: 'space-between', alignItems: 'center',
+                height: hp(10), width, paddingHorizontal: 15, justifyContent: 'space-between', alignItems: 'center',
                 flexDirection: 'row',
                 backgroundColor: 'white',
                 // marginBottom:3,
@@ -311,19 +313,19 @@ class AttentionItem extends PureComponent {
                     />
                     <SvgUri style={{
                         position: 'absolute',
-                        right: -3,
-                        bottom: -3,
+                        right: -hp(0.5),
+                        bottom: -hp(0.5),
                         backgroundColor: item.sex == 0 ? '#3b8ae8' : '#e893d8',
                         borderRadius: 20,
                         padding: 3,
-                    }} fill={'white'} width={8} height={8}
+                    }} fill={'white'} width={hp(1.5)} height={hp(1.5)}
                             svgXmlData={item.sex == 0 ? sex_nan_ : sex_nv_}/>
                 </View>
 
                 <View style={{justifyContent: 'space-around'}}>
                     <View style={{marginLeft: 15}}>
-                        <Text style={{fontSize: 15}}>{item.username}</Text>
-                        <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.7)', marginTop: 7}}>{item.fan_num}位粉丝</Text>
+                        <Text style={{fontSize: hp(2.3)}}>{item.username}</Text>
+                        <Text style={{fontSize: hp(2), color: 'rgba(0,0,0,0.7)', marginTop: 7}}>{item.fan_num}位粉丝</Text>
                     </View>
                 </View>
             </View>
@@ -375,9 +377,9 @@ const styles = StyleSheet.create({
         // 设置背景颜色
         backgroundColor: '#E8E8E8',
         // 设置宽度
-        width: 40,
-        height: 40,
-        borderRadius: 25,
+        width: hp(8),
+        height: hp(8),
+        borderRadius: hp(4),
         // 设置高度
         // height:150
     },

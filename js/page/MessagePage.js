@@ -170,7 +170,7 @@ class MsgList extends Component {
                     }}/>
 
                     <MessageColumnRedux/>
-                    <View style={{height: hp(7)}}/>
+                    <View style={{height: hp(9)}}/>
                 </View>
 
             }

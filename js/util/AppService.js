@@ -832,6 +832,24 @@ export function getAllTask(data) {
     });
 }
 /**
+ * 获取所有新手任务
+ */
+export function getAllTaskForNewEr(data) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            // http.setPostHeader('token', token);
+            const ret = await http.post('user/getAllTaskForNewEr', data);
+            if (ret && ret.status == 0) {
+                resolve(ret && ret.data);
+            } else {
+                reject(ret && ret.msg);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/**
  * 获取所有任务
  */
 export function getLunboList(data) {

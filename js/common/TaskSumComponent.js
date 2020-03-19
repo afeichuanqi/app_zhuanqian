@@ -9,6 +9,7 @@ import {equalsObj, renderEmoji} from '../util/CommonUtils';
 import Global from './Global';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import FastImage from 'react-native-fast-image';
+
 const {width} = Dimensions.get('window');
 
 class TaskSumComponent extends Component {
@@ -39,6 +40,7 @@ class TaskSumComponent extends Component {
             // borderColor:'rgba(0,0,0,0.6)',
         },
         boxTextColor: 'white',
+        isShowPicLabel: true,
     };
 
     constructor(props) {
@@ -147,7 +149,7 @@ class TaskSumComponent extends Component {
                         </View>
 
                     </View>
-                    <View style={{flexDirection: 'row', flexWrap:'wrap',width:wp(55)}}>
+                    {this.props.isShowPicLabel && <View style={{flexDirection: 'row', flexWrap: 'wrap', width: wp(55)}}>
                         {item.recommendIsExp == 1 && <Image
                             resizeMode={'contain'}
                             source={require('../res/img/item_icon/tuijian_item.png')}
@@ -173,7 +175,7 @@ class TaskSumComponent extends Component {
 
                         />}
 
-                    </View>
+                    </View>}
                     <TouchableOpacity
                         onPress={() => {
                             NavigationUtils.goPage({userid: item.userId}, 'ShopInfoPage');
@@ -223,7 +225,7 @@ class TaskSumComponent extends Component {
                     fontSize: hp(3.7),
                     color: '#e6493b',
                     fontWeight: '700',
-                }}>{item.rewardPrice.toString().length==1?`${item.rewardPrice}.0`:item.rewardPrice}</Text>
+                }}>{item.rewardPrice.toString().length == 1 ? `${item.rewardPrice}.0` : item.rewardPrice}</Text>
             </View>
             <View style={styles.labelStyle}>
 
@@ -259,8 +261,8 @@ const styles = StyleSheet.create({
         paddingVertical: Platform.OS === 'android' ? 2 : 3,
         borderTopRightRadius: 8,
         borderBottomLeftRadius: 10,
-        borderTopLeftRadius:2,
-        borderBottomRightRadius:2,
+        borderTopLeftRadius: 2,
+        borderBottomRightRadius: 2,
         alignItems: 'center',
         justifyContent: 'center',
         maxWidth: wp(35),
@@ -309,7 +311,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemIconStyle: {
-        marginTop:hp(0.5),
+        marginTop: hp(0.5),
         width: hp(6.5),
         height: hp(3),
         marginLeft: hp(0.5),

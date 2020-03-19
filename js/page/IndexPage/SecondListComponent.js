@@ -267,7 +267,7 @@ class ScrollItem extends React.Component {
 
         if (!item.task_name) {
             return <SkeletonPlaceholder minOpacity={0.2}>
-                <View style={{width: hp(23), height: hp(20), marginRight: 10, borderRadius: 5}}/>
+                <View style={{width: hp(23), height: hp(17), marginRight: 10, borderRadius: 5}}/>
                 <View style={{height: 15, width: hp(23), marginTop: 5}}/>
                 <View style={{height: 20, width: 50, marginTop: 2}}/>
             </SkeletonPlaceholder>;
@@ -283,7 +283,7 @@ class ScrollItem extends React.Component {
                     style={{
                         backgroundColor: 'rgba(0,0,0,0.2)',
                         height: hp(16),
-                        borderRadius: 5,
+                        borderRadius: hp(1),
                         width:hp(23),
                     }}
                     resizeMode={FastImage.resizeMode.stretch}
@@ -301,7 +301,7 @@ class ScrollItem extends React.Component {
                 <View style={{
                     width: 2,
                     height: 2,
-                    borderRadius: 2,
+                    borderRadius:  hp(1),
                     backgroundColor: 'black',
                     marginHorizontal: 3,
                     opacity: 0.7,
@@ -314,7 +314,7 @@ class ScrollItem extends React.Component {
                 elevation: 1, marginTop: 3,
             }}>
                 <Image resizeMode={'stretch'} source={require('../../res/img/moneys.png')}
-                       style={{width: hp(1.8), marginRight: 5, height: hp(2.1)}}/>
+                       style={{width: hp(1.5), marginRight: 5, height: hp(1.9)}}/>
                 <Text style={{
                     fontSize: hp(2.1),
                     color: 'red',

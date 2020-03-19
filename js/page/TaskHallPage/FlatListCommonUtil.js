@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, Text, View, StyleSheet, Dimensions, Platform} from 'react-native';
 import Animated from 'react-native-reanimated';
 import TaskSumComponent from '../../common/TaskSumComponent';
-import {getAllTask} from '../../util/AppService';
+import {getAllTask, getAllTaskForNewEr} from '../../util/AppService';
 import EmptyComponent from '../../common/EmptyComponent';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Global from '../../common/Global';
@@ -18,6 +18,7 @@ export default class FlatListCommonUtil extends PureComponent {
         },
         onLoading: () => {
         },
+        isNewEr: false,
 
     };
 
@@ -27,9 +28,10 @@ export default class FlatListCommonUtil extends PureComponent {
         }, 500);
         EventBus.getInstance().addListener(EventTypes.change_for_apple, this.listener = data => {
             this._updateList(true);
-        })
+        });
 
     }
+
     componentWillUnmount(): void {
         EventBus.getInstance().removeListener(this.listener);
     }
@@ -68,7 +70,9 @@ export default class FlatListCommonUtil extends PureComponent {
             this.props.onLoading(true);
             this.params.pageIndex += 1;
         }
-        getAllTask({
+        const getTask = this.props.isNewEr ? getAllTaskForNewEr : getAllTask;
+
+        getTask({
             pageIndex: this.params.pageIndex,
             column_type: this.params.column_type,
             types: this.params.types,
@@ -167,7 +171,7 @@ export default class FlatListCommonUtil extends PureComponent {
                 <ActivityIndicator
                     style={{color: 'red'}}
                 />
-                <Text style={{marginLeft: 10, fontSize:hp(1.7)}}>正在加载更多</Text>
+                <Text style={{marginLeft: 10, fontSize: hp(1.7)}}>正在加载更多</Text>
             </View> : this.params.pageIndex === 0 || !this.params.pageIndex ? null : <View
                 style={{marginVertical: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
@@ -182,7 +186,7 @@ export default class FlatListCommonUtil extends PureComponent {
         }
         return <TaskSumComponent
 
-
+            isShowPicLabel={this.props.isShowPicLabel}
             statusBarType={this.props.statusBarType}
             imageViewModal={this.imageViewModal}
             item={item} key={index}/>;

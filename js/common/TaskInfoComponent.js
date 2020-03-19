@@ -97,19 +97,19 @@ class TaskInfoComponent extends PureComponent {
 
 
                         {item.recommendIsExp == 1 && <View style={{
-                            height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                            height: hp(2.1), width: hp(2.1), borderRadius:hp(0.2), backgroundColor: bottomTheme,
                             alignItems: 'center',
                             justifyContent: 'center', marginLeft: 5,
                         }}>
-                            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>推</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.8)}}>推</Text>
                         </View>}
                         {item.topIsExp == 1 && <View style={{
-                            height: 15, width: 15, borderRadius: 3, backgroundColor: bottomTheme,
+                            height: hp(2.1), width: hp(2.1), borderRadius: hp(0.2), backgroundColor: bottomTheme,
                             alignItems: 'center',
                             justifyContent: 'center',
                             marginLeft: 3,
                         }}>
-                            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 11}}>顶</Text>
+                            <Text style={{color: 'white', fontWeight: 'bold', fontSize: hp(1.8)}}>顶</Text>
                         </View>}
                     </View>
                     {/*价格*/}

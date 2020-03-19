@@ -32,6 +32,7 @@ import Image from 'react-native-fast-image';
 import {renderEmoji} from '../util/CommonUtils';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AnimatedFadeIn from '../common/AnimatedFadeIn';
+import NewErTaskPage from './TaskHallPage/NewErTaskPage';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 const {timing} = Animated;
@@ -49,7 +50,8 @@ class TaskHallPage extends PureComponent {
                 {key: 'second', title: '更多'},
             ] : [
                 {key: 'first', title: '全部'},
-                {key: 'second', title: Platform.OS === 'android' ? '安卓手机' : '苹果手机'},
+                {key: 'newer', title: '新手任务'},
+                {key: 'second', title: Platform.OS === 'android' ? '安卓专属' : '苹果专属'},
             ],
             showFeekBack: true,
         };
@@ -168,7 +170,7 @@ class TaskHallPage extends PureComponent {
                     />
                     <View style={{flexDirection: 'row', marginTop: hp(3), alignItems: 'center'}}>
                         {/*加图标*/}
-                        {((Global.apple_pay == 1 && Platform.OS === 'ios')||(Global.android_pay == 1 && Platform.OS === 'android')) ? null : <>
+                        {((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? null : <>
                             <TouchableOpacity
                                 onPress={() => {
                                     NavigationUtils.goPage({}, 'TaskRelease');
@@ -254,6 +256,8 @@ class TaskHallPage extends PureComponent {
                 return <FirstListComponent index={0} device={1}/>;
             case 'second':
                 return <FirstListComponent index={1} device={Platform.OS == 'android' ? 2 : 3}/>;
+            case 'newer':
+                return <NewErTaskPage index={1} device={Platform.OS == 'android' ? 2 : 3}/>;
         }
     };
 
@@ -411,6 +415,7 @@ class FirstListComponent extends PureComponent {
                     onRefresh={() => {
                         this.headlineComponent.updatePage();
                     }}
+                    isShowPicLabel={true}
                 />
             </Animated.View>
             {/*工具条*/}
@@ -431,7 +436,7 @@ class FirstListComponent extends PureComponent {
                 }}>
                     <TopLeftFilterComponent onPress={this._columnTypeClick}
                                             ref={ref => this.topLeftFilterComponent = ref}/>
-                    {((Global.apple_pay == 1 && Platform.OS === 'ios')||(Global.android_pay == 1 && Platform.OS === 'android')) ? null :
+                    {((Global.apple_pay == 1 && Platform.OS === 'ios') || (Global.android_pay == 1 && Platform.OS === 'android')) ? null :
                         <TypeItem ref={ref => this.typeItem = ref} show={show} onPress={this._onPress}/>}
 
                 </View>
@@ -596,8 +601,8 @@ class HeadlineComponent extends PureComponent {
                     this.flatList.scrollToIndex && this.flatList.scrollToIndex({animated: true, index: this.index});
                 }
 
-            }catch (e) {
-                console.log(e)
+            } catch (e) {
+                console.log(e);
             }
 
         }, 2500);

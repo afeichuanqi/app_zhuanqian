@@ -174,7 +174,7 @@ class ComplyColumn extends Component {
                         svgXmlData={isTrue ? task_sure1 : task_sure}/>
 
 
-                <Text style={{fontSize: 13, color: 'black'}}>我已阅读并同意遵守</Text>
+                <Text style={{fontSize: hp(2), color: 'black'}}>我已阅读并同意遵守</Text>
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => {
@@ -182,7 +182,7 @@ class ComplyColumn extends Component {
                     }}
 
                 >
-                    <Text style={{color: 'red', fontSize: 13}}>《发布规则》</Text>
+                    <Text style={{color: 'red', fontSize: hp(2)}}>《发布规则》</Text>
                 </TouchableOpacity>
 
                 <Text style={{fontSize: 13, color: 'black'}}>全部内容</Text>
@@ -190,7 +190,7 @@ class ComplyColumn extends Component {
             <View style={{padding: 10}}>
                 <Text
                     selectable={true}
-                    style={{color: 'red', fontSize: 12}}>
+                    style={{color: 'red', fontSize: hp(1.7)}}>
                     {rule.release_prompt}
                 </Text>
             </View>
@@ -393,11 +393,11 @@ class TaskRelease extends PureComponent {
     renderColumn = () => {
         // console.log((((Global.user_service_fee ) - 1)*100).toFixed(0),"(((Global.user_service_fee ) - 1)*100).toFixed(0)");
         return <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
-            <View style={{height: 40, backgroundColor: 'white'}}>
-                <Text style={{fontSize: 15, marginTop: 10, marginLeft: 10, color: 'black'}}>请选择类型</Text>
+            <View style={{height: hp(5.5), backgroundColor: 'white'}}>
+                <Text style={{fontSize: hp(2), marginTop: 10, marginLeft: 10, color: 'black'}}>请选择类型</Text>
             </View>
-            <View style={{marginTop: 10, height: 40, backgroundColor: 'white'}}>
-                <Text style={{fontSize: 15, marginTop: 10, marginLeft: 10, color: 'black'}}>支持设备</Text>
+            <View style={{marginTop: 10, height: hp(5.5), backgroundColor: 'white'}}>
+                <Text style={{fontSize: hp(2), marginTop: 10, marginLeft: 10, color: 'black'}}>支持设备</Text>
             </View>
             <View style={{backgroundColor: 'white', marginTop: 10}}>
                 {this.getXuniTitle('项目名称', '请输入项目名称')}
@@ -417,8 +417,8 @@ class TaskRelease extends PureComponent {
                     flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 15, alignItems: 'center',
                     justifyContent: 'space-between',
                 }}>
-                    <Text style={{fontSize: 14, color: 'black'}}>添加步骤</Text>
-                    <SvgUri width={20} style={{marginLeft: 5}} height={20}
+                    <Text style={{fontSize: hp(2), color: 'black'}}>添加步骤</Text>
+                    <SvgUri width={hp(2.5)} style={{marginLeft: 5}} height={hp(2.5)}
                             svgXmlData={step_add}/>
                 </View>
 
@@ -431,16 +431,17 @@ class TaskRelease extends PureComponent {
         return <View style={{
             flexDirection: 'row',
             paddingHorizontal: 10,
-            paddingVertical: Platform.OS === 'android' ? 10 : 15,
+            paddingVertical: hp(1.8),
             alignItems: 'center',
         }}>
-            <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
+            <Text style={{fontSize: hp(2.2), color: 'black'}}>{title}</Text>
             <TextInput
+
                 onFocus={(event: Event) => {
                     ScrollViewRef.scrollToFocusedInput(findNodeHandle(event.target));
                 }}
 
-                style={{marginLeft: 20, fontSize: 15, color: 'black', padding: 0}}
+                style={{marginLeft: 20, fontSize: hp(2), color: 'black', padding: 0}}
                 placeholderTextColor={'rgba(0,0,0,0.5)'}
                 placeholder={placeholder}/>
         </View>;
@@ -1040,7 +1041,7 @@ class InputSetting extends Component {
     render() {
         const {rightComponentData, title} = this.props;
         return <View style={{
-            width, flexDirection: 'row', height: 40, paddingHorizontal: 10, paddingVertical: 10,
+            width, flexDirection: 'row', height: hp(5.5), paddingHorizontal: 10, paddingVertical: 0,
             alignItems: 'center', borderBottomWidth: 0.3, borderBottomColor: 'rgba(0,0,0,0.1)',
         }}>
             <Text style={{width: width / 4.2, fontSize: hp(2.1), color: 'black'}}>{title}</Text>
@@ -1252,7 +1253,7 @@ class TypeSelect extends Component {
         const {title, typeArr} = this.props;
         return <View style={[{backgroundColor: 'white', paddingBottom: 20}, this.props.style]}>
             <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
-                <Text style={{fontSize: 15, color: 'black'}}>{title}</Text>
+                <Text style={{fontSize: hp(2), color: 'black'}}>{title}</Text>
             </View>
             <View style={{
 
