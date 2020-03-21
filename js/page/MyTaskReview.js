@@ -27,7 +27,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import EventBus from '../common/EventBus';
 import EventTypes from '../util/EventTypes';
 import FastImagePro from '../common/FastImagePro';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
@@ -158,20 +158,20 @@ class MyTaskReview extends PureComponent {
                                     backgroundColor: 'white',
                                     marginTop: 2,
                                     flexDirection: 'row',
-                                    height: 40,
+                                    height: hp(5),
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}>
 
                                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                        <Text>已审核:</Text>
-                                        <Text style={{color: 'red', marginLeft: 5}}>{haveReviewCount}</Text>
-                                        <Text>个</Text>
+                                        <Text style={{color:'black', fontSize:hp(1.8)}}>已审核:</Text>
+                                        <Text style={{color: 'red', marginLeft: 5, fontSize:hp(1.8)}}>{haveReviewCount}</Text>
+                                        <Text style={{color:'black', fontSize:hp(1.8)}}>个</Text>
                                     </View>
                                     <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 20}}>
-                                        <Text>未审核:</Text>
-                                        <Text style={{color: 'red', marginLeft: 5}}>{unReviewCount}</Text>
-                                        <Text>个</Text>
+                                        <Text style={{color:'black', fontSize:hp(1.8)}}>未审核:</Text>
+                                        <Text style={{color: 'red', marginLeft: 5, fontSize:hp(1.8)}}>{unReviewCount}</Text>
+                                        <Text style={{color:'black', fontSize:hp(1.8)}}>个</Text>
                                     </View>
                                 </View> :
                                 isReject === 1 ?
@@ -188,13 +188,13 @@ class MyTaskReview extends PureComponent {
                                         paddingVertical: 10,
                                     }}>
                                         <View style={{alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap'}}>
-                                            <Text style={{color: 'red'}}>驳回理由:</Text>
+                                            <Text style={{color: 'red',fontSize:hp(1.8)}}>驳回理由:</Text>
                                             <Text
                                                 // numberOfLines={5}
                                                 // ellipsizeMode={'tail'}
                                                 style={{
                                                     width: screenWidth - 120,
-                                                    fontSize: 14,
+                                                    fontSize: hp(1.8),
                                                     color: 'red',
                                                     marginLeft: 10,
                                                 }}>{JSON.parse(taskData.reason_for_rejection).turnDownInfo}</Text>
@@ -216,7 +216,7 @@ class MyTaskReview extends PureComponent {
                                             >
                                                 <FastImagePro
                                                     loadingType={2}
-                                                    style={{height: 80, width: 80, marginTop: 10}}
+                                                    style={{height: hp(9), width: hp(9), marginTop: hp(1.5)}}
                                                     source={{uri: url}}
                                                     // resizeMode={Image_.resizeMode.contain}
                                                 />
@@ -235,7 +235,7 @@ class MyTaskReview extends PureComponent {
                                     NavigationUtils.goPage({userid: taskData.userid}, 'ShopInfoPage');
                                 }}
                                 style={{
-                                    width: screenWidth, height: 70,
+                                    width: screenWidth, height: hp(8),
                                     alignItems: 'center',
                                     flexDirection: 'row',
                                     paddingHorizontal: 10,
@@ -245,22 +245,22 @@ class MyTaskReview extends PureComponent {
                                 <FastImagePro
                                     source={{uri: taskData.avatar_url}}
                                     style={{
-                                        width: 40, height: 40,
+                                        width: hp(5), height: hp(5),
                                         borderRadius: 25,
                                     }}/>
-                                <View style={{marginLeft: 15, height: 40, justifyContent: 'space-around'}}>
+                                <View style={{marginLeft: 15, height: hp(5), justifyContent: 'space-around'}}>
                                     <View style={{flexDirection: 'row', width: Dimensions.get('window').width - 80}}>
-                                        <Text style={{fontSize: 15, color: 'black'}}>{taskData.username}</Text>
+                                        <Text style={{fontSize: hp(1.9), color: 'black'}}>{taskData.username}</Text>
                                         <Text
                                             style={{
-                                                fontSize: 15,
+                                                fontSize: hp(1.9),
                                                 color: 'black',
                                                 marginLeft: 5,
                                             }}>(ID:{taskData.userid})</Text>
                                     </View>
 
                                     <Text style={{
-                                        fontSize: 12,
+                                        fontSize: hp(1.6),
                                         color: 'rgba(0,0,0,0.6)',
                                         width: Dimensions.get('window').width - 80,
                                     }}>{task_status != 0 ? `审核时间:${taskData.review_time}` : `提交时间:${taskData.send_date}`}</Text>
@@ -279,7 +279,7 @@ class MyTaskReview extends PureComponent {
                                     this.reviewPic.push({url: typeData.uri1});
 
                                     ImageIndex += 1;
-                                    return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || 500, typeData.uri1ImgWidth || screenWidth - 40, ImageIndex);
+                                    return this.getImageView(typeData.uri1, typeData.uri1ImgHeight || hp(70), typeData.uri1ImgWidth || screenWidth - 40, ImageIndex);
                                 } else if (type === 6 && typeData.collectInfoContent) {
                                     return this.getTextView(typeData.collectInfoContent, index);
                                 } else {
@@ -297,7 +297,7 @@ class MyTaskReview extends PureComponent {
                                 // paddingVertical: 5,
                                 backgroundColor: bottomTheme,
                                 alignItems: 'center',
-                                height: 50,
+                                height: hp(6),
                             }}>
 
                                 <TouchableOpacity
@@ -306,36 +306,36 @@ class MyTaskReview extends PureComponent {
                                     }}
                                     activeOpacity={0.5}
                                     style={{
-                                        height: 40,
+                                        height: hp(5),
                                         width: (screenWidth - 2) / 3,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                     }}>
-                                    <Text style={{color: 'white'}}>通过</Text>
+                                    <Text style={{color: 'white', fontSize:hp(1.9)}}>通过</Text>
                                 </TouchableOpacity>
                                 <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
                                 <TouchableOpacity onPress={() => {
                                     NavigationUtils.goPage({taskData, updatePage: this._updatePage}, 'TaskTurnDownPage');
                                 }} style={{
-                                    height: 40,
+                                    height: hp(5),
                                     width: (screenWidth - 2) / 3,
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}>
-                                    <Text style={{color: 'white'}}>驳回</Text>
+                                    <Text style={{color: 'white', fontSize:hp(1.9)}}>驳回</Text>
                                 </TouchableOpacity>
                                 <View style={{height: 30, width: 1, backgroundColor: 'white'}}/>
                                 <TouchableOpacity
                                     onPress={!isEnd ? this._nextStepData : null}
                                     activeOpacity={isEnd ? 0.5 : 0.7}
                                     style={{
-                                        height: 40,
+                                        height: hp(5),
                                         width: (screenWidth - 2) / 3,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         opacity: isEnd ? 0.5 : 1,
                                     }}>
-                                    <Text style={{color: 'white'}}>下一个</Text>
+                                    <Text style={{color: 'white', fontSize:hp(1.9)}}>下一个</Text>
                                 </TouchableOpacity>
 
 
@@ -349,31 +349,31 @@ class MyTaskReview extends PureComponent {
                                 // paddingVertical: 5,
                                 backgroundColor: bottomTheme,
                                 alignItems: 'center',
-                                height: 50,
+                                height: hp(6),
                             }}>
                                 <TouchableOpacity
                                     onPress={this._PreviousStepData}
                                     activeOpacity={isEnd ? 0.5 : 0.7}
                                     style={{
-                                        height: 40,
+                                        height: hp(5),
                                         width: (screenWidth - 2) / 3,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         // opacity: isEnd ? 0.5 : 1,
                                     }}>
-                                    <Text style={{color: 'white'}}>上一个</Text>
+                                    <Text style={{color: 'white', fontSize:hp(1.9)}}>上一个</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={!isEnd ? this._nextStepData : null}
                                     activeOpacity={isEnd ? 0.5 : 0.7}
                                     style={{
-                                        height: 40,
+                                        height: hp(5),
                                         width: (screenWidth - 2) / 3,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         opacity: isEnd ? 0.5 : 1,
                                     }}>
-                                    <Text style={{color: 'white'}}>下一个</Text>
+                                    <Text style={{color: 'white', fontSize:hp(1.9)}}>下一个</Text>
                                 </TouchableOpacity>
                             </View>}
 
@@ -462,7 +462,7 @@ class MyTaskReview extends PureComponent {
                 flexDirection: 'row',
             }}>
                 <View style={{width: 20, height: 0.7, backgroundColor: 'black'}}/>
-                <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15, paddingHorizontal: 10}}> 验证图 </Text>
+                <Text style={{color: 'black', fontWeight: 'bold', fontSize: hp(1.7), paddingHorizontal: 10}}> 验证图 </Text>
                 <View style={{width: 20, height: 0.7, backgroundColor: 'black'}}/>
             </View>
             {/*<Flat*/}

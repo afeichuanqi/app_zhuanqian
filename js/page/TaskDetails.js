@@ -674,7 +674,7 @@ class TaskDetailsPop extends Component {
                 }}
 
                 style={{
-                    width: 100, height: 30,
+                    width: 100, height: hp(4),
                     alignItems: 'center', flexDirection: 'row',
                     justifyContent: 'center',
                 }}>
@@ -688,12 +688,12 @@ class TaskDetailsPop extends Component {
                     this.props.shareClick();
                 }}
                 style={{
-                    width: 100, height: 35,
+                    width: 100, height: hp(4),
                     alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                 }}>
                 <SvgUri width={hp(2.7)} fill={'rgba(0,0,0,0.7)'} height={hp(2.7)} svgXmlData={fenxiang}/>
                 <Text
-                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.8, color: 'black'}}>分享</Text>
+                    style={{fontSize: hp(2), width: 60, textAlign: 'center', opacity: 0.8, color: 'black'}}>分享</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 activeOpacity={0.6}
@@ -711,13 +711,13 @@ class TaskDetailsPop extends Component {
                     this.taskMenu.hide(true);
                 }}
                 style={{
-                    width: 100, height: 35,
+                    width: 100, height: hp(4),
                     alignItems: 'center', flexDirection: 'row', justifyContent: 'center',
                 }}>
                 <SvgUri width={hp(2.7)} fill={isFavorite == 1 ? bottomTheme : 'rgba(0,0,0,0.7)'} height={hp(2.7)}
                         svgXmlData={isFavorite == 1 ? shoucang_ : shoucang}/>
                 <Text
-                    style={{fontSize: hp(2), width: 40, textAlign: 'center', opacity: 0.8, color: 'black'}}>收藏</Text>
+                    style={{fontSize: hp(2), width: 60, textAlign: 'center', opacity: 0.8, color: 'black'}}>收藏</Text>
             </TouchableOpacity>
 
         </TaskMenu>;

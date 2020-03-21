@@ -50,7 +50,7 @@ class TaskHallPage extends PureComponent {
                 {key: 'second', title: '更多'},
             ] : [
                 {key: 'first', title: '全部'},
-                {key: 'newer', title: '新手任务'},
+                // {key: 'newer', title: '新手任务'},
                 {key: 'second', title: Platform.OS === 'android' ? '安卓专属' : '苹果专属'},
             ],
             showFeekBack: true,

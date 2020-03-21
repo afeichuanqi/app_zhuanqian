@@ -114,7 +114,7 @@ class ToastShare extends PureComponent {
                             <ScrollView
                                 showsHorizontalScrollIndicator={false}
                                 horizontal={true}
-                                style={{paddingHorizontal: 20, marginTop: 5}}>
+                                style={{paddingHorizontal: hp(1), marginTop: hp(1)}}>
 
                                 {this.getMenu('QQ', require('../res/img/share/qq.png'), () => {
                                     if (this.utilType === 1) {
@@ -291,9 +291,9 @@ class ToastShare extends PureComponent {
                 }, 300);
 
             }}
-            style={{alignItems: 'center', width: (width - 50) / 6}}>
+            style={{alignItems: 'center', width: (width-10 ) / 6}}>
             <Image
-                style={{height: wp(8), width: wp(8), marginHorizontal: 8}}
+                style={{height: hp(4), width: hp(4)}}
                 source={source}
                 resizeMode={Image.resizeMode.stretch}
             />

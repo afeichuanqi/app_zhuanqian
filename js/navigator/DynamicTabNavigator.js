@@ -6,8 +6,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, Text, StatusBar, Dimensions, TouchableOpacity, Image, Platform,AppState} from 'react-native';
-// import Animated from 'react-native-reanimated';
+import {View, Text, StatusBar, Dimensions, TouchableOpacity, Platform,AppState} from 'react-native';
 import IndexPage from '../page/IndexPage';
 import TaskHallPage from '../page/TaskHallPage';
 import {bottomTheme, theme} from '../appSet';
@@ -29,10 +28,7 @@ import Toast from 'react-native-root-toast';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import MyPageTmp from '../page/MyPageTmp';
 import {selectAppealNum} from '../util/AppService';
-
-// const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
-
-// const {SpringUtils, spring} = Animated;
+import FastImage from 'react-native-fast-image';
 type Props = {};
 
 const {width, height} = Dimensions.get('window');
@@ -46,7 +42,7 @@ class DynamicTabNavigator extends Component<Props> {
             navigationRoutes: ((Global.apple_pay == 1 && Platform.OS === 'ios')|| (Global.android_pay == 1 && Platform.OS === 'android')) ? [
                 {key: 'index', title: '推荐'},
                 {key: 'hall', title: '最新'},
-                {},
+                {key:'empty'},
                 {key: 'my', title: '最新'},
             ] : [
                 {key: 'index', title: '推荐'},
@@ -457,11 +453,11 @@ class BottomBarItem extends Component {
                 alignItems: 'center',
             }}>
             <View style={{
-                // transform: [{scale: this.animations.scale}],
                 alignItems: 'center',
                 marginTop: hp(0.5),
             }}>
-                <Image
+                <FastImage
+                    resizeMode={FastImage.resizeMode.cover}
                     style={{height: hp(3), width: hp(3)}}
                     source={source}
                 />
