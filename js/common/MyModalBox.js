@@ -145,7 +145,7 @@ class MyModalBox extends PureComponent {
                                     width: (width - 40) / 2,
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    height: 50,
+                                    height: hp(6),
                                     top: 1,
                                     // backgroundColor:'red',
                                 }}>
@@ -160,7 +160,7 @@ class MyModalBox extends PureComponent {
                                         borderBottomRightRadius:5,
                                     }}
                                     style={{
-                                        width: (width - 40) / 2, height: 50, top: 1, justifyContent: 'center',
+                                        width: (width - 40) / 2, height: hp(6), top: 1, justifyContent: 'center',
                                         alignItems: 'center', backgroundColor: bottomTheme, borderBottomRightRadius:5,
                                     }}
                                     source={require('../res/img/buttombackground.png')}>

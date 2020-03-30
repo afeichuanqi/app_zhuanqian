@@ -185,7 +185,7 @@ class ComplyColumn extends Component {
                     <Text style={{color: 'red', fontSize: hp(2)}}>《发布规则》</Text>
                 </TouchableOpacity>
 
-                <Text style={{fontSize: 13, color: 'black'}}>全部内容</Text>
+                <Text style={{fontSize: hp(2), color: 'black'}}>全部内容</Text>
             </TouchableOpacity>
             <View style={{padding: 10}}>
                 <Text
@@ -418,7 +418,7 @@ class TaskRelease extends PureComponent {
                     justifyContent: 'space-between',
                 }}>
                     <Text style={{fontSize: hp(2), color: 'black'}}>添加步骤</Text>
-                    <SvgUri width={hp(2.5)} style={{marginLeft: 5}} height={hp(2.5)}
+                    <SvgUri width={hp(3)} style={{marginLeft: 5}} height={hp(3)}
                             svgXmlData={step_add}/>
                 </View>
 
@@ -1212,10 +1212,10 @@ class StepInfo extends Component {
                 click();
             }}
             style={{
-                width: 100, height: 35,
+                width: hp(13), height: hp(4),
                 alignItems: 'center', flexDirection: 'row',
             }}>
-            <SvgUri width={20} style={{marginHorizontal: 5}} fill={'black'} height={20} svgXmlData={svgXmlData}/>
+            <SvgUri width={hp(2)} style={{marginHorizontal: 5}} fill={'black'} height={hp(2)} svgXmlData={svgXmlData}/>
             <Text style={{fontSize: hp(2.1), color: 'black'}}>{title}</Text>
         </TouchableOpacity>;
     };

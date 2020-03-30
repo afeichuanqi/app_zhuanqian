@@ -203,7 +203,7 @@ class WithDrawPage extends React.Component {
                 }}/>
                 <Text style={{color: 'rgba(0,0,0,0.3)', marginLeft: 5, fontSize: hp(1.8)}}>{title}</Text>
             </View>
-            <Text style={{color: 'red', fontSize: hp(2.2), fontWeight: 'bold', marginTop: 6}}>{num}</Text>
+            <Text style={{color: 'red', fontSize: hp(2.7), fontWeight: 'bold', marginTop: 6}}>{num}</Text>
         </View>;
     };
     page = {

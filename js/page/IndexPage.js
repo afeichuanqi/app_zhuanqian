@@ -365,7 +365,7 @@ class FristListComponent extends PureComponent {
     render() {
         // console.log('render');
         const columnTop = Animated.interpolate(this.scrollY, {
-            inputRange: [-hp(100), 0, hp(30)],
+            inputRange: [-hp(100), 0, hp(27)],
             outputRange: [hp(134), hp(34), hp(7)],
             extrapolate: 'clamp',
         });

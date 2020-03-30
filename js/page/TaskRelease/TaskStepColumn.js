@@ -479,6 +479,7 @@ class TaskStepColumn extends Component {
                                     borderColor: bottomTheme,
                                     // backgroundColor: 'rgba(0,0,0,0.2)',
                                     paddingHorizontal: 5,
+                                    // fontSize:hp(2),
                                 }}/>
                         </View>
 

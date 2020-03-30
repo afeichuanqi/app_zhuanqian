@@ -38,7 +38,7 @@ export default class TaskReleaseItem extends PureComponent {
                 style={{
                     flex: 1,
                     flexDirection: 'row',
-                    paddingHorizontal: 10,
+                    paddingHorizontal: hp(1),
                     paddingTop: hp(3),
                     height:  hp(12),
                     backgroundColor: 'white',
@@ -51,7 +51,7 @@ export default class TaskReleaseItem extends PureComponent {
                 />
                 <View style={{
                     height:hp(7),
-                    width: wp(85),
+                    width: wp(100)-hp(7)-hp(2),
                     paddingLeft: 15,
                     paddingRight: 5,
                     justifyContent: 'space-between',
@@ -126,6 +126,7 @@ export default class TaskReleaseItem extends PureComponent {
                         <View style={{
                             flexDirection: 'row',
                             alignItems: 'center',
+
                         }}>
                             <Text style={{
                                 fontSize: hp(1.7),

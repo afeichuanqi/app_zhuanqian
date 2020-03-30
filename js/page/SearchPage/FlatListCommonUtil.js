@@ -6,7 +6,7 @@ import EmptyComponent from '../../common/EmptyComponent';
 import TaskInfoComponent from '../../common/TaskInfoComponent';
 import TaskInfoComponent_tmp from '../../common/TaskInfoComponent_tmp';
 import Global from '../../common/Global';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {height, width} = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class FlatListCommonUtil extends PureComponent {

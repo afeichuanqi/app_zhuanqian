@@ -13,7 +13,7 @@ import SvgUri from 'react-native-svg-uri';
 import add_image from '../../res/svg/add_image.svg';
 import PickerImage from '../../common/PickerImage';
 import Image from 'react-native-fast-image';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const {width} = Dimensions.get('window');
 
 class TaskPopMenu extends PureComponent {
@@ -67,7 +67,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: hp(1.9), color: 'black'}}>{typeData.title}</Text>
                     <TextArea
                         ref={ref => this.textArea = ref}
                         value={this.inputData.info ? this.inputData.info : ''}
@@ -87,7 +87,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: hp(1.9), color: 'black'}}>{typeData.title}</Text>
                     <TextInputPro
                         ref={ref => this.textInputPro = ref}
                         inputValue={this.inputData.inputValue ? this.inputData.inputValue : ''}
@@ -117,7 +117,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: hp(1.9), color: 'black'}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}
@@ -137,7 +137,7 @@ class TaskPopMenu extends PureComponent {
                         width: width - 40,
                         paddingHorizontal: 15,
                     }}>
-                    <Text style={{fontSize: 13, color: 'black'}}>{typeData.title}</Text>
+                    <Text style={{fontSize: hp(1.9), color: 'black'}}>{typeData.title}</Text>
                     {/*<TextArea placeholder={typeData.placeholder} onChangeText={typeData.onChangeText}/>*/}
                     <View style={{width: width - 60, alignItems: 'center'}}>
                         {/*//图片选择 */}
@@ -325,9 +325,9 @@ class TextInputPro extends PureComponent {
             placeholder={this.props.placeholder}
             placeholderTextColor={'#727272'}
             style={{
-                height: 30,
+                height: hp(3.5),
                 marginTop: 10,
-                fontSize: 13,
+                fontSize: hp(1.9),
                 paddingHorizontal: 5,
                 borderRadius: 5,
                 padding: 0,
@@ -465,11 +465,11 @@ class TextArea extends PureComponent {
                 placeholder={this.props.placeholder}
                 placeholderTextColor={'#727272'}
                 style={{
-                    height: 80,
+                    height: hp(9),
                     // backgroundColor: '#e8e8e8',
 
                     marginTop: 10,
-                    fontSize: 13,
+                    fontSize: hp(1.9),
                     paddingHorizontal: 5,
                     borderRadius: 5,
                     padding: 0,

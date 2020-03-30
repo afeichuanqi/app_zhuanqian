@@ -60,12 +60,12 @@ class MyPage extends PureComponent {
         };
         const titleTop = Animated.interpolate(this.scrollY, {
             inputRange: [-hp(200), hp(0), hp(10)],
-            outputRange: [hp(250), hp(10), hp(1.8)],
+            outputRange: [hp(209.3), hp(9.3), hp(2)],
             extrapolate: 'clamp',
         });
         const titleFontSize = Animated.interpolate(this.scrollY, {
             inputRange: [0, 100],
-            outputRange: [hp(2.8), hp(2.3)],
+            outputRange: [hp(3.5), hp(2.3)],
             extrapolate: 'clamp',
         });
         const translateY = Animated.interpolate(this.scrollY, {
@@ -185,7 +185,7 @@ class MyPage extends PureComponent {
                             position: 'absolute',
                             top: hp(0.5),
                             transform: [{translateY: titleTop}],
-                            left: 10,
+                            left: 13,
                             zIndex: 2,
                             elevation: 0.3,
 
@@ -405,8 +405,8 @@ class TopInfoColumn extends PureComponent {
             alignItems: 'center',
             paddingTop: hp(1),
         }}>
-            <Text style={{color: 'white', fontSize: hp(2.1), fontWeight: '500'}}>{value}</Text>
-            <Text style={{color: 'white', fontSize: hp(1.7), opacity: 0.8, marginTop: 5}}>{title}</Text>
+            <Text style={{color: 'white', fontSize: hp(2.2), fontWeight: '500'}}>{value}</Text>
+            <Text style={{color: 'white', fontSize: hp(1.7), opacity:1, marginTop: 5}}>{title}</Text>
         </View>;
     };
     _avatarClick = () => {
@@ -448,9 +448,9 @@ class TopInfoColumn extends PureComponent {
                         }}
                         style={{marginTop: hp(7), flexDirection: 'row', alignItems: 'center'}}>
 
-                        <SvgUri width={hp(1.8)} height={hp(1.8)} style={{marginRight: 5}} fill={'white'}
+                        <SvgUri width={hp(1.9)} height={hp(1.9)} style={{marginRight: 5}} fill={'white'}
                                 svgXmlData={shop}/>
-                        <Text style={{fontSize: hp(1.8), color: 'white'}}>我的店铺 > </Text>
+                        <Text style={{fontSize: hp(1.9), color: 'white'}}>我的店铺 > </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{marginTop: hp(2)}}

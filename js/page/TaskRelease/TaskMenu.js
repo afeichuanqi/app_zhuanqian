@@ -9,7 +9,7 @@
 import React, {PureComponent} from 'react';
 import {Modal, View, Dimensions, TouchableOpacity} from 'react-native';
 import Animated, {Easing} from 'react-native-reanimated';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const {timing} = Animated;
 const {height} = Dimensions.get('window');
@@ -62,7 +62,7 @@ class TaskMenu extends PureComponent {
         // this.animations.left = ;
         this.setState({
             visible: true,
-            left: x - 75,
+            left: x - hp(10),
         }, () => {
             this._anim = timing(this.animations.top, {
                 duration: 200,
@@ -121,7 +121,7 @@ class TaskMenu extends PureComponent {
                             borderRightColor: 'rgba(0,0,0,0)',//左箭头颜色
                             position: 'absolute',
                             top: -12,
-                            left: 83,
+                            left: hp(11),
                         }}/>
                         {/*<KeyboardAwareScrollView>*/}
                             {this.props.children}
