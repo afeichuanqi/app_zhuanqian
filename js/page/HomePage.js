@@ -13,6 +13,7 @@ import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
 import RNBootSplash from 'react-native-bootsplash';
 import NavigationUtils from '../navigator/NavigationUtils';
 import PromotionToast from '../common/PromotionToast';
+import JoinQQToast from '../common/JoinQQToast';
 import Toast from 'react-native-root-toast';
 import Global from '../common/Global';
 import {getAppSetting} from '../util/AppService';
@@ -53,12 +54,9 @@ class HomePage extends PureComponent {
                     EventBus.getInstance().fireEvent(EventTypes.change_for_apple, {});
                 }
             }
-            // console.log(result.android_pay,Global.android_pay,Platform.OS);
             if (Platform.OS === 'android') {
-                // console.log(result.android_pay != Global.android_pay);
                 if (result.android_pay != Global.android_pay) {
                     Global.android_pay = result.android_pay;
-                    // console.log(Global.android_pay);
                     EventBus.getInstance().fireEvent(EventTypes.change_for_apple, {});
                 }
             }
@@ -185,8 +183,15 @@ class HomePage extends PureComponent {
                     </View>
                 </Animated.View>}
                 <DynamicTabNavigator/>
-                <PromotionToast ref={ref => this.promotionToast = ref}/>
-
+                <PromotionToast
+                    onHide={() => {
+                        this.joinQQToast.show()
+                    }}
+                    ref={ref => this.promotionToast = ref}
+                />
+                <JoinQQToast
+                    ref={ref => this.joinQQToast = ref}
+                />
                 {!appSetting.agreePrivacy && <PrivacyToast
                     click={() => {
                         this.PrivacyToast.hide();

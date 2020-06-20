@@ -100,9 +100,7 @@ class OnlineService extends PureComponent {
                     {this.getSettingMenu('QQ群', () => {
                         Clipboard.setString('1090251007');
                         Toast.show('已经复制到剪切板');
-                        Linking.canOpenURL('mqq://').then(supported => {
-                            // Linking.openURL('http://shang.qq.com/wpa/qunwpa?idkey=e1b2d5e04975ef35ef65d5da1cd6e40364851ca1fa9cbc61eabcb61c145591f4')
-                            if (supported) {
+                        Linking.canOpenURL('mqq://').then(supported => {if (supported) {
                                 Linking.openURL('mqq://');
                             } else {
                             }

@@ -53,6 +53,10 @@ class PromotionToast extends PureComponent {
             this.setState({
                 visible: false,
             });
+            const { onHide } = this.props;
+            if (onHide) {
+                onHide(true);
+            }
         }, 300);
 
 
@@ -83,7 +87,6 @@ class PromotionToast extends PureComponent {
                 visible={visible}
                 supportedOrientations={['portrait']}
                 onRequestClose={this.hide}
-
             >
                 <TouchableOpacity style={{
                     flex: 1, backgroundColor: 'rgba(0,0,0,0.6)',

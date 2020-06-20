@@ -108,8 +108,8 @@ class TaskSumComponent extends Component {
                     <FastImage
                         style={{
                             backgroundColor: '#E8E8E8',
-                            width: hp(10),
-                            height: hp(10),
+                            width: hp(9),
+                            height: hp(9),
                             borderRadius: 5,
 
                         }}
