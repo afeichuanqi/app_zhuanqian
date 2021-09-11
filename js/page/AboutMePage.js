@@ -59,7 +59,7 @@ class AboutMePage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: bottomTheme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '关于我们', null, bottomTheme, 'white', 16, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '关于我们', null, bottomTheme, 'white', hp(2.4), null, false);
 
         return (
             <SafeAreaViewPlus

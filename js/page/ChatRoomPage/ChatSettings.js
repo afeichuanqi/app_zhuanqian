@@ -71,7 +71,7 @@ class ChatSetting extends PureComponent {
             style={{backgroundColor: theme}} // 背景颜色
         />;
         const {fromUserinfo} = this.params;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '聊天设置', null, theme, 'black', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '聊天设置', null, theme, 'black', hp(2.4), () => {
         }, false);
         return (
             <SafeAreaViewPlus

@@ -92,6 +92,7 @@ export class App extends Component<Props> {
     }
 
     componentDidMount() {
+        console.log('1234')
         this.JPushInit();
         Linking.addEventListener('url', this._handleOpenURL);
         JAnalytics.setLoggerEnable({'enable': true});

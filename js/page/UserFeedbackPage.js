@@ -62,7 +62,7 @@ class UserFeedbackPage extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提意见送大礼', null, 'white', 'black', hp(2), () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '提意见送大礼', null, 'white', 'black', hp(2.4), () => {
             NavigationUtils.goPage({}, 'UserFeedbackListPage');
         }, false, true, '历史反馈');
 
@@ -189,7 +189,7 @@ class InputPro extends PureComponent {
             value={this.state.phone}
             placeholder={'请留下您的联系方式，方便我们联系您'}
             placeholderTextColor={'rgba(0,0,0,0.4)'}
-            style={{height: hp(6), width, backgroundColor: 'white', paddingHorizontal: 15, fontSize:hp(1.9)}}
+            style={{height: hp(6), width, backgroundColor: 'white', paddingHorizontal: 15, fontSize:hp(2)}}
         />;
     }
 }
@@ -231,7 +231,7 @@ class InputTextImage extends PureComponent {
                     paddingTop: 5,
                     paddingHorizontal:15,
                     borderRadius: 5,
-                    fontSize:hp(1.8),
+                    fontSize:hp(2.0),
                 }}
                 placeholder={'希望您能积极的提交平台的不足,请我们及时能知道我们的缺点 ~ ~ 请务必在登录模式下提交,如bug存在将赠送红包'}
                 placeholderTextColor={'rgba(0,0,0,0.4)'}
@@ -239,7 +239,7 @@ class InputTextImage extends PureComponent {
                 autoCapitalize={'none'}
                 autoComplete={'off'}
             />
-            <View style={{ flexDirection: 'row', backgroundColor:'white', marginLeft:13}}>
+            <View style={{ flexDirection: 'row', backgroundColor:'white', paddingLeft:13}}>
                 <UploadImgsComponent userinfo={this.props.userinfo} ref={ref => this.uploadImgs = ref}/>
             </View>
 
@@ -322,7 +322,7 @@ class RadioCheck extends PureComponent {
                          borderColor: bottomTheme,
                     }:{backgroundColor: '#fcfcfc', borderColor:'#d2d2d2'}]}>
                     <Text
-                        style={[{color: bottomTheme, fontSize:hp(1.9)}, checkIndex === index ? {color: bottomTheme} : {color: 'rgba(0,0,0,0.7)'}]}>{item.title}</Text>
+                        style={[{color: bottomTheme, fontSize:hp(2)}, checkIndex === index ? {color: bottomTheme} : {color: 'rgba(0,0,0,0.7)'}]}>{item.title}</Text>
                 </TouchableOpacity>;
             })}
 

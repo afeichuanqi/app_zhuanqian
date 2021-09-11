@@ -27,7 +27,7 @@ export default class ViewUtil {
                     <SvgUri width={24} height={24} fill={fontColor} svgXmlData={goback}/>
                 </TouchableOpacity>
                 <View style={{justifyContent: 'center', alignItems: 'center', width: width - 220}}>
-                    <Text style={{color: fontColor, fontSize:hp(2)}}>{title}</Text>
+                    <Text style={{color: fontColor, fontSize:hp(2.4)}}>{title}</Text>
                 </View>
                 <TouchableOpacity
                     onPress={rightClick}

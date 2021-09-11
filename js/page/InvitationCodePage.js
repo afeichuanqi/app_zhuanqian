@@ -82,7 +82,7 @@ class InvitationCodePage extends React.Component {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '输入邀请码', null, theme, 'black', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '输入邀请码', null, theme, 'black', hp(2.4), () => {
             const {onSetUserName, userinfo} = this.props;
             onSetUserName(userinfo.token, this.state.text, (bool, msg) => {
                 if (bool) {

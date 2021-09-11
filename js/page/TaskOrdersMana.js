@@ -134,8 +134,8 @@ class TaskOrdersMana extends Component {
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={wp(5)}
-                        activeStyle={{fontSize: hp(2.1), color: [255, 255, 255]}}
-                        inactiveStyle={{fontSize: hp(1.6), color: [255, 255, 255], height: hp(1.2)}}
+                        activeStyle={{fontSize: hp(2.3), color: [255, 255, 255]}}
+                        inactiveStyle={{fontSize: hp(1.9), color: [255, 255, 255], height: hp(1.2)}}
                         indicatorStyle={{height: 3, backgroundColor: 'yellow', borderRadius: 3}}
                     />}
                     <TabView

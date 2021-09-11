@@ -76,7 +76,7 @@ class UserUpdateOrderPage extends PureComponent {
                             paddingTop: 15,
                             paddingHorizontal: 10,
                             marginBottom: 10,
-                            fontSize: hp(1.8),
+                            fontSize: hp(2),
                         }}>购买须知：刷新包使用期限不限，不支持退订，请确认后购买</Text>
 
                     </View>
@@ -104,7 +104,7 @@ class UserUpdateOrderPage extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                        <Text style={{color: 'black', fontSize: hp(2)}}>取消</Text>
+                        <Text style={{color: 'black', fontSize: hp(2.4)}}>取消</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.7}
@@ -118,7 +118,7 @@ class UserUpdateOrderPage extends PureComponent {
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}>
-                        <Text style={{color: 'white', fontSize: hp(2)}}>提交</Text>
+                        <Text style={{color: 'white', fontSize: hp(2.4)}}>提交</Text>
                     </TouchableOpacity>
                 </View>
                 <ToastSelect
@@ -213,7 +213,7 @@ class RadioCheck extends PureComponent {
                     <Text
                         style={[{
                             color: bottomTheme,
-                            fontSize: hp(1.9),
+                            fontSize: hp(2.2),
                         }, , checkIndex === index ? {color: bottomTheme} : {color: 'rgba(0,0,0,0.7)'}]}>{item.title}</Text>
                 </TouchableOpacity>;
             })}

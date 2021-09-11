@@ -332,7 +332,7 @@ class ChatRoomPage extends React.Component {
         />;
 
 
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, 'black', 16, () => {
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, this.fromUserinfo.username, message_more, null, 'black', hp(2.4), () => {
             NavigationUtils.goPage({fromUserinfo: this.fromUserinfo}, 'ChatSettings');
         });
         const msgList = this.getMessages();

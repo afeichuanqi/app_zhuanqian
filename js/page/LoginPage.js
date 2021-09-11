@@ -266,6 +266,11 @@ class LoginPage extends PureComponent {
         JShareModule.authorize({
             platform: 'qq',
         }, (info) => {
+            // 新浪微博
+            if (info.state === 'cancel') {
+                Toast.show('您取消了QQ授权');
+                return;
+            }
             this.loddingModal.hide();
             const {openId, token} = info;
             const DeviceID = DeviceInfo.getUniqueId();
@@ -305,8 +310,12 @@ class LoginPage extends PureComponent {
         JShareModule.authorize({
             platform: 'weibo',
         }, (info) => {
+            // 新浪微博
+            if (info.state === 'cancel') {
+                Toast.show('您取消了微博授权');
+                return;
+            }
             const {onSinaAuthorizeLogin} = this.props;
-
             const DeviceID = DeviceInfo.getUniqueId();
             const platform = Platform.OS;
             const device_brand = DeviceInfo.getBrand();
@@ -315,6 +324,7 @@ class LoginPage extends PureComponent {
             const device_is_tablet = DeviceInfo.isTablet();
             // this.loddingModal.hide();
             const {token, originData} = info;
+            
             const id = JSON.parse(originData).id || JSON.parse(originData).uid;
 
             onSinaAuthorizeLogin({

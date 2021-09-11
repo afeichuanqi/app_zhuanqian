@@ -7,7 +7,7 @@ let defaultConfig = {
         // baseUrl: Platform.OS === 'android' ? 'http://bzcgpg.natappfree.cc' : 'http://localhost:3000',//测试
         // baseUrl: 'http://test.xiaofaka.com',//测试
         baseUrl: 'http://www.easy-z.cn',//正式
-        // baseUrl: 'http://39.99.145.203:3000',//测试
+        // baseUrl: 'http://easy-z.natapp1.cc',//测试
         timeout:
             15000,
         headers:
@@ -65,6 +65,10 @@ class Axios {
                 response = await instance.get(baseUrl + url, null);
             } else {
                 response = await instance.get(baseUrl + url + '?' + query);
+            }
+            console.log(response, 'response')
+            if (!response.data) {
+                return new Error('数据错误');
             }
             return response;
         } catch (e) {

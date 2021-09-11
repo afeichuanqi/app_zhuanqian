@@ -43,11 +43,14 @@ export default class FlatListCommonUtil extends PureComponent {
                 iosV:Global.apple_pay,
                 androidV:Global.android_pay,
             }).then(result => {
-                this.setState({
-                    taskData: result,
-                    isLoading: false,
-                    hideLoaded: result.length >= 30 ? false : true,
-                });
+                if (result) {
+                    this.setState({
+                        taskData: result,
+                        isLoading: false,
+                        hideLoaded: result.length >= 30 ? false : true,
+                    });
+                }
+                
             }).catch(() => {
                 this.setState({
                     isLoading: false,
@@ -101,7 +104,7 @@ export default class FlatListCommonUtil extends PureComponent {
             iosV:Global.apple_pay,
             androidV:Global.android_pay,
         }).then(result => {
-            if (refresh) {
+            if (refresh && result) {
                 this.setState({
                     taskData: result,
                     isLoading: false,

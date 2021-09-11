@@ -568,6 +568,11 @@ class TaskDetails extends PureComponent {
                 });
                 this._updateTaskStatus().then();
             }).catch((msg) => {
+                if (msg === '为了您的安全,请先绑定手机号') {
+                    NavigationUtils.goPage({
+                        updatePhone: true
+                    }, 'LoginPage')
+                }
                 Toast.show(msg, {position: Toast.positions.CENTER});
             });
 

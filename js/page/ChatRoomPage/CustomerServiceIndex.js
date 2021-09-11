@@ -38,7 +38,7 @@ class CustomerServiceIndex extends React.Component {
         />;
         const customerInfo = this.params.customerInfo;
         // const customerInfos = customerInfo.spi
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, customerInfo[2], null, null, 'black', 17, null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, customerInfo[2], null, null, 'black', hp(2.4), null, false);
         return <SafeAreaViewPlus
             topColor={theme}
         >

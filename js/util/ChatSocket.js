@@ -43,6 +43,7 @@ class ChatSocket {
         // const URL = 'ws://localhost:433/';
 
         Global.ws = !Global.ws ? new ReconnectingWebSocket(URL) : Global.ws;
+        console.log(Global.ws, 'Global.ws')
         Global.ws.addEventListener('open', () => {
             Global.dispatch(Message.onChangeSocketStatue(''));
             Global.connectionstatus = true;
@@ -160,7 +161,7 @@ class ChatSocket {
 
         });
         Global.ws.addEventListener('error', (e) => {
-            // console.log('onerror', e);
+            console.log('onerror', e);
             // // Toast.show('聊天连接发生错误 ~ ~');
             // // console.log(e);
             Global.connectionstatus = false;

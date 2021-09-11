@@ -116,7 +116,7 @@ class UserBillListPage extends React.Component {
                     <TabBar
                         style={{
                             height: hp(5),
-                            width: hp(20),
+                            width: wp(45),
                             alignSelf: 'center',
                             marginLeft: hp(4),
                         }}
@@ -128,8 +128,8 @@ class UserBillListPage extends React.Component {
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={hp(3)}
-                        activeStyle={{fontSize: hp(2), color: [0, 0, 0], fontWeight: 'bold'}}
-                        inactiveStyle={{fontSize: hp(2), color: [150, 150, 150], height: 10}}
+                        activeStyle={{fontSize: hp(2.2), color: [0, 0, 0], fontWeight: 'bold'}}
+                        inactiveStyle={{fontSize: hp(2.2), color: [150, 150, 150], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3, top: 3}}
                     />
                     <TouchableOpacity

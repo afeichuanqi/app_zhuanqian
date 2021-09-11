@@ -64,7 +64,7 @@ class TaskReleaseMana extends PureComponent {
             statusBar={statusBar}
             style={{backgroundColor: theme}} // 背景颜色
         />;
-        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '邀请送大礼', null, 'white', 'black', hp(2), null, false);
+        let TopColumn = ViewUtil.getTopColumn(this.onBackPress, '邀请送大礼', null, 'white', 'black', hp(2.4), null, false);
 
         return (
             <SafeAreaViewPlus

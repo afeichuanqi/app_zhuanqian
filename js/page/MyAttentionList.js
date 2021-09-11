@@ -96,20 +96,20 @@ class MyAttention extends PureComponent {
                     <TabBar
                         style={{
                             height: hp(5),
-                            // width: hp(20),
+                            width: wp(45),
                             alignSelf: 'center',
                             marginLeft: hp(4),
                         }}
                         position={this.position}
-                        contentContainerStyle={{paddingTop: hp(2.2)}}
+                        contentContainerStyle={{paddingTop: hp(2)}}
                         routes={navigationRoutes}
                         index={0}
                         sidePadding={0}
                         handleIndexChange={this.handleIndexChange}
                         bounces={true}
                         titleMarginHorizontal={20}
-                        activeStyle={{fontSize: hp(2), color: [0, 0, 0], fontWeight: 'bold'}}
-                        inactiveStyle={{fontSize: hp(2), color: [150, 150, 150], height: 10}}
+                        activeStyle={{fontSize: hp(2.2), color: [0, 0, 0], fontWeight: 'bold'}}
+                        inactiveStyle={{fontSize: hp(2.2), color: [150, 150, 150], height: 10}}
                         indicatorStyle={{height: 3, backgroundColor: bottomTheme, borderRadius: 3,top:3}}
                     />
                     <TouchableOpacity
