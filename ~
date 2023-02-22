@@ -1,0 +1,23 @@
+q
+s
+#
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1	localhost
+255.255.255.255	broadcasthost
+:1             localhost
+100.88.134.47 trace01.inc.alipay.net
+11.160.222.181 qixian.cs.alipay.net
+100.88.133.117 itc.cloud.alipay.com
+#202.106.0.20 github.com
+#202.106.0.20 www.github.com
+#202.106.0.20 nodeload.github.com
+113.31.136.60 jiguang.cn
+113.31.136.60 www.jiguang.cn
+#122.190.3.142 easy-z.cn
+#122.190.3.142 admin.easy-z.cn
+#122.190.3.142 www.easy-z.cn
+17.142.160.59 apple.com
